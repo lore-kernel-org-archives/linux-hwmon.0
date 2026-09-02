@@ -1,76 +1,77 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19B864AA017
-	for <linux-hwmon@vger.kernel.org>; Wed,  2 Sep 2026 17:08:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E114D4AA57B
+	for <linux-hwmon@vger.kernel.org>; Wed,  2 Sep 2026 17:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788368890; cv=none; b=CjWJoFaOSYtinsOkSrPUXKLusuuppVFh/0Fe3M/wKlkMRubZIASzqVlP0VW5fL/bEv1oAZ8jolvDaD6QFKK1BjSbBVXXRUMntUf1DztorFMrFHYSc6dLXhOl6srWJLPAB6lTa3g+FxHmk9cR7OUy01a1UcB9DubID2oPbfCRFGs=
+	t=1788369713; cv=none; b=C5HELz9xDYAZg8cbjmu45GUKaT2mcciUKX/tL9dBbmj0EfUs09qBrHRntDF9dPbgEr92p5p00luXUuP++q+hGQhSKhIwVgTBbdVF7D7TzwMp7JoL51wOET3WN/JNlebVbXmlCkLRemfLEwo48UlsOpNDb8iCw3L4oo8AEhKo65Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788368890; c=relaxed/simple;
-	bh=JnknEmahrVju07jazUHIYGf6cC1gFbzgcgf5A1GCE5Q=;
+	s=arc-20240116; t=1788369713; c=relaxed/simple;
+	bh=Cbwzu8rXIJUiVu9+IeUdlVICi7IaF8Z8Kk9VmHQP3L0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=My0ljdQDFQ91B26aGNpOe6BbjYsmdaBS7nQyeOdwFToFnteQKX5gs9AzJyd9b8/oucC77UZ2zMl+Xf48d5QQtGR+GJBDUWky6NsP5PG8pp10M/EGp2Rcv4o89Wc7tpLRGSifwyVRmzNwyuJR0rTKb1/0S+BCxY1hT210Ug3GQH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ocw8X7S5; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	 In-Reply-To:Content-Type; b=frKCdCkb795ScBKw2AYMHqIjeDt9PG2WFkcVKuHYQoYcBHzQrlO6BYN1a7JOledlhYKEeNs9qjU5q++/ejyC+gbOf6tw4KV9RpKZYOVxmSVLkmmc/pp+zSaCYCsIpueKbxcSwzqN6FFYdmd0oCd1ULU5he5nG+8vRiCSFQrjxr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NW3kgX1p; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ocw8X7S5"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2d032846c95so16539585ad.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 02 Sep 2026 10:08:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NW3kgX1p"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-398a4dcf289so1560935a91.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 02 Sep 2026 10:21:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788368887; x=1788973687; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
+        d=gmail.com; s=20251104; t=1788369711; x=1788974511; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Qt1jr7QAlD4Hl2AR8Dx75FzaqLrnvA6qwE10LUR2JjE=;
-        b=ocw8X7S5uCuOM+3aGa49ZjlbFaBRFGWj+aVsaQrVLb0ADIraNRkc6VZECdhLesqugr
-         T4PaC2pS/W/6gZQzitRptovYs7lr+Le/8SHNGlpF7VOB6dHSDjyYOLs7sYzCMOrc097h
-         NdCMVwdiaOJFh0Ljzy07i9bIKcztwYquKAD89s5WlwWHdm4+7+/gsTlGFxt40AhCmmnK
-         VjYBqe0+eF0iOKbNawp3b3L+MbOpx8K882XRiraa/Ez4N7NEKK/niDfYHmAq+35Z2mo3
-         3nvY3BjIk99tb5K4/mowuWfI1Balx9S2Nuh4sawLKw1QUZ9FSiPBEWlECl3XGp1AIseE
-         WJIg==
+        bh=Epr4vvqjxUGUVPjJ1am+KeorzVpdgtbuB59p1B9RHNU=;
+        b=NW3kgX1pgEi8uoWEqgGuGpandlQAoWhBN2kiLYTJn4vqnon210DiOhiamfTNJvheTO
+         NG3WLwr9hgEV5f6NmXV47LuAQVhlLeWFn7FO+9JkAi6hCpaxefYY+JMc3kqP71unAwEE
+         OOGm4ghJ2e+LnzGVhaQDzD+hF+05H8xmhQc4ziKMcMdYEN0VZhzLV/LcNAX7THLy55o5
+         TsoJe90orbPNGieN2xUHH3TwSLnqF7mhzzNfhyzbi0vS6Z/GTBeF5XrDQIb1xrKNnQOP
+         0rOKEVISeZ4xnyp+5k0KCyiyzMs0RYXDeMF4qmvvoPKbgOxVcnjya3dAiMmsG0cbi8m5
+         r4xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788368887; x=1788973687;
-        h=content-transfer-encoding:content-type:in-reply-to:from
+        d=1e100.net; s=20251104; t=1788369711; x=1788974511;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Qt1jr7QAlD4Hl2AR8Dx75FzaqLrnvA6qwE10LUR2JjE=;
-        b=iiGstQgyC/hlvvIr7dTioZAwWobsOsMdSxe+KddFoKcli9CNIEkgY8JnO/5RrFysx1
-         xBF7Y9TEd6SBOtKc9nOdQm48/4j3unIysDaJzr3mNccEBms9zQsSE6rinRQr0i5VbnOj
-         IRQHtRaRU7mxNnCjzzreouTfdi5NRDxiryTjJytKnJE5aKrsfOCFd26jzYY34VOMLMGU
-         U/lzeHwLuTYLSU9ZYBpxtb74Tw2ILbQyOk2I/ZCxgYL/3DFhBP4H2ytbxVUQMxis1cxY
-         hcm4tHmYy9U79Ap+vZF4wXK2q0t3l/MniDFB6ez9WKGdAfkcTN65WdtUzvaTqpdsaBYs
-         7Zaw==
-X-Gm-Message-State: AFuF++kCKzyZYeZhH5r6OxA9lkQRucfc+WYgzXTO6VKom5eVrP38swbz
-	6lbOb4rcbsxnsHkaW11U+HGuCpvEaz+Oi2blwZNuHXRoiAt2np4W5dtg7tuX0x/gwzk=
-X-Gm-Gg: AYBFou18MEOuz9TcRXw5IERcqEsj0zAtB7sALvbvuEStvQ5MMG977i7euDJ/bRPN3MG
-	E5rJYcHo0xRNzcZwIaBN6VwrFw8bzAWUU8SnNAGkelB+y5zOO2UHYm50qIr0Ws3vxo7S2W+4+uH
-	5xZUyLTC/+KGALDqsIzXVVWV+IDi3nnK71wq4Q5WW0rQaMw4FKGELwORSeSPYlhH+8diyaZWqip
-	Uf23hrS5hjmioW0Z5suWI2LbBJcA4FNDHDBBSGbzTP7nyz+t0r5rLHHK1a7k6EdVSVFDapycIBp
-	4ItoG5REYrPIapaW+JHirDSRplKmiSXtA5tGBQ3oaiE2VwDBKXaN0rssz5O0+cZEuIchstjML49
-	BxYskc8amxhoTpCb0ufVR7JEQZHA+vhFauPhTCTy8aa0NRBYhUOiyvnxjGcozQyT1gib02XcVQG
-	nT2QdBJmwtLG+/cRNMFedATUkbfAtzigr2CNeCCvuqfvrdP1Y9mp48cqYLQmYK8GS1MYrUv3wiX
-	rD0CfcGgtL//rDGBvcY9M0IeEYvJT8JrWsVzlJPJjPJJM3BkW7929KutUC1NHRWQy0=
-X-Received: by 2002:a17:902:e946:b0:2d9:51b7:c0bc with SMTP id d9443c01a7336-2daec71e48emr97289655ad.12.1788368886763;
-        Wed, 02 Sep 2026 10:08:06 -0700 (PDT)
-Received: from [10.198.0.120] (wnpgmb02ydw-ds01-112-62-45.dynamic.bellmts.net. [204.112.62.45])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dadd4d5e8esm16053475ad.81.2026.09.02.10.08.05
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Epr4vvqjxUGUVPjJ1am+KeorzVpdgtbuB59p1B9RHNU=;
+        b=USVdSDbBVaDdjpb1ay15NgbejCRDzngqheI6CQVLomH0YpO2FSr8+d1Os486PgoNDr
+         WM9Nnx9BMdFjSlNb7docuj1oSZjmKSuMTTiW7+DnNbZYY0mY2DukN/E0wQO8mfyYQFQB
+         8G3Q72QF/jStU1iDeOAJwCpfeQUU0556z2W8kbw3ytuMxthKldxD1IZ03nhyPbNidAVb
+         RGaN8Y82f1juPwZVZo4ttsc/rOiIlCHke963ErCh31doV0OBrsT1mZpAPK96ddmP/wao
+         OQN4UeyPzKXkhzVEwVNfYZS3TS3fKDh3U+tY5oaTPa5kUvOkXOgV0WPBAnAJ8e4AYu9Z
+         oo2Q==
+X-Gm-Message-State: AFuF++k2z1VZJlH21HF1uGah4Knwsvp+q8XH3o0nIODs8uWc0MG4HJ3c
+	NmfpayXllVqFMdzhZpLaoYe0nf6rmBPl1bOyz2H4ZbzWsAORIoI+6qcy
+X-Gm-Gg: AYBFou0O/FkOAwU3xXVA1+AFvcxjKJq57XDZPGXab56gEnCnvr8NkWwWHxtDm+4yX8/
+	1OIqArlp7ciVe2PgS90yR8F9i3sQKY8zdXdbb2oMmoerAMCod+RH+3k/VqSWGIuHiwvuAEsEPpV
+	uahM+uSnRDoF8aMujvLulgeVit130sh9/zhJlL7qhrKvqApIJ1N7e4jp1rGulDQxRtIji4SxAm5
+	o8MXM2k7S9SOKZDHcFil+wCUvF1CdfodiXBJ4+z86rccIF6+Ai1di5kDV7gLOKE2aSaA5GexMZg
+	sKtOgOBD03w4prfHwnQ1iEPDZXlvVTfoaq0qDS2DAqecNzr/aepJJkOZJ9JwVkCHba4B8k6wGoS
+	4PDpaWMd+x47ZyY3I5gF4m0zwPQojaklUEL/bgJta09fjnGybbSwtr0qpzrCN7Oed+Bqx+EByE9
+	1WFjiW9rni3/5sy/LIhURdTAPHaQkeC1dyGemoY7SOgHiGfeUqsFGPzSHPHdsWs0u/edAlgsXw9
+	AssHlc75NnzAY5oow9cAk580eHlpH4Azl0uMA==
+X-Received: by 2002:a17:90a:e7c9:b0:395:4290:46e0 with SMTP id 98e67ed59e1d1-39aedf5da48mr8846328a91.5.1788369710824;
+        Wed, 02 Sep 2026 10:21:50 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b0861e54csm392768a91.10.2026.09.02.10.21.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Sep 2026 10:08:06 -0700 (PDT)
-Message-ID: <531be24a-bad0-40f6-8e30-3d4da565afcb@gmail.com>
-Date: Wed, 2 Sep 2026 12:08:03 -0500
+        Wed, 02 Sep 2026 10:21:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <56826d45-e18a-4f9e-94b0-3e6f335c4ee7@roeck-us.net>
+Date: Wed, 2 Sep 2026 10:21:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Linux)
+User-Agent: Mozilla Thunderbird
 Subject: Re: [BUG] SPD5118 Intermittent MR11 Corruption During Suspend/Resume
-To: Armin Wolf <W_Armin@gmx.de>, Guenter Roeck <linux@roeck-us.net>
+To: Matthew Bettencourt <matthew.bettencourt@gmail.com>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <1a8ea9da-1ac1-4312-a8ca-ea4a9f35093f@gmail.com>
  <ee284272-0da0-45b6-a3be-c76822e5d54f@roeck-us.net>
@@ -88,584 +89,159 @@ References: <1a8ea9da-1ac1-4312-a8ca-ea4a9f35093f@gmail.com>
  <65336f12-b821-449b-a637-31972807c676@gmail.com>
  <a953dcaa-cfff-40c8-85a9-c12601e49e85@roeck-us.net>
  <9cdf4b63-8f99-4a80-b0be-3f3df69e526e@gmail.com>
- <46191fa9-fa4a-4c16-b618-2c0c6dc09102@gmx.de>
+ <0de99cfa-7de4-4236-930c-2c037aa1648e@roeck-us.net>
+ <2df09073-2d9f-4b6f-892b-45e7287a85c9@gmail.com>
 Content-Language: en-US
-From: Matthew Bettencourt <matthew.bettencourt@gmail.com>
-In-Reply-To: <46191fa9-fa4a-4c16-b618-2c0c6dc09102@gmx.de>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <2df09073-2d9f-4b6f-892b-45e7287a85c9@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi Armin,
+Hi Matthew,
 
-Are you want the acpi.log file or are you asking me to print out all the 
-.dat files?
+On 9/2/26 08:26, Matthew Bettencourt wrote:
+> Hello Guenter,
+> 
+> Here is the i2cdump for those two 0x71 and 0x73 devices
+> 
+> # i2cdump -y -f 12 0x73 b
+>       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
+> 00: ff ff ff ff XX ff 12 ff 12 ff ff ff XX XX XX XX    ....X.?.?...XXXX
+> 10: XX 0f XX XX XX XX XX XX XX XX XX XX XX XX XX XX    X?XXXXXXXXXXXXXX
+> 20: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+> 30: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+> 40: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+> 50: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+> 60: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+> 70: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+> 80: 00 e1 f9 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f    .???????????????
+> 90: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f    ????????????????
+> a0: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f    .???????????????
+> b0: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f    ????????????????
+> c0: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f    .???????????????
+> d0: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f    ????????????????
+> e0: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f    .???????????????
+> f0: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f    ????????????????
+> # i2cdump -y -f 12 0x71 b
+>       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
+> 00: ff ff ff ff XX ff 57 ff 57 ff ff ff XX XX XX XX    ....X.W.W...XXXX
+> 10: XX 0f XX XX XX XX XX XX XX XX XX XX XX XX XX XX    X?XXXXXXXXXXXXXX
+> 20: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+> 30: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+> 40: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+> 50: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+> 60: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+> 70: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+> 80: 00 0b e0 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f    .???????????????
+> 90: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f    ????????????????
+> a0: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f    .???????????????
+> b0: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f    ????????????????
+> c0: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f    .???????????????
+> d0: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f    ????????????????
+> e0: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f    .???????????????
+> f0: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f    ????????????????
+> 
 
-$ ls -1 | grep -iE ".dat|acpi.log"
-acpi.log
-dsdt.dat
-ssdt10.dat
-ssdt11.dat
-ssdt12.dat
-ssdt13.dat
-ssdt14.dat
-ssdt15.dat
-ssdt16.dat
-ssdt1.dat
-ssdt2.dat
-ssdt3.dat
-ssdt4.dat
-ssdt5.dat
-ssdt6.dat
-ssdt7.dat
-ssdt8.dat
-ssdt9.dat
+I2C bus multiplexers only return a single data byte reflecting the currently
+selected bus. On writes they also accept a single byte, where a set bit indicates
+which of its channel(s) should be enabled. So i2cdump does not really work.
+Actually, using i2cdump might have messed it up because the writes involved
+might change the active bus... sorry, I should have mentioned before.
+In general it is not safe to use i2cdump on an unknown device. Worst case
+it can turn the hardware into a brick (seriously - I have seen that happen).
+
+You could try "i2cget 12 0x71" and "i2cget 12 0x73". That should return
+the active channel(s) if those are really I2C bus multiplexers. If they are,
+only a single bit should be set (again, i2cdump might have messed it up,
+so you might want to reboot).
+
+> # ls -l /sys/bus/i2c/devices/
+> total 0
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 12-0051 -> ../../../devices/pci0000:00/0000:00:14.0/i2c-12/12-0051
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 12-0053 -> ../../../devices/pci0000:00/0000:00:14.0/i2c-12/12-0053
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-0 -> ../../../devices/platform/AMDI0010:00/i2c-0
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-1 -> ../../../devices/platform/AMDI0010:01/i2c-1
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-10 -> ../../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/drm/card1/card1-DP-2/i2c-10
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-11 -> ../../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/drm/card1/card1-DP-3/i2c-11
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-12 -> ../../../devices/pci0000:00/0000:00:14.0/i2c-12
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-13 -> ../../../devices/pci0000:00/0000:00:14.0/i2c-13
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-14 -> ../../../devices/pci0000:00/0000:00:14.0/i2c-14
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-2 -> ../../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-2
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-3 -> ../../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-3
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-4 -> ../../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-4
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-5 -> ../../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-5
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-6 -> ../../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-6
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-7 -> ../../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-7
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-8 -> ../../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-8
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-9 -> ../../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/drm/card1/card1-DP-1/i2c-9
+> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-MSFT8000:00 -> ../../../devices/platform/AMDI0010:01/i2c-1/i2c-MSFT8000:00
+> 
+> 
+> If it is worth while I have access to second AMD machine, PRO B850M-A WIFI/7600x3d/Teamgroup 2x16GB - FLBD532G6000HC30DC01, which I can swap parts from/to. Even though its a completely different system it might worth it to swap parts out and see then what comes up on either system to help identify what might be going on with the i2c bus devices.
+> 
+
+It might be worthwhile if that system does not suffer from the same problem.
+
+Bus-wise I can see that you seem to have different I2C busses in your system. I have
+
+lrwxrwxrwx 1 root root 0 Aug 29 16:26 0-0050 -> ../../../devices/pci0000:00/0000:00:14.0/i2c-0/0-0050
+lrwxrwxrwx 1 root root 0 Aug 29 16:26 0-0051 -> ../../../devices/pci0000:00/0000:00:14.0/i2c-0/0-0051
+lrwxrwxrwx 1 root root 0 Aug 29 16:26 0-0052 -> ../../../devices/pci0000:00/0000:00:14.0/i2c-0/0-0052
+lrwxrwxrwx 1 root root 0 Aug 29 16:26 0-0053 -> ../../../devices/pci0000:00/0000:00:14.0/i2c-0/0-0053
+lrwxrwxrwx 1 root root 0 Aug 29 16:26 i2c-0 -> ../../../devices/pci0000:00/0000:00:14.0/i2c-0
+lrwxrwxrwx 1 root root 0 Aug 29 16:26 i2c-1 -> ../../../devices/pci0000:00/0000:00:14.0/i2c-1
+lrwxrwxrwx 1 root root 0 Aug 29 16:26 i2c-2 -> ../../../devices/pci0000:00/0000:00:14.0/i2c-2
+lrwxrwxrwx 1 root root 0 Aug 29 16:26 i2c-3 -> ../../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-3
+lrwxrwxrwx 1 root root 0 Aug 29 16:26 i2c-4 -> ../../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-4
+lrwxrwxrwx 1 root root 0 Aug 29 16:26 i2c-5 -> ../../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-5
+lrwxrwxrwx 1 root root 0 Aug 29 16:26 i2c-6 -> ../../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-6
+lrwxrwxrwx 1 root root 0 Aug 29 16:26 i2c-7 -> ../../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/drm/card1/card1-DP-1/i2c-7
+
+so I don't have any of the AMDI0010 devices. Maybe that is the built-in GPU ?
 
 Thanks,
-Matthew
-
-On 9/2/26 11:57 AM, Armin Wolf wrote:
-> Am 02.09.26 um 16:00 schrieb Matthew Bettencourt:
-> 
->> Hello Guenter,
->>
->> > It would be something like
->> >
->> > sudo acpidump > acpi.log
->> > acpixtract acpi.log
->> > iasl -d *.dat
->> >
->> > You'll get a number of.dsl files with cryptic assembler-style
->> > code and data. Then the digging starts ... you may find something
->> > like "Name (SMB0, 0x0B00)" in dsdt.dsl. Then we can only hope to
->> > figure out if ACPI actually accesses it.
->>
->> That wasn't as hard as I thought. I got everything decoding I guess, I 
->> just did a grep on all the dsl files for SMB.
->>
->> $ grep -i -rn "SMB" *.ds
->> dsdt.dsl:295:    Name (SMBB, 0x0B20)
->> dsdt.dsl:296:    Name (SMBL, 0x20)
->> dsdt.dsl:297:    Name (SMB0, 0x0B00)
->> dsdt.dsl:298:    Name (SMBM, 0x10)
->> dsdt.dsl:311:    Name (SSMB, 0xFED80200)
->> dsdt.dsl:3352:                                If (SMBB)
->> dsdt.dsl:3354:                                    CreateWordField 
->> (CRS, 0xD2, SMB1)
->> dsdt.dsl:3357:                                    SMB1 = SMBB /* \SMBB */
->> dsdt.dsl:3358:                                    SMH1 = SMBB /* \SMBB */
->> dsdt.dsl:3359:                                    SML1 = SMBL /* \SMBL */
->> dsdt.dsl:3360:                                    CreateWordField 
->> (CRS, 0xCA, SMBZ)
->> dsdt.dsl:3363:                                    SMBZ = SMB0 /* \SMB0 */
->> dsdt.dsl:3364:                                    SMH0 = SMB0 /* \SMB0 */
->> dsdt.dsl:3365:                                    SML0 = SMBM /* \SMBM */
->> ssdt4.dsl:4026:            SMB8,   8
->> ssdt4.dsl:4032:            SMB8 |= 0x40
->> ssdt4.dsl:4046:            Local1 = SMB8 /* \M477.SMB8 */
->> ssdt4.dsl:4062:            SMB8,   8
->> ssdt4.dsl:4065:        SMB8 |= 0x80
->> ssdt4.dsl:4073:            SMB0,   8,
->> ssdt4.dsl:4074:            SMB1,   8,
->> ssdt4.dsl:4075:            SMB2,   8
->> ssdt4.dsl:4085:                SMB0 = 0x1F
->> ssdt4.dsl:4100:                Local2 = SMB0 /* \M479.SMB0 */
->> ssdt4.dsl:4105:                SMB2 = 0x02
->> ssdt4.dsl:4113:        If (((SMB0 & One) != Zero))
->> ssdt4.dsl:4124:                SMB1 = 0x3F
->> ssdt4.dsl:4139:                Local2 = SMB1 /* \M479.SMB1 */
->> ssdt4.dsl:4144:                SMB1 = 0x02
->> ssdt4.dsl:4152:        If (((SMB1 & One) != Zero))
->> ssdt4.dsl:4173:        M460 ("  KER-ASL-CpmSmbusExecutor (Port%d, 
->> isRead %d, Potcl %d, DevAddr 0x%X, Cmd 0x%X)\n", Arg0, Arg1, Arg2, 
->> Arg3, Arg4, Zero)
->> ssdt4.dsl:4179:            M459 ("  KER-ASL-CpmSmbusExecutor return 
->> 0x80\n", Zero)
->> ssdt4.dsl:4186:            M459 ("  KER-ASL-CpmSmbusExecutor return 
->> 0x81\n", Zero)
->> ssdt4.dsl:4201:            M459 ("  KER-ASL-CpmSmbusExecutor return 
->> 0x82\n", Zero)
->> ssdt4.dsl:4212:                M460 ("  KER-ASL-CpmSmbusExecutor 
->> return 0x83, Length %d\n", Local2, Zero, Zero, Zero, Zero, Zero)
->> ssdt4.dsl:4223:            M460 ("  KER-ASL-CpmSmbusExecutor return 
->> 0x84, Local4 %d\n", Local4, Zero, Zero, Zero, Zero, Zero)
->> ssdt4.dsl:4230:            SMB0,   8,
->> ssdt4.dsl:4231:            SMB1,   8,
->> ssdt4.dsl:4232:            SMB2,   8,
->> ssdt4.dsl:4233:            SMB3,   8,
->> ssdt4.dsl:4234:            SMB4,   8,
->> ssdt4.dsl:4235:            SMB5,   8,
->> ssdt4.dsl:4236:            SMB6,   8,
->> ssdt4.dsl:4237:            SMB7,   8,
->> ssdt4.dsl:4238:            SMB8,   8
->> ssdt4.dsl:4249:            Local6 = SMB2 /* \M47A.SMB2 */
->> ssdt4.dsl:4250:            SMB2 = (Local6 & 0x7F)
->> ssdt4.dsl:4257:                SMB2 = Local6
->> ssdt4.dsl:4267:            M459 ("  KER-ASL-CpmSmbusExecutor return 
->> 0x85\n", Zero)
->> ssdt4.dsl:4275:                SMB2 = Local6
->> ssdt4.dsl:4286:            M459 ("  KER-ASL-CpmSmbusExecutor return 
->> 0x86\n", Zero)
->> ssdt4.dsl:4294:            SMB0 = 0x1F
->> ssdt4.dsl:4295:            SMB4 = ((Arg3 << One) | Arg1)
->> ssdt4.dsl:4296:            SMB3 = Arg4
->> ssdt4.dsl:4297:            SMB2 = (Arg2 << 0x02)
->> ssdt4.dsl:4298:            Local1 = SMB2 /* \M47A.SMB2 */
->> ssdt4.dsl:4303:                    SMB5 = DerefOf (Local7 [One])
->> ssdt4.dsl:4308:                    SMB6 = DerefOf (Local7 [0x02])
->> ssdt4.dsl:4309:                    SMB5 = DerefOf (Local7 [One])
->> ssdt4.dsl:4315:                    SMB5 = Local2
->> ssdt4.dsl:4319:                        SMB7 = DerefOf (Local7 [Local1])
->> ssdt4.dsl:4327:                SMB5 = Local2
->> ssdt4.dsl:4330:            SMB2 = ((Arg2 << 0x02) | 0x40)
->> ssdt4.dsl:4350:                Local2 = SMB0 /* \M47A.SMB0 */
->> ssdt4.dsl:4355:                SMB2 = 0x02
->> ssdt4.dsl:4358:                    SMB2 = Local6
->> ssdt4.dsl:4369:                M459 ("  KER-ASL-CpmSmbusExecutor 
->> return 0x87\n", Zero)
->> ssdt4.dsl:4379:                SMB0 = 0x08
->> ssdt4.dsl:4390:                        DATB = SMB5 /* \M47A.SMB5 */
->> ssdt4.dsl:4396:                        Local0 [0x03] = SMB6 /* 
->> \M47A.SMB6 */
->> ssdt4.dsl:4397:                        Local0 [0x02] = SMB5 /* 
->> \M47A.SMB5 */
->> ssdt4.dsl:4403:                        Local2 = SMB2 /* \M47A.SMB2 */
->> ssdt4.dsl:4404:                        Local2 = SMB5 /* \M47A.SMB5 */
->> ssdt4.dsl:4416:                            Local0 [Local1] = SMB7 /* 
->> \M47A.SMB7 */
->> ssdt4.dsl:4424:        Local1 = (SMB0 & 0x1D)
->> ssdt4.dsl:4426:        SMB0 = 0x1F
->> ssdt4.dsl:4429:            SMB2 = Local6
->> ssdt4.dsl:4439:        M460 ("  KER-ASL-CpmSmbusExecutor return St: 
->> 0x%X, Len %d, Data: 0x%X, 0x%X, 0x%X, 0x%X ...\n", STAT, LEN, DerefOf 
->> (Local0 [0x02]), DerefOf (Local0 [
->> ssdt4.dsl:4497:            M460 ("  KER-ASL-CpmReadSmbusByte (%d, 
->> 0x%X, 0x%X) = 0 Smbus Access Disable\n", Arg0, Arg1, Arg2, Zero, Zero, 
->> Zero)
->> ssdt4.dsl:4506:            SMB0,   8,
->> ssdt4.dsl:4507:            SMB1,   8,
->> ssdt4.dsl:4508:            SMB2,   8,
->> ssdt4.dsl:4509:            SMB3,   8,
->> ssdt4.dsl:4510:            SMB4,   8,
->> ssdt4.dsl:4511:            SMB5,   8,
->> ssdt4.dsl:4512:            SMB6,   8,
->> ssdt4.dsl:4513:            SMB7,   8,
->> ssdt4.dsl:4514:            SMB8,   8
->> ssdt4.dsl:4525:            Local6 = SMB2 /* \M409.SMB2 */
->> ssdt4.dsl:4526:            SMB2 = (Local6 & 0x7F)
->> ssdt4.dsl:4533:            SMB8 |= 0x10
->> ssdt4.dsl:4536:            Local1 = SMB8 /* \M409.SMB8 */
->> ssdt4.dsl:4546:                SMB0 = 0x1F
->> ssdt4.dsl:4549:                Local1 = SMB0 /* \M409.SMB0 */
->> ssdt4.dsl:4554:                SMB2 = 0x02
->> ssdt4.dsl:4567:                SMB2 = Local6
->> ssdt4.dsl:4576:            M460 ("  KER-ASL-CpmReadSmbusByte (%d, 
->> 0x%X, 0x%X) = 0 ERROR 1\n", Arg0, Arg1, Arg2, Zero, Zero, Zero)
->> ssdt4.dsl:4587:                SMB1 = 0x3F
->> ssdt4.dsl:4590:                Local1 = SMB1 /* \M409.SMB1 */
->> ssdt4.dsl:4595:                SMB1 = 0x02
->> ssdt4.dsl:4608:                SMB2 = Local6
->> ssdt4.dsl:4617:            M460 ("  KER-ASL-CpmReadSmbusByte (%d, 
->> 0x%X, 0x%X) = 0 ERROR 2\n", Arg0, Arg1, Arg2, Zero, Zero, Zero)
->> ssdt4.dsl:4624:            SMB0 = 0x1F
->> ssdt4.dsl:4625:            SMB4 = ((Arg1 << One) | One)
->> ssdt4.dsl:4626:            SMB3 = Arg2
->> ssdt4.dsl:4627:            SMB2 = 0x08
->> ssdt4.dsl:4628:            Local1 = SMB2 /* \M409.SMB2 */
->> ssdt4.dsl:4629:            SMB2 = 0x48
->> ssdt4.dsl:4639:                    Local1 = SMB0 /* \M409.SMB0 */
->> ssdt4.dsl:4644:                    SMB2 = 0x02
->> ssdt4.dsl:4647:                        SMB2 = Local6
->> ssdt4.dsl:4656:                    M460 (" KER-ASL-CpmReadSmbusByte 
->> (%d, 0x%X, 0x%X) = 0 ERROR 3\n", Arg0, Arg1, Arg2, Zero, Zero, Zero)
->> ssdt4.dsl:4662:                Local1 = SMB0 /* \M409.SMB0 */
->> ssdt4.dsl:4672:                SMB0 = 0x08
->> ssdt4.dsl:4679:                Local4 = SMB5 /* \M409.SMB5 */
->> ssdt4.dsl:4683:        SMB0 = 0x1F
->> ssdt4.dsl:4684:        SMB8 |= 0x20
->> ssdt4.dsl:4687:            SMB2 = Local6
->> ssdt4.dsl:4696:        M460 ("  KER-ASL-CpmReadSmbusByte (%d, 0x%X, 
->> 0x%X) = 0x%X Success\n", Arg0, Arg1, Arg2, Local4, Zero, Zero)
->> ssdt4.dsl:4705:            M460 ("  KER-ASL-CpmWriteSmbusByte (%d, 
->> 0x%X, 0x%X, 0x%X) = 0 Smbus Access Disable\n", Arg0, Arg1, Arg2, Arg3, 
->> Zero, Zero)
->> ssdt4.dsl:4714:            SMB0,   8,
->> ssdt4.dsl:4715:            SMB1,   8,
->> ssdt4.dsl:4716:            SMB2,   8,
->> ssdt4.dsl:4717:            SMB3,   8,
->> ssdt4.dsl:4718:            SMB4,   8,
->> ssdt4.dsl:4719:            SMB5,   8,
->> ssdt4.dsl:4720:            SMB6,   8,
->> ssdt4.dsl:4721:            SMB7,   8,
->> ssdt4.dsl:4722:            SMB8,   8
->> ssdt4.dsl:4733:            Local6 = SMB2 /* \M410.SMB2 */
->> ssdt4.dsl:4734:            SMB2 = (Local6 & 0x7F)
->> ssdt4.dsl:4741:            SMB8 |= 0x10
->> ssdt4.dsl:4744:            Local1 = SMB8 /* \M410.SMB8 */
->> ssdt4.dsl:4754:                SMB0 = 0x1F
->> ssdt4.dsl:4757:                Local1 = SMB0 /* \M410.SMB0 */
->> ssdt4.dsl:4762:                SMB2 = 0x02
->> ssdt4.dsl:4775:                SMB2 = Local6
->> ssdt4.dsl:4784:            M460 ("  KER-ASL-CpmWriteSmbusByte (%d, 
->> 0x%X, 0x%X, 0x%X) = 0 ERROR 1\n", Arg0, Arg1, Arg2, Arg3, Zero, Zero)
->> ssdt4.dsl:4795:                SMB1 = 0x3F
->> ssdt4.dsl:4798:                Local1 = SMB1 /* \M410.SMB1 */
->> ssdt4.dsl:4803:                SMB1 = 0x02
->> ssdt4.dsl:4816:                SMB2 = Local6
->> ssdt4.dsl:4825:            M460 ("  KER-ASL-CpmWriteSmbusByte (%d, 
->> 0x%X, 0x%X, 0x%X) = 0 ERROR 2\n", Arg0, Arg1, Arg2, Arg3, Zero, Zero)
->> ssdt4.dsl:4832:            SMB0 = 0x1F
->> ssdt4.dsl:4833:            SMB4 = (Arg1 << One)
->> ssdt4.dsl:4834:            SMB3 = Arg2
->> ssdt4.dsl:4835:            SMB2 = 0x08
->> ssdt4.dsl:4836:            Local1 = SMB2 /* \M410.SMB2 */
->> ssdt4.dsl:4837:            SMB5 = Arg3
->> ssdt4.dsl:4838:            SMB2 = 0x48
->> ssdt4.dsl:4848:                    Local1 = SMB0 /* \M410.SMB0 */
->> ssdt4.dsl:4853:                    SMB2 = 0x02
->> ssdt4.dsl:4856:                        SMB2 = Local6
->> ssdt4.dsl:4865:                    M460 (" KER-ASL-CpmWriteSmbusByte 
->> (%d, 0x%X, 0x%X, 0x%X) = 0 ERROR 3\n", Arg0, Arg1, Arg2, Arg3, Zero, 
->> Zero)
->> ssdt4.dsl:4871:                Local1 = SMB0 /* \M410.SMB0 */
->> ssdt4.dsl:4881:                SMB0 = 0x08
->> ssdt4.dsl:4892:        SMB0 = 0x1F
->> ssdt4.dsl:4893:        SMB8 |= 0x20
->> ssdt4.dsl:4896:            SMB2 = Local6
->> ssdt4.dsl:4905:        M460 ("  KER-ASL-CpmWriteSmbusByte (%d, 0x%X, 
->> 0x%X, 0x%X) Success\n", Arg0, Arg1, Arg2, Arg3, Zero, Zero)
-> 
-> Interesting, can you share the whole output of acpidump?
-> 
-> Thanks,
-> Armin Wolf
-> 
->> On 9/1/26 10:19 PM, Guenter Roeck wrote:
->>> Hi Matthew,
->>>
->>> On 9/1/26 19:14, Matthew Bettencourt wrote:
->>>> Hello Guetner,
->>>>
->>>> I believe I implemented the print port correctly, below is the dmesg 
->>>> and piix4_sb800_port_sel() function.
->>>>
->>>>  > Another idea might be to decode the ACPI data and see if there is 
->>>> anything
->>>>  > in there which accesses the SMBus controller.
->>>>
->>>> I have no problem grabbing the ACPI data or whatever is needed, just 
->>>> might need a little bit of guidance on that front. I am OK at c code 
->>>> with some AI help but never really delved into ACPI.
->>>>
->>>
->>> It would be something like
->>>
->>> sudo acpidump > acpi.log
->>> acpixtract acpi.log
->>> iasl -d *.dat
->>>
->>> You'll get a number of.dsl files with cryptic assembler-style
->>> code and data. Then the digging starts ... you may find something
->>> like "Name (SMB0, 0x0B00)" in dsdt.dsl. Then we can only hope to
->>> figure out if ACPI actually accesses it.
->>>
->>>> And one last thing I greatly appreciate all the time and effort you 
->>>> are putting into this. I would definitely not have been able to get 
->>>> this far without your help.
->>>>
->>> My pleasure.
->>>
->>>> --- CMD=0b
->>>> [19462.122064] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.123074] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.123109] [  T21683] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.124081] [  T21683] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.124115] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.125067] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.125074] [  T21668] spd5118 12-0053: PRE BIT UPDATE: SUSPEND 
->>>> MR11 (0x0B) -> Cache: 0x00 | Bus: 0x00
->>>> [19462.125094] [  T21683] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.126064] [  T21683] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.126072] [  T21683] spd5118 12-0051: PRE BIT UPDATE: SUSPEND 
->>>> MR11 (0x0B) -> Cache: 0x00 | Bus: 0x00
->>>> [19462.126088] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.127545] [  T21668] i2c i2c-12: [PIIX4 ERROR TRACE TRIGGERED] 
->>>> result=0
->>>>                          STEP 1 (PRE-START)    : CNT=08, CMD=0b, 
->>>> ADD=a7, DAT0=00, DAT1=18
->>>>                          STEP 2 (START BIT SET): CNT=08, CMD=0b, 
->>>> ADD=a7, DAT0=00, DAT1=18
->>>>                          STEP 3 (POST-WAIT)    : STS=00, CNT=08, 
->>>> CMD=01, ADD=45, DAT0=ff, DAT1=18
->>>>                          STEP 4 (POST-CLEANUP) : CNT=08, CMD=01, 
->>>> ADD=45, DAT0=ff, DAT1=18
->>>
->>> Now we'll need to know the port number here (or even better at each 
->>> step),
->>> so some duplication of piix4_sb800_port_sel() which only reads the port
->>> number will be needed.
->>>
->>> Note that this may not help at all - whatever entity is modifying the 
->>> registers
->>> may not change the port number.
->>>
->>> Thanks,
->>> Guenter
->>>
->>>> [19462.127556] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.127582] [  T21683] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.128217] [  T21683] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.128240] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.128894] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.128920] [  T21683] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.129561] [  T21683] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.129588] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.130227] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.130255] [  T21683] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.130894] [  T21683] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.130919] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.131560] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.131584] [  T21683] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.132226] [  T21683] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.132249] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.132882] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.132904] [  T21683] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.133555] [  T21683] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.133563] [  T21683] spd5118 12-0051: POST BIT UPDATE: SUSPEND 
->>>> MR11 (0x0B) -> Cache: 0x00 | Bus: 0x00
->>>> [19462.133581] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.134238] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19462.134244] [  T21668] spd5118 12-0053: POST BIT UPDATE: SUSPEND 
->>>> MR11 (0x0B) -> Cache: 0x00 | Bus: 0x08
->>>>
->>>> --- CMD=1a
->>>> [19664.445821] [  T21712] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.446491] [  T21712] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.446531] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.447201] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.447235] [  T21712] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.447890] [  T21712] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.447903] [  T21712] spd5118 12-0053: PRE BIT UPDATE: SUSPEND 
->>>> MR11 (0x0B) -> Cache: 0x00 | Bus: 0x00
->>>> [19664.447923] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.448574] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.448581] [  T21668] spd5118 12-0051: PRE BIT UPDATE: SUSPEND 
->>>> MR11 (0x0B) -> Cache: 0x00 | Bus: 0x00
->>>> [19664.448601] [  T21712] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.449239] [  T21712] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.449264] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.449886] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.449910] [  T21712] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.451402] [  T21712] i2c i2c-12: [PIIX4 ERROR TRACE TRIGGERED] 
->>>> result=0
->>>>                              STEP 1 (PRE-START)    : CNT=08, CMD=1a, 
->>>> ADD=a7, DAT0=00, DAT1=18
->>>>                              STEP 2 (START BIT SET): CNT=08, CMD=1a, 
->>>> ADD=a7, DAT0=00, DAT1=18
->>>>                              STEP 3 (POST-WAIT)    : STS=00, CNT=08, 
->>>> CMD=01, ADD=45, DAT0=ff, DAT1=18
->>>>                              STEP 4 (POST-CLEANUP) : CNT=08, CMD=01, 
->>>> ADD=45, DAT0=ff, DAT1=18
->>>> [19664.451414] [  T21712] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.451438] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.452398] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.452423] [  T21712] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.453393] [  T21712] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.453400] [  T21712] spd5118 12-0053: POST BIT UPDATE: SUSPEND 
->>>> MR11 (0x0B) -> Cache: 0x00 | Bus: 0x00
->>>> [19664.453417] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.454396] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.454417] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.454883] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.454904] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.455541] [  T21668] piix4_smbus: PORT SEL -> requested=0x00 | 
->>>> hardware_was=0x00 | writing=0x07
->>>> [19664.455549] [  T21668] spd5118 12-0051: POST BIT UPDATE: SUSPEND 
->>>> MR11 (0x0B) -> Cache: 0x00 | Bus: 0x00
->>>>
->>>>
->>>> ---
->>>> int piix4_sb800_port_sel(u8 port, struct sb800_mmio_cfg *mmio_cfg)
->>>> {
->>>>      u8 smba_en_lo, val, prev_port;
->>>>
->>>>      if (mmio_cfg->use_mmio) {
->>>>          smba_en_lo = ioread8(mmio_cfg->addr + piix4_port_sel_sb800);
->>>>          val = (smba_en_lo & ~piix4_port_mask_sb800) | port;
->>>>          if (smba_en_lo != val)
->>>>              iowrite8(val, mmio_cfg->addr + piix4_port_sel_sb800);
->>>>
->>>>          prev_port = smba_en_lo & piix4_port_mask_sb800;
->>>>      } else {
->>>>          outb_p(piix4_port_sel_sb800, SB800_PIIX4_SMB_IDX);
->>>>          smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
->>>>
->>>>          val = (smba_en_lo & ~piix4_port_mask_sb800) | port;
->>>>          if (smba_en_lo != val)
->>>>              outb_p(val, SB800_PIIX4_SMB_IDX + 1);
->>>>
->>>>          prev_port = smba_en_lo & piix4_port_mask_sb800;
->>>>      }
->>>>
->>>>      /* Always print port state on every function call */
->>>>      pr_info("piix4_smbus: PORT SEL -> requested=0x%02x | 
->>>> hardware_was=0x%02x | writing=0x%02x\n",
->>>>              port, prev_port, val);
->>>>
->>>>      return prev_port;
->>>> }
->>>>
->>>>
->>>> Thanks,
->>>> Matthew
->>>> On 9/1/26 8:32 PM, Guenter Roeck wrote:
->>>>> On 9/1/26 17:57, Matthew Bettencourt wrote:
->>>>>> Hello Guenter,
->>>>>>
->>>>>> These are the only boot up messages I see for SMBus/i2c/piix4
->>>>>>
->>>>>> [    1.848113] [    T272] i2c_dev: i2c /dev entries driver
->>>>>> [    6.093885] [    T727] piix4_smbus 0000:00:14.0: SMBus Host 
->>>>>> Controller at 0xb00, revision 0
->>>>>> [    6.093888] [    T727] piix4_smbus 0000:00:14.0: Using register 
->>>>>> 0x02 for SMBus port selection
->>>>>
->>>>> So bus 12 and 13 share the same controller address.
->>>>>
->>>>> There is one more thing we can try: Print the selected port before 
->>>>> and after
->>>>> the access. The code to access the port number is in 
->>>>> piix4_sb800_port_sel().
->>>>> If we are "lucky", we may find that the selected port changed.
->>>>>
->>>>> Unfortunately that isn't going to help much since we'd still have
->>>>> to figure out where that happens.
->>>>>
->>>>> Another idea might be to decode the ACPI data and see if there is 
->>>>> anything
->>>>> in there which accesses the SMBus controller.
->>>>>
->>>>> Thanks,
->>>>> Guenter
->>>>>
->>>>>> [    6.095020] [    T727] i2c i2c-12: Successfully instantiated 
->>>>>> SPD at 0x51
->>>>>> [    6.095981] [    T727] i2c i2c-12: Successfully instantiated 
->>>>>> SPD at 0x53
->>>>>> [    6.096039] [    T727] piix4_smbus 0000:00:14.0: Auxiliary 
->>>>>> SMBus Host Controller at 0xb20
->>>>>>
->>>>>>
->>>>>> I don't see anything on bus 13 or 14, I added 10-12 as well for 
->>>>>> good measure.
->>>>>> # sudo i2cdetect -y -a 14
->>>>>>       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
->>>>>> 00: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 70: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> # sudo i2cdetect -y -a 13
->>>>>>       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
->>>>>> 00: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 70: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> # sudo i2cdetect -y -a 12
->>>>>>       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
->>>>>> 00: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 10: -- -- -- -- -- 15 -- -- -- -- -- -- -- -- -- --
->>>>>> 20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 40: -- -- -- -- -- -- -- -- -- 49 -- 4b -- -- -- --
->>>>>> 50: -- 51 -- 53 -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 70: -- 71 -- 73 -- -- -- -- -- -- -- -- -- -- 7e --
->>>>>> # sudo i2cdetect -y -a 11
->>>>>>       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
->>>>>> 00: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 30: 30 -- -- -- -- -- -- 37 -- -- -- -- -- -- -- --
->>>>>> 40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 50: 50 -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 70: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> # sudo i2cdetect -y -a 10
->>>>>>       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
->>>>>> 00: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>> 70: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->>>>>>
->>>>>>
->>>>>>
->>>>>>
->>>>
->>>
->>
->>
+Guenter
 
