@@ -1,69 +1,69 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD8649C4D0
-	for <linux-hwmon@vger.kernel.org>; Wed,  2 Sep 2026 13:13:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D09F4A013E
+	for <linux-hwmon@vger.kernel.org>; Wed,  2 Sep 2026 13:28:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788354808; cv=none; b=JeXVyOFhiDx14IKXRkzXpLhKOzS5XKjLoIsmmv3WgXzWdLzaQsGxNXc1rc8gKMIoTOzeVMqtxJBFxakAoTxXtzAFBrePxN1fi0o3lDim1YzqACNHkfqcSRtZGBmft+OquH+SGSRht88lA1kYrBF6KyJgnCfcFdq11+bsS+NuyQc=
+	t=1788355728; cv=none; b=Q32gO0M7DIrpUy2zOz4doh921fkfYTTqs2eeRswKj5v4nO0ok/Oo6q0EQYVy6gUIZJ9IWhXiTxQPMxoPBbvF+nKSjlHnVvpxcgbXv6IvuBXnIcCHFJat0uWjJRcmePXEIxlCLsW3W4tO+cSLOz85Wc53dBrBol0pJ/nQp8+3lsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788354808; c=relaxed/simple;
-	bh=U9vc3dyM+YUvCBr/4qgAYA5zLaGitUqlS1Dy/V99s3M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=hecpr9jabtCAmXORv4WlCeMzxv9wv3/axBxi0M/oicCTDaKKtODLnrS7X1kaMOTMEzgH4kPVOB1nsnpaRTkSxEycE7etCqbmydQmmH4RurJQMT0uG2Yv/ZgbYPMSOyIxW6A+J1qbflzgcmf8HzB+FrMUyWIMvbx7y7Daj1uZpYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q3C6oQ+8; arc=none smtp.client-ip=209.85.210.182
+	s=arc-20240116; t=1788355728; c=relaxed/simple;
+	bh=vqQ9yFom+KAtKBmXnmdPUsCdNv7GT8zmvq1Y31NDaXs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uCkjR2R7STa91qIe79Leg2bCWpKcr2M6ajDBURFmp90Sud10w6sKYw1M2BypQs7M1B5UVmuQ1WHJfXH8JLfMhP/xHeDezoZSFqLAbVkNDfChz+g9fm5ZAG3kOuvtDoDNyvRwQmwwZjb+duqETY6fuGQQlv4g/CH1V3qz8gAdVYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q4M/7d0V; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q3C6oQ+8"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-85339ed040aso862335b3a.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 02 Sep 2026 06:13:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q4M/7d0V"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-38759bcd877so1244377a91.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 02 Sep 2026 06:28:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788354805; x=1788959605; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788355727; x=1788960527; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=/42RqmC9ERn7tQq+z58dQa1AiNxwavuyLFyUeoiv2QQ=;
-        b=Q3C6oQ+8N2+FSQ0VDOy957LzND00Kaz8atEOgIJUQcpoocHf1NCG4LguYmo4pPex5m
-         bUUqD8HkQigpCsN3KuoM/kJzSjT9hqbYIbsDGBIVZh4PCpBPX4GB7KM+uxo4ValEgJWV
-         zv5MEsv7j6uG+PYu5ZPzJ9Mum0Rg0W2a7Bq0/ckQSqGdz9eKxvm8kOqTcnLLlPjDcz3v
-         siddDzLrvhl7XAXwmuDkyMLqVO2iZXWCiR7tLDu3uucDjj+CkmGzhJrhRldJdztWIUET
-         lhadpdZiNAO8AZ7BAY2TXqFJ/cgAteC+sbRTEeu4SOownuIS4Agm0A476uP48bMykd6K
-         kXLw==
+        bh=WaieGRt6LOh5thIe/TkyPr91gBSSxoFIo40Umb3lPE4=;
+        b=q4M/7d0V4DHiJegKtwXhmBb3L81BAeT4yvG2kyPwkNXJ+z4NnoE5XFlFHDb0CmI3gc
+         1DlQKXgy+hRnUiPFz9NVGb5/CCaZxXcPbLJ33BBnG84Njx+5SBiEHQiCRFea5vb5SL57
+         JKrdQIE+U/jNOlzb3NowieqjcSmMdmIHDkPcdCj97Wyl8Iu+kH5hdLF44xzQMDoq2TOK
+         MCqO5nQ/fge3WAfLHzH82NqLztjdtOG5PnF6JmlIxtPqnAdNgXOSWVt71BoxZHvsWsbP
+         ibIf2K+LuGg2N0uhcgOHKZKJg27U4HW8njsewi/1jAw1i6mntYHp0tcR6QE/zU3vB4KK
+         kyCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788354805; x=1788959605;
+        d=1e100.net; s=20251104; t=1788355727; x=1788960527;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=/42RqmC9ERn7tQq+z58dQa1AiNxwavuyLFyUeoiv2QQ=;
-        b=cH1UeKrwexlI1MLpl7DpIl/pfsaQ71UgL5vY4FMRBu55y5CLnQI4nxshTQ20B5RiQS
-         QvSKP5sQOoJLuXsFYxEvnvJszxD47frTEYa2BBjLfOl+rGSx06cgBtOPyzASQJPzXMSn
-         qYf1ixm+2gjqJo6FkFg4mOSaA1Ous/K9LPzUKx5f41e0gJq82I5EgI9jeHTZx0owW/sb
-         sBEIFVTbXbdV8jKJhcYVVYeMHwZ++qjwusuEJyjhLaaW5RAdA5kxyODpG3qjBw1jBMBe
-         0rj+ryerniMeLSMDE3NYlT/zhC4kHEiuei8Kn3Yp/8AcdhUfXYzW1iBpknz/d5V+xeGs
-         Ie/Q==
-X-Forwarded-Encrypted: i=1; AKwUvBxE+91SJcVDgbDkbQGOmoPYkF+J6LCO6BXjyslOm3NrXAHkB8VBcxWuIu1pix2rTuq7DWKiowkhGKX2dQ==@vger.kernel.org
-X-Gm-Message-State: AFuF++kWz6wYy1OAKePh1CAyFNJ3UEebXc39EVtJd9B0BJy3lzpvBOWC
-	/Yq4UXu6m4AACb2NM0MOPqf4iQYYCfGmrlRcWX4YREdcoyAeNRtwfbeeKlb/Eg==
-X-Gm-Gg: AYBFou24boLAmhF8qBWbm+ZJ2xFBHEvq4kYvuFsSuzENt0gdZKQb+fJe22CvfQFNOc2
-	5LjfH/kLgoU/mFsWiEBspMcV5ma+wj8qSh8I3RN8D+HKnjk0VwgtxJ7EIsC4kMKK2hlEvEeucro
-	1cvr1bjT06ThYIEQPmI4jfUjclakVZM84x5wbBf8dUWQG6Mb/udBMByj7dTiBhkB29cg/L4i4UP
-	KfJYekRf0iA8ujAZqGFDeIJnpDmFHI++pAAIp0oB0u3/FeXApJ3i47aMO26VKejxN7Z/F+ZPVjq
-	p9iQC325p2JiK4Msb2h5uoTyvsSf4JBs3nOwU7Xyi+cD75VdS7XfsHow7ZoyqJG2Ug+lnb4Gbm+
-	bFktd/AlM+OFucSMQF5xeim0Lxs1WzcoRvNkNXxVd6yVoe2fER2aP+Qm5kV4CNcmxvLEISO8XeM
-	FJHzXjl3i+nyQgGMHPBKbvzFDnWGNVIwhkOfolARAD88iRZOUnkVAXW3C8aXv0Ij4b8cxwHLv0k
-	akHOuMutEcAZEPXvFS5dbix/M8iDSOBNVLHCA==
-X-Received: by 2002:a05:6a00:4286:b0:857:4dea:e20e with SMTP id d2e1a72fcca58-85ecef11451mr7958614b3a.0.1788354805381;
-        Wed, 02 Sep 2026 06:13:25 -0700 (PDT)
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=WaieGRt6LOh5thIe/TkyPr91gBSSxoFIo40Umb3lPE4=;
+        b=TiZm+k2UMcBu0LIQm+rBSVboSmvwdX2IKxka26E3aZTyBLIdlKiidsAiKMBby7v9g2
+         x4bC9JKYWtygMJj0ekYv8rTsKhB0phAleitaMK/vl8iivxIVL7EWNN4JkMuype6mqA/v
+         72uzVoxU/E4nSMDozsilknYZ8j7/w7I6/e3zSIJ0mCBgV6QYCghkKXVyGmzmb22mZcMl
+         APsl7Q/Wlg20oWTCh42+E8tGSCw9z4tMWkxbuYw62Y1ouWmtp/IkNKYqXdL2vmPfGI7n
+         tcTnf4OMQKKEVBIO/2XVIz1h4tj0uZO1EMHDEDqumh7nJf4IUfUQiMUwshII7iWivAkx
+         fekA==
+X-Forwarded-Encrypted: i=1; AKwUvBy+34RKNOd78uzEbenjfnY8RSlt+Jw/HSniVfEhx6opKIzX55MSQwGcXqOMsX8/J5mHlTFbtRYM6pobyQ==@vger.kernel.org
+X-Gm-Message-State: AFuF++k4or0QmaIMBRfIfi6JKUXepri8tx4rlf4G3L9cII5OKCTSBq4C
+	5l9GbMuYc1Xge+M3ZxqlWezUxC64bHJ7Or8XLlP3sr+BhnohGdl4whmn
+X-Gm-Gg: AYBFou0y3jj1gD2jYSjSs1kNPtv2WD01+yTTgc8f1pv4x85oCQGdW3dzVeeu9b+gzRq
+	hjIxsYvi5VQ0CAby9Liqw0NMdvglWQjVUkHzB+gCoh+9fEAb3WmXxeySNZC5wjrWikRyeDQTFHH
+	b+SkIpATN0hpf2X/tia29kT9TNUQ0CDIoI4vJ9pNKIJiFrDrqfDWAxngZhBXS43AJDSxYHGhz1N
+	KuMeR4clglh81j/G8WjgamjqBIciZZMTAFEs3pJjCxS385gEOrEKIxXB/8h/iiL5R2jiYpxxh0i
+	v3AnqgYbDb/ggk/xiC+THBGQXhu41ApPt9aL7FHafYlITPee5u4q8L0ucvnTtcX9z0y7/VUWsrk
+	2bRjtDfOC+cGgou05TErwU1CuBI3n24w56BxNpZHOs3GHQ+qnQl0QyGKB6hq8G0+B9SCmtnX8J+
+	PBzWs/nKqh8kUytmyj/B962hVQyRz+XE9EJK2jHY2GZ+6To2ycGNYsgPC4RyLby2PF7koJWQIkd
+	cdNm5uRTh5itXmVZSDGo1YP2hAXriWheu6dcQ==
+X-Received: by 2002:a17:90b:1a8a:b0:385:393e:7124 with SMTP id 98e67ed59e1d1-39aee0e5de8mr6631593a91.14.1788355726490;
+        Wed, 02 Sep 2026 06:28:46 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-85dc071665dsm1360625b3a.40.2026.09.02.06.13.24
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3990d7bb9d7sm12149494a91.15.2026.09.02.06.28.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Sep 2026 06:13:24 -0700 (PDT)
+        Wed, 02 Sep 2026 06:28:45 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ff4f10a6-7818-49f1-8852-e712e19c7d57@roeck-us.net>
-Date: Wed, 2 Sep 2026 06:13:23 -0700
+Message-ID: <bc51c907-a523-4b99-bf3a-b23c5823fd56@roeck-us.net>
+Date: Wed, 2 Sep 2026 06:28:44 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,10 +71,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: drivetemp: Unable to read SATA drive temperatures from usb
- enclosure, but can read SMART temp
-To: Rishub Nagpal <rishub.nagpal@gmail.com>, linux-hwmon@vger.kernel.org
-References: <CALCyNyd=pmL2_RSJAOiwpX3x1ctuaXghpUxzfu77PNxHnUjPVQ@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: hwmon: ti,tmp401: add
+ #thermal-sensor-cells
+To: Krzysztof Kozlowski <krzk@kernel.org>, Vincent Jardin <vjardin@free.fr>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260825-for-upstream-dt-tmp401-vcc-tsc-v2-1-cbc360ec51d9@free.fr>
+ <20260828-weightless-ferret-of-pluck-ef2baa@quoll>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -120,47 +124,31 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <CALCyNyd=pmL2_RSJAOiwpX3x1ctuaXghpUxzfu77PNxHnUjPVQ@mail.gmail.com>
+In-Reply-To: <20260828-weightless-ferret-of-pluck-ef2baa@quoll>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/2/26 05:57, Rishub Nagpal wrote:
-> Hi,
+On 8/28/26 03:02, Krzysztof Kozlowski wrote:
+> On Tue, Aug 25, 2026 at 12:13:18AM +0200, Vincent Jardin wrote:
+>> The property is missing, so a board that uses it with a thermal zone fails
+>> with dtbs_check:
+>>
+>>    tmp411@4c (ti,tmp411): '#thermal-sensor-cells' does not match any of the
 > 
-> I have a Sabrent HDD enclosure connected through a USB-C bridge. I
-> noticed that the drivetemp module cannot read temperature information
-> from this enclosure, however I can read temperature information
-> through SMART.
+> Cannot find such node.
 > 
-> Admittedly, I used AI to try and investigate it, and it reports that
-> "the bridge does not provide the SCSI ATA Information VPD page (0x89)
-> and the drivetemp probe currently appears to require VPD page 0x89
-> before attempting SMART/SCT access."
-> 
-> First, is this correct?
-> 
-Yes
-
-> Second, since drivetemp supports reading temperatures through SMART,
-> would it make sense to add a case for similar devices like this that
-> if VPD 0x89 is not present, but is a sata drive, to query with SMART?
+> How can I reproduce this warning? If it is non-reproducible, then it is
+> not a valid reason for a change and instead driver implementing thermal
+> sensor would be the proper reason.
 > 
 
-The driver uses the information to determine if the drive is a SATA
-drive and if it supports SCT or SMART. Maybe there is another / better
-way to do that. If so, I don't know what it is, I can not test it, and
-I don't have the time to explore. I'll be happy to review and apply
-any patches shown to be safe.
+The driver does register thermal zones. Since #thermal-sensor-cells is
+mandatory for using it, I would think that the property is needed.
+
+However, not all chips supported by the driver (and this bindings file)
+have more than one channel, so I suspect that the value range might
+need to be "enum: [0, 1]".
 
 Thanks,
 Guenter
-
-> I tested this on Kernel 7.1.10-200.fc44.x86_64
-> 
-> I would be happy to submit or test a patch on this hardware or any
-> insights on why drivetemp is designed this way, I am not well-versed
-> in the kernel.
-> 
-> Thanks,
-> Rishub
 
