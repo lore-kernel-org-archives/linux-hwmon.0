@@ -1,101 +1,100 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E1347D935
-	for <linux-hwmon@vger.kernel.org>; Wed,  2 Sep 2026 12:59:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6424249C4AA
+	for <linux-hwmon@vger.kernel.org>; Wed,  2 Sep 2026 13:01:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788353972; cv=none; b=o1kOIHjZeLAgFgqKMyZxG3cIoIMvV/r9Q2pqrpDtzPoKUr25j3c8gm+xYgtpL1+qMnUve3ivnbfFfxyQVnJ10apDpOSKaixafxIlE3erh5lAMutJ8Z+bJA0eWdwm8XFJqR2RCZSg2Zv+4RDoyneTFV477k+7Ea31nndBzLtT4NU=
+	t=1788354072; cv=none; b=oBryhhvPaaNCqnx3l13L+jmRz1Jq5+5LFDWKT1pp3cXUJITyKhRBXKS3B7sGiu1khPomtP7hncBUNb+ItEvpgU2ICy1stLYyM+NUKg6h8itngt7dGZyvKBefT/kxM0CCWvlodogwrvfmupHeYupHP8GvHN6zFSnS5CHFA67+PZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788353972; c=relaxed/simple;
-	bh=dmJe+J/F+vYCqGcuQ3jcywh4Jc/H3IZgC2ypGBQHfp0=;
+	s=arc-20240116; t=1788354072; c=relaxed/simple;
+	bh=8oS/0o7cbFR6d0ZNPiKRUaGlfNnV83oR76X/iueXojc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ry8jGsJ6CtrgPTeP8+Hqr0OggfBqIth+03WWaSi3XPVUBWEaLbT+c6iut6xCw2pijRkiBiOQ+pA1/kIH01yadgEBNnAo9qyn0UyG0Fo/200/mVHutDS2TSWLxysIw6sbrhM1vtVPyTyz56V27F5RRybCb89w7QnVtU1cRtUc/BI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pPkUxD/T; arc=none smtp.client-ip=209.85.214.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=QTmGupSxz2n+aYWJ+BAExIuucfRWAzMVX64bJpottVh/dsFu93vnMNeV+7xQNkxisjadJalDjqlWqHcDUIEQ0dDKmTcEB8UYSQ7yMKDoNxw2huSMUT2ahtHayTQlbrGP74yT+FPvH1VQSs0NY5npsA1uTXdZIkoCiWSHH3my5N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c9/EOGjH; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pPkUxD/T"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2d032846c95so12365345ad.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 02 Sep 2026 05:59:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c9/EOGjH"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8558c0b26a8so818001b3a.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 02 Sep 2026 06:01:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788353970; x=1788958770; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=SqORnjd6nGMwkHINTVnkwjIgRmlTLFd4wtw4MP5cLxE=;
-        b=pPkUxD/Twrwtl8FSBb3jjo50HqDKJ5Gemks/7vWj7UFSxp15IkP+79KXBQa+Rf/0ff
-         K71gAHKDZiYsH1qwaLX8f2Sxmov+dieOamzQcATPeEyA93+m+CAOSgp49F+c1BmTLQxC
-         4w4UC6HQA8e7NBjdvKcRWNowO/PIazlUvQy+W5TlaPkLeBO+4uf6L62gX+UsMkE5x17v
-         zdCSvV/YvowcVkbMamIPnNYs1zqlsIAm0YSzFh9yN0OJhUyd59LA+VW8I9pOMakRsdmt
-         +MEVrpIRHQ/TJR7mbMILaRjeKdmRVTuppNyo1qd1iDx8vW1uBwRmnh6WcFmQ0gW/KLN8
-         jOVA==
+        d=gmail.com; s=20251104; t=1788354071; x=1788958871; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=J7I3yfmBz4sZhZWkBTulqc5Y1o3WUiX91xHY8kVn60w=;
+        b=c9/EOGjHFydswb+mB31CPhpzj/WR4Ybsxa+lzHNHfvodVlxOSplegH1cxTM2WWy+x/
+         lljWNh/islMZFKsLlk0hBL4vDs14KAZVrQuk9dp9vPsVJoyZ9KLYEv3QM+U7TuYTTgNT
+         Yvba7ZeO6khEBW6Nc4+mGr5U6RQJs1eg1CD2CKA13QHmqHqpkq981IH5LTETCQ0UHkmT
+         ixJG23xYRDDrwt0zJm0QOFN6zZGtKCZrl6B6BS2zSjNk2FZqDz9LBHx05Vv0+Kd3h4T5
+         GvOOUTBW2OksqkzRJYTv88BRUyk+Y433kHSGmmjSUENGSGaYJ4bwRt++x9zFIo4O8n5u
+         e50w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788353970; x=1788958770;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=SqORnjd6nGMwkHINTVnkwjIgRmlTLFd4wtw4MP5cLxE=;
-        b=KZch0rM1Y5KGu/VLmaTqcTh2h4NH/PHheEBngJmFSh0tqZ85vu0fg0XCnppiyEshQJ
-         SK4yNGr0WgZibgqvfrLTejkD75eaKbOuFtKM311FiMjn/Nss48jEhz99OU6/yhshA4Ai
-         I0Xu9CaWc+4oeUw3iPeaxenF5JRxcd6feZd6P7+QGMG8IxG2+Q2b4mPftHrCz8hHjURI
-         ifpVcB58Ye/Tz+LbeH37fDU2AAnaCHZYxc2NIlgCHERIPNQOSGXo1MZmTi00dX1tQ/3D
-         TxAvKAh+LFWnRbqIlP4lDGOPhwhRoE8y6WMGITmvzgPRbhL5jt1U4jmxmSQG0/FaQ8Fb
-         neMA==
-X-Gm-Message-State: AFuF++nFhcSZxK4xSAxkPQseZaVcZR5PwFRZ9PqHy6wvk1Yll8Gmacmb
-	NhIJCo8x36M1G36Cf4x/cXzTAt2Mc6G7mQcbHaIFw5UqV9WQqDPzoAER
-X-Gm-Gg: AYBFou2TUod2SOPLXr62JJdlSogpRmeSG/rzLdCuoJs9hdCMPYab4tC9lNknu8N2hkN
-	4nYcnWR/KQY4eXlKQM7U2LoSJXP/qHnPYUBxGVDT72ewh5pDgs4neLowjplLePLORltdZrNUrm9
-	wHL+p7Iq1OwVR5pvjAeZ3EyBZDe+FNmrdzDXIETZRBI/khmO4IfJdEtfJXyGyODPy5GhmIv8FZG
-	0AEzkQswMnoDCNcvAbXPO3vaQjgB1yWklhJGDbfTK7cSUjMHIN3hCNhxf4X9cOgymxc0KiU0E6l
-	kAgRbMU5niiW6laxEMiNhoKr/PzVlwb+iDgTzZ8y2YWGm4+XQNkmHTHsDL1XcuXPXcCdK54GijT
-	ytkupGSPIgykLXDHzvBb2mNOM69CvEZiYX0bQnyxtrkh1lKO/fA25ql3A+9Na91z0Nc3L+YfILf
-	ipwpN1dWpoF3FNBtsM1CrAhwDAHwXUbGXKy5NEcZlzLcaiKqD90OQnO88g/cOALWmAQqr1e512W
-	Q==
-X-Received: by 2002:a17:903:22ca:b0:2d6:3c2f:6a5 with SMTP id d9443c01a7336-2daec71f2f5mr60870245ad.14.1788353970437;
-        Wed, 02 Sep 2026 05:59:30 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1788354071; x=1788958871;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=J7I3yfmBz4sZhZWkBTulqc5Y1o3WUiX91xHY8kVn60w=;
+        b=NRBA7weCbkyKsFKJeNFalRVvfnne5tWl5ybZXQMmp80TwxcogvN9B3KjhEkBjTptAY
+         tfcKiaxZ73aZ4XWualNEfc6YyMdsJQWxUQKNURInyNyrqA/wk8PD/brmYF3nh0bmB5IB
+         v9LTrDTd/4nf6WfX8SkF010wVvAuLEVSrWO6Llh+/67iUStJIkEQ9sZXE0V7q2Y3gOh8
+         uZOHXvHokvs5o+unlDfAyUt26jGlwaa6eDMB12X4cSURCgljXKGI3Xj1VwhM9XPbB9ym
+         /+qXvUWx1n2bcusEfIgY6s1dXapM0/IsJSP8blhe21AMz4MrukBDFThmvh++uCerBdqm
+         Uw+Q==
+X-Forwarded-Encrypted: i=1; AKwUvBy8WCzsC12/UHgj9AxVEnInrn0TU8LqbZBe8+c3+mCr67HSD0L4PKzp9xS3jzRGH+niJeutn08cPgc2gg==@vger.kernel.org
+X-Gm-Message-State: AFuF++lZF3xaXqI5HMxtNC6GiqErBU/SfFJV3WpxNQUyXFPwo4np3ADJ
+	gvvw3oPqM1ge8jzZVHf/Nco4LpdRDfjPpGZjLF3fBChUh7vry3Sg+eJC
+X-Gm-Gg: AYBFou2Wnh0602foFQScaFFSLFHEyCQSxn7ay+AoNtp8BUzcIPE4Szw6eoWsZUlerUf
+	RCDuBcxThDt9UlJfie0yMwywz6DvJYruv4IXhXVY54wMXgCePCcYy4yIEbZuWHeJxaK/f1O6AUR
+	EQ6UQ12khQ3J00d4nmHFeqj/l/nW9hknQrKR3gk4/yhC4SZ/SmPjA/gI7vlG0v+E8qg1iBS6MYm
+	y9hB3gLU/JThM/GqXhdy36f+kdt6mzyx0ybyu5086KFckvGzalCe5RZ+c+MNd3xg4WSq7mzooHE
+	LCK1lFqpeoOAi30jZ2ZeAMMI6wd+gbbNW01xIPZheP7CBwF1cX4zD0JpsLdLf5kNTPnv2SEIbOD
+	ms6qVN4ClmY46fGODtQmf5zskVeVOpKmIkq6k1X8pKgu5nRKQ2Ch1q6s4ON/XOR0ab+nKpGBPVG
+	vpWG8tRo2C3szl4tbYVhucdU/9J1BJJ012wdS2ybnYQQ3jH8xXwcYVWWU0HzLRLXdUf9bgk5E/w
+	w==
+X-Received: by 2002:a05:6a00:a90c:b0:857:727c:a1f3 with SMTP id d2e1a72fcca58-85ed4446f43mr7765503b3a.21.1788354070164;
+        Wed, 02 Sep 2026 06:01:10 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dadd4a688dsm12228205ad.58.2026.09.02.05.59.29
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-85db24f4140sm1333636b3a.1.2026.09.02.06.01.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Sep 2026 05:59:29 -0700 (PDT)
+        Wed, 02 Sep 2026 06:01:09 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 2 Sep 2026 05:59:27 -0700
+Date: Wed, 2 Sep 2026 06:01:07 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: =?iso-8859-1?Q?Sebasti=E1n?= Peyrott <speyrott@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] hwmon: Add Minisforum UM780 XTX EC monitoring and fan
- control
-Message-ID: <7709521d-745d-4d1c-b68f-95337918fa43@roeck-us.net>
-References: <20260902000509.191115-1-speyrott@gmail.com>
+To: Linmao Li <lilinmao@kylinos.cn>
+Cc: Marius Zachmann <mail@mariuszachmann.de>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Sashiko <sashiko-bot@kernel.org>
+Subject: Re: [PATCH] hwmon: (corsair-cpro) Remove debugfs entries when probe
+ fails
+Message-ID: <58b477f2-ceae-4569-9227-93be3db9940f@roeck-us.net>
+References: <20260828061949.3151191-1-lilinmao@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260902000509.191115-1-speyrott@gmail.com>
+In-Reply-To: <20260828061949.3151191-1-lilinmao@kylinos.cn>
 
-On Tue, Sep 01, 2026 at 09:05:09PM -0300, Sebastián Peyrott wrote:
-> Add a DMI-gated hwmon driver for the embedded controller used by the
-> Minisforum UM780 XTX with board revision 1.1 and BIOS 1.06.
+On Fri, Aug 28, 2026 at 02:19:49PM +0800, Linmao Li wrote:
+> ccp_debugfs_init() registers debugfs files whose private data is the devm
+> allocated ccp.  If hwmon_device_register_with_info() fails right after it,
+> ccp_probe() returns without removing them: the HID core then frees ccp,
+> and ccp_remove() is not called for a failed probe, so the files stay
+> behind.  Reading one of them dereferences the freed pointer.
 > 
-> Expose the CPU and system fan control temperatures and tachometers. The
-> tachometer protocol returns one byte per OEM command, so serialize
-> transactions and use high-low-high sampling to reject torn values.
+> Remove the debugfs entries on that error path.  debugfs_remove_recursive()
+> waits for readers already inside the show callbacks, so ccp is no longer
+> reachable through debugfs by the time probe returns.
 > 
-> Allow selecting either complete OEM CPU fan profile through pwm1_enable and
-> changing the two validated system fan transition temperatures through
-> standard automatic-curve attributes. Cache coherent settings and restore
-> them after the firmware reloads defaults following resume.
-> 
-> Signed-off-by: Sebastián Peyrott <speyrott@gmail.com>
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Closes: https://lore.kernel.org/linux-hwmon/20260708031612.BD7E61F000E9@smtp.kernel.org/
+> Fixes: 5997eb60f896 ("hwmon: (corsair-cpro) Add firmware and bootloader information")
+> Signed-off-by: Linmao Li <lilinmao@kylinos.cn>
 
 Applied.
 
