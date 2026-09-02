@@ -1,316 +1,163 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05274AEBCB
-	for <linux-hwmon@vger.kernel.org>; Wed,  2 Sep 2026 17:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B39381EB5
+	for <linux-hwmon@vger.kernel.org>; Wed,  2 Sep 2026 18:04:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788370660; cv=none; b=dthXVK8KGNLYl0cex9e9mAu2yYUicr8TMrpTJDqd744d8EzzdaaOB1iIDO6QsRL1WML49Bfo21oKrswtlCK1Dw6/Zbbzazmrp3LVWK6sB4QMN4utjSBzpGy7jjG0zPQkRZ+yuPYIigOi76y3bST3qDuPYMLFZWoEKCatt2X+qgE=
+	t=1788372275; cv=none; b=Ah4b5IK25GMAvD1mW9NUNSp1CdrllPYDX1rVfmhd1lRZ3UfmK1nv5Ana8z8Ow4mJVmaC5FdMA8vJ6G2HoQupwt7QDdz212d1Aq6EALj9c63OR1lQg8jGI6AEIzTpAGgGOUGrN8o5/Z1jWdPtCi0JpR3nJFMe4u3Jh6VNVAURBhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788370660; c=relaxed/simple;
-	bh=m37hZlXLu7o+QJCT8gXldAaRh4+ThnnXsxOJuAQFx60=;
+	s=arc-20240116; t=1788372275; c=relaxed/simple;
+	bh=f4WXt6Zuy9y3eY9gmTUA3MWcgBpYzepnscd0xhcL5fs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cW+b6JKQhpt5N6Saw6MCobcKWu/ATcpPV5TwfiAiSNQM67PflEgabvj/JLIv4DutKHomC74KFy7e/gxuEbVhTo3IpY3MnhFwaErsFpOQRlKWlN/Y0JkmkyUoKsNIGZlXT/i/BuOTWTiaqhpkGSuusgjYTGCWQdl+HUuOWZgdBGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DvcX+N7h; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	 In-Reply-To:Content-Type; b=pcCFNxWm2ns71lN2lHBlE7zK58LtCMEEz+N2XsG+1+eJbvIz7pAnCTMzpvS2KbGpckbm10CCJm/y4CKzam6+SbOTZQQ583f7o+I3Ql159HROErlKfhfmU/lzgXxdf/R8856C2+luhRTqZ0Nhjv1L0NPUGW+UiMDZfaiEDpiab/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XpPca+zo; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DvcX+N7h"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-cc1bc88a20eso1812975a12.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 02 Sep 2026 10:37:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XpPca+zo"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38e42560ebcso1238599a91.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 02 Sep 2026 11:04:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788370655; x=1788975455; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
+        d=gmail.com; s=20251104; t=1788372273; x=1788977073; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ho3tL4wP9lAngetSW7d9GmzKVGsoI3fi1/0eS8npSDw=;
-        b=DvcX+N7hzK26ddIPtCusif1DVpzKxqo51aNYk19SU0VKawGCfVssCkQggt4pLGy6c9
-         mw2RXL0dEBo/qgZidWRdwr2srxrWmujF8AQm1eLfKcoHj8Hd/6aQ/S9A5J3BCmMz/XrO
-         fYRqGguo7qaTZRPe4TX9V6P7CuIuxeV3K8+heJa7qV7QP0P0GO8ZWMkOv30nGkYagzzf
-         txeNAaAbreHH9RQJQZ5NaYZGK3Q9NPfNKLm/NbiZHbC5MDWE1FBvuOfAM7hIMSiX3BID
-         smNewPBX3YBZfdGNXQfr5fDHWeVALqnPOixhMkq3YFb32ghFbMU//vuQUEBC8YiMYtlO
-         YMEQ==
+        bh=nHZfK559PfK75u7ErNf5bfk1YJgbq213PkKA07r3fYE=;
+        b=XpPca+zoAfvjNUIzHIbTLhbNZSt0Pcl7pTY4p78KZE7pik1TalCEpPI6I0Gca3Kquc
+         1JW1ONJzQ57oEeoSUbOwSrDATaprZbCtcqtekpW9b4El7c8FEYdHfhex8+xi248BGUAS
+         2tKBUZnHYtiODj+x+qcDF7ahsIR0kI/crL62AzOWjsq/iS2w7pzajhpQkFNUlG2n6hHN
+         9GcH6+C10E85Jywm9rWX3ciMkMpHzmYiszAwdT8hxsQIlwVL5uCGjja3SgaQXQKLUbZk
+         xMnecptUYtYu34Bb6IUPv3SvzISAXU98HxI9p990Gr9xR8p11LByElX6xbf39MaKg7M2
+         YMtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788370655; x=1788975455;
-        h=content-transfer-encoding:content-type:in-reply-to:from
+        d=1e100.net; s=20251104; t=1788372273; x=1788977073;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ho3tL4wP9lAngetSW7d9GmzKVGsoI3fi1/0eS8npSDw=;
-        b=H6phf5qkNFyuZHHLfH5Pd0GKaaIGMYrrYDB341FWJTR4zL1iooPqP2N9m5TlthGQ16
-         bN/923gG45nWqwX9n1QKw30nAx3bgaTmM5IsHjrXNAERcJDRka1Ir4bTX/TAFH3rZfp+
-         p9iupz8lYdOAaK4k6pQXlW/Z5EMdlVNorFVw1JXmEfn3aaCFCu6husEagxAYWgQ2iRNM
-         nxU5lxM9U894rJ5N5wwqelzJsIaUKbNBijc2MCDiRGEKJD/FbikfaGZ2qtB/ou+m6i4p
-         tp3S16dDKQ0wXzRXrMD6CUnf4YZ/QVNfvLMFzgBu8ODxUY+5Kpe/150vdhGDBqhk2SWS
-         c39g==
-X-Gm-Message-State: AFuF++keOSLzjm1EBySL899fFlOLPizx1w8fdGCfHBIOAndqp1scrN4I
-	ZhsUKYqqaMOvlWyNW+sgJZl+QJFvGTdnnt9ENdBsrqU1kjhTR2BAt12C
-X-Gm-Gg: AYBFou1+DutiPPOgXBsQirjzorkpk8BrnVkcZ7UayjYGQZKLjeJO686j656MIQnS38G
-	xI59O9oCcEnWsJJGp89ZhW0q0zjXvY8k81/Fh6jkVUNmcbkkBiOPtoVGf/MyZ/SqSkSu5QB5zCI
-	RNbtq9G3zHVFvyz4Bd468i/Xb/kPWeqsgpr4pCUYiQUaHcvhVHRPghT4UBy3mcv8r29IXLG7meX
-	Me92P0QkoZYjRF3MFmWJkjT2V+FUcpcjZa0eDExOrgo9V6ezBKoNumKoTWRNJQ686TVDDTaqjV+
-	63pB+yd6Rchy9D7CdIjAnod6VJOhGoC94Kcwyae0rXu9y/2qm+oj8SLALF2vKpKBu71YNARVPvS
-	BNAUB8Gf37fV0SO/zjvFbFk9sOi5nsw8qAIvEgOREyS1jDXgugRowBiH5B5SNq98uW/vdTnLKTB
-	2J6Wx/cmSFZDcCL8UMqtB+ZVPxCvxjQtlq75g6y6LgU0m2jq5nQdf33BLYveiglswvah9OR+c/o
-	kjm/ycaP5CW8xgK0hvRyt6bkkdBeUCKfJbNdOlaIaaSshFrJSABV/4h
-X-Received: by 2002:a17:90a:d403:b0:396:4cbf:45a2 with SMTP id 98e67ed59e1d1-39aee162852mr10758029a91.14.1788370654797;
-        Wed, 02 Sep 2026 10:37:34 -0700 (PDT)
-Received: from [10.198.0.120] (wnpgmb02ydw-ds01-112-62-45.dynamic.bellmts.net. [204.112.62.45])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b083e7167sm448061a91.5.2026.09.02.10.37.33
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=nHZfK559PfK75u7ErNf5bfk1YJgbq213PkKA07r3fYE=;
+        b=BjkniPp5IWNBCQlo3MgaiBIJiScKqiYVrUFGW0KrRtoB8OOGEhjtXhzzs+00LW3R0s
+         9A2oyRuH0i6T4P0ZS39e5ME2LuzqmdPOIGn+FIAggitDycGlCZWrYpQmHtGzJcMaYXSI
+         JyOaCKFKMAKe5t7oLiQE4+gldZmD1psTGMmSOheQSZfHOasGb/kq/IMw5QPxsUiTT49m
+         fEsnLzPUaki4roRccxK57u9ubFGqb1+FBV8THbG+JIJCIfCiSicPymPvjxyQOaL0UF1G
+         DxtAD4hMU9gqSIPpkNEkRcH7DwYEmQmPws1NgXItdiUw6EvOuuziaGNO9QdjyDWs44EC
+         +ZIw==
+X-Forwarded-Encrypted: i=1; AKwUvBxLy8I0soSNBvIe0Xo2xqZqJ4Ax3KU2yU94oY59i0CaatPSjbgAY1CoPJRm5JouPNws2WR2tAq6x3e+7g==@vger.kernel.org
+X-Gm-Message-State: AFuF++lY4oD6MbTJIs2blvoiiQ/MJULPAkKqcxgk6BSZWo2Qy4sGTlw5
+	iZMwlFCPiZlimYLDJSXVhIi2jtcWkLwZKS5cVpvdntdRvhwJvOXhs6i4
+X-Gm-Gg: AYBFou1bdWiH3REwpKy32mYIgITwl1XaqwHBMLLPD3i72iB5R18lI+BA1vW+3YibRAr
+	Upk6/gGlxFFz7ln396Yj5of7/tpO6TwIqZKZDXYnN/tXn2yTfEOTC+TOgSBs/VkZ8KKec2z9aqC
+	/V4XFraYJqzyvf4DfRoMfjQX8BanFb15tai8WIpg+wKitKWIUbq6XwrxbI+pxaJGrpsyLXzQQKR
+	FujyXvlLqaQqXDJDo0MW+rrqMVysVakKrOq4XldpFGtKh51nwGQeIHaUklLiwepJXA/mKh+5QHN
+	UOzdseFq3r413eOmDBFnvhc0AgnAKKE/jrTT5gVAeADhEB1FAlVg/7P1VTVu/ULZmUgP7gQnXgk
+	kXRSYnhpScK0PRd4motql9YI91xkj+X8Rr3Cq24Rkwv0EpYEOTmM4HZig0o9VD0IHwummpg0ub6
+	SCz3y2yTI8HY5WPCjWTb7bHLQR/RbM7xPnis1gtLmLALlpbOekoqUG06XQ50ga43hrm4aWGUvKb
+	VtwO8gwiogzn12ALzKqSdOkdI329NDjlcWFWw==
+X-Received: by 2002:a17:90b:2c8e:b0:398:990e:1587 with SMTP id 98e67ed59e1d1-39aedf25104mr9855099a91.9.1788372273028;
+        Wed, 02 Sep 2026 11:04:33 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b08627417sm545440a91.12.2026.09.02.11.04.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Sep 2026 10:37:34 -0700 (PDT)
-Message-ID: <bb74ebc1-9ea6-4ab0-9443-d25f2f971e4e@gmail.com>
-Date: Wed, 2 Sep 2026 12:37:32 -0500
+        Wed, 02 Sep 2026 11:04:32 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b7e6e195-4fde-47eb-b849-7ae02243673b@roeck-us.net>
+Date: Wed, 2 Sep 2026 11:04:31 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Linux)
-Subject: Re: [BUG] SPD5118 Intermittent MR11 Corruption During Suspend/Resume
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1a8ea9da-1ac1-4312-a8ca-ea4a9f35093f@gmail.com>
- <ee284272-0da0-45b6-a3be-c76822e5d54f@roeck-us.net>
- <014b9438-e9b7-4be1-b816-002e83a068a0@roeck-us.net>
- <37132c40-aa82-4df1-b5ce-337601f3c085@gmail.com>
- <3c4e9f59-5272-48cf-a4a0-eeefcba955a9@roeck-us.net>
- <763a8b30-8548-4ff0-a1e9-8e74bbfe9b02@gmail.com>
- <6e8761aa-67ef-4624-834d-4b9d0ce729d6@roeck-us.net>
- <9753ed80-5666-42a6-b04c-99b9ef9326fe@gmail.com>
- <5c17ea39-c479-4f88-adc6-9a86f3dfb96a@roeck-us.net>
- <d80cf68e-a6cb-4b0b-807e-313be29ca8ae@gmail.com>
- <49cafd78-2468-4b43-a376-a8b2e2de2c19@roeck-us.net>
- <11de1daa-702e-419e-912a-db37c9f28e92@gmail.com>
- <67938f6d-d60f-44cf-9b03-fa472c8a8499@roeck-us.net>
- <65336f12-b821-449b-a637-31972807c676@gmail.com>
- <a953dcaa-cfff-40c8-85a9-c12601e49e85@roeck-us.net>
- <9cdf4b63-8f99-4a80-b0be-3f3df69e526e@gmail.com>
- <0de99cfa-7de4-4236-930c-2c037aa1648e@roeck-us.net>
- <2df09073-2d9f-4b6f-892b-45e7287a85c9@gmail.com>
- <56826d45-e18a-4f9e-94b0-3e6f335c4ee7@roeck-us.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] dt-bindings: hwmon: ti,tmp401: add
+ #thermal-sensor-cells
+To: Vincent Jardin <vjardin@free.fr>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260825-for-upstream-dt-tmp401-vcc-tsc-v2-1-cbc360ec51d9@free.fr>
+ <20260828-weightless-ferret-of-pluck-ef2baa@quoll>
+ <bc51c907-a523-4b99-bf3a-b23c5823fd56@roeck-us.net>
+ <apgyEzLFXnyXEkPF@L30177.local>
 Content-Language: en-US
-From: Matthew Bettencourt <matthew.bettencourt@gmail.com>
-In-Reply-To: <56826d45-e18a-4f9e-94b0-3e6f335c4ee7@roeck-us.net>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <apgyEzLFXnyXEkPF@L30177.local>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Hello Guenter
-
- > I2C bus multiplexers only return a single data byte reflecting the
- > currently
- > selected bus. On writes they also accept a single byte, where a set bit
- > indicates
- > which of its channel(s) should be enabled. So i2cdump does not really 
-work.
- > Actually, using i2cdump might have messed it up because the writes 
-involved
- > might change the active bus... sorry, I should have mentioned before.
- > In general it is not safe to use i2cdump on an unknown device. Worst case
- > it can turn the hardware into a brick (seriously - I have seen that
- > happen).
- >
- > You could try "i2cget 12 0x71" and "i2cget 12 0x73". That should return
- > the active channel(s) if those are really I2C bus multiplexers. If they
- > are,
- > only a single bit should be set (again, i2cdump might have messed it up,
- > so you might want to reboot).
-
-No worries, the system did not brick itself haha. I rebooted and 
-executed the i2cget commands
-
-# i2cget 12 0x71
-WARNING! This program can confuse your I2C bus, cause data loss and worse!
-I will read from device file /dev/i2c-12, chip address 0x71, current data
-address, using read byte.
-Continue? [Y/n] y
-0x1f
-# i2cget 12 0x73
-WARNING! This program can confuse your I2C bus, cause data loss and worse!
-I will read from device file /dev/i2c-12, chip address 0x73, current data
-address, using read byte.
-Continue? [Y/n] y
-0x1f
-
- > so I don't have any of the AMDI0010 devices. Maybe that is the built-in
- > GPU ?
-
-I thought I had disabled the igpu in the BIOS, but I might have reset 
-the BIOS to factory settings at some point so it might have been become 
-enabled again. I can check the BIOS settings when I get home.
-
-
- >> If it is worth while I have access to second AMD machine, PRO B850M-A
- >> WIFI/7600x3d/Teamgroup 2x16GB - FLBD532G6000HC30DC01, which I can swap
- >> parts from/to. Even though its a completely different system it might
- >> worth it to swap parts out and see then what comes up on either system
- >> to help identify what might be going on with the i2c bus devices.
- >>
- >
- > It might be worthwhile if that system does not suffer from the same
- > problem.
- >
- > Bus-wise I can see that you seem to have different I2C busses in your
- > system. I have
-
-Yes I can do that. I will swap the RAM kits on both systems and see what 
-happens, checking for the sleep/resume error message with the piix4 
-transaction log.
+On 9/2/26 07:26, Vincent Jardin wrote:
+> Hi Guenter,
+> 
+>> The driver does register thermal zones. Since #thermal-sensor-cells is
+>> mandatory for using it, I would think that the property is needed.
+> 
+> agree. thanks.
+> 
+>> However, not all chips supported by the driver (and this bindings file)
+>> have more than one channel, so I suspect that the value range might
+>> need to be "enum: [0, 1]".
+> 
+> I could switch to "enum: [0, 1]" if you would still prefer it, but
+> tmp401_probe() sets temp_channel_config[0] and [1] unconditionally (local plus
+> one remote diode) and tmp432 adds [2] for its second remote.
+> So each case in this binding has at least two channels and the channel index is always
+> meaningful. That is why "const: 1" is used, matching national,lm90.yaml,
+> which covers a mix of 2 and 3 channel chips.
+> 
+Makes sense. Sorry, I missed that all chips have at least two sensors.
 
 Thanks,
-Matthew
+Guenter
 
-On 9/2/26 12:21 PM, Guenter Roeck wrote:
-> Hi Matthew,
+> I'll send a v3, that does not change the yaml by that applies the proper comments
+> per Krzysztof's feedbacks.
 > 
-> On 9/2/26 08:26, Matthew Bettencourt wrote:
->> Hello Guenter,
->>
->> Here is the i2cdump for those two 0x71 and 0x73 devices
->>
->> # i2cdump -y -f 12 0x73 b
->>       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
->> 00: ff ff ff ff XX ff 12 ff 12 ff ff ff XX XX XX XX    ....X.?.?...XXXX
->> 10: XX 0f XX XX XX XX XX XX XX XX XX XX XX XX XX XX    X?XXXXXXXXXXXXXX
->> 20: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
->> 30: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
->> 40: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
->> 50: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
->> 60: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
->> 70: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
->> 80: 00 e1 f9 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f    .???????????????
->> 90: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f    ????????????????
->> a0: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f    .???????????????
->> b0: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f    ????????????????
->> c0: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f    .???????????????
->> d0: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f    ????????????????
->> e0: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f    .???????????????
->> f0: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f    ????????????????
->> # i2cdump -y -f 12 0x71 b
->>       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
->> 00: ff ff ff ff XX ff 57 ff 57 ff ff ff XX XX XX XX    ....X.W.W...XXXX
->> 10: XX 0f XX XX XX XX XX XX XX XX XX XX XX XX XX XX    X?XXXXXXXXXXXXXX
->> 20: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
->> 30: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
->> 40: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
->> 50: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
->> 60: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
->> 70: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
->> 80: 00 0b e0 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f    .???????????????
->> 90: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f    ????????????????
->> a0: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f    .???????????????
->> b0: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f    ????????????????
->> c0: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f    .???????????????
->> d0: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f    ????????????????
->> e0: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f    .???????????????
->> f0: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f    ????????????????
->>
-> 
-> I2C bus multiplexers only return a single data byte reflecting the 
-> currently
-> selected bus. On writes they also accept a single byte, where a set bit 
-> indicates
-> which of its channel(s) should be enabled. So i2cdump does not really work.
-> Actually, using i2cdump might have messed it up because the writes involved
-> might change the active bus... sorry, I should have mentioned before.
-> In general it is not safe to use i2cdump on an unknown device. Worst case
-> it can turn the hardware into a brick (seriously - I have seen that 
-> happen).
-> 
-> You could try "i2cget 12 0x71" and "i2cget 12 0x73". That should return
-> the active channel(s) if those are really I2C bus multiplexers. If they 
-> are,
-> only a single bit should be set (again, i2cdump might have messed it up,
-> so you might want to reboot).
-> 
->> # ls -l /sys/bus/i2c/devices/
->> total 0
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 12-0051 -> ../../../devices/ 
->> pci0000:00/0000:00:14.0/i2c-12/12-0051
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 12-0053 -> ../../../devices/ 
->> pci0000:00/0000:00:14.0/i2c-12/12-0053
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-0 -> ../../../devices/ 
->> platform/AMDI0010:00/i2c-0
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-1 -> ../../../devices/ 
->> platform/AMDI0010:01/i2c-1
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-10 -> ../../../devices/ 
->> pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/drm/ 
->> card1/card1-DP-2/i2c-10
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-11 -> ../../../devices/ 
->> pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/drm/ 
->> card1/card1-DP-3/i2c-11
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-12 -> ../../../devices/ 
->> pci0000:00/0000:00:14.0/i2c-12
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-13 -> ../../../devices/ 
->> pci0000:00/0000:00:14.0/i2c-13
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-14 -> ../../../devices/ 
->> pci0000:00/0000:00:14.0/i2c-14
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-2 -> ../../../devices/ 
->> pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-2
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-3 -> ../../../devices/ 
->> pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-3
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-4 -> ../../../devices/ 
->> pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-4
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-5 -> ../../../devices/ 
->> pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-5
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-6 -> ../../../devices/ 
->> pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-6
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-7 -> ../../../devices/ 
->> pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-7
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-8 -> ../../../devices/ 
->> pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-8
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-9 -> ../../../devices/ 
->> pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/drm/ 
->> card1/card1-DP-1/i2c-9
->> lrwxrwxrwx. 1 root root 0 Sep  2 10:08 i2c-MSFT8000:00 -> ../../../ 
->> devices/platform/AMDI0010:01/i2c-1/i2c-MSFT8000:00
->>
->>
->> If it is worth while I have access to second AMD machine, PRO B850M-A 
->> WIFI/7600x3d/Teamgroup 2x16GB - FLBD532G6000HC30DC01, which I can swap 
->> parts from/to. Even though its a completely different system it might 
->> worth it to swap parts out and see then what comes up on either system 
->> to help identify what might be going on with the i2c bus devices.
->>
-> 
-> It might be worthwhile if that system does not suffer from the same 
-> problem.
-> 
-> Bus-wise I can see that you seem to have different I2C busses in your 
-> system. I have
-> 
-> lrwxrwxrwx 1 root root 0 Aug 29 16:26 0-0050 -> ../../../devices/ 
-> pci0000:00/0000:00:14.0/i2c-0/0-0050
-> lrwxrwxrwx 1 root root 0 Aug 29 16:26 0-0051 -> ../../../devices/ 
-> pci0000:00/0000:00:14.0/i2c-0/0-0051
-> lrwxrwxrwx 1 root root 0 Aug 29 16:26 0-0052 -> ../../../devices/ 
-> pci0000:00/0000:00:14.0/i2c-0/0-0052
-> lrwxrwxrwx 1 root root 0 Aug 29 16:26 0-0053 -> ../../../devices/ 
-> pci0000:00/0000:00:14.0/i2c-0/0-0053
-> lrwxrwxrwx 1 root root 0 Aug 29 16:26 i2c-0 -> ../../../devices/ 
-> pci0000:00/0000:00:14.0/i2c-0
-> lrwxrwxrwx 1 root root 0 Aug 29 16:26 i2c-1 -> ../../../devices/ 
-> pci0000:00/0000:00:14.0/i2c-1
-> lrwxrwxrwx 1 root root 0 Aug 29 16:26 i2c-2 -> ../../../devices/ 
-> pci0000:00/0000:00:14.0/i2c-2
-> lrwxrwxrwx 1 root root 0 Aug 29 16:26 i2c-3 -> ../../../devices/ 
-> pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-3
-> lrwxrwxrwx 1 root root 0 Aug 29 16:26 i2c-4 -> ../../../devices/ 
-> pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-4
-> lrwxrwxrwx 1 root root 0 Aug 29 16:26 i2c-5 -> ../../../devices/ 
-> pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-5
-> lrwxrwxrwx 1 root root 0 Aug 29 16:26 i2c-6 -> ../../../devices/ 
-> pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/i2c-6
-> lrwxrwxrwx 1 root root 0 Aug 29 16:26 i2c-7 -> ../../../devices/ 
-> pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/drm/ 
-> card1/card1-DP-1/i2c-7
-> 
-> so I don't have any of the AMDI0010 devices. Maybe that is the built-in 
-> GPU ?
-> 
-> Thanks,
-> Guenter
-> 
+> best regards,
+>    Vincent
 
