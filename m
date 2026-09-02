@@ -1,78 +1,118 @@
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE4E34B682;
-	Wed,  2 Sep 2026 14:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.27.42.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD8C749C4CD;
+	Wed,  2 Sep 2026 14:34:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788359201; cv=none; b=smCnyEAx7ZSvikkkSY0zrYsjcjMsUyGmQoqAHbZyWTFSjLrKGMefFs8DGU7ua18b8scVI2gQcvfweAi844L4z+0JVE7ytiIuAmlr0+MWZwm3gnWg3vRsWv/Wdh8hETMi7Ob6s+Brtuz8fZ9JIqKJ8NDS727kLKYRYrrkGeYUV0A=
+	t=1788359682; cv=none; b=jV0BaNKIf0pjEOb71fHpA+7CEsC85duY80zIlMA4TTPI7yr8DPZ8Gh4U0MMCnfBONNikMj7exAXJZjoj0bNIrAhwanOjxhZAbPfYKBJQdih0btyRucRWdNhbY3ZA+JS17UrpEDQdyHX3TPhXG0jpAaEj6OAE1vPV4DscqyGA6WY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788359201; c=relaxed/simple;
-	bh=6pnUS24KLxJU8vsNrCQ35P3B4gSS5eeN0K9s/ckslV8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jFQmFOBm9r4FRJFK6ywcnRBipQDSadTVbI6kY2uiQ8ltiXi+dp+wuuW6/eh4E6ugvq0lq2h+0MKUZLfzW16dCZb7C2yKAIFEMc/oRKkhjeiCd06KVFIrGvotYKsvP2PySBh40EDMHLdrAiaHarnLtzm9tTC89PSJtWu/fsVDxQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=free.fr; spf=pass smtp.mailfrom=free.fr; dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b=KKjvJebU; arc=none smtp.client-ip=212.27.42.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=free.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=free.fr
+	s=arc-20240116; t=1788359682; c=relaxed/simple;
+	bh=AVdaTgc5J2CZct1mArWZNY96rgu/WyPsFUSO1GQ8uJE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=cGAOT39GzmHTlKWe3VHqSLKPmpoWyHobZqu0n+KiskL14ow+qTro0Zpzj4BwJEchqMTf1bagGb8+23hiqkDpwmJgVWLeH1UfRy/redhu5LZq33lk/L9CP6nxy6JW51ziB8zk6eA3QQnaHpnFKdiDlHJVVaNWbnIEor5IzfZ4hDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CYG6sg41; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b="KKjvJebU"
-Received: from L30177.local (unknown [213.36.7.12])
-	(Authenticated sender: vjardin@free.fr)
-	by smtp6-g21.free.fr (Postfix) with ESMTPSA id E0AE3780507;
-	Wed,  2 Sep 2026 16:26:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
-	s=smtp-20201208; t=1788359197;
-	bh=6pnUS24KLxJU8vsNrCQ35P3B4gSS5eeN0K9s/ckslV8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KKjvJebUIvQiOpAfLjhUJAFJfeUpVKWcSdYodH9AiJvDlcml3yvC12dmkntFpkwyA
-	 sPW+b1/G1XdO6lT2U22K4KKdwQ9ZJC07u30I3c0f+bRfuybUcJ369Lic5C5AP8j70u
-	 Dd+WBMtf6mmVEwe2i2L5XZejjl8Hsqb8viO8LnBi6wgW77oz/4AQ4BZBZhkpGpmTnq
-	 4r0S5WmN0Blbhl8dh+MWJ0fAmeODn3i/RV9NKgGTgv2aKtUO98WrflJxnXu8+z+jkc
-	 lhyxsc4CBHVYBEhKGSN1cuex4/B28i6MrkCxKhDOVuilFblhB6CHMW+NO2Az0s7KnH
-	 zoDkXVNn+XZ5w==
-Date: Wed, 2 Sep 2026 16:26:27 +0200
-From: Vincent Jardin <vjardin@free.fr>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: hwmon: ti,tmp401: add
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CYG6sg41"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 41E23C2BCB3;
+	Wed,  2 Sep 2026 14:34:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1788359682;
+	bh=AVdaTgc5J2CZct1mArWZNY96rgu/WyPsFUSO1GQ8uJE=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=CYG6sg41tyuBSEbIvBt+L4ZEtiT3g1s8s0DC26y/QBkZnqkIEddIMSxsSHIFGjz0W
+	 PhYVG8sU/6YkMEY80Vb9025AoGIoETBepPW/xOdwnM/mUEju4Cw5LnaTOaoTUz/els
+	 JBLYQjkBS7VZYtEy6aT4cGTGvrRbQgk5PDi5fSBR4AztlrSSTdkHMYz5XU+1MpEj89
+	 v1+j/D3N8goAkovxqBUpTH1T69XqgSN3rbBqadxdvn8RmGBxXN0MED7OOxKZGFDUN2
+	 HkjV/zN7UhqGZoj+AAEm69hmeLp/NlWd1Kio8EWVija0K2zeL/+DSnMkhDEcl/wIvG
+	 AVCopauS6IMEw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D656C61DD6;
+	Wed,  2 Sep 2026 14:34:42 +0000 (UTC)
+From: Vincent Jardin via B4 Relay <devnull+vjardin.free.fr@kernel.org>
+Date: Wed, 02 Sep 2026 03:54:00 +0200
+Subject: [PATCH v3] dt-bindings: hwmon: ti,tmp401: add
  #thermal-sensor-cells
-Message-ID: <apgyEzLFXnyXEkPF@L30177.local>
-References: <20260825-for-upstream-dt-tmp401-vcc-tsc-v2-1-cbc360ec51d9@free.fr>
- <20260828-weightless-ferret-of-pluck-ef2baa@quoll>
- <bc51c907-a523-4b99-bf3a-b23c5823fd56@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bc51c907-a523-4b99-bf3a-b23c5823fd56@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260902-for-upstream-dt-tmp401-vcc-tsc-v3-1-49c484d2f08b@free.fr>
+X-B4-Tracking: v=1; b=H4sIALeBl2oC/43NvQ7CIBSG4VtpmD0GaKmtk/dhHMrhYBn6E0Cia
+ Xrv0i666fh+w/MtLJB3FNi5WJin5IKbxhzloWDYd+OdwJncTHJZ80ZWYCcPjzlET90AJkIc5oo
+ LSIgQA0Inak3YlEpSxTIye7LuuR9cb7l7F+LkX/tfEtv6N50ECCDUiuypaRttLtYTHa1nG5zkN
+ 6Z+YjJjqLGsOaESpv1g67q+AR7SCHoXAQAA
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Vincent Jardin <vjardin@free.fr>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1788314042; l=1832;
+ i=vjardin@free.fr; s=20260525; h=from:subject:message-id;
+ bh=7R3pcu6eseDa7fzzVvZHfd5ptFboQq6wZTkdZSwBKr4=;
+ b=ifr4eNv2wadubCmVyxfaX6jr9pERAMOm+qJqkhJXZlWlgfvo3mfSl/ukqc5N9ujyID5g7C0/R
+ pdRNAGAXfLlB+KBbo2B4GDjVmHwkiH5WvytTVm52ut5QMCGvt0hUvSh
+X-Developer-Key: i=vjardin@free.fr; a=ed25519;
+ pk=hppgLeFpGpKOi7LNwGEZ4jOYofJCoGd4Jf1ltAabiLw=
+X-Endpoint-Received: by B4 Relay for vjardin@free.fr/20260525 with
+ auth_id=871
+X-Original-From: Vincent Jardin <vjardin@free.fr>
+Reply-To: vjardin@free.fr
 
-Hi Guenter,
+From: Vincent Jardin <vjardin@free.fr>
 
-> The driver does register thermal zones. Since #thermal-sensor-cells is
-> mandatory for using it, I would think that the property is needed.
+Since commit
+  a3b61ba2558e ("hwmon: (tmp401) register with thermal subsystem")
+the driver sets HWMON_C_REGISTER_TZ, so the hwmon core calls
+devm_thermal_of_zone_register() for every temperature channel and the
+device can be referenced as a thermal sensor.
 
-agree. thanks.
+Signed-off-by: Vincent Jardin <vjardin@free.fr>
+---
+Changes in v3:
+- Rewrite the commit message: justify the property from the driver,
+  which sets HWMON_C_REGISTER_TZ since a3b61ba2558e
+  (Krzysztof Kozlowski)
+- Keep "const: 1": every chip in this binding has at least two
+  temperature channels, see national,lm90.yaml
+- No change to the diff/code
+- Link to v2: https://lore.kernel.org/r/20260825-for-upstream-dt-tmp401-vcc-tsc-v2-1-cbc360ec51d9@free.fr
 
-> However, not all chips supported by the driver (and this bindings file)
-> have more than one channel, so I suspect that the value range might
-> need to be "enum: [0, 1]".
+Changes in v2:
+- Drop vcc-supply: tmp401.c has no regulator code, every hwmon binding
+  that declares vcc-supply today has a driver consuming it, so declaring it
+  as description only does not belong to this patch (Sashiko)
+- Adapt the commit message
+- Link to v1: https://lore.kernel.org/r/20260824-for-upstream-dt-tmp401-vcc-tsc-v1-1-ecb5ef7898bd@free.fr
+---
+ Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I could switch to "enum: [0, 1]" if you would still prefer it, but
-tmp401_probe() sets temp_channel_config[0] and [1] unconditionally (local plus
-one remote diode) and tmp432 adds [2] for its second remote.
-So each case in this binding has at least two channels and the channel index is always
-meaningful. That is why "const: 1" is used, matching national,lm90.yaml,
-which covers a mix of 2 and 3 channel chips.
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+index 0e8ddf0ad7890..f283b567d5b6c 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+@@ -50,6 +50,9 @@ properties:
+     minimum: 0
+     maximum: 15
+ 
++  "#thermal-sensor-cells":
++    const: 1
++
+ allOf:
+   - if:
+       properties:
 
-I'll send a v3, that does not change the yaml by that applies the proper comments
-per Krzysztof's feedbacks.
+---
+base-commit: 89a312991dc6e638a36adc43ccb91dbc25504c04
+change-id: 20260824-for-upstream-dt-tmp401-vcc-tsc-a16bec8352e4
 
-best regards,
-  Vincent
+Best regards,
+-- 
+Vincent Jardin <vjardin@free.fr>
+
+
