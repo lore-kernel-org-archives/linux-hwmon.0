@@ -1,69 +1,41 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74BD401A08
-	for <linux-hwmon@vger.kernel.org>; Thu,  3 Sep 2026 21:05:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A79C35203D;
+	Thu,  3 Sep 2026 22:47:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788469552; cv=none; b=t3iXOkmQA5k/q6mXmBmvY/6PGXTfApJVouirG/SJagPGshfK163JmJBNUMctDo5q7M/80gKGmn1nlV9XCqmz87+x4tJig/1vSHbjZ/qUgYObzb3lGTcCr3vIYEt6AEXw94Vv04trJ7rzztt8ROvCQ/gp+jm1LBWntQ/pmdeajoY=
+	t=1788475644; cv=none; b=jR+Vci7UXeMF31klcIQ9M9oihurK/1V3UexkQpIr4DKRMiTI0yLU0AFmy0jjLVuzS4FtsoEkYENL0JSeeNwrEQHzvFdJPTJeSitW/iGhA3biBzWexo2HU4nS8Upe6ozjgBVmmJYbyr/1fKj7dIt8PzwLbTtm4aGdZlusX0V1NhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788469552; c=relaxed/simple;
-	bh=SOR9fOIt3kBxiRpEZhQdRNk36+I0q9GbOCdrTRgTeWc=;
+	s=arc-20240116; t=1788475644; c=relaxed/simple;
+	bh=Fw/39VPGJMV+S1rqX3otK3BY/RkIua46XLFzdlV95GQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=utkq/I9jbVGr5kfIwxZ/sZSzKEnN9T/LNp6vmx66puiJtvktbDzVPZ+Utm7Nje5hdo7H7qkB1zKf08h8y3D1oIV2xtwcCzGpm/JxxjEKVr8pYVtPk/YyFjIBE5S4N3YywVoGoP8ZZ8eECv8VR0Ce4hEr+KIN2dmH6E+pNEx9i1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VPW9DXMz; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=RYCuiBJ0Be3qmpMJcMU8FlWbxXeTaDKLf2CDIAGHAYSwQjJafG2fzJD4g03lTwlT42MUSN2+w9op7SB0xgQL+oyHtRvuFa1VsWO8JNh1oruLEyyyIec8C1dMcrlU4IJDJ22+VksnrG04Qr8Rvtl8pEMyCrc5RIpfXma8Dnlsdwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=HE6PwqNy; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VPW9DXMz"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-398d2b28acfso207705a91.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 03 Sep 2026 14:05:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788469550; x=1789074350; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=60P5FvTjKGMcVafsSO2v7sG3m4btNPCdvxmW+oE/rmM=;
-        b=VPW9DXMzVc6TdQ5J0hItX8ZBoaz/F6mE0HfxplBk8APZt5oUVc23qD4U/KLHeoTbWd
-         ouhr+bU8nHIBZHklWHd/6NpXrQ0Fuoyp5RPHI3WZoLUfHFVNE9beuFaXM/sAY+Hf5kaH
-         n0NcRbAIfYZCz/m8SGlvBL4MTv1a61L5RpSKHn6eAEY5OkGWk43BbiKTikH4XyDoK52Q
-         WCZjEEFgt1f/CAsBr7OJ6wiu9kO6KZCwyBE7UUxZlCMrehwyi5mH76EHszEwJ8G9P0TL
-         beaRoKepjw8PQ4cp2K7T3furmTGME+GBXZgbpOdH8WO9k2HmGdBY2ibxe7GzRV0ukUvc
-         trEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788469550; x=1789074350;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=60P5FvTjKGMcVafsSO2v7sG3m4btNPCdvxmW+oE/rmM=;
-        b=WS4ktNtMBNQPqKnCBsnYQ5epiZTi4nKJiiiCXPlR9s+kCDZdekN/K6og8TjqPYR2SE
-         KOpXTNQhOvMUNJevy5nAi/A0f7bT6rzg+q7PIPqyBFnESN7BmBxdie2Q+TcXOzqXqZrH
-         Huq3INw+lqPJ/pOTPy3BLom8be6nhhKgyIBMkbNJQwqSD77egxqfjc5fhUG5SY/FncuZ
-         6Zr8biufMIJf1oovZwvUVOvWMllWJyPErmGfn8V6clDJ1n89Lxoq375K/B7bMla9NZDe
-         FMJkad2RSBhEAjL/x4txofOgP9Ix9JGlb7rFLrBcriV1CifBGlysnj31D8gH5Iuz0Ne/
-         z+Kg==
-X-Forwarded-Encrypted: i=1; AKwUvBzj68G00SYL4lpA0rbUX+1ycO67gcX6aZyuiTXzfJQfNCBnnuaZqX2BbGZkcTSP+sOWcF3FTqM1hWEoyw==@vger.kernel.org
-X-Gm-Message-State: AFuF++nv0zV01O8plCWe224qXW8+Ty5VkrA6R1VdedmQWMygrwlmmYmp
-	Q2OvLNjmMWEeCyA5iM92At3EM2FvEq5QMnXF7457Kq9mxsrpvn8flPBf
-X-Gm-Gg: AYBFou1suUS7uO5SYxTwtQeTrodXTlp5wSlh8Z1XO/LYMar8SjgNXwZagWfNh5v90Rt
-	n1GAgESOe3EnoaSgNrSU39qqissiexn/hotmlB0ToWF/N3YlC6w82eFB1vUlW/LpzDkUFvf3hjO
-	Tn2hj/QaaFPWqd4Qvzef115KoEBw9aBBJwkHFGurCkJLEwm+Y3+eVL9w/G/f8VXC6r5MbYRZG1o
-	1STe5i67yH8zgpUpIGUw8YEQX4tHNuimxTpnLNXfdKGzNTapCpbmGx/KloJLf95OILocI4H5Sdp
-	ionwSTUp1vd9jK9kQ4uH7OFrjXCmm4c/K3susWX+t2/T0jExJ0RP6O6SvKV2IJ2Ppe2oG7rlkGa
-	q+s+2PBxmnlIwWCHt4u3HzWfoJsJIKdhBH9YaMwURceXs7iGz0848M80lP2C6PKn2v4nFqA8YLK
-	YFGrXh1r/GyTeQte6cytHqospq17UCg27vObYpJ+shCDXkPk/VPEX2jGG1cvLE+42XK50KHod/p
-	B/T/ge7M/NNs+nDhTNo4pGj0pWe5nLMbM4fBg==
-X-Received: by 2002:a17:90b:564c:b0:37f:e326:6557 with SMTP id 98e67ed59e1d1-39b2612338dmr2047120a91.4.1788469549990;
-        Thu, 03 Sep 2026 14:05:49 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b260cd2aasm767627a91.3.2026.09.03.14.05.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Sep 2026 14:05:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5480c69c-8e98-443e-96d7-30e64e886373@roeck-us.net>
-Date: Thu, 3 Sep 2026 14:05:48 -0700
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="HE6PwqNy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1788475622; x=1789080422; i=w_armin@gmx.de;
+	bh=Fw/39VPGJMV+S1rqX3otK3BY/RkIua46XLFzdlV95GQ=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=HE6PwqNyW7NDKDPdNVusjiaTTUMyqvbYzw2xiLfsaP3o+OS6b3AXN3KUouo9z4xE
+	 TpiQt9r2Ksu9LIIZbZXffxZbwZ5Mmyl31sqRG3y2ifliwXuHh7ZlCeqBWejhkwlEs
+	 1KXdOzSDLuN3MDegWNsd8EVfWhGDL9Ft8JSHssLoq7iIT3sgwuzfPakfBGQAjn6gD
+	 3BfMHRvaRKLH807FXPXVZ01XPbf4ZGLANzjaKXkwu5dzAmldk6JLakUPsrp8Nrpqi
+	 j7Xn6i0kjRT8A1pRWv9V6vNFOpQcv7oVhjEinPQsrUaRLwgQOuDRUreEFTOojN9aJ
+	 Tjq/JXbbufaQvFhQ0A==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mn2aD-1wd4Wf2E23-00ijtw; Fri, 04
+ Sep 2026 00:47:02 +0200
+Message-ID: <02dc7eb6-6d0d-4c0c-af10-b831d3f8ba06@gmx.de>
+Date: Fri, 4 Sep 2026 00:47:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -72,9 +44,10 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [BUG] SPD5118 Intermittent MR11 Corruption During Suspend/Resume
-To: Matthew Bettencourt <matthew.bettencourt@gmail.com>
-Cc: Armin Wolf <W_Armin@gmx.de>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+To: Guenter Roeck <linux@roeck-us.net>,
+ Matthew Bettencourt <matthew.bettencourt@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
  "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
 References: <46191fa9-fa4a-4c16-b618-2c0c6dc09102@gmx.de>
  <531be24a-bad0-40f6-8e30-3d4da565afcb@gmail.com>
@@ -88,88 +61,160 @@ References: <46191fa9-fa4a-4c16-b618-2c0c6dc09102@gmx.de>
  <7ca2e621-e0a1-4eee-bcd1-2ded610f1beb@gmail.com>
  <cff09168-9a88-494d-bc82-d9a5e4de22a7@roeck-us.net>
  <e1a6a91d-d03e-4e7a-ba7b-9268284ce7e8@gmail.com>
+ <5480c69c-8e98-443e-96d7-30e64e886373@roeck-us.net>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <e1a6a91d-d03e-4e7a-ba7b-9268284ce7e8@gmail.com>
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <5480c69c-8e98-443e-96d7-30e64e886373@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:+UDIw/3/2HiqIOSOnHgU9KGabzFnHwuwpxWOM3pra72mBzxjyCP
+ oY4k55nvU6yBXRZfJbxPam8dj1Mg5JWQpq81uGXnYNlq3b3qEANNcrfQHmVYwIcIjLJ6ita
+ tMF68LPJUIwapb7h7NViDHVPfkN1GaHuDe5sAD+7w4bFUjh8uR+7h/OO9iaY4psYjqQSNq1
+ 2ApaZ3e+IptZ7Zqwr9BOQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:RuAnbtgxKpk=;btevXHpyDer61GBQZoiT8B8cF2l
+ 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
 
-Hi Matthew,
+Am 03.09.26 um 23:05 schrieb Guenter Roeck:
 
-On 9/3/26 11:25, Matthew Bettencourt wrote:
-> Hello Guenter,
-> 
->  > This system [MSI PRO B850M-A WIF/7600x3d] does _not_ have a problem, or did I misunderstand the above ?
-> 
-> That is correct. I was unable to replicate the issue with the MSI PRO B850M-A WIF and 7600x3d. The MR11 registered never got corrupted during sleep/resume and I never saw any piix4 errors logged when using my piix4 driver with the additional logging enabled.
-> 
-> I never swapped the CPUs as that was more hassle than I was willing to do right now, but if it something that might be useful I can probably try that at some point.
-> 
-I don't think that would help. From all the reports I browsed through
-so far, the common denominator seems to be that the affected systems use
-a X870 or X870E chipset.
+> Hi Matthew,
+>
+> On 9/3/26 11:25, Matthew Bettencourt wrote:
+>> Hello Guenter,
+>>
+>> =C2=A0> This system [MSI PRO B850M-A WIF/7600x3d] does _not_ have a=20
+>> problem, or did I misunderstand the above ?
+>>
+>> That is correct. I was unable to replicate the issue with the MSI PRO=
+=20
+>> B850M-A WIF and 7600x3d. The MR11 registered never got corrupted=20
+>> during sleep/resume and I never saw any piix4 errors logged when=20
+>> using my piix4 driver with the additional logging enabled.
+>>
+>> I never swapped the CPUs as that was more hassle than I was willing=20
+>> to do right now, but if it something that might be useful I can=20
+>> probably try that at some point.
+>>
+> I don't think that would help. From all the reports I browsed through
+> so far, the common denominator seems to be that the affected systems use
+> a X870 or X870E chipset.
+>
+> Anyway, couple of ideas:
+>
+> - Do you have the latest BIOS installed on your system ?
+> =C2=A0 Some statements online seem to suggest that the problem
+> =C2=A0 _may_ be fixed with the latest BIOS on at least some
+> =C2=A0 of the affected systems.
+>
+> - Please boot the affected system with "usbcore.autosuspend=3D-1"
+> =C2=A0 kernel command line parameter.
+> =C2=A0 There are some claims online that this might resolve the problem.
+> =C2=A0 I have no idea why that would be the case, but I guess it does
+> =C2=A0 not hurt trying. Of course, if that _does_ work, we have yet anot=
+her
+> =C2=A0 mystery to solve.
+>
+> - Do you have memory with RGB-anything in the affected system ? If so,
+> =C2=A0 is it controlled by the BIOS ? If yes, please disable the functio=
+nality
+> =C2=A0 if that is possible.
+>
+> Thanks,
+> Guenter=20
 
-Anyway, couple of ideas:
+According to the output of /proc/ioports, the root issue seems to be that =
+the ACPI firmware
+drives the SMBus controller and marks the affected IO ports as reserved, b=
+ut acpi_check_region()
+still tells the driver that the IO ports are available.
 
-- Do you have the latest BIOS installed on your system ?
-   Some statements online seem to suggest that the problem
-   _may_ be fixed with the latest BIOS on at least some
-   of the affected systems.
-
-- Please boot the affected system with "usbcore.autosuspend=-1"
-   kernel command line parameter.
-   There are some claims online that this might resolve the problem.
-   I have no idea why that would be the case, but I guess it does
-   not hurt trying. Of course, if that _does_ work, we have yet another
-   mystery to solve.
-
-- Do you have memory with RGB-anything in the affected system ? If so,
-   is it controlled by the BIOS ? If yes, please disable the functionality
-   if that is possible.
+I already CCed the ACPI people to take a look at this.
 
 Thanks,
-Guenter
+Armin Wolf
 
