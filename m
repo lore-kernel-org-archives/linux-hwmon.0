@@ -1,45 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A62CD4052D7;
-	Thu,  3 Sep 2026 16:35:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74B04A3D35;
+	Thu,  3 Sep 2026 17:43:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788453325; cv=none; b=muG/jWnopVm2seC9UmNwAtAcdDa800DeOL8T5hw8ISD4vV6XZGTGt1xul6Q7aGclg+q7tvo9qXW17vqtW3uIRS3FHGV++erMv8a9OJRPLm0MxSqzgfO8ohuUXDx1of103fX7OulyogD5I1aapFXOi+dTnXSxyRewD1n9tcPn2Fw=
+	t=1788457393; cv=none; b=A4Lv3IPyVhPdzACyeUllEU55fO5G49alJNsOdpYvZ+ScW3EzKU0JNvRTt0ES/bf9hxGc+1TVtD9j9oy/Sj19ZzmJlPNb+7BD97FfFqn6D24Osl/DxXuAi1ee+zuy7rUo5h8zyKDtshR0olWA9mEcDNSnPS37pJA8UztBenGJyOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788453325; c=relaxed/simple;
-	bh=4VgcqGwejHpXlI0fhcLml5Ty0iRHkq8/A0Kj2ugtbO4=;
+	s=arc-20240116; t=1788457393; c=relaxed/simple;
+	bh=0yKUp8+OjNQuiGydyuc88xNu/ZV5JJj7ABNvGpvioNc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=STNhTzemhy1ef9LcBK4laCUQ2F8qp8gZdIHiWphRKetAJR9aq0reYcZd/65+9aaP/QL+qa2TL6PQq7NDE262HAOXjQDrwVxeeoBJ2ZCeie8PThHtDwO3d7QYoEvjBFJNNyYrjUV5x+zYhJDUjZvDT28petgbs4hZeXn/V623AR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bJn00D5L; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=gGsfpl8viV+q/Qv8HGqFRNUSrihabgQiiYINqk29dxUEoc7cBYC/6e3j95RB37twJZakrptnFwETB6asPwqG8RV/ma2/HjIUWzfNNegcwEVKoYyNnYD8xzdhc8iAB9ooog+CeUTM7XCvsvBo2OcigEINFT/cz2IgwJSMlUdFHiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iG3I0jS6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bJn00D5L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D0C51F000E9;
-	Thu,  3 Sep 2026 16:35:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iG3I0jS6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 162F81F000E9;
+	Thu,  3 Sep 2026 17:43:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788453324;
-	bh=4VgcqGwejHpXlI0fhcLml5Ty0iRHkq8/A0Kj2ugtbO4=;
+	s=k20260515; t=1788457392;
+	bh=0yKUp8+OjNQuiGydyuc88xNu/ZV5JJj7ABNvGpvioNc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=bJn00D5LHCNxJKO8OB0oD4jqtmpIcvs0FKWYL07kd8xyziZ1PcVIVLGJqrrvOyO6X
-	 BmEKRU8wNOCpJepqx4LQvKCaa0mVKE6PkerBqdK04v2t1qGy9cyq3kzmWkhcmBQw2t
-	 sB6E9oujzXL9p3jHW3gPcowbvTnOaQVpB7JmsCOMOGR85OPYgVpk18plFAtGbZGCz1
-	 97uzgbxyhmG+2jWU0YOBSUV7F3jzL2l3gpQ7GsUEPThXoKdF4MsG2yf3XnsnRoGVMz
-	 O8kOFhFN7wAQvwZbu0+RMK2EGNJ+nAvrw0DE16a591UIriRc9/meKuQmdJGJfNzOhZ
-	 /IftCisocxTMA==
-Date: Thu, 3 Sep 2026 17:35:20 +0100
+	b=iG3I0jS6ZHTha1IW2rCS0eScKYZtyUujA70ocylueLet1hFh+DjLNFd956URbpOE8
+	 JRSx/+luzRm0armEHasBKTtiLbokj/goAb3J9bHseVU+SwUZsUg4cxDVK+FLXM6ysh
+	 m9V5qce9cvT1NR+8eKrEJipUz/L9xOG+7C6UHFGRbND3mzF+HQg7+CN8/QLPnzt+9r
+	 qnjwDhQmNbXpE8M/sHGbhh2k/3uut+449wzf940H7uq0yPzsjHzzSeKWPRcINcO4rJ
+	 nk0tzCVgPhYhCLx66uKLWbmdey9qzsw7fM+0WHJ4kkthz9w4S44lazpYgO3QFbh0l8
+	 AmbqcadSMzJTg==
+Date: Thu, 3 Sep 2026 18:43:06 +0100
 From: Conor Dooley <conor@kernel.org>
-To: Changhuang Liang <changhuang.liang@starfivetech.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Iwona Winiarska <iwona.winiarska@intel.com>,
-	Guenter Roeck <linux@roeck-us.net>, openbmc@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH v1 1/6] dt-bindings: peci: Add StarFive JHB100 PECI
- controller
-Message-ID: <20260903-rotten-judgingly-5655b33067a3@spud>
-References: <20260903133408.110847-1-changhuang.liang@starfivetech.com>
- <20260903133408.110847-2-changhuang.liang@starfivetech.com>
+To: Petar Stepanovic <pstepanovic@axiado.com>
+Cc: Akhila Kavi <akavi@axiado.com>,
+	Prasad Bolisetty <pbolisetty@axiado.com>,
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Tzu-Hao Wei <twei@axiado.com>,
+	Karthikeyan Mitran <kmitran@axiado.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	openbmc@lists.ozlabs.org
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add Axiado AX3000 TSADC
+Message-ID: <20260903-magical-stopwatch-05e1a8be6fd8@spud>
+References: <20260903-axiado-ax3000-tsadc-v1-0-a8a0f3b251f5@axiado.com>
+ <20260903-axiado-ax3000-tsadc-v1-1-a8a0f3b251f5@axiado.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -47,26 +52,26 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6/hMdV/OsdyQFZVD"
+	protocol="application/pgp-signature"; boundary="SpJjSe/VbDY80SOp"
 Content-Disposition: inline
-In-Reply-To: <20260903133408.110847-2-changhuang.liang@starfivetech.com>
+In-Reply-To: <20260903-axiado-ax3000-tsadc-v1-1-a8a0f3b251f5@axiado.com>
 
---6/hMdV/OsdyQFZVD
+--SpJjSe/VbDY80SOp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 pw-bot: not-applicable
 
---6/hMdV/OsdyQFZVD
+--SpJjSe/VbDY80SOp
 Content-Type: application/pgp-signature; name=signature.asc
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCapmhyAAKCRB4tDGHoIJi
-0ux/AP91kU+PdujjA6iPz887aHKutbwu6u6M2sBSS0IoEsSS/wD8D6L6UV278fvm
-MgP0qQVpRpxWTJIbBhkO1zR9Kljykw4=
-=K3hZ
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCapmxqgAKCRB4tDGHoIJi
+0j+jAQD8wrE09OV3X86Bngo1gmedxzYJrUI0492AHQUpCyME4wD/b483lktimFdV
+N+9+LIBwWe0Ngow1TyKs9btPQpBogAQ=
+=fY2z
 -----END PGP SIGNATURE-----
 
---6/hMdV/OsdyQFZVD--
+--SpJjSe/VbDY80SOp--
