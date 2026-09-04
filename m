@@ -1,173 +1,133 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124983F20FA
-	for <linux-hwmon@vger.kernel.org>; Fri,  4 Sep 2026 15:06:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95163C1087
+	for <linux-hwmon@vger.kernel.org>; Fri,  4 Sep 2026 17:58:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788534424; cv=none; b=HPsymchoH2gqzfu/knJClCDSYwFc/oscOoeqQ6WE/ur4pJRAzJ+O8aKTKbKPhbcBB/ThbnPuyoyQpaLEOBsCv6d4seW2lqoDatAiHCeFn8WHkw9NpgbwF4tzrMwdPQZ/wTlwVK4rlo/YZfQUV2Sh+R1zBm3u1P17zUVxU0cBqFY=
+	t=1788544705; cv=none; b=VqkjnT17B5AX9YoCa2yT3qHcZdN60gVCWxDptbgUws0JdL7CbVZ1KmAyQ5ZLFns4KaQ4qWQ+lYr/rD3M0XWZTXYy2D1hlDatftlS6iheqx44tMrodv7e/fNJ3ZtZ5qNHTeKyEJWDkyCBBTPhqhhkmTUxcpnn9n4pNUrvOCjH2HY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788534424; c=relaxed/simple;
-	bh=Ott9U2hb4Hi4viuIaAguynnm0K0RD5lCpDpLZlXQGbA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V/vboaL+AedDc2Cb2lW3KZl3PxOQk4EpI+fy69VlAaC4pMclTuc09iowRr7b8KDEyFU1dV68ne27LZhHYKlyNMktM0+S/nGq7iJsF7Qjqn/FFez/4bCmyMRm3q9iC8E85yfg1Bf9HTBhq7tCUlzq/0sP8G2U/KYTlqxLrw9Jh6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nrr6bu3m; arc=none smtp.client-ip=209.85.216.46
+	s=arc-20240116; t=1788544705; c=relaxed/simple;
+	bh=pI2JbNlZVZDDW8lq9rTAQZsCB4xQJ8Xq1HJSt+KCzQw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OBSxRABE9yJr1AudlPatLuF6R7wnwKPRVmLoLY5PloPRCkT/L9BVXwZQVDVfhSMrxrYnbV3HBlnY0DroJ9xiwE92YUMZgiCo8bjmTV+xAsssb7sJxrRuV1ZkLhyhRpJDzXz52S3gPaI4VWxuTfgTsY9aNg0f9I/DfWRsXd/jnPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VFpQ1+wP; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nrr6bu3m"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-395cf2535acso1282454a91.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 04 Sep 2026 08:06:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VFpQ1+wP"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38759bcd877so1248520a91.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 04 Sep 2026 10:58:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788534418; x=1789139218; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=D6GOw+scLq5i6j/FXIclHCa3fA7Hy3H193BHaaw+L/g=;
-        b=nrr6bu3m6k0EL+ggctC6Exq+4woawHFrkJztB+9kcOpHnLNCAxw9ro2jXve7GqIk7M
-         taWQLHbj3V6+c2ezVJcIjzZQgIfRHCojh5Ca+bvauGKb14gxAKx/LvLzAzER+OWStCUI
-         ogjzhDHMzHcxTyzo0aa6c4ro5Wt+5OiJEwXmMM6L7LF+zlNVVlVFik2gxgm1X+UtSxaI
-         v55XlsKmcVNsyN5im41+bYAEsHuwCgizbcHMIS36CN6oErEG0+fy1U1+0Og7WfZdI1ZN
-         21nbNlxW+nv5h1+ULWh/9uPdX9jwhQJcgbeRda60ZvK5GJPWhOQZ6mIcwEHBbXkPUX/t
-         lG1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788534418; x=1789139218;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20251104; t=1788544703; x=1789149503; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=D6GOw+scLq5i6j/FXIclHCa3fA7Hy3H193BHaaw+L/g=;
-        b=GgnpbtpelA9DJObko+lfTFZCEBoK7drSggFfWRAdhgiWzIxxZMmX/ixuCXXIYSAc8I
-         FaSWOXceecauGWwft4sfch4apMN7XKjdzxWjaWvnYXuZIif96nTh6V3mAzv6c3+Jl3ax
-         PlbKuBKAOl4Oy+SS4zDGrLSuaEAmmF9X1+HeX5fGFUHyWfG0t6ew5QaAgTCarrWgbGjB
-         pMIso1/EmIWRDh/8jPCn2uHFQf/SuVXAPxZElMCtlYzzdxMw822pH05qkS5riV9XQCP1
-         K5hnYWIJeLhBQvEL2R4EjoM8wxJF2enu/f2g0Q5Elpk+7vtNSjsHUqaeTDrHdqcKH3SS
-         iiKw==
-X-Gm-Message-State: AFuF++l5fwDhEQQUoiDyVP8++ops9I3P0437EixyJlvx9DGLjda9MmuC
-	mdWyoCbGVpSR9VPmsem6rucTEW8ucvpLlCMaWorK6pQwP4b2UtG6Mun232OTLw==
-X-Gm-Gg: AYBFou1B5ewW3vPLXQ2e7g2EFq3zgkIi6Kwjo9z0CHnYVxkRHYNHJ1ptuKuNgHxBwjn
-	uokrR1dbGwipt7Ix138hrckmYMNYcW4/mgHexUGvyQnMxKLA/hCzQQT4njKykRsfwDXlVe5zv3i
-	qTevr0NrwCktLDCuD/JZUD5QcXYu0YLHeWK4rNZQV8Qf2IXvjSM6oaYzoEh7RfmG3Kc1C4LYgXZ
-	8z6+Yjr0jLgwgTXYFwh/lwNKxVFfn3nxhFqEs7g+Xkvy2W7fuQFfctFEi/rTBkAepyTTUSE+YEi
-	HISenO7KX0HesaKiDoVszpc2J/ffI0gCnZwmu26SRwzwOGax12IDpkIymMo56wMv3Xj5kMvnkB8
-	w9KO3bHgQjieuN2+0Mw7l9XIOJr3gkK80mz+oWZRC6/Q13Mkk5T/hayW2lQovOOQCvGlvGlmdxI
-	HCJcE/HfYyRsKAuKJ1vlPEzCP7VCVB2XpAX9eXMBowhNaGd9v0cW9RKf2/Y7XQ2+givMBCoD7OK
-	mbE/txpTh5gRNGtUBBkwJ7NA5hD8g9qKLMQgg==
-X-Received: by 2002:a17:90b:280a:b0:398:cb8f:c308 with SMTP id 98e67ed59e1d1-39b076add5fmr16354143a91.0.1788534418387;
-        Fri, 04 Sep 2026 08:06:58 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3342af0bc08sm5423868eec.17.2026.09.04.08.06.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Sep 2026 08:06:57 -0700 (PDT)
+        bh=MCttvfM9DrOknQxq7vF2LggqSOtL8sYj8RJ3yUrgdFo=;
+        b=VFpQ1+wP1PCWPl5KnizqDlsh97db/9Ssnn7sIwlvJFlAval0ZlIUA1NWArQaotk25j
+         BnvJsLlc5/RIb8TxzvYMWIxkiaeqBtB2QXf/nPcvC535NOKxatNPjYDRvNk0b4WAbOy2
+         nISwHad2f93TDY7Dl+AAmoc0PPaZPurFdU6aaXFleKLqQgBjiliZR8cxVqhbGXX/GScg
+         19ERZJvob/yBtbjBe+cPFV/ClRHkuVziWp17+aaKtNhJomgjzYAYtxVbm+RjLLs61J1a
+         n9bu4+nAzPKMyMV2/bQN8xB2TVk5Mpm/XZiw46uGxOPOuvy685ZMw/BJp1CCrf009fB3
+         OEzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788544703; x=1789149503;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=MCttvfM9DrOknQxq7vF2LggqSOtL8sYj8RJ3yUrgdFo=;
+        b=XoWj1rHT1hS1o2mIpxURY/4VKdRpinY/uF20RuXzKAR1Hd/9DZtOEJGH6Mx0R0dAbM
+         Cltd7zXvCWsD0h2mmXfdbr6iXPJoUpMnmifuLIfLc9C2z5WCF4rtwBvyTVyEPxBeDK/u
+         Na17hzgWXs2z9qE3/C90DQzFjdu5/cR9+JQwyf3wmDCI+jT7Ab2ImJ33zkCE4QMrNlf5
+         LzCnLyTkVRla7HvBgKtQI6iALMfHB6J8K38Dv8gb7IV72i9QQfzVrxnGfjKTyl1fdlBO
+         3XPppGjvSXFlM3Ab48WXVNpfHMmMGafbX2ebwd8TFCDvQGi8DRnVRDdYLCQ5wG111PAq
+         +/pw==
+X-Forwarded-Encrypted: i=1; AKwUvBzkuKqkco6P8v+bN0RBHYPqmYbyafE7jG0PtD0mJhlAfbz3Q3+OXz8rk6mK/M0oTD+ZEGmrE5+9HTWpCA==@vger.kernel.org
+X-Gm-Message-State: AFuF++mySqqFZZRDqc6vLOfoBqmfjYti1qYOMqPl2ZBpjU46UU8guJzs
+	0+3UQXaXITHPVixvCcSn/IT5OK+Rs2AuSKQNtktffvMZ6/HcO0CLb1AT
+X-Gm-Gg: AYBFou3PO8a6W08jbJHOSwMcYXZqvqtTJ0o7dV5BpOGplpFcSp6Wpw/gh6YmoXSFASM
+	zg+jzTsNfwiaqcqKVjZwvgFCxMAOZ+wPkKbhOxz1f2undzutoacvl2AHS7LOSUzWDxTomydB96/
+	/HiTRSmZ3TrjkvvzYn/QHKaV1csxBJ7M3aCbje3hl6LDqkPQSY6GKl10SV7vDKZaNhBLeWhIs9F
+	jzmeQxAzV66qA1WVUNt5ZodjrmSrJxpHJt7X2eyrUMQmgsBmkpr2mAD/mBDoi9F6dmmTk4HGWew
+	+UVB4uWTeMIEtLEwFfNgHu4CvvpgMhWgXjlpnjZl7TwTfL7ORutWnspWffPBc2DYM0ka5qFmR9v
+	UDiUl/ulPLB2cqQ0574rjPf7X8sh64mZktucPwCTgjgQgoMeNGd143jUriuCDDhll4K7p5Lc5bP
+	BmZrA+11ZIzO+Zi0ePBiXUyw0dV56kec1bQTI+JT41bNtLmLS5IJuyyg1Bol1arTAMpmmIKo6Ez
+	N4sMqYsTmn2Ugs=
+X-Received: by 2002:a17:90a:ec8d:b0:37d:f983:7b5 with SMTP id 98e67ed59e1d1-39b26101c08mr11024544a91.9.1788544702820;
+        Fri, 04 Sep 2026 10:58:22 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3339bbf1feesm8215824eec.26.2026.09.04.10.58.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Sep 2026 10:58:21 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0d666fd1-e8be-40a6-8d1a-f550b3095e15@roeck-us.net>
-Date: Fri, 4 Sep 2026 08:06:55 -0700
+Date: Fri, 4 Sep 2026 10:58:20 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Matthew Bettencourt <matthew.bettencourt@gmail.com>
+Cc: Armin Wolf <W_Armin@gmx.de>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Subject: Re: [BUG] SPD5118 Intermittent MR11 Corruption During Suspend/Resume
+Message-ID: <77e8caab-18b4-4953-8b66-887d5a7b31b1@roeck-us.net>
+References: <a5d32ab5-f545-4e11-bf0b-88d3eaa68890@gmail.com>
+ <474a37bb-0774-4710-8458-ea28d7c54c89@gmx.de>
+ <c81e7caf-d3e4-4212-be9b-ec35d0a04086@gmail.com>
+ <c096b0d7-90c2-4d91-9776-9f109679c309@gmx.de>
+ <7ca2e621-e0a1-4eee-bcd1-2ded610f1beb@gmail.com>
+ <cff09168-9a88-494d-bc82-d9a5e4de22a7@roeck-us.net>
+ <e1a6a91d-d03e-4e7a-ba7b-9268284ce7e8@gmail.com>
+ <5480c69c-8e98-443e-96d7-30e64e886373@roeck-us.net>
+ <02dc7eb6-6d0d-4c0c-af10-b831d3f8ba06@gmx.de>
+ <d1a590c7-f526-4e70-a255-fccfb199be39@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v0 1/2] hwmon: pmbus: Fix vout_mode parsing
-To: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260904005351.2136374-1-aryan.srivastava@alliedtelesis.co.nz>
- <20260904005351.2136374-2-aryan.srivastava@alliedtelesis.co.nz>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260904005351.2136374-2-aryan.srivastava@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d1a590c7-f526-4e70-a255-fccfb199be39@gmail.com>
 
-On 9/3/26 17:53, Aryan Srivastava wrote:
-> Currently this parsing assumes the top-most bit of the register is
-> unset, allowing it to match against all 2bit numbers. In the case where
-> the top bit is set, the parsing fails as the extracted value is always a
-> 3 bit number.
+Hi Matthew,
+
+On Thu, Sep 03, 2026 at 07:24:12PM -0500, Matthew Bettencourt wrote:
+> Hello Guenter,
 > 
-> AND the read value after the bit shift to ensure only 2 bits are being
-> parsed out.
+> >> - Do you have the latest BIOS installed on your system ?
+> >>   Some statements online seem to suggest that the problem
+> >>   _may_ be fixed with the latest BIOS on at least some
+> >>   of the affected systems.
+> 
+> Yup as of Sept 3 2026 I am running the latest BIOS, 4.43. I think a new one
+> is coming soonish as Asrock has started rolling out 4.50 on other x870
+> motherboards
+> 
+> >> - Please boot the affected system with "usbcore.autosuspend=-1"
+> >>   kernel command line parameter.
+> >>   There are some claims online that this might resolve the problem.
+> >>   I have no idea why that would be the case, but I guess it does
+> >>   not hurt trying. Of course, if that _does_ work, we have yet another
+> >>   mystery to solve.
+> 
+> I think we have another mystery to solve. I enabled "usbcore.autosuspend=-1"
+> as a boot parameter and the errors have cleared up when I suspend/resume. I
+> doubled checked this by removing "usbcore.autosuspend=-1" from my boot
+> parameters and the errors came back.
 > 
 
-Another note: Why "v0" ? What is this supposed to mean ?
+Outch. The mystery (or misery) deepens. So we kind of know that this has
+something to do with ACPI _and_ with USB, such as ACPI accessing (or trying
+to access) a device on the I2C bus when suspending (or trying to suspend)
+a USB port / bus.
 
+As Armin has pointed out, it isn't safe for the piix4 controller driver to
+access the hardware when its memory space is reserved by ACPI, even if that
+ACPI access turns out to be plain wrong. My ACPI / DSL knowledge isn't good
+enough to figure out what exactly is happening, but even if we do that it
+won't help: The PIIX4 driver must not load if its memory space is reserved
+by ACPI, or it must access devices on the I2C bus through ACPI.
+
+Thanks,
 Guenter
-
-> Signed-off-by: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
-> ---
->   drivers/hwmon/pmbus/pmbus.c      | 2 +-
->   drivers/hwmon/pmbus/pmbus_core.c | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
-> index 7a7eac90d62e..b629acbffbfb 100644
-> --- a/drivers/hwmon/pmbus/pmbus.c
-> +++ b/drivers/hwmon/pmbus/pmbus.c
-> @@ -121,7 +121,7 @@ static int pmbus_identify(struct i2c_client *client,
->   
->   		vout_mode = pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
->   		if (vout_mode >= 0 && vout_mode != 0xff) {
-> -			switch (vout_mode >> 5) {
-> +			switch ((vout_mode >> 5) & 0x3) {
->   			case 0:
->   				break;
->   			case 1:
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 5f69c1420b4e..55391db5b414 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2753,7 +2753,7 @@ static int pmbus_identify_common(struct i2c_client *client,
->   		 * Not all chips support the VOUT_MODE command,
->   		 * so a failure to read it is not an error.
->   		 */
-> -		switch (vout_mode >> 5) {
-> +		switch ((vout_mode >> 5) & 0x3) {
->   		case 0:	/* linear mode      */
->   			if (data->info->format[PSC_VOLTAGE_OUT] != linear)
->   				return -ENODEV;
-
