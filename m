@@ -1,126 +1,139 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB520DF59
-	for <linux-hwmon@vger.kernel.org>; Fri,  4 Sep 2026 01:07:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE0E2192F9
+	for <linux-hwmon@vger.kernel.org>; Fri,  4 Sep 2026 01:10:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788484026; cv=none; b=fjlz9S/edhtYoXeZnSjSSmRSC77uy+GwA8s2PH4xSL2aDbB600Xs2ExjXfjZtaFgBVtBttWFkuXFapMhVW2oxF+vah23csJFMQ9BJ/Hr2IUjQX+l3wO6rmTypV7pgxRy0NuvCwMm5BCg4r9gfQEtLvWKjLoXeWIUp/JYJKvselI=
+	t=1788484218; cv=none; b=WfLGdWn+KyBmYU8tirOMU5XQ4rCOTJ5wDAaOY/dnu8BeDevhz0oOVG2rnY501O63NhQ1uUoRTqwleQLZPar+npAb16Su2BV6jrVsIqhWG/X5/HV+nhze5f59VDfYuQ0WsSWWHEODxhW1AQNFeLc28aUslOSjy/WOqeJ8vFKQwWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788484026; c=relaxed/simple;
-	bh=1orPyQ8sy+s0UlHrQM/lDNxqkA7c6YQAOqGEmMvP1lI=;
+	s=arc-20240116; t=1788484218; c=relaxed/simple;
+	bh=2fLjt+eDUh9+OD6hptJNK0YLgkAKYRTr1zVxbjUAQqE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=YcVf13ukEIU8o86qwe5PdYLXtf++47u4zmM/3Q6KqDMaz7x8RutvU9FTYCqJ/Nm2OZ3VTTKE7LqUrOIImA+Ois9jq3WdtCrzRFhDtpfqAE5M0m4OkH7crPqPweGdl5Y0gBjDvund4wroYEYT3UDULp1mP30S+vQ0x+9fMuqvIh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NdpnZVzk; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=GAua0pdNdQo9TOKk/nSjtxqMeEGcH3o17n1ChFthS1ZE/9xDpwut/tgVpiWOf76WGOQ884jQ8a2MeJd1HkAl8y9oWpRandWeRfRn7clMzogVv43rIWj0h2xrWCYoS+KaX/q9jDvHHgWnEfYNYbRwH0hiXsHeoulpRT8AZIRpn1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AU+FAjA7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NdpnZVzk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 543661F000E9;
-	Fri,  4 Sep 2026 01:07:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AU+FAjA7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BA331F000E9;
+	Fri,  4 Sep 2026 01:10:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788484024;
-	bh=gI2mIeP3gGx7qJst7qCqI5xuWZrqP0g6CvgneIzqQbE=;
+	s=k20260515; t=1788484216;
+	bh=BXVUNkXalCqGBrmdCo92lpeS4pKUmPYzIN9qyxGa0TE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=NdpnZVzk+r6kjCkOBWTk2AwKe37iZ1LzLS6W4NhZ/FYtdpS07RRfFiwvMInUjztiT
-	 gg6BgOI4ve4p1u94WZX/xz60swmVodiS3hl6BvOas+9AqI3B+gp/hiKUTlG9EIJviM
-	 DN0CwnAlRg6RC4QlGZX2O4CT2zsGqXEgrBQfOXx2MeEamkxCrqaBXakdTJ0K+dGp5h
-	 3xPzM6XG+mv3oY9AvgsKsijihSFijQsKYu2vanG2bhpfY3m9zBey/scAlImFfnJ6HC
-	 IIwSkDPtaTEWJUo8TqG1IxaaKLj6euYqxLNfdBeMEDSNXe+UWAoGcJAllTkVloN/SB
-	 RFa97MbpGDnEg==
+	b=AU+FAjA7GuuILxhL7bRoazcof6rWfthLqjGN5rBsezwsK7FQ+mMuyalwJA2JmexFB
+	 e+qNuk5rxKL4Mz0S5CqPyaJwLXpyQvU2mLzGrBSX/p42jcoPlCWrEjpO6Qt64loEt5
+	 GEPfsgRZGnIQdFBTam8bbt3/2iq9hogyPY78miFM2+0K2kZ6ZkH60aDAto8TrbNh6a
+	 8GSnXz9PxICbjVTNYkIZd6yasniDZ33tgHXPzHwEYX3Io2Uqa68HOn8wwXQw8gPuPl
+	 22cV9ZNb37nQNyG2CAspvCG4Hl9dgyTyDImoDI05adh4S5t/fGQl5pA7pEk15RKk8z
+	 Snfp1Fpo1rYQQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v0 1/2] hwmon: pmbus: Fix vout_mode parsing
+Subject: Re: [PATCH v0 2/2] hwmon: pmbus: Add tps546e25 to generic pmbus
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Aryan Srivastava" <aryan.srivastava@alliedtelesis.co.nz>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260904005351.2136374-2-aryan.srivastava@alliedtelesis.co.nz>
+In-Reply-To: <20260904005351.2136374-3-aryan.srivastava@alliedtelesis.co.nz>
 References: <20260904005351.2136374-1-aryan.srivastava@alliedtelesis.co.nz>
- <20260904005351.2136374-2-aryan.srivastava@alliedtelesis.co.nz>
+ <20260904005351.2136374-3-aryan.srivastava@alliedtelesis.co.nz>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 04 Sep 2026 01:07:03 +0000
-Message-Id: <20260904010704.543661F000E9@smtp.kernel.org>
+Date: Fri, 04 Sep 2026 01:10:16 +0000
+Message-Id: <20260904011016.8BA331F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
 s) to consider:
-- [High] The patch truncates the PMBus VOUT_MODE mode field from 3 bits to =
-2 bits, violating the PMBus specification, wrongly accepting reserved modes=
-, and introducing dead code.
+
+New issues:
+- [Medium] The new `tps546e25` device entry incorrectly uses `pmbus_info_ze=
+ro` instead of `pmbus_info_one`, which forces unnecessary dynamic page prob=
+ing.
+- [Low] The new compatible string is not documented in the device tree bind=
+ings.
+- [Low] The new device is missing from the generic PMBus driver documentati=
+on.
+
+Pre-existing issues:
+- [High] Potential NULL pointer dereference of `device_info` in `pmbus_prob=
+e()`.
 --
 
-commit b7e943858dbfad31b0cd1d29753290823efc6361
+commit fc4eef8dbc6c89c58d89c8feeedc224bbb325745
 Author: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
+Subject: hwmon: pmbus: Add tps546e25 to generic pmbus
 
-hwmon: pmbus: Fix vout_mode parsing
-
-This patch masks the vout_mode parsing in the PMBus core with 0x3, intending
-to handle cases where devices unexpectedly set the top-most bit of the
-VOUT_MODE register.
+This commit adds support for the tps546e25 device to the generic PMBus driv=
+er.
+It operates over SMBus and is similar to other TI DCDC devices.
 
 > diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
-> index 7a7eac90d62e5..b629acbffbfb6 100644
+> index b629acbffbfb6..96a72950e7d36 100644
 > --- a/drivers/hwmon/pmbus/pmbus.c
 > +++ b/drivers/hwmon/pmbus/pmbus.c
-> @@ -121,7 +121,7 @@ static int pmbus_identify(struct i2c_client *client,
-> =20
->  		vout_mode =3D pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
->  		if (vout_mode >=3D 0 && vout_mode !=3D 0xff) {
-> -			switch (vout_mode >> 5) {
-> +			switch ((vout_mode >> 5) & 0x3) {
+> @@ -245,6 +245,7 @@ static const struct i2c_device_id pmbus_id[] =3D {
+>  	{ .name =3D "tps544b25", .driver_data =3D (kernel_ulong_t)&pmbus_info_o=
+ne },
+>  	{ .name =3D "tps544c20", .driver_data =3D (kernel_ulong_t)&pmbus_info_o=
+ne },
+>  	{ .name =3D "tps544c25", .driver_data =3D (kernel_ulong_t)&pmbus_info_o=
+ne },
+> +	{ .name =3D "tps546e25", .driver_data =3D (kernel_ulong_t)&pmbus_info_z=
+ero },
+
+[Severity: Medium]
+Since this is similar to other TI DCDC devices, should this use pmbus_info_=
+one
+instead of pmbus_info_zero?
+
+Using pmbus_info_zero forces dynamic page probing, which causes unnecessary
+I2C/SMBus traffic. If the device ignores the data but ACKs out-of-range page
+writes, it could expose 32 identical phantom pages in sysfs.
+
+>  	{ .name =3D "udt020", .driver_data =3D (kernel_ulong_t)&pmbus_info_one =
+},
+>  	{ }
+>  };
+
+
+[Severity: Low]
+Is it intentional that the new device is omitted from the device tree bindi=
+ngs?
+
+Adding ti,tps546e25 to Documentation/devicetree/bindings/trivial-devices.ya=
+ml
+would prevent dtbs_check warnings when this compatible string is used.
+
+
+[Severity: Low]
+Could we also update the supported hardware documentation in
+Documentation/hwmon/pmbus.rst?
+
+Adding the TPS546E25 to the list of Texas Instruments devices and its prefix
+'tps546e25' would ensure users know it is supported by this driver.
+
 
 [Severity: High]
-Does this change incorrectly alias reserved VOUT_MODE values (4-7) to stand=
-ard
-modes (0-3)?
+This is a pre-existing issue, but I noticed a potential NULL pointer derefe=
+rence
+in pmbus_probe().
 
-By masking the top 3 bits down to 2 bits, if a PMBus chip reports a reserve=
-d or
-manufacturer-specific mode (such as mode 4), it will now be parsed as a
-standard mode (like linear mode 0) instead of being properly rejected.
-Misinterpreting the voltage format could cause erroneous voltage calculatio=
-ns,
-which might lead to system instability or physical hardware damage from
-overvoltage.
+drivers/hwmon/pmbus/pmbus.c:pmbus_probe() {
+    ...
+	device_info =3D (struct pmbus_device_info *)i2c_get_match_data(client);
+	if (device_info->flags) {
+    ...
+}
 
-Should device-specific quirks (such as a specific device erroneously setting
-bit 7) be handled via a custom .read_byte_data callback or a quirk in a
-dedicated device driver, rather than breaking PMBus protocol compliance for
-all devices in the generic pmbus_identify() logic?
+If the driver is bound manually via sysfs (e.g., using driver_override)
+without an I2C ID that matches the driver's id_table, i2c_get_match_data()
+will return NULL. The code immediately dereferences device_info->flags,
+which will cause a kernel crash.
 
->  			case 0:
->  				break;
->  			case 1:
-
-[ ... ]
-
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus=
-_core.c
-> index 806c9a4913bb0..60ddc49afb3f7 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2751,7 +2751,7 @@ static int pmbus_identify_common(struct i2c_client =
-*client,
->  		 * Not all chips support the VOUT_MODE command,
->  		 * so a failure to read it is not an error.
->  		 */
-> -		switch (vout_mode >> 5) {
-> +		switch ((vout_mode >> 5) & 0x3) {
-
-[Severity: High]
-Does masking with 0x3 here introduce dead code in pmbus_identify_common()?
-
-Because the evaluated value is strictly restricted to 0, 1, 2, or 3, and all
-four of those cases are explicitly handled below this switch, the default c=
-ase
-and its error handling (return -ENODEV;) can never be reached.
-
->  		case 0:	/* linear mode      */
->  			if (data->info->format[PSC_VOLTAGE_OUT] !=3D linear)
->  				return -ENODEV;
+Does this need to be checked before dereferencing?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260904005351.2136=
-374-1-aryan.srivastava@alliedtelesis.co.nz?part=3D1
+374-1-aryan.srivastava@alliedtelesis.co.nz?part=3D2
