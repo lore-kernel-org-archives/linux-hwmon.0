@@ -1,110 +1,174 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA348391505
-	for <linux-hwmon@vger.kernel.org>; Fri,  4 Sep 2026 02:41:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788489683; cv=pass; b=hntVLQe9isyWm4DZXspCZvJwlCX1qp1ZRmms+oARAMV5JhrjkA8MZGA5+s5vaDM2pPrt9dDZhla4WTmwoM1ZdMHfXW5TeBdg65PqtRqhrYG0BZ+nKYjDXPW3N9hVbFvsMj1nX8KBoikOBbMrYZlhbIp5+wrguR+7fvq1ZXnjShE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788489683; c=relaxed/simple;
-	bh=haeN8BwgCyC9B0Qb8uV/x9/S4ZiukBNTmmqvdkO4bN0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=scaUyHO58acRXUrNIUCioZm7TsI5CmuJE3aCyayCtayzfnd34ex49j+CHZy3XLQ4RmCNaPqkeuaf+DyKdvWirra+i8wipN+vbyaijuhyv7HIaM7iaj2AbiXhrWo3X9T//3QsOKJQDjTP48X9D0q/0/se8EGNwKRZHY/Pm8Fdbpw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arimil.com; spf=pass smtp.mailfrom=arimil.com; dkim=pass (2048-bit key) header.d=arimil.com header.i=@arimil.com header.b=Ib+N6Z7H; arc=pass smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arimil.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arimil.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DCBE447813
+	for <linux-hwmon@vger.kernel.org>; Fri,  4 Sep 2026 09:45:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788515107; cv=none; b=oQgNQVXW0tuSY5nS6grnMR9bVV05gNnf+IKqxfD+ywTboxypgGPJCCnh/AEtcVOCu6VyHQcUCAktKblSEwPsw0FJR1Y3PlhrndZ1Fq+b+UPeyMrXdy6hs+qIjr0UWsI+TPkoDpxZJVAM7ynW5lfO/xAFMqwec0u+AOIOtiQzwUg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788515107; c=relaxed/simple;
+	bh=zVrsOBbUBsqRW8lZE59vCWEnEi6cLmNkhdl/0iaYt6w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uxa90ypv75jtHDg/2d6nuIUKXEj5yMt9aMgLSFfn6zUxk6j1/2tiv2QDGvLx/StM1eFlZzQEiiLtDn8SAsyaMg5vKpYbTbPhezRdaWOdEFQiV7XF5ygmHorjLUp5Cy7sd7OCHEzNW7ThU2Ocl3Lqmue54wibUOpJMW4aOxRG7V4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=I+ylvqLL; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=NQsxj/5Z; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arimil.com header.i=@arimil.com header.b="Ib+N6Z7H"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6a18840e2abso680642a12.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 03 Sep 2026 19:41:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788489680; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ehpDJ2SLnhzfFFZSTGgNNneEoU9ErGuGqN+xXz1+zCpwlaS/xzTa06OaU7wizuNHIl
-         5mjT0UCeF8m3Wr2hjpb23RoTbUFGQLePhf523uGyXkcLK8OAu13FOMdmsAMHuKtUIxA+
-         TXa0pebsdYTinlbAWD9m/kaSCjptzbxNu93nYrLuNRIiDN2xZba6IP7/TuR9KHGuo/os
-         k66WtF2eQ0N9XR39d/ks3BB8TPbsJULcAI5KlAZO8aGKc9c5L14ld7leF7dVziw9Jkc8
-         a8vFc0p/ipJqk0hPGyyP579PtkZrzdH+qaVLr+ojuNa6SWBb2wpDnZNbvKQKJZ5MHScG
-         Vh0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=haeN8BwgCyC9B0Qb8uV/x9/S4ZiukBNTmmqvdkO4bN0=;
-        fh=0hdvEPJRino8wRvGrrw1gATkOs6ExpSix2L2F38xNVA=;
-        b=QWpGFXW44HaNsTrfKiLHQIDHm7amZyP1FwDh2uOBlU0oCTCYgdYRzVPxIjHG8aTObv
-         hD1HsSjyyod7JHCVB1itqKrFgO/Z80ObfV+Vf+QPlh4N7kGzTITrC0/hVA0VQf/9/Vyn
-         /igV8r/TJWNGN3obxGFO26oGUprSRgOWIWKtJGll3FqxZNlJreXpZc/u0SRLgVhV9nio
-         6OGKbyqPUGm/P5BzaUMrG+Qs8PtxDqg8sGQvv60HO4lhTx+l8BPxgdJwhqGh8yLTFoyq
-         B39YjDn6cIb8Mbzm54uuIm9AHXfoyWTQkplfgvQXca2MkzlBcOWz5MTvb28X3xNp+w9I
-         UXPQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="I+ylvqLL";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="NQsxj/5Z"
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6847n40T2976892
+	for <linux-hwmon@vger.kernel.org>; Fri, 4 Sep 2026 09:45:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	+8D5YW4aMjYqkv07n5OIFJYINICm6DBJu2yq9WVbe+8=; b=I+ylvqLLLLgJPGX0
+	J4MRCr1bKezTgXDYnj6VwxvaI14kiNq83vRgzc2OZShwpLAt65CC7bWQOOG4NDhS
+	eZDowL7tahOXy4y6LgcF/EBMEnjEtcI+4wxlhPEYGTBZEqqQwJhmIqgOf4C7NQ6w
+	13d6QSs7uQCmoydDb8q7HwMz2EHLEBg1XbPDTy0M5TkenpgtSw7PcoF9AvcoIqg6
+	787fNoKGjFPZEYr1yGKEQLGxwd6Gxy/M6zpeDaxACjYUWemAJxPxU7h8rTYogyvt
+	tXa5KmElgYFevjgXUEq4TNcPaI67wNgCiYMwiyUkTQNo3f0u8C++t8KAmwBa61/G
+	9jC7Og==
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4gfdyxjy3b-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-hwmon@vger.kernel.org>; Fri, 04 Sep 2026 09:45:03 +0000 (GMT)
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-52ea38b1e7eso2073841cf.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 04 Sep 2026 02:45:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arimil.com; s=google; t=1788489680; x=1789094480; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=haeN8BwgCyC9B0Qb8uV/x9/S4ZiukBNTmmqvdkO4bN0=;
-        b=Ib+N6Z7HnmBPxlKGQjLIBsTyhg9ZffHTZdkvlTtuXpUxdWQ9Bgbf70P66KV6cS/37p
-         PiOR2Z1gv4bWBMsiz21dtco8J1dNS0mGj0i65CRATSJgVbB573pab02vVR55knahjrd4
-         Y2kXRR6Wv8z7TFrzwGP+ezWPXGKDdgmfHQUCKbR0nabQiajZ69krjlAtm62cEXzE8k7m
-         G8qB+t4JTpb3D8oh+uyv0gVlmWCZjSsuuKvagHXAe60w2IY61QYopVTIdYp4EjCMyHvt
-         7ey7gHVmPz3w2lwQutJ1c6Ka11Ibt+FqHWL2A6EYfpIGCWWMA4kbZ/91qA5ePgn4+ByT
-         furg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788489680; x=1789094480;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=oss.qualcomm.com; s=google; t=1788515103; x=1789119903; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=haeN8BwgCyC9B0Qb8uV/x9/S4ZiukBNTmmqvdkO4bN0=;
-        b=GtsZ+MGS+TyVaW8xZRBePF8YtH+kMiZ6n9ruYtEsntHGnKATno1vw9wxCZzpLlflNU
-         0SSSw6h0XlGT7yquqoDjYSidXqZtZCBSVPQ6bIW1mNJ8DLtCXyHo8AvLhajAIiGBFRXz
-         IV9Litpze0BM3UHK5Zk2yNzmv8ih0/QsYmmrBplASqBHxa1VVBm2G8Qjf1GHvfdK1/Xp
-         z1OJMB8SLRNVALipU0ZUWeih4ySh5fhgb5R+UQKM5FHNRUKN3oLvfbVYhcDix6X2nFce
-         DTrqNJl7fCqADbXCvfP/MqR3LBN++d6EQr7YUqeASWnGpOpgt1LGd8V/LowwgnoNiOlH
-         prbw==
-X-Gm-Message-State: AFuF++l6NZ7hySxweGD09Kw7WykI42fs0pI7V07i5wZRrZrjZ22rrz/w
-	DbrcaBfFEE7EFaaf7CAq0tbDvRV3SWrAA9/A/DM+OnDW0SjzJOxLHOQ1bbI0bNcz2pUtht34rsE
-	29v2rlXbokq47sFZIRIw0hCJP4lruwz+CzHNEuFOXKw==
-X-Gm-Gg: AYBFou1N/YoyP5mV1yxLWbrfGDG3UQS40ISLVUZjHuV5ymX/r7KVNtqHddYyg1Sc6ku
-	igTGJjuQHLL8xiJzkgawdPbvyzga2VMGur2cTqRAHsnFQ9On+A68bgcxpkrWI/4bkB+cA+CefLc
-	W3DxRMUR18BnJ5aAAURazLNRzFeCcFb+dZkDqksBZEIW+B8o6UjwpE4pbG3zmmxOzJGesvTAT7M
-	23HJMmWrfNynteKJ9Ahljx9z2qBdSbKvD0bzevjlncLaFgYRNerR7Mgq2NpodRuwjud9kZ2jD4P
-	5KIHWbNys8KpWndwdf/c4WFoYBq9Wh4BHoJo5LErciz74g==
-X-Received: by 2002:a17:907:c1f:b0:c20:d90b:2cb1 with SMTP id
- a640c23a62f3a-c260c48eb7fmr151929166b.0.1788489679824; Thu, 03 Sep 2026
- 19:41:19 -0700 (PDT)
+        bh=+8D5YW4aMjYqkv07n5OIFJYINICm6DBJu2yq9WVbe+8=;
+        b=NQsxj/5ZbKnlN7KuwJQSCkGUz9r1PEtjj2RPLhJVNwnFaa1tuoauldZwkqLbVMHSKs
+         M4O/sxML/bdXlpPGVCkco+agybOVoFP0vTT9fGcwfUPaUla2JM8tfNk6OMrkHepxVVa/
+         Ynp5K2ID0amUZXEv7qvzvs0FEfIMzYUmfKYcPiJEQTqMsWXIaux2Ki4dLYC+g0FgQwST
+         HfaKse8siim9lfVvCwEToxLvJgUoW702pvdEC7U52xr9J2HrYNMm3zpFa04jUNPNqnSP
+         YhqNrjsQ/MLGcmR+qlDhe+kKFyp37sO8Au9BRTnfiQV4rmIuqfP/viom6pUPjtNJ5Omq
+         KOrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788515103; x=1789119903;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=+8D5YW4aMjYqkv07n5OIFJYINICm6DBJu2yq9WVbe+8=;
+        b=AeR8I5qDIvnJYWV2/zmIQaCsJT2oe2frLJrw+VfXezpn0ozSWm9RMr4oTw475jOHoj
+         xgNZgwU37+ICCMsRzEEyh/bGM8XUE61Y0pr43kIddMbYK0N/4cp2Fyl04FSB7GsYztNB
+         FF9yUHOjxx3hK7/hNLjTomfRVhH/KRZ1FlHoHD7SaNSY1ZQgAItR4MdJ+CfT4rf3YawH
+         mpKgFi1jamsEomIXDgR6s8KTXpl8b7OCIfzsLsNNZdDTt+MIGY1cioxjN8tHCQannLKe
+         h3WECTFKcR4ROfWCMmw+/4GqjCiDaPvAWgOMvFhOqGX7QFc3YtqJ03zNcxw2Mlg3ewne
+         mniw==
+X-Gm-Message-State: AFuF++kQhjiI5RMA56kqm5tqWS9zO5ctjKXJ+yJFXrefEPJ8hbsDM9bD
+	fmhU6xvMVLI9IbiG/i1Hmi7zb+7D2t9JtXeTbezkd3Y4sM4VdItMOnFJ7WOjKfwvr1UFi7D70p7
+	Vt7JOv6+0SHk9FqVUkZVHUVIXdC4rYltLgrwWiCN79Zf2T4xlwIjuFSRqjrGNqVyVvg==
+X-Gm-Gg: AYBFou2bzkmjEE/10KiaN9DgbCpwHwTFiG2dk1F5zP1LpjCY18PBTLkb9ruEzOzeruL
+	o1zDv4XwFx8fARie1/LOIqUdayilcR8llmsIkmrJx2e4lUG3xVkTA6fUCedE0Ijjsa6Meh/W91T
+	PULv6KmxUeQerLztTK+wwqSY3++yU8aztc6rzAj07LCLJ0Cze+iQMB1TMBiP7xwnSUUJO3f1aPN
+	pkyt7ymnherVcJ/VmhhaLgUgdJaaI+Ug4IlbsSdQwxPTqMeGy62joXlpmDI8sYjxoKgZ9Cr07fu
+	0OrH4byLxeSUl3aFtFLhIlBESQKS/xh6/MZZpTlZ9zklTlBvSO4d39uB61AK+NiMFKb5/qsjzoF
+	ZInGLLh0PKyPO7Oa/MXTwcQ==
+X-Received: by 2002:a05:620a:4686:b0:939:47f4:935a with SMTP id af79cd13be357-939807adf30mr345133185a.5.1788515097815;
+        Fri, 04 Sep 2026 02:44:57 -0700 (PDT)
+X-Received: by 2002:a05:620a:4686:b0:939:47f4:935a with SMTP id af79cd13be357-939807adf30mr345131285a.5.1788515097419;
+        Fri, 04 Sep 2026 02:44:57 -0700 (PDT)
+Received: from [192.168.202.12] ([178.235.128.140])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c260d6dfad6sm83831366b.60.2026.09.04.02.44.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Sep 2026 02:44:56 -0700 (PDT)
+Message-ID: <62c7ed77-32c7-4e4a-ab44-64bb174a88f8@oss.qualcomm.com>
+Date: Fri, 4 Sep 2026 11:44:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260904022129.97896-1-renari@arimil.com> <20260904022129.97896-3-renari@arimil.com>
- <20260904023424.B3E601F000E9@smtp.kernel.org>
-In-Reply-To: <20260904023424.B3E601F000E9@smtp.kernel.org>
-From: Arimil <renari@arimil.com>
-Date: Thu, 3 Sep 2026 22:41:08 -0400
-X-Gm-Features: AcwNN1WjASArX-YhmXTGtQG-Eun6uq676mwBPhxrZKuoGIxqwl0m9gJaLnPlvvs
-Message-ID: <CADBHdQ2g0uX3rrjdE8+BiO_2n5Ld2FOesgeowTzKunuAZhaLaA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] hwmon: (asus_rog_ryujin) Synchronize HID command and
- report handling
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] platform: arm64: Add Radxa SVC GLINK driver
+To: Xilin Wu <sophon@radxa.com>, Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>, Hans de Goede <hansg@kernel.org>,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+References: <20260831-radxa-svc-v1-0-7c028de6a387@radxa.com>
+ <20260831-radxa-svc-v1-1-7c028de6a387@radxa.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20260831-radxa-svc-v1-1-7c028de6a387@radxa.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: fdS627r2jlg1ViLxsq5mtXzrH03ltbjB
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTA0MDA4OCBTYWx0ZWRfX6+GHx6ZdCznY
+ nvQfPF2CwGBVp+islRGqqtbrWIAyXTpxEX4ClMGxRQBln8gMXcXS+vMfG9FEDpyXUmT8TJk8YGm
+ uLqchX6KbZJ3qOyO/eVes5gsa1p9QFo=
+X-Proofpoint-GUID: fdS627r2jlg1ViLxsq5mtXzrH03ltbjB
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTA0MDA4OCBTYWx0ZWRfX87/NJtMYmtXQ
+ QYowHa0gfxrtLXMdGLhpaOn9pKFZf1iktGfWhqT4jU8fEwLPrs1MKBwT39xIXwCTUVFk54SMBkx
+ c1Lf7yY1HXgxNqooMDGA5WE06NXt82ix9qjrk/mWN/kTIiYxBCCSJx71e/m9IBDJGZHmDMzeM/t
+ UgGFqt7m1clw893hORpayAqmSEXun9vfRv1U1Aq/Rik/LmLo6VOsxk+nlCjLuDiNWMB2xP37x5N
+ 3upPzic539e5coD9f28GDAfOHjfx+oDyvVlsbdqIa3cOjK1B/QbuQ6S30L3k1OYFrist1KTGRfF
+ 1xpqPwC7tUin0jFSbeFjl8rRBHPpq7knsV/Jc1Tg8c1HYAKeoCuhyH/QFUjek5NawVoY9I4JFKU
+ spdcPjGobXyYIzir2lBOYZW0l25dL1ntNpwG0iCBwN7pbas3+VpM9rRTJGqjnUJ/tfWMF0/oHqQ
+ tASQoJbJ1eBMB+8svAg==
+X-Authority-Analysis: v=2.4 cv=X9Zi7mTe c=1 sm=1 tr=0 ts=6a9a931f cx=c_pps
+ a=WeENfcodrlLV9YRTxbY/uA==:117 a=PRfkaYvzSr8QmIIGAkY2Sg==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=yOCtJkima9RkubShWh1s:22
+ a=ksxQWNrZAAAA:8 a=oytB4wdSUnn8FBOm40sA:9 a=QEXdDO2ut3YA:10
+ a=kacYvNCVWA4VmyqE58fU:22 a=l7WU34MJF0Z5EO9KEJC3:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-04_02,2026-09-03_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 malwarescore=0 bulkscore=0 clxscore=1011 lowpriorityscore=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 spamscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2609040088
 
-On Thu, Sep 3, 2026 at 10:34=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
->
-> Pre-existing issues:
-> - [High] The driver starts the hardware and registers hidraw before initi=
-alizing the driver's spinlock and completions, leading to a potential NULL =
-pointer dereference panic if a report arrives early.
-> --
+On 8/31/26 5:09 PM, Xilin Wu wrote:
+> Add an rpmsg client for the RADXA_SVC_ADSP_APPS firmware service used
+> on supported Radxa boards with Qualcomm SoCs.
+> 
+> Expose fan control through the standard hwmon pwm1 and pwm1_enable
+> attributes. SET_PROFILE only changes the fan curve, so map its quiet and
+> performance curves to automatic modes instead of platform_profile.
+> 
+> Signed-off-by: Xilin Wu <sophon@radxa.com>
+> ---
 
-This is a false positive, this driver does not call
-hid_device_io_start() so there will be no early reports.
+[...]
+
+> +static int radxa_svc_request(struct radxa_svc_glink *svc, u32 opcode,
+> +			     const void *req_payload, size_t req_len,
+> +			     void *rsp_payload, size_t *rsp_len);
+
+I don't think you need this forward-declaration
+
+[...]
+
+
+> +	reinit_completion(&svc->rsp);
+> +
+> +	spin_lock_irqsave(&svc->rsp_lock, flags);
+
+
+GPT says:
+
+High: A late response from a timed-out request can complete and corrupt
+the next transaction.
+
+In patch 1, radxa_svc_request() clears pending and returns after the
+5-second timeout, then a later request calls reinit_completion() and
+installs its new pending_seq (patch lines 526-540, 550-555). The callback
+sets do_complete under rsp_lock, drops the lock, and only then calls
+complete() (patch lines 612-624). 
+
+Konrad
