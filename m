@@ -1,139 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE0E2192F9
-	for <linux-hwmon@vger.kernel.org>; Fri,  4 Sep 2026 01:10:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA6B358378
+	for <linux-hwmon@vger.kernel.org>; Fri,  4 Sep 2026 02:21:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788484218; cv=none; b=WfLGdWn+KyBmYU8tirOMU5XQ4rCOTJ5wDAaOY/dnu8BeDevhz0oOVG2rnY501O63NhQ1uUoRTqwleQLZPar+npAb16Su2BV6jrVsIqhWG/X5/HV+nhze5f59VDfYuQ0WsSWWHEODxhW1AQNFeLc28aUslOSjy/WOqeJ8vFKQwWc=
+	t=1788488497; cv=none; b=V5d4+LteaNa9q4EFCtFhQ9kYNyaoRMP0fYU9ZGCr/CtTcCuYZ7cwX7F/9eaGZdmxERs4/pRU+1Jt8lXm9QUNTOrCWkX320WbNkjbVJF1qNzSlFxfAND8xFxUnO086oEHWwVyeVQ26O8N2Q5Y9yk+rtpMzU1vP6rHKTNbSj955b8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788484218; c=relaxed/simple;
-	bh=2fLjt+eDUh9+OD6hptJNK0YLgkAKYRTr1zVxbjUAQqE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=GAua0pdNdQo9TOKk/nSjtxqMeEGcH3o17n1ChFthS1ZE/9xDpwut/tgVpiWOf76WGOQ884jQ8a2MeJd1HkAl8y9oWpRandWeRfRn7clMzogVv43rIWj0h2xrWCYoS+KaX/q9jDvHHgWnEfYNYbRwH0hiXsHeoulpRT8AZIRpn1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AU+FAjA7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788488497; c=relaxed/simple;
+	bh=kJ8A2o/UZ0mgONwUJC/941kV4kbtBGHonCNWzYdcslo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Rjr+tt3N0NYCmjxADjr1Glo/SHNcfoq+s3qcsBG0JJUic69OwjuD4zeyqi55UnE8QbXzLg90E1k0PmocYQQ2Wc7k6ErA2xgmh8S7q1VPmLKg45KJQBTbE27XGWbAkpEIAkmsZeuzXx6ckYmBz33rJF5ejXZRisbYG0b/LxvH3cw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arimil.com; spf=pass smtp.mailfrom=arimil.com; dkim=pass (2048-bit key) header.d=arimil.com header.i=@arimil.com header.b=gqWmVYh8; arc=none smtp.client-ip=209.85.219.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arimil.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arimil.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AU+FAjA7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BA331F000E9;
-	Fri,  4 Sep 2026 01:10:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788484216;
-	bh=BXVUNkXalCqGBrmdCo92lpeS4pKUmPYzIN9qyxGa0TE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=AU+FAjA7GuuILxhL7bRoazcof6rWfthLqjGN5rBsezwsK7FQ+mMuyalwJA2JmexFB
-	 e+qNuk5rxKL4Mz0S5CqPyaJwLXpyQvU2mLzGrBSX/p42jcoPlCWrEjpO6Qt64loEt5
-	 GEPfsgRZGnIQdFBTam8bbt3/2iq9hogyPY78miFM2+0K2kZ6ZkH60aDAto8TrbNh6a
-	 8GSnXz9PxICbjVTNYkIZd6yasniDZ33tgHXPzHwEYX3Io2Uqa68HOn8wwXQw8gPuPl
-	 22cV9ZNb37nQNyG2CAspvCG4Hl9dgyTyDImoDI05adh4S5t/fGQl5pA7pEk15RKk8z
-	 Snfp1Fpo1rYQQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v0 2/2] hwmon: pmbus: Add tps546e25 to generic pmbus
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Aryan Srivastava" <aryan.srivastava@alliedtelesis.co.nz>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260904005351.2136374-3-aryan.srivastava@alliedtelesis.co.nz>
-References: <20260904005351.2136374-1-aryan.srivastava@alliedtelesis.co.nz>
- <20260904005351.2136374-3-aryan.srivastava@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 04 Sep 2026 01:10:16 +0000
-Message-Id: <20260904011016.8BA331F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=arimil.com header.i=@arimil.com header.b="gqWmVYh8"
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-90e7bde5596so5998236d6.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 03 Sep 2026 19:21:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arimil.com; s=google; t=1788488494; x=1789093294; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=i+/FE/y9ST1Zo9N51I7plUbyGgWh9xTfCZH/6siYgus=;
+        b=gqWmVYh8D2U4EFeCsvuSr1Pq+fj7Sseufv0gILhvcwJn9XNkcu4GjO8h2Uj3OsiU87
+         U/sp9b+fVpesB22gTqAy73gwB63EhwI0HgopaaltMoZcvjgmDvaDA5YbaNuoXJnYUuPo
+         WUkvKPjsH4n6ToLTa2mOBLFIbreEb9mxHCA7p5wiqMvXDJhiX0WZb3sEA5teY/TRLnnK
+         bQhN5V9ETmghZ7v+wQT3wsmh7rqSZrwbkpizUA3Fx6VwGIv0sk4LG1aX/k1JvVXhu1mS
+         WUV17jpZFfSZyA2ndBrnmLFBuY/DidUJK629657tW+p01Ct7gI1geV+Qv4On/Bla0+Rw
+         NBOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788488494; x=1789093294;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=i+/FE/y9ST1Zo9N51I7plUbyGgWh9xTfCZH/6siYgus=;
+        b=JFeFNJxk0RCzF27+cHzQqtaD1X/WPlCk2aWdNeAxRESBx+JtzDNSEgiRof3V5wVbY/
+         E1+mNtmgz3nwm1GGEfSYLmpnS3+JQ0yFHSLyk1fHEpM8V3gKy4MedcK+qGlfyOmASl5s
+         g5O7vAxdIvVMj/P9cbNeJQoesd1JGjf0zk6cmQS0eOLKo6g7VRDMyNr0Ov2IxYcH+wKJ
+         H0ttKIfJKhAipJ3KKRwACGykJ0ZZTPo9LdPatP/rmImL/y5p2Gln0e14Ndv0JcUIuL7J
+         io08Hlr5PapmUF2WWZ/D5dVBpR38bw85fdpVShydjf8aqUyiirop9LNBcDoIIcCGgdjE
+         6ZIA==
+X-Forwarded-Encrypted: i=1; AKwUvByMtU7ivYjz8eQ0ZCK1G1bQqYPNEp1XdS9w0uWcfDvlBkFzA2A0jWtx4AdxELJWd2x7EXcCFwCTB4LeZw==@vger.kernel.org
+X-Gm-Message-State: AFuF++mqDcYKJbyXlwT+1GCjpnBfLqP/a+R9ieVhAH6TLduk6BKSWmPf
+	rFngORsqxPZsEdsIV0+6cMlmoSO0yUWilmC+o04T6tkQlx9QH0Qk0BYmydpRq2NW1AM=
+X-Gm-Gg: AYBFou3gYNpul0aomICXIUq3GhWxtREh5AskirRLGt6mYEhWYMKBun+bciyPewuhEv4
+	wFS/WB2PMnhFLVogeTZZJ4hjQ3EDDDd/d2eM935kZyRlMU3pjQ1QAaceTpwkeRrXL9vagxWhVEI
+	UUG595jEMTEVlYBonnQORxlRcWV7Vray/ojFbMPNqJhNeGloLlY4U2Bn9J7gHNwPDwHQ8wmptFj
+	BIxCeyeCBAs7DCWUHaWCAfsLVPfH2ocxEvGCIP575jieP2xdqiqEnXIpXPWaw2leGbpSxveXEUl
+	A+gi9HBBRbDGJnzRUBd39XDQnXYRTnKSr5Ix3YdqNh59Kv3iFVKt/k2R2EHJTW5Cn2Cx/PkywWa
+	Qd4Rj/lKzJnOj0Et4s4Lauy26LSBpEtgW/NCuYEtRbbSy3cYmkNy1TOqAP9d7+D3Px/9uAjYIqF
+	e6LmYqp5/NsGubYiRLjbhByKNZubXtjndu7UkOL8CMoYIC7BWDVyl6bod8QwQgGIrjQjJIzWYaW
+	7NvqZQspiSLYCkPTP5jGZlTp0ig+6Q+tx2FRb87MWzjksI=
+X-Received: by 2002:a05:6214:5f0a:b0:910:3451:340 with SMTP id 6a1803df08f44-9103efb477dmr42621986d6.31.1788488494443;
+        Thu, 03 Sep 2026 19:21:34 -0700 (PDT)
+Received: from camelot.arimil.com (24.229.171.193.res-cmts.sm3.ptd.net. [24.229.171.193])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91040595f81sm9508846d6.2.2026.09.03.19.21.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Sep 2026 19:21:33 -0700 (PDT)
+From: Arie Miller <renari@arimil.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Aleksa Savic <savicaleksa83@gmail.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Arie Miller <renari@arimil.com>
+Subject: [PATCH 0/2] hwmon: Fix ASUS ROG Ryujin HID report handling
+Date: Thu,  3 Sep 2026 22:21:27 -0400
+Message-ID: <20260904022129.97896-1-renari@arimil.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
+A Sashiko review found two pre-existing issues in the ASUS ROG Ryujin
+driver: missing HID report length validation and a race between completion
+updates and reinitialization.
 
-New issues:
-- [Medium] The new `tps546e25` device entry incorrectly uses `pmbus_info_ze=
-ro` instead of `pmbus_info_one`, which forces unnecessary dynamic page prob=
-ing.
-- [Low] The new compatible string is not documented in the device tree bind=
-ings.
-- [Low] The new device is missing from the generic PMBus driver documentati=
-on.
+Reject undersized reports and serialize both paths with the existing
+spinlock.
 
-Pre-existing issues:
-- [High] Potential NULL pointer dereference of `device_info` in `pmbus_prob=
-e()`.
---
+Tested on an ASUS ROG Ryujin III EVA using a DKMS-built module with 16,000
+concurrent hwmon reads and 50 liquidctl status requests over hidraw. No
+failures, timeouts, lock warnings, or HID errors were observed.
 
-commit fc4eef8dbc6c89c58d89c8feeedc224bbb325745
-Author: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
-Subject: hwmon: pmbus: Add tps546e25 to generic pmbus
+Arie Miller (2):
+  hwmon: (asus_rog_ryujin) Validate HID report lengths
+  hwmon: (asus_rog_ryujin) Synchronize HID command and report handling
 
-This commit adds support for the tps546e25 device to the generic PMBus driv=
-er.
-It operates over SMBus and is similar to other TI DCDC devices.
+ drivers/hwmon/asus_rog_ryujin.c | 30 +++++++++++++++++++++++++-----
+ 1 file changed, 25 insertions(+), 5 deletions(-)
 
-> diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
-> index b629acbffbfb6..96a72950e7d36 100644
-> --- a/drivers/hwmon/pmbus/pmbus.c
-> +++ b/drivers/hwmon/pmbus/pmbus.c
-> @@ -245,6 +245,7 @@ static const struct i2c_device_id pmbus_id[] =3D {
->  	{ .name =3D "tps544b25", .driver_data =3D (kernel_ulong_t)&pmbus_info_o=
-ne },
->  	{ .name =3D "tps544c20", .driver_data =3D (kernel_ulong_t)&pmbus_info_o=
-ne },
->  	{ .name =3D "tps544c25", .driver_data =3D (kernel_ulong_t)&pmbus_info_o=
-ne },
-> +	{ .name =3D "tps546e25", .driver_data =3D (kernel_ulong_t)&pmbus_info_z=
-ero },
-
-[Severity: Medium]
-Since this is similar to other TI DCDC devices, should this use pmbus_info_=
-one
-instead of pmbus_info_zero?
-
-Using pmbus_info_zero forces dynamic page probing, which causes unnecessary
-I2C/SMBus traffic. If the device ignores the data but ACKs out-of-range page
-writes, it could expose 32 identical phantom pages in sysfs.
-
->  	{ .name =3D "udt020", .driver_data =3D (kernel_ulong_t)&pmbus_info_one =
-},
->  	{ }
->  };
-
-
-[Severity: Low]
-Is it intentional that the new device is omitted from the device tree bindi=
-ngs?
-
-Adding ti,tps546e25 to Documentation/devicetree/bindings/trivial-devices.ya=
-ml
-would prevent dtbs_check warnings when this compatible string is used.
-
-
-[Severity: Low]
-Could we also update the supported hardware documentation in
-Documentation/hwmon/pmbus.rst?
-
-Adding the TPS546E25 to the list of Texas Instruments devices and its prefix
-'tps546e25' would ensure users know it is supported by this driver.
-
-
-[Severity: High]
-This is a pre-existing issue, but I noticed a potential NULL pointer derefe=
-rence
-in pmbus_probe().
-
-drivers/hwmon/pmbus/pmbus.c:pmbus_probe() {
-    ...
-	device_info =3D (struct pmbus_device_info *)i2c_get_match_data(client);
-	if (device_info->flags) {
-    ...
-}
-
-If the driver is bound manually via sysfs (e.g., using driver_override)
-without an I2C ID that matches the driver's id_table, i2c_get_match_data()
-will return NULL. The code immediately dereferences device_info->flags,
-which will cause a kernel crash.
-
-Does this need to be checked before dereferencing?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260904005351.2136=
-374-1-aryan.srivastava@alliedtelesis.co.nz?part=3D2
+-- 
+2.55.0
