@@ -1,102 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 950E92744F
-	for <linux-hwmon@vger.kernel.org>; Sat,  5 Sep 2026 13:44:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF7B3783D5
+	for <linux-hwmon@vger.kernel.org>; Sat,  5 Sep 2026 13:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788615853; cv=none; b=fm3ozTuB7mBb1WhRg7GDMSyLoDfJxtI6LxoZk5sLmw5TN/wrXdJP1DQ9Gj3qikkeTn8yJs/9d5SJgmTHjhor7vU7DihNe7SHrlruCu/3DFZ8LJivHhYyqusAvJmIp4rRcR9gp5qN2TZuPaW+DN9OxhGakQpN0+TNxlmffbykWOw=
+	t=1788616122; cv=none; b=cyLXt4xocR7zfTx2pHTfcINF94uhuvJ/ueEk40gFNxP+e56GOiE6Cv9X54AlVVBX/mFlHAvCNbsoDKSZu8brorGIJP1rEGbutLMrXu/5cs+7xMxJfi480sgPtU/9okkGb/8lJdL7keOC3Crq9CBgHyINuA7K0oRSll+UuUaL68s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788615853; c=relaxed/simple;
-	bh=IawtjIhnUn8r8b0gZe0MQldWaEQVlX/jPI5tslyMpRs=;
+	s=arc-20240116; t=1788616122; c=relaxed/simple;
+	bh=6x6HHOX0cLzIlpDyXVZzHBZ/SrHx8SqajrH7Ny//GCM=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=jEOBwOtyXrvpP0kuwM8GkMOvevlVR+/jVYJO2jd9pF44Wx1jjl57juD7nS9AUDzMJh/abeCx8ZEqczd/PgKHbArlSxkEfao+aUB6i+PJ/mN87WaaifdQoEXHREOc7JJFsxbs7tAyhSUiyDVf13vRRPVuwHBR9CRaCd/mJ1ZWWyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SqehuWnn; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=YLCBBgE6ZIFkGCw9RXYmPPvQlziJfE9K+uupjbXuTxWbPJ3cLL2j/hb/IeNx+HCTUNHWiYmRUIehWZYXah8uqiNb6SUQ0/BSzl8pgIjYuX64XphexZg1eLXtw8H/tbxSg9JFgmLTqKn40iSadVppDJBfLKPIFvFxltbVDbR+JbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S7XjY/4l; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SqehuWnn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 164601F00A3D;
-	Sat,  5 Sep 2026 13:44:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S7XjY/4l"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 424E51F00A3D;
+	Sat,  5 Sep 2026 13:48:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788615852;
-	bh=XIKOtlvy2sDzje+GzBUZnR/a7Rjl/13p0yankYQhZg4=;
+	s=k20260515; t=1788616120;
+	bh=E5x2nuGAP7qhlJDDq1KWyFIoXdgiiOO4woxTa84W6a8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SqehuWnnvveABVXJCeMROq7DIj+W+Y1oHqkQw/KLdKyDFY9QWFaL01whw9Xg23GJR
-	 Q7KJtUuyfawnIsz2D4aik//2nnSR7prP/ZFu0jhCEf7M9a0uYIJYlJ7qsaZzBuZJeg
-	 1hveg4/ExClNexngAO991jjpo4+cwg4OwPmD07FUBE/jmagLC5kvSywpTrk++m2gzS
-	 o43JWp/gK6MGi7LVmpz3YNypj7sfWIxrjfw3uBw0lLOfVU6nHPN5aJrGSg4cq7IDPl
-	 wpq7WhvF14/mFgm7kkCSEfCMvYnMfUD1bybkbvV+Ij2yK3w+mG1hdfc1A8rs3x9r6l
-	 EEKdY4iDnmyOw==
+	b=S7XjY/4lzW0tomFR41MqUHJLL9wDsryr93TXHHFNbc7aLORq1w+LIR+lJ37kEJvNr
+	 AHsx5pVe32SOyCmfIUHodZmCKelH+iJILiNx6BUD2AzouxT+d6rUPEB/w6UBWz+f8O
+	 YOkHhk6m3njTg4LHNCrqFh3r/dOdmFRV2fWvJbRP6rjeKn3H/B+6lfIOqkeIJ808I+
+	 Ow5hVS1c8xHuXYlY5GwP5EPCUp5GoDEdQaA9SyvdRvK4BEEHbLJYlquW9rUm0eNGKs
+	 Cz4shsN0tMrRyQgoLS63MOM7F5u3s+BB62X0fyzRjQX6/gsqoi5SvKpVJhvQ8aYyii
+	 WD+l3hKucuf4w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (mp5990) Publish the OF module aliases
+Subject: Re: [PATCH] hwmon: (max6639) Publish the OF module alias
 Reply-To: sashiko-reviews@lists.linux.dev
 To: hpp.iscas <hppiscas@163.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260905133721.65588-1-hppiscas@163.com>
-References: <20260905133721.65588-1-hppiscas@163.com>
+In-Reply-To: <20260905133643.65365-1-hppiscas@163.com>
+References: <20260905133643.65365-1-hppiscas@163.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 05 Sep 2026 13:44:11 +0000
-Message-Id: <20260905134412.164601F00A3D@smtp.kernel.org>
+Date: Sat, 05 Sep 2026 13:48:39 +0000
+Message-Id: <20260905134840.424E51F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Unsafe fallback matching logic causes a NULL pointer dereference w=
-hen probed via ACPI PRP0001.
+- [Critical] Missing i2c_set_clientdata() in probe causes a NULL pointer de=
+reference in PM suspend/resume callbacks.
+- [High] Unbalanced regulator disable if I2C access fails during suspend.
 --
 
-commit 8c03c546eec5de58e0c8478c39f38b64125e7713
+commit e5868671fda98c3e539843bf646808d132b90df7
 Author: hpp.iscas <hppiscas@163.com>
 
-hwmon: (mp5990) Publish the OF module aliases
+hwmon: (max6639) Publish the OF module alias
 
-MP5990 and MP5998 Device Tree clients are matched through mp5990_of_match. =
-Only
-the I2C ID table is currently published, although Device Tree clients emit =
-OF
-modalias events.
+This patch publishes the max6639_of_match table as the OF device ID
+module table. This ensures the correct OF modalias is emitted by the I2C
+core for Device Tree clients, complementing the legacy I2C detection.
 
-> diff --git a/drivers/hwmon/pmbus/mp5990.c b/drivers/hwmon/pmbus/mp5990.c
-> index f8a5d1b42ff7a..d5143956d4780 100644
-> --- a/drivers/hwmon/pmbus/mp5990.c
-> +++ b/drivers/hwmon/pmbus/mp5990.c
-> @@ -213,6 +213,7 @@ static const struct of_device_id mp5990_of_match[] =
+> diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
+> index dd5f4b3b128da..bf9236151be19 100644
+> --- a/drivers/hwmon/max6639.c
+> +++ b/drivers/hwmon/max6639.c
+> @@ -790,6 +790,7 @@ static const struct of_device_id max6639_of_match[] =
 =3D {
->  	{ .compatible =3D "mps,mp5998", .data =3D (void *)mp5998 },
->  	{}
+>  	{ .compatible =3D "maxim,max6639", },
+>  	{ },
 >  };
-> +MODULE_DEVICE_TABLE(of, mp5990_of_match);
+> +MODULE_DEVICE_TABLE(of, max6639_of_match);
+> =20
+>  static struct i2c_driver max6639_driver =3D {
+>  	.class =3D I2C_CLASS_HWMON,
+
+[Severity: Critical]
+This is a pre-existing issue, but does max6639_probe() forget to set the
+driver data for the parent I2C device?
+
+max6639_probe() registers the hwmon device, which binds the driver data to
+the new hwmon device:
+
+	hwmon_dev =3D devm_hwmon_device_register_with_info(dev, client->name,
+							 data, &max6639_chip_info,
+							 NULL);
+
+However, there is no corresponding call to i2c_set_clientdata() or
+dev_set_drvdata() for the parent I2C device.
+
+When the PM core calls max6639_suspend() or max6639_resume(), it passes the
+parent I2C device:
+
+static int max6639_suspend(struct device *dev)
+{
+	struct max6639_data *data =3D dev_get_drvdata(dev);
+
+	if (data->reg)
+
+Won't dev_get_drvdata(dev) return NULL here, causing an immediate NULL
+pointer dereference upon system suspend or resume?
 
 [Severity: High]
-This isn't a bug introduced by this patch, but I noticed a potential NULL
-pointer dereference in mp5990_probe():
+This isn't a bug introduced by this patch, but could this lead to an
+unbalanced regulator disable if the I2C access fails during suspend?
 
-drivers/hwmon/pmbus/mp5990.c:mp5990_probe() {
-    ...
-	if (client->dev.of_node)
-		chip =3D (uintptr_t)of_device_get_match_data(&client->dev);
-	else
-		chip =3D i2c_match_id(mp5990_id, client)->driver_data;
-    ...
-}
+In max6639_suspend():
 
-If the driver is probed via an ACPI PRP0001 node, client->dev.of_node is NU=
-LL.
-The probe function will fall back to the else branch and call i2c_match_id(=
-).
+	if (data->reg)
+		regulator_disable(data->reg);
 
-Because the client's name is derived from ACPI (e.g., 'PRP0001:00') and is
-absent from mp5990_id, i2c_match_id() will return NULL.
+	return regmap_write_bits(data->regmap, MAX6639_REG_GCONFIG,
+				 MAX6639_GCONFIG_STANDBY,
+				 MAX6639_GCONFIG_STANDBY);
 
-Could the unconditional dereference of ->driver_data cause a kernel panic
-in this scenario?
+If regmap_write_bits() fails, the error is returned directly but the
+regulator remains disabled.
+
+The PM core will abort the suspend transition for this device and it will
+conceptually remain active, potentially leading to overheating as the fan
+is off. Later, when the driver is unbound, devres will run
+max6639_regulator_disable(), which could result in a negative enable count
+in the regulator core.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260905133721.6558=
-8-1-hppiscas@163.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260905133643.6536=
+5-1-hppiscas@163.com?part=3D1
