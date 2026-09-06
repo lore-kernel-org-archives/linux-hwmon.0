@@ -1,102 +1,109 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB9135E953
-	for <linux-hwmon@vger.kernel.org>; Sun,  6 Sep 2026 17:03:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EDE42E736A;
+	Sun,  6 Sep 2026 22:35:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788714211; cv=none; b=U9TUVRPGf7v40wvwvMxDmzd8s0ZCnFcp8T/TEBhcGUTw3zsF2HnuEDZIe7+CmldzbYN+xd0HMvAN5fw/5KR+r7XSCAuFD0OInnwOA9KUAgJ+MzIxj/KilJUTDHNpndzyaLBS9H2EZfR9fbbnMGS+STyYSNxLpT0XpMxKT/bIHXo=
+	t=1788734117; cv=none; b=mIJYJGe4I+eaxmSb+J7pfRs7TKHaVIMwRvlmHoQCOLGsXAhzn7pxTqVFLSXLmXIXtkrSP8ujaEFX90PihwilvXdBgpBvVhKRI60SEeV5D0/S3ENM8MzkV2Mp98tS1oyEaaAALaQymgJ02cOVxVHoPZ9tz1aiC8e2J+LHVNu2UFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788714211; c=relaxed/simple;
-	bh=3nQdtxw/p3KehznPyVdjNN8kTVqQcOVVInmE6Fspmvs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ubZQ3AtFSX8hd/R15WtnRihFNEDy9EAfbhfo2bnxcwNJSnqdiQl5EK6ACXMeD7Uw7Fx7opw8JE07GaQDl+lYkNwdWuLZZm/751P+x+jbyrdIVm/+zqmxMJug7h67eV/4RAWZ0ouK1GA2K2zt8SGrHzj0NkhmImBqnR2FR7XLjCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=islALXcM; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788734117; c=relaxed/simple;
+	bh=2b66tyf40CPjDrRMx0MKDWRR25VJTr1dquIvtg/bz5M=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=X6V7N50PgwydIEN3OTYDb72/85miuGf1Q8aEYTYaZ3z7MabENyLSzYKk7Crkr1w3Pafurrz2GNONvEGeQKxAPdBMk0dSvpRJOYZ4wNQR3TorQkxFyDuRr8agw9PWoUKfne41W8tA/W62WIbOTKg2memDTy7cAmmbVXQbgfcSPAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dP6m3O1M; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="islALXcM"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3966791a6eeso3270990a91.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 06 Sep 2026 10:03:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788714210; x=1789319010; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=WbyKgxmi/08EG4pWqu0vnWSWMfKp3Bgy++/kX1RtY/8=;
-        b=islALXcMkeE19kDYnyctCkZOazjAyEgafus2D+wqdD2hFX4Cet8ObCIBUIQwTdHc7K
-         frBUckQTayhunRYMV8xFGbZj3h0yFFqo3K0OIKeVMt6ikKqi4R9ZF9N0MfZC5rM7JBSz
-         c4STraOypxKYcH66L6XHWhw97FWfeHG1K7aUs2+9MHPOGXZfNWM4XwAfSi+5f8JJ6o39
-         FFsLRAYMX0SPz47WkTJrYmL5uN/1yntMWFaaxXo79EdEw9u7UCMEuHboT7127AG3PqmQ
-         K3zmFM4xwanJgEbEZVKZ1WjNGx9+73RbCixIGeg+wUcs1DzSkQnBsam9gvNzKSHtdkPU
-         xP1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788714210; x=1789319010;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=WbyKgxmi/08EG4pWqu0vnWSWMfKp3Bgy++/kX1RtY/8=;
-        b=RfqvBWvufC/8MY1e7jtthjXT4DSkOQeGYSKn1+2xPUqcRa5q8BqSsqFTRH/UNYm1Ey
-         Z0Zz8C/+6U75Khbc6o9c3UIA10i2hvKi1FT5GE8b/F9U6oGwkVwtlpA0gVfMCwqVS5oo
-         xXWw6ZPYykO+4PbSfYdhnXaK1HF3j/atu4QOGlGynje6mAD2E29Uo4weA6mSrSCGfk7d
-         3PKC8H9iCWv5HOI7c8KmfCw+L+8Ih3lMJRfWjcTvu7/lThvmkLHJry7r1MDYOhvksCvF
-         fAk2C92Uy3/B8OGsGN1zXxnm6dXKdO+9jjKF70TXy7/m7Tc/pHfakmu4HeNBcnHIk+o3
-         hPyg==
-X-Forwarded-Encrypted: i=1; AKwUvBz+/jRVjfDDEFDt8m29zSAHv4gIZrDSBTCQ8+jf/6ODRTG9qM5oAqc13QLftclpMiVyJh+zbQXdWmoSAA==@vger.kernel.org
-X-Gm-Message-State: AFuF++l5KQlVjKCfuINlzCiiS5Sn+wUNkqiNlcIGw6X+mvUNDpqLAhVN
-	zpeLmp+30pwfyquZ98BYTvr+MmpudkG9pXwVi7pml8+qBfgh0KAVqPQQ
-X-Gm-Gg: AYBFou2CYH9b/AWjEemG6pVYNmySvDhNRgFCBT8r+I1riIFB/pTY0LjRuCh7LBDD43l
-	sadcZXPX09tZjjYaDxEtM76nO1PGoNcrFqybC6W0tTZC2hiy+/zTmTdfM5lX6xedNYUstLxtSZy
-	6M6S0tu2i1jMu9dIUbKTeZdpDnlg1R8b2clyVL6RkLVo8nxYRQalE8Vgt+DNw6+8+0rnwP3V/Zu
-	iQpkj7kvEEY9QEiqE6cfBHxl9dw/to//+475zrmimwkhC9W/O19F2v6ipfJNn76P+HmtpanfBzy
-	HVrwDp09/SjbjkryMn/GEJo4V6OIpBFeOLNbP3IezZcFhLkmqrgMHJE4eUxD+ylf5MXnmbuZG9+
-	+75RSWLkfqGD9pZCktFVKdS+08w7B4o79esSYuy3YDoL7d2HqHyEHlEVZ3sbAry8ROFhBE7+frQ
-	A6/RMPgQYJRa448afhriYKglTn7rDfV6CfWi2El3hLWKb3WF40soL1autBx9Kfifc25+M+jihHR
-	BU=
-X-Received: by 2002:a17:90a:da8f:b0:398:b71e:60c1 with SMTP id 98e67ed59e1d1-39b26208e7amr26267464a91.12.1788714209868;
-        Sun, 06 Sep 2026 10:03:29 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39ae60891b2sm9330813a91.0.2026.09.06.10.03.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Sep 2026 10:03:28 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 6 Sep 2026 10:03:27 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc: Mario Nuevo <marionuevo@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add ROG STRIX Z490-A GAMING
-Message-ID: <ec1e36dd-3128-42e0-be0b-dcb7c7aff303@roeck-us.net>
-References: <20260905080346.1957380-1-eugene.shalygin@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dP6m3O1M"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 44CB0C2BCB8;
+	Sun,  6 Sep 2026 22:35:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1788734116;
+	bh=2b66tyf40CPjDrRMx0MKDWRR25VJTr1dquIvtg/bz5M=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=dP6m3O1MgZEBRGYEoya33pWG8Tyt9eWOq8TpddMlHFMNStDkY36De4EXk2cdFXG6G
+	 1qdlZMRB8o0CLZ9JKwtr37qB2R/NObjlDswlhruw0cLR+HQdvjvniMvWYUu0SYGx6r
+	 w8Yj3Yevl4mT7Kvlfcul18DIPkE0XMJbrc4r1hujsv2BCAaXfliJLLBNe4CflLDCns
+	 WbCiUXnqRoazgPf+qX3yuQR0f7OpJuSeZkfSZq0A+F6U7TXLMri8RMz5Z1nnhVcs10
+	 PZkeYNb1hMQ2mILOzdOiZ/rF7TMy0f3u0wAt+9SDuA8A112HwmH33EbVF2GyAfIE1p
+	 3LXfsGElq8A/Q==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2244DC79F9E;
+	Sun,  6 Sep 2026 22:35:16 +0000 (UTC)
+From: Massinissa Ghoul via B4 Relay <devnull+massigh680.gmail.com@kernel.org>
+Date: Mon, 07 Sep 2026 00:35:02 +0200
+Subject: [PATCH] hwmon: (hih6130) Replace sprintf() with sysfs_emit()
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260905080346.1957380-1-eugene.shalygin@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260907-hwmon-hih6130-sysfs-emit-v1-1-a1adb5245d0f@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMyw6CMBBA0V8hs3aSaQlt4FeMCx6DHROK6fDQE
+ P7dqsuzuPcA5SSs0BQHJN5EZY4Z5lJAH9p4Z5QhGyxZRzV5DPs0RwwSnCkJ9a2jIk+yIPnKGGd
+ tSd5Dzp+JR3n91tfb37p2D+6X7w/O8wPa9ngofAAAAA==
+X-Change-ID: 20260907-hwmon-hih6130-sysfs-emit-075116223077
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Massinissa Ghoul <massigh680@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1788734115; l=1351;
+ i=massigh680@gmail.com; s=20260906; h=from:subject:message-id;
+ bh=MHrNwwTYchzU6LrretLfcd95AXrW/h9RfnDFCAgZNm0=;
+ b=unx4Z7I7LuzIi4htsnORzaqD09Y9jKfD2Qo05QcVbmBMf4/DmsUC/HgmJOUS79pQDS9tvVlQx
+ fXDHIFG33fJD7ZwoJMqIPXwD5m9utQG/rPwvt28MvN0+yoyCSX8axKR
+X-Developer-Key: i=massigh680@gmail.com; a=ed25519;
+ pk=0sdDIn8rwwQcfQLT4kpMuP9iTaPw8YMcqI9B3U/GS1k=
+X-Endpoint-Received: by B4 Relay for massigh680@gmail.com/20260906 with
+ auth_id=1012
+X-Original-From: Massinissa Ghoul <massigh680@gmail.com>
+Reply-To: massigh680@gmail.com
 
-On Sat, Sep 05, 2026 at 10:03:36AM +0200, Eugene Shalygin wrote:
-> From: Mario Nuevo <marionuevo@gmail.com>
-> 
-> The ROG STRIX Z490-A GAMING and Z490-F GAMING are essentially the same
-> board apart from the F's onboard WiFi module, which isn't wired through
-> the EC, so they share the same EC sensor layout. The Z490-A exposes the
-> same EC sensor set as the Z490-F (chipset, CPU, motherboard, T_Sensor
-> and VRM temperatures plus CPU_OPT and VRM HS fans) at the same EC
-> registers, so reuse the Z490-F board_info for it.
-> 
-> Signed-off-by: Mario Nuevo <marionuevo@gmail.com>
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+From: Massinissa Ghoul <massigh680@gmail.com>
 
-Applied.
+Use sysfs_emit() instead of sprintf() in the sysfs show functions
+hih6130_temperature_show() and hih6130_humidity_show() to use the
+preferred kernel interface for writing to sysfs buffers.
 
-Thanks,
-Guenter
+No functional change intended.
+
+Note: Not runtime tested due to lack of hardware.
+
+Signed-off-by: Massinissa Ghoul <massigh680@gmail.com>
+---
+ drivers/hwmon/hih6130.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/hih6130.c b/drivers/hwmon/hih6130.c
+index 7984be1e706d..6a79aab5d128 100644
+--- a/drivers/hwmon/hih6130.c
++++ b/drivers/hwmon/hih6130.c
+@@ -168,7 +168,7 @@ static ssize_t hih6130_temperature_show(struct device *dev,
+ 	ret = hih6130_update_measurements(dev);
+ 	if (ret < 0)
+ 		return ret;
+-	return sprintf(buf, "%d\n", hih6130->temperature);
++	return sysfs_emit(buf, "%d\n", hih6130->temperature);
+ }
+ 
+ /**
+@@ -189,7 +189,7 @@ static ssize_t hih6130_humidity_show(struct device *dev,
+ 	ret = hih6130_update_measurements(dev);
+ 	if (ret < 0)
+ 		return ret;
+-	return sprintf(buf, "%d\n", hih6130->humidity);
++	return sysfs_emit(buf, "%d\n", hih6130->humidity);
+ }
+ 
+ /* sysfs attributes */
+
+---
+base-commit: ba08432bda66a7889d8f3d1581dabf10f59b25eb
+change-id: 20260907-hwmon-hih6130-sysfs-emit-075116223077
+
+Best regards,
+--  
+Massinissa Ghoul <massigh680@gmail.com>
+
+
