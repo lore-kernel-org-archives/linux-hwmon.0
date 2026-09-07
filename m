@@ -1,46 +1,46 @@
-Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012027.outbound.protection.outlook.com [52.101.53.27])
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010056.outbound.protection.outlook.com [52.101.201.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06F8640BCBC;
-	Mon,  7 Sep 2026 06:52:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.27
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A0640B0E6;
+	Mon,  7 Sep 2026 06:52:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.56
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788763968; cv=fail; b=FFINPO4AMFtaJhGIxBlVG7U+edEennimPRqpooR42VeChnGHyKI/8oO/aY66HiltifSID+InF+iRa3TymQkxstJ7JPk+Lg8jPVPQoLb9uIhgDoDot4Vc8B4K8Nsk7wdkz9SZuMnql7YxULTNbroME7PttKbRQnt/n9SyIbpeqEI=
+	t=1788763971; cv=fail; b=q2q62QVUhfry2/G+AknG0wAd4BBjb5l6FM8ihHcUZbfJD7DYobsrNJjWkk/+luXwMZIEs+t66ZYtDRjfYGqbuSZCB/h7DcXy4dWigrNVBy8r14q/vC+oRK+vrn8xTfDzSbmkvrDhGX+GeJvr++w+fRqNHGHakBSBoX+dNK2s5T0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788763968; c=relaxed/simple;
-	bh=FSmk3SzmETKmXxQqMCkkg92HUXqmHyLJR2IS7n2kdZQ=;
+	s=arc-20240116; t=1788763971; c=relaxed/simple;
+	bh=JgfVIyl7mjqngBwIENiuTuEYh/MHvv7+etnYgqYRado=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=dtDQOMqC+QPhZgod2jF/ZuSOxdLEJfxSY1rwPo4hqTQSbljZtfdP700WCmcSvLfXb6EU1cFkwNEbkwti1EYJh+gliOD6DtobgXwE7RozTaWMfnrfi7cP7Hnr/TS0oDREFOY34sNws9rFeWdMtfy5ElgrPfHTO1HgorwfVdnFiTI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=XZw1DUcr; arc=fail smtp.client-ip=52.101.53.27
+	 In-Reply-To:To:CC; b=TwVWHhhgFAzTaZ+2Hy/inCTK19EWmAfnPocLjqexc5emcVNuWE5NnHGsmB6+jB52cMvDMRybArXs4WnTqiSe3yTcXu0cM61r3d1pr9j7lxGwgggEzGOt9JDQPNFdBSvkWpl21Ps0Bv9H3d4A1K9VDtg55u4rxEG7nIdwU+6K244=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=GdxDp943; arc=fail smtp.client-ip=52.101.201.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="XZw1DUcr"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="GdxDp943"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QfKu5KLKCwqjrMPQUGGfeFISMhXJCkvHbJNdQg+9wz+4n/Cmv/3tdhFw1aCAnZaoYzaTW9nrpOW8YjnY4k0ctiuuAqybgxLifENkelma3VDgPpCD2k8OypADMRuVKJj1HShdxjnQEgrTawGVxrcXlpVFgPacU/EuL+l/PArx7rHoNO7l1Yw0O4JsHskc2LrVnOdKDbefHW1MvH1GRZ03pyLsy2pJlyYIoGBSY23jH8kAOwbX5yfV2iClc8zuj6Nx6+mIiRdYoRBM/QG6km3NsQqKglnDDrNZmAidH4sdLn+YNakWcxkkvJt1m5IH6VA9q7/1dN9Acg9bArCufJjNFg==
+ b=s78g/66rTO/i6obNHdHqOWbA567HM/HYK2VKbv9VDzt57HuDZ/hIHjdzDEN8sTzbkdAXW8JDmf97+twgMOkQQdN/fqX39ERN0OL00SKvevMc2EcxGQF2jN8tnHYlzNidcyMPQUlr7wN4ViXsHZ9TXsC/gLt1TbSkfJ1+HYi4+ACSRuWhxg6BGTRPislA8Aer/jxfat+TCz+s9IWEmeT3ivJrI50vZPhnsHOeEO11/ud4BJs9accK+xxG1XMKkZLM255v6x4YofvEDAo6xsypIyqcTd6psHDwHRUR2h2AAxolZlbRbuekP426ZmcN/R+L4ZY75Ql72EgVNAlUBEwHWg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3QQfNYlRBA2ZtHp4UlxxqokEZtUbXPg9G4IFL9/yZD4=;
- b=jgdM2U9I1VyRh7ikq47pUiZjAEt3T3nJL3vSgNsoWkTwFkz1CZg3OEbJSzPfHTLLPqVjHUYsmco3yBKAHHnhdwNgzJGGHJOXM/R1q7rhv11iX4G2JC6TKv76fAvGihmW0qoztktCKBZ5EkjgsMbTTE0d2ZxIijb/SW6OcEhQzFwDai+VR9XG6b6TmeanTSO8D03lMLn04E5KLceVpz9y3U0D3vKQ41QgY+HsGqsxE8DGfzr2xaJgUchnzjGCSHPouS+mAo9lOTW1MWATNuQpGevF6Rh2Hb8V4Eo30xqlaiIQRZgdjCTRNNCMMFwHxm/8z9moz8DBZVwLnRhOKzuhEg==
+ bh=m0nsuFNYiUnHFm8QCGx6itYrVSd2S52ssyx2VyBB4hA=;
+ b=d7kiIDLZw7EP5TKfGvJLtY/25wOvrPi3/UZco0FjvHBehRY2EyHTlSsYvkni9LsUYX07g2U0MU1rOesU2hXtfvrMnofdwSsbw57HEMYL2cZKFAZF5ORd+ZKFMOqYKHpTP3msy67Ewx9lFtKjtqFBBEknGYF3s0pDF58Xou5QwSaZT/UTvkTsFwXOqFwEu2DgLdhn646uOFKkOHkKUOI8hzSqDFO1gWFxW8K+vPy3E0KLQ4RqrxnhVsDS49hMspDreNDMiIZsIMII+9xaD4LyyFoAoBFpnoxnQjnIu9DMUuCHDPJeOBnOIYy3DjJUUig9hyt6xlQVYt/apA5S74nfpw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3QQfNYlRBA2ZtHp4UlxxqokEZtUbXPg9G4IFL9/yZD4=;
- b=XZw1DUcr7XToWvQBpvJcH7zVUetvXYdSJPIYLQysY8jv/AlshBAXkbGFZWvHbWFgdI8oQC1RJInfsCfiLB378zmeu88Kc3N0zq9SQ8rAeh4W+E+qPg1YXISC9kIz4e0qtjUYxqzABZ1+qiinpjOcD1ehPot0ugejSux2Jx/FDGQ=
-Received: from BLAPR05CA0012.namprd05.prod.outlook.com (2603:10b6:208:36e::21)
- by SA1PR12MB7269.namprd12.prod.outlook.com (2603:10b6:806:2be::5) with
+ bh=m0nsuFNYiUnHFm8QCGx6itYrVSd2S52ssyx2VyBB4hA=;
+ b=GdxDp943ogcOlD0OhSvAZ5RF77laKsWLTbdvDujYoMmsxhchLUVZjivYTaXxjTApvwCv6B2DS2D3IlzWn2FYi7QtseuDgmzJY6nvYhl37cLZ/CEmHz/Re1TAfrrgWZQXB1sA3SAMnn8NcE9HCKKB1ar2BQxR3Zq9n1DLEMn90Zs=
+Received: from BN9PR03CA0203.namprd03.prod.outlook.com (2603:10b6:408:f9::28)
+ by CH3PR12MB7596.namprd12.prod.outlook.com (2603:10b6:610:14b::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.382.15; Mon, 7 Sep
- 2026 06:52:43 +0000
-Received: from BN3PEPF0000B074.namprd04.prod.outlook.com
- (2603:10b6:208:36e:cafe::87) by BLAPR05CA0012.outlook.office365.com
- (2603:10b6:208:36e::21) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.406.6 via Frontend Transport; Mon, 7
- Sep 2026 06:52:42 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.382.14; Mon, 7 Sep
+ 2026 06:52:45 +0000
+Received: from BN3PEPF0000B076.namprd04.prod.outlook.com
+ (2603:10b6:408:f9:cafe::21) by BN9PR03CA0203.outlook.office365.com
+ (2603:10b6:408:f9::28) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.382.15 via Frontend Transport; Mon, 7
+ Sep 2026 06:52:45 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -48,24 +48,24 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
 Received: from satlexmb08.amd.com (165.204.84.17) by
- BN3PEPF0000B074.mail.protection.outlook.com (10.167.243.119) with Microsoft
+ BN3PEPF0000B076.mail.protection.outlook.com (10.167.243.121) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.406.5 via Frontend Transport; Mon, 7 Sep 2026 06:52:42 +0000
+ 15.21.406.5 via Frontend Transport; Mon, 7 Sep 2026 06:52:45 +0000
 Received: from satlexmb10.amd.com (10.181.42.219) by satlexmb08.amd.com
  (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.46; Mon, 7 Sep
- 2026 01:52:42 -0500
+ 2026 01:52:44 -0500
 Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb10.amd.com
  (10.181.42.219) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.46; Mon, 7 Sep
- 2026 01:52:42 -0500
+ 2026 01:52:44 -0500
 Received: from [127.0.1.1] (10.180.168.240) by satlexmb07.amd.com
  (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.46 via Frontend
- Transport; Mon, 7 Sep 2026 01:52:40 -0500
+ Transport; Mon, 7 Sep 2026 01:52:42 -0500
 From: Colin Huang <colin.huang2@amd.com>
-Date: Mon, 7 Sep 2026 14:52:29 +0800
-Subject: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: Add Infineon tda38740
- and tda38725
+Date: Mon, 7 Sep 2026 14:52:30 +0800
+Subject: [PATCH v2 2/2] hwmon: (pmbus/tda38740) Add driver for Infineon
+ TDA38740/TDA38725
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -74,7 +74,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20260907-add-tda38740-and-tda38725-v2-1-1d051d63aa01@gmail.com>
+Message-ID: <20260907-add-tda38740-and-tda38725-v2-2-1d051d63aa01@gmail.com>
 References: <20260907-add-tda38740-and-tda38725-v2-0-1d051d63aa01@gmail.com>
 In-Reply-To: <20260907-add-tda38740-and-tda38725-v2-0-1d051d63aa01@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
@@ -83,138 +83,188 @@ CC: <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, <colin.huang2@amd.com>, Colin Huang
 	<u8813345@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1788763951; l=3159;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1788763951; l=4526;
  i=u8813345@gmail.com; s=20260202; h=from:subject:message-id;
- bh=yJUSlD+iR1JmbsQDXZp6JI5ayImV0iL4dKTzOzpOFnI=;
- b=B3qZLjRI5q1OQy5lyDE8EFRGANThw8Ta0IcSYJWK/+sFvFj6mn3Wu+1p268pW8EPpWhYkkUQs
- F6pKoMIn7TCAL6lbVIod0D0mcRA28/wQFBpIkguovGCMRwZPq/WNms8
+ bh=FRHchz2P4X0jfKHjWfuTnDJE7rCtTwHQUBDDYQ6P3Yc=;
+ b=hjxNFSShjjqDpFu+HKP3xTNV9elnUBH4bMPGyfbD8Gd/JRiDap6TVJvH6LaAJt7OneDLM4uS7
+ 6J8AFN2QYdDBPqBx4MS1aJSZyy2Hc6NPE9NiAwD+A+mClnfdeHkp4lB
 X-Developer-Key: i=u8813345@gmail.com; a=ed25519;
  pk=Zlg0WqpCw4qbswOqamTBTXIchwR/3SnYZpy7rjaGMdQ=
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B074:EE_|SA1PR12MB7269:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0914ada3-4043-4af8-d72c-08df0cac9d92
+X-MS-TrafficTypeDiagnostic: BN3PEPF0000B076:EE_|CH3PR12MB7596:EE_
+X-MS-Office365-Filtering-Correlation-Id: d5381854-9821-4c10-2d81-08df0cac9ef6
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|36860700016|1800799024|82310400026|376014|10067099003|3023799007|22082099003|18002099003|56012099006|11063799006|13003099007;
+	BCL:0;ARA:13230040|23010399003|36860700016|1800799024|82310400026|376014|10067099003|3023799007|22082099003|18002099003|56012099006|11063799006;
 X-Microsoft-Antispam-Message-Info:
-	znB3uKacqP8spK8SugxBHz/kc9+uCS8VHkWWMDkuIoiBGxc87/rk2qEd5ie+XiRRSavom/Ch8rrmtkKuhOrT3cTxpiLbHfXB8UppxhTN6BGDDLtiDbwGSz7yoPuOgSw41Wdy2yVIfiO5IGcizLJ7mzXUsDWm0eYtjCHYI8hEWnO9yDylMA/Afg6aKhxWtBySqVYK9C93/VNrj6IU/9zP8UjvqyE6t3Up3L0wDtMgEwjzj0sn1aALl5cNJvSbtGExFuzpGWZwGD2vV637BUquVB1AxDUuMFNCIWI0S8nwrB0MCalhGhcTj2t/fEiZkrqP4S/Wb6+EfAY2sENoNJ/jAAEs8Tm+haAjdvqGJgQsj2pmtC3SfS2LY4rjWxNRuKbds7dkXqXtO6D0ov0ADSl9cCWzhtA4QdOWp5rz+fY+mePkK8+VTz+m7ARO3v9gt9BrA85XUbPGxFqKmUo4OtF2ek3b808KC+9dVT25sz0ZQV2c3Mza5ssOSp4yBIpsuysQAvLol4Qjv8elvaYY3c/aP22ppQj5pPxhnnEYzw8G4eH6YE3WDXpjPekHkaKu8rLL9crwcwAit2fFeZSc7avtVK96GpLAmkuTg7/ovfI2V9ryLqb7Cif/rkdUypSgSxztHPxgYLRqrjH9CT1AJS9bWw==
+	dg+N9MclQ9jk4FLLWtWs64ygOjukrIIbao8dAb3eRCagSN+CW/QOpTcUtfyXKpq6JTZfIh8/86PDH4mAgeVs/hFYO+CENk+rKHqPZ1ZIM5q5TcpTOMp1VqXhHw/+U3kPdpKg40pFJbmRtApNPIjvUOvzCcCsJbtepRY/RZgKZfzS6x1bNWQP9eRuprGZevo15XyKW4gtAPAu68w+Pb6Xh49BIZRcBYl5aVRUWQkB/svb7vocf0uGlVdRCBx0ZLTmIBHAfYDf58CIPcY4PUat84aU1x1T9nN2HEi0qzMznMjMYjNMj/5x2rx1H65YNUAGEMD0Hko/6oPwbTTbTo8bQhyXosieMFGY4Lj0VCAmDdKmuTAUfAte1GQDF3/ivFcmAbsLzcjxjd1TfzvyM0ztCxQm/FYlZCQJWcmOPWb9DDHEUWBkFP8sva8gYXubt5FalkkSs5OhVnOlsksv5i7DzLdjvH/ZiTOJNp6pwKSxx0MsCzaI/XKuocSAvSGyRJvpnUXGj0UHkrQjLYqDTu/h7Xec+z610wWqQofqGyNJf5kRRIZ17jKKAGBcTTbxcpWI57SFX07wEhQFTsVsROGfEjT/aQXBfMBPZd0ZKlwZE53pacyNC3wFgD1vMsnuhryZkM+sQ+7rJpSBbLJCvpApGhkjqpbS6F/ib9TmfhfRty+M/+nAWc+X2PPT3r3D74L+CvMbPWRjp9M9xT+65r6CrQ==
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(23010399003)(36860700016)(1800799024)(82310400026)(376014)(10067099003)(3023799007)(22082099003)(18002099003)(56012099006)(11063799006)(13003099007);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(23010399003)(36860700016)(1800799024)(82310400026)(376014)(10067099003)(3023799007)(22082099003)(18002099003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	grf6Qyuvzky5ILKjbySOnMhUJaRyprwtlgDQtjk4uFCg+F9qFQQc2Q0gtYE0i0wk3dHPvFTmYtKgFA1sWKwiqkUq7w54f/IipZNgDFafNk7Ha6/xLxxYk9GueCqfJuB2BKbnG3g135lMdlm7SVQEzZz1j3BeVi7a/iB1O7wy+CBsZAZixlwwWLMClqGvzO8QWtnpZV1dSOcT6e5IWC5xJoF1KfJ5lNW/I5qCSn777VlUqRk84Yjj7smKhDRpNSosKK2dEzS1q4253nxzNWfDJ7PsX96rJU+EruJdXgfuVCgG6psNLtqFoiPAV1LaO6huOnFX5yMXUH5A/Dkssk7OX5IptLY5WG046mLMYlgLT+TJxi32kY57uEdT1wa7q6k7f2zrLmxteHgti4qJ7dHWl5czgH24rkf+JzKvc9S/w982YEtGvNvJOg/nVR1PQVmt
+	PWub0N+2ENY84wl2KfXJDsu4fIjw5Go73CYDJXYCNeWeRnD1icMbHHDixITampd9gioYq3cmcJ81v5a+5++0olM/c5Cg7mG0gT7oVjWxu8vKcfI8PNQ70J6GIh+UIRHiV4aMpw4MYPh5lKakEljvJ2lr7PgfQBG178ZkEENFD4KPStsNOXIX2nh4A6cJmOlvQr6cog3LW3AD8awhx1n0HLUReXE1ZRcEMJzzXEAVvaA55x2W5Bo5HvIJ6PIepYcweLXdo4qfC2xPYCHL9URyeT/MmRNRT7YUkxX0LfEfpbbtM/FMWYUHmYKcDsQJ+d9YwLVnan/vxxC0YyrWSQeNARTkHZqXh+FmvJKvOQ41J5iqxMbM3TmxhkcoTAUaqlsMBDpkBYUYqBi4dundJY9VHKCDNGpip3JJZ+QS5uQTGxHSnHzGvbQmFpsPuKwAAdJW
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2026 06:52:42.7033
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2026 06:52:45.0319
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0914ada3-4043-4af8-d72c-08df0cac9d92
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5381854-9821-4c10-2d81-08df0cac9ef6
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B074.namprd04.prod.outlook.com
+	BN3PEPF0000B076.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7269
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7596
 
 From: Colin Huang <u8813345@gmail.com>
 
-Add devicetree bindings for the Infineon TDA38740 and TDA38725
-single-voltage synchronous buck regulators with PMBus interface.
+Add a PMBus driver for Infineon TDA38740 and TDA38725
+single-voltage synchronous buck regulators.
 
 Signed-off-by: Colin Huang <u8813345@gmail.com>
 ---
- .../bindings/hwmon/pmbus/infineon,tda38740.yaml    | 82 ++++++++++++++++++++++
- 1 file changed, 82 insertions(+)
+ drivers/hwmon/pmbus/Kconfig    |  9 ++++
+ drivers/hwmon/pmbus/Makefile   |  1 +
+ drivers/hwmon/pmbus/tda38740.c | 98 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 108 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38740.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38740.yaml
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index bcfdc4ce4c10..e4ca80dd0574 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -763,6 +763,15 @@ config SENSORS_TDA38640_REGULATOR
+ 	  If you say yes here you get regulator support for Infineon
+ 	  TDA38640 as regulator.
+ 
++config SENSORS_TDA38740
++	tristate "Infineon TDA38725/TDA38740"
++	help
++	  If you say yes here you get hardware monitoring support for Infineon
++	  TDA38725 and TDA38740.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called tda38740.
++
+ config SENSORS_TPS25990
+ 	tristate "TI TPS25990"
+ 	help
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index e288fe72a437..eb06d47816fd 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -70,6 +70,7 @@ obj-$(CONFIG_SENSORS_STEF48H28)	+= stef48h28.o
+ obj-$(CONFIG_SENSORS_SQ24860)	+= sq24860.o
+ obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
+ obj-$(CONFIG_SENSORS_TDA38640)	+= tda38640.o
++obj-$(CONFIG_SENSORS_TDA38740)	+= tda38740.o
+ obj-$(CONFIG_SENSORS_TPS25990)	+= tps25990.o
+ obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
+ obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
+diff --git a/drivers/hwmon/pmbus/tda38740.c b/drivers/hwmon/pmbus/tda38740.c
 new file mode 100644
-index 000000000000..c9bf19902d3c
+index 000000000000..4cf9a81b276c
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38740.yaml
-@@ -0,0 +1,82 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
++++ b/drivers/hwmon/pmbus/tda38740.c
+@@ -0,0 +1,98 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Hardware monitoring driver for Infineon TDA38725/TDA38740
++ *
++ * Copyright (c) 2023 9elements GmbH
++ *
++ */
 +
-+$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,tda38740.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include "pmbus.h"
 +
-+title: Infineon TDA38740 and TDA38725 PMBus Synchronous Buck Regulator
++struct tda38740_data {
++	struct pmbus_driver_info info;
++};
 +
-+maintainers:
-+  - Colin Huang <u8813345@gmail.com>
++/*
++ * TDA38725/TDA38740 only support Linear format for VOUT related commands,
++ * with exponents in the range of -8 to -12 (see datasheet VOUT_MODE
++ * description). Direct format is not supported by this device.
++ */
++static int tda38740_identify(struct i2c_client *client,
++			     struct pmbus_driver_info *info)
++{
++	int vout_mode;
 +
-+description: |
-+  The Infineon TDA38740/TDA38725 is a 40A/25A single-voltage synchronous
-+  buck regulator with a PMBus interface designed for industrial use.
++	vout_mode = pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
++	if (vout_mode < 0 || vout_mode == 0xff)
++		return vout_mode < 0 ? vout_mode : -ENODEV;
 +
-+  Datasheet:
-+  https://www.infineon.com/row/public/documents/24/49/infineon-tda38740-tda38725-datasheet-en.pdf
++	if ((vout_mode >> 5) != 0)
++		return -ENODEV;
 +
-+properties:
-+  compatible:
-+    enum:
-+      - infineon,tda38725
-+      - infineon,tda38740
++	info->format[PSC_VOLTAGE_OUT] = linear;
 +
-+  reg:
-+    maxItems: 1
++	return 0;
++}
 +
-+  infineon,vout-scale-micro:
-+    description: |
-+      Scaling factor applied to READ_VOUT telemetry.
++static struct pmbus_driver_info tda38740_info = {
++	.pages = 1,
++	.format[PSC_VOLTAGE_IN] = linear,
++	.format[PSC_CURRENT_OUT] = linear,
++	.format[PSC_CURRENT_IN] = linear,
++	.format[PSC_POWER] = linear,
++	.format[PSC_TEMPERATURE] = linear,
++	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
++	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
++	    | PMBUS_HAVE_IIN
++	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
++	    | PMBUS_HAVE_POUT | PMBUS_HAVE_PIN,
++	.identify = tda38740_identify,
++};
 +
-+      TDA38740/25 pin strap parts are available in two flavors of
-+      VOUT_SCALE_LOOP: 1:1 and 1:2.
++static int tda38740_probe(struct i2c_client *client)
++{
++	struct tda38740_data *data;
 +
-+      For the 1:1 VOUT_SCALE_LOOP version, output voltage sense pins are
-+      directly connected to the output, and no resistor divider is used.
++	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++	memcpy(&data->info, &tda38740_info, sizeof(tda38740_info));
 +
-+      For the 1:2 version, a resistor divider is typically used (for example,
-+      499 ohms for both top and bottom resistors).
++	return pmbus_do_probe(client, &data->info);
++}
 +
-+      In some designs, users intentionally modify the feedback divider ratio
-+      to obtain an output voltage different from the internally configured
-+      VBOOT or VOUT value.
++static const struct i2c_device_id tda38740_id[] = {
++	{ .name = "tda38725"},
++	{ .name = "tda38740"},
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, tda38740_id);
 +
-+      In such cases, the device telemetry (READ_VOUT) continues to report
-+      the internally programmed voltage and does not reflect the actual
-+      externally adjusted output voltage.
++static const struct of_device_id __maybe_unused tda38740_of_match[] = {
++	{ .compatible = "infineon,tda38725"},
++	{ .compatible = "infineon,tda38740"},
++	{ },
++};
++MODULE_DEVICE_TABLE(of, tda38740_of_match);
 +
-+      This property provides a multiplier to scale the reported telemetry
-+      value so that the monitoring system reflects the actual output voltage.
++/* This is the driver that will be inserted */
++static struct i2c_driver tda38740_driver = {
++	.driver = {
++		.name = "tda38740",
++		.of_match_table = of_match_ptr(tda38740_of_match),
++	},
++	.probe = tda38740_probe,
++	.id_table = tda38740_id,
++};
 +
-+      The value shall be expressed in micro units where 1,000,000 represents
-+      a scaling factor of 1.0.
++module_i2c_driver(tda38740_driver);
 +
-+      Example:
-+        If actual Vout = 0.75V and READ_VOUT reports 0.7V:
-+        scaling factor = 0.75 / 0.7 = 1.071
-+        value = 1071000
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 100000
-+    maximum: 2000000
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        sensor@40 {
-+            compatible = "infineon,tda38740";
-+            reg = <0x40>;
-+            infineon,vout-scale-micro = <1071000>;
-+        };
-+    };
-+
++MODULE_DESCRIPTION("PMBus driver for Infineon TDA38725/TDA38740");
++MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS("PMBUS");
 
 -- 
 2.34.1
