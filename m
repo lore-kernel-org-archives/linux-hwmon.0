@@ -1,43 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395A84028E2;
-	Mon,  7 Sep 2026 07:31:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEE4B356766;
+	Mon,  7 Sep 2026 07:43:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788766267; cv=none; b=XXZVa322W16BpH2XmRlth9+h0sBVj2Gh5spIYDCJFoxUiZQlXvfuRU8Wx5+VFFDYZAdAxxvkGrG46vVcanXrFY/OaUOGG3+Hyv2S7xrTbZ2biNnqgmOdQGe0+ccchlniyWp3/4PM8nTgEDb06FhzR/dqg+4DtcX7n+Fu5MwdmIg=
+	t=1788767016; cv=none; b=UOpvDgXUlv9riorlbhcsWH+91zGtFpBSr3+vXNLRRksKJRFqm/wghnmbOXTQQ96zWWhOLp3IYz5aNuqpNQUqRfGp0NETj0UNB6aSH7TtsEvgETlh0RElpV8utNmiDAe25I9+j1MBAjOqgdJaoKxDBmjYhjmWjZf6X8617v2qKug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788766267; c=relaxed/simple;
-	bh=75gJo4soMDWgvVFd907DxIUGAHUUJsAttBWjfH8/iug=;
+	s=arc-20240116; t=1788767016; c=relaxed/simple;
+	bh=73N7HaWOUvi6JeCbvZyrIKBy85Hn4IFBjMhnzDo2vMY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y/KUus6z+H8WyO4pqQ8Ikx1YAlvY5xPwd23UG/m8rDVr3KkoMeefV1W56tl0O1Xp3NlpwA/yfHStNraQndTRc+aZbW5dfnMetLKuUrFOIQTHF+KJKWHrJbn3EtQgnSjW2ulQGTmUQzg3mnR0iDgnBaP3HC95RycKwnvhPCmBrZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H0z2f1hG; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rvxujp/bCi4eR0d0uNUKdfc9zfogguIjFLmA5euJnTHyqS7CBpHbl8aYbo5S71CkrldbjheWb3z4y/aaw8Jr2w1JUIsD0Xr6GazsEszrVY6UB5iywG6Yj3a3bqRNT4m6E6CIDtmRp7rvgPdYfSt0fc0jDdnTfj2C5erv+UUG2lI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b+SF3Vf8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H0z2f1hG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC7411F00A3A;
-	Mon,  7 Sep 2026 07:31:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b+SF3Vf8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 736B71F00A3A;
+	Mon,  7 Sep 2026 07:43:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788766265;
-	bh=tMdyHZ9kayoSShJk3iyTTO+vjov94Kd7L0/5q/U75GM=;
+	s=k20260515; t=1788767014;
+	bh=2U0LJa2+6NGYuS6YPV73PvwnOOrnGHIqZijxTc6txuI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=H0z2f1hGIErfStKXpyMG9QhyCc1VB4LVG100lVEc1k+pXRiJufmNFUcDv6EsMO3mR
-	 hCKGVPgjjc0gBThKZZA0RYGTgYdnNQxfmLCAJSdFNv16rV8YgwflBo8B91HxRPu6/f
-	 EpSZ7MCZfMwUrBXKWi24RVU9l0Xwpsv1DCBz3H6EGKyfHAqSq/vn8yd0bhgXZepfPl
-	 1ugZ4emWXDrXaoYDRgeExTHVJ4xsk6mID1PYTNBSswYq6ZlD16mdbMVHysQ1gFzHW7
-	 FiUCaYwNpSdVSHFNGqJhjQOS2JPI2wzivCZ2RabQByFwZQrSt5R/YDd1hb0br5n/yN
-	 PhEpC94rSM9Qw==
-Date: Mon, 7 Sep 2026 09:31:01 +0200
+	b=b+SF3Vf86nNpzU2W5TO6XWzNuHH58klFKzIhjAWiy83h3bcOJRNJM6EtszA1GfHal
+	 3kJTEEz4CxizL98R8RK5nLLfiaZnAs2o0mlwGlB9KIgpzUT1qFYYY62DUHxDdfxack
+	 uI985PKfaByayo7fKTBOtyPf7U88ssTb+CXWggvPQQu+wWL4SxB5dOAoA1miWi2JZJ
+	 o2kx28+TbgTinqnOYrp1D5bV+jnDJAKZQMWSY7/eMTnDP0TFXwKEi+wdql0EqptzNQ
+	 mmiIHbIa/tTr4uGrzf6jXUt0eEffXi2XFMf6RacdH892NbSWMvOTEk4pUr3U/f+m9m
+	 3YYeeAuT68yrg==
+Date: Mon, 7 Sep 2026 09:43:30 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Frank.Li@oss.nxp.com
+To: Vincent Jardin <vjardin@free.fr>
 Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	"open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev, 
-	Frank Li <Frank.Li@nxp.com>
-Subject: Re: [PATCH 1/1] dt-bindings: hwmon: tmp102: move ti,tmp103 to enum
- from items
-Message-ID: <20260907-relaxed-giga-pegasus-5c6a00@quoll>
-References: <20260901222249.1194299-1-Frank.Li@oss.nxp.com>
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] dt-bindings: hwmon: ti,tmp401: add
+ #thermal-sensor-cells
+Message-ID: <20260907-subtle-able-cicada-67535a@quoll>
+References: <20260902-for-upstream-dt-tmp401-vcc-tsc-v3-1-49c484d2f08b@free.fr>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -46,27 +44,21 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260901222249.1194299-1-Frank.Li@oss.nxp.com>
+In-Reply-To: <20260902-for-upstream-dt-tmp401-vcc-tsc-v3-1-49c484d2f08b@free.fr>
 
-On Tue, Sep 01, 2026 at 06:22:48PM -0400, Frank.Li@oss.nxp.com wrote:
-> From: Frank Li <Frank.Li@nxp.com>
+On Wed, Sep 02, 2026 at 03:54:00AM +0200, Vincent Jardin wrote:
+> Since commit
+
+Stray blank line. It's one sentence "commit foo....".
+
+>   a3b61ba2558e ("hwmon: (tmp401) register with thermal subsystem")
+> the driver sets HWMON_C_REGISTER_TZ, so the hwmon core calls
+> devm_thermal_of_zone_register() for every temperature channel and the
+> device can be referenced as a thermal sensor.
 > 
-> Fix patch merge error. ti,tmp103 should be after ti,tmp102 in enum, instead
-> of in items.
+> Signed-off-by: Vincent Jardin <vjardin@free.fr>
 
-Fixes?
-
-Commit 94056769c49 is also looking differently than link below:
-
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
-> original patch is correct
-> https://lore.kernel.org/imx/20260826211422.3299728-1-Frank.Li@oss.nxp.com/
-
-but not in the way of where the compatible is added. What's more, I
-cannot find such context in linux-next, so maybe that's some recent
-commit in hwmon tree.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
 Best regards,
 Krzysztof
