@@ -1,107 +1,139 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C4D18DB35
-	for <linux-hwmon@vger.kernel.org>; Tue,  8 Sep 2026 02:03:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95BD72BEFEB
+	for <linux-hwmon@vger.kernel.org>; Tue,  8 Sep 2026 02:07:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788833021; cv=none; b=il/q4T9vfQyfhfEQOpNI4j2K1rgWE5/or7+Kk2f3a6zzZI6X5apwEF9bLIks5YfMiD9bMVOnKwgpmTlFsjIlftb7UXwHElBqvExI5wfE2ymKR5jPQUkS3ncusVj+rxm5Nn/nIsY+9kp3oPuYI+IvSfs777G2WVy70gWBfJaPsqM=
+	t=1788833233; cv=none; b=nmDsCof9T5ywgZ8o8HZ2FJmNhYy7LsJqn6oc53o1Fx9g5skUmUxyKebw1Zf3ZKiFeHNOYN+WviHIqMIRdeDh6665jrkcOqR6E+4cWMgNtzbqSwjs7wCWQBbuUonwZqN3w1NgBFeYZwQPt7a0+soFpI1R0BzgX7dwGSiqOP/kdk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788833021; c=relaxed/simple;
-	bh=rLihSZtIb35h1sUKgpt1wYy4e8+lr2xCXyQ3qzXvw5M=;
+	s=arc-20240116; t=1788833233; c=relaxed/simple;
+	bh=+lNgJAcLM9dNTt9ya6R1wibB/aTJwmp6ebQQ/oU6UPQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PoOC9UTS3UUBH+WMVfRrdJdobex0j3y61c0IrjCs/KFt5TjIY4t3O/PkIp0w+io8WT/CN7x9UsuJ4X4QSvQVSukJ19fRnSNeTO092qX4ilOSoMHgdMo8fj64agHoOLm938ttJyfFAHl+FRYMm+XoIY1dpbT1OtlfZap0ZxV4s7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EFKHSIZ+; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=FV48MpFX+eIr4hnhhtSvLnbE7uWhabLMPvp8rueKF4JMdyviAEDNtD+P1DrZQLDpaaEI23pAPZHKVclGsnWmilQTlAMUhpBa3yZNMtLR3CggJ5xTcCwM9sAfL8P4qgisblmX0HHdb7yLQqO9PRhJoxf6Nb+IOe7/bc9M8AuwZcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PemW82v6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EFKHSIZ+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F16FC1F00A3A;
-	Tue,  8 Sep 2026 02:03:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PemW82v6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED17B1F00A3A;
+	Tue,  8 Sep 2026 02:07:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788833020;
-	bh=YScMUHIcvkafQAgE143H4NHQv1iW6llVq2IV2mo/L9s=;
+	s=k20260515; t=1788833232;
+	bh=3s8dEvZZIEr/zZAXpP0wAfqqw3MZN55PfUAOp5KzaJs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=EFKHSIZ+7ytvMWRlGDrX42sC5+q50NTZGLlQBdiPbZiNBDYdrGWQ+FhUmxNOxb4k5
-	 11pxP6ZC4Jyz+7MdqdY0dsymVh8nWIR8fFxDg2dbVVtODd/ySyHtC+7PklqUb9M+af
-	 w/LOmx168Kqen2ILgTggMXuIeC/Od/gfEYQCAhizJy+d7naCXSsk1pDUeLGmRFEnyg
-	 jS8XTuJkbaoPA77Yu/2jVQIvm5rNk/UZD0JgC0k2WubS4w+vF4ZCMyaDYY8C2/5ak1
-	 QeMg384nxDFDiJa9v8RN2nOJfe5cc5B8BF6H3psfArHQB3ytLWba2cR/7G5swoCVIv
-	 MRACy/x0DxmFA==
+	b=PemW82v6DIUt/2xP9KCFEPf+7YNMG+uDe2/ak+Sx7WwvuQh8hGFvorpTW0ZsvAEHY
+	 Yr7hunXbDfKgaQdPop+YqH/Bpxy8kaIyHW+41d0tOAJ+wCBi05vO7g6dp1/MUNwWju
+	 eoeVxXcYeHhUQL7lC8EQcxyG46CaLmRs3DIoCI+AdhNlQC963vudwhhSsjgxEsDMaF
+	 GT7wY/uMQlkWr32TAoI38A/y3f1Sv5ehZ6z2CWvJpK/hb3RJ9KyPjnDhuRo0L02kgr
+	 GtbH064wKFZAxyXAxFPkpSJjyrzPljf5C8tUvGWDreuAx2fyD8o+dKGk0pSFaB1b3o
+	 5cBGKav29EDRQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH 1/2] platform: arm64: qcom-hamoa-ec: monitor Slim 7x
- legacy sensors
+Subject: Re: [RFC PATCH 2/2] platform: arm64: qcom-hamoa-ec: test sensor and
+ variant handling
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Birk Skyum" <birk.skyum@pm.me>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260908015650.84401-2-birk.skyum@pm.me>
+In-Reply-To: <20260908015650.84401-3-birk.skyum@pm.me>
 References: <20260908015650.84401-1-birk.skyum@pm.me>
- <20260908015650.84401-2-birk.skyum@pm.me>
+ <20260908015650.84401-3-birk.skyum@pm.me>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 08 Sep 2026 02:03:39 +0000
-Message-Id: <20260908020339.F16FC1F00A3A@smtp.kernel.org>
+Date: Tue, 08 Sep 2026 02:07:11 +0000
+Message-Id: <20260908020711.ED17B1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Low] Hardware monitoring functionality is registered directly from a pla=
-tform driver outside of the drivers/hwmon/ directory.
+- [High] Unresolvable devres reference loop causes a permanent hang during =
+KUnit test cleanup.
+- [Medium] Hardware monitoring device registered from a platform driver out=
+side of drivers/hwmon/.
 --
 
-commit 763b40f1f55a5efec49b9919dd06a1242c3e47c2
+commit 10084c21cb97238d4ea1fb5148e02186d2b75bb5
 Author: Birk Skyum <birk.skyum@pm.me>
 
-platform: arm64: qcom-hamoa-ec: monitor Slim 7x legacy sensors
+platform: arm64: qcom-hamoa-ec: test sensor and variant handling
 
-This commit adds read-only fan speed and thermistor monitoring for the
-Lenovo Yoga Slim 7x embedded controller using a legacy interface.
+This commit introduces KUnit tests for the Qualcomm EC driver's sensor
+transactions and read-only callbacks. The tests simulate an I2C adapter to
+verify RPM decoding, short transfers, and error propagation without
+accessing a physical EC.
 
-Link: https://github.com/aarch64-laptops/build/blob/2e58842f5fa2f87771c2df0=
-17ae4d8c65225ef10/misc/lenovo-yoga-slim-7x/acpi/dsdt.dsl
-Link: https://lkml.iu.edu/hypermail/linux/kernel/2607.3/08806.html
-
-> diff --git a/drivers/platform/arm64/qcom-hamoa-ec.c b/drivers/platform/ar=
-m64/qcom-hamoa-ec.c
-> index 4d2ad042a7f84..3a4ca8a0de5c8 100644
-> --- a/drivers/platform/arm64/qcom-hamoa-ec.c
-> +++ b/drivers/platform/arm64/qcom-hamoa-ec.c
-
+> diff --git a/drivers/platform/arm64/qcom-hamoa-ec-test.c b/drivers/platfo=
+rm/arm64/qcom-hamoa-ec-test.c
+> new file mode 100644
+> index 0000000000000..68868ef7625ae
+> --- /dev/null
+> +++ b/drivers/platform/arm64/qcom-hamoa-ec-test.c
 [ ... ]
-
-> +static int qcom_ec_hwmon_probe(struct qcom_ec *ec)
+> @@ -0,0 +1,294 @@
+[ ... ]
+> +static void qcom_ec_probe_sensor_test(struct kunit *test)
 > +{
-> +	struct device *dev =3D &ec->client->dev;
-> +	struct device *hwmon;
-> +	long rpm;
-> +	int ret;
+> +	struct qcom_ec_test_context *ctx =3D test->priv;
 > +
-> +	if (!i2c_check_functionality(ec->client->adapter,
-> +				     I2C_FUNC_I2C | I2C_FUNC_SMBUS_READ_BYTE_DATA))
-> +		return -EOPNOTSUPP;
-> +
-> +	ret =3D qcom_ec_read_fan_rpm(ec, &rpm);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to read fan RPM\n");
-> +
-> +	hwmon =3D devm_hwmon_device_register_with_info(dev, "qcom_ec", ec,
-> +						     &qcom_ec_hwmon_chip_info, NULL);
+> +	KUNIT_EXPECT_EQ(test, qcom_ec_hwmon_probe(&ctx->ec), 0);
 
-[Severity: Low]
-Does this violate the hardware monitoring subsystem layering rules by
-registering a hwmon device directly from drivers/platform/arm64/ within
-qcom_ec_hwmon_probe?
+[Severity: High]
+Does manually invoking qcom_ec_hwmon_probe() on a dummy I2C client cause a
+permanent kernel hang during test cleanup?
 
-Since the main functionality of this EC chip is not hardware monitoring,
-should the hwmon functionality be implemented as an auxiliary device driver
-residing in drivers/hwmon/ to avoid bypassing maintainer review and
-increasing driver complexity?
+The KUnit test creates a dummy I2C client using i2c_new_dummy_device(),
+which lacks a bound driver. When qcom_ec_hwmon_probe() is manually invoked,
+it allocates a child hwmon device via devm_hwmon_device_register_with_info(=
+):
 
-> +	return PTR_ERR_OR_ZERO(hwmon);
+drivers/platform/arm64/qcom-hamoa-ec.c:qcom_ec_hwmon_probe() {
+    ...
+    hwmon =3D devm_hwmon_device_register_with_info(dev, "qcom_ec", ec,
+                                                 &qcom_ec_hwmon_chip_info,
+                                                 NULL);
+    ...
+}
+
+Because the dummy client has no bound driver, devres cleanup is deferred
+until its kobject refcount reaches zero. However, the registered child hwmon
+device takes a kobject reference on the dummy client. This creates an
+unresolvable cycle where the parent refcount cannot reach zero until the
+child hwmon device is unregistered, which is supposed to happen in the
+devres cleanup.
+
+This prevents the dummy client from being freed, causing the subsequent
+i2c_del_adapter() in test cleanup to block forever in
+wait_for_completion(&adap->dev_released).
+
+[Severity: Medium]
+Does this code register a hardware monitoring device from a driver located
+outside of the drivers/hwmon/ directory?
+
+The hwmon subsystem architecture requires that hardware monitoring devices
+be registered from drivers residing in drivers/hwmon/. If the main
+functionality of the chip is not hardware monitoring, the hardware
+monitoring functionality should be implemented as an auxiliary device driver
+residing in drivers/hwmon/.
+
+Here, devm_hwmon_device_register_with_info() is called directly by a
+platform driver located in drivers/platform/arm64/:
+
+drivers/platform/arm64/qcom-hamoa-ec.c:qcom_ec_hwmon_probe() {
+    ...
+    hwmon =3D devm_hwmon_device_register_with_info(dev, "qcom_ec", ec,
+                                                 &qcom_ec_hwmon_chip_info,
+                                                 NULL);
+    ...
+}
+
+> +	KUNIT_EXPECT_EQ(test, ctx->transactions, 1);
+> +	KUNIT_EXPECT_EQ(test, ctx->writes, 0);
+> +	ctx->reply[0] =3D 0;
+> +	KUNIT_EXPECT_EQ(test, qcom_ec_hwmon_probe(&ctx->ec), -EPROTO);
+> +	KUNIT_EXPECT_EQ(test, ctx->writes, 0);
 > +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260908015650.8440=
-1-1-birk.skyum@pm.me?part=3D1
+1-1-birk.skyum@pm.me?part=3D2
