@@ -1,139 +1,65 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95BD72BEFEB
-	for <linux-hwmon@vger.kernel.org>; Tue,  8 Sep 2026 02:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 879AD1A08AF;
+	Tue,  8 Sep 2026 02:19:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788833233; cv=none; b=nmDsCof9T5ywgZ8o8HZ2FJmNhYy7LsJqn6oc53o1Fx9g5skUmUxyKebw1Zf3ZKiFeHNOYN+WviHIqMIRdeDh6665jrkcOqR6E+4cWMgNtzbqSwjs7wCWQBbuUonwZqN3w1NgBFeYZwQPt7a0+soFpI1R0BzgX7dwGSiqOP/kdk0=
+	t=1788833948; cv=none; b=RZcYOIL1mRYes9gOsAW+87IXPd3LvzH+7vR2B0z1PZCccgwPYrg7TaK2TU6w53/x4qshORSOR//p7AatGzJIvyEqz2/BAtdX9Va1OZSgUM48+40iCvXZiShm7lsbu+w1UjjPvfR1eTsezIVAk9zRZGiM8JoEgSCSO/9wkP0bfGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788833233; c=relaxed/simple;
-	bh=+lNgJAcLM9dNTt9ya6R1wibB/aTJwmp6ebQQ/oU6UPQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=FV48MpFX+eIr4hnhhtSvLnbE7uWhabLMPvp8rueKF4JMdyviAEDNtD+P1DrZQLDpaaEI23pAPZHKVclGsnWmilQTlAMUhpBa3yZNMtLR3CggJ5xTcCwM9sAfL8P4qgisblmX0HHdb7yLQqO9PRhJoxf6Nb+IOe7/bc9M8AuwZcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PemW82v6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788833948; c=relaxed/simple;
+	bh=ckZPKP6MIV+rGzRcTmVrwD7IJjzrjIx54TsqsetafqI=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=eCv5UMaZd8HNpSd1h95jv1Nx2PW+vv440SFC0E5KNaAFFWvP3ysLpiD4wOzniH7ftRFygDmtR4xfH+gDikWQUCWxjSfj/+q4uuH9+YJzcDubnUUF0AmSMSlDN4NcFjwLUuROn/IMp1GroHaHIc8bXeBOEproDZD/Bgtm0i5OV4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=J1VzTJPN; arc=none smtp.client-ip=185.70.43.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PemW82v6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED17B1F00A3A;
-	Tue,  8 Sep 2026 02:07:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788833232;
-	bh=3s8dEvZZIEr/zZAXpP0wAfqqw3MZN55PfUAOp5KzaJs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=PemW82v6DIUt/2xP9KCFEPf+7YNMG+uDe2/ak+Sx7WwvuQh8hGFvorpTW0ZsvAEHY
-	 Yr7hunXbDfKgaQdPop+YqH/Bpxy8kaIyHW+41d0tOAJ+wCBi05vO7g6dp1/MUNwWju
-	 eoeVxXcYeHhUQL7lC8EQcxyG46CaLmRs3DIoCI+AdhNlQC963vudwhhSsjgxEsDMaF
-	 GT7wY/uMQlkWr32TAoI38A/y3f1Sv5ehZ6z2CWvJpK/hb3RJ9KyPjnDhuRo0L02kgr
-	 GtbH064wKFZAxyXAxFPkpSJjyrzPljf5C8tUvGWDreuAx2fyD8o+dKGk0pSFaB1b3o
-	 5cBGKav29EDRQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH 2/2] platform: arm64: qcom-hamoa-ec: test sensor and
- variant handling
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Birk Skyum" <birk.skyum@pm.me>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260908015650.84401-3-birk.skyum@pm.me>
-References: <20260908015650.84401-1-birk.skyum@pm.me>
- <20260908015650.84401-3-birk.skyum@pm.me>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 08 Sep 2026 02:07:11 +0000
-Message-Id: <20260908020711.ED17B1F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="J1VzTJPN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1788833937; x=1789093137;
+	bh=ckZPKP6MIV+rGzRcTmVrwD7IJjzrjIx54TsqsetafqI=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=J1VzTJPN3PJEscotfVTzDLDuDl6fXWsyan3PL/N2t175BG17LRYNdIFgZf6ND0tCm
+	 MyIOWAqDbTc9joEQrcyXNyocVXtrMPZJymXoX463FBnm2ET0UdEvlI6TEhuXCPjOu2
+	 2pDICjFgbkW9kGVFz3AQgqHsGIzMHWhvLJlPME3Cd7vdoTl2y1c06lcqba8KZYi2Rs
+	 DKLf+sighk64oUPE87BliJgGaeFeyAJuIqleFSSgdlB9qs/7Bw94CQd11a/f8IGjCS
+	 8lSqM81YR0u9O13NJ2CixiSe+I620FvlB/iD6+i9/Ms/Rm1wxYYHL19xXdn+5euQqr
+	 7uQORjiGzk//g==
+Date: Tue, 08 Sep 2026 02:18:54 +0000
+To: sashiko-bot@kernel.org
+From: Birk Skyum <birk.skyum@pm.me>
+Cc: Anvesh Jain P <anvesh.p@oss.qualcomm.com>, Sibi Sankar <sibi.sankar@oss.qualcomm.com>, Hans de Goede <hansg@kernel.org>, =?utf-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, Daniel J Blueman <daniel@quora.org>, Maya Matuszczyk <maccraft123mc@gmail.com>, linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 2/2] platform: arm64: qcom-hamoa-ec: test sensor and variant handling
+Message-ID: <20260908021844.42118-1-birk.skyum@pm.me>
+In-Reply-To: <20260908020711.ED17B1F00A3A@smtp.kernel.org>
+References: <20260908015650.84401-1-birk.skyum@pm.me> <20260908015650.84401-3-birk.skyum@pm.me> <20260908020711.ED17B1F00A3A@smtp.kernel.org>
+Feedback-ID: 21326998:user:proton
+X-Pm-Message-ID: a76c158dbe87dbe248d5d35c808c3c4721c06681
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Unresolvable devres reference loop causes a permanent hang during =
-KUnit test cleanup.
-- [Medium] Hardware monitoring device registered from a platform driver out=
-side of drivers/hwmon/.
---
+Thanks for checking this.
 
-commit 10084c21cb97238d4ea1fb5148e02186d2b75bb5
-Author: Birk Skyum <birk.skyum@pm.me>
+The test client is bound to the I2C core's dummy driver by
+i2c_new_dummy_device(). Unregistering it unbinds that driver and releases
+the managed hwmon child before the adapter is deleted. I reran the arm64
+KUnit image on the stated 7.3-rc2 base; all seven cases completed and the
+guest rebooted normally, including cleanup after the sensor-probe test.
 
-platform: arm64: qcom-hamoa-ec: test sensor and variant handling
+The dummy-driver binding is also documented here:
+https://docs.kernel.org/driver-api/i2c.html#c.i2c_new_dummy_device
 
-This commit introduces KUnit tests for the Qualcomm EC driver's sensor
-transactions and read-only callbacks. The tests simulate an I2C adapter to
-verify RPM decoding, short transfers, and error propagation without
-accessing a physical EC.
+For the hwmon placement, I kept the small read-only sensor path in the
+existing EC driver, as huawei-gaokun-ec does. Guenter and linux-hwmon are
+already copied. Would an auxiliary driver under drivers/hwmon be preferred
+here? I'm happy to split it if that is the preferred direction.
 
-> diff --git a/drivers/platform/arm64/qcom-hamoa-ec-test.c b/drivers/platfo=
-rm/arm64/qcom-hamoa-ec-test.c
-> new file mode 100644
-> index 0000000000000..68868ef7625ae
-> --- /dev/null
-> +++ b/drivers/platform/arm64/qcom-hamoa-ec-test.c
-[ ... ]
-> @@ -0,0 +1,294 @@
-[ ... ]
-> +static void qcom_ec_probe_sensor_test(struct kunit *test)
-> +{
-> +	struct qcom_ec_test_context *ctx =3D test->priv;
-> +
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_hwmon_probe(&ctx->ec), 0);
-
-[Severity: High]
-Does manually invoking qcom_ec_hwmon_probe() on a dummy I2C client cause a
-permanent kernel hang during test cleanup?
-
-The KUnit test creates a dummy I2C client using i2c_new_dummy_device(),
-which lacks a bound driver. When qcom_ec_hwmon_probe() is manually invoked,
-it allocates a child hwmon device via devm_hwmon_device_register_with_info(=
-):
-
-drivers/platform/arm64/qcom-hamoa-ec.c:qcom_ec_hwmon_probe() {
-    ...
-    hwmon =3D devm_hwmon_device_register_with_info(dev, "qcom_ec", ec,
-                                                 &qcom_ec_hwmon_chip_info,
-                                                 NULL);
-    ...
-}
-
-Because the dummy client has no bound driver, devres cleanup is deferred
-until its kobject refcount reaches zero. However, the registered child hwmon
-device takes a kobject reference on the dummy client. This creates an
-unresolvable cycle where the parent refcount cannot reach zero until the
-child hwmon device is unregistered, which is supposed to happen in the
-devres cleanup.
-
-This prevents the dummy client from being freed, causing the subsequent
-i2c_del_adapter() in test cleanup to block forever in
-wait_for_completion(&adap->dev_released).
-
-[Severity: Medium]
-Does this code register a hardware monitoring device from a driver located
-outside of the drivers/hwmon/ directory?
-
-The hwmon subsystem architecture requires that hardware monitoring devices
-be registered from drivers residing in drivers/hwmon/. If the main
-functionality of the chip is not hardware monitoring, the hardware
-monitoring functionality should be implemented as an auxiliary device driver
-residing in drivers/hwmon/.
-
-Here, devm_hwmon_device_register_with_info() is called directly by a
-platform driver located in drivers/platform/arm64/:
-
-drivers/platform/arm64/qcom-hamoa-ec.c:qcom_ec_hwmon_probe() {
-    ...
-    hwmon =3D devm_hwmon_device_register_with_info(dev, "qcom_ec", ec,
-                                                 &qcom_ec_hwmon_chip_info,
-                                                 NULL);
-    ...
-}
-
-> +	KUNIT_EXPECT_EQ(test, ctx->transactions, 1);
-> +	KUNIT_EXPECT_EQ(test, ctx->writes, 0);
-> +	ctx->reply[0] =3D 0;
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_hwmon_probe(&ctx->ec), -EPROTO);
-> +	KUNIT_EXPECT_EQ(test, ctx->writes, 0);
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260908015650.8440=
-1-1-birk.skyum@pm.me?part=3D2
