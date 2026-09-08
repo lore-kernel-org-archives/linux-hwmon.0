@@ -1,69 +1,69 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 092CE353A7D
-	for <linux-hwmon@vger.kernel.org>; Tue,  8 Sep 2026 05:25:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E70952E62B4
+	for <linux-hwmon@vger.kernel.org>; Tue,  8 Sep 2026 05:26:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788845109; cv=none; b=VVj6g5gg/K/jtcuc5Ys5tuwL2heX4m6Er5/tZv8fG8+/k5WMa7VzaMeLwvRjZQjXAbSv+coCGi816VvkgPfb9pgxCuawuNxhBAcYXVO/pzZaNYeoCw0tzsa/QgMUmgvDeo1dj2fMvE/Oh08fk23bryzmaBGGcEeHGwAuZmP6Xes=
+	t=1788845216; cv=none; b=lj7P7Z8MRaZzjMBElOpK6rnXStG/ZgNv9G4Z8lJgBoo/VHLQuUc71nsmGCodoPk6koxQciX3g+Mxnk1wIQNnCGAl7vy5l1mEPtnrwFgTWxClAtw0KvvlUSA4bZf0amdKAGrwIBr3AGVg65waj2n2dbNd9AWCqqNKQ3GMU8eDI1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788845109; c=relaxed/simple;
-	bh=yr8hbTbeNs8s7he/80wXBeIAySSnmo+j47sPdYXRQRE=;
+	s=arc-20240116; t=1788845216; c=relaxed/simple;
+	bh=ZIRVEqjxXGVRKDzZh1TGbLw59T9G6VckCt7458JkZCw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X2vDG4I4+XzcXa2s2Q6cNQq6OZ98863Z4ioXdqrNAV2dH4UUiid2IRS9h43u6+DdV7P4MszH5yOiIhY1a4hXD+BDMg3s1f6gILeQb4ctzLOD/ReCl1vv1+Uc114fIhiiVBkEjUUFMJVMuFO/O/5z5NaUXr4i3Bybtbk9/ALo/Mc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tD2Leewd; arc=none smtp.client-ip=209.85.216.44
+	 In-Reply-To:Content-Type; b=pUoYp3TlCguD6LDk3NpbrQabgz2MrnUqSQfiPE/xX2q0D4HYj5Nk4l4Ts1vurIbhj6qKAzsfQg8Sn1ftwppDTIrISI9C+J4FiBz3VVBz1IoSjWwIR8d1o81cvk4u4vV6uz5FNfyuAQpJQ5RGHg11aFIbD8AjTrRZ3yEB7qXzrmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UkMuKH5D; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tD2Leewd"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-39266382df6so3258625a91.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 07 Sep 2026 22:25:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UkMuKH5D"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-38e42560ebcso3008405a91.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 07 Sep 2026 22:26:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788845105; x=1789449905; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788845214; x=1789450014; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Ym3WdTKLeGIRO2xfNfe+mh7R6C5MMc8hhWmJN+491nc=;
-        b=tD2LeewdW73B8Gp1LgTUyYQEWZh2PcoWYwJpqUQUoIrp4MfDf0fGeq+oKiGBY2ZQ5w
-         PL05/Q2OLSc/NIzCK1u0N3DT1/HjqYwnJBLZrl0vx9EoPSPrhDLF5NwVM+0Ukkgz/mba
-         5R1WoKL5+RekBfwiVufy8kxaygCZjSEV6+qj9/6ONuPgbkhL5Gi+UuTvXnzYVOGFT7zy
-         wnI69pZeWGYcwCkS8xxkokJHXBGiZ9O5hvMIYUl/4sExe5tsBt/FkmTjDhtkJ1LVmcs4
-         r/yX7l4sgiskqfes1tTVs8E1chjAO+VlD3EUSsHVNAionhAvoNm4PHB7MtKJLE2MQ7WQ
-         WQKQ==
+        bh=1W+fM/Wuxfg9AV61/48GxXECYU1wlppMPQetunuyOIs=;
+        b=UkMuKH5DLx1QhBCXQL0ADKpiw6NCr49GIdGMliXZKWyFc30tkMZ/Y9z1qanozXWTOR
+         YNlfYX6iZPh5J9Jx6UL6nGotIMa/c11eUgg0oibIIR2XZSXVPgLWWFsZUINvByi7VQBY
+         W5tsAMUGJ0SohkHxTmvyDlF6DrtNAmRo+EZMCh4LfDHfYJqNA+JGeTOeSKaVcDMquCbd
+         QyvmLgP0zqLrTb3pay0yYn0jMT8uJLn9uzZ9tj0dT2YF7VbHeaNbY+QzjmbERiEUMIVZ
+         ohIQrbrXRIDeRDlQx/6BK/zyrkFcbf+xzzJFFGXLOUJLi8ye5eIhAMgnoHxX+wZMAa6U
+         ONjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788845105; x=1789449905;
+        d=1e100.net; s=20251104; t=1788845214; x=1789450014;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=Ym3WdTKLeGIRO2xfNfe+mh7R6C5MMc8hhWmJN+491nc=;
-        b=re4vX4V2xucX7jFXclwgsy82/5H56MLf7T0nfLPC1Y3T2tC/EF6Zm64D/2wCbnwtUS
-         KI+hN8NPdFxMlPLIAXUorbWfb9xc7lpclE6xL0qcUtfYsodYDPyKIiwKVBjWniAVTIQA
-         XbmR/9tMWUf04EG2v9l5Wo6sKM+jvVbW8peHbuKY0B7h3p5VlC7N+co2hqs8dWvfo68T
-         aeBvFCnHlc7a1Hi2DcNG2Yv/bV1Ek18HN8tnHP8wD7Q5XNMc1C3R48r77utTjeYMZ1i8
-         7pTKcqBPO33hLYRC4HRBSIna2Cf2T9QgQYuVqapFtOcVkkw38t/oRuZh5bjMSdlmezIo
-         o5DA==
-X-Forwarded-Encrypted: i=1; AKwUvBwf2y3R5p4TjAM+GyorA2UXEfCUaoacOCmXR2gRSX9jQ1225Ollt2MGr5mvrFXcT4jSgJDCr4/NmrTzgA==@vger.kernel.org
-X-Gm-Message-State: AFuF++nDxX2iB49zfDUt8X7uEPRiWdkqXR6IMIY4Oebthvf16TSi3OJI
-	qOlfQxZTAYKQTUKfkIyWQufmobLDCaZqYGzgu91exiO/9BGHCXuZSUfX
-X-Gm-Gg: AYBFou1U4PrAecGJkkK3eYp1W1L0sLXS5+cBVu0dYHibiG+bV4S0yC9ZDfXfwBRsMIx
-	/qIaYaIhgQNmtq/8MQAMe/MK8H1g+ud7pawXNDC0J8vK4+6TLat/HpccwuL98TfEO56mSJQpRL+
-	tALuSriN8gh+rTp4ruWtbpYMhE3JY7L843Mv9V/jlduTXfC6L2R4MpWjHtl/+VNUhtvhoKRAdv5
-	4EZMCMQpx8k/PwQaubFaOqsTvln7iin6mmODjw9cZk7Xy+/j8VQUHAjxuGgzykXYHYc5qnyaJns
-	fCR2aRYTuUylyT4KzOaAa1kK74Z7mDfM66mxuMJa3blclyAkvjErQYsIVwpcX+Fj5++kcjtfxFM
-	NlOHaoHXsJOgkYKbMunAFQCS5hJonujt2+O1PuayHAWOLUWmG2p+PSX+zn2eMAenjIokEPh7ypA
-	qfooJQXe62NVsyNSdoFCGhMXhjCdquEfOzbLD5e/nfcLmOh/QPH9tGuOZhUxiF0lcHBqgq9APdJ
-	VNGopbAfDucjSzVUeGp9cpa5mihAOnOi0GZXQ==
-X-Received: by 2002:a17:90b:2784:b0:395:4de5:1054 with SMTP id 98e67ed59e1d1-39b26272bdcmr45563264a91.16.1788845105216;
-        Mon, 07 Sep 2026 22:25:05 -0700 (PDT)
+        bh=1W+fM/Wuxfg9AV61/48GxXECYU1wlppMPQetunuyOIs=;
+        b=L9oprOCYF3oaBIfNGHr+NLLx/aDJJHipRjjHsHPeMvmsJaqC0K6w01CfQiwqAK78hD
+         CsRMe9/rJjZEZB9V+N30B75PCoXoRgcgg3bqcpy/ssEYEfpm/3wFfVdUj5+eB85KFQLj
+         l/P2+4NE4J0g7G8llOZmyOcA389ySA1vdt3Syx2LTv+C3ZBhET6N3WNMsUas0MiF5O28
+         BQ8UG79aJkDRVKJgfkziGxsheBkw1nRhERhe9s5ohnf5l6KQKJ3HC0f9Lq12E7ypiRhi
+         TBo4nJ5Tg35ue/JCcRxhOCwGLQHIpwYjtc0YeVpO3QnNJ4Hg46+cnYwx2rG/+jDQTPXG
+         EuBA==
+X-Forwarded-Encrypted: i=1; AKwUvByeVzBFWM0PrRCxcTH2rGikIXkTqbbvZj7C9oOelacVhol4+dF1HHlUkRwYynClPon26A9Ww4eO3L7HwA==@vger.kernel.org
+X-Gm-Message-State: AFuF++nyRy+EjdpTVT/XvT98cMO7lQ2vigiEwFMhZ079fiPFZL9DLjyg
+	86exox8D1Zxc8MPPVGOMe6K2CqkrrT4bP0KUy03YHsT/POS5f4quZ42d
+X-Gm-Gg: AYBFou21jyEvMbLynF3+OksNr4BoCNPB1HX8Te8ZEQmcDq8ppv8Nfac9G3ddmq86e/l
+	L3B+4NGJANv0zID+CQAhEeJgGIpYWdyf7DNUDFA6Jkq3w9qyfilDan9LECX5f5zw8ntiSkKbpdJ
+	CpHpnpBWKKMZuAFDVba/6zTUsH8NixGnBRr3gJ722fcPbAuULGbqH8PWAdXOrhFiKVdUgMMv0rv
+	Zpd0Mo0rWmboBAauG5XKV/YF7YzZds7ncs7EjGRvNp7b6qWTQpI7K0FWPHeV8cusZMbv+gR5KHx
+	5njud0ACdKE/J3x8tkweUG2GD2FD4sfOvNA3H7T4Vsb9urHLhh3HCEelZ2tvRnbMlx4b9GdaJeU
+	2uEVXFQ78ouaZUMHIGIw7R9B2I30IzNgWt75REQVg4TpRidqANdgy5g2u0ry6M9uJ3GQ4+AALG6
+	Quw2xH5DakdqmKkopSE82OjzyhNGkOXlhdS+KUYlIt5SEpdSR15O8bEreVZSGRbA2TgNW4qYDxs
+	VY+TeUSiIw6GxCDIfLmBxCIXxBmnUomD9RTdQ==
+X-Received: by 2002:a17:90a:d004:b0:392:6638:2e6a with SMTP id 98e67ed59e1d1-39b26273267mr41950559a91.13.1788845214308;
+        Mon, 07 Sep 2026 22:26:54 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b08c39227sm30807563a91.9.2026.09.07.22.25.03
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b58187a9fsm4339012a91.3.2026.09.07.22.26.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Sep 2026 22:25:04 -0700 (PDT)
+        Mon, 07 Sep 2026 22:26:53 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2169e4a9-4e18-4cc7-8018-3c9db0891334@roeck-us.net>
-Date: Mon, 7 Sep 2026 22:25:02 -0700
+Message-ID: <1b2d3cca-09a6-42f7-93b3-ac1a2934d301@roeck-us.net>
+Date: Mon, 7 Sep 2026 22:26:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,20 +71,23 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 1/2] platform: arm64: qcom-hamoa-ec: monitor Slim 7x
- legacy sensors
-To: Birk Skyum <birk.skyum@pm.me>, Anvesh Jain P <anvesh.p@oss.qualcomm.com>,
+Subject: Re: [RFC PATCH 2/2] platform: arm64: qcom-hamoa-ec: test sensor and
+ variant handling
+To: Birk Skyum <birk.skyum@pm.me>, sashiko-bot@kernel.org
+Cc: Anvesh Jain P <anvesh.p@oss.qualcomm.com>,
  Sibi Sankar <sibi.sankar@oss.qualcomm.com>, Hans de Goede
  <hansg@kernel.org>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?=
- <ilpo.jarvinen@linux.intel.com>
-Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ <ilpo.jarvinen@linux.intel.com>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
  Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
  Randy Dunlap <rdunlap@infradead.org>, Daniel J Blueman <daniel@quora.org>,
  Maya Matuszczyk <maccraft123mc@gmail.com>, linux-arm-msm@vger.kernel.org,
  platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20260908015650.84401-1-birk.skyum@pm.me>
- <20260908015650.84401-2-birk.skyum@pm.me>
+ <20260908015650.84401-3-birk.skyum@pm.me>
+ <20260908020711.ED17B1F00A3A@smtp.kernel.org>
+ <20260908021844.42118-1-birk.skyum@pm.me>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -130,36 +133,31 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260908015650.84401-2-birk.skyum@pm.me>
+In-Reply-To: <20260908021844.42118-1-birk.skyum@pm.me>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/7/26 18:57, Birk Skyum wrote:
-> The Yoga Slim 7x EC returns an all-zero response to the reference-board
-> thermal capability command. Probe fails even though its legacy RPM and
-> thermistor queries work and firmware controls the fan automatically.
+On 9/7/26 19:18, Birk Skyum wrote:
+> Thanks for checking this.
 > 
-> Select a read-only path for the Lenovo compatible. Expose its first RPM
-> channel and thermistor through hwmon, validating the transfer length and
-> RPM payload count and treating the thermistor's 0xff sentinel as ENODATA.
-> Do not enable SCI, register manual cooling controls or send standby
-> commands on this path. Keep the reference-board behavior and strict
-> capability validation unchanged.
+> The test client is bound to the I2C core's dummy driver by
+> i2c_new_dummy_device(). Unregistering it unbinds that driver and releases
+> the managed hwmon child before the adapter is deleted. I reran the arm64
+> KUnit image on the stated 7.3-rc2 base; all seven cases completed and the
+> guest rebooted normally, including cleanup after the sensor-probe test.
 > 
-> The transactions are documented by the Yoga's FC22 and FC29/TZ39 DSDT
-> methods and Maya Matuszczyk's EC protocol notes. Anvesh Jain P's pending
-> fan-profile series also documents the RPM query. This change does not
-> include its calibration, LUT programming or temperature reporting.
+> The dummy-driver binding is also documented here:
+> https://docs.kernel.org/driver-api/i2c.html#c.i2c_new_dummy_device
 > 
-> Link: https://github.com/aarch64-laptops/build/blob/2e58842f5fa2f87771c2df017ae4d8c65225ef10/misc/lenovo-yoga-slim-7x/acpi/dsdt.dsl
-> Link: https://lkml.iu.edu/hypermail/linux/kernel/2607.3/08806.html
-> Signed-off-by: Birk Skyum <birk.skyum@pm.me>
-> ---
->   Documentation/hwmon/index.rst          |   1 +
->   Documentation/hwmon/qcom-ec.rst        |  40 +++++++
+> For the hwmon placement, I kept the small read-only sensor path in the
+> existing EC driver, as huawei-gaokun-ec does. Guenter and linux-hwmon are
+> already copied. Would an auxiliary driver under drivers/hwmon be preferred
+> here? I'm happy to split it if that is the preferred direction.
 
-Platform drivers are not documented here. This directory is intended
-for hardware moitoring drivers in the drivers/hwmon/ directory.
+
+Your call, really, but it is all or nothing as mentioned
+in the other patch. Platform drivers are not documented in
+Documentation/hwmon/.
 
 Guenter
 
