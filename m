@@ -1,185 +1,303 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5F53515E3
-	for <linux-hwmon@vger.kernel.org>; Wed,  9 Sep 2026 04:58:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788929911; cv=none; b=Us4q3T2U9GQ0ilShWWQH6PL0Jeoq762xIFOlukY/at1d7qdg+RLdM+jHZPbY9xuk2RHh94SU9TNAM6C5qOypKrsvqqHYjrLPv+Ar/abq8liHt5NlCBaQMmwzmntBSYFA0RkeBr6wajSS/fTZstSAVm970CLaiI5gJBNPC3JCmvM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788929911; c=relaxed/simple;
-	bh=5lrHC0k2zcfllWc2Fvzf1mTjEPO+aONQ1+R2c0DuGn8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XD46DGbh+tW5vrqhIMfG+SFj8GFxlvM6kq/5xRtOq1og9+YMFySpHW3MAo4vtVf2Nb7vy+/haX0TD5ghDKdTO7iMR+KggIFWOIKtj7/nqtAaTq5A5Giifnd+FBXBExL+p7cNwF9BZD+PSsZIWjG+9+SSL/jKQi8AK6o3HnfCT7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=MzR4Fa4t; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=SB1kfPL1; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D272E3D7D65
+	for <linux-hwmon@vger.kernel.org>; Wed,  9 Sep 2026 07:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788937857; cv=pass; b=E9B7ehGjSfZX0VjvoG2ywztASMr0iLX3MF0+nKXqVzzadDtbzrxr1VhzIALZhLTwdOE2m+NeaALTLLRa9JonLlEviR7K8CPMhSfuNd5l8mmRpNcxJ0TQGuejr+rrl8165WusegEyfNTeLiiZDgEj7rkMc6zWnCQQu/IrEvPr9G0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788937857; c=relaxed/simple;
+	bh=cV6UlgSsoeieB0QU53jtGzzQVyQymOnaPmCvkqkbYk0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O4VISO8rjTBjISkwiZJRGyCXXdnWa04K92oOVeuUUf1L0EhUbNKc8Emt7qdyyBKGDQUHoE6lc1lRTRBD/wf7gqlGlEGuBtUfIjJXVMMUGwuQQESJCs5oefy0Z77sLpvT1id6RDcLp+83YwAODjybQVCvSOvuMBJX/9m/vfr0fkA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XM9U9dFV; arc=pass smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="MzR4Fa4t";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="SB1kfPL1"
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 688Mg0bs3654009
-	for <linux-hwmon@vger.kernel.org>; Wed, 9 Sep 2026 04:58:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	LUlpyw9W+HelyIeeXNtDQKDxjhNyFJhI6vx7P1VkvH4=; b=MzR4Fa4tvrEypJdp
-	5oeZIRoUMBphKCPDdOMZC4FblmXs+klvJnyllfroRzgHObNTr7t74xwm9cdbq+lD
-	DXCosvY58OTUnVVMhEKi/QEsdLYOTe56LwHZLTX7jrw7n8233tr+hfUQ6KxMmzf3
-	HDuWJJrBPsLJ8VUJUfYQTzxBic78Tk7q7oaOP9BVnrUOIQgY2rSdud3r9WRsN1yZ
-	PiYLiFS5WbFQEB4m571+IUK123v1BmcadMcmW3Qc4ZhVPMvvYzr/Tfkn9GgqIaCq
-	em7yPjxkCxTrZ3xH5vK84qtNGuQKIlDzlMqILsEV8Mhs4H+wRLk9n12KLN2NuwPP
-	7Z4jSQ==
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4gjppp2eh3-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-hwmon@vger.kernel.org>; Wed, 09 Sep 2026 04:58:29 +0000 (GMT)
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cc49bb3295cso919538a12.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 08 Sep 2026 21:58:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XM9U9dFV"
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-3a20c95e412so46345861fa.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 09 Sep 2026 00:10:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788937850; cv=none;
+        d=google.com; s=arc-20260327;
+        b=pW33nxoWY1Ka+Nz4U4yDol1Lt8zNbn0SKcyQHdMcGQpjUSWGUajUS8AiFg0vAglyjG
+         R4U2zNmf/y7P0jHH23inhAHtUn8A4CvUaJUBaYjMPEkLzbNxUnM+r5MV7KLZs9Sr/Nxn
+         uuIivqY5C13ikhs28E5xROToYY6EvNpaNcykTv0dbfkzMtVNAIJr1KTN2MPZB+F0EQaM
+         qudfcjXnTp9xs75BPTwzEzHBG7ZZ+0+eOQi6MYRTDAJNo8TA28ozIWcosLn/U6OChiWD
+         fjHQCRbtfyTkpD2ooyJxkXXgcXA07u++OyzCwCJC3Yev9HrnlG7Osa4rZG8S2DXu+WRL
+         Bv0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ROD27d8m1GR2fFN6iwOvveba7kIgkMyQccBJdEpOPig=;
+        fh=tLzEuvCh/VquYGlq0g2+tAjhxlPwnlK+hB/aczJWAAU=;
+        b=NAqRBDkeYsIZcjfbgMW15Sgyhx4cXqpJIC5kdX7SCGuGJbDuzz80oCWmvJzPxQ+UUc
+         fn/K1ZmGnIH/E5sfSX5q71Jh08NbcMz/VNWycQ2NvQdjbZO2Fpv35ZQG/YGeab89tmIQ
+         ieG0wh5yWXGRTmkLsp75FTqg4gjN6R6OgBqjPqX4SzUmJ9k9KiaF9cHyY6H3Za4H/izC
+         ElURRnfBV1HUCS5KyMY5s2JCdRk8J1PwbBxrdBOqkzjPZrmxr2omTdvxqzce74IS/uhO
+         4Fl3B0MCrm5QC8ywvbiXIo2Y08YGRXWWLY88n/HjCLqsWkt9aKoAd2HM3s7EnhyfrYC1
+         Tbeg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1788929906; x=1789534706; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LUlpyw9W+HelyIeeXNtDQKDxjhNyFJhI6vx7P1VkvH4=;
-        b=SB1kfPL1j4nwK7UtVR3mln//J540/PONUqJTDvjxc1n4Sd++JuC9BSSI7lLFiiEDWU
-         EzU7Yuuy3+OdfSMXtv1SRWGqZDUbAFXHOq+aCEJireBFMdtntA86PLnZQWusDFMoY8r+
-         U8nCVfEQRNvy7xELSM1SesthlXD16JsY4a3taD6m3QTgTrWagSgt+1YwD9NIDgla6+gl
-         z6iOkucMHAqfZwTDyz46inXT6oikD7WyrGDgwZl+NxSKMxoWpydzgnfLwGSeOWvjz68U
-         ropDcvhIjomL7MzR9S0CNKgPzkl5tjKXl5u+sHPlAIyjZinbjcvcsCrJmPunAlK92JqN
-         eKWw==
+        d=gmail.com; s=20251104; t=1788937850; x=1789542650; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ROD27d8m1GR2fFN6iwOvveba7kIgkMyQccBJdEpOPig=;
+        b=XM9U9dFVh8+9/DSTvcmT2g+ndD8Ks5zbRwdMzNvOmiOxy1RXe32jtZc73F2nWvT3Qe
+         OPp49eSHTDJ05s/wKP+KcwUQ+lvMT96880d1mm71y/XNAnKGD2r/QLQ1aNrutI+tRd6V
+         yqSZ3HHpY43V4+KUTUrXgbDRw1AJFreQ8H6P22jjbLzicEgEwa0dsg4fNeAJIgY467J/
+         sRYlzvaWCCGbyWs82Gft/3ZBsZ3MAzOttAqoK7mO8kQlDtE/lHmb4nOJenpkZE9Dxhf3
+         M+nnKCgUfGdxXxjxY6DZ2eV0uN4NOzarqjm+lB/xq+8Mgl3Ux9T3xcrXl7luzXrscn9B
+         Z0UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788929906; x=1789534706;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=LUlpyw9W+HelyIeeXNtDQKDxjhNyFJhI6vx7P1VkvH4=;
-        b=cBc4MvX/Nyb1Bdvabd7qOfKK5LQo5ipJYKMGuIzF6LVGvR+30t8tcVSNovlBe6jdBI
-         hyi/bB7+bgzsyVbaSPppejJCP+arAyQQmvJrAgmXUtecAcmSBWJ67hs7U1gDaqrZnSGZ
-         Mvd2eRzACOIPFBZpzkksb6OHzz9ebSJ9wP6PfK2StnMSQN7pyZxpywr2ZsRSQD/1RdXU
-         pxauVe50kM7UyUPKswlNygedJJzdHZKsgxpbH3z39VhZzYGZ4Hs+pJt2GBixcC83Kgj9
-         OYVSALFs7yJTurmlsw5ouYkGEmeAheueZYfN9kiXaf7f7hheX4xTO+y9gzHpe50zJG6A
-         /GyQ==
-X-Forwarded-Encrypted: i=1; AKwUvBx/j5Q4X3rEw/XtGfog29k12OPNcoY3c61qwaAN3YBBpYDRvaXhZkTiRzqrpRzpPt8VEGrHq87fuLlW2A==@vger.kernel.org
-X-Gm-Message-State: AFuF++ksFEMxqITd9cvGTHpV3sS5qBBAnaxjyp4Nx5nOBicIvucJne4m
-	HpS4cGjQ/Dt9GU3YjCl/w60cV6zBa5z4VOTTG8zNZ87zYZK1A+dAne19VEDArVkDYWFwB28ZXZg
-	r7CCrAPun9cjUnBkk+ELFkP4Lo06puQ5kUNeUBF4LRMGJRIWqO0vn/zyNGXt5wRYq2Q==
-X-Gm-Gg: AYBFou31ATxyEr9OU2hwLEguK6BOct4RBvbsmuBkrTXlMLdYVztOYd/xS3s7mtDxjTt
-	yQVhkgEa2zcjWOUjqPcMbTQV7bamwDW/fKyLVUKrvQ7+LU0wmg6Dxe33/Y0iO1cYXqntIrJgSn3
-	pfvJZ9/2EZCWNIR3h3y6KPotwTshpTQdDD9VZVsEZKAkCr/qQVjG5Uh6hqLTKZ6tqZItjZkpXxn
-	1gstCTkW8LwZ2yQ2UcpAXehcWbyBmpsjSE6OMlQQpurIyYEzqSAGTlF/VTe4/tIxfACSabtKAN9
-	Yc2oG1gg9u1Wx0qf6dkMiCJfcs1I+kAWebTXBbyHWlOyuTANwLtCayi9/dp4UTIammPCqnlUNCw
-	1d1qatAqmJI6zyIsSckxic+qCZW9+5zcdZLMlb7VSQAQdSc452fU8McusolpOqC+N2/xWwW4W+r
-	iTUAxvsGN4tT8s
-X-Received: by 2002:a05:6a20:a108:b0:3cc:45cc:c401 with SMTP id adf61e73a8af0-3da39ff4c0amr44295601637.13.1788929905759;
-        Tue, 08 Sep 2026 21:58:25 -0700 (PDT)
-X-Received: by 2002:a05:6a20:a108:b0:3cc:45cc:c401 with SMTP id adf61e73a8af0-3da39ff4c0amr44295553637.13.1788929905334;
-        Tue, 08 Sep 2026 21:58:25 -0700 (PDT)
-Received: from [10.79.117.175] (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com. [103.229.18.19])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-334fbd5e6f6sm33551065eec.23.2026.09.08.21.58.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Sep 2026 21:58:24 -0700 (PDT)
-Message-ID: <695a5c15-9028-4b7e-8e37-b2e08ad1fb93@oss.qualcomm.com>
-Date: Wed, 9 Sep 2026 10:28:18 +0530
+        d=1e100.net; s=20251104; t=1788937850; x=1789542650;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ROD27d8m1GR2fFN6iwOvveba7kIgkMyQccBJdEpOPig=;
+        b=XrRIrKPRdZ+BwHMvOh8UDN72n7VVsdnIhLjmIUZfsfXIc/74fNstCU0qgnr4Y1b6vI
+         S3EGLJg8R57hgH1wXRjlnyE9FxWKtqQFO8nGpBtwLY9S1doJWEiDw2hXBcMcGti8/++E
+         cAUTOSCMz5VZaRsLFg0OosR43opPrAQ8gda7RygL2753978cAvti9xQ4toIZbVzQquK+
+         yi3H8kTH7pYvd+Oh3LZW0FtHxDfGxgp30BW5W6HVATaZoOfk1pe+okzKkf+mFkdU4/W4
+         PcsRIuSmlXM7dnPxMPe117LVfNKkBbCwVozaPsFKCrN8x1Jkj/XVkL7S/Zh85IGT9yVp
+         hrTQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzxFFPpXbLCFW1Bg6Khg/lvMb5mhAMEkGGBzUdEkGqlHgXRTHfZ+HkumfI6NzT+UgomfHBX48rI1uh6cw==@vger.kernel.org
+X-Gm-Message-State: AFuF++nu/HdLswi4Y07aqcy+qLJ4XKOUKo+o2Eue0VCclYKOTJV1praB
+	aorNaCI+Ivrk4tZA74m8bLOj3DHvp7xACXekTRvAZFWGcM50EZdfztOi9834wT9vO1UKYfWb2dr
+	BBIXpi3UsPVPun0lYJ3pWdUEet8s4gUs=
+X-Gm-Gg: AYBFou0HggjhtAavhWYInStu/6FYDlVrbWykHL2f+BcCWnNERhHmG9E/3OvqNhe4Q7N
+	Eh1JQ7edFIqxJVDmBiDqDX4X6yzTsS1Xn+wEHikE27ob/BsSVWurXr+UdIquZiCyAtO3zmIMQs9
+	Sa1hkpekgvzkNTmokmLXXJkDNs8iEArvVLFXm6/xrea8UICXNdhWJvMtJA6T3N2ix2ejWUMHHg1
+	AhS4aLYDnI1Pa//99QDgMP1Xi8FCV/LCjr49Fg7t38wMjfSE90w6VXPgR6gc6KGSYM+geJHfAyu
+	RwwqtxVB30EtS3OYwWlP7nGSMBpvxWPu+8TXcelIr3uicXBWI0VrRSbw8sXDG3pspYCn9E40fDz
+	3k3xOZJUElsAJ
+X-Received: by 2002:a05:651c:43c2:10b0:3a3:74b9:8a7c with SMTP id
+ 38308e7fff4ca-3a374b98b1cmr22174011fa.21.1788937849797; Wed, 09 Sep 2026
+ 00:10:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 1/2] platform: arm64: qcom-hamoa-ec: monitor Slim
- 7x legacy sensors
-To: Birk Skyum <birk.skyum@pm.me>
-Cc: sashiko-bot@kernel.org, Sibi Sankar <sibi.sankar@oss.qualcomm.com>,
-        Hans de Goede <hansg@kernel.org>,
-        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Randy Dunlap
- <rdunlap@infradead.org>,
-        Daniel J Blueman <daniel@quora.org>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20260908135801.81436-1-birk.skyum@pm.me>
- <20260908135801.81436-2-birk.skyum@pm.me>
- <20260908140849.229ED1F00A3A@smtp.kernel.org>
- <20260908143650.30134-1-birk.skyum@pm.me>
-Content-Language: en-US
-From: Anvesh Jain P <anvesh.p@oss.qualcomm.com>
-In-Reply-To: <20260908143650.30134-1-birk.skyum@pm.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: l8rvIf5hPNk9C_7VBMk2Jm62AQsuwHbH
-X-Proofpoint-ORIG-GUID: l8rvIf5hPNk9C_7VBMk2Jm62AQsuwHbH
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTA5MDA1NCBTYWx0ZWRfX+gE3NdcR8su0
- cQquhQj2vO+pfGgD62ePr4UlgWtbvoYdUaW37y6GgpUUrV/ilURa9YVsCrDZeoaDUH7XOenFOII
- DnSq+i7PUz+Ly8hKrq81ZoEw04yn2vdqKz50JDkaKLPIpXRsXGQKNIjeHoHN0gPgTXluQzAbfHh
- D5CVomKTJwZxZzHHvjJEoxbjIzmSt9xMmYjKPDfWaCj6nu75X1LL4j6dDhknD59AGVb+LjNelMe
- aKaQVqFYV3N0FCgNhu+UstcXhk6yut3yAbg92g9K5P5vFNhs0TEYaLj7Ma6S/1PXXfF1yl1wUW/
- Y/uD7D7k71JYzMvREIwZmIYhwnr03POHaTC4fH/8gJX9EFdRC6YTpDw9NeD1ojkmtmgz6p+KXl1
- CnH9ra0aJxGx4Do6Xb0BQyNBjuOiNVj84dS44MipFHA/Hw8ELu1gEO/xLx6i7/BTDUq4akUHA2q
- gpCvdl7vXY+EVSRvt7A==
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTA5MDA1NCBTYWx0ZWRfXw7ATMg5wd4Bw
- o2baZyDwHkMEz3f/QxFK3ZqRaTj+UxFsrqn+GXiqaSxpciilRB8LTxJ/MleC4VDkP2wyg4rXx4F
- zwE2HiGxCaxngSmUcMzNAg8R8eLe2xc=
-X-Authority-Analysis: v=2.4 cv=DcInbPtW c=1 sm=1 tr=0 ts=6aa0e775 cx=c_pps
- a=Oh5Dbbf/trHjhBongsHeRQ==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
- a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=YMgV9FUhrdKAYTUUvYB2:22
- a=IA0wh2spAAAA:8 a=2NzAWjCmuF5XDdBpOFkA:9 a=QEXdDO2ut3YA:10
- a=_Vgx9l1VpLgwpw_dHYaR:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-08_03,2026-09-08_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 bulkscore=0 suspectscore=0 phishscore=0 clxscore=1011
- lowpriorityscore=0 adultscore=0 spamscore=0 malwarescore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2609090054
+References: <20260907080831.11281-1-syhuang3@nuvoton.com> <c1f812d6-9938-494f-ae37-e250434a25f7@roeck-us.net>
+In-Reply-To: <c1f812d6-9938-494f-ae37-e250434a25f7@roeck-us.net>
+From: Sheng-Yuan Huang <hsyemail2@gmail.com>
+Date: Wed, 9 Sep 2026 15:10:38 +0800
+X-Gm-Features: AcwNN1UlzTkjD7sEoviBsfQKLTRM8RtP5VhfLDJP0BM5vsjXETF0F6kXVtLWwCo
+Message-ID: <CACW=pY4mpuC1+Z21egn3jJY6jtMhMx1PFFbM+Rcy6giuzXpJ1Q@mail.gmail.com>
+Subject: Re: [PATCH v1] hwmon: (lm75) Add support for Nuvoton NCT7715
+To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc: Sheng-Yuan Huang <syhuang3@nuvoton.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Thank you for the review. I may have misunderstood which conversion
+you are referring to, so I would like to clarify both parts.
 
+If this refers to the NCT7715_CONFIG_* masks, they use the logical bit
+positions of the 16-bit configuration register defined by the
+NCT7715 specification. They are not pre-swapped for the SMBus word
+byte order.
 
-On 9/8/2026 8:06 PM, Birk Skyum wrote:
-> Hi Anvesh,
-> 
-> Sashiko flagged the pre-existing SCI cleanup gap on the reference-board
-> probe path. I reproduced it in KUnit with simulated I2C and IRQ devices:
-> when the thermal-capability read fails, SCI remains enabled after the
-> driver core releases the interrupt.
-> 
-> I noticed you already proposed the devm_add_action_or_reset() conversion
-> and agreed to split it out after Konrad's review:
-> https://lkml.iu.edu/hypermail/linux/kernel/2607.3/10628.html
-> 
-> With that conversion applied locally, the failure-path and removal tests
-> pass. Is there a standalone version available to test? Happy to share the
-> reproducer if useful. I'll keep this separate from the Yoga sensor RFC.
-> 
-> For the other v2 findings, I've queued the named I2C initializers for the
-> next revision. Guenter left the driver split to me, and v2 already moved
-> the documentation out of Documentation/hwmon as requested.
-> 
-> Thanks,
-> Birk
+If this refers to the I2C accessors, the NCT7715 transfers its 16-bit
+configuration register MSB first. The lm75 regmap bus uses
+reg_read/reg_write callbacks. In this path, regmap passes the logical
+register value to the callbacks, and i2c_smbus_*_word_swapped()
+performs the conversion between that value and the SMBus word byte
+order.
 
-Hi Birk,
+I verified this on hardware by changing update_interval. i2cget shows
+0xe060, 0xa060, 0x6060, and 0x2060 for 125, 250, 1000, and 4000 ms,
+respectively. After accounting for the SMBus word byte order, these
+are logical values 0x60e0, 0x60a0, 0x6060, and 0x6020. In each case,
+only the NCT7715 conversion-rate field, bits [7:6], is changed.
 
-Yes, we already have that fix, SCI disable is now registered as a devm
-action right after it's enabled in probe, so it unwinds on any probe
-failure, not just on remove(). Same for the i2c_device_id
-named-initializer thing bot flagged.
-
-I'm working on v2 right now. Once I get consensus on all the review
-comments, I'll post it with these fixes included very soon, once it's
-out so you can test against your reproducer.
-
--- 
-Best Regards,
-Anvesh
-
+Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2026=E5=B9=B49=E6=9C=887=E6=97=
+=A5=E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=8811:30=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On 9/7/26 01:08, hsyemail2@gmail.com wrote:
+> > From: Sheng-Yuan Huang <syhuang3@nuvoton.com>
+> >
+> > The Nuvoton NCT7715 is compatible with the LM75 temperature and
+> > limit register layout, but its 16-bit configuration register is
+> > transmitted most-significant byte first. Add support for the NCT7715,
+> > including byte-swapped SMBus accesses for its configuration register.
+> >
+> > Handle its conversion-rate field and shutdown bit separately, since
+> > their bit positions differ from the standard LM75 layout.
+> >
+> I don't think so. See below.
+>
+> > Signed-off-by: Sheng-Yuan Huang <syhuang3@nuvoton.com>
+> > ---
+> >   .../devicetree/bindings/hwmon/lm75.yaml       |  1 +
+> >   Documentation/hwmon/lm75.rst                  |  6 ++
+> >   drivers/hwmon/lm75.c                          | 57 ++++++++++++++++++=
+-
+> >   3 files changed, 62 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Docume=
+ntation/devicetree/bindings/hwmon/lm75.yaml
+> > index b48bf3fd721f..832a8c5d83e9 100644
+> > --- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
+> > +++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+> > @@ -31,6 +31,7 @@ properties:
+> >         - nxp,p3t1750
+> >         - nxp,p3t1755
+> >         - nxp,pct2075
+> > +      - nuvoton,nct7715
+> >         - st,stds75
+> >         - st,stlm75
+> >         - microchip,tcn75
+> > diff --git a/Documentation/hwmon/lm75.rst b/Documentation/hwmon/lm75.rs=
+t
+> > index ca46754e028b..fac0b8f29ddc 100644
+> > --- a/Documentation/hwmon/lm75.rst
+> > +++ b/Documentation/hwmon/lm75.rst
+> > @@ -150,6 +150,12 @@ Supported chips:
+> >
+> >                  https://ams.com/documents/20143/36005/AS6200_DS000449_=
+4-00.pdf
+> >
+> > +  * Nuvoton NCT7715
+> > +
+> > +    Prefix: 'nct7715'
+> > +
+> > +    Addresses scanned: none
+> > +
+> >   Author: Frodo Looijaard <frodol@dds.nl>
+> >
+> >   Description
+> > diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+> > index 2d2d752aeac9..0b55f6b7c68d 100644
+> > --- a/drivers/hwmon/lm75.c
+> > +++ b/drivers/hwmon/lm75.c
+> > @@ -39,6 +39,7 @@ enum lm75_type {            /* keep sorted in alphabe=
+tical order */
+> >       max6626,
+> >       max31725,
+> >       mcp980x,
+> > +     nct7715,
+> >       p3t1750,
+> >       p3t1755,
+> >       pct2075,
+> > @@ -107,6 +108,15 @@ static const unsigned short normal_i2c[] =3D { 0x4=
+8, 0x49, 0x4a, 0x4b, 0x4c,
+> >   #define LM75_REG_MAX                0x03
+> >   #define PCT2075_REG_IDLE    0x04
+> >
+> > +#define NCT7715_CONFIG_RESOLUTION_12_BIT     GENMASK(14, 13)
+> > +#define NCT7715_CONFIG_SHUTDOWN                      BIT(8)
+> > +#define NCT7715_CONFIG_CONVERSION_RATE_MASK  GENMASK(7, 6)
+> > +#define NCT7715_CONFIG_EXTENDED_MODE         BIT(4)
+> > +#define NCT7715_CONFIG_RATE_0_25HZ           0
+> > +#define NCT7715_CONFIG_RATE_1HZ                      BIT(6)
+> > +#define NCT7715_CONFIG_RATE_4HZ                      BIT(7)
+> > +#define NCT7715_CONFIG_RATE_8HZ                      GENMASK(7, 6)
+> > +
+> >   struct lm75_data {
+> >       const char *label;
+> >       struct regmap                   *regmap;
+> > @@ -122,6 +132,10 @@ struct lm75_data {
+> >   /*-------------------------------------------------------------------=
+----*/
+> >
+> >   static const u8 lm75_sample_set_masks[] =3D { 0 << 5, 1 << 5, 2 << 5,=
+ 3 << 5 };
+> > +static const u16 nct7715_sample_set_masks[] =3D {
+> > +     NCT7715_CONFIG_RATE_8HZ, NCT7715_CONFIG_RATE_4HZ,
+> > +     NCT7715_CONFIG_RATE_1HZ, NCT7715_CONFIG_RATE_0_25HZ
+> > +};
+> >
+> >   #define LM75_ALERT_POLARITY_HIGH_8_BIT      (BIT(2))
+> >   #define LM75_ALERT_POLARITY_HIGH_16_BIT     (BIT(2) << 8)
+> > @@ -259,6 +273,15 @@ static const struct lm75_params device_params[] =
+=3D {
+> >               .sample_times =3D (unsigned int []){ 30, 60, 120, 240 },
+> >               .resolutions =3D (u8 []) {9, 10, 11, 12 },
+> >       },
+> > +     [nct7715] =3D {
+> > +             .config_reg_16bits =3D true,
+> > +             .set_mask =3D NCT7715_CONFIG_RESOLUTION_12_BIT,
+> > +             .clr_mask =3D NCT7715_CONFIG_EXTENDED_MODE,
+> > +             .default_resolution =3D 12,
+> > +             .default_sample_time =3D 250,
+> > +             .num_sample_times =3D 4,
+> > +             .sample_times =3D (unsigned int []){ 125, 250, 1000, 4000=
+ },
+> > +     },
+> >       [tmp100] =3D {
+> >               .set_mask =3D 3 << 5,     /* 12-bit mode */
+> >               .clr_mask =3D 1 << 7,     /* not one-shot mode */
+> > @@ -354,6 +377,11 @@ static inline long lm75_reg_to_mc(s16 temp, u8 res=
+olution)
+> >   static inline int lm75_write_config(struct lm75_data *data, u16 set_m=
+ask,
+> >                                   u16 clr_mask)
+> >   {
+> > +     if (data->kind =3D=3D nct7715)
+> > +             return regmap_update_bits(data->regmap, LM75_REG_CONF,
+> > +                                       clr_mask | set_mask | NCT7715_C=
+ONFIG_SHUTDOWN,
+> > +                                       set_mask);
+> > +
+> >       return regmap_update_bits(data->regmap, LM75_REG_CONF,
+> >                                 clr_mask | set_mask | LM75_SHUTDOWN, se=
+t_mask);
+> >   }
+> > @@ -486,6 +514,13 @@ static int lm75_update_interval(struct device *dev=
+, long val)
+> >               if (data->params->resolutions)
+> >                       data->resolution =3D data->params->resolutions[in=
+dex];
+> >               break;
+> > +     case nct7715:
+> > +             err =3D lm75_write_config(data, nct7715_sample_set_masks[=
+index],
+> > +                                     NCT7715_CONFIG_CONVERSION_RATE_MA=
+SK);
+> > +             if (err)
+> > +                     return err;
+> > +             data->sample_time =3D data->params->sample_times[index];
+> > +             break;
+> >       case tmp112:
+> >       case as6200:
+> >               err =3D regmap_update_bits(data->regmap, LM75_REG_CONF,
+> > @@ -609,6 +644,8 @@ static int lm75_i2c_reg_read(void *context, unsigne=
+d int reg, unsigned int *val)
+> >       if (reg =3D=3D LM75_REG_CONF) {
+> >               if (!data->params->config_reg_16bits)
+> >                       ret =3D i2c_smbus_read_byte_data(client, LM75_REG=
+_CONF);
+> > +             else if (data->kind =3D=3D nct7715)
+> > +                     ret =3D i2c_smbus_read_word_swapped(client, LM75_=
+REG_CONF);
+> >               else
+> >                       ret =3D i2c_smbus_read_word_data(client, LM75_REG=
+_CONF);
+> >       } else {
+> > @@ -628,8 +665,11 @@ static int lm75_i2c_reg_write(void *context, unsig=
+ned int reg, unsigned int val)
+> >       if (reg =3D=3D PCT2075_REG_IDLE ||
+> >           (reg =3D=3D LM75_REG_CONF && !data->params->config_reg_16bits=
+))
+> >               return i2c_smbus_write_byte_data(client, reg, val);
+> > -     else if (reg =3D=3D LM75_REG_CONF)
+> > +     else if (reg =3D=3D LM75_REG_CONF) {
+> > +             if (data->kind =3D=3D nct7715)
+> > +                     return i2c_smbus_write_word_swapped(client, reg, =
+val);
+>
+> This code is double swapping. The calling code swaps (bit settings),
+> regmap calls this function, where the word is swapped again.
+>
+> Guenter
+>
