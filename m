@@ -1,113 +1,109 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C7263C0602
-	for <linux-hwmon@vger.kernel.org>; Wed,  9 Sep 2026 20:28:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B8F3B7742;
+	Wed,  9 Sep 2026 20:28:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788985703; cv=none; b=sXUPlUJYqWlKPBBmrfQgdyEDXFY6dymCB4zJWqAxA9p8sycaI9FXP1mIscjqVyMyCNYN+WVON8L1TiZKLhbXhrxNwK6SJHZoHsNjxdZfg/ClHC3f/oNub4PurGHuGT3GKfrWHPRaJqQFwBrBJCipzVZ+xvF6380rqryNAExYsoQ=
+	t=1788985728; cv=none; b=Bpv0xUCwiI+eCFj8l3/rjPqL6W588906nVJO5x1QbRhR2yEJhZs1mZSA8RRBgwgBY5MW3OpSUlgChhLSVEDrm4CApwkmRg5hfqE9IbDSP8FpfJOEvPD/1vvMHHmf4ztJrQQrFMEEVSSvJjvlMjlEihYnUreUSDzoC1QIFsLKVSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788985703; c=relaxed/simple;
-	bh=W5JXtiEI1GAvGT/64QMWOtm3bVHKWsvJdYfasU41N9E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YB4r0/ecHzzO7xUku9yyNff8HC2DZlf+OUXxiFTJYjxlbbd4iMi9oun5aHKyMBgD6ln20LJK/AoV9Nb+EwrMKJ9zNigXWE6sNmBOer/dGWcBEduyiOkZWPZHUcogKmBExr0fsql56+6CiVKge+dTZvdYFP1wsIT95m+8LUuTVaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gt8ZOElh; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788985728; c=relaxed/simple;
+	bh=QISU5wQMrvMhMtMCIZ/TuxNbQ2q9R16Gc79aX5NAMQM=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=NSUHhL1W2ykJBwOKt1tCk178OhJtH4tHjelFNiFo2cX5s1mdNepgRA5J3D6FZULflzWlif3YK4+9FdW43YVl4UulCA7empWLNGRG0eoFoVF42SOPorCDmGwvrXe/OCBbBAI1hPhzpmzpmsD1vwdzWhXHKiz5aUud2Q76Q7clLsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fols19Bh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gt8ZOElh"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-381b831d535so9875417a91.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 09 Sep 2026 13:28:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788985696; x=1789590496; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=DEzU3fsaUeqKNU36+P/KzrJW02m3H6Ngnj8OsDYtm0w=;
-        b=Gt8ZOElhwjuuUxUcP99/D9HeSgGkHyVSX5spNNTrK6ezlxDH3kYrD3FuwgXU4sU6Nd
-         etRG3UdQTh7Jiy1SMrLYPF0+BYVvMx73BxsZ1zguDnCKAshmUSv4WMr10mY4Gh2+cBQA
-         qS3CImtiCwKPdb7Z3U3h81TNLMEiMIeoKs/xcDvANqkjBSDrDVy87PU/5NLKB7OWj09f
-         yvLswRdMwbjScOrcMJgMA9wAn0szAVqU8kZdpUCXj9jWL18SgRbDJUoYHIF0Fsll4Nuo
-         Teldl7MITb5D1h2KcOIRt3U5PCzcKj/ltgrbwVprPisdmDn1tJHj2eIaCQwyAQDyhlCG
-         dtzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788985696; x=1789590496;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=DEzU3fsaUeqKNU36+P/KzrJW02m3H6Ngnj8OsDYtm0w=;
-        b=hi9GidrVTGq7dwMaFOYBIpZUnqX377NuUqnpQzY1fg5n7WB9jbXu4/TtYGX/dXkAmM
-         qxdekr44vzdSrRjinzumyq8KdT4LXrO4cu/ewMmsmbeSj4Ki5nOYDpe9x1Dv8owcyq+7
-         GnEKuHEN/eAzIwa2Kcdkk8/y4x/QSiNJQwILLsYAyJCfvm/lLJh8V8JRBtvSDVORflND
-         0muVh8dxhDC3wi5ZuHmyL6MFGq4l5HwHNdPXfhmd227g/AWvzptECqf0mMK2qPS90ey9
-         6Zpg0r+JwE/sQPcBZxIidcw+HHqFNwhq3jjEkMd8mN1GV4v0lHicYCsbZMjbS5xMNlAi
-         XFXQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwjb6gWg70kkzFwGjrfHbdPtmjlE0XJO2PGgpeHB2d+uPw1VAYsUfViXhGLbbx2w69iDSncOOv4w/wwzw==@vger.kernel.org
-X-Gm-Message-State: AFuF++lQUQjfEaFuS5SYLJms2RT/7Rn+qx146JIgpHNV8mwH3l6oirWb
-	zPBln3ANO+OfMBC7FrApXEQ7edxH7pC2K6JYEP5PkvFUSBe4bNEQTlNv
-X-Gm-Gg: AYBFou1iRLfHPnHkMC/wagpkN4usPdSDa5rGyzp4bYwY67uIIfuNkiZfXo9TlHjVPwC
-	JzPcAAkGqdlRzIoUwB/arb7hTAgsl0+sP2MFjDpcAZnWf9hOToUJ9KIOUIsxddjT6YE4YBmduR7
-	GrAnyUyc3zo9JrZzGOVKelA1mghReKqhvYwy6Lf7T+8zQlhyQYnPChdX0JLcQ4HPyhgpLCHt+wl
-	EPBv1y/br6crcCHOmIPzR7R2j/lEDdJYGwoiOp7JBBDXnCHX980Xyb7FCOIL7sDxQ5gOAAgvF9Q
-	cjxw8OL1UNwwz5ittt0J5BFWMIy6P/tiJX3rMuyWfiv4CU4RuXDVNeFZsnuB07AS8Bk4afEhvue
-	5mfBKIU6xXUkzVq4XcZA3S2k0Pwl12ijV2l6oAZlqZCNZ3aGDgo6h//qg2govUtmycieBNdMH3s
-	HkaEHe9pE7tAlNJLiyRqE1hJaDGiBROtwqB/CshT1wqO13JeqJJMYxqEPBF9hUCIe9iv2PKO+6H
-	UwZmbVkVp0l
-X-Received: by 2002:a17:90b:43:b0:395:5eec:b932 with SMTP id 98e67ed59e1d1-39b26141c79mr58732068a91.11.1788985696439;
-        Wed, 09 Sep 2026 13:28:16 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d77388944sm1156264a91.5.2026.09.09.13.28.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2026 13:28:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 9 Sep 2026 13:28:15 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Paul Louvel <paul.louvel@bootlin.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] hwmon: (nct6775) Add support for NCT6126D
-Message-ID: <be37aafc-6b6b-478e-b01e-9e6f0a932608@roeck-us.net>
-References: <20260909-bootlin-hwmon-nct6126-v1-0-4e85615fef10@bootlin.com>
- <20260909-bootlin-hwmon-nct6126-v1-2-4e85615fef10@bootlin.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fols19Bh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED5A61F00893;
+	Wed,  9 Sep 2026 20:28:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788985722;
+	bh=I+kxnJhecEnYspOixEfBiX1GOqSVXXYgliBU2I5h0UY=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=fols19BhcnoVFViG7MRlm/xSNYoyZW1iUzGGvPPwTBEPkTAoSSDv4SWvZA/wSMuOs
+	 Rn8a48x7FXHOzBkJUYC46B3E1dvcqiJK/P9wBxeIhQCIW9t0X7K1PXod5IYEUfWzSw
+	 gho00p+xVU1Jm7hG3YI2JldJRvJRKAkPkRN1KAW0GYHY/NIxCK/05NP144A3mZo40G
+	 o3hC2yk39TenVB/UXIk/z9zlM7TDYIfLYecA1pUabso6O/1ELgcN8uFp/k7+jR/E57
+	 IQAZ/nu5Zm9g5G7fwYP+aPOXeQSEe+LsE7GQUAcT9oDvXt1Af7Aa+RKcY7AS2z89Z6
+	 sXWah7Cm11ssg==
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfauth.ams.internal (Postfix) with ESMTP id 59E75198003A;
+	Wed,  9 Sep 2026 16:28:39 -0400 (EDT)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Wed, 09 Sep 2026 16:28:39 -0400
+X-ME-Sender: <xms:dMGhakZrAgTBnlBqFftocUXviR0J2l7Sre8N_hkU3bm99NdIDpI_vQ>
+    <xme:dMGhaqNkf1UVpBqqwwAIKZGe6ZLR5887KxkWzxjdQYI3lCGrl43WgdmPSAAxnQHsP
+    Uox-U9EzoXttS4S5-47rSz-rZ2uAoCXuXOQors4CntR1dH4NInHP8jwKQ>
+X-ME-Proxy-Cause: dmFkZTE8Kd/+IGN7zwsPgDLBZ7Pw2HSIlU3e1eyy66uQrsX01THEP44sRyzEQVpoW8v+S7
+    UUKed+8n4cu4eeFtESaBbopZLJ6LrBTdCRAync7iQXnwkzKgdYbtZFutVSF81TSkj5oLHm
+    r580h0FhuAildnT6ONm+KzGew4F0SEbuCQV4nqvUhYlCrVwT9UfknvcS497JIK7cA13NaY
+    9Ud5IRKSG/vIwSogDRhoQkRzAa3SDHKuqOM0bM1KH7FXh9QDZUTCQwPNYTXC9RwyKnmJDH
+    V7+T/rFge4J+gL6ogMK86+6wii7xZ1h6OLfZj9KgnGZLdocmKJaNmoyXFpo/+mxxaiEdkT
+    jlWHsCaLqv1TGspZZq12xA8euHVb7zvVRyb2MXaU3xRe5DtA//BGIKLrgLh+dmhrsOl0Zr
+    LhWH2PfvgXrEg28p9yDwL50pLFysJbkseor7mYCo6kqWkSeWAqQTWUlbSkBwY2s5Tn9yji
+    zYbo1j/RT1XLUpGjwAmSZuYwovSpvRBA32oYRPXhVGksgdotjvcV8f5mqReuuUuAW9l67w
+    /etZ6hRhJ7BppXSfmCE1NW0Z51mYf/ZYPGj3MzO3OLBodhCqoMiydyYfetnuz+QZbRmWXG
+    6DUPUYvLLxpKQYFcX8kN926mmi5lo/AquurTUISnXbXY9XE75EuEaMhb2KlQ
+X-ME-Proxy: <xmx:d8Ghas_AlNDs4o4m4hmLeopgBHxFnbofTtd53FIHx00SNOdAX09wmA>
+    <xmx:d8GhatetjFIRC8dRHihv3Rdu5cMWoC3ft1F1tCAIAUNioBHRZa6oIw>
+    <xmx:d8GhagtO6IjNdv5Jht6BhK6wRORMmcDzfx-4GiJr1UkH7c_qnHCeLw>
+    <xmx:d8Ghau2zRd_Qf-XFQel1Ar1hzUadP-wn0PBMyD9aurfsjithUavzxA>
+    <xmx:d8GhalBJh7CQ2Q4n7PDcU-vbkiGbQPaVyavFhkAYmhgNTQLesx-lqTph>
+Feedback-ID: i36794607:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id CB1DB32A007B; Wed,  9 Sep 2026 16:28:36 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260909-bootlin-hwmon-nct6126-v1-2-4e85615fef10@bootlin.com>
+X-ThreadId: A6VsXwS0CIh3
+Date: Wed, 09 Sep 2026 22:28:16 +0200
+From: "Arnd Bergmann" <arnd@kernel.org>
+To: sashiko-reviews@lists.linux.dev
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ media-ci@linuxtv.org, mfd@lists.linux.dev, linux-leds@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "Rob Herring" <robh@kernel.org>,
+ linux-input@vger.kernel.org,
+ "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+ "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+ linux-watchdog@vger.kernel.org, linux-rtc@vger.kernel.org,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "Florian Fainelli" <florian@openwrt.org>, "Lee Jones" <lee@kernel.org>
+Message-Id: <098645b4-afea-47db-9c43-ecd5ef61c68a@app.fastmail.com>
+In-Reply-To: <20260909133956.E4DD51F00A3D@smtp.kernel.org>
+References: <20260909132153.1596191-1-arnd@kernel.org>
+ <20260909132153.1596191-3-arnd@kernel.org>
+ <20260909133956.E4DD51F00A3D@smtp.kernel.org>
+Subject: Re: [PATCH 02/14] mfd: remove unused rdc321x southbridge support
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 09, 2026 at 08:25:55PM +0200, Paul Louvel wrote:
-> Add support for the hardware monitoring functionality of the NCT6126D
-> Super-I/O chip.
-> 
-> The NCT6126D hardware monitor is nearly identical to the NCT6116D: the
-> fan, PWM, temperature, TSI, alarm.
-> 
-> The differences are:
-> 
-> - Device IDs 0xd283 (A version) and 0xd284 (B version), which both fall
->   into the NCT6116D ID range (0xd280) when masked with SIO_ID_MASK.
->   Instead, compare the full value to distinguish from NCT6116D.
-> 
-> - One additional VIN: VHIF scaled at 16 mV/LSB.
-> 
-> - The fan count limit registers are documented for all five fans.
->   Also expose fan4_min.
-> 
-> Assisted-by: opencode:z-ai/glm-5.3-flash
-> Signed-Off: Paul Louvel <paul.louvel@bootlin.com>
+On Wed, Sep 9, 2026, at 15:39, sashiko-bot@kernel.org wrote:
+>> Remove this driver, as there is no way to run Linux any more on the
+>> older chips after i486 support has been removed.
+>> 
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> [Severity: Low]
+> Since the entire platform and driver support is being removed, should we
+> also clean up the remaining dead references to the RDC321x platform?
+>
+> Specifically, the reboot fixup code in arch/x86/kernel/reboot_fixups_32.c
+> has a rdc321x_reset() function and an associated entry in fixups_table that
+> appear to be left behind now that the hardware is no longer supported.
+>
+> Additionally, the PCI_DEVICE_ID_RDC_R6030 definition in include/linux/pci_ids.h
+> is no longer used by any active driver.
 
-Signed-off-by:
+This sounds like something that should go through the x86 tree, but probably
+not this patch.
 
-I can not change that, so you'll have to resend.
+> Finally, there is a stale "RDC R-321X SoC" entry in MAINTAINERS that might
+> need to be removed to complete the cleanup.
 
-Thanks,
-Guenter
+Removed this now, and added Florian to Cc here and in the changelog.
+
+     Arnd
