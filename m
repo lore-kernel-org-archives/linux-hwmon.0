@@ -1,113 +1,141 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6DC3515D6
-	for <linux-hwmon@vger.kernel.org>; Wed,  9 Sep 2026 20:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0807E5867CC;
+	Wed,  9 Sep 2026 20:47:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788986271; cv=none; b=Q6pHg0w6Knm5rD+1WqsqRYL7alu0aWsF7sUVvAsZntffF7ggi6guV/Zv6cyns7+e/ToGObDv0SnOK0KGrh2qOnzU4E/7Y2GjqRKiwmbiiPLocG/JbanUI91BhbnKruwD2dIcxw1Ek+ODvo+AxGawetO8bfBkDbbqeCxro27Mapc=
+	t=1788986840; cv=none; b=rOjDhH/kkPXJGni2OwIb855vYIAlv+z6d0uTe5jXUpfSlNX22o9yxKaac/ZkYsUYHMIQ/cb5rFca4dMvlugwgeaqxi6UeaZ6f4e4gVlzulXB+EG6cmvJgQdHc2jxPwFSKGYZw/sMrMH+NeOz8Wmwl8jsdFAmhNqR8clWr3gZYJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788986271; c=relaxed/simple;
-	bh=5Hm9gfjEI1Q2doQp1W1IdtzLqqaU+0usRSw9PAqTEB0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V3eaMxEdf5EZOUkIr2/X+NF2fx3KUn/lBHFlM6XX5d0klU3bMcnwAALhFCXrPEXBVO6qFEE94ax/wosdOTOTyfAWDapXs1hJYVrKVk0RI4Zbon4oXmPDTOiL4iLwOIsGRYoAdwBpT5VMzE3tfZ+gH7lKZjDNbcF3lYIsDo0BmyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eEjEpjaf; arc=none smtp.client-ip=74.125.227.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788986840; c=relaxed/simple;
+	bh=fV6iXWX0mmB/G468K7hvnWQ54p4s/YlWu1AvqhaLGjM=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=aTMT+J23rFpJNq+y1ogRT68rGYWwrwQWhikgK6/03O2Z4GmxCsSwLQ3LL3qOFpPtB1OaqWpGTswhb3dV6vfTM7Woiq0MzwxSb8HgNL0VOlddOJEsn22tWDAW6hIzHksAXTdUen9REexPCTSAqbUtAnwZJC+NkAenMs8HX7tBnAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YkfRjdju; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eEjEpjaf"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccc09d65so601785a91.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 09 Sep 2026 13:37:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788986264; x=1789591064; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=8ck0b/tvXvZ/1fxlfkYlwHFNSdW5hjtPnNTOS43Hbuw=;
-        b=eEjEpjafyAx0EMcn7QDeHBJvrqY9VpJoVW/oCyJB/ptPlt3+pg/OIEoID3hJId/mQO
-         2epXyGjI2Wq0T6012WCjZUMfWA30/GHqT+2mTZq7th0PvA+UQnVJ0h9MCPPtvICRESl0
-         ruM48B/BBD1ja8Hf6I4J2TaucDGpv8fLf/cj9OZOlnPXr3nv7yXIaui/yL/7CjRHIQ1T
-         7ihsRvWCQkKKXgaWggyIWfVU46H/c2sAXH2FFGchcwBHAYR9X+4ckHaxFMHzZ+4hldSg
-         FWS8E5MdmYeo6NY+ZlJqQ7xy0VcyKrq0JRWzMP3Udus+412lVRudkxiSxQJIGH0Xnn/+
-         mogA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788986264; x=1789591064;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=8ck0b/tvXvZ/1fxlfkYlwHFNSdW5hjtPnNTOS43Hbuw=;
-        b=mRKfR+3J5f8WDswcph34vq1hjq6amg8Q/04QrbQVS4li3hsnhrLoW3oSa3yJJ1vODY
-         lVI947YtFMx3sFpz7i2WE/TjRKMhGsyZmmf+4YAwWXLY7Z9DbqqYtRD8vr23Krqrpz7t
-         S1FTTOhkDCMOepNIflzYr551ShjZ7sEM/4DKK3Rcdu4FyemJrh5Y242+OKCQyKMzSrMK
-         XeL+bO/fX+TNb6oWGpJdgArTZqcMnH8u7PzfOf9asreXBl5Fj7KFWx3BpW64Uo46Ddo1
-         1i6CXhiFb7fmWYIOcnuOw0cINdbiMgNplzdghRWtaP3Q6zvZBmmkyrkBkupbAdlkKRLe
-         iSHA==
-X-Forwarded-Encrypted: i=1; AKwUvByBFWO2rJCmOkEAwLSwMcanzzoW+nKS1YW3MThEtOCEffZaH2BcU71hUoupTKBnBm7twUpgf17B3DFp+A==@vger.kernel.org
-X-Gm-Message-State: AFuF++lKy08KgcRQSjBcvzioEIuyR3JWDp+aKuAWKpdqGKJB5UXgIt2M
-	Zp89K5pAub5pEmI7UNAr1F0deIuFhxGDMlIIoRqsdou0TGBxYIZLuGyV
-X-Gm-Gg: AYBFou3XDn6tVRf77WpgUb4lqdeQvrXWaD4jVtzofKmCQvdSqAdo5AjAmJqdob421G0
-	PgjrQy5yjOnWhfqyaV1M1/WA0pzszhFp/+Nnb4SBRqMjRa7yLll+qHgOtLxhyGG7wVTpH/st7kN
-	va0W4vSZj8nrL8j0D0cxM6vSqT2+pnbd6E+UIwCg+9fZyhQyvN0jO5+JOpflcarsv1vlPlbKN7d
-	UaMVCiwGEyslz5xbqRe9JXp6Yw9/MHz0Ew7vylOXEcDlGJIDGKnmysiffnbPWdKtDbVOyKTPvN/
-	Dxj+2NX+xW5gwjsI3ZEmvz/UzLSuqG1UQs0RkaBOJBRARhf4hVQwWaZoUxCHJzZDaTMWPDCF8Hs
-	KI5D7dymFMtImY2Md6HfltVyu9zKImgsi+Bhzdi0J90nX+fPm+ZKkq4EMIw6EFBwlko3n0ZBIiR
-	Pa3Dq1cW/gj9kbY2d6a0Od3u2BJiujnq0/hDD3lubBssWMdTbPacyNxklSCFGIlzrWD/oBCjrau
-	h0Gy6nSEHkN
-X-Received: by 2002:a17:90b:558c:b0:38e:57a3:f218 with SMTP id 98e67ed59e1d1-39d70ae1a5emr4704439a91.13.1788986264483;
-        Wed, 09 Sep 2026 13:37:44 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d770bc2e1sm1226801a91.1.2026.09.09.13.37.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2026 13:37:43 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 9 Sep 2026 13:37:42 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Ali Ahmet Memis <ali@iusegentoo.com>
-Cc: Ming Yu <tmyu0@nuvoton.com>, Ming Yu <a0282524688@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>, Lee Jones <lee@kernel.org>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (nct6694) do not expose enable on DTIN
- temperature channels
-Message-ID: <a9885f92-e54a-42d6-bf96-db2ee819b473@roeck-us.net>
-References: <20260803102148.14196-1-ali@iusegentoo.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YkfRjdju"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C14841F00893;
+	Wed,  9 Sep 2026 20:47:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788986827;
+	bh=v2JjZ/AR3wGVNWpMfGkri5D4yVOiJejXVZCAAY3Mv1w=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=YkfRjdjubgsAOzVOp4piJ6yw3LjAf8bzx4ZQmFYhNWAl2B3UyW6ctAdr2j6VS4cCD
+	 azvPT+JQi+ePCvnbKCb5nO8fsI8eNISlU+o9bQrwIRGr3Hyf+mydTpi/O/jR8UU8yS
+	 BGM7ktN5FJTMRmDZ2n2rmiVUFdb0LSetW59/wv/Zx+S47t85ebMD00UE9zFoqipnGv
+	 ZCDXMBqGLDw6qFSIOrFmLy85gUg3QLGXH9oWuywD7izNYQ9kf9ikxP2cVFMsAF4WR5
+	 hK7VJayrf52JBubYEowtbxu7ynGOy+Bgx/3dwOLqF9n9iYvBuu8aIpJOPup0ribah6
+	 yl/pghTkZz/fQ==
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfauth.ams.internal (Postfix) with ESMTP id 39968198003A;
+	Wed,  9 Sep 2026 16:47:04 -0400 (EDT)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Wed, 09 Sep 2026 16:47:04 -0400
+X-ME-Sender: <xms:xcWhaq8_Q61kXo0IMDQ58fPAqQTZ8tf5kHPD1cbQysphdJirlfmWmw>
+    <xme:xcWhalgrvIMf_6LUwFUkeHmkL_iOofTXxLXCkcPPpenSv6I1RHHFkRCKG2VtbIPmK
+    EbGq-zKwVvlSDAnl4MuU9IeLvxKf63PszZ43lnehBRZDMepx531apmWGw>
+X-ME-Proxy-Cause: dmFkZTFqb0S1UKeED46t7V7AaDZQOyNUriK9lNpweq+oFuFsncA5u/n+amUPWXVGSZwRp0
+    aoA/8/u8xfnY7DjRsbI2Jns+nH3zbzBghMPk0AMvv+HCAV1xtzlgjq12QYSqN1X88VeN/A
+    pym+2CmbNo0bNNwmFK6AeRvLW7Lf3NSnfmAyULhcp0dZ93rt6kdDUZJIXfZ8gmVGnEo6tx
+    gKfs3a3Pus8LjknyRCpkJUQWOFxNv6HOJ0tLWp4tDej+BdccpbNL7qVfwWpDSbo3xgP0ZV
+    +LhwuibAxpRy+AXBwU9SB7e4fILZ2mtX+VJdpi7tO54CsxcxGrO2+30XpZGxL4aqy3X/Nl
+    1gPfo82LOa75pb29VtCYbi7hbSrE+I1bAkEgEiiv2NahNkgB1t4s7Ewp80829rozxNkfJK
+    KPwFlhghrb1eG05pdm2MzE0XUZYdOwfxlVP9q5OXPtjel2gMm8pti3W78nBqyKf/o4lflK
+    Qpu/bK2jlU6URCRZGWhIu30fo/vdFe2DLJPa4pZ9W5XyvsRkq1mBMPdz24wkDsMeQQjwYu
+    LXKft9xGEeRQQBdbwdQBtdkNf5QlHj+uDZGeqt6FOmrz1v6RH+XgsibxEKPcfw1OJB9ctn
+    msCK7eigEkKHrI2i4qJjI3ns5yxsfUgtgsVG9ygdlwAVs/BRSBsJvb7egJ8w
+X-ME-Proxy: <xmx:yMWhageO8A4LP83Jmioohhfjwe6thY3V70kJBRBqQyIe5itMVwFwcw>
+    <xmx:yMWhauiM_Cnexb6zkCeq4RHXfTjukjG049orpmNjHE6TSxnRQfpsEw>
+    <xmx:yMWhajIR9pbTPc4bsQ2f6KyOLxYZShCrER8pNrzwIuSZqnWfJ1y0GQ>
+    <xmx:yMWhajH9lNnB7WpxdL9cthPnoEJ8jc-F-aFDyzTqIhmNVfechJ_aaw>
+    <xmx:yMWhah1w9ymXahoKekUZ7b_C32f4SemT7T4BKD4Q17lhnEtTf0Wjs4Z->
+Feedback-ID: i36794607:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id BB78832A007B; Wed,  9 Sep 2026 16:47:01 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260803102148.14196-1-ali@iusegentoo.com>
+X-ThreadId: AlHo1ocPbBlo
+Date: Wed, 09 Sep 2026 22:46:41 +0200
+From: "Arnd Bergmann" <arnd@kernel.org>
+To: sashiko-reviews@lists.linux.dev
+Cc: "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+ linux-watchdog@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-rtc@vger.kernel.org, "Conor Dooley" <conor+dt@kernel.org>,
+ media-ci@linuxtv.org, linux-leds@vger.kernel.org,
+ "Rob Herring" <robh@kernel.org>, "Lee Jones" <lee@kernel.org>,
+ devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ "Dmitry Torokhov" <dmitry.torokhov@gmail.com>, mfd@lists.linux.dev,
+ dri-devel@lists.freedesktop.org
+Message-Id: <5c169e15-45a5-46dc-bfdc-84228eb773a5@app.fastmail.com>
+In-Reply-To: <20260909134910.33A1C1F00A3D@smtp.kernel.org>
+References: <20260909132153.1596191-1-arnd@kernel.org>
+ <20260909132153.1596191-14-arnd@kernel.org>
+ <20260909134910.33A1C1F00A3D@smtp.kernel.org>
+Subject: Re: [PATCH 13/14] mfd: remove unused menelaus driver
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Mon, Aug 03, 2026 at 10:21:48AM +0000, Ali Ahmet Memis wrote:
-> The driver registers 26 temperature channels, all advertising
-> HWMON_T_ENABLE, and indexes the enable bitmap with the raw channel:
-> 
-> 	data->hwmon_en.tin_en[channel / 8] |= BIT(channel % 8);
-> 
-> tin_en is two bytes and only covers the 5 THR and 5 TDP channels
-> (index 0-9). The 16 DTIN channels (index 10-25) are enabled by the
-> firmware and were never meant to carry an enable bit. Because the
-> control structure is packed, writing temp17_enable and above indexes
-> past tin_en into the fin_en bytes that follow it, so it toggles fan
-> enable state instead; nct6694_hwmon_init() then sends the whole
-> structure back to the device, and reads report fan state as temperature
-> state. It stays within the structure, so this is not a memory safety
-> problem, but on a board that uses the fan channels it is not harmless.
-> 
-> Give the DTIN channels a temperature config without HWMON_T_ENABLE so
-> the core never creates their enable attribute. The enable path is then
-> reachable only for the first 10 channels, which stay within tin_en, and
-> fin_en is left alone. The DTIN input and limit attributes are unchanged.
-> 
-> Fixes: 197e779d29d8 ("hwmon: Add Nuvoton NCT6694 HWMON support")
-> Suggested-by: Ming Yu <tmyu0@nuvoton.com>
-> Link: https://lore.kernel.org/all/20260802124730.20387-1-ali@iusegentoo.com/
-> Signed-off-by: Ali Ahmet Memis <ali@iusegentoo.com>
+On Wed, Sep 9, 2026, at 15:49, sashiko-bot@kernel.org wrote:
+> [Severity: Low]
+> Is the omap24xx platform completely removed?
+>
+> It looks like arch/arm/mach-omap2/board-n8x0.c and 
+> arch/arm/mach-omap2/common-board-devices.h still exist and unconditionally
+> include the deleted header, which breaks the build for OMAP2 configurations:
+>
+> arch/arm/mach-omap2/board-n8x0.c:
+>     #include <linux/mfd/menelaus.h>
+>
+> arch/arm/mach-omap2/common-board-devices.h:
+>     #include <linux/mfd/menelaus.h>
+>     extern struct menelaus_platform_data n8x0_menelaus_platform_data;
 
-Applied.
+As mentioned in the cover letter, this is one of the four drivers
+that are only orphaned after the series I sent yesterday to remove
+omap2 and other platforms.
 
-Thanks,
-Guenter
+>> diff --git a/drivers/mfd/menelaus.c b/drivers/mfd/menelaus.c
+>> deleted file mode 100644
+>> index a125d40fa121b..0000000000000
+>> --- a/drivers/mfd/menelaus.c
+>> +++ /dev/null
+>> @@ -1,1251 +0,0 @@
+>
+> [Severity: Low]
+> Should the reference to this file in MAINTAINERS also be removed?
+>
+> MAINTAINERS:
+>     F: drivers/mfd/menelaus.c
+
+This was accidentally removed in the omap2 patch, moving it to this
+patch now.
+
+> [ ... ]
+>
+>> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+>> index ec73533703f72..9dfe1ea08c250 100644
+>> --- a/drivers/rtc/Kconfig
+>> +++ b/drivers/rtc/Kconfig
+>> @@ -570,15 +570,6 @@ config RTC_DRV_BQ32K
+>>  	  This driver can also be built as a module. If so, the module
+>>  	  will be called rtc-bq32k.
+>>  
+>> -config RTC_DRV_TWL92330
+>> -	bool "TI TWL92330/Menelaus"
+>
+> [Severity: Low]
+> Does this leave an orphaned defconfig entry?
+>
+> arch/arm/configs/omap2plus_defconfig still references the removed config:
+>
+> arch/arm/configs/omap2plus_defconfig:
+>     CONFIG_RTC_DRV_TWL92330=y
+
+This is now removed in the omap2 removal patch as well.
+
+      Arnd
