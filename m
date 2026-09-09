@@ -1,106 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA913C5DA6;
-	Wed,  9 Sep 2026 20:22:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A4F4334C7
+	for <linux-hwmon@vger.kernel.org>; Wed,  9 Sep 2026 20:26:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788985336; cv=none; b=US7Yb9MHwPTC796EEQ6OdUAA3Sn6W2qnxqKODRmDcF+kS9tndQ0uc48HmRgmv3mdPMheuoQ9BtXKrEh9flhFlmIdLD+s7KfjSioAxYZS63DPEU7vjTbBH13xYSgFHc522VeE1fe4RxtEVdZWY33Pmqi2WPgqjvtFRtu+NCPx4kY=
+	t=1788985612; cv=none; b=nm3e9M9bUfuBI6IzCp0Yy+vpZSlxvDe/3bmJ8Yo1MeSwuccPq2iB/ND8ncFS/lHGqt11MF/Jpu+/CbxkROge7y4XD/acAdISrZHxDqCqUbHpLWGxs+e/F/50wRwiKzc7Z+QJzHYT2RhQVo51NzWUETAsgX2/pwQuEu42zFyQhXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788985336; c=relaxed/simple;
-	bh=5MFsnNsghcZNkKF6FTeNb1hgCDrTiB1FUTpRFYAZwno=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Kcnw0ETxB/1dLlSISYnGEIHav2EKC/dVJlYrWqpRUA2Kcd7RIQyHLkbk7JIDTY6NlWA1mK5PuBpBSp1NFp5UAa10MXU0Y07u7M4cIYMXHUi6xJUuc8PKiqsaAJj8cxnMiQVnm7SeiZbK7V1ug36PbVH3KlJT+QoSeb+frsN4C0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z6yQDY07; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788985612; c=relaxed/simple;
+	bh=0p8Nkk2uR5bJct5mDj70pGBOis/omuOo7vuJrgv65Mw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VIGfLMT9Dz5wUJ/J8iMDqzqypJoW9FANuLdWKgIIbVtgYpcgqkB1gB1yHq9e1wlgzPwBn6EPjZnDDYPseyC8ZlrOdV/kaIi/xX4NCNY/keKD5ikpQVr5O//xwo5SMIL+p8CpLuMf4djecxwXQ88W4AgH1FsDQQhgg53xoZBvwJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AohOgggQ; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z6yQDY07"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AABC71F00893;
-	Wed,  9 Sep 2026 20:22:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788985328;
-	bh=f/vJPlc8T6fJJB4nW5dL7YWbom6WiGDZ7/U7PJNU6os=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=Z6yQDY07n9vEwnxKgqEkA9aaWxrEXnMW6mowwzxEtFO5nukDdKwGHmLUT93jWvuTk
-	 qp6kvaMWMHznazv9n9Ze/UAX6rMEMsCxXtliQ+BfM/J7hZGFAQjyMmAhWqaoYxYxaR
-	 6VgViAzgzuQo9lI8giFGHudbmm5LmXbbnzEJzUKfVKvM2F8FpPr+iN13t4220OYn6i
-	 nbtLjIxcCd3zreHP8jFc5IWmEFm0JeIPxAm+AhVCCNyIEA2qABDwhOkUP6jxkzDMr0
-	 7pcrFj7lefn6OO42HY7DlHtQEOMKM4YAOBOyyIcSEQqC7oCqGsclodGWGQM+FBL2GP
-	 kBS+PrqYhlaYA==
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfauth.ams.internal (Postfix) with ESMTP id 1B2F1198003A;
-	Wed,  9 Sep 2026 16:22:05 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Wed, 09 Sep 2026 16:22:05 -0400
-X-ME-Sender: <xms:6r-handXz_o_C5DukWnEOfr4NLQn7c61KNre1FdUV0-TlZfBGhG9lg>
-    <xme:6r-haoD7H8K6PlEE6wyLuwHbjFmQRgdO0R46IZOUCp-UUXMp3R6i54OrAxl_lriYU
-    nbdfiLWg8PbYTmaQkiy9miT2q5r227w8ICANPKka4bFXNziY8boCOU>
-X-ME-Proxy-Cause: dmFkZTGOPtYz0YGef1KbspNp4wTPdGdk1T/H9qyyC2M/T06oJAVCV4BqA2OF/poQX871Yt
-    rk5p+hkaLTG4dMeFglwUkLNSxt+mUz9o0Ng0nlkD8CaDrF03PFrN572A1KJi6IpaQ3K5Cc
-    kJ0QAMtHkUz73asFAT0vYmeWZI2AMRi+55uTCOzPNIbdUShXXNPe4zAwxvl2Hiw7KHTC7u
-    vtBXDEs+zLHFPqZcnLz5Poo7kKx8eGHXSq0NkOHrzIbr6S4NbNMRIReJL5e4gCF9DM8OMC
-    CuTPI4Kc8oiHl9F/Aklk2oddw6LJOSIz0J5VUwKZSs97CZQi/t5ENn2m6o/PCUdSEHvxtz
-    b7KyWErK9fVop7OSL4coHmMjTr74TaqnqmYzGPdYEFfxDsZUbp/IR3O2OG3Y8+sXufCn3y
-    qfxMEZOLhvcmGBegrfv7nuTItkaVdX66Knrypo7JQMGtRu52GQqSeRlfpV94wEKTBY3KNd
-    xMeHtPdnwe58UkfH08GxhAlK6wo3jcPQlYGROQ0tRIx8KS7yLfeI9jOT6zeUUSK2D3Tysb
-    ujIyyY5iJjmRIBU+G0/rqFUmu2bg/gBZG0QwYkQQHaPKxB4RllUroB6kWU+MMdInTGIRbN
-    DLpdo2cCfbeQNA1vDTWyYRuKEtShuQ+Xt16kOmEyxXfDdv/0zAARwxXguaFw
-X-ME-Proxy: <xmx:7b-hao98DweUafzIKUW1PqUMQJbMtYex6kRnS13CmfzvX6-bBx0wuQ>
-    <xmx:7b-hatBM1m69H0ALdWWObIttuSMLllpPTiPC18GS4B8qhD_QamccWw>
-    <xmx:7b-havo296ND2cVaHy9kOISLZieXsWZW_5kNv1o9iRXIT_Dtt9hx_g>
-    <xmx:7b-halnDY6-h-CEgypR5Y3zZ6iS1CZqy2MQRzxMVsJFkLs6rvQsLKA>
-    <xmx:7b-haiW_6VXvtdc_Xg46AkkjNR10hmYi6kiNEVBYFEmgGPZsy8vCJQ0R>
-Feedback-ID: i36794607:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 7CDA632A007B; Wed,  9 Sep 2026 16:22:02 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AohOgggQ"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2db710396ffso2255995ad.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 09 Sep 2026 13:26:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788985603; x=1789590403; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=0rUy6QUb3FEaeMughMRFuqCqfaHGo8kxiuvRMxxUU30=;
+        b=AohOgggQ5aKgD4ZkgxVcEE+fpiUWut/XEwN4ZefwAqF2tJMDvJmFbw2u6kMkQdMP/p
+         EiCMDLZl/6CRcTagFPiboGekl9cTt9AL3yGoyy/B5w+l2x+rXzXKZH6/r0Jv9Xc2Z3pi
+         Xuqq5Hj5otbjR1ia9cfAWv0IcDh1m+7mk/SwkHGe/rfj9Wwp+0ckBwtIpI1prwRXSbcb
+         H0DpydB6uKg1gSbtSgplpW+LvDWaYBlUlzkM0Jk+fQzcxGlZXfs6n+92wY2dKilOHrq5
+         IOBS9kfebFvNMszjaHxB9wZz4ZM1cK135TuTfmY8vH/P/nLANeV/v1Bgr/zoAuqn3ltB
+         4yjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788985603; x=1789590403;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=0rUy6QUb3FEaeMughMRFuqCqfaHGo8kxiuvRMxxUU30=;
+        b=MwgCWrQwcYtmWpj8YRs8wEW/VctIHUkTiiTSDr25OgUqUyixu6tq8GeLul6gpQ5AKU
+         k22Sf5TP4gwHoHkYZwYAl92ITByfO5Lq6+wuYywe4tM+6LLLCSg/RfQEi9YL/GAZkbsd
+         flf+F6h3lGHWWv7MbCn2GHBraZRflZ9sbNChZXn8Wn+SRIDOUZtz1bhgkWO/5ZXWvbiC
+         +nlKXRK+0IYYpWYL3x5vq75ldaM1ufoswTdSytlS80qprGJWf2oKaHIn2qwCqBvodzky
+         CtdDrL+dyXZdLG/apE5sQlktIXSCr3kFZp/zqu3y+qmX2ND4iEmXsrYtIFIdHukyUFxu
+         dBcQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzp4qV3o9K8784Jg07uHf+7qUvTscB6dVS3lc4FOd5t81/rAlUQE458S7x2PRgdcQncdB8l54ECBaTi/g==@vger.kernel.org
+X-Gm-Message-State: AFuF++k1x66kxqoxJIg89XcUBq4mvYctFndVxF8fpBgBklR6A1LQDNMp
+	H/DIqoCLFbQaSA7DfK3+Nv71Clv1yW3uNvQ+WgCuoKtq2Il+IRnY/ZV6
+X-Gm-Gg: AYBFou3Ec0EADsOXx0n44/eJRhL5xECpkivANzM/9KoS1olCTUogYkesgX6KMGmJqgZ
+	mUILWj4noAdxP3+8RfH+mUaA4k93YATzOzHpF/qFX0cfYiYaC+LSkOMwnvlBX9abrH0jRhbSfou
+	gmJRn6gnJ6BS3i20SQxp5FAkS6BzXtGr2/B4L49oZ+ZZWntejp487E7otcYogisy2gtN7vRNot7
+	TpJL9e2MNe34C/d5ciNyESNYKte6I9Po891vEhVr66nr6Otl/CtARtb6i9N/vOF7zAl6Acwarcy
+	mBYRfpSHxLYxcaviA67+3AbgvC01MkftVXfChYNWZ6uz5wfUH5b+boCGruPTUepr9VWDmvOWnDw
+	xxw1GH8DFRFT/7ns8JCXDi1JHO6WrHlfF0qqP3cpg5nwsVcUs1d81o2DBAosb7frHoJWqfH4bDe
+	gz/4LVXLxwtNE2iZ6tSRb6SfwvJAVqND7siNesS0ua+aa3mFiGMVOVsvQt7ApnsfnwAb/kXI0Bi
+	osCRj8ZrzWis5eiv7IdO8E=
+X-Received: by 2002:a17:90b:2f8f:b0:381:10a3:8b10 with SMTP id 98e67ed59e1d1-39d779bd533mr1151278a91.14.1788985603264;
+        Wed, 09 Sep 2026 13:26:43 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d77608fb4sm1175896a91.15.2026.09.09.13.26.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Sep 2026 13:26:42 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 9 Sep 2026 13:26:41 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Paul Louvel <paul.louvel@bootlin.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] Documentation: hwmon: (nct6775) Document
+ NCT6116D/NCT6122D/NCT6126D support
+Message-ID: <6faf5d14-1698-44fc-b4d3-492f567c6172@roeck-us.net>
+References: <20260909-bootlin-hwmon-nct6126-v1-0-4e85615fef10@bootlin.com>
+ <20260909-bootlin-hwmon-nct6126-v1-1-4e85615fef10@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AmJ_Nx877FLk
-Date: Wed, 09 Sep 2026 22:21:19 +0200
-From: "Arnd Bergmann" <arnd@kernel.org>
-To: sashiko-reviews@lists.linux.dev
-Cc: mfd@lists.linux.dev, linux-hwmon@vger.kernel.org, media-ci@linuxtv.org,
- "Rob Herring" <robh@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>,
- linux-leds@vger.kernel.org,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- devicetree@vger.kernel.org, "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
- dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-input@vger.kernel.org,
- "Lee Jones" <lee@kernel.org>
-Message-Id: <ef6f3053-3455-449e-9e25-f35ebef63598@app.fastmail.com>
-In-Reply-To: <20260909133709.139231F00A3A@smtp.kernel.org>
-References: <20260909132153.1596191-1-arnd@kernel.org>
- <20260909132153.1596191-6-arnd@kernel.org>
- <20260909133709.139231F00A3A@smtp.kernel.org>
-Subject: Re: [PATCH 05/14] mfd: remove unused adp5520 driver
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260909-bootlin-hwmon-nct6126-v1-1-4e85615fef10@bootlin.com>
 
-On Wed, Sep 9, 2026, at 15:37, sashiko-bot@kernel.org wrote:
-> [Severity: Low]
-> Should the corresponding block for the _dim attributes also be removed?
->
-> Further down in this file, under the documentation for the _dim attributes,
-> there is another block describing the sysfs nodes for the ADP5520 driver:
->
-> 		For ADP5520 and ADP5501, <ambient light zone> can be:
->
-> 		===========  ================================================
-> 		Ambient      sysfs entry
-> 		light zone
-> 		===========  ================================================
-> 		daylight     /sys/class/backlight/<backlight>/daylight_dim
-> 		office       /sys/class/backlight/<backlight>/office_dim
-> 		dark         /sys/class/backlight/<backlight>/dark_dim
-> 		===========  ================================================
->
-> Leaving this block behind orphans the documentation for hardware that is no
-> longer supported.
+On Wed, Sep 09, 2026 at 08:25:54PM +0200, Paul Louvel wrote:
+> The NCT6112D/NCT6114D/NCT6116D family has been supported by the driver
+> since commit 29c7cb485b32 ("hwmon: (nct6775) Integrate new model
+> nct6116"), but was never added to the list of supported chips in the
+> driver documentation.
+> 
+> Also add the NCT6122D/NCT6126D.
+> 
+> Assisted-by: opencode:z-ai/glm-5.3-flash
+> Signed-off-by: Paul Louvel <paul.louvel@bootlin.com>
 
-Fixed now.
+Applied.
 
-       Arnd
+Thanks,
+Guenter
