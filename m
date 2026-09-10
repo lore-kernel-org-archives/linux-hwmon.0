@@ -1,76 +1,59 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3410B53444B
-	for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 18:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61A03B993A
+	for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 18:46:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789065817; cv=none; b=iPQw5qJL9iI0mMWg45i+rrjEi/CobGZkF9ohoQ0Ebws7aF84O259aMrer4ularND5TXiz+a37boKqOnlYZnDoAeUUCJgIM55zWWlTU2gtALaHPx5UZwy3rJOeM8QBffTYzQFvChGFeFRZ7CBb1MLyV+oHYdo2Kz6p2XftfNJot0=
+	t=1789066005; cv=none; b=cQPEE/Q00QPjPyY8WZpj5DZgP0RkPAO3xqyfXVWgCDYOPvdnb0qayu4IFcey8LMC3jw/5VxrM4K/yJIzgznBoki6kCW54WafAQwT5Fq3FluQo9OsCHhCrpioafSG0kLZh7bNGZuwq1pTNQLwWFdKy9GT4lM1Zjx72gMwN4GUUrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789065817; c=relaxed/simple;
-	bh=r1XeofO9EgzdrTaxOl8NJyXp4vf9gL60GDDFioW+fc4=;
+	s=arc-20240116; t=1789066005; c=relaxed/simple;
+	bh=ea37eSY8UMTeej1DjKnFFcpv5Ewer3HYOf31GatXJwE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=GMWhXt2g8QOe6UBdetdkfYQJdA4IwY1ydzJ0SC5LQRp8i1updoXfwRcygRrHtRGcpQLQS+/NAqTa7hcfZuO1GIjMchWGlh5YcfKzaT3oG7NDJZoJUB9s029Ky+ymcu0Sc+QYC5KeuHNPLabWRp3Hhgf8L0aP2UiGQJ4ycf0r1QE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YcAR73qX; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=cUyUu7GB9GpNSpbdbbM16mivtrzkXRoBJtwPAx56PE6qV1CIAAI6dViW50Vpt4I1bPNmibxHOgTjfHzFrNIJEcNkORTAq0EDSXiJMJETwRsWH9gvF0lzJXblW1LBBUjftUvMUGm38iltbHZT6JkU67BlIuSrfl8AQb8xlXyYmRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e25P/0nt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YcAR73qX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 792901F000FF;
-	Thu, 10 Sep 2026 18:43:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e25P/0nt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 471CC1F000FF;
+	Thu, 10 Sep 2026 18:46:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789065815;
-	bh=CyeJrFid+pyPl3GW9L18A0KEnKmp7vFpmHwHmKpEyuo=;
+	s=k20260515; t=1789066004;
+	bh=ea37eSY8UMTeej1DjKnFFcpv5Ewer3HYOf31GatXJwE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YcAR73qX9HiSgv7vbVOXTh5drkn8HHauxr/KJqs2Ss68Ya5kwys7AW/IKZ6pQlfKW
-	 TT0LAnQ4BWzughno3BLOvTa72J6rlHl3Z+IrXx03QUuaw9FIo4c5qcVmcuKtVr4piB
-	 fO2/b0myOEp+c/zO9LOU6jQCefvxxUL7ue9hZa7CllfPCO3WIX9qCysgG3WD96yr/T
-	 pOIFjK8ARxR3RGLE3QGQYLooz/9tAR8YnPLL8IPrb0s13MFsiYMpK8BWLEJldLkvO1
-	 gZKgC4AQg57jKrzsGeElXJFMRNzhSlUIs6Ljq7AtQdTTaeKZ/v0o1Cx8pZ3J2+yEFV
-	 j6RBBd6s4lwpQ==
+	b=e25P/0nt75vW2Q1jCiHyhYV9/+d6iGsOFLzNN8qK2JBRcXCiVYokwKCHsv07mBRX1
+	 Z8q8inp9JVLq0qiZcXz5JoJpqri1wNYrv+SJBU2mQVvDuZBSnbWxHnJFqy1PrWHtrM
+	 QOU8jVy1CIC9TTCGB3cDF+6A9N+TiX6bCNKXw/qwc/OyY1OxiAuwpfBJI1lUeaEjc7
+	 BQp4iYPAD2s1bDVF0c9Or3pg2N/JZVQz8g/LKJTP3kBpXXNPUlVDiWWwPmtba1XviM
+	 tJeV8RRl5OlTXEempAUQHCpGoQSQm5zx31ivdhSqdhYr70VwPOLPNbzIW54fVbeyIV
+	 EI7h6feFH+BSA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (k10temp) Fix model id range of Zen5 Turin
+Subject: Re: [PATCH v4] Documentation: hwmon: (yogafan) Update model
+ reference table and contributors
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Rong Zhang" <i@rong.moe>
+To: "Sergio Melas" <sergiomelas@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260911-k10temp-fix-zen5-epyc-v1-1-643f5a248ae1@rong.moe>
-References: <20260911-k10temp-fix-zen5-epyc-v1-1-643f5a248ae1@rong.moe>
+In-Reply-To: <20260910184322.1816996-1-sergiomelas@gmail.com>
+References: <20260910184322.1816996-1-sergiomelas@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 10 Sep 2026 18:43:35 +0000
-Message-Id: <20260910184335.792901F000FF@smtp.kernel.org>
+Date: Thu, 10 Sep 2026 18:46:43 +0000
+Message-Id: <20260910184644.471CC1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-> Model 20h-2Fh are mobile processors with single CCD. For example, model
-> 24h is Strix Point, i.e., Ryzen AI 7 (PRO) (H/HX) 360/365/370.
+> Add the new IdeaPad 3 15ALC6 Ub model and Yoga 740-15IML, update existing
+> model entries, include corresponding contributors, and adjust the
+> reStructuredText table layout and column separators to accommodate the
+> longer strings and prevent Sphinx build warnings.
 >=20
-> Including mobile processors in the model id range of Zen5 Turin
-> processors leads to bogus reporting:
->=20
->   k10temp-pci-00c3
->   Adapter: PCI adapter
->   Tctl:         +54.1=C2=B0C
->   Tccd4:       +148.6=C2=B0C
->   Tccd6:       +148.4=C2=B0C
->   Tccd7:       +149.1=C2=B0C
->   Tccd8:       +149.2=C2=B0C
->   Tccd9:       +149.2=C2=B0C
->   Tccd12:      +149.1=C2=B0C
->   Tccd14:       +22.0=C2=B0C
->   Tccd15:       +22.0=C2=B0C
->   Tccd16:       +22.0=C2=B0C
->=20
-> Fix it by removing the said range.
->=20
-> Fixes: 8440d5aca227 ("hwmon: (k10temp) Add per-CCD temperature monitoring=
- for Zen5 Turin")
-> Signed-off-by: Rong Zhang <i@rong.moe>
+> Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
 
 Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260911-k10temp-fi=
-x-zen5-epyc-v1-1-643f5a248ae1@rong.moe?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260910184322.1816=
+996-1-sergiomelas@gmail.com?part=3D1
 
