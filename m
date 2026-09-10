@@ -1,123 +1,123 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 777EB39A06F;
-	Thu, 10 Sep 2026 06:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B2633BBCD;
+	Thu, 10 Sep 2026 06:31:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789021555; cv=none; b=ADMHOJgRnPyhkhRewZFNeY0a/yNylb9K4iYioL2Zi3vMBqSUNlZsr9oA75JMSjVEJX8mEtqfE0aODcgQSDTBQIfrBtXg0c+GL2cr4KaGEeMFrytq1F5gVtjv76gdrXBlE0O6FADw6mScaMpLNA0Yqhn0vrmp0qtSykaIViVn0gs=
+	t=1789021868; cv=none; b=K3WKm7d01DoIgB8bPD7eaLNINJ3Hs9X7ocWLyUjHLxGiEEOtE54W3BjsFPQdpoBwF3mRGq3ujWimopO4Q7XFoPMplN4KbkxRI3qKLI814QlSAjfskZgtiXQJy940ONIr6vnarxEXOlZ9kt7iP5+kXD5i1x/QHCgz1uWxpS0mufQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789021555; c=relaxed/simple;
-	bh=Efye9OFJlK/JrofQrCM/Kca8C56PLZV83plKkVo4Fmo=;
+	s=arc-20240116; t=1789021868; c=relaxed/simple;
+	bh=XPt/ZMV6fQTCtpTEpvUBwdx1DO7yY3PzULQf11vhq/c=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=rdHttMF3noMi64H8cXQbhuhco/xuRgopOqe7pKV58IrEosLenwKImeXTli29aQ+m5KVbxVp+/dYHMpBYAgfhDYclSkB+x051pLdFSrhG6MB6nGahHagFOWwQ12K/7xGGeQYmBkupDSNfft7k1RzJbglQjKm1eP7tSVtXjH7m39k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dn4vCQC8; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=ONTptH5umxNgGhVCSQMIvlFVCrg0JWsricR5j7wUeELeRWID14thdbsxggWt5aCIThUGNtu/qCyPCdkqKK06701V/nMbNqem8+fv/RzyYhZyI9hspHOOQ+ke61jwbNKNYfW4CWfEVyFZHv/BzMfMA6npLoGvm/sZSFD9UyrXBs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KrTpr/4X; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dn4vCQC8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAB651F000FF;
-	Thu, 10 Sep 2026 06:25:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KrTpr/4X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ADEB1F000FF;
+	Thu, 10 Sep 2026 06:31:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789021554;
-	bh=ywYRRoiOdrGMZtEtwBjh7zih1QoZ/Wg6rByq7kymUKg=;
+	s=k20260515; t=1789021865;
+	bh=+Qcfe64i4YBT15C2r5+ZwdoiuWDP1+o5rGvD3i7WT1s=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dn4vCQC8qmigXWohYCwlf7Nky0C+qeutJHCTmN7KqozURqNWCKCRPMyIQpuBOqRNY
-	 0zX0x/sEwunevcuYP7NCiBRkpKUIYYxk62La9lUuQECF1ZtirNsXWwnlkeGCelrcnL
-	 WDEBUFBdA3uPp01y7RArwVFeTV+x5lTUI4R0MNyUsHsDAxfgiXrhzwfng6w5rYRLP3
-	 xDnNmjdaM2VlYUmdUZTuBgMZNNNeBs0NmGzxY60agbbH3XomElavy6bGMStvqfrARl
-	 IHjSr642wyuNd+Ex4NKV/aaHy3Fy/Ar6u+saoii5stE8LLiFe1JDNhm7Vp38fdaJP/
-	 g1KVegXHS7HjQ==
+	b=KrTpr/4X8xB+hWZyfqAi6LyRIUTclOCyOOsfVY77phX+pftXH/ubrLeZMB44snHB8
+	 7FdS74TpAWkqJgKjgsTsdtSlAcrE6wFZHBrcuTBYoV2U80CwuAfJfRbytsJamBGuKN
+	 QJU2nlUvyGTaaIq+m0IaCa2AO9pSnEMRklTj2rrry5ey1w/W56YdZpEvseuI/W82A4
+	 At8WToXjG9sN8scrJYNOyKpVB4qb1BiiF7fEf+filLTh2KhURmlTUWh6UCDx6jmMjG
+	 Kmi+98sDhhdnT6B6sLu1SCbxurT7b1mIjlUcZN59W+WcDsBx9fWVxms/WbsLQiCk7u
+	 3SfFhEsxnlmhQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: pmbus: Add Infineon tda38740
- and tda38725
+Subject: Re: [PATCH v3 2/2] hwmon: (pmbus/tda38740) Add driver for Infineon
+ TDA38740/TDA38725
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Colin Huang" <colin.huang2@amd.com>
-Cc: devicetree@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20260910-add-tda38740-and-tda38725-v3-1-3e87637da3d6@gmail.com>
+Cc: devicetree@vger.kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org, conor+dt@kernel.org
+In-Reply-To: <20260910-add-tda38740-and-tda38725-v3-2-3e87637da3d6@gmail.com>
 References: <20260910-add-tda38740-and-tda38725-v3-0-3e87637da3d6@gmail.com>
- <20260910-add-tda38740-and-tda38725-v3-1-3e87637da3d6@gmail.com>
+ <20260910-add-tda38740-and-tda38725-v3-2-3e87637da3d6@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 10 Sep 2026 06:25:53 +0000
-Message-Id: <20260910062553.CAB651F000FF@smtp.kernel.org>
+Date: Thu, 10 Sep 2026 06:31:04 +0000
+Message-Id: <20260910063105.0ADEB1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The `compatible` property description advises violating Devicetr=
-ee hardware description principles, and the schema incorrectly restricts st=
-andard fallback usage.
-- [Low] The generic node name in the example does not reflect the primary f=
-unction of the device.
+- [High] The driver intercepts PMBUS_READ_VOUT to apply `vout_scale_micro` =
+but fails to scale VOUT limits during reads and completely omits a write ho=
+ok, leading to dangerous unscaled hardware writes.
 --
 
-commit 082d97c0bf8403a18b54faadfc2b22f3ff1da139
+commit 1abfb85e1a82a16c8ba7229d3c9657b7d232835d
 Author: Colin Huang <u8813345@gmail.com>
 
-dt-bindings: hwmon: pmbus: Add Infineon tda38740 and tda38725
+hwmon: (pmbus/tda38740) Add driver for Infineon TDA38740/TDA38725
    =20
-Add devicetree bindings for the Infineon TDA38740 and TDA38725
-single-voltage synchronous buck regulators with PMBus interface.
+Add a PMBus driver for Infineon TDA38740 and TDA38725
+single-voltage synchronous buck regulators.
 
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38=
-740.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38740.=
-yaml
+> diff --git a/drivers/hwmon/pmbus/tda38740.c b/drivers/hwmon/pmbus/tda3874=
+0.c
 > new file mode 100644
-> index 0000000000000..28e6ff9d9d9c1
+> index 0000000000000..df5173d8da0c1
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38740.yaml
-> @@ -0,0 +1,87 @@
+> +++ b/drivers/hwmon/pmbus/tda38740.c
 [ ... ]
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: infineon,tda38740
-> +      - const: infineon,tda38725
-> +    description: |
-> +      The Infineon TDA38740 and TDA38725 share the same PMBus programming
-> +      model. Use infineon,tda38740 as the preferred compatible string;
-> +      infineon,tda38725 is kept as a compatibility alias.
+> +static int tda38740_read_word_data(struct i2c_client *client, int page,
+> +				   int phase, int reg)
+> +{
+> +	const struct tda38740_data *data;
+> +	int ret;
+> +	u64 scaled;
+> +
+> +	if (reg !=3D PMBUS_READ_VOUT)
+> +		return -ENODATA;
 
-[Severity: Medium]
-Is the guidance to use infineon,tda38740 for TDA38725 hardware correct?
-Devicetree typically requires accurately describing the specific hardware
-present.
+[Severity: High]
+Does this bypass software scaling for all VOUT-related limit commands?
 
-Also, does this oneOf with const restrict standard compatible string
-fallbacks? If an author tries to use a standard fallback like:
+By returning -ENODATA for anything other than PMBUS_READ_VOUT, the PMBus
+core falls back to unscaled hardware reads for VOUT limits (e.g., in1_crit
+or in1_input limits).
 
-    compatible =3D "infineon,tda38725", "infineon,tda38740";
+Should this function also scale the limit registers when they are read?
 
-it would fail schema validation because it restricts the property to a
-single string instead of an array.
-
-Shouldn't a simple list of allowed single strings use enum instead of oneOf
-per dt-schema rules?
-
+> +
+> +	ret =3D pmbus_read_word_data(client, page, phase, reg);
+> +	if (ret < 0)
+> +		return ret;
 [ ... ]
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
+> +static int tda38740_probe(struct i2c_client *client)
+> +{
+[ ... ]
+> +	memcpy(&data->info, &tda38740_info, sizeof(tda38740_info));
+> +	data->vout_scale_micro =3D vout_scale_micro;
+> +	data->info.read_word_data =3D tda38740_read_word_data;
 > +
-> +        sensor@40 {
+> +	return pmbus_do_probe(client, &data->info);
 
-[Severity: Low]
-Does the generic node name sensor@40 reflect the primary function of this
-synchronous buck regulator? According to the Devicetree Specification, the
-node name should describe the primary function (e.g., regulator@40).
+[Severity: High]
+Is there a missing write_word_data hook here?
 
-> +            compatible =3D "infineon,tda38740";
-> +            reg =3D <0x40>;
-> +            infineon,vout-scale-micro =3D <1071000>;
-> +        };
-> +    };
-> +
+Since the driver intercepts reads to apply vout_scale_micro, writes to limit
+registers currently fall back to unscaled hardware writes.
+
+If a user writes a 1.5V limit for a board with a 2x voltage divider, the PM=
+Bus
+core writes 1.5V directly to hardware without scaling. The hardware then
+regulates or triggers a fault only when the pin reaches 1.5V, which corresp=
+onds
+to 3.0V on the board, potentially causing physical damage.
+
+Could we add a write_word_data hook to ensure VOUT limit writes are scaled
+correctly?
+
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260910-add-tda387=
-40-and-tda38725-v3-0-3e87637da3d6@gmail.com?part=3D1
+40-and-tda38725-v3-0-3e87637da3d6@gmail.com?part=3D2
