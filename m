@@ -1,68 +1,68 @@
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F37737C906
-	for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 15:19:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B57348875D
+	for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 15:21:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789053596; cv=none; b=sz5chZP08e/4WxV//sPJ/gd/b7I9ggk8ZBJIXf7CaZtqc7N4I6kWH9mwAbaApQRc9IbSAE0qsnoZplmPNb2gZsJhkvFfY1gVc090Ow+cJiDAeUKcXNjihbCSysjURz9gqm9yo2mMJGIR7kFMlCSKjyNGZkNgbSnFFj/ZhYm2mxI=
+	t=1789053668; cv=none; b=cIRbnDXaOuye3VKleJGd2gvA4s+1wffp7GvjdF6o0kdTYdlibyIJjYx1lR1ksatsiTI6BnJEL62ZorL6ceb318tM+kDVe7nz9vbLoJy51rsiReE8oMg21Qnaziulo3XrAY/ROzUsFU3fbWwh1Dl9s1T2VTPvVXXGid8siKsv9sY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789053596; c=relaxed/simple;
-	bh=RS5fzbnrhNxA/GAN2337xKkxjWEl1P2eDhtbp5XkuB0=;
+	s=arc-20240116; t=1789053668; c=relaxed/simple;
+	bh=0xEQgT/s8m3NJpOJD7G2kjNJ7WGRSRytpLzCpoikd6k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QZMS7CCvgrA/UjLjvsxC2en6aVejpTtsDjqih4ZY/ia5wxAn5iIr6l4na1k2/cCcXMNvBFPJNKNIyD09IXWerTmSJaLT9ZQlXBpRK2MrKQ9Datxeh1vpTyHP2oGKkTxlemMB0p3drLWZlqsJtETvfljm+tusbyHa7espMd0YWNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qC118meU; arc=none smtp.client-ip=209.85.160.53
+	 In-Reply-To:Content-Type; b=RcfG1F6M/yOX60cvIGQ1qFVoWp2VplKQFipyP4dxBt4ARnBg40UuDYOH6cQ53xxbE8wkhil2qtxILLUxaweyIejAENiE8dFMn6/WCszep5zE2enB6prNxJcUIPPOltVWwJQ50A5ovqJ7IygEGXH/VFtdI0i3iM5DXRgf2WizWnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SoZYa3mV; arc=none smtp.client-ip=209.85.167.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qC118meU"
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-46adf49ff3dso4687636fac.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 08:19:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SoZYa3mV"
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-4a483a552efso3311247b6e.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 08:21:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789053588; x=1789658388; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789053661; x=1789658461; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=kglaqaLFoVxSEZyqvHDcD/nUChRlP6JQlA/ICImrCj0=;
-        b=qC118meUqb0I05UJQrGOAnZbx/ylGVMv4LaMhvCNLpxf0wNYSF48EBtwhc3bqQJYFP
-         4MH/Pyf8xWA6FyRNtEXzvABVpcHbcROBsOtRqyUHXrkb2/ygK3QeiE5+mBzlvfdDU0Nd
-         IEIsazaPprPzCDsn+VQTe3peFVS+s8rL/3Qef8AgSWbQzNhgSTDyGU/4JOq5d4JBaW9o
-         rdhmbM36yGtwthDort5SOQqU+p7gWBQEcLWjx/won7QtWcMhSOLPWodSOrEudWBR1+hI
-         LUhqpcZJ2i8OaxEikH2pMxxbqgc0u4sloxr25Q89OF5owBvlTlOXi3c1FkzJ9DmHD8tz
-         yAWg==
+        bh=Is6QCpSLv4TMEMoNx1AAjKAPoWKXWN2o91q0iAaVLcE=;
+        b=SoZYa3mVhvVZz19ZP6GpbrCwJOuhxobt38etHMl8CRKhpPKtSjhC/ER2qZvitkyN/4
+         Z3eymSkTcfX7cpGthVZqLqLAtCdJTZHhN792C6cE7CpIug5Y023xFYXi+dKG6Pt547nE
+         CmZo1Cw8TEG7NeNb7TdXaePr1tLTVP8lHA2thnfM4eI2d5MHY6GhdVuboV8ochOurTbK
+         mkr7fpBw8xPP4AIDa6nDZvATvKt63ZV9Uu2kcgcDfpsKNnT171j1gKM9ExmqXhrOtrbf
+         7bb5w8ZYvCnv06xS2tEh2JH77bqLqvfIdmM8QW8SLLUeGo26nIRs0T8ZR4xk25uVbni4
+         zGUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789053588; x=1789658388;
+        d=1e100.net; s=20251104; t=1789053661; x=1789658461;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=kglaqaLFoVxSEZyqvHDcD/nUChRlP6JQlA/ICImrCj0=;
-        b=HVaV1eDWZdihOjy3swdKx0fED+Og8bzlRHYVGEAbs8v14NSHd38IoLUTJIac2UH8VH
-         HeK+veCFq43lV37aoKr1qlMSQVvVWIlNfVImZhfYc7eO4FWs+S/rjODqlZmY9Nb0fQ/h
-         IgKiey90Vy1fKgBB1uFU9VOT+VOIIHxyGPcnj0FTe8pwOlYvOYQisE9V8nXoXgyBrkLN
-         ZW7Iu7QiFoBH0ANgUlVf66uG4+sxAeVKU8EMexDhZZSD0gpV8aT1L9vWPxYIltpDoKhA
-         vIDnDJekZPY1LYTVW2Cvfslnq5Yjn4rL10x1LwDfMHakRC3g+o2Kh79atu1fg4966AQr
-         lC4A==
-X-Gm-Message-State: AFuF++k5DdhC87GRutFYpes0I0f3uLrDZmvhXo+VydKvaQoBRAAMLAcT
-	yAMSOlhm1J1zIMqPhEVkdbFiweenXcBSufBzWNjyoCf4k21MvEPu9EAI
-X-Gm-Gg: AYBFou0Q4hAZR/JG57QMLyGx8/smqrAJOoRx9CeuYcZlf+KrfZCpSACrWaUF6LpYGsE
-	0UWfolFT25yTncEOvgwxUoO9XGrqN/dyAwaH8Osbn4N5WjtShj4iC/7hpQggw2OBF0KK0ZkbMb0
-	obfFmdZJ19o03wRU0sLV+EhGDxUberckc2LAQMFbOoR2JMH7Porh7R61axgAY2nqKsfQpfLFeca
-	pBI0r+rPywCjdCj3NP/qIue9FbhP8rLvDTdetwaz2FZeyKi7Oqqdt/zucLikYaF158ntYjQT31F
-	focuKxAUjW8/fliNl9Fc7sgHRkn78dbXtm8HDCfqzS2emGrXffwHicZmeA8Pwk9m8lWLtYDan8r
-	imxxI0oUch97aU35ygMcO/rkAeFlfwio7Cy7oUDb+lg96an/RgMNKDuPpwruBzNgtT8wOReCfls
-	QxXRkQmoZy5YfnKoNZ8BIwhSORly9GHr9J84QutOfQgUjABK7teKJ+c9M3rOMUesbK+E1v3Zd8X
-	loHCsV2PyH+TptF/g4MgbMI1B3AjDFPmkuJnURrWYnTwi55
-X-Received: by 2002:a05:6870:318e:b0:448:8bdd:8358 with SMTP id 586e51a60fabf-47551c2914bmr29838746fac.15.1789053588033;
-        Thu, 10 Sep 2026 08:19:48 -0700 (PDT)
+        bh=Is6QCpSLv4TMEMoNx1AAjKAPoWKXWN2o91q0iAaVLcE=;
+        b=ak6PinjaR8jWWVqaS1uj2KQjwbCnNODD22bR+lVrIOLkwIyWNhoDtxQ8PjbbkXOUBG
+         XLP4fbS8chrzQ/6L23mWXF5u62kDs+C3ieOsbcN3Dtt0ZuhEijdiX913oV+FF6b2doOo
+         NvWocKFNYENUUEJpML7rWFjfUIc68A7epI4u+2M4WWCmzFo3kINK8ZmR7RiHJqBC2GRg
+         lUvcipAzV912NdaVL0GSTQeADnQsn3LSKgSFx1UXr5byys2QZbmBJs8Rrfa45NJY5yyu
+         MkzbhetluWVYKapu0bS8lT5mu/LBDbgmKgmBXkvtp+h9WhFhL7FdRuvSqmynyc3WNMLH
+         843A==
+X-Gm-Message-State: AFuF++nrbajEhVO/5w6hE5VS+6c895Y9ilki1pZoBmVeO6/wAXZsR0Hz
+	o6Ts8un0bvKaXaPRzI1LmPbAjim1Akc95QygZDKyBp5CmVm1oBTdjBr/
+X-Gm-Gg: AYBFou0bIEkW1503Wx8VUfGU7C8y5ZFCACU/+G5HQV98Tg8pDDTqjxrstyHZnrLzRCx
+	JapPEG8FZFSOVdWukyfd3fzHM46LScGxxD+LFCP6+eepWz3ADwX4FkX6QPD71F6OiPdodUez9aX
+	BPraxtjBjFmiBJJvuxqvPoSQ6oSDbcTUfjM6e7S9WatAHB7f2zwl6p8oztAlkDKgO+2/JbxGEqC
+	buYbX6N5whCpKAzoenHAPJrSN6O/7JDP9yM2XenY67DDJruWNM95u4Ifs6avQtZMeTmniMJidPq
+	2ce2a1ufYmog26hKxehN1/o6bu0nw4bg1w69IDFxv3IUcVI6f2PNHZYiXqnqkBXpcW71AkfUjk9
+	XTfHRp7LhS3X/lIMozM+ia7nm5f/loeGJ7H67im4Ml5MqlBYLcVdtpMfWNOP9fo5sKc8dYZYm+u
+	hYCmIu+06IL5tvoVU+B+1xxzxFhTeDvtv0OFebam/9NslbIfm+WbHORpk5boeONloYczWdGhrKg
+	EFFoX59h4Ow9wq8ZZ1Dw5P0RnUiQlnH7jsjGnGbG8Ha7Bv+
+X-Received: by 2002:a05:6808:1986:b0:495:feaa:9e3b with SMTP id 5614622812f47-4b965a75102mr24408459b6e.7.1789053657792;
+        Thu, 10 Sep 2026 08:20:57 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-475541a8becsm19532037fac.6.2026.09.10.08.19.46
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b971c98e07sm17859939b6e.18.2026.09.10.08.20.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Sep 2026 08:19:47 -0700 (PDT)
+        Thu, 10 Sep 2026 08:20:57 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7317a007-3995-47b3-b9f8-3aaf7702c7a4@roeck-us.net>
-Date: Thu, 10 Sep 2026 08:19:45 -0700
+Message-ID: <af4a28fc-e150-46f8-99a9-f8098c1ed949@roeck-us.net>
+Date: Thu, 10 Sep 2026 08:20:56 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,17 +70,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] hwmon: (pmbus/tda38740) Add driver for Infineon
- TDA38740/TDA38725
-To: Colin Huang <colin.huang2@amd.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- Colin Huang <u8813345@gmail.com>
-References: <20260910-add-tda38740-and-tda38725-v4-0-dbae7fabce09@gmail.com>
- <20260910-add-tda38740-and-tda38725-v4-2-dbae7fabce09@gmail.com>
+Subject: Re: [PATCH v3] Documentation: hwmon: (yogafan) adjust table alignment
+ for long model name
+To: sashiko-reviews@lists.linux.dev, Sergio Melas <sergiomelas@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+References: <20260910074505.1077544-1-sergiomelas@gmail.com>
+ <20260910074916.93F211F000FF@smtp.kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -126,251 +121,63 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260910-add-tda38740-and-tda38725-v4-2-dbae7fabce09@gmail.com>
+In-Reply-To: <20260910074916.93F211F000FF@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/10/26 05:35, Colin Huang wrote:
-> From: Colin Huang <u8813345@gmail.com>
+On 9/10/26 00:49, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] The patch silently introduces undocumented model additions and modifications to the hardware support table, which contradicts the commit message.
+> --
 > 
-> Add a PMBus driver for Infineon TDA38740 and TDA38725
-> single-voltage synchronous buck regulators.
+> commit ecc05eb9d5cd9f6474be8ef3ef43d5a812bf701e
+> Author: Sergio Melas <sergiomelas@gmail.com>
 > 
-> Signed-off-by: Colin Huang <u8813345@gmail.com>
-> ---
->   Documentation/hwmon/index.rst    |  1 +
->   Documentation/hwmon/tda38740.rst | 65 +++++++++++++++++++++++++++
->   drivers/hwmon/pmbus/Kconfig      |  9 ++++
->   drivers/hwmon/pmbus/Makefile     |  1 +
->   drivers/hwmon/pmbus/tda38740.c   | 94 ++++++++++++++++++++++++++++++++++++++++
->   5 files changed, 170 insertions(+)
+> Documentation: hwmon: (yogafan) adjust table alignment for long model name
 > 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index f07977a20271..aeff87b3d46d 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -265,6 +265,7 @@ Hardware Monitoring Kernel Drivers
->      sy7636a-hwmon
->      tc654
->      tc74
-> +   tda38740
->      thmc50
->      tmp102
->      tmp103
-> diff --git a/Documentation/hwmon/tda38740.rst b/Documentation/hwmon/tda38740.rst
-> new file mode 100644
-> index 000000000000..55ce12f14914
-> --- /dev/null
-> +++ b/Documentation/hwmon/tda38740.rst
-> @@ -0,0 +1,65 @@
-> +.. SPDX-License-Identifier: GPL-2.0-only
-> +
-> +====================================
-> +Kernel driver tda38740
-> +====================================
-> +
-> +Supported chips:
-> +  * Infineon TDA38740
-> +  * Infineon TDA38725
-> +
-> +    Prefix: 'tda38740'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet:
-> +      https://www.infineon.com/row/public/documents/24/49/infineon-tda38740-tda38725-datasheet-en.pdf
-> +
-> +Author: Colin Huang <u8813345@gmail.com>
-> +
-> +Description
-> +-----------
-> +
-> +The TDA38740 and TDA38725 are single-output synchronous buck regulators with a
-> +PMBus interface. They expose basic voltage, current, power and temperature
-> +telemetry through the standard PMBus hwmon interfaces.
-> +
-> +Sysfs entries
-> +-------------
-> +
-> +======================= =======================================================
-> +curr1_alarm		Input current alarm
-> +curr1_input		Measured input current
-> +curr1_label		"iin"
-> +
-> +curr2_crit		Critical maximum output current
-> +curr2_crit_alarm	Output current critical high alarm
-> +curr2_input		Measured output current
-> +curr2_label		"iout"
-> +
-> +in1_crit		Critical maximum input voltage
-> +in1_crit_alarm		Input voltage critical high alarm
-> +in1_input		Measured input voltage
-> +in1_label		"vin"
-> +
-> +in2_crit		Critical maximum output voltage
-> +in2_crit_alarm		Output voltage critical high alarm
-> +in2_input		Measured output voltage
-> +in2_label		"vout"
-> +in2_lcrit		Critical minimum output voltage
-> +in2_lcrit_alarm		Output voltage critical low alarm
-> +
-> +power1_alarm		Input power alarm
-> +power1_input		Measured input power
-> +power1_label		"pin"
-> +
-> +power2_input		Measured output power
-> +power2_label		"pout"
-> +
-> +temp1_crit		Critical high temperature
-> +temp1_crit_alarm	Chip temperature critical high alarm
-> +temp1_input		Measured temperature
-> +temp1_max		Maximum temperature
-> +temp1_max_alarm		Chip temperature high alarm
-> +======================= =======================================================
-> +
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index bcfdc4ce4c10..e4ca80dd0574 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -763,6 +763,15 @@ config SENSORS_TDA38640_REGULATOR
->   	  If you say yes here you get regulator support for Infineon
->   	  TDA38640 as regulator.
->   
-> +config SENSORS_TDA38740
-> +	tristate "Infineon TDA38725/TDA38740"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Infineon
-> +	  TDA38725 and TDA38740.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called tda38740.
-> +
->   config SENSORS_TPS25990
->   	tristate "TI TPS25990"
->   	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index e288fe72a437..eb06d47816fd 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -70,6 +70,7 @@ obj-$(CONFIG_SENSORS_STEF48H28)	+= stef48h28.o
->   obj-$(CONFIG_SENSORS_SQ24860)	+= sq24860.o
->   obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
->   obj-$(CONFIG_SENSORS_TDA38640)	+= tda38640.o
-> +obj-$(CONFIG_SENSORS_TDA38740)	+= tda38740.o
->   obj-$(CONFIG_SENSORS_TPS25990)	+= tps25990.o
->   obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
->   obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
-> diff --git a/drivers/hwmon/pmbus/tda38740.c b/drivers/hwmon/pmbus/tda38740.c
-> new file mode 100644
-> index 000000000000..6d3e9884f733
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/tda38740.c
-> @@ -0,0 +1,94 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Hardware monitoring driver for Infineon TDA38725/TDA38740
-> + *
-> + * Copyright (c) 2023 9elements GmbH
-> + *
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include "pmbus.h"
-> +
-> +/*
-> + * TDA38725/TDA38740 only support Linear format for VOUT related commands,
-> + * with exponents in the range of -8 to -12 (see datasheet VOUT_MODE
-> + * description). Direct format is not supported by this device.
-> + */
-> +static int tda38740_identify(struct i2c_client *client,
-> +			     struct pmbus_driver_info *info)
-> +{
-> +	int vout_mode;
-> +
-> +	vout_mode = pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
-> +	if (vout_mode < 0 || vout_mode == 0xff)
-> +		return vout_mode < 0 ? vout_mode : -ENODEV;
-> +
-> +	if ((vout_mode >> 5) != 0)
-> +		return -ENODEV;
-> +
+> This commit updates the reStructuredText table layout in the yogafan
+> documentation to accommodate a longer product family string for the newly
+> added IdeaPad 3 15ALC6 Ub model, preventing Sphinx build warnings.
+> 
+>> Update the reStructuredText table layout and column separators to
+>> accommodate the longer product family string for the newly added IdeaPad
+>> model (IdeaPad 3 15ALC6 Ub). This prevents Sphinx build warnings and
+>> maintains proper visual alignment.
+> 
+>> diff --git a/Documentation/hwmon/yogafan.rst b/Documentation/hwmon/yogafan.rst
+>> index 9ff5db5dc08ce..239c7b5761caf 100644
+>> --- a/Documentation/hwmon/yogafan.rst
+>> +++ b/Documentation/hwmon/yogafan.rst
+>> @@ -85,28 +85,30 @@ immediately to ensure the user knows the fan has stopped.
+>>   
+>>   ::
+>>   
+>> - MODEL (DMI PN) | FAMILY / SERIES  | EC OFFSET | FULL ACPI OBJECT PATH          | WIDTH  | MULTiplier
+>> - ----------------------------------------------------------------------------------------------------
+>> - 82N7           | Yoga 14cACN      | 0x06      | \_SB.PCI0.LPC0.EC0.FANS        |  8-bit | 100
+>> - 80V2 / 81C3    | Yoga 710/720     | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0        |  8-bit | 100
+> 
+> [ ... ]
+> 
+>> + MODEL (DMI PN) | FAMILY / SERIES     | EC OFFSET | FULL ACPI OBJECT PATH          | WIDTH  | MULTiplier
+>> + -------------------------------------------------------------------------------------------------------
+>> + 82N7           | Yoga 14cACN 2021    | 0x06      | \_SB.PCI0.LPC0.EC0.FANS        |  8-bit | 100
+>> + 81TD           | Yoga 740-15IML      | 0x06      | \_SB.PCI0.LPCB.EC0.FANS        |  8-bit | 100
+>> + 82KU           | IdeaPad 3 15ALC6 Ub | 0x06      | \_SB.PCI0.LPC0.EC0.FANS/FA2S   |  8-bit | 100
+> 
+> [Severity: Medium]
+> The commit message states this patch only adjusts table alignment to
+> accommodate the newly added IdeaPad 3 15ALC6 Ub model. However, it appears
+> this patch also silently adds an entirely new model (81TD | Yoga 740-15IML)
+> and modifies the name of an existing model (Yoga 14cACN to Yoga 14cACN 2021).
+> Should these unrelated hardware support additions and modifications be split
+> into a separate patch or explicitly mentioned in the commit message to
+> accurately reflect the changes made?
+> 
 
-What is the point of this code ? The PMBus core, in pmbus_identify_common(),
-already compares the configured mode (info->format[PSC_VOLTAGE_OUT]) with
-the value in the PMBUS_VOUT_MODE register and bails out if it does not match.
-The code here just seems to duplicate that. Am I missing something ?
-> +	info->format[PSC_VOLTAGE_OUT] = linear;
-> +
-> +	return 0;
-> +}
-> +
-> +static struct pmbus_driver_info tda38740_info = {
-> +	.pages = 1,
-> +	.format[PSC_VOLTAGE_IN] = linear,
-> +	.format[PSC_CURRENT_OUT] = linear,
-> +	.format[PSC_CURRENT_IN] = linear,
-> +	.format[PSC_POWER] = linear,
-> +	.format[PSC_TEMPERATURE] = linear,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
-> +	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
-> +	    | PMBUS_HAVE_IIN
-> +	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-> +	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
-> +	    | PMBUS_HAVE_POUT | PMBUS_HAVE_PIN,
-> +	.identify = tda38740_identify,
-> +};
-> +
-> +static int tda38740_probe(struct i2c_client *client)
-> +{
-> +	struct tda38740_data *data;
-> +
-
-This definition got lost, and I don't immediately see why it would be
-needed.
+Why those changes ? This should at least be explained in the commit
+description.
 
 Thanks,
 Guenter
-
-> +	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	memcpy(&data->info, &tda38740_info, sizeof(tda38740_info));
-> +
-> +	return pmbus_do_probe(client, &data->info);
-> +}
-> +
-> +static const struct i2c_device_id tda38740_id[] = {
-> +	{ .name = "tda38725"},
-> +	{ .name = "tda38740"},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, tda38740_id);
-> +
-> +static const struct of_device_id __maybe_unused tda38740_of_match[] = {
-> +	{ .compatible = "infineon,tda38725"},
-> +	{ .compatible = "infineon,tda38740"},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, tda38740_of_match);
-> +
-> +static struct i2c_driver tda38740_driver = {
-> +	.driver = {
-> +		.name = "tda38740",
-> +		.of_match_table = of_match_ptr(tda38740_of_match),
-> +	},
-> +	.probe = tda38740_probe,
-> +	.id_table = tda38740_id,
-> +};
-> +
-> +module_i2c_driver(tda38740_driver);
-> +
-> +MODULE_DESCRIPTION("PMBus driver for Infineon TDA38725/TDA38740");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS("PMBUS");
-> 
 
