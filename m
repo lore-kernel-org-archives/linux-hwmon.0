@@ -1,207 +1,186 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74A6472602
-	for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 18:29:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EDB54A68B7
+	for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 18:38:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789064975; cv=none; b=RUWlrp9IdaG1s/bR5oaX+PxgOYdpTjICh7rYpHM3uH3LDEjgWpsjlr6hJy+fQ7Vbvz9ZWZXgKACvHGiKOw6qVb5xYK6+X+D0FVt2/IdMj+xCRWHvbUVXvTEb2HXVmZBj4tFMAMQ06c+CIHxkHosMFcHTG80JgWwP1AoUujZpTIY=
+	t=1789065489; cv=none; b=AOw5eRbT+KrEJYO/OnWItn3f3Wfht9vefm8haTGO8d64vIYXqueLrmeatyF/2GbdsIQLonTT+TzWKImJxg5DG/qUZSEwL/YKcrHi3dQFz6a4c8DcrUGxIk3vdVb66AMxEzc3Jt15cDwwzAVz3AG8m5ZrA0xTViuR19rioh7upLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789064975; c=relaxed/simple;
-	bh=LoZgFSMbH6l2V8yXMUuVWMtfuVe3msV1ym68BSi9k70=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O+BLR9pRbSyj8URRfdu8QAieUGCxQA90C4cUp+HTGmrC+fnlPyr+3mXx0mMwjdvmRnutMuyjzQxyB6Ge03fcOKUCzBJuKOhIA70+uH9PyFuqi2Udd69iI6XDvcVXIK8bXkk9s79vUZzbQKtydJQ6CqHmSAUCNh9IzgpLgyOcUus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NipcsWLT; arc=none smtp.client-ip=209.85.210.175
+	s=arc-20240116; t=1789065489; c=relaxed/simple;
+	bh=XqQ/TBdyys53bJSV2TlOxB+9gn0LoZosuGJ+Op+jijg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=V3BfhFlOBN/N50Yf2CvTrpKI6g6JI0qX28guRRlbIoytCaAg90upYp4nAxKvjlKonKZy77MPDJhOS4jWjupe1J77jFNZLL3d5HRP3gXh9ceFQZwM+EGxKENCxwPBM4l+zXDwtic1AEKUMC96ZM1ctlkG1IiA3Uyjp+gPWcHpe28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ByiblXtc; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NipcsWLT"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-851cbd64814so7851b3a.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 11:29:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ByiblXtc"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38a0c7e841fso55561a91.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 11:38:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789064973; x=1789669773; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1789065487; x=1789670287; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=DxFdTsORvz4Di0mzXUD8oZCgI3pt+vNsjqEyUYZBOUM=;
-        b=NipcsWLTWGykpPhvvrKcNL1a0YfdEbtUTaE8qSwhlA/wGq+xj2C/S/ASooHxwvG5DB
-         P7ULLRttA57XgIKKrjvP9l2WrnbYrBNS8gzDUkjcspbzNpnKfDHgbaQP4Wd5QQETi29L
-         JzxzIPdeNWWvRRXmkI8spAZ5sX8VWw9ei8794LJJwmikmqukFevOH1HYp+nPXVG3SGPG
-         pHLHHvrPHEZ/3i/OkMijaL55xUjOHf7t0VZ+UhozjsdQ1gNxJu7cwyjNM+I+H6DZ6TC6
-         igC2TYJvE4nrg5a+BsDNj4V2YLQYohcTvBU/NrlYrXYCzqUD0WUoCmUE13oTQL+8Io3w
-         EQEg==
+        bh=9u7TJ9tgwm2KnuZFSYIca8LwnX5gbxqDtxG2LPSH6i0=;
+        b=ByiblXtc3+xG0Oh2cV0vBgSMKuqQtcRusXb89NrFQsnx41PBnsEtuNsoJ95Wrw2fMF
+         8RdITLXQ2BAgyIbQRdFDCTbBCNvrWhrhglJ4fSPw2G/Khp+aha2xy60L8EX92MDwC2q5
+         1n2d0lhk9L90B8Z/IHmcEnGRpAQnUFQFzweH2z+xskdkPUzwkiB042sQ7k7UdKKxP3yX
+         PjE0jP1l9ISxDvP7PJWkgkGSdf8PCnNj8gqSJkOXxuU3GgyB8xVrLSpJm9qkg2INdzs9
+         jC6zyRl7S5N2xWI4TPbPYsnMtmFELgKVjgZBfteAxH2aL7ec56dgJvSvbqM3k5hg961W
+         BVsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789064973; x=1789669773;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=DxFdTsORvz4Di0mzXUD8oZCgI3pt+vNsjqEyUYZBOUM=;
-        b=JyHXHxtzoYl9/tQ0iMEzeLcn4oCAeBPjppBq34eEYEtEIWHb5NFUjwXzfSy2hcsowT
-         zIV6VWrqiNawLSQ9X9GkR0pGu4+Igg6KdYHtvCj3D76Ns39Fz3eHbfeLf+eLOZ36Z0n4
-         M6hnftbiAQE2IFTmctzO0qLBQiyDnteU3+d+Q7iFPBM0J+Qk2c6rTX6THEVsygvPvAlx
-         HK06/gZU27pNGkD55M0KYzr+LXs5IegU4GityGeZX1RVoPWxMbI70zuzsxsS4Ivq99O7
-         oblRhbyeX2soTacqJYPlUiEAxz9pwzfK6vmbWYZCqbCKFz1v/WdFsmso4nGLwchO4z6s
-         mlyw==
-X-Gm-Message-State: AFuF++mnfWO8TNwj/o8e0SgEq7d4E1EUDmRaq/yhDnP2rRkm6IPCYbXF
-	kiM0CovO9k4Sau4VbWqMFsxEYwIY1ygZI+sxasnhGFddn1lAFLCceru8
-X-Gm-Gg: AYBFou21MJQx0Horr0IPoRdC7L67BHlMWM3U4unVUOdwkpP2ws8rXZaapl1UH0llum1
-	fth5SVJublieDW6N1bkchKFVzqt9Svqh5hUnH4mo8QmFGabwIh95yZuM3VMvyBcRbPSn53eH/no
-	ESIIxIP2vVsQIiFByRGy4tPGKsLmLL5rF+pZX/O30tu7TGHWU2Lvqtwx6csRLGu97XtKF4oER1V
-	UUEQv8m25ayODGet/qjrNl4SgSknLXV0bRumBYsy35dAdoYcowRthPD4MM8Z9lEsDoH+18npUFF
-	KDWoF9D+eeq5hWo4yRqPlzu+ZJY3omvrmDoeBIvwQ07m+UHqHTjtZy4O7VkFNc0pZuxP67Kcl/B
-	fOqCk/8BlY7pyT4u+knkeW7Uk4Bsm5NdTFpXRi0b0SOZ1GSghYRFgdasl1dXiiCHIm3YFAiCAhF
-	0D6A5+8dWi5prusca8xPqaQcX+Gfn1U/+hHO7CeWmLbYMlI+TZuSSFel8Qn/XWEEZn34pS3Uibu
-	D5RGIS3wO8f
-X-Received: by 2002:a05:6a00:1bc5:b0:86a:38af:2062 with SMTP id d2e1a72fcca58-86b34cea716mr50922b3a.26.1789064972414;
-        Thu, 10 Sep 2026 11:29:32 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc4c652aa8dsm111155a12.7.2026.09.10.11.29.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 11:29:31 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1789065487; x=1789670287;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=9u7TJ9tgwm2KnuZFSYIca8LwnX5gbxqDtxG2LPSH6i0=;
+        b=QXzYbWmBZWEOKUypMMaRu50PzAkzjc+aQRoJxn56nbUHfHVj7WbjAol+nv+CAq8d4Q
+         cJsJZA2t01ledVu+6Q5M0PJ4LImDiGZi1+9wGZhsaGBjg2websQqDqsyp4PJdtOLZceC
+         +p/vwwRFIjWMBSWHy/DitKCeNPHJdiRluEmL7HvSOzt+DgK7RWWwdAVjuxpDoZ31yS3u
+         ILWdkC+Fqd2NYwlkeQ8MhRQI+xXD5rZidhoaMT5RVGeAHszV8YVy93LL6Yqt5M/7Xgvl
+         RY6JRRjLn7v1IpBQPccsLYzwzMDfscljGHrgAcD7cx/7E3RviS7LrSZOZS73kdDVrjny
+         lgVQ==
+X-Forwarded-Encrypted: i=1; AKwUvBw3yaKj/FsrocEF+7Oy1wGl5uQZM9NoBc1QFwXlQG2A1GB6KtyC9avNPssiPruWRtyfHvSjlSL5S67eUw==@vger.kernel.org
+X-Gm-Message-State: AFuF++lwETov1IMEfRIKKf9I7J3akHxVFOxO4lO9eq6Sfwp+6a3FSocL
+	Mt8aWSUsGM8R5wZvEOzy+mWHJfr9fhPrl6X0gjHTMbAAZPaYEtVKPhFT
+X-Gm-Gg: AYBFou23CaN/45yLwWHtqV3KqXJGR/klLl3cuZ7d8cVWNx7weE9gv0bt+YaFfwQtEI/
+	iPwRJLw3M1zuSYScmO/ZzhfdPpBU9mO5aYSg+XHsSBfqcAMHAak5UDUu61ZF0nTxBCMLOS8SGl/
+	0Ml1LrPR+hUzQNKJVA6ax/0EY2Js7iBAOaxFG+k8ZymemxecVvpBeLrhH+pVbfsf2ZDM2v/fZC1
+	pmLUoKZyrOmHNjvZY0leMXGuZdz1lm+oRPWlhHLLTPWytlIxZEmqRmAXGbwX241g7jE2pY/qZa/
+	AZcciACMRGm3vlyG/K29cyh/6MpkO2L1ijehcpMIHlGnprFpeg7+ld9XS0CYXXxPE+fluzrSIYw
+	YwOt45FQ7iu2wzdpABr/EI/eXi1QwJzKfW6lZcgYlLBxplGUpM/PPasTOC9/rN2KN0MJOtU1zJ3
+	n/SCpckAKHqnfCxq/loXW+DcElPv3AP8kD6qKcNF4iY32PmptFgpULv8bPWs1yjS7C8ZSE1eJKL
+	7QnMLc5PQnm/4HLi4L1WIcR/W0x9twrBtDCtzSCSQNR+mKc
+X-Received: by 2002:a17:90b:35d2:b0:39d:8d38:8b04 with SMTP id 98e67ed59e1d1-39d9bbea1d3mr52593a91.1.1789065486698;
+        Thu, 10 Sep 2026 11:38:06 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d95752809sm851731a91.13.2026.09.10.11.38.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Sep 2026 11:38:06 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v7.3-rc3
-Date: Thu, 10 Sep 2026 11:29:30 -0700
-Message-ID: <20260910182930.1739489-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+Message-ID: <7a92a79e-e22a-4e34-9f11-4086b88f62cc@roeck-us.net>
+Date: Thu, 10 Sep 2026 11:38:03 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 08/14] mfd: remove unused aat2870 driver
+To: Arnd Bergmann <arnd@arndb.de>, Svyatoslav Ryhel <clamor95@gmail.com>,
+ Arnd Bergmann <arnd@kernel.org>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Bartosz Golaszewski <brgl@kernel.org>, Mark Brown <broonie@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Daniel Thompson <danielt@kernel.org>,
+ Helge Deller <deller@gmx.de>, devicetree@vger.kernel.org,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ dri-devel@lists.freedesktop.org, Jonathan Cameron <jic23@kernel.org>,
+ Jingoo Han <jingoohan1@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Linus Walleij <linusw@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-doc@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, mfd@lists.linux.dev,
+ Michael Hennerich <michael.hennerich@analog.com>,
+ patches@opensource.cirrus.com, Pavel Machek <pavel@kernel.org>,
+ Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Support Opensource <support.opensource@diasemi.com>
+References: <CAPVz0n0ryOns2sCJE_jFana9MVzwEj1QZuPEa8FNhGbHXnMB+A@mail.gmail.com>
+ <11652e5e-053e-45b0-98a0-0c1cb2aeedc4@app.fastmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <11652e5e-053e-45b0-98a0-0c1cb2aeedc4@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Linus,
+On 9/10/26 11:14, Arnd Bergmann wrote:
+> On Thu, Sep 10, 2026, at 18:40, Svyatoslav Ryhel wrote:
+>> __
+>> Hello Arnd! May you please spare AAT2870 from being removed? I have a
+>> device which uses aat2870 (LG Optimus 2X P990 Tegra 2, not upstreamed
+>> yet, but in process as well) and atm I am working on converting this
+>> driver to use OF. Thank you!
+> 
+> Sure, I have removed this patch from my series now.
+> 
+>> P. S. If you are planning to remove more old drivers, please CC me in
+>> since I may be interested in some additional driver upgrades for
+>> devices I own.
+> 
+> Please have a look at
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/log/?h=board-remove-7.3
+> 
+> I tried to be careful about figuring out exactly which drivers are
+> unused, but I'm sure there are still a few false positive and false
+> negative ones in there. I've added the current list of driver files below,
+> let me know if you see something that shouldn't be there.
+> 
+>       Arnd
+> 
+...
+> drivers/hwmon/ds620.c
+> drivers/hwmon/f75375s.c
+> drivers/hwmon/max1111.c
+> drivers/hwmon/max197.c
 
-Please pull hwmon fixes for Linux v7.3-rc3 from signed tag:
+I missed the rationale for removing those, but then I don't really
+mind either. I guess we'll hear if someone still uses any of those
+drivers/chips.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.3-rc3
-
-Thanks,
 Guenter
-------
 
-The following changes since commit df2908090cda368b01ff43709f51890076c56157:
-
-  Linux 7.3-rc2 (2026-09-06 15:07:20 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v7.3-rc3
-
-for you to fetch changes up to c88a6338ae485e4d6210cc74cdb7664d6476c925:
-
-  hwmon: (nct6694) do not expose enable on DTIN temperature channels (2026-09-09 18:16:35 -0700)
-
-----------------------------------------------------------------
-hwmon fixes for v7.3-rc3
-
-* Core
-
-  - Fix potential UAF in pec_store
-
-  - Ensure that 'dev' passed to hwmon_notify_event() is a hwmon device
-
-  - Document hwmon_notify_event()
-
-* applesmc: Fix key backlight workqueue leak on register failure
-
-* aspeed-pwm-tacho: Propagate reset deassert errors
-
-* asus_rog_ryujin: HID report fixes
-
-* chipcap2: Fix channels in humidity alarm notifications
-
-* corsair-cpro: debugfs fixes
-
-* gpd-fan: Documentation: replace full-width colon by a standard ASCII colon
-
-* gpio-fan: Take fan_data->lock in gpio_fan_shutdown(), and fix
-  use-after-free in alarm work
-
-* ina2xx: Fix in0 and curr1 alarm handling, and acquire hwmon_lock in
-  shunt_resistor_show()
-
-* ltc4282: Fully initializeclk_init_data
-
-* mcp9982: Propagate one-shot polling errors
-
-* nct6694: Do not expose enable on DTIN temperature channels
-
-* PMBus core: Clear generic status alarms with CLEAR_FAULTS
-
-* sht4x: Fix return value from heater_enable_store(), and add missing locks
-
-----------------------------------------------------------------
-Ali Ahmet Memis (1):
-      hwmon: (nct6694) do not expose enable on DTIN temperature channels
-
-Antonin Godard (1):
-      Documentation: hwmon: replace full-width colon by a standard ASCII colon
-
-Arie Miller (2):
-      hwmon: (asus_rog_ryujin) Validate HID report lengths
-      hwmon: (asus_rog_ryujin) Synchronize HID command and report handling
-
-Cong Nguyen (2):
-      hwmon: (applesmc) fix key backlight workqueue leak on register failure
-      hwmon: (gpio-fan) take fan_data->lock in gpio_fan_shutdown()
-
-Fan Wu (1):
-      hwmon: (gpio-fan) Fix use-after-free in alarm work
-
-Geert Uytterhoeven (1):
-      hwmon: (ltc4282) Make sure clk_init_data is fully initialized
-
-Guenter Roeck (5):
-      Documentation/hwmon: Document hwmon_notify_event()
-      hwmon: Fix potential UAF in pec_store
-      hwmon: Ensure that 'dev' passed to hwmon_notify_event() is a hwmon device
-      hwmon: (sht4x) Add missing locks
-      hwmon: (sht4x) Fix return value from heater_enable_store()
-
-Jared Kangas (4):
-      hwmon: (ina2xx) Acquire hwmon_lock in shunt_resistor_show()
-      hwmon: (ina2xx) Parameterize ina2xx_data in ina226_alert_read()
-      hwmon: (ina2xx) Replace masks with enum in alert functions
-      hwmon: (ina2xx) Decouple in0 and curr1 alarms
-
-Javier Carrasco (1):
-      hwmon: (chipcap2) fix channels in humidity alarm notifications
-
-Linmao Li (2):
-      hwmon: (corsair-cpro) Create debugfs entries after hwmon registration
-      hwmon: (corsair-cpro) Remove debugfs entries when probe fails
-
-Nikhil Gurudasani (1):
-      hwmon: (mcp9982) Propagate one-shot polling errors
-
-Pengpeng Hou (1):
-      hwmon: (aspeed-pwm-tacho) Propagate reset deassert errors
-
-Vishnu Razdan (1):
-      hwmon: (pmbus) Clear generic status alarms with CLEAR_FAULTS
-
-hanzhijian (1):
-      hwmon: (yogafan) fix non-kernel-doc comment
-
- Documentation/hwmon/gpd-fan.rst          |   2 +-
- Documentation/hwmon/hwmon-kernel-api.rst |  15 +++
- drivers/hwmon/applesmc.c                 |   7 +-
- drivers/hwmon/aspeed-pwm-tacho.c         |   4 +-
- drivers/hwmon/asus_rog_ryujin.c          |  30 +++++-
- drivers/hwmon/chipcap2.c                 |   9 +-
- drivers/hwmon/corsair-cpro.c             |  24 +++--
- drivers/hwmon/gpio-fan.c                 |  13 ++-
- drivers/hwmon/hwmon.c                    |  31 +++---
- drivers/hwmon/ina2xx.c                   | 163 ++++++++++++++++++++++++++-----
- drivers/hwmon/ltc4282.c                  |   2 +-
- drivers/hwmon/mcp9982.c                  |   2 +
- drivers/hwmon/nct6694-hwmon.c            |  35 ++++---
- drivers/hwmon/pmbus/pmbus_core.c         |   4 +-
- drivers/hwmon/sht4x.c                    |   8 +-
- drivers/hwmon/yogafan.c                  |   2 +-
- 16 files changed, 267 insertions(+), 84 deletions(-)
