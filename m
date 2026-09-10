@@ -1,68 +1,68 @@
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55BE949DB96
-	for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 14:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F37737C906
+	for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 15:19:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789052193; cv=none; b=TS8xk0Z188dsICJBQMyYLPi+yeBeN1gLy6PJzoH3VkbYMzOgF1EOsWLH+sfiKA1MCrhpQDd84yMdQebAuur1PJs32NeEMsPrZjzWHJbvihYKdo6kAaoJ1EdmdUdpfWvQ2q1ncRvkvzXSDJCbp2FGVhCX+X+vcT9ECYJy9kU3HBA=
+	t=1789053596; cv=none; b=sz5chZP08e/4WxV//sPJ/gd/b7I9ggk8ZBJIXf7CaZtqc7N4I6kWH9mwAbaApQRc9IbSAE0qsnoZplmPNb2gZsJhkvFfY1gVc090Ow+cJiDAeUKcXNjihbCSysjURz9gqm9yo2mMJGIR7kFMlCSKjyNGZkNgbSnFFj/ZhYm2mxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789052193; c=relaxed/simple;
-	bh=YSFIu6CrNW5GnEAP7cV78TEE1V6V6nRvjoaUzJKag4I=;
+	s=arc-20240116; t=1789053596; c=relaxed/simple;
+	bh=RS5fzbnrhNxA/GAN2337xKkxjWEl1P2eDhtbp5XkuB0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cvgZeCSE9+8uap300v401uG+QZAv6CBoNUVQLFPv97QKAwFWAZWEyzfWdevA2n8lNvusrqf5Myo4tcaYn/ImcRsIZdzXUx+7ur9+KkIJDr8JenXQmR/GdkE+9yuzegv2vVgJJOIRLEO7wWyW9GM2MGgIirnFv0QobCvNrNAL81s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XYE7rbMp; arc=none smtp.client-ip=209.85.167.174
+	 In-Reply-To:Content-Type; b=QZMS7CCvgrA/UjLjvsxC2en6aVejpTtsDjqih4ZY/ia5wxAn5iIr6l4na1k2/cCcXMNvBFPJNKNIyD09IXWerTmSJaLT9ZQlXBpRK2MrKQ9Datxeh1vpTyHP2oGKkTxlemMB0p3drLWZlqsJtETvfljm+tusbyHa7espMd0YWNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qC118meU; arc=none smtp.client-ip=209.85.160.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XYE7rbMp"
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-4b381337e1fso6921726b6e.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 07:56:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qC118meU"
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-46adf49ff3dso4687636fac.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 08:19:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789052190; x=1789656990; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789053588; x=1789658388; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=9lTm0yv3jtVyAOGkqkKEQgPKn1d5nHzjUribtnIURR8=;
-        b=XYE7rbMpC6Hhezfu9fpedxtbdvLtkw687pU6FtAw6lOT2xF34Bo8+AJ8hjaPrUsVol
-         QcdjMJGgyG4vQWZLSFX+4lW1iIcQRdI9WG75w1vppj+gRgdAE+h2Wdn7zRkCfIMUB+J7
-         I7QzGMSGjKaZwPxDES6hHk4eD79fH/DmwIpDlKyyzvUgl1VFyZrceDZIrVWlmEfIcWI0
-         oQ6WfWwqhz52JxCI/C4PdCPBGxaNP/qUkrkaqTThA20OXbQ5EqzYVoiTcDsSYBqpEkNg
-         nHhd8LL67qJPtTXp70zkaQrrTHx8drnIu+Emzx4wQDH0KV9Rl8oQ61DVXhswdj9Tv6r3
-         Cn4g==
+        bh=kglaqaLFoVxSEZyqvHDcD/nUChRlP6JQlA/ICImrCj0=;
+        b=qC118meUqb0I05UJQrGOAnZbx/ylGVMv4LaMhvCNLpxf0wNYSF48EBtwhc3bqQJYFP
+         4MH/Pyf8xWA6FyRNtEXzvABVpcHbcROBsOtRqyUHXrkb2/ygK3QeiE5+mBzlvfdDU0Nd
+         IEIsazaPprPzCDsn+VQTe3peFVS+s8rL/3Qef8AgSWbQzNhgSTDyGU/4JOq5d4JBaW9o
+         rdhmbM36yGtwthDort5SOQqU+p7gWBQEcLWjx/won7QtWcMhSOLPWodSOrEudWBR1+hI
+         LUhqpcZJ2i8OaxEikH2pMxxbqgc0u4sloxr25Q89OF5owBvlTlOXi3c1FkzJ9DmHD8tz
+         yAWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789052190; x=1789656990;
+        d=1e100.net; s=20251104; t=1789053588; x=1789658388;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=9lTm0yv3jtVyAOGkqkKEQgPKn1d5nHzjUribtnIURR8=;
-        b=DV+eGxYS31cqvZvoXrX6YMxeE6nBOB4SVh2fncIMVgRzLIJ8aOapY0dXUzhHs3mcgo
-         SDmzDflx9tcB4dU6gIUHQjuujEutkbPhq5hQliZvD2tfQaL/pi74Lyz4rzZfsp+rBIgK
-         2dugQgjPnq3qkphnVwrkhzcUHeIG8zQZEDfXOKF2XPSDrqGD4sNbdJGFgKMhpPghCu9+
-         G8QFIHIHY0SLa7ypZI5jFVQx+RhIesOIf12b2td8DXK4YWj4AVgtYlENwR1WsMAQ5rhu
-         SF91zGfwqc5Lqbl5ZRmTYNJFZyUq5sFrkzh5R1jQ49IEQIQtiV14M5sd6REgnOCcjc8t
-         K8OQ==
-X-Gm-Message-State: AFuF++nI+4gQ4zT+PQS6ZUqKqLNTG5VyEeUU7U2UQRvYNa4UccO6lGLP
-	cahPPLUeCeAyj5PbJpOyIQsjCit6Oh9BLW/3oIS66LyFMdJeYjEI5kd+87eOFpZr
-X-Gm-Gg: AYBFou0E59Pp+7J/uiFfLmYDuGQ+3YnTmC+/oCzF43UhrG/kOFYApFbA6b8CSpC8dNw
-	LwUkJbVEeP9JaoRvwqwBtYaa8r32LFHEmRcbWg4eZkIGDPXPWjrKQMs+x/LzPPpah5+nkN4k0KG
-	S1mJrpkXxQta0ZDeKX//JGoQcEueP+leMoriyWAnx5qBh0F+9zgL1NXAKH5NtdUTF2nAxLV6Ud3
-	v6m5ymYAB6i7sF+j9bV+0XCCPkQew4PGCwbsLF1gROICcyQcxs2yqo+/X0xTsrtD17ZnaxrbrpI
-	mjzFI/OILN+V7QxOkXC5++e4E2oYfgGSx4ew+fmfc+mgTy6s+UVh7WpbRv33aski/paK7RpM02B
-	ZrZBmLo9m0+Ke/CYWTIRwpHuL7CuQF3/siO4ikHwgVhWnL82eQ2YozJnqstS+FxO4//z7JtvrdS
-	JEncGh8yA22YLQ74Kld/4cMjrT8UbbHh2CIzBlgzLi9zmn70YSjhLKTxFYU7IV6z4zyBovFYtU7
-	3kvvNfpbZS0iijBevZJLVUoJ8PShRuX7sxAHd+xsO8nV0FB3Q==
-X-Received: by 2002:a05:6808:4f4b:b0:4bb:5bcf:b257 with SMTP id 5614622812f47-4bb5bcfbbfbmr18845694b6e.3.1789052190086;
-        Thu, 10 Sep 2026 07:56:30 -0700 (PDT)
+        bh=kglaqaLFoVxSEZyqvHDcD/nUChRlP6JQlA/ICImrCj0=;
+        b=HVaV1eDWZdihOjy3swdKx0fED+Og8bzlRHYVGEAbs8v14NSHd38IoLUTJIac2UH8VH
+         HeK+veCFq43lV37aoKr1qlMSQVvVWIlNfVImZhfYc7eO4FWs+S/rjODqlZmY9Nb0fQ/h
+         IgKiey90Vy1fKgBB1uFU9VOT+VOIIHxyGPcnj0FTe8pwOlYvOYQisE9V8nXoXgyBrkLN
+         ZW7Iu7QiFoBH0ANgUlVf66uG4+sxAeVKU8EMexDhZZSD0gpV8aT1L9vWPxYIltpDoKhA
+         vIDnDJekZPY1LYTVW2Cvfslnq5Yjn4rL10x1LwDfMHakRC3g+o2Kh79atu1fg4966AQr
+         lC4A==
+X-Gm-Message-State: AFuF++k5DdhC87GRutFYpes0I0f3uLrDZmvhXo+VydKvaQoBRAAMLAcT
+	yAMSOlhm1J1zIMqPhEVkdbFiweenXcBSufBzWNjyoCf4k21MvEPu9EAI
+X-Gm-Gg: AYBFou0Q4hAZR/JG57QMLyGx8/smqrAJOoRx9CeuYcZlf+KrfZCpSACrWaUF6LpYGsE
+	0UWfolFT25yTncEOvgwxUoO9XGrqN/dyAwaH8Osbn4N5WjtShj4iC/7hpQggw2OBF0KK0ZkbMb0
+	obfFmdZJ19o03wRU0sLV+EhGDxUberckc2LAQMFbOoR2JMH7Porh7R61axgAY2nqKsfQpfLFeca
+	pBI0r+rPywCjdCj3NP/qIue9FbhP8rLvDTdetwaz2FZeyKi7Oqqdt/zucLikYaF158ntYjQT31F
+	focuKxAUjW8/fliNl9Fc7sgHRkn78dbXtm8HDCfqzS2emGrXffwHicZmeA8Pwk9m8lWLtYDan8r
+	imxxI0oUch97aU35ygMcO/rkAeFlfwio7Cy7oUDb+lg96an/RgMNKDuPpwruBzNgtT8wOReCfls
+	QxXRkQmoZy5YfnKoNZ8BIwhSORly9GHr9J84QutOfQgUjABK7teKJ+c9M3rOMUesbK+E1v3Zd8X
+	loHCsV2PyH+TptF/g4MgbMI1B3AjDFPmkuJnURrWYnTwi55
+X-Received: by 2002:a05:6870:318e:b0:448:8bdd:8358 with SMTP id 586e51a60fabf-47551c2914bmr29838746fac.15.1789053588033;
+        Thu, 10 Sep 2026 08:19:48 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b971c98e07sm17788638b6e.18.2026.09.10.07.56.29
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-475541a8becsm19532037fac.6.2026.09.10.08.19.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Sep 2026 07:56:29 -0700 (PDT)
+        Thu, 10 Sep 2026 08:19:47 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a69a9492-45f8-4072-8ad0-b023a5c139d0@roeck-us.net>
-Date: Thu, 10 Sep 2026 07:56:28 -0700
+Message-ID: <7317a007-3995-47b3-b9f8-3aaf7702c7a4@roeck-us.net>
+Date: Thu, 10 Sep 2026 08:19:45 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,13 +70,17 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: (cgbc-hwmon): Add some temperature sensors
-To: sashiko-reviews@lists.linux.dev,
- "Thomas Richard (congatec GmbH)" <thomas.richard@bootlin.com>
-Cc: linux-hwmon@vger.kernel.org
-References: <20260910-cgbc-hwmon-fix-and-new-sensors-v1-0-ef13ae2fa147@bootlin.com>
- <20260910-cgbc-hwmon-fix-and-new-sensors-v1-2-ef13ae2fa147@bootlin.com>
- <20260910134538.76E6F1F000FF@smtp.kernel.org>
+Subject: Re: [PATCH v4 2/2] hwmon: (pmbus/tda38740) Add driver for Infineon
+ TDA38740/TDA38725
+To: Colin Huang <colin.huang2@amd.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ Colin Huang <u8813345@gmail.com>
+References: <20260910-add-tda38740-and-tda38725-v4-0-dbae7fabce09@gmail.com>
+ <20260910-add-tda38740-and-tda38725-v4-2-dbae7fabce09@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,88 +126,251 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260910134538.76E6F1F000FF@smtp.kernel.org>
+In-Reply-To: <20260910-add-tda38740-and-tda38725-v4-2-dbae7fabce09@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/10/26 06:45, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] The patch adds a 15th voltage sensor ('12V Standby Voltage', mapping to `in14_input`) to the driver's string labels and documentation, but fails to add its corresponding configuration entry to the `cgbc_hwmon_info` array. As a result, the hardware monitoring core will silently ignore the 15th channel and fail to expose it to sysfs.
-> --
+On 9/10/26 05:35, Colin Huang wrote:
+> From: Colin Huang <u8813345@gmail.com>
 > 
-> commit 0d30ff3c376bb1134975af10205e094badb07304
-> Author: Thomas Richard (congatec GmbH) <thomas.richard@bootlin.com>
+> Add a PMBus driver for Infineon TDA38740 and TDA38725
+> single-voltage synchronous buck regulators.
 > 
-> hwmon: (cgbc-hwmon): Add some temperature sensors
+> Signed-off-by: Colin Huang <u8813345@gmail.com>
+> ---
+>   Documentation/hwmon/index.rst    |  1 +
+>   Documentation/hwmon/tda38740.rst | 65 +++++++++++++++++++++++++++
+>   drivers/hwmon/pmbus/Kconfig      |  9 ++++
+>   drivers/hwmon/pmbus/Makefile     |  1 +
+>   drivers/hwmon/pmbus/tda38740.c   | 94 ++++++++++++++++++++++++++++++++++++++++
+>   5 files changed, 170 insertions(+)
 > 
-> This commit adds several new temperature sensors, updating documentation and
-> string labels to match the Congatec board controller documentation. It also
-> modifies existing labels.
-> 
->> diff --git a/drivers/hwmon/cgbc-hwmon.c b/drivers/hwmon/cgbc-hwmon.c
->> index 2effa0b562862..098896ec8c6f6 100644
->> --- a/drivers/hwmon/cgbc-hwmon.c
->> +++ b/drivers/hwmon/cgbc-hwmon.c
->> @@ -41,32 +41,42 @@ enum cgbc_sensor_types {
-> [ ... ]
->>   static const char * const cgbc_hwmon_labels_in[] = {
->> -	"CPU Voltage",
->> +	"CPU Core Voltage",
->>   	"DC Runtime Voltage",
->>   	"DC Standby Voltage",
->>   	"CMOS Battery Voltage",
->> -	"Battery Voltage",
->> +	"Battery Supply Voltage",
->>   	"AC Voltage",
->>   	"Other Voltage",
->> -	"5V Voltage",
->> +	"5V Runtime Voltage",
->>   	"5V Standby Voltage",
->> -	"3V3 Voltage",
->> +	"3V3 Runtime Voltage",
->>   	"3V3 Standby Voltage",
->>   	"VCore A Voltage",
->>   	"VCore B Voltage",
->> -	"12V Voltage",
->> +	"12V Runtime Voltage",
->> +	"12V Standby Voltage",
->>   };
-> 
-> [ ... ]
-> 
->> @@ -255,7 +265,12 @@ static const struct hwmon_channel_info * const cgbc_hwmon_info[] = {
->>   			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
->>   			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
->>   			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
->> -			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL),
->> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL),
->>   	HWMON_CHANNEL_INFO(in,
->>   			   HWMON_I_INPUT | HWMON_I_LABEL, HWMON_I_INPUT | HWMON_I_LABEL,
->>   			   HWMON_I_INPUT | HWMON_I_LABEL, HWMON_I_INPUT | HWMON_I_LABEL,
-> 
-> [Severity: Medium]
-> This patch adds a 15th voltage label ("12V Standby Voltage"), but is the
-> corresponding configuration entry missing from the cgbc_hwmon_info array?
-> 
-> Looking at the 'in' channel info array here, it only has 14 configuration
-> elements.
-> 
-> Since the hardware monitoring core iterates over the cgbc_hwmon_info
-> array and stops after 14 entries for 'in', will it silently ignore the 15th
-> channel and fail to expose it to sysfs?
-> 
-Sashiko has a point here. Maybe make the subject and description a bit more generic
-("Add some sensors" or similar, document that a voltage sensor was added as well,
-and add the missing channel info entry.
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index f07977a20271..aeff87b3d46d 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -265,6 +265,7 @@ Hardware Monitoring Kernel Drivers
+>      sy7636a-hwmon
+>      tc654
+>      tc74
+> +   tda38740
+>      thmc50
+>      tmp102
+>      tmp103
+> diff --git a/Documentation/hwmon/tda38740.rst b/Documentation/hwmon/tda38740.rst
+> new file mode 100644
+> index 000000000000..55ce12f14914
+> --- /dev/null
+> +++ b/Documentation/hwmon/tda38740.rst
+> @@ -0,0 +1,65 @@
+> +.. SPDX-License-Identifier: GPL-2.0-only
+> +
+> +====================================
+> +Kernel driver tda38740
+> +====================================
+> +
+> +Supported chips:
+> +  * Infineon TDA38740
+> +  * Infineon TDA38725
+> +
+> +    Prefix: 'tda38740'
+> +
+> +    Addresses scanned: -
+> +
+> +    Datasheet:
+> +      https://www.infineon.com/row/public/documents/24/49/infineon-tda38740-tda38725-datasheet-en.pdf
+> +
+> +Author: Colin Huang <u8813345@gmail.com>
+> +
+> +Description
+> +-----------
+> +
+> +The TDA38740 and TDA38725 are single-output synchronous buck regulators with a
+> +PMBus interface. They expose basic voltage, current, power and temperature
+> +telemetry through the standard PMBus hwmon interfaces.
+> +
+> +Sysfs entries
+> +-------------
+> +
+> +======================= =======================================================
+> +curr1_alarm		Input current alarm
+> +curr1_input		Measured input current
+> +curr1_label		"iin"
+> +
+> +curr2_crit		Critical maximum output current
+> +curr2_crit_alarm	Output current critical high alarm
+> +curr2_input		Measured output current
+> +curr2_label		"iout"
+> +
+> +in1_crit		Critical maximum input voltage
+> +in1_crit_alarm		Input voltage critical high alarm
+> +in1_input		Measured input voltage
+> +in1_label		"vin"
+> +
+> +in2_crit		Critical maximum output voltage
+> +in2_crit_alarm		Output voltage critical high alarm
+> +in2_input		Measured output voltage
+> +in2_label		"vout"
+> +in2_lcrit		Critical minimum output voltage
+> +in2_lcrit_alarm		Output voltage critical low alarm
+> +
+> +power1_alarm		Input power alarm
+> +power1_input		Measured input power
+> +power1_label		"pin"
+> +
+> +power2_input		Measured output power
+> +power2_label		"pout"
+> +
+> +temp1_crit		Critical high temperature
+> +temp1_crit_alarm	Chip temperature critical high alarm
+> +temp1_input		Measured temperature
+> +temp1_max		Maximum temperature
+> +temp1_max_alarm		Chip temperature high alarm
+> +======================= =======================================================
+> +
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index bcfdc4ce4c10..e4ca80dd0574 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -763,6 +763,15 @@ config SENSORS_TDA38640_REGULATOR
+>   	  If you say yes here you get regulator support for Infineon
+>   	  TDA38640 as regulator.
+>   
+> +config SENSORS_TDA38740
+> +	tristate "Infineon TDA38725/TDA38740"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for Infineon
+> +	  TDA38725 and TDA38740.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called tda38740.
+> +
+>   config SENSORS_TPS25990
+>   	tristate "TI TPS25990"
+>   	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index e288fe72a437..eb06d47816fd 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -70,6 +70,7 @@ obj-$(CONFIG_SENSORS_STEF48H28)	+= stef48h28.o
+>   obj-$(CONFIG_SENSORS_SQ24860)	+= sq24860.o
+>   obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
+>   obj-$(CONFIG_SENSORS_TDA38640)	+= tda38640.o
+> +obj-$(CONFIG_SENSORS_TDA38740)	+= tda38740.o
+>   obj-$(CONFIG_SENSORS_TPS25990)	+= tps25990.o
+>   obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
+>   obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
+> diff --git a/drivers/hwmon/pmbus/tda38740.c b/drivers/hwmon/pmbus/tda38740.c
+> new file mode 100644
+> index 000000000000..6d3e9884f733
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/tda38740.c
+> @@ -0,0 +1,94 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Hardware monitoring driver for Infineon TDA38725/TDA38740
+> + *
+> + * Copyright (c) 2023 9elements GmbH
+> + *
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include "pmbus.h"
+> +
+> +/*
+> + * TDA38725/TDA38740 only support Linear format for VOUT related commands,
+> + * with exponents in the range of -8 to -12 (see datasheet VOUT_MODE
+> + * description). Direct format is not supported by this device.
+> + */
+> +static int tda38740_identify(struct i2c_client *client,
+> +			     struct pmbus_driver_info *info)
+> +{
+> +	int vout_mode;
+> +
+> +	vout_mode = pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
+> +	if (vout_mode < 0 || vout_mode == 0xff)
+> +		return vout_mode < 0 ? vout_mode : -ENODEV;
+> +
+> +	if ((vout_mode >> 5) != 0)
+> +		return -ENODEV;
+> +
+
+What is the point of this code ? The PMBus core, in pmbus_identify_common(),
+already compares the configured mode (info->format[PSC_VOLTAGE_OUT]) with
+the value in the PMBUS_VOUT_MODE register and bails out if it does not match.
+The code here just seems to duplicate that. Am I missing something ?
+> +	info->format[PSC_VOLTAGE_OUT] = linear;
+> +
+> +	return 0;
+> +}
+> +
+> +static struct pmbus_driver_info tda38740_info = {
+> +	.pages = 1,
+> +	.format[PSC_VOLTAGE_IN] = linear,
+> +	.format[PSC_CURRENT_OUT] = linear,
+> +	.format[PSC_CURRENT_IN] = linear,
+> +	.format[PSC_POWER] = linear,
+> +	.format[PSC_TEMPERATURE] = linear,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
+> +	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
+> +	    | PMBUS_HAVE_IIN
+> +	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+> +	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+> +	    | PMBUS_HAVE_POUT | PMBUS_HAVE_PIN,
+> +	.identify = tda38740_identify,
+> +};
+> +
+> +static int tda38740_probe(struct i2c_client *client)
+> +{
+> +	struct tda38740_data *data;
+> +
+
+This definition got lost, and I don't immediately see why it would be
+needed.
 
 Thanks,
 Guenter
 
-
-
+> +	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	memcpy(&data->info, &tda38740_info, sizeof(tda38740_info));
+> +
+> +	return pmbus_do_probe(client, &data->info);
+> +}
+> +
+> +static const struct i2c_device_id tda38740_id[] = {
+> +	{ .name = "tda38725"},
+> +	{ .name = "tda38740"},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, tda38740_id);
+> +
+> +static const struct of_device_id __maybe_unused tda38740_of_match[] = {
+> +	{ .compatible = "infineon,tda38725"},
+> +	{ .compatible = "infineon,tda38740"},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, tda38740_of_match);
+> +
+> +static struct i2c_driver tda38740_driver = {
+> +	.driver = {
+> +		.name = "tda38740",
+> +		.of_match_table = of_match_ptr(tda38740_of_match),
+> +	},
+> +	.probe = tda38740_probe,
+> +	.id_table = tda38740_id,
+> +};
+> +
+> +module_i2c_driver(tda38740_driver);
+> +
+> +MODULE_DESCRIPTION("PMBus driver for Infineon TDA38725/TDA38740");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS("PMBUS");
+> 
 
