@@ -1,347 +1,357 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 591DF47FAF5;
-	Thu, 10 Sep 2026 11:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789041346; cv=none; b=YrtxF3JfYAu3RGDCjttzLU3fYIONsbBCWgI+sGf6EwsPXB3GAX1JlElFK3qbztiosejs0KEgWheUeO7NyeUSn5fvUZio9fHianig9jI5BCvUuPuddfxpggNXJRf7F/budQcay7prnH/U9ka1xmLo+nLzugyPVADooziKWXYzyDk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789041346; c=relaxed/simple;
-	bh=UUaEgNeNMccJLAoF7pwC14reszTjJaGKomlQDaMeR5c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rWDyQJYi7yquKUCmIAuIc7GNl/9gYJL9Jty0k5gzN6H3JbNCRHn/9uxdeLUbu4O4XoQGsV7isSRZa+Oc++mmvQZivpidRj8dLKlEzYJ8Z55ZKm4otYvo0jY309KMLiVpV5tL6SbqK+jWeg+WzPG80wyWGgvM1yYWVxqFTtpoiSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MPO74S6D; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7B9481AA4
+	for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 12:35:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789043756; cv=pass; b=BF8tn7Zdbt1GEXwbs3wW98ndi4akgPhtClw/0QyvLtaF6wDTBjL2QF1veapRlBg7+3m/Xncv1c07gj4lFTT184200fEhixAWQSzPlTX0JWsMhlqCFUMJ1tkb+h6DUWdJHx85Dt/fn54E8qTWwPuYB9cBf/7Zh0q+ssQcDalAJrk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789043756; c=relaxed/simple;
+	bh=3QNl9J8mitkeiSvGDN/UT/SMZ+Mm0hyaBOOHnWAVZKk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l0/UHJODWXnjAOnxcmalFivqQ1WnoytWxefvNaVjnJLARBAbsm7cGvl8inwluW9fbtEyhlmjjbBW6kuwQ8Mpx+w4C21OTG0rQxhCMa1VtLalo0lKDeKf/rH806FpKDPrz7PeqWCIl1/4QEW0MIVfMrPN25j1eeGPvM8gqJ7eLAw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ayC0bF8k; arc=pass smtp.client-ip=209.85.217.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MPO74S6D"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94F0F1F000FF;
-	Thu, 10 Sep 2026 11:55:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789041344;
-	bh=q/ZoUG1g58Wphg9XuXpQn8gD79V0mdJu+nv6/V83IPY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=MPO74S6Dz7p7zDx3yU8cMO9igOOmAIxnG+mUzY3DzcSMwIe+y191wdNNZwbsztuk2
-	 ZCr2lADtMUyAgT3aLB7/cF7hxM/iJOYFN5DWua7shyovAs31hOeIKbFhUh8aTz+75i
-	 YyxFcA65hIcgsecJq5nzJkglnZC3QiZOTfJUO3q8u2aAc3PIbd4Ig0XJ7N171gN5rQ
-	 SkwXhOdXCRQOfElljk2Yd7MdRQkzg0wpCgcyVulbI6vJ/4ey0SPZwvtgnJp9etqM7h
-	 Y2s9iNP9YJ2yeYyrHTyMsUL0HiRZLyd0xc9prjoFVZ4b7H8LjLwB9xAoH+Y6u0UK3R
-	 k92KDuCObKyfg==
-Date: Thu, 10 Sep 2026 12:55:39 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Ariana Lazar <ariana.lazar@microchip.com>
-Cc: Jonathan Cameron <jic23@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: iio: adc: add support for PAC1711
-Message-ID: <aqKauqCxYwo8_nxM@squawk>
-References: <20260909-pac1711-v3-0-dff81003b82f@microchip.com>
- <20260909-pac1711-v3-1-dff81003b82f@microchip.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ayC0bF8k"
+Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-78fb1fb9508so654072137.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 05:35:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789043753; cv=none;
+        d=google.com; s=arc-20260327;
+        b=BQrbZ1z+mRz5witAupsFBBy0IUyfs/cYLYnChwzM2i/z3XICsXvfQVfNam6FaU3tJl
+         3EmpWKNI0frHyXGFyW24bpDOLE4/BvCeYQe7iOAUVuMbHX9Y6p0HUDGNo/wSs0ML7LhS
+         wZpJwHfBq7g/U+Amz94E1+O9w2bopl1td8lYL9Wy/EAOuKtLphQJeL2rnJx8tm2/ZeHH
+         wMk/EXyjPnhrCQF/T7g5im0auTy8oQW2UFmyHYzzIl85M2l2M96GB7MolfdhLoudKuQd
+         FMHxuHYYqPAfiEMlhb7eq5D4q1gELQQ+HPL84nNMFEid4ZWMft308OkBGJvrdxqbPoy1
+         OEFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=USiUqUD8S/Y9N+JUYgnVXLlnBrLijvaF9UlhS8aFiXQ=;
+        fh=ZK/zikAtlrA+DXAKA7IVY6iYJssSfIl0itpwJL+ckcE=;
+        b=pvC2+vmldTVRfN0FrUyg7occF1W8PYO2io4ir6BFj1EVk9CwucFY5JPxUSajivscCQ
+         QF8o7x1zvPwVW+bOdG6YkfXIXn7mr3SKUW3RT6rwpbWH01UL8cAttS4DSK/mX23CnO6t
+         snIjyk0/BSU7oZesHiwcBlOvsqj8HDHDGUwqzHyvd28cGtrwwGcSdFegFHcVpjXxjuI0
+         vdVEMN0mgWCeOLp47BSeii5M8T7GRvYA7nBvk1xb88VSB5SaCOnUGDQlgkDyh7FVV9l4
+         zqWZlAUHgvaO09avRI5z3WkyqcLP6SKYVwXTaE1Z1i2Vfd1cAZXJTRcrKzHkI/kJn4RY
+         N05A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789043753; x=1789648553; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=USiUqUD8S/Y9N+JUYgnVXLlnBrLijvaF9UlhS8aFiXQ=;
+        b=ayC0bF8k6H8t+Z2k24lB2s+2ovZFT35f05B8BP2UUaYrrzFdixaJkbLn38cTMizLoZ
+         eCemnrUrQ6AtJs5fTgUTu1xsgq3mmOETqYKVyuy+RBlWn9/3ONqD26uTODMavumCgM2+
+         4M6wzdH0uKs/q8IRFxfxCQhlDTeeYlL8YI+xiULgiNr8V/bFeb4V1Ai7EKtxY4zonYLZ
+         IQu+pWme5mBup/Toy0UiI6V4Bc0NHGtquuYRe1cCEG5Lm7T19wEQnOuljANGva7DoYRl
+         pd/IYOcnjNA33NFhbFW+07GBgCOrBb+gnszS3eh+1iNYO9rlCwDJXqToxGGIyffeRkFq
+         yOfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789043753; x=1789648553;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=USiUqUD8S/Y9N+JUYgnVXLlnBrLijvaF9UlhS8aFiXQ=;
+        b=F8Sdmn9ylUTdMSY5XCweft2v2qLLh+Q9BiBfmWYju9kPgemPnImjaxp5o59q/TPq0l
+         LMEGCaMRdpA+cO7Or7RAMXWcsdNhG/Xq+TECzhgzKNSi0MKBq7QUFZirYMe/JhvT83Qu
+         J2yUm++Q/g81gpTeiVUru8FWYhzHMwN/td4elbQOqo4JjL5ViE60vwBiberIARfJfI1Y
+         j7vKSb5yIdH/yPNFg5cCkao94QghHgHoUyy02rbaHoEPknP/JF06BFccPOYc7PIEd7vV
+         1ppDvNHtrwOjRfh/dbtpLOI9l9DRPLs82AizX64jRKprcI/Zy7G6p69iCg0n39aWmYMC
+         ajRw==
+X-Forwarded-Encrypted: i=1; AKwUvBz68R1F0hU8zWAAii4WEZgrvQpzPb1VlY6VyXguHyg7R785Xuukr9Esm9mNdDQjr8xUYQjiaHcZYCaY/g==@vger.kernel.org
+X-Gm-Message-State: AFuF++lE17AT/sLGZDICsY95Na7tDAFbOLNywqoJoOovaQXj+flNgnvQ
+	p48Q4lUh0MbNUbLR/jlhOvCtdoVyRvIKKpQK1beT1ENh7z1Y8la1BwSy/dfO3ln4Q7gsS8GL361
+	lFLUNi70dWWc5lGyy3FChmWmQjfwxV+Y=
+X-Gm-Gg: AYBFou3kwh9qUdVPNfQfWV/LwtxaLMkviCcMONEeTVxZsNClMdtvZQrFYjoMMDHgECL
+	msrGyunyk6JYD13bVXyMGGhKg2g8VD61x734LdYaRogsThexYoT3Fg18wgv3Jtiwp2w3+D4+clp
+	FWqZCE6qMjrC6AJrpB/N5q9UUAITVTrMY7UWByudXkJMBCL7tCAVGiXiOGD8rtqb5f3NyISxRki
+	81xo8LU41dlwn5NoqSiFvcsTJ6aBSjHqE+OotNK/AKWk0W4dO/h8jfFPPxdxSNQmXgTq6YYk5f4
+	15EGoLvivxVnLCnXpzWMEF1oN37bEYFLuE+/hpIUj5ziWCLnBwHnfh+3mM1qAFGWpD1GqQ==
+X-Received: by 2002:a67:eb48:0:b0:791:740b:7ce6 with SMTP id
+ ada2fe7eead31-791741bc3bemr534083137.11.1789043753031; Thu, 10 Sep 2026
+ 05:35:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="/MoetIXoV046mHB9"
-Content-Disposition: inline
-In-Reply-To: <20260909-pac1711-v3-1-dff81003b82f@microchip.com>
-
---/MoetIXoV046mHB9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20260910-add-tda38740-and-tda38725-v3-0-3e87637da3d6@gmail.com>
+ <20260910-add-tda38740-and-tda38725-v3-2-3e87637da3d6@gmail.com> <045b177a-7501-4c73-871e-5d9f78d6bcce@roeck-us.net>
+In-Reply-To: <045b177a-7501-4c73-871e-5d9f78d6bcce@roeck-us.net>
+From: Colin Huang <u8813345@gmail.com>
+Date: Thu, 10 Sep 2026 20:35:41 +0800
+X-Gm-Features: AcwNN1XoHSr8FamRmjmrT765YkGEYJIbBi0T4ehpgPPy_ta7um_0KmhY6LlEwRM
+Message-ID: <CAPBH0A81ksHcGJPar-rTU+UVfOTxuV_RtSwdV1cuYEdhoWeo_g@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] hwmon: (pmbus/tda38740) Add driver for Infineon TDA38740/TDA38725
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Colin Huang <colin.huang2@amd.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 09, 2026 at 03:23:34PM +0300, Ariana Lazar wrote:
-> This is the device tree schema for Microchip PAC1711, PAC1721, PAC1811 and
-> PAC1821 single-channel power monitor with accumulator. The PAC1711 and
-> PAC1721 devices use 12-bit resolution for voltage and current measurements
-> and 24 bits for power calculations, while PAC1811 and PAC1821 have 16-bit
-> resolution and use 32 bits for power calculations. The 56-bit accumulator
-> register accumulates power (energy) or current (Coulomb counter).
->=20
-> PAC1711 and PAC1811 measure up to 42V Full-Scale Range, respectively 9V f=
-or
-> PAC1721 and PAC1821.
->=20
-> Signed-off-by: Ariana Lazar <ariana.lazar@microchip.com>
-> ---
->  .../bindings/iio/adc/microchip,pac1711.yaml        | 183 +++++++++++++++=
-++++++
->  MAINTAINERS                                        |   6 +
->  2 files changed, 189 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/iio/adc/microchip,pac1711.=
-yaml b/Documentation/devicetree/bindings/iio/adc/microchip,pac1711.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..c10b4b83a08d690b8045a3f42=
-d4e43d17a8058d7
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/adc/microchip,pac1711.yaml
-> @@ -0,0 +1,183 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/adc/microchip,pac1711.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip PAC1711 Power Monitors with Accumulator
-> +
-> +maintainers:
-> +  - Ariana Lazar <ariana.lazar@microchip.com>
-> +
-> +description: |
-> +  This device is part of the Microchip family of Power Monitors with Acc=
-umulator.
-> +  Datasheet links:
-> +  [PAC1711]: https://ww1.microchip.com/downloads/aemDocuments/documents/=
-MSLD/ProductDocuments/PAC1711-Data-Sheet-DS20007058.pdf
-> +  [PAC1721]: https://ww1.microchip.com/downloads/aemDocuments/documents/=
-MSLD/ProductDocuments/PAC1721-Single-Channel-Power-Monitor-with-Accumulator=
--DS20007088.pdf
-> +  [PAC1811]: https://ww1.microchip.com/downloads/aemDocuments/documents/=
-MSLD/ProductDocuments/DataSheets/PAC1811-Data-Sheet-DS20007066.pdf
-> +  [PAC1821]: https://ww1.microchip.com/downloads/aemDocuments/documents/=
-MSLD/ProductDocuments/DataSheets/PAC1821-Data-Sheet-DS20007097.pdf
-> +
-> +  PAC1711, PAC1721, PAC1811 and PAC1821 are Single Channel Power Monitors
-> +  with Accumulator, having 12-bit or 16-bit resolution. The devices PAC1=
-711
-> +  and PAC1811 can measure up to 42V Full-Scale Range, respectively 9V
-> +  Full-Scale Range for PAC1721 and PAC1821.
-> +
+Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2026=E5=B9=B49=E6=9C=8810=E6=
+=97=A5=E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=884:55=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On 9/9/26 23:18, Colin Huang wrote:
+> > From: Colin Huang <u8813345@gmail.com>
+> >
+> > Add a PMBus driver for Infineon TDA38740 and TDA38725
+> > single-voltage synchronous buck regulators.
+> >
+> > Signed-off-by: Colin Huang <u8813345@gmail.com>
+> > ---
+> >   drivers/hwmon/pmbus/Kconfig    |   9 +++
+> >   drivers/hwmon/pmbus/Makefile   |   1 +
+> >   drivers/hwmon/pmbus/tda38740.c | 150 ++++++++++++++++++++++++++++++++=
++++++++++
+>
+> Documentation is missing.
+>
+Hi Guenter,
 
-> +  The accumulation-source property aims to specify what kind of hardware=
- is
-> +  intended to be used/available for the user. There are two main cases h=
-ere:
-> +    - the user wants to measure also the current/power consumed before t=
-he
-> +      driver insertion (e.g. from the boot to user control) and if this =
-is a
-> +      runtime setting, the hardware accumulator will be reset by the def=
-ault
-> +      configuration the driver starts with.
-> +    - the driver does not know what type of hardware it's dealing with. =
-In
-> +      case the part is monitoring the charge/discharge current it does n=
-ot
-> +      make sense in user-space to change the accumulator to calculate en=
-ergy.
-> +      Same if the hardware is intended to calculate energy it does not m=
-ake
-> +      sense in user-space to change to Coulomb counter. Changing the set=
-ting
-> +      from one mode to another will reset the hardware accumulator insid=
-e the
-> +      chip.
+Thanks for review.
 
-Why is this here, rather than with the property in question or the
-commit message? Anything justifying the property should just be in the
-commit message, this doc is user facing and just should explain when and
-why to use it.
+I will prepare Documentation/hwmon/tda38740.rst file for this driver.
 
-Otherwise, this is fine.
-pw-bot: changes-requested
+> >   3 files changed, 160 insertions(+)
+> >
+> > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> > index bcfdc4ce4c10..e4ca80dd0574 100644
+> > --- a/drivers/hwmon/pmbus/Kconfig
+> > +++ b/drivers/hwmon/pmbus/Kconfig
+> > @@ -763,6 +763,15 @@ config SENSORS_TDA38640_REGULATOR
+> >         If you say yes here you get regulator support for Infineon
+> >         TDA38640 as regulator.
+> >
+> > +config SENSORS_TDA38740
+> > +     tristate "Infineon TDA38725/TDA38740"
+> > +     help
+> > +       If you say yes here you get hardware monitoring support for Inf=
+ineon
+> > +       TDA38725 and TDA38740.
+> > +
+> > +       This driver can also be built as a module. If so, the module wi=
+ll
+> > +       be called tda38740.
+> > +
+> >   config SENSORS_TPS25990
+> >       tristate "TI TPS25990"
+> >       help
+> > diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefil=
+e
+> > index e288fe72a437..eb06d47816fd 100644
+> > --- a/drivers/hwmon/pmbus/Makefile
+> > +++ b/drivers/hwmon/pmbus/Makefile
+> > @@ -70,6 +70,7 @@ obj-$(CONFIG_SENSORS_STEF48H28)     +=3D stef48h28.o
+> >   obj-$(CONFIG_SENSORS_SQ24860)       +=3D sq24860.o
+> >   obj-$(CONFIG_SENSORS_STPDDC60)      +=3D stpddc60.o
+> >   obj-$(CONFIG_SENSORS_TDA38640)      +=3D tda38640.o
+> > +obj-$(CONFIG_SENSORS_TDA38740)       +=3D tda38740.o
+> >   obj-$(CONFIG_SENSORS_TPS25990)      +=3D tps25990.o
+> >   obj-$(CONFIG_SENSORS_TPS40422)      +=3D tps40422.o
+> >   obj-$(CONFIG_SENSORS_TPS53679)      +=3D tps53679.o
+> > diff --git a/drivers/hwmon/pmbus/tda38740.c b/drivers/hwmon/pmbus/tda38=
+740.c
+> > new file mode 100644
+> > index 000000000000..df5173d8da0c
+> > --- /dev/null
+> > +++ b/drivers/hwmon/pmbus/tda38740.c
+> > @@ -0,0 +1,150 @@
+> > +// SPDX-License-Identifier: GPL-2.0+
+> > +/*
+> > + * Hardware monitoring driver for Infineon TDA38725/TDA38740
+> > + *
+> > + * Copyright (c) 2023 9elements GmbH
+> > + *
+> > + */
+> > +
+> > +#include <linux/err.h>
+> > +#include <linux/i2c.h>
+> > +#include <linux/init.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/module.h>
+> > +#include <linux/property.h>
+> > +#include "pmbus.h"
+> > +
+> > +#define TDA38740_VOUT_SCALE_DEFAULT_MICRO    1000000
+> > +#define TDA38740_VOUT_SCALE_MIN_MICRO                100000
+> > +#define TDA38740_VOUT_SCALE_MAX_MICRO                2000000
+> > +
+> > +struct tda38740_data {
+> > +     struct pmbus_driver_info info;
+> > +     u32 vout_scale_micro;
+> > +};
+> > +
+> > +static int tda38740_read_word_data(struct i2c_client *client, int page=
+,
+> > +                                int phase, int reg)
+> > +{
+> > +     const struct tda38740_data *data;
+> > +     int ret;
+> > +     u64 scaled;
+> > +
+> > +     if (reg !=3D PMBUS_READ_VOUT)
+> > +             return -ENODATA;
+> > +
+> > +     ret =3D pmbus_read_word_data(client, page, phase, reg);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     data =3D container_of(pmbus_get_driver_info(client), struct tda38=
+740_data,
+> > +                         info);
+> > +
+> > +     scaled =3D (u64)ret * data->vout_scale_micro;
+> > +     scaled =3D DIV_ROUND_CLOSEST_ULL(scaled,
+> > +                                    TDA38740_VOUT_SCALE_DEFAULT_MICRO)=
+;
+> > +
+>
+> The chip supports VOUT_SCALE_LOOP, which should be used for any VOUT scal=
+ing.
+> VOUT values should not be manipulated manually.
+>
+> Also, Sashiko is correct in complaining about not scaling other VOUT
+> related commands, both on the read and write side. The chip _does_ suppor=
+t
+> limit commands.
 
-Thanks,
-Conor.
+I will remove the code related vout_scale_micro  support.
 
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - microchip,pac1711
-> +      - microchip,pac1721
-> +      - microchip,pac1811
-> +      - microchip,pac1821
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  vdd-supply: true
-> +
-> +  "#io-channel-cells":
-> +    const: 1
-> +
-> +  shunt-resistor-micro-ohms:
-> +    description:
-> +      Value in micro Ohms of the shunt resistor connected between the VS=
-ENSE+
-> +      and VSENSE- inputs, across which the current is measured. This val=
-ue is
-> +      needed to compute the scaling of the measured current.
-> +
-> +  label:
-> +    description: Unique name to identify which device this is.
-> +
-> +  microchip,vbus-input-range-microvolt:
-> +    description: |
-> +      Specifies the voltage range in microvolts chosen for the voltage f=
-ull
-> +      scale range (FSR). The range should be set as <minimum, maximum> by
-> +      hardware design and should not be changed during runtime.
-> +
-> +      The VBUS could be configured into the following full scale range:
-> +        - for PAC1711 or PAC1811:
-> +            - VBUS has unipolar 0V to 42V FSR (default)
-> +            - VBUS has bipolar -42V to 42V FSR
-> +            - VBUS has bipolar -21V to 21V FSR
-> +        - for PAC1721 or PAC1821:
-> +            - VBUS has unipolar 0V to 9V FSR (default)
-> +            - VBUS has bipolar -9V to 9V FSR
-> +            - VBUS has bipolar -4.5V to 4.5V FSR
-> +
-> +  microchip,vsense-input-range-microvolt:
-> +    description: |
-> +      Specifies the voltage range in microvolts chosen for the current f=
-ull
-> +      scale range (FSR). The current is calculated by dividing the vsense
-> +      voltage by the value of the shunt resistor. The range should be se=
-t as
-> +      <minimum, maximum> by hardware design and it should not be changed
-> +      during runtime.
-> +
-> +      The VSENSE could be configured into the following full scale range:
-> +        - VSENSE has unipolar 0 mV to 100 mV FSR (default)
-> +        - VSENSE has bipolar -100 mV to 100 mV FSR
-> +        - VSENSE has bipolar -50 mV to 50 mV FSR
-> +    oneOf:
-> +      - items:
-> +          - const: 0
-> +          - const: 100000
-> +      - items:
-> +          - const: -100000
-> +          - const: 100000
-> +      - items:
-> +          - const: -50000
-> +          - const: 50000
-> +
-> +  microchip,accumulation-source:
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    description: |
-> +      The Hardware Accumulator may be used to accumulate VPOWER or VSENS=
-E values
-> +      for any channel. By setting the accumulator for a channel to accum=
-ulate
-> +      the VPOWER values gives a measure of accumulated power over a time=
- period,
-> +      which is equivalent to energy. Setting the accumulator for a chann=
-el to
-> +      accumulate VSENSE values gives a measure of accumulated current, w=
-hich is
-> +      equivalent to charge.
-> +
-> +      The Hardware Accumulator could be configured as:
-> +       "energy" - Accumulator accumulates VPOWER (energy)
-> +       "charge" - Accumulator accumulates VSENSE (Coulomb Counter)
-> +    enum: [energy, charge]
-> +    default: energy
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - vdd-supply
-> +  - shunt-resistor-micro-ohms
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          pattern: "^microchip,pac1[78]11$"
-> +    then:
-> +      properties:
-> +        microchip,vbus-input-range-microvolt:
-> +          oneOf:
-> +            - items:
-> +                - const: 0
-> +                - const: 42000000
-> +            - items:
-> +                - const: -42000000
-> +                - const: 42000000
-> +            - items:
-> +                - const: -21000000
-> +                - const: 21000000
-> +          default: [0, 42000000]
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          pattern: "^microchip,pac1[78]21$"
-> +    then:
-> +      properties:
-> +        microchip,vbus-input-range-microvolt:
-> +          oneOf:
-> +            - items:
-> +                - const: 0
-> +                - const: 9000000
-> +            - items:
-> +                - const: -9000000
-> +                - const: 9000000
-> +            - items:
-> +                - const: -4500000
-> +                - const: 4500000
-> +          default: [0, 9000000]
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        power-monitor@40 {
-> +            compatible =3D "microchip,pac1711";
-> +            reg =3D <0x40>;
-> +
-> +            shunt-resistor-micro-ohms =3D <11000000>;
-> +            label =3D "VDD3V3";
-> +            vdd-supply =3D <&vdd>;
-> +            microchip,vbus-input-range-microvolt =3D <(-21000000) 210000=
-00>;
-> +            microchip,vsense-input-range-microvolt =3D <(-50000) 50000>;
-> +            microchip,accumulation-source =3D "energy";
-> +        };
-> +    };
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a92290fffa163f9fe8fe3f04bf66426f9a894409..399da37f79fd9768f29cc60aa=
-5384a1ba9fe8afc 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16337,6 +16337,12 @@ F:	Documentation/devicetree/bindings/nvmem/micro=
-chip,sama7g5-otpc.yaml
->  F:	drivers/nvmem/microchip-otpc.c
->  F:	include/dt-bindings/nvmem/microchip,sama7g5-otpc.h
-> =20
-> +MICROCHIP PAC1711 POWER/CURRENT MONITOR DRIVER
-> +M:	Ariana Lazar <ariana.lazar@microchip.com>
-> +L:	linux-iio@vger.kernel.org
-> +S:	Supported
-> +F:	Documentation/devicetree/bindings/iio/adc/microchip,pac1711.yaml
-> +
->  MICROCHIP PAC1921 POWER/CURRENT MONITOR DRIVER
->  M:	Matteo Martelli <matteomartelli3@gmail.com>
->  L:	linux-iio@vger.kernel.org
->=20
-> --=20
-> 2.43.0
->=20
+>
+> > +     return clamp_val(scaled, 0, U16_MAX);
+> > +}
+> > +
+> > +/*
+> > + * TDA38725/TDA38740 only support Linear format for VOUT related comma=
+nds,
+> > + * with exponents in the range of -8 to -12 (see datasheet VOUT_MODE
+> > + * description). Direct format is not supported by this device.
+> > + */
+> > +static int tda38740_identify(struct i2c_client *client,
+> > +                          struct pmbus_driver_info *info)
+> > +{
+> > +     int vout_mode;
+> > +
+> > +     vout_mode =3D pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
+> > +     if (vout_mode < 0 || vout_mode =3D=3D 0xff)
+> > +             return vout_mode < 0 ? vout_mode : -ENODEV;
+> > +
+> > +     if ((vout_mode >> 5) !=3D 0)
+> > +             return -ENODEV;
+> > +
+> > +     info->format[PSC_VOLTAGE_OUT] =3D linear;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static struct pmbus_driver_info tda38740_info =3D {
+> > +     .pages =3D 1,
+>
+> The chips support the PAGE command, described as "Allows access
+> of each loop via paging". I don't know what exactly that refers to,
+> but it does look like it supports multiple pages.
 
---/MoetIXoV046mHB9
-Content-Type: application/pgp-signature; name=signature.asc
 
------BEGIN PGP SIGNATURE-----
+TDA38725/TDA38740 are 40A/25A "Single-voltage" Synchronous Buck Regulator
+It's one page.
 
-iHUEARYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaqKaugAKCRB4tDGHoIJi
-0mKLAQCO6l7oFprAmTtRLSq7BTowVq1KW1lXvMqP6oceQvVaDgEA+1uiOqPdeMOU
-aXNe8IFM7R4t7jhRF3+1K9fEYtB5Uws=
-=Pd+M
------END PGP SIGNATURE-----
+> > +     .format[PSC_VOLTAGE_IN] =3D linear,
+> > +     .format[PSC_CURRENT_OUT] =3D linear,
+> > +     .format[PSC_CURRENT_IN] =3D linear,
+> > +     .format[PSC_POWER] =3D linear,
+> > +     .format[PSC_TEMPERATURE] =3D linear,
+> > +     .func[0] =3D PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
+> > +         | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
+> > +         | PMBUS_HAVE_IIN
+> > +         | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+> > +         | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+> > +         | PMBUS_HAVE_POUT | PMBUS_HAVE_PIN,
+> > +     .identify =3D tda38740_identify,
+> > +};
+> > +
+> > +static int tda38740_probe(struct i2c_client *client)
+> > +{
+> > +     struct device *dev =3D &client->dev;
+> > +     struct tda38740_data *data;
+> > +     const char *propname;
+> > +     u32 vout_scale_micro;
+> > +     int ret;
+> > +
+> > +     data =3D devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> > +     if (!data)
+> > +             return -ENOMEM;
+> > +
+> > +     propname =3D "infineon,vout-scale-micro";
+> > +     if (device_property_present(dev, propname)) {
+> > +             ret =3D device_property_read_u32(dev, propname, &vout_sca=
+le_micro);
+> > +             if (ret)
+> > +                     return dev_err_probe(dev, ret,
+> > +                                          "%s property read fail.\n",
+> > +                                          propname);
+> > +     } else {
+> > +             vout_scale_micro =3D TDA38740_VOUT_SCALE_DEFAULT_MICRO;
+> > +     }
+> > +
+> > +     if (vout_scale_micro < TDA38740_VOUT_SCALE_MIN_MICRO ||
+> > +         vout_scale_micro > TDA38740_VOUT_SCALE_MAX_MICRO)
+> > +             return -EINVAL;
+> > +
+> > +     memcpy(&data->info, &tda38740_info, sizeof(tda38740_info));
+> > +     data->vout_scale_micro =3D vout_scale_micro;
+> > +     data->info.read_word_data =3D tda38740_read_word_data;
+> > +
+> > +     return pmbus_do_probe(client, &data->info);
+> > +}
+> > +
+> > +static const struct i2c_device_id tda38740_id[] =3D {
+> > +     { .name =3D "tda38725"},
+> > +     { .name =3D "tda38740"},
+> > +     {}
+> > +};
+> > +MODULE_DEVICE_TABLE(i2c, tda38740_id);
+> > +
+> > +static const struct of_device_id __maybe_unused tda38740_of_match[] =
+=3D {
+> > +     { .compatible =3D "infineon,tda38725"},
+> > +     { .compatible =3D "infineon,tda38740"},
+> > +     { },
+>
+> No "," here.
+I will remove it.
 
---/MoetIXoV046mHB9--
+>
+> > +};
+> > +MODULE_DEVICE_TABLE(of, tda38740_of_match);
+> > +
+> > +/* This is the driver that will be inserted */
+>
+> Pointless comment.
+>
+I will remove it.
+
+> > +static struct i2c_driver tda38740_driver =3D {
+> > +     .driver =3D {
+> > +             .name =3D "tda38740",
+> > +             .of_match_table =3D of_match_ptr(tda38740_of_match),
+> > +     },
+> > +     .probe =3D tda38740_probe,
+> > +     .id_table =3D tda38740_id,
+> > +};
+> > +
+> > +module_i2c_driver(tda38740_driver);
+> > +
+> > +MODULE_DESCRIPTION("PMBus driver for Infineon TDA38725/TDA38740");
+> > +MODULE_LICENSE("GPL");
+> > +MODULE_IMPORT_NS("PMBUS");
+> >
+>
