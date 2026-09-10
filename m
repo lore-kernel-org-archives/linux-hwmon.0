@@ -1,168 +1,209 @@
-Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012022.outbound.protection.outlook.com [52.101.53.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A31C4A0F0B;
-	Thu, 10 Sep 2026 14:52:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.22
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789051928; cv=fail; b=rDjt5pjFnkBrfcPMOOYgHhTGA6DPu3Rwq4k2BHhSUZWWgUEFoJCCbsJvvCX3QatbS2ortPKQUrOdtKm0MUUVNUnc0eNw2l+wpm0Zhc41cU7lYri8I1urQyxRSYYJOcsZx6l2vuV6T/E/Un5mr5WkQMCTwhvjeiFXT48lAF0WCM4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789051928; c=relaxed/simple;
-	bh=m3d32ZSsuAyuW137/pfSUeEPtta8oh2j5/82k+UpTQE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=hBzS58v3XqkKCIF59gJZHKvgmt2jn7kTk/+xInthtJtM/LBRUPIxp8Mra5jKggZVs0xRnW+EINNOFbsyyDTUPFZYykD1EPcaEyCpVMWwfo1OG9JWxDj2CCGhATsUxPjM0ctXy9foDaYa5NG5IvgXcuXqktofQ4zR+JLjjaCnvAQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=IoX9PPJ2; arc=fail smtp.client-ip=52.101.53.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55BE949DB96
+	for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 14:56:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789052193; cv=none; b=TS8xk0Z188dsICJBQMyYLPi+yeBeN1gLy6PJzoH3VkbYMzOgF1EOsWLH+sfiKA1MCrhpQDd84yMdQebAuur1PJs32NeEMsPrZjzWHJbvihYKdo6kAaoJ1EdmdUdpfWvQ2q1ncRvkvzXSDJCbp2FGVhCX+X+vcT9ECYJy9kU3HBA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789052193; c=relaxed/simple;
+	bh=YSFIu6CrNW5GnEAP7cV78TEE1V6V6nRvjoaUzJKag4I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cvgZeCSE9+8uap300v401uG+QZAv6CBoNUVQLFPv97QKAwFWAZWEyzfWdevA2n8lNvusrqf5Myo4tcaYn/ImcRsIZdzXUx+7ur9+KkIJDr8JenXQmR/GdkE+9yuzegv2vVgJJOIRLEO7wWyW9GM2MGgIirnFv0QobCvNrNAL81s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XYE7rbMp; arc=none smtp.client-ip=209.85.167.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="IoX9PPJ2"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=zKD5ZbOb7gi5bqbTTHx2d4K1fE8D4pebFGu9gEeNv1NwvTfsOnt6c3pdb4l59nkvw26VXAWhcYyA9KExfVzkvuF8USp/sCrLHTc/7AZOijBx5joEAqzCtmk6W11fvpi9NtsG8xwVncvDHWZTMiMub7Tns+ZgfjRieh/hugAbXxMqcqhQTmvlPcM2Aehr3K+yadGYTiDV4OqgCj5qEu9Z9BgswXTkHgH2QuqwJhvnA5SgqzRfBmscX/9r6vxnWsZD2I/IXEfuFsC3mU/H/AwCeptDsiu8jjAwjFIuFGxqvqgYn9KaMNJwnBIke9CgIp2HeYxF/cg3IkikvHjVWHEQHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m3d32ZSsuAyuW137/pfSUeEPtta8oh2j5/82k+UpTQE=;
- b=NKpS5w8gaxKIDiAoDJrj9UKbPrIGLGPVgnkmjAFknEko/MId2FO53/uqRiIO/dlBI8KxGLKtSBcdSlCZWNTd4Iy165kAdR5Kv+3uodMhF9dWYbmbVrsHPJ9vBq868I8c+UpOAvvB3xSSiCl8PzvGfKbj7EKg+XZMUG8EFMUjrP7K+aI77TDA7FWhS92b8ugqTVXJbXPxIKt2UqaJ9SLBB5NjaLSyEfEe9RrzYDQjUcXFZKH/wvP2AQD3A58sx8rX1n14Lb1PsoMLIFLHxr5uowyk7JqI7kXahkTXVhcR43d1RoF7J8cT+ocQRNGLjgZrxW5t1nqUAR7sehsj2A6LJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microchip.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m3d32ZSsuAyuW137/pfSUeEPtta8oh2j5/82k+UpTQE=;
- b=IoX9PPJ2fXQKwh8MLSjqYf5ELyP0HoFLJXkoMB78NUbjx6bHiNB7Brni9T1WvUlt1Q3YGpAulVXmbMS8gS6jIha8YgXbSN2gaXaQUQvozIFIhXSbNexIe+NAf2xfCY7bNG/VXukk1akDeNOSIu2V4NqLB5BPNriWHWVcxd8nOwJ+iBgjeIMHUzAkLjTV+SY94wx+dEfoUjlHvx5EbDpTm8MDGV6eWRAyj2T37VzK86gYDQivFRvYYmBCr/QWNfy0V5f6mXcolZYtetTUFm0E0kMbBJ5lYyW+yDme093eONMZ1Gl+vd93yBGuAbAab/ZgETBXmCx9k0v+krZw5Zvc3Q==
-Received: from PH7PR11MB8251.namprd11.prod.outlook.com (2603:10b6:510:1a9::9)
- by LV4PR11MB9514.namprd11.prod.outlook.com (2603:10b6:408:2e0::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.9; Thu, 10 Sep
- 2026 14:52:03 +0000
-Received: from PH7PR11MB8251.namprd11.prod.outlook.com
- ([fe80::e81b:3e24:1804:5c7c]) by PH7PR11MB8251.namprd11.prod.outlook.com
- ([fe80::e81b:3e24:1804:5c7c%3]) with mapi id 15.21.0406.007; Thu, 10 Sep 2026
- 14:52:02 +0000
-From: <Ariana.Lazar@microchip.com>
-To: <conor@kernel.org>
-CC: <dlechner@baylibre.com>, <linux@roeck-us.net>,
-	<linux-hwmon@vger.kernel.org>, <nuno.sa@analog.com>,
-	<linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>, <robh@kernel.org>,
-	<jic23@kernel.org>, <andy@kernel.org>, <krzk+dt@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <conor+dt@kernel.org>
-Subject: Re: [PATCH v3 1/2] dt-bindings: iio: adc: add support for PAC1711
-Thread-Topic: [PATCH v3 1/2] dt-bindings: iio: adc: add support for PAC1711
-Thread-Index: AQHdQFYYYjqbfVQFs0qkp9cnsb/VObbHteyAgAAxKwA=
-Date: Thu, 10 Sep 2026 14:52:02 +0000
-Message-ID: <b706814686dedc5a640970ae83e5e845589f4163.camel@microchip.com>
-References: <20260909-pac1711-v3-0-dff81003b82f@microchip.com>
-	 <20260909-pac1711-v3-1-dff81003b82f@microchip.com>
-	 <aqKauqCxYwo8_nxM@squawk>
-In-Reply-To: <aqKauqCxYwo8_nxM@squawk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR11MB8251:EE_|LV4PR11MB9514:EE_
-x-ms-office365-filtering-correlation-id: fb93c579-ddba-4d10-3296-08df0f4b1330
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|23010399003|7416014|376014|366016|38070700021|6133799003|10067099003|11063799006|4143699003|56012099006|18002099003|22082099003;
-x-microsoft-antispam-message-info:
- YCssLPUnwewaDrLdvxMPbDbUKSATfB9bp8g4V/5qIvLhhYtYHlz/tBOeWPFFFKqSEwO5Iqm5apAfZhciavmgA4ntjjctxavxCCqEMaxGXYTDTo/XmxOYOVYxy4dqwRCEtFVDuFq+zGeQas7IGskADhAEujrAzEExjfrTHEhiBVHb+xL9qjs4885yRaTr3Dz2ob1c/vTg3GUeJk/KLABo8OO2/t1PbhFX5724hp4iJCl7tMHz3wtp7dKDYzwqlLue3TVe7bI0c8ncCo69dr4Dg0me0N+hr3BYoVYKvyG9fy+X46B17xjNf7X3ZjzCd35+HFTbhRc7Xf73YDlAa05EzU/tSw2A4KGt77uUD52CR1yJDGwKp/7pwZY/wXMcJ4tgQlIl0gm6XzpmU3Sgprc0jicf4ia5n/FneVNoc4XDqoQOh+Alccvqpx3THWa563qW/xdkH3UGIc3dv7Z4vjkBELWuG6z/w278LJrBztrN75KkTk9mh4u4RFDUZwzY8iKqpLG4AgSQSA7y7IPssGQzFrCMiBL23n/U0P3821uodXxZeDysARqGS2bIfa3pior4qIR8gPwW42SIYniiXhN1l1MnYiiY45j4o9CNtRzf/JlufCFHu/9xOPIiSftkMEyw9hV5THWV2PK6v1D5auGBlvCCABTdY+crstWMJJgxm8RUQdVc5CL8uo6TgMpxtaapvYJGu1Qkt5039CJL+yHQniD0ADTnuOZoC5nLQI0sogU=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB8251.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(7416014)(376014)(366016)(38070700021)(6133799003)(10067099003)(11063799006)(4143699003)(56012099006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?WSszOXpQYndHNXV3aTdoNVN4aFgxQkxTckxKdUNLN1BvZjZ3SFBYR1hXMndO?=
- =?utf-8?B?aEhaWGFmQnZta1pSVit2dXdPQTNzOGNPZ2gzRmZCMDVMUDVLQW1ReUo3cDJz?=
- =?utf-8?B?bVl4ZlVvYXJrdDV5NWo4MjVndzVFMEJITFdGQys4TDYvTkx2MUZ6dVU1L3Bo?=
- =?utf-8?B?Y2YzaTN1OEVkQytTd3FRTkM4SGk5ZzRnbHlLOXdGLzBKN0JkRnhMS01EWnR2?=
- =?utf-8?B?V2VwaU13eExOTGVzT2M3NHQrdmRQQnRVNFBndkFrNWRXVTZEbzVXb29TZXhy?=
- =?utf-8?B?U2lpdElJL0UvNnZNclpVYWhQMVltc0d1ZEUzRmc2clBLejRsWTNTeU5qM053?=
- =?utf-8?B?YWNoR3RIM3hYTGZrMzdaMnFoeSt2MW9aTnBxMXJyNXdQc3NYVVJaZmkyenhp?=
- =?utf-8?B?ZGswSDRjZmt4bVNqSEZSRlhnT3hkOC9FcEI0MjZwcVlDQ05PUGVyY2ZudU85?=
- =?utf-8?B?NTFmZmpFWGhuUm1XZmUvOTN6Qm1HcE9GSUlzajREbXZNQkx6WGFnVjBLTnl5?=
- =?utf-8?B?YmZIR2NVeXo2bmVpWkRPR3BNalZrM2llVXF5dlhyeWVBR0NUQTk1WDJJUWRy?=
- =?utf-8?B?QXZvRTErcmFnQU5IVEZEQ3dNRmcwcWdDVncyRGp4K0pVcDNrWmh5SUpVQ1NR?=
- =?utf-8?B?ZmpkQjFCZnRhRXBNM3FiRDdlQVloYndzc2hqa3dndzNZc1VlK0ZDL0RjekdC?=
- =?utf-8?B?a2J5aGlpM3NORWpwNXRtNytYK25DckJ4eXU0THN5NVpmTW9XaTU3U3h0SDk3?=
- =?utf-8?B?b1JsNHo3bWptQ3l6Y3h5TWxGWGhRNnJyWTh2MHExMkhaVGd1c1U1bGdPTE1J?=
- =?utf-8?B?bWVDNXBJQnB6bDd1QWdJeUlLVXdmbWpLeVRpakcra0xhQmFGalg0RjduMUcy?=
- =?utf-8?B?dTNwY0VyTWk5dGp4c0xpVmNzNndrTnBhOTBnRVIxbDhVTys2MWY3TkxURW56?=
- =?utf-8?B?NFhyY1BydVo4ejZHZUFJYVBQWGcyNmk4cmRnZXh6aGJMZ1JCbDVFTFhGMm8x?=
- =?utf-8?B?ckdLRHY4MVZBckc1bFU3cDhkVlJXandIai95VkxtcjhFYnRUeU40SUJ4TC93?=
- =?utf-8?B?STMxeXprby9GUllYV3FzeGl5N1dYVW0yTGpYbWNsZ2RlSFJxaVhJa3R1V05U?=
- =?utf-8?B?ZmNCMXhQbE1ZLzFwK0IxS1FpcGtUbU9KU2JsQW84UkFOOXA2UWtQMXZMZmlL?=
- =?utf-8?B?NlRSaGZwZnFvcEVSdWt5NXBZU2VZbm5QZ0dOaktvMEV5a3RTaHNKdmFsUHhl?=
- =?utf-8?B?RWcydHQ5dW4ya1Mrb1RnQ3hCdUtzaUlxT0RZNGY2WU5MeWdlK2hCaVpTRkdq?=
- =?utf-8?B?d1NnR2xROVJOblJCTDU3Si9zNXN6QkFTMHdOMGwxRjJEZlp4SEtHVVQyWlh1?=
- =?utf-8?B?OHlhdnFnYnZKRU9xWGVMUVdrOTZlbDdiOHVKN1VnZTlqRWFTTjN1eVdqaEhI?=
- =?utf-8?B?Q2Q4NVNyMWkxeitKalRDN0ZFbGhPWXdDK3pMNWZlR3pseDlHZXVYN2U2Nmll?=
- =?utf-8?B?NWNWOEZrbG5HMm1WbHMrV1BiT0plQUUvbHVrQVB2cHRUSlRQV0JWeXBpVWV6?=
- =?utf-8?B?dDE3RjRSZ0xic3hORmxBeE9vRHhEUWd4VnoxRGxsSFFCd2k3bTk4b2RFMlJo?=
- =?utf-8?B?ZGVFc1BvWndqaXIxVWZXa1dIanpaUzlheEl4Y3RQanpDZ21HY05CYVBSOVUy?=
- =?utf-8?B?c2p0NnRUY3BDMnk5K0M0TWd6b1l4OUN5WndUUTgvMmZ5SEZsWXVlQ3FpRmdr?=
- =?utf-8?B?dTU1ejB6dkMrME40SnB3YldNcWREWXdaazJqdzJ5Q2tBM28rSjU0NmpHbHd0?=
- =?utf-8?B?SXR0NEdYdHd3MXpOclBFWE9RaEpLVUVKWEtvV1M3eFNuSHBlWmpUUkhiMHMr?=
- =?utf-8?B?dE5uQlEvU2tpdzdjRTJrV2NidkVIOVorUVVkNHhGa2FXSU9sWkx6WjVLV3g5?=
- =?utf-8?B?eDFuUEo3Wm5zMk0rVVg1bWdVdzFQSUZDbkdueEtOT0J4YVBzcWJtNXlNdzEy?=
- =?utf-8?B?Zk5oZjFoc050YTFwUVRXOThBTVBsaTBTMWRrcUh6ZmFIN0VsYmlYSnBIRytS?=
- =?utf-8?B?c3BCeE5TNEEvamV1eFZrbGM2eG13cXU5WkpPUXUwVXFUQXZ6K0ZrVml3d1NG?=
- =?utf-8?B?TjNHaVhyQVk1c1ZxeUp0amtVbVd2bklTZ2wxaFBvTTRYYkV3WFdOZlhEbE14?=
- =?utf-8?B?RVkxUlJBNEpGN0NFQUh6R0dDYlgzM21aaFFjYURtZThqTWluRmZ2WnVwMGE4?=
- =?utf-8?B?QUMyTjlOMjVBeGE1VEJaY1U1emtUSUVINDJmTEM0TmJpSmxYazJPNEFSSUIx?=
- =?utf-8?B?UC9rS25jay9OemwrWE8waEc0N3hIV2lmNGZwVWRWemlNc2QvLzM1TDVMRURQ?=
- =?utf-8?Q?KhRs3vvWbi499F80=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E7F7774947CB2241B7304F233029610B@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XYE7rbMp"
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-4b381337e1fso6921726b6e.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 07:56:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789052190; x=1789656990; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=9lTm0yv3jtVyAOGkqkKEQgPKn1d5nHzjUribtnIURR8=;
+        b=XYE7rbMpC6Hhezfu9fpedxtbdvLtkw687pU6FtAw6lOT2xF34Bo8+AJ8hjaPrUsVol
+         QcdjMJGgyG4vQWZLSFX+4lW1iIcQRdI9WG75w1vppj+gRgdAE+h2Wdn7zRkCfIMUB+J7
+         I7QzGMSGjKaZwPxDES6hHk4eD79fH/DmwIpDlKyyzvUgl1VFyZrceDZIrVWlmEfIcWI0
+         oQ6WfWwqhz52JxCI/C4PdCPBGxaNP/qUkrkaqTThA20OXbQ5EqzYVoiTcDsSYBqpEkNg
+         nHhd8LL67qJPtTXp70zkaQrrTHx8drnIu+Emzx4wQDH0KV9Rl8oQ61DVXhswdj9Tv6r3
+         Cn4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789052190; x=1789656990;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=9lTm0yv3jtVyAOGkqkKEQgPKn1d5nHzjUribtnIURR8=;
+        b=DV+eGxYS31cqvZvoXrX6YMxeE6nBOB4SVh2fncIMVgRzLIJ8aOapY0dXUzhHs3mcgo
+         SDmzDflx9tcB4dU6gIUHQjuujEutkbPhq5hQliZvD2tfQaL/pi74Lyz4rzZfsp+rBIgK
+         2dugQgjPnq3qkphnVwrkhzcUHeIG8zQZEDfXOKF2XPSDrqGD4sNbdJGFgKMhpPghCu9+
+         G8QFIHIHY0SLa7ypZI5jFVQx+RhIesOIf12b2td8DXK4YWj4AVgtYlENwR1WsMAQ5rhu
+         SF91zGfwqc5Lqbl5ZRmTYNJFZyUq5sFrkzh5R1jQ49IEQIQtiV14M5sd6REgnOCcjc8t
+         K8OQ==
+X-Gm-Message-State: AFuF++nI+4gQ4zT+PQS6ZUqKqLNTG5VyEeUU7U2UQRvYNa4UccO6lGLP
+	cahPPLUeCeAyj5PbJpOyIQsjCit6Oh9BLW/3oIS66LyFMdJeYjEI5kd+87eOFpZr
+X-Gm-Gg: AYBFou0E59Pp+7J/uiFfLmYDuGQ+3YnTmC+/oCzF43UhrG/kOFYApFbA6b8CSpC8dNw
+	LwUkJbVEeP9JaoRvwqwBtYaa8r32LFHEmRcbWg4eZkIGDPXPWjrKQMs+x/LzPPpah5+nkN4k0KG
+	S1mJrpkXxQta0ZDeKX//JGoQcEueP+leMoriyWAnx5qBh0F+9zgL1NXAKH5NtdUTF2nAxLV6Ud3
+	v6m5ymYAB6i7sF+j9bV+0XCCPkQew4PGCwbsLF1gROICcyQcxs2yqo+/X0xTsrtD17ZnaxrbrpI
+	mjzFI/OILN+V7QxOkXC5++e4E2oYfgGSx4ew+fmfc+mgTy6s+UVh7WpbRv33aski/paK7RpM02B
+	ZrZBmLo9m0+Ke/CYWTIRwpHuL7CuQF3/siO4ikHwgVhWnL82eQ2YozJnqstS+FxO4//z7JtvrdS
+	JEncGh8yA22YLQ74Kld/4cMjrT8UbbHh2CIzBlgzLi9zmn70YSjhLKTxFYU7IV6z4zyBovFYtU7
+	3kvvNfpbZS0iijBevZJLVUoJ8PShRuX7sxAHd+xsO8nV0FB3Q==
+X-Received: by 2002:a05:6808:4f4b:b0:4bb:5bcf:b257 with SMTP id 5614622812f47-4bb5bcfbbfbmr18845694b6e.3.1789052190086;
+        Thu, 10 Sep 2026 07:56:30 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b971c98e07sm17788638b6e.18.2026.09.10.07.56.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Sep 2026 07:56:29 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a69a9492-45f8-4072-8ad0-b023a5c139d0@roeck-us.net>
+Date: Thu, 10 Sep 2026 07:56:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: microchip.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB8251.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb93c579-ddba-4d10-3296-08df0f4b1330
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Sep 2026 14:52:02.8205
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FA/DmbsBKG/TCLrb408SYTU/xsEGeJiWM9cuERtoKsbe8jiNfsP6f17KCmJMVdl/nCg91kdziGubmw8btJpHi38KhLBO0SyzMAelwXPFOYA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV4PR11MB9514
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] hwmon: (cgbc-hwmon): Add some temperature sensors
+To: sashiko-reviews@lists.linux.dev,
+ "Thomas Richard (congatec GmbH)" <thomas.richard@bootlin.com>
+Cc: linux-hwmon@vger.kernel.org
+References: <20260910-cgbc-hwmon-fix-and-new-sensors-v1-0-ef13ae2fa147@bootlin.com>
+ <20260910-cgbc-hwmon-fix-and-new-sensors-v1-2-ef13ae2fa147@bootlin.com>
+ <20260910134538.76E6F1F000FF@smtp.kernel.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260910134538.76E6F1F000FF@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-SGkgQ29ub3IsDQoNCj4gPiArwqAgVGhlIGFjY3VtdWxhdGlvbi1zb3VyY2UgcHJvcGVydHkgYWlt
-cyB0byBzcGVjaWZ5IHdoYXQga2luZCBvZg0KPiA+IGhhcmR3YXJlIGlzDQo+ID4gK8KgIGludGVu
-ZGVkIHRvIGJlIHVzZWQvYXZhaWxhYmxlIGZvciB0aGUgdXNlci4gVGhlcmUgYXJlIHR3byBtYWlu
-DQo+ID4gY2FzZXMgaGVyZToNCj4gPiArwqDCoMKgIC0gdGhlIHVzZXIgd2FudHMgdG8gbWVhc3Vy
-ZSBhbHNvIHRoZSBjdXJyZW50L3Bvd2VyIGNvbnN1bWVkDQo+ID4gYmVmb3JlIHRoZQ0KPiA+ICvC
-oMKgwqDCoMKgIGRyaXZlciBpbnNlcnRpb24gKGUuZy4gZnJvbSB0aGUgYm9vdCB0byB1c2VyIGNv
-bnRyb2wpIGFuZCBpZg0KPiA+IHRoaXMgaXMgYQ0KPiA+ICvCoMKgwqDCoMKgIHJ1bnRpbWUgc2V0
-dGluZywgdGhlIGhhcmR3YXJlIGFjY3VtdWxhdG9yIHdpbGwgYmUgcmVzZXQgYnkNCj4gPiB0aGUg
-ZGVmYXVsdA0KPiA+ICvCoMKgwqDCoMKgIGNvbmZpZ3VyYXRpb24gdGhlIGRyaXZlciBzdGFydHMg
-d2l0aC4NCj4gPiArwqDCoMKgIC0gdGhlIGRyaXZlciBkb2VzIG5vdCBrbm93IHdoYXQgdHlwZSBv
-ZiBoYXJkd2FyZSBpdCdzIGRlYWxpbmcNCj4gPiB3aXRoLiBJbg0KPiA+ICvCoMKgwqDCoMKgIGNh
-c2UgdGhlIHBhcnQgaXMgbW9uaXRvcmluZyB0aGUgY2hhcmdlL2Rpc2NoYXJnZSBjdXJyZW50IGl0
-DQo+ID4gZG9lcyBub3QNCj4gPiArwqDCoMKgwqDCoCBtYWtlIHNlbnNlIGluIHVzZXItc3BhY2Ug
-dG8gY2hhbmdlIHRoZSBhY2N1bXVsYXRvciB0bw0KPiA+IGNhbGN1bGF0ZSBlbmVyZ3kuDQo+ID4g
-K8KgwqDCoMKgwqAgU2FtZSBpZiB0aGUgaGFyZHdhcmUgaXMgaW50ZW5kZWQgdG8gY2FsY3VsYXRl
-IGVuZXJneSBpdCBkb2VzDQo+ID4gbm90IG1ha2UNCj4gPiArwqDCoMKgwqDCoCBzZW5zZSBpbiB1
-c2VyLXNwYWNlIHRvIGNoYW5nZSB0byBDb3Vsb21iIGNvdW50ZXIuIENoYW5naW5nDQo+ID4gdGhl
-IHNldHRpbmcNCj4gPiArwqDCoMKgwqDCoCBmcm9tIG9uZSBtb2RlIHRvIGFub3RoZXIgd2lsbCBy
-ZXNldCB0aGUgaGFyZHdhcmUgYWNjdW11bGF0b3INCj4gPiBpbnNpZGUgdGhlDQo+ID4gK8KgwqDC
-oMKgwqAgY2hpcC4NCj4gDQo+IFdoeSBpcyB0aGlzIGhlcmUsIHJhdGhlciB0aGFuIHdpdGggdGhl
-IHByb3BlcnR5IGluIHF1ZXN0aW9uIG9yIHRoZQ0KPiBjb21taXQgbWVzc2FnZT8gQW55dGhpbmcg
-anVzdGlmeWluZyB0aGUgcHJvcGVydHkgc2hvdWxkIGp1c3QgYmUgaW4NCj4gdGhlDQo+IGNvbW1p
-dCBtZXNzYWdlLCB0aGlzIGRvYyBpcyB1c2VyIGZhY2luZyBhbmQganVzdCBzaG91bGQgZXhwbGFp
-biB3aGVuDQo+IGFuZA0KPiB3aHkgdG8gdXNlIGl0Lg0KPiA+IA0KDQpUaGFua3MgZm9yIHRoZSBy
-ZXZpZXcuIEkgcHV0IHRoZSBleHBsYW5hdGlvbiBpbiB0aGUgYmluZGluZyBkZXNjcmlwdGlvbg0K
-YXMgc3VnZ2VzdGVkIGluIHRoZSBWMiByZXZpZXcgaGVyZToNCmh0dHBzOi8vbG9yZS5rZXJuZWwu
-b3JnL2FsbC9hNzNhYjRlMy01MjBlLTQ1MTUtYWRhZi1lZDVlYzY0NGU1ZjZAYmF5bGlicmUuY29t
-Lw0KDQpCdXQgaWYgaXQncyBiZXR0ZXIsIEkgd2lsbCBtb3ZlIGl0IGluIHRoZSBjb21taXQgbWVz
-c2FnZSBpbnN0ZWFkIGluIFY0DQpvZiB0aGlzIHBhdGNoIHNlcmllcy4NCg0KQmVzdCByZWdhcmRz
-LA0KQXJpYW5hDQoNCg0K
+On 9/10/26 06:45, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] The patch adds a 15th voltage sensor ('12V Standby Voltage', mapping to `in14_input`) to the driver's string labels and documentation, but fails to add its corresponding configuration entry to the `cgbc_hwmon_info` array. As a result, the hardware monitoring core will silently ignore the 15th channel and fail to expose it to sysfs.
+> --
+> 
+> commit 0d30ff3c376bb1134975af10205e094badb07304
+> Author: Thomas Richard (congatec GmbH) <thomas.richard@bootlin.com>
+> 
+> hwmon: (cgbc-hwmon): Add some temperature sensors
+> 
+> This commit adds several new temperature sensors, updating documentation and
+> string labels to match the Congatec board controller documentation. It also
+> modifies existing labels.
+> 
+>> diff --git a/drivers/hwmon/cgbc-hwmon.c b/drivers/hwmon/cgbc-hwmon.c
+>> index 2effa0b562862..098896ec8c6f6 100644
+>> --- a/drivers/hwmon/cgbc-hwmon.c
+>> +++ b/drivers/hwmon/cgbc-hwmon.c
+>> @@ -41,32 +41,42 @@ enum cgbc_sensor_types {
+> [ ... ]
+>>   static const char * const cgbc_hwmon_labels_in[] = {
+>> -	"CPU Voltage",
+>> +	"CPU Core Voltage",
+>>   	"DC Runtime Voltage",
+>>   	"DC Standby Voltage",
+>>   	"CMOS Battery Voltage",
+>> -	"Battery Voltage",
+>> +	"Battery Supply Voltage",
+>>   	"AC Voltage",
+>>   	"Other Voltage",
+>> -	"5V Voltage",
+>> +	"5V Runtime Voltage",
+>>   	"5V Standby Voltage",
+>> -	"3V3 Voltage",
+>> +	"3V3 Runtime Voltage",
+>>   	"3V3 Standby Voltage",
+>>   	"VCore A Voltage",
+>>   	"VCore B Voltage",
+>> -	"12V Voltage",
+>> +	"12V Runtime Voltage",
+>> +	"12V Standby Voltage",
+>>   };
+> 
+> [ ... ]
+> 
+>> @@ -255,7 +265,12 @@ static const struct hwmon_channel_info * const cgbc_hwmon_info[] = {
+>>   			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
+>>   			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
+>>   			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
+>> -			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL),
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL),
+>>   	HWMON_CHANNEL_INFO(in,
+>>   			   HWMON_I_INPUT | HWMON_I_LABEL, HWMON_I_INPUT | HWMON_I_LABEL,
+>>   			   HWMON_I_INPUT | HWMON_I_LABEL, HWMON_I_INPUT | HWMON_I_LABEL,
+> 
+> [Severity: Medium]
+> This patch adds a 15th voltage label ("12V Standby Voltage"), but is the
+> corresponding configuration entry missing from the cgbc_hwmon_info array?
+> 
+> Looking at the 'in' channel info array here, it only has 14 configuration
+> elements.
+> 
+> Since the hardware monitoring core iterates over the cgbc_hwmon_info
+> array and stops after 14 entries for 'in', will it silently ignore the 15th
+> channel and fail to expose it to sysfs?
+> 
+Sashiko has a point here. Maybe make the subject and description a bit more generic
+("Add some sensors" or similar, document that a voltage sensor was added as well,
+and add the missing channel info entry.
+
+Thanks,
+Guenter
+
+
+
+
