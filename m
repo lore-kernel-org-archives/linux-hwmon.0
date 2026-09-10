@@ -1,186 +1,135 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender6-op-o15.zoho.com (sender6-op-o15.zoho.com [165.173.180.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2432A599A34
-	for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 19:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789068724; cv=none; b=uc2bUveVOnOXEBwhPIh7C4fmygF3KqmI5PazxnyYlOMJVhDi65bsQDqF/Pq4G26y0gnKWdDJtyhoUDxg7rfskRDwnidH4NMtMzzwTk71CBHW94WQ4vebo43hWA42io6M+0j+Mg4LfMBwYnftBp4nNiueXuOUC1Qdei1OhghLVlU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789068724; c=relaxed/simple;
-	bh=RVscuzOwWBLYOqPI0VAq65UPbl5BzTBhY3MPWSu7TYU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PR+MqI4cmB5iDNb8asUOYFEUkDxi8ldWovNNBFWh3ry+cvWR5NzEYZVEWD6ASe+ccLIH6It3Nhb71u7Zl6LSsJSYjTAUV/p2nnCVbsHcb2bnyeuNb85q/Algzl/9EyD8vqqq5NWHv5jRdCkSEh6u3Q4l/y1+Id8mtP14tuc+Yv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RosHvJK9; arc=none smtp.client-ip=74.125.228.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 397A1496D37;
+	Thu, 10 Sep 2026 20:08:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=165.173.180.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789070942; cv=pass; b=tZIFrbjKRM/ivA4YEPfS4VfIBf+IEOQyRaXkgJXvvNMg7IFN3Uty/bt4wxN4A5gVZ+4JFM3vRcn2mMPRl72nxxU8TJ+D3IL9RhOc1kpDNH3yHRK75AhbNXFdTZSxNpYygz6EnqsqaqZljtnRCg1HU4pcL2u4qbdPwEUfjQoxKHk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789070942; c=relaxed/simple;
+	bh=XMxpG9iAPdg0+hMCZskbc/CZruxQJW5ugKlBJSiu/4Q=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=OiV7/pMIgY+cYwdojtkNrJVVDWLyPs0N7ov6hnFxh+/qxcjmUd6Z/DogOPeDFIpM7vLr/3+SUqJiNgrFxuWDZnCrvv+zfUTo5ICCxJR5Xoy4bR7KNsCTNMakLEXnOl4myFAYdK6U1zRy1Ok2V6ECdZiiJlV2nMQb2w6jFc/JPXw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (2048-bit key) header.d=rong.moe header.i=i@rong.moe header.b=l1hiqpOT; arc=pass smtp.client-ip=165.173.180.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rong.moe
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rong.moe
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RosHvJK9"
-Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-85469b2e1d5so63586b3a.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 12:31:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789068712; x=1789673512; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gEdV5Xs8ER2iH6ECRgXfLV1Fk4a++1FtqWHfmbg9CiM=;
-        b=RosHvJK9DLK0FlPnzknkm7VlHCbjT6fsYBPIZKcvabHTFuvKkmzNvbSYKIfikaqHtc
-         7fab1b9E0d3x7/+7bqzQqEkKybK8tvuS1RJM5+ez9HQ3ByWOxS1UTWx4CGZ428GgZPWL
-         mPBxWuS5QN4kF+LEajLA2p6ch7yrI86NwVxJoWW+3acLARqivoKzVNc8A3cPUa67JG8W
-         y+Y81VXs5tzI1Kr5aXGO2kiOfkfJe0LFJB/lG0LnzmLD0ihHV/iUTViFOXYhY1IO0KEJ
-         VwNx2nrsNwn+8yTFMvNE3/ZtaHG/9WrfezbUsXaTPuMioWUfYeRrrG9aOn/IRs0A2SMA
-         ppGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789068712; x=1789673512;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=gEdV5Xs8ER2iH6ECRgXfLV1Fk4a++1FtqWHfmbg9CiM=;
-        b=jCOqTkFNaSfNC5+CFfPo2EoIjSvLpEAxc2kV9ELGJQIetOLm5BN0xOa0gdvVGIThOZ
-         8Sy1D/GLdxyTKGyuPscIGmvmPzj/XOl0wW1aqV0jOGIQFHdaueP+Hd/NIvzHC9SVIY7X
-         XuV2AI2h6d1Y+7YIzccZT4mYb5uxgbDwEhKLzh2o+tzdB/faI8SwthQLUNd9L9jnkLQn
-         W8kngQzesCA3gVNwWLVfSaGu57/8FnJ69ljidqiCRDQRFcEmFfrCFjKGIaFcdr/Uz8Ti
-         G8i3hTW1K4HLDWuhZRXv0UejO6aMzmp0rDv6nLZVkPbSS5B4nOcZlJhLqWxThi3HUWlR
-         REgw==
-X-Forwarded-Encrypted: i=1; AKwUvBzoMqyKDmkeU8OfmrBtj/NLWGYQTNkIkBxtcDcMr44Q11HKtaddZOsYkS7VwtFFcERvFV9awiasRRdjLw==@vger.kernel.org
-X-Gm-Message-State: AFuF++k/cRPvy6B2vvqQJ6xrLIlmlMItIIegl1jXsBHfOut/9AOgvfS1
-	2puYGo3FuYlvvEr9+uwLliGvwi0bFU0J5JU3ehrOPWsdlofBh5vG6Hky
-X-Gm-Gg: AYBFou1T+JpzMeNbn5oxYmq8VzPeLqa2bxuNbiuMfCk9u27vDToASwckTLF+ES1hQfS
-	tLRAgjdyqFBW8F/Y87RWJDLbQ1rGMB6srwG1+NqR+WmtJfqRvyaBc3BRxObQAMHXwpivKu5yYCN
-	0zw3zME51VpjM0efS9DrvAG01Hd2obeEXpMAXu1fm5R27N3LCLiR8Y1kukMAWRw47rOdo5pofsk
-	hq0GzjtawGzxKDclBMC93bdyV5STT18m+bZS4yy0jS++W4cq3tOK2aJu3NndsSarUBCKDNjhAAD
-	jGh8/G1ewnlKEkGv2CX25Ra9DhM7V5esXGGnMYPqy035qCYmnlcLfPDfsF1no005jscB+S997L3
-	ugY4evLCf5t2roCJnFPTvzLv0hXOtysccGQCboHNBp2S82/sJKW/eungVMycjZqaTQEvLT+VruJ
-	6QfjzUO+3rVtC8lqmogkmvaYdMeMD7EWf3Pivv7excepMmtvyTOmTvVF1f9M/Eew24R2W5UFIoc
-	REODsRGmFFm0bt1iTJUWC56Fa+kiKfleiOXjb/bLKdQtcS3
-X-Received: by 2002:a05:6a00:ba8d:b0:857:72ba:ff0f with SMTP id d2e1a72fcca58-86b34efaaebmr529838b3a.23.1789068712105;
-        Thu, 10 Sep 2026 12:31:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-86b2a5c052csm79353b3a.58.2026.09.10.12.31.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Sep 2026 12:31:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c5fd98fc-2cfb-434a-8a81-3bf589049670@roeck-us.net>
-Date: Thu, 10 Sep 2026 12:31:49 -0700
+	dkim=pass (2048-bit key) header.d=rong.moe header.i=i@rong.moe header.b="l1hiqpOT"
+ARC-Seal: i=1; a=rsa-sha256; t=1789070909; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=TZr/MqxeO+RPrnxMU8acxsErDbW0kzwYW50+jb8y8WPpzMkiKtjlzCZpvi0wQK+4pSJA7Ln42c+DcqIW00HqOG7+oKaa+Cb3YOSK/cNZD06/tBn0l2l6wU6HCGD/qzpqn40kvWwImuKwsMbhILIsNmcufkuHyl5Yktsyf9IgHz0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1789070909; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=7xF/bvGmmgfKjp7IFSUVBBDJnWnSnz1VJawArGtXiI4=; 
+	b=CGtwW3B1TMb9OT9d+Sn5cmtsNP4XOuee2gdxUgfBOX4m7XDt24DkotZWlgY4Lrt3s6br8CaZSfO85QTkgQgV0+cQgNFF6cgyYg6js0SnKi9RBrwekCZNlyDRykpCqET8UI0VQTqQkk5NQmMcDuNr542dRByErKBzyOrzfq4HPS0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=rong.moe;
+	spf=pass  smtp.mailfrom=i@rong.moe;
+	dmarc=pass header.from=<i@rong.moe>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1789070909;
+	s=zmail2048; d=rong.moe; i=i@rong.moe;
+	h=Date:Date:From:From:To:To:CC:Subject:Subject:In-Reply-To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
+	bh=7xF/bvGmmgfKjp7IFSUVBBDJnWnSnz1VJawArGtXiI4=;
+	b=l1hiqpOTywFVBjt9qWrrToVmN5Rn8oO0ssv+jQLph63ELk/A9PZq0QKhr6PmBBpg
+	5K1OacgbhFSBI+5S2g359fysF31hb76ReeLhXe7RqGQG5U9NUIHGprgI0igj0YSdcDv
+	th0QOr0GfUfg6ABNm3GaJLmHWwnkh2iXx6n3OyrJ/Fk0iLZd9YNupTXHmSNfupvDb/v
+	NbLPa9ml8LAH96SUcIHovqD4Uqgoj4MaqpFCPbL+MGcQym+O1pa8lEXEnL3/cVVmDOy
+	g6L6s2U3VDnjjqp8A5UhJWSqNrVjNA4LNYkeUtlnG3n2L50V6tmwqSFJaI3y+xrVvQl
+	o5FIAL6Buw==
+Received: by smtp.zohomail.com with SMTPS id 1789070906809196.12110273373378;
+	Thu, 10 Sep 2026 13:08:26 -0700 (PDT)
+Date: Fri, 11 Sep 2026 04:07:13 +0800
+From: Rong Zhang <i@rong.moe>
+To: Guenter Roeck <linux@roeck-us.net>, Clemens Ladisch <clemens@ladisch.de>,
+ Gabriel Ford <gabriel@gford.dev>
+CC: Mario Limonciello <mario.limonciello@amd.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (k10temp) Fix model id range of Zen5 Turin
+User-Agent: Thunderbird for Android
+In-Reply-To: <54a5620c-36cb-4dc1-bbd8-9647ff7cb708@roeck-us.net>
+References: <20260911-k10temp-fix-zen5-epyc-v1-1-643f5a248ae1@rong.moe> <54a5620c-36cb-4dc1-bbd8-9647ff7cb708@roeck-us.net>
+Message-ID: <9334E4DA-5389-49BE-A9FF-48A7FF5C1C35@rong.moe>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 08/14] mfd: remove unused aat2870 driver
-To: Arnd Bergmann <arnd@arndb.de>, Svyatoslav Ryhel <clamor95@gmail.com>,
- Arnd Bergmann <arnd@kernel.org>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Bartosz Golaszewski <brgl@kernel.org>, Mark Brown <broonie@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Daniel Thompson <danielt@kernel.org>,
- Helge Deller <deller@gmx.de>, devicetree@vger.kernel.org,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- dri-devel@lists.freedesktop.org, Jonathan Cameron <jic23@kernel.org>,
- Jingoo Han <jingoohan1@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Linus Walleij <linusw@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-doc@vger.kernel.org, linux-fbdev@vger.kernel.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev,
- Mauro Carvalho Chehab <mchehab@kernel.org>, mfd@lists.linux.dev,
- Michael Hennerich <michael.hennerich@analog.com>,
- patches@opensource.cirrus.com, Pavel Machek <pavel@kernel.org>,
- Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Support Opensource <support.opensource@diasemi.com>
-References: <CAPVz0n0ryOns2sCJE_jFana9MVzwEj1QZuPEa8FNhGbHXnMB+A@mail.gmail.com>
- <11652e5e-053e-45b0-98a0-0c1cb2aeedc4@app.fastmail.com>
- <7a92a79e-e22a-4e34-9f11-4086b88f62cc@roeck-us.net>
- <e33b42dc-1561-4819-b028-b13af9e7115b@app.fastmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <e33b42dc-1561-4819-b028-b13af9e7115b@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
 
-On 9/10/26 12:15, Arnd Bergmann wrote:
-> On Thu, Sep 10, 2026, at 20:38, Guenter Roeck wrote:
->>>
->> ...
->>> drivers/hwmon/ds620.c
->>> drivers/hwmon/f75375s.c
->>> drivers/hwmon/max1111.c
->>> drivers/hwmon/max197.c
->>
->> I missed the rationale for removing those, but then I don't really
->> mind either. I guess we'll hear if someone still uses any of those
->> drivers/chips.
-> 
-> None of these have devicetree support, and they are not usable
-> with any of the remaining board files.
-> 
->  From what I found:
-> 
-> - da620 apparently never had any users upstream, though it does
->    not require platform data and is theoretically usable with
->    an external dtb
-> - f75375s was only used on iop32x (long gone)
-> - max197 was used on x86/elan/ts5500, which is still in the
->    tree but cannot be enabled anymore because it is a 486 class SoC.
->    I have sent a separate patch to remove that platform
-> - max1111 was used on spitz, which is on its way out for 7.4.
-> 
+Hi Guenter,
 
-As I said, I don't have any issues with removing them. Note though
-that the ds620 driver (like many other hwmon drivers) does not require
-devicetree or platform data to work just fine.
+Thanks for your review=2E
+
+
+=E4=BA=8E 2026=E5=B9=B49=E6=9C=8811=E6=97=A5 GMT+08:00 03:00:13=EF=BC=8CGu=
+enter Roeck <linux@roeck-us=2Enet> =E5=86=99=E9=81=93=EF=BC=9A
+> On 9/10/26 11:39, Rong Zhang wrote:
+> > Model 20h-2Fh are mobile processors with single CCD=2E For example, mo=
+del
+> > 24h is Strix Point, i=2Ee=2E, Ryzen AI 7 (PRO) (H/HX) 360/365/370=2E
+> >=20
+> > Including mobile processors in the model id range of Zen5 Turin
+> > processors leads to bogus reporting:
+> >=20
+> >    k10temp-pci-00c3
+> >    Adapter: PCI adapter
+> >    Tctl:         +54=2E1=C2=B0C
+> >    Tccd4:       +148=2E6=C2=B0C
+> >    Tccd6:       +148=2E4=C2=B0C
+> >    Tccd7:       +149=2E1=C2=B0C
+> >    Tccd8:       +149=2E2=C2=B0C
+> >    Tccd9:       +149=2E2=C2=B0C
+> >    Tccd12:      +149=2E1=C2=B0C
+> >    Tccd14:       +22=2E0=C2=B0C
+> >    Tccd15:       +22=2E0=C2=B0C
+> >    Tccd16:       +22=2E0=C2=B0C
+> >=20
+> > Fix it by removing the said range=2E
+> >=20
+> > Fixes: 8440d5aca227 ("hwmon: (k10temp) Add per-CCD temperature monitor=
+ing for Zen5 Turin")
+> > Signed-off-by: Rong Zhang <i@rong=2Emoe>
+> > ---
+> >   drivers/hwmon/k10temp=2Ec | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/hwmon/k10temp=2Ec b/drivers/hwmon/k10temp=2Ec
+> > index 75a45010d687=2E=2E3e7e63edc6a3 100644
+> > --- a/drivers/hwmon/k10temp=2Ec
+> > +++ b/drivers/hwmon/k10temp=2Ec
+> > @@ -523,7 +523,7 @@ static int k10temp_probe(struct pci_dev *pdev, con=
+st struct pci_device_id *id)
+> >   		}
+> >   	} else if (boot_cpu_data=2Ex86 =3D=3D 0x1a) {
+> >   		switch (boot_cpu_data=2Ex86_model) {
+> > -		case 0x00 =2E=2E=2E 0x2f:	/* Zen5 Turin */
+> > +		case 0x00 =2E=2E=2E 0x1f:	/* Zen5 Turin */
+>=20
+> Doesn't that drop _all_ CCD temperature reporting for those chips ?
+
+Yes, it's intentional=2E Mobile processors don't support Tccd at all, and
+Tctl is the only available temperature metric on such processors=2E
+In the commit message there is an example of bogus Tccd reporting=2E
 
 Thanks,
-Guenter
+Rong
 
+>=20
+> Guenter
+>=20
+> >   			data->ccd_offset =3D 0x1F0;
+> >   			k10temp_get_ccd_support(data, 16);
+> >   			break;
+> >=20
+> > ---
+> > base-commit: 50d05c7c76c96b90462f24debacca971d2e86713
+> > change-id: 7b515a4b-k10temp-fix-zen5-epyc-14334e85a3b9
+> >=20
+> > Thanks,
+> > Rong
+>=20
