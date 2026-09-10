@@ -1,23 +1,23 @@
 Received: from out28-122.mail.aliyun.com (out28-122.mail.aliyun.com [115.124.28.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B1B3DB325;
-	Thu, 10 Sep 2026 08:27:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 841BA3F1ADA;
+	Thu, 10 Sep 2026 08:28:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789028884; cv=none; b=n+fXARhsfSLy1xgquVDQk9idZRCEM2AYek1jR/r4Jpx1m6qKv7FqYDaM0yU2fva0GUokijVayZUuBTYD+dwLW1tIkx26khNoC86VcZKLSO2m2ptGj78RLTysgAvjJPfd2MH+T9arclXaRb9iBIkHqzb2Vc2aWQYiJDArMRhqeXU=
+	t=1789028885; cv=none; b=q+pfr0n6miHmilQjg/yIWFRya00hb5fj6nundwy9QBE1trzDE46JqfZf6a2OfWp9/7WWoJFEX0NJxxjsTA77QkBOVCnzPiqkv0vK6MjQACd0yjwHmiw+dodNpciNO/4q7yoeGtxqb1mpfJYZYbILpQm5sZkasuzMVoMaml/dqoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789028884; c=relaxed/simple;
-	bh=+YnLN+VkRDm3/0xrpu5OmkDkoKd4tGFXfYH+dNZnV5Y=;
+	s=arc-20240116; t=1789028885; c=relaxed/simple;
+	bh=+Ih/mzzz23PxzgsInvOf1KV3e+Ff5Pd8XQ6TygF9OkQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Eiqqm+oqQudtRHaIZivdnYI1uOBv7NGOnGCPp9yyBWQ791nCI0NhFQjUGZ/M4ScTUrwzOxcxTX2QmAzt6JwqKwoSBCmJ4P9FTcyAvobbr4l1PyP0rFTG9AAVqlrCJkP2oSViIeaaOkcH2/ixxXWTcfnDmHl+Gmx2OGGLKZKwOIE=
+	 MIME-Version; b=BwqpSVZ5v7mmmTIh7BTZmaLCwpGG2dBjVUQXcjPFFUgFOydHO1mJCwRXEKs4ZxTd+C1ereNbma5/NCACEfrp/cr9bLgpoaaR4qE2Lz7vQwPrW3rK+6YBYdOl17UymPRVFdzVc5S6pusgMqsklfkRm7gk3SUUb+34Okw91OQpH2E=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.09531699|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0129748-0.0460928-0.940932;FP=1146291024952902867|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033037032089;MF=wanglin@open-hieco.net;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.jAJ356r_1789028869;
-Received: from localhost.localdomain(mailfrom:wanglin@open-hieco.net fp:SMTPD_---.jAJ356r_1789028869 cluster:ay29)
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.1959432|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0220792-0.18182-0.796101;FP=7902404667849131669|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033045220102;MF=wanglin@open-hieco.net;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.jAJ357r_1789028870;
+Received: from localhost.localdomain(mailfrom:wanglin@open-hieco.net fp:SMTPD_---.jAJ357r_1789028870 cluster:ay29)
           by smtp.aliyun-inc.com;
-          Thu, 10 Sep 2026 16:27:49 +0800
+          Thu, 10 Sep 2026 16:27:50 +0800
 From: Lin Wang <wanglin@open-hieco.net>
 To: Borislav Petkov <bp@alien8.de>,
 	Yazen Ghannam <yazen.ghannam@amd.com>,
@@ -34,9 +34,9 @@ Cc: Pu Wen <puwen@hygon.cn>,
 	linux-edac@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 3/8] EDAC/amd64: Stop matching Hygon CPUs
-Date: Thu, 10 Sep 2026 16:27:29 +0800
-Message-ID: <20260910082734.3771675-4-wanglin@open-hieco.net>
+Subject: [PATCH v5 4/8] RAS/AMD/ATL: Match AMD CPUs only
+Date: Thu, 10 Sep 2026 16:27:30 +0800
+Message-ID: <20260910082734.3771675-5-wanglin@open-hieco.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260910082734.3771675-1-wanglin@open-hieco.net>
 References: <20260910082734.3771675-1-wanglin@open-hieco.net>
@@ -48,48 +48,51 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-amd64_edac matches Hygon Family 0x18, but obtains its node count and
-F3 devices from the AMD northbridge cache. That cache maps dense node
-indices to fixed PCI slots starting at 0x18. Hygon discovers DF devices
-by PCI ID and reads their identities from DF registers. Their PCI slots
-do not encode node identity, and CPU NodeIds are sparse across sockets.
-The cache therefore cannot represent the Hygon topology.
+The ATL CPU table matches Hygon through X86_FEATURE_SMCA and
+X86_FEATURE_ZEN, but the library obtains its node count and F4 devices
+from the AMD northbridge cache. That cache maps dense node indices to
+fixed PCI slots. Hygon PCI slots do not encode node identity, and CPU
+NodeIds are sparse across sockets. The cache therefore cannot represent
+the Hygon topology or provide ATL with a valid node-to-F4 mapping.
 
-A failed fixed-slot F3 lookup causes amd_cache_northbridges() to discard
-the cache, and amd64_edac then exits at its amd_nb_num() check. The
-driver has no valid Hygon node count or node-to-F3 mapping.
+A failed fixed-slot F3 lookup leaves the cache empty, so amd_atl_init()
+exits at its amd_nb_num() check.
 
-Remove the Hygon CPU match and the unused Family 0x18 case. Hygon memory
-controller support requires the Hygon node interfaces and will be added
-separately. This does not affect MCE decoding in mce_amd.c.
+Limit both feature matches to AMD. Hygon address translation requires
+the Hygon node interfaces and will be added separately.
 
 Signed-off-by: Lin Wang <wanglin@open-hieco.net>
 ---
- drivers/edac/amd64_edac.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/ras/amd/atl/core.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 475235c402e8..9e35098d3dd2 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -3840,9 +3840,6 @@ static int per_family_init(struct amd64_pvt *pvt)
- 		}
- 		break;
+diff --git a/drivers/ras/amd/atl/core.c b/drivers/ras/amd/atl/core.c
+index d77dacdd4f56..fe84fc52c657 100644
+--- a/drivers/ras/amd/atl/core.c
++++ b/drivers/ras/amd/atl/core.c
+@@ -176,18 +176,17 @@ static void check_for_legacy_df_access(void)
+ }
  
--	case 0x18:
--		break;
--
- 	case 0x19:
- 		switch (pvt->model) {
- 		case 0x00 ... 0x0f:
-@@ -4120,7 +4117,6 @@ static const struct x86_cpu_id amd64_cpuids[] = {
- 	X86_MATCH_VENDOR_FAM(AMD,	0x15, NULL),
- 	X86_MATCH_VENDOR_FAM(AMD,	0x16, NULL),
- 	X86_MATCH_VENDOR_FAM(AMD,	0x17, NULL),
--	X86_MATCH_VENDOR_FAM(HYGON,	0x18, NULL),
- 	X86_MATCH_VENDOR_FAM(AMD,	0x19, NULL),
- 	X86_MATCH_VENDOR_FAM(AMD,	0x1A, NULL),
+ /*
+- * This library provides functionality for AMD-based systems with a Data Fabric.
++ * This library provides functionality for AMD systems with a Data Fabric.
+  * The set of systems with a Data Fabric is equivalent to the set of Zen-based systems
+  * and the set of systems with the Scalable MCA feature at this time. However, these
+  * are technically independent things.
+  *
+  * It's possible to match on the PCI IDs of the Data Fabric devices, but this will be
+- * an ever expanding list. Instead, match on the SMCA and Zen features to cover all
+- * relevant systems.
++ * an ever expanding list. Instead, match AMD CPUs with the SMCA and Zen features.
+  */
+ static const struct x86_cpu_id amd_atl_cpuids[] = {
+-	X86_MATCH_FEATURE(X86_FEATURE_SMCA, NULL),
+-	X86_MATCH_FEATURE(X86_FEATURE_ZEN, NULL),
++	X86_MATCH_VENDOR_FEATURE(AMD, X86_FEATURE_SMCA, NULL),
++	X86_MATCH_VENDOR_FEATURE(AMD, X86_FEATURE_ZEN, NULL),
  	{ }
+ };
+ 
 -- 
 2.43.0
 
