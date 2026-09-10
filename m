@@ -1,23 +1,23 @@
-Received: from out28-122.mail.aliyun.com (out28-122.mail.aliyun.com [115.124.28.122])
+Received: from out28-173.mail.aliyun.com (out28-173.mail.aliyun.com [115.124.28.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 841BA3F1ADA;
-	Thu, 10 Sep 2026 08:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72AFC3CD8CC;
+	Thu, 10 Sep 2026 08:28:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789028885; cv=none; b=q+pfr0n6miHmilQjg/yIWFRya00hb5fj6nundwy9QBE1trzDE46JqfZf6a2OfWp9/7WWoJFEX0NJxxjsTA77QkBOVCnzPiqkv0vK6MjQACd0yjwHmiw+dodNpciNO/4q7yoeGtxqb1mpfJYZYbILpQm5sZkasuzMVoMaml/dqoo=
+	t=1789028888; cv=none; b=Pfal+JEEHtjznzZR/F7JgfPAy0ZiLoHu+q6yUnTzz+0m1G3iiLpr/I3hERE7F6HGA45ODXZySoZEOMiJgpv6GMV/Ss2dqt0MIi1H0c24zOXr5CrmvZS0vDs3U06y7v55nJ/kAdwEIVNOVZby11adsDuRlz52SwWGfv59ghdAaoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789028885; c=relaxed/simple;
-	bh=+Ih/mzzz23PxzgsInvOf1KV3e+Ff5Pd8XQ6TygF9OkQ=;
+	s=arc-20240116; t=1789028888; c=relaxed/simple;
+	bh=5N6j6OVlQygKnyi3loXRCpMJogtm3EHBuAGkOZz9364=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BwqpSVZ5v7mmmTIh7BTZmaLCwpGG2dBjVUQXcjPFFUgFOydHO1mJCwRXEKs4ZxTd+C1ereNbma5/NCACEfrp/cr9bLgpoaaR4qE2Lz7vQwPrW3rK+6YBYdOl17UymPRVFdzVc5S6pusgMqsklfkRm7gk3SUUb+34Okw91OQpH2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.122
+	 MIME-Version; b=SH7pbiKl0QeMxphbr/yKt0+a55OEM6yQnXBLTBr42QCQbI3Yipx5ytl5jHve7Vz1aHR1da3/bZqgicvhwaEfrmNfnyB222ZsTxMNzvjGbUBzJxl6xrBRYoEjXrsdQoFH1TRGcz29Kqo1zJoria93TaIdcuYfQV6/IPR8t7yBetA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.1959432|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0220792-0.18182-0.796101;FP=7902404667849131669|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033045220102;MF=wanglin@open-hieco.net;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.jAJ357r_1789028870;
-Received: from localhost.localdomain(mailfrom:wanglin@open-hieco.net fp:SMTPD_---.jAJ357r_1789028870 cluster:ay29)
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.08866867|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.00722971-0.0111682-0.981602;FP=4740927069331392975|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033037021217;MF=wanglin@open-hieco.net;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.jAJ35AB_1789028872;
+Received: from localhost.localdomain(mailfrom:wanglin@open-hieco.net fp:SMTPD_---.jAJ35AB_1789028872 cluster:ay29)
           by smtp.aliyun-inc.com;
-          Thu, 10 Sep 2026 16:27:50 +0800
+          Thu, 10 Sep 2026 16:27:52 +0800
 From: Lin Wang <wanglin@open-hieco.net>
 To: Borislav Petkov <bp@alien8.de>,
 	Yazen Ghannam <yazen.ghannam@amd.com>,
@@ -34,9 +34,9 @@ Cc: Pu Wen <puwen@hygon.cn>,
 	linux-edac@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 4/8] RAS/AMD/ATL: Match AMD CPUs only
-Date: Thu, 10 Sep 2026 16:27:30 +0800
-Message-ID: <20260910082734.3771675-5-wanglin@open-hieco.net>
+Subject: [PATCH v5 6/8] x86/amd_nb: Restrict the northbridge framework to AMD CPUs
+Date: Thu, 10 Sep 2026 16:27:32 +0800
+Message-ID: <20260910082734.3771675-7-wanglin@open-hieco.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260910082734.3771675-1-wanglin@open-hieco.net>
 References: <20260910082734.3771675-1-wanglin@open-hieco.net>
@@ -48,51 +48,46 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The ATL CPU table matches Hygon through X86_FEATURE_SMCA and
-X86_FEATURE_ZEN, but the library obtains its node count and F4 devices
-from the AMD northbridge cache. That cache maps dense node indices to
-fixed PCI slots. Hygon PCI slots do not encode node identity, and CPU
-NodeIds are sparse across sockets. The cache therefore cannot represent
-the Hygon topology or provide ATL with a valid node-to-F4 mapping.
+amd_cache_northbridges() obtains function 3 and function 4 for node N
+from fixed PCI slot 0x18 + N. Hygon DF devices are discovered by PCI
+ID and their slots do not encode node identity, so this cache cannot
+represent the Hygon topology.
 
-A failed fixed-slot F3 lookup leaves the cache empty, so amd_atl_init()
-exits at its amd_nb_num() check.
+The preceding patches remove the Hygon matches from amd64_edac and ATL.
+Restrict the northbridge initialization and early device check to AMD
+CPUs. Keep amd_get_mmconfig_range() available on Hygon because it reads
+the MMCONFIG MSR without using the northbridge cache.
 
-Limit both feature matches to AMD. Hygon address translation requires
-the Hygon node interfaces and will be added separately.
-
+Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
 Signed-off-by: Lin Wang <wanglin@open-hieco.net>
 ---
- drivers/ras/amd/atl/core.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ arch/x86/kernel/amd_nb.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/ras/amd/atl/core.c b/drivers/ras/amd/atl/core.c
-index d77dacdd4f56..fe84fc52c657 100644
---- a/drivers/ras/amd/atl/core.c
-+++ b/drivers/ras/amd/atl/core.c
-@@ -176,18 +176,17 @@ static void check_for_legacy_df_access(void)
- }
+diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+index 5d364540673d..848ed2ca17c3 100644
+--- a/arch/x86/kernel/amd_nb.c
++++ b/arch/x86/kernel/amd_nb.c
+@@ -125,8 +125,7 @@ bool __init early_is_amd_nb(u32 device)
+ 	const struct pci_device_id *id;
+ 	u32 vendor = device & 0xffff;
  
- /*
-- * This library provides functionality for AMD-based systems with a Data Fabric.
-+ * This library provides functionality for AMD systems with a Data Fabric.
-  * The set of systems with a Data Fabric is equivalent to the set of Zen-based systems
-  * and the set of systems with the Scalable MCA feature at this time. However, these
-  * are technically independent things.
-  *
-  * It's possible to match on the PCI IDs of the Data Fabric devices, but this will be
-- * an ever expanding list. Instead, match on the SMCA and Zen features to cover all
-- * relevant systems.
-+ * an ever expanding list. Instead, match AMD CPUs with the SMCA and Zen features.
-  */
- static const struct x86_cpu_id amd_atl_cpuids[] = {
--	X86_MATCH_FEATURE(X86_FEATURE_SMCA, NULL),
--	X86_MATCH_FEATURE(X86_FEATURE_ZEN, NULL),
-+	X86_MATCH_VENDOR_FEATURE(AMD, X86_FEATURE_SMCA, NULL),
-+	X86_MATCH_VENDOR_FEATURE(AMD, X86_FEATURE_ZEN, NULL),
- 	{ }
- };
+-	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
+-	    boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
++	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
+ 		return false;
  
+ 	if (cpu_feature_enabled(X86_FEATURE_ZEN))
+@@ -315,8 +314,7 @@ static __init void fix_erratum_688(void)
+ 
+ static __init int init_amd_nbs(void)
+ {
+-	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
+-	    boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
++	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
+ 		return 0;
+ 
+ 	amd_cache_northbridges();
 -- 
 2.43.0
 
