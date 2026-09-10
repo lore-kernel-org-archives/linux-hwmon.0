@@ -1,23 +1,23 @@
-Received: from out28-193.mail.aliyun.com (out28-193.mail.aliyun.com [115.124.28.193])
+Received: from out28-122.mail.aliyun.com (out28-122.mail.aliyun.com [115.124.28.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB58392819;
-	Thu, 10 Sep 2026 08:27:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B1B3DB325;
+	Thu, 10 Sep 2026 08:27:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789028884; cv=none; b=lDD0c/hpvkIbV2uyi1oy+xV5nic4Ejt76cw4czxYAqPus6Yh79SxvaDQMl2IjEjbtDy5507IqFZIuLlqpDWVyh3JsZGyJcZ1LwfTukXiD08FRgo1T5XOcJjs+RvGE0ZmXsGApeOaPOarD5d9q4qIaz3U8enNK1q2ciQU5DiYRyI=
+	t=1789028884; cv=none; b=n+fXARhsfSLy1xgquVDQk9idZRCEM2AYek1jR/r4Jpx1m6qKv7FqYDaM0yU2fva0GUokijVayZUuBTYD+dwLW1tIkx26khNoC86VcZKLSO2m2ptGj78RLTysgAvjJPfd2MH+T9arclXaRb9iBIkHqzb2Vc2aWQYiJDArMRhqeXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789028884; c=relaxed/simple;
-	bh=c8SKgYkSJURp0ia/ucGtZk91QBnGcA1QJPzgcrn33ow=;
+	bh=+YnLN+VkRDm3/0xrpu5OmkDkoKd4tGFXfYH+dNZnV5Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o9baeMWwj2x0a7dc4QM8xfttVvYDQK3/l3xZ9tLoxn0ygBkxoCHYoPF/LHNqlU2ctGRUZcQLo51vQiQRy0/V0dy9UtR6kk9XS8OEOfhIjVv2k1lisMTUaRx/d1f6jMD1T1ly2T3UWgO2YH7yGbySykGheYpkvkIk5dAGn+CXM2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.193
+	 MIME-Version; b=Eiqqm+oqQudtRHaIZivdnYI1uOBv7NGOnGCPp9yyBWQ791nCI0NhFQjUGZ/M4ScTUrwzOxcxTX2QmAzt6JwqKwoSBCmJ4P9FTcyAvobbr4l1PyP0rFTG9AAVqlrCJkP2oSViIeaaOkcH2/ixxXWTcfnDmHl+Gmx2OGGLKZKwOIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.0743752|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.00635557-0.00123426-0.99241;FP=14413116730169444571|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033037006180;MF=wanglin@open-hieco.net;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.jAJ355l_1789028868;
-Received: from localhost.localdomain(mailfrom:wanglin@open-hieco.net fp:SMTPD_---.jAJ355l_1789028868 cluster:ay29)
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.09531699|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0129748-0.0460928-0.940932;FP=1146291024952902867|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033037032089;MF=wanglin@open-hieco.net;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.jAJ356r_1789028869;
+Received: from localhost.localdomain(mailfrom:wanglin@open-hieco.net fp:SMTPD_---.jAJ356r_1789028869 cluster:ay29)
           by smtp.aliyun-inc.com;
-          Thu, 10 Sep 2026 16:27:48 +0800
+          Thu, 10 Sep 2026 16:27:49 +0800
 From: Lin Wang <wanglin@open-hieco.net>
 To: Borislav Petkov <bp@alien8.de>,
 	Yazen Ghannam <yazen.ghannam@amd.com>,
@@ -34,9 +34,9 @@ Cc: Pu Wen <puwen@hygon.cn>,
 	linux-edac@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 2/8] x86/hygon: Map CPU NodeIds to DF nodes
-Date: Thu, 10 Sep 2026 16:27:28 +0800
-Message-ID: <20260910082734.3771675-3-wanglin@open-hieco.net>
+Subject: [PATCH v5 3/8] EDAC/amd64: Stop matching Hygon CPUs
+Date: Thu, 10 Sep 2026 16:27:29 +0800
+Message-ID: <20260910082734.3771675-4-wanglin@open-hieco.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260910082734.3771675-1-wanglin@open-hieco.net>
 References: <20260910082734.3771675-1-wanglin@open-hieco.net>
@@ -48,137 +48,48 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On bare-metal Hygon systems, CPUID 0x8000001E ECX[7:0] encodes a
-CPU's socket and local CDD ordinal. The value is sparse across sockets
-and cannot be used as an index into the dense DF node cache.
+amd64_edac matches Hygon Family 0x18, but obtains its node count and
+F3 devices from the AMD northbridge cache. That cache maps dense node
+indices to fixed PCI slots starting at 0x18. Hygon discovers DF devices
+by PCI ID and reads their identities from DF registers. Their PCI slots
+do not encode node identity, and CPU NodeIds are sparse across sockets.
+The cache therefore cannot represent the Hygon topology.
 
-Translate the CPUID value through the CDDs sorted by socket and DFID.
-The NodeId reported by CPUID in a guest may not describe the physical
-DF topology. Return -ENODEV in guests or when the NodeId does not
-identify an enumerated CDD.
+A failed fixed-slot F3 lookup causes amd_cache_northbridges() to discard
+the cache, and amd64_edac then exits at its amd_nb_num() check. The
+driver has no valid Hygon node count or node-to-F3 mapping.
+
+Remove the Hygon CPU match and the unused Family 0x18 case. Hygon memory
+controller support requires the Hygon node interfaces and will be added
+separately. This does not affect MCE decoding in mce_amd.c.
 
 Signed-off-by: Lin Wang <wanglin@open-hieco.net>
 ---
- arch/x86/include/asm/hygon/node.h | 22 +++++++++++++
- arch/x86/kernel/hygon_node.c      | 51 +++++++++++++++++++++++++++++++
- 2 files changed, 73 insertions(+)
+ drivers/edac/amd64_edac.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/arch/x86/include/asm/hygon/node.h b/arch/x86/include/asm/hygon/node.h
-index 77e9f5354837..8ed44addedd4 100644
---- a/arch/x86/include/asm/hygon/node.h
-+++ b/arch/x86/include/asm/hygon/node.h
-@@ -77,6 +77,23 @@ u16 hygon_cdd_num(void);
-  */
- int hygon_node_get_info(u16 node, struct hygon_node_info *info);
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index 475235c402e8..9e35098d3dd2 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -3840,9 +3840,6 @@ static int per_family_init(struct amd64_pvt *pvt)
+ 		}
+ 		break;
  
-+/**
-+ * hygon_cpu_to_df_node() - map CPU to dense DF CDD index
-+ * @cpu: CPU index
-+ *
-+ * Hygon Fam18h exposes sparse physical node IDs via CPUID 0x8000001E
-+ * ECX[7:0].
-+ * This function translates the per-CPU physical node ID into a dense
-+ * DF CDD index in [0, hygon_cdd_num()). The NodeId reported by CPUID in
-+ * a guest may not describe the physical DF topology, so the translation
-+ * is unavailable in guests.
-+ *
-+ * Return: DF CDD index on success, -EINVAL if @cpu is out of range,
-+ * -ENODEV if CPU-to-DF mapping is unavailable or the physical node ID
-+ * does not map to a known DF node.
-+ */
-+int hygon_cpu_to_df_node(unsigned int cpu);
-+
- /**
-  * hygon_node_get_func() - get DF function PCI device for a node
-  * @node: DF node index in [0, hygon_node_num())
-@@ -118,6 +135,11 @@ static inline int hygon_node_get_info(u16 node, struct hygon_node_info *info)
- 	return -ENODEV;
- }
- 
-+static inline int hygon_cpu_to_df_node(unsigned int cpu)
-+{
-+	return -ENODEV;
-+}
-+
- static inline struct pci_dev *hygon_node_get_func(u16 node, u8 func)
- {
- 	return NULL;
-diff --git a/arch/x86/kernel/hygon_node.c b/arch/x86/kernel/hygon_node.c
-index 9ba734c09e6f..a7d09a3938c3 100644
---- a/arch/x86/kernel/hygon_node.c
-+++ b/arch/x86/kernel/hygon_node.c
-@@ -25,6 +25,7 @@
- #include <linux/processor.h>
- #include <linux/slab.h>
- #include <linux/sort.h>
-+#include <linux/topology.h>
- 
- #include <asm/cpu_device_id.h>
- #include <asm/hygon/node.h>
-@@ -553,6 +554,40 @@ static int __init hygon_sort_and_classify(struct hygon_node_cache *cache)
- 	return 0;
- }
- 
-+/*
-+ * Translate a Hygon Fam18h phys_node_id (CPUID 8000001E ECX[7:0]) to a
-+ * dense DF CDD index.  On supported models, CPUID reports this
-+ * encoding:
-+ *
-+ *   phys_node_id = (socket_id << 4) | local_cdd_index_in_dfid_order
-+ *
-+ * The cache->nodes[] CDD region is sorted by (socket_id ASC, dfid ASC),
-+ * so walk it and return the actual cache index of the CDD whose
-+ * socket_id matches and whose socket-local ordinal is @local.
-+ *
-+ * Return -ENODEV if the cache is unavailable or no CDD matches.
-+ */
-+static int hygon_phys_nid_to_df_node(unsigned int phys_nid)
-+{
-+	unsigned int socket = phys_nid >> 4;
-+	unsigned int local = phys_nid & 0xf;
-+	unsigned int ordinal = 0;
-+	u16 i;
-+
-+	if (!hygon_cache.ready)
-+		return -ENODEV;
-+
-+	for (i = 0; i < hygon_cache.num_cdd; i++) {
-+		if (hygon_cache.nodes[i].socket_id != socket)
-+			continue;
-+
-+		if (ordinal++ == local)
-+			return i;
-+	}
-+
-+	return -ENODEV;
-+}
-+
- /*
-  * Build the global DF node cache.
-  *
-@@ -617,6 +652,22 @@ int hygon_node_get_info(u16 node, struct hygon_node_info *info)
- }
- EXPORT_SYMBOL_GPL(hygon_node_get_info);
- 
-+int hygon_cpu_to_df_node(unsigned int cpu)
-+{
-+	if (cpu >= nr_cpu_ids)
-+		return -EINVAL;
-+
-+	/*
-+	 * The NodeId reported by CPUID in a guest may not describe the
-+	 * physical DF topology.
-+	 */
-+	if (cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
-+		return -ENODEV;
-+
-+	return hygon_phys_nid_to_df_node(topology_amd_node_id(cpu));
-+}
-+EXPORT_SYMBOL_GPL(hygon_cpu_to_df_node);
-+
- struct pci_dev *hygon_node_get_func(u16 node, u8 func)
- {
- 	if (!hygon_cache.ready)
+-	case 0x18:
+-		break;
+-
+ 	case 0x19:
+ 		switch (pvt->model) {
+ 		case 0x00 ... 0x0f:
+@@ -4120,7 +4117,6 @@ static const struct x86_cpu_id amd64_cpuids[] = {
+ 	X86_MATCH_VENDOR_FAM(AMD,	0x15, NULL),
+ 	X86_MATCH_VENDOR_FAM(AMD,	0x16, NULL),
+ 	X86_MATCH_VENDOR_FAM(AMD,	0x17, NULL),
+-	X86_MATCH_VENDOR_FAM(HYGON,	0x18, NULL),
+ 	X86_MATCH_VENDOR_FAM(AMD,	0x19, NULL),
+ 	X86_MATCH_VENDOR_FAM(AMD,	0x1A, NULL),
+ 	{ }
 -- 
 2.43.0
 
