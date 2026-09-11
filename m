@@ -1,186 +1,186 @@
 Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB5648642C
-	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 21:40:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322794A4EF0
+	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 21:46:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789162809; cv=none; b=qpwvZ2gLrJ6ULzPIKX+VHLOzi+TW/3LRF3Xg2A1EAuLwxKABgGh+F3KXJt5E/skpiqBp4j86evYRE0fJyKrFX1+a4p5sZIhpSbZOovQDEmP7QCBggRG8lWMHEk6NNB6fjS1JBkrdLBrRk0a9tTWl/vIZfxtT1oxFFSPH/m/nrgA=
+	t=1789163217; cv=none; b=ks/XcAXlLVzzbc6NnD3PK7mwoIZjoOopqrTeOAmUER69ryJ7hUdg6eKeXVj4wERumRJU0S214PwMNOBoZWSnYG/755F1KIcOn5sBrZxDqeRgaP/aKYCAfbCU5VV6SN9ojVvV9bhYLAoUM7eu3JCELCS8Bnm9+vEm/GQgRvIRvTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789162809; c=relaxed/simple;
-	bh=wUUTuEwrfC89Bk6zRIwGjO7vwt3E9SQDT/CGRnS191s=;
+	s=arc-20240116; t=1789163217; c=relaxed/simple;
+	bh=PiaKAyD7d+00pfdZ8SrbGYWHzdANSMetJuvQBoxbsXw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NNhSAw0Adt2utniRIsI9CtFJ5DWWTNkWqx8VK1oacmuuRP03ovSC/JVDhWkAtXG25ZyP3qbQQsSVD9KILfIr230Ci02MUkSoO5+PZ0etcMLnV8HBKhgu+gX22oIE+/YLAfOzlfSXLjfBNLPUlENzGVBOgPoM0Wo1xxUj5qPULj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OtQh8mlK; arc=none smtp.client-ip=74.125.227.141
+	 Content-Type:Content-Disposition:In-Reply-To; b=T6bYm7B1X6iykKQaPUA1pxV0V7DTglsGMT+aXHznIxssG0iEkKQWONBgReXfhpXeKBzSsXoD8tZID71KL4Q+RBPi5OLMchxE0ZcR3eHDLRZ6uA/9+xAEHGX2hsY2R4EgEbYUIkQQdEtlwPHZ/vEr7E/ZWd7Z5TfDG8SQh1g8yO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bkUrAZH/; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OtQh8mlK"
-Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccb652d7so31365a91.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 14:40:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bkUrAZH/"
+Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccafb74fso275507a91.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 14:46:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789162806; x=1789767606; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=CeQ7vx0KvkM9NOKTbl9EpM89WcQPA8FtwRV02R2rPEU=;
-        b=OtQh8mlKggldb+caUR8zOiecvOeowoQwazFVClbnwmltHISn64SZyHI9k3iEeKJCQH
-         ipbiZqU8MOJdmhpmXeYnGHT1FdG7D+64BblsEu5lSKXonvWJPmROcvYmo5K7ZCPEtF9l
-         nUxFDDt2wss+ejXQjwFTd0+T1K0gzXIlYCeoER6rAgHCU9eZztiCfNrSkPrjtdkNkx8k
-         c2kfEu9C2j0rGkJrY0aj8DFr7v7SmqB4gSy473ofJh2xYVCADPji9cF8ZV6mGOdEro3g
-         MHI8meSNUA4ZcfdG6zivYx0gZcz/PUPqGSqgLd6OqyOAcMoU9vH/oReXI4R96YTWn+ja
-         jJRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789162806; x=1789767606;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1789163215; x=1789768015; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=CeQ7vx0KvkM9NOKTbl9EpM89WcQPA8FtwRV02R2rPEU=;
-        b=TdxdYhQwpBTHG1xLixyM7T3oJ200/kUC6ZvNJwJtI1VvB7fcO8xD24yEHDerkDQadM
-         cEXVx25GxuUBLr5jGPxMqogp7r9N6Z9Ero0btvoCe34gPuEC/bLDF+3zguCk5l3lqYHz
-         tGNfuPnl/TBNetuOiE/JCfEfl2lTMGvv0LgivwKtndpszLIsMPYFxUuQQGwlHmxsR/C9
-         R5z0outqEUuEx+Qm8J50tFIClVyfH1TbyrUlEp24cwKSXUXfVhmX03AjK+gUkjnIoWOT
-         J1ytBSIQVjt4D18x1Xab1Rcdz+9ptfNMx3r/TPa5SkK/RJQUu0fbg2iYxLtpGPoqmMwZ
-         lbnA==
-X-Forwarded-Encrypted: i=1; AKwUvBz0m+FixodKG9S1BDmlzPqM9sPwZYna/Wyqv5K9eZuspZzMgkCyefdVgUX5jltqlbf18ffvHKhWK7Tr7Q==@vger.kernel.org
-X-Gm-Message-State: AFuF++mfe4WYvFL/9551fR5BLSHD8Bju0mZzLoitNg1a2ioS1YojDqcw
-	64esObxnlqDRNBAA/tAR22mvG1NKgPSdhtXDJQJrX5NOC8nlP5KqIZHA
-X-Gm-Gg: AYBFou2J5NhMUKWgxKbB2ml4dXg0RE7PO0mrhLRPV43EP9pralqa5/K/La02/CTa+a6
-	sKA686w2bSiKt5I74d2g5ZMfqnSLaq7k3KP9x/nW+B0gQdCJtDKuTqpK0W5fjxKsOnu63P14qCk
-	CQoLG09NP799bevlETw6JXlx7gD+QXS6mc29Ec72bI5V54OFwILP6jOTQba+0/cjgiA9J/MhiQT
-	HOo0J/BMuNq5PlhjN8CjKmKbVVmUMy9tpf2bwx4tm8jWCsIBKQb7jh+G346NT4z6EkKggVaeiRs
-	WkOr5oBLn4XWMP9VZfbC+pKTU4HRXJQk0A7BfXOxf8kjSqq6CVqajIjJPoQt+F1N/9UIuncg+z9
-	FBlDsAN7tAvdw5E6lfPb9An241UFRvJ2aiiASQKi27uxXlwOTLRYos/EoLZA34DYZ2gcr0wlN0A
-	3bbDBNSxqgu1hqW5PpjYf/bGvzcM4ERUHgVqethr3u5NPyILXweLMnZiKoLbFeV8whrKaiu+k/U
-	LVLW9jmllCY
-X-Received: by 2002:a17:90b:280e:b0:381:cef1:11ac with SMTP id 98e67ed59e1d1-39dbc0c3fa6mr241945a91.10.1789162805971;
-        Fri, 11 Sep 2026 14:40:05 -0700 (PDT)
+        bh=CvF6mXV4/o8ZVJXR1oq5jFHP/ZPq+7AJoMWbWxqY8mo=;
+        b=bkUrAZH/qds+Ws9yZnIK6TXBuUT1YkjzdzB48Zkdd1etRDYChRU5os0IvbUI4DCgf+
+         gqRK2AWnRisK69KoHRL3fPwym9YBS0tW0AZs59jV1TkbmsykIdDO19iNDhNkEsx0W3If
+         EOrrDUvGJH6shlCkzqyesXpic9t9ggHTKw1pB5lBUqZ1LTbsqR9SbLMKwHq81NI5Jwiu
+         ETGzLR4YYV4B8iWP7xHoToaMcla18RWHDUPO8fsgKDU0NSfMoRa7rVlmZR97TQzgjtCW
+         DEUEh5SzadzYm6izRzhNZ5F2OJ9C+vezY2D4O+2Pbr8v/d+UQIU3v2HYD/gGn3qgpFad
+         HgFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789163215; x=1789768015;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=CvF6mXV4/o8ZVJXR1oq5jFHP/ZPq+7AJoMWbWxqY8mo=;
+        b=YbdWbNdB7X8D2RFsPKfpnM3bpDS5ZIdFc54c7bSig7IZQ3OEGGZAbLHIF9itMycS8r
+         t1dj9wzD03IZfhEB3E+X11ccE/I5eF+xGAO9JxmT4CxRpSFJgoVNbFU5iTvMnGkt1/X9
+         MmwSNRc2//RarcN/lvo+jV30aruEvTBxYuL0QBLFfJDSUUxujRR558toQKBukUedrKr5
+         XtsN6iou6Kh1XjixqbDFyTCSBl6LbN+V0Y0Dy/PGSaLV9myqr+dAzqIrr0dJVEpbJgfa
+         JRGqOHE0xQ8CnZHjmROVZGhEY+0Rhw1elVkqi37QDEjzMyWDFtGqtjfy6e2xDuY8bSGa
+         vFdg==
+X-Gm-Message-State: AFuF++kkZuFjH9aCeFOufE1XA5BIBf2Qc1mjqeMudeLulAQhtM6GzL3y
+	6zCPrw4rYH6ERW5J1KoYDZMfoF0i0t8tlmZkPWtoHbBK/CQSu/7EgAqr
+X-Gm-Gg: AYBFou30qo7G470w7k7wMmJiQObh4PCO6aM/9R7IsOVFBOLiHLkgfmhWKa/vCwZ0Iqu
+	LGqhulJvJ9JBnETaS7yDUJfbP3Vnz0tYLP8GZMUqWSdl06EmZXjlz/CWWsvRbsXVXDL+iNgveWO
+	T9YT1vZf/4nT2AtbHkVceYjbY0o58pabSswLj7wfH0pUkBKiiXz6HZ14+1LxcF0HWYjERQ/IY3j
+	yupzCV4H1+bJi2qP23RUUr17RGCpKONIZ8DzIz/urQR4lFOEIFt3Xo33ptZBauGT2n74JhOZpUC
+	zV4U9wXUsOY6CVffnCfgKc13PWnSoPgLiA7T7ctU8LQH7XSCXsqx0j3AlFvRWOECpHY7Q9snVw3
+	vgQU/e5ITk3s85CxJvsUvxNCKxjZnGUsODgT4ibkCvw+OJT6YzIG8yfGOFYK4VX5/SuwsQq6nX3
+	2qDvhpXCF4PK8hsqo/40+yFpOUPrp3svwtMACQ73vKKZMr1HIli3gosaJpRj0hqj2q/z5E48nVo
+	pIdUEuJ+T52e+rcyfAfvUI=
+X-Received: by 2002:a17:90b:548f:b0:392:b509:b1a5 with SMTP id 98e67ed59e1d1-39d9c1db3d4mr10747178a91.14.1789163215212;
+        Fri, 11 Sep 2026 14:46:55 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d98e5c630sm7301184a91.6.2026.09.11.14.40.04
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14365bb6ba0sm8657061c88.15.2026.09.11.14.46.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 14:40:05 -0700 (PDT)
+        Fri, 11 Sep 2026 14:46:54 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 11 Sep 2026 14:40:04 -0700
+Date: Fri, 11 Sep 2026 14:46:53 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: bhelgaas@google.com, clemens@ladisch.de, linux-hwmon@vger.kernel.org,
-	linux-pci@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: (k10temp): Define unshared PCI device IDs
- locally
-Message-ID: <8167c38d-5b9e-4889-821d-d05c7461def6@roeck-us.net>
-References: <20260911191803.1522358-1-mario.limonciello@amd.com>
- <20260911191803.1522358-3-mario.limonciello@amd.com>
+To: marco.rodolfi@tuta.io
+Cc: Linux Hwmon <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH] arctic_fan_controller: Add a way to set a default value
+ state on kernel bootup
+Message-ID: <5684d0e8-9ac9-48e3-9f81-3c7c9b63d65a@roeck-us.net>
+References: <P1G6-or--F-9@tuta.io>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260911191803.1522358-3-mario.limonciello@amd.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <P1G6-or--F-9@tuta.io>
 
-On Fri, Sep 11, 2026 at 02:17:14PM -0500, Mario Limonciello wrote:
-> Headers (now) only used by k10temp should not be declared in
-> global headers.
+On Fri, Sep 11, 2026 at 05:36:13PM +0200, marco.rodolfi@tuta.io wrote:
+> This allows to quickly set the connected fan(s) speed on bootup to a 
+> sensible value, rather than the randomly initialized values as the 
+> default behavior was.
 > 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Marco Rodolfi <marco.rodolfi@tuta.io>
 
-I'll need an Ack from a PCI maintainer to apply this patch.
+This patch is corrupted. On top of that, it has various checkpatch issues
+which could easily be discovered by running checkpatch. On top of that, it
+conflicts with a patch that I just accepted, which sets the default speed
+to 40%. I think that is sufficient.
+
+Anything further should explore the possibility of caching the current
+values prior to suspend and restoring it on resume. I do not see the need
+for module parameters.
 
 Thanks,
 Guenter
 
+
 > ---
-> v2:
->  * New patch
-> ---
->  drivers/hwmon/k10temp.c | 30 +++++++++++++++++++++---------
->  include/linux/pci_ids.h | 20 --------------------
->  2 files changed, 21 insertions(+), 29 deletions(-)
+> arctic_fan_controller.c | 34 ++++++++++++++++++++++++++++------
+> 1 file changed, 28 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index 5414b7841864b..49a62d7349ca7 100644
-> --- a/drivers/hwmon/k10temp.c
-> +++ b/drivers/hwmon/k10temp.c
-> @@ -83,17 +83,29 @@ MODULE_PARM_DESC(force, "force loading on processors with erratum 319");
->   */
->  #define AMD_I3255_STR				"3255"
->  
-> -/*
-> - * PCI Device IDs for AMD's Family 17h-based SOCs.
-> - * Defining locally as IDs are not shared.
-> - */
-> +/* PCI Device IDs. Defining locally as IDs are not shared. */
-> +#define PCI_DEVICE_ID_AMD_11H_NB_MISC		0x1303
-> +#define PCI_DEVICE_ID_AMD_CNB17H_F3		0x1703
-> +#define PCI_DEVICE_ID_AMD_17H_DF_F3		0x1463
-> +#define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3	0x15eb
-> +#define PCI_DEVICE_ID_AMD_17H_M30H_DF_F3	0x1493
-> +#define PCI_DEVICE_ID_AMD_17H_M40H_DF_F3	0x13f3
-> +#define PCI_DEVICE_ID_AMD_17H_M60H_DF_F3	0x144b
-> +#define PCI_DEVICE_ID_AMD_17H_M70H_DF_F3	0x1443
->  #define PCI_DEVICE_ID_AMD_17H_M90H_DF_F3	0x1663
-> -
-> -/*
-> - * PCI Device IDs for AMD's Family 1Ah-based SOCs.
-> - * Defining locally as IDs are not shared.
-> - */
-> +#define PCI_DEVICE_ID_AMD_17H_MA0H_DF_F3	0x1727
-> +#define PCI_DEVICE_ID_AMD_19H_DF_F3		0x1653
-> +#define PCI_DEVICE_ID_AMD_19H_M10H_DF_F3	0x14b0
-> +#define PCI_DEVICE_ID_AMD_19H_M40H_DF_F3	0x167c
-> +#define PCI_DEVICE_ID_AMD_19H_M50H_DF_F3	0x166d
-> +#define PCI_DEVICE_ID_AMD_19H_M60H_DF_F3	0x14e3
-> +#define PCI_DEVICE_ID_AMD_19H_M70H_DF_F3	0x14f3
-> +#define PCI_DEVICE_ID_AMD_19H_M78H_DF_F3	0x12fb
-> +#define PCI_DEVICE_ID_AMD_1AH_M00H_DF_F3	0x12c3
-> +#define PCI_DEVICE_ID_AMD_1AH_M20H_DF_F3	0x16fb
->  #define PCI_DEVICE_ID_AMD_1AH_M50H_DF_F3	0x12cb
-> +#define PCI_DEVICE_ID_AMD_1AH_M60H_DF_F3	0x124b
-> +#define PCI_DEVICE_ID_AMD_1AH_M70H_DF_F3	0x12bb
->  #define PCI_DEVICE_ID_AMD_1AH_M80H_DF_F3	0x1243
->  #define PCI_DEVICE_ID_AMD_1AH_M90H_DF_F3	0x127b
->  
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index 63774ae2bf71d..7f2ce86695de4 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -550,7 +550,6 @@
->  #define PCI_DEVICE_ID_AMD_11H_NB_HT	0x1300
->  #define PCI_DEVICE_ID_AMD_11H_NB_MAP	0x1301
->  #define PCI_DEVICE_ID_AMD_11H_NB_DRAM	0x1302
-> -#define PCI_DEVICE_ID_AMD_11H_NB_MISC	0x1303
->  #define PCI_DEVICE_ID_AMD_11H_NB_LINK	0x1304
->  #define PCI_DEVICE_ID_AMD_15H_M10H_F3	0x1403
->  #define PCI_DEVICE_ID_AMD_15H_M30H_NB_F3 0x141d
-> @@ -567,28 +566,9 @@
->  #define PCI_DEVICE_ID_AMD_16H_NB_F4	0x1534
->  #define PCI_DEVICE_ID_AMD_16H_M30H_NB_F3 0x1583
->  #define PCI_DEVICE_ID_AMD_16H_M30H_NB_F4 0x1584
-> -#define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
-> -#define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3 0x15eb
-> -#define PCI_DEVICE_ID_AMD_17H_M30H_DF_F3 0x1493
-> -#define PCI_DEVICE_ID_AMD_17H_M40H_DF_F3 0x13f3
-> -#define PCI_DEVICE_ID_AMD_17H_M60H_DF_F3 0x144b
-> -#define PCI_DEVICE_ID_AMD_17H_M70H_DF_F3 0x1443
-> -#define PCI_DEVICE_ID_AMD_17H_MA0H_DF_F3 0x1727
-> -#define PCI_DEVICE_ID_AMD_19H_DF_F3	0x1653
-> -#define PCI_DEVICE_ID_AMD_19H_M10H_DF_F3 0x14b0
-> -#define PCI_DEVICE_ID_AMD_19H_M40H_DF_F3 0x167c
-> -#define PCI_DEVICE_ID_AMD_19H_M50H_DF_F3 0x166d
-> -#define PCI_DEVICE_ID_AMD_19H_M60H_DF_F3 0x14e3
-> -#define PCI_DEVICE_ID_AMD_19H_M70H_DF_F3 0x14f3
-> -#define PCI_DEVICE_ID_AMD_19H_M78H_DF_F3 0x12fb
-> -#define PCI_DEVICE_ID_AMD_1AH_M00H_DF_F3 0x12c3
-> -#define PCI_DEVICE_ID_AMD_1AH_M20H_DF_F3 0x16fb
-> -#define PCI_DEVICE_ID_AMD_1AH_M60H_DF_F3 0x124b
-> -#define PCI_DEVICE_ID_AMD_1AH_M70H_DF_F3 0x12bb
->  #define PCI_DEVICE_ID_AMD_MI200_DF_F3	0x14d3
->  #define PCI_DEVICE_ID_AMD_MI300_DF_F3	0x152b
->  #define PCI_DEVICE_ID_AMD_VANGOGH_USB	0x163a
-> -#define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
->  #define PCI_DEVICE_ID_AMD_LANCE		0x2000
->  #define PCI_DEVICE_ID_AMD_LANCE_HOME	0x2001
->  #define PCI_DEVICE_ID_AMD_SCSI		0x2020
+> diff --git a/drivers/hwmon/arctic_fan_controller.c b/drivers/hwmon/arctic_fan_controller.c
+> index 75cc78d..00ca803 100644
+> --- a/drivers/hwmon/arctic_fan_controller.c
+> +++ b/drivers/hwmon/arctic_fan_controller.c
+> @@ -17,6 +17,7 @@
+> #include <linux/jiffies.h>
+> #include <linux/minmax.h>
+> #include <linux/module.h>
+> +#include <linux/moduleparam.h>
+> #include <linux/spinlock.h>
+> #include <linux/string.h>
+> #include <linux/unaligned.h>
+> @@ -36,6 +37,14 @@
+>   */
+> #define ARCTIC_ACK_TIMEOUT_MS		1000
+>  
+> +static int all_fan_default = 100;
+> +module_param(all_fan_default, int, 0);
+> +MODULE_PARM_DESC(all_fan_default, "This parameter controls the default value that the fan(s) will have once the module is loaded. The default is 100/255 (which correspond to 50%).");
+> +
+> +static int fanx_default[ARCTIC_NUM_FANS] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+> +module_param_array(fanx_default, int, NULL, 0);
+> +MODULE_PARM_DESC(fanx_default, "This parameter controls the default value that each individual fan will have once the module is loaded. This parameter takes precedence over the global default. If you don't want to set a default speed for a specific fan, specify -1 in the array. The default is -1 for all fans in the array (so use the global default for all of them).");
+> +
+> struct arctic_fan_data {
+> struct hid_device *hdev;
+> struct device *hwmon_dev;	/* stored for explicit unregister in remove() */
+> @@ -254,16 +263,20 @@ static int arctic_fan_reset_resume(struct hid_device *hdev)
+> {
+> struct arctic_fan_data *priv = hid_get_drvdata(hdev);
+> unsigned long flags;
+> +	int i;
+>  
+> /*
+> * The device resets its PWM channels to hardware defaults on power
+> -	 * loss during suspend. Clear the cached duty values so they reflect
+> -	 * the unknown hardware state, consistent with probe-time behaviour
+> -	 * (the device has no GET_REPORT support). Hold in_report_lock so
+> -	 * this does not race with a concurrent pwm read or write callback.
+> +	 * loss during suspend. Set the requested default state again to
+> +	 * reconfigure the hardware correctly. Hold in_report_lock so this
+> +	 * does not race with a concurrent pwm read or write callback.
+> */
+> spin_lock_irqsave(&priv->in_report_lock, flags);
+> -	memset(priv->pwm_duty, 0, sizeof(priv->pwm_duty));
+> +	for (i = 0; i < ARCTIC_NUM_FANS; i++) {
+> +		int speed_selected = fanx_default[i] == -1 ? all_fan_default : fanx_default[i];
+> +
+> +		arctic_fan_write(&hdev->dev, hwmon_pwm, hwmon_pwm_input, i, speed_selected);
+> +	}
+> spin_unlock_irqrestore(&priv->in_report_lock, flags);
+> return 0;
+> }
+> @@ -272,7 +285,7 @@ static int arctic_fan_probe(struct hid_device *hdev,
+>     const struct hid_device_id *id)
+> {
+> struct arctic_fan_data *priv;
+> -	int ret;
+> +	int ret, i;
+>  
+> if (!hid_is_usb(hdev))
+> return -ENODEV;
+> @@ -317,6 +331,17 @@ static int arctic_fan_probe(struct hid_device *hdev,
+> priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "arctic_fan",
+>   priv, &arctic_fan_chip_info,
+>   NULL);
+> +	/*
+> +	 * Check which fan default value to use, chosen between the array of fan(s)
+> +	 * values or the default fans value (first takes precedence) and write the
+> +	 * corresponding value to the hardware.
+> +	 */
+> +	for (i = 0; i < ARCTIC_NUM_FANS; i++) {
+> +		int speed_selected = fanx_default[i] == -1 ? all_fan_default : fanx_default[i];
+> +
+> +		arctic_fan_write(&hdev->dev, hwmon_pwm, hwmon_pwm_input, i, speed_selected);
+> +	}
+> +
+> if (IS_ERR(priv->hwmon_dev)) {
+> ret = PTR_ERR(priv->hwmon_dev);
+> goto out_close;
