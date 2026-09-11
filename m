@@ -1,153 +1,98 @@
-Received: from mail.w14.tutanota.de (mail.w14.tutanota.de [185.205.69.214])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83D23E7BC7
-	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 15:36:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.205.69.214
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866C3489873
+	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 17:32:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789140977; cv=none; b=FlPawcNIZLO5i/ZaQoUe8jGUrbCA6TqvhTWAG8y13Sic734iizLghYCjjLz+MLAm2Koi42YLjeAxwZm1B7DBmOVyXz7gve37qEqx9UkNMMIWoa7uajeNjPc5rxPf+Fix2sFNiYcB84S30XFKfDmkStGUSsGIffNM8R3raPm+8K4=
+	t=1789147938; cv=none; b=f3BURpy0BYVKG4Cg0NTzm49m84Zl2CTIXajcDFMyEzTsMPwt7CSLQ4j2kZMvotkJ3+9inK1Qtq2j/Pri0DSMkreB3OTttJYSZkMFMFiAGoxdsBCJMeuPPxdc3ccbNRLIJGV46E5ADaeDZ8Q9fk3wO8TuAnf7J3U1MQN3cpqhTmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789140977; c=relaxed/simple;
-	bh=XyMFeppzzeXq9kSD0cskeUQGJv/U8X0oVp+C4DmjupI=;
-	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type; b=J7fBg1OE1WxlNwjlSvSEJBX5llN7SayVFnU2ErVmLGMLQhXlZF7MDJsEcRIzrBqZXsu46xjd5GVoCsMS3XPPIC9Yl8qEgfP33bLnKLWhoF9hW+mP5GaUaLyRVu7yLzv+J6n0/iyeecuVX/NA8IxfNVbllhK6fLV6o+HfC5qBpsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuta.io; spf=pass smtp.mailfrom=tuta.io; dkim=pass (2048-bit key) header.d=tuta.io header.i=@tuta.io header.b=y/n1YTef; arc=none smtp.client-ip=185.205.69.214
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuta.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuta.io
+	s=arc-20240116; t=1789147938; c=relaxed/simple;
+	bh=U5EPtwPnVzGoQa66Q6UkBkS7Y6PG7MX3kKDPy934Vt4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DyGCJ7CfvBX0uYXXWZOw0RuIlYgHtiN1HTHTe18OYw85bbjV2FPOzeEfymtZIF1DevMO9qm8fboRnVxpf0gWR2v767L5nqX1kRlvJKhnSc1ZxMQQj5xWj4zVPitFmPXHR/9pPRu/LqVJaD5atIypZNg2C4Kn081g75b1w+2W5SI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=xvAtfaFp; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuta.io header.i=@tuta.io header.b="y/n1YTef"
-Received: from tutadb.w10.tutanota.de (w10.api.tuta.com [IPv6:fd:ac::d:10])
-	by mail.w14.tutanota.de (Postfix) with ESMTP id 0361F181F3331
-	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 17:36:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1789140973;
-	s=s1; d=tuta.io;
-	h=From:From:To:To:Subject:Subject:Content-Description:Content-ID:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Cc:Date:Date:In-Reply-To:MIME-Version:MIME-Version:Message-ID:Message-ID:Reply-To:References:Sender;
-	bh=XyMFeppzzeXq9kSD0cskeUQGJv/U8X0oVp+C4DmjupI=;
-	b=y/n1YTef+p7URbijKZhghJsXGRQLYrxJoCJC76GxsliX+H7qjzU+ocDT/Jmg7osW
-	Tf/rjBz/ly8WL2uk4ugcBD5RuCPquHKquDVNNef0ZNB9WT6zkQ/9u7//wlzaXs6Gzvr
-	xBRuzqf5xJtOl9m/wMy6VlDHRMeXPq2c4AMqeWH+6bUsrxtYGCLcIuVjbeoYnSmBvXN
-	SUuPjmZ/FN2VV2/LVUiMQxRVezTttJuaD/7sjrMVVCBU1m2PHct0bMB/A4OFr1sFl+S
-	zg6AnvjjWNo6MQQKPrzJq+VMPEiRINQCEp9u7Zm3Iop2EpLN0yR+qGdzki0in/rk5wK
-	WQxAABzeDA==
-Date: Fri, 11 Sep 2026 17:36:13 +0200 (CEST)
-From: marco.rodolfi@tuta.io
-To: Linux Hwmon <linux-hwmon@vger.kernel.org>
-Message-ID: <P1G6-or--F-9@tuta.io>
-Subject: [PATCH] arctic_fan_controller: Add a way to set a default value
- state on kernel bootup
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="xvAtfaFp"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 30306C63A0D;
+	Fri, 11 Sep 2026 17:32:50 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 2D1D2601A3;
+	Fri, 11 Sep 2026 17:32:08 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A319011C7A9DC;
+	Fri, 11 Sep 2026 19:32:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1789147923; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=JcB9bhgVut9tKHA9A+c05srf0xReEifMfQuuEFW+4U0=;
+	b=xvAtfaFp7jCLWqG8iPGnC6V2QbMWcAJYO5V5oi6m631GLh/wC+2nA7F802d2BVDbhT/maU
+	pGM7C/XllDVdZnST7ldUZes/2FE+y/VqWkX5dG5giAzJK0banIl5UIX8QmbZQtZ8qM0Meu
+	cMN+MZLEYQWFssDKdKe+B+6t71mDcmld6rMTdd7Y9X8+bqnD+AUMsDtydQEwl5U5ikxIaN
+	xNEEVDh9pwhgEVP7FmvKEkrnAS1lI6m8gcmXWm9f2QJ3v4pEzy/Za8n0Hu9EOMgQNu4f3T
+	ezY2PgFO9mqWSwC8Sv6MTs7ar6x67KJWSHtWRZZSI75x5C1JkIffoFlXtzsAyA==
+From: "Thomas Richard (congatec GmbH)" <thomas.richard@bootlin.com>
+Subject: [PATCH v2 0/2] Congatec Board Controller: Fix current sensor
+ lookup and add new sensors
+Date: Fri, 11 Sep 2026 19:31:57 +0200
+Message-Id: <20260911-cgbc-hwmon-fix-and-new-sensors-v2-0-0c6bf078d173@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-Feedback-ID: 0163f6a5f9f5e848d73c81ce5fcf742ebdce5d09ec4a6e1e0c86da1a30d302df15f5fd9ef5f65e49aba77d8913841fe1f28c355371ed1bac58d58a6370859b24fd:TurnOnPrivacy!:tutamail
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WOQQ6CMBBFr0K6dkxbFNCV9zAs2jJAjbSmU0FDu
+ LsFDuDyJS///ZkRBovErtnMAo6WrHcJ5CFjpleuQ7BNYia5LHjFCzCdNtBPg3fQ2g8o14DDCQg
+ d+UAghSqVPudVqXOWRl4Bk7YF7vXO9NYPNHFdXY3eUvThuz0YxertsYvg/2KjAA7YilyhbJU4l
+ TftfXxadzR+YPWyLD81tcXs4AAAAA==
+X-Change-ID: 20260806-cgbc-hwmon-fix-and-new-sensors-21a7ab5387b3
+To: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>
+Cc: "Thomas Richard (congatec GmbH)" <thomas.richard@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Werner Gartner <Werner.Gartner@congatec.com>, linux-hwmon@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, stable@kernel.org
+X-Mailer: b4 0.16.0
+X-Last-TLS-Session-Version: TLSv1.3
 
-This allows to quickly set the connected fan(s) speed on bootup to a=C2=A0
-sensible value, rather than the randomly initialized values as the=C2=A0
-default behavior was.
+Second iteration, I just added the missing 'in' channel in cgbc_hwmon_info
+(reported by Sashiko). I also fixed the commit message, and made it more
+generic.
 
-Signed-off-by: Marco Rodolfi <marco.rodolfi@tuta.io>
+Signed-off-by: Thomas Richard (congatec GmbH) <thomas.richard@bootlin.com>
 ---
-arctic_fan_controller.c | 34 ++++++++++++++++++++++++++++------
-1 file changed, 28 insertions(+), 6 deletions(-)
+Changes in v2:
+- Add missing in channel in cgbc_hwmon_info. 
+- Link to v1: https://patch.msgid.link/20260910-cgbc-hwmon-fix-and-new-sensors-v1-0-ef13ae2fa147@bootlin.com
 
-diff --git a/drivers/hwmon/arctic_fan_controller.c b/drivers/hwmon/arctic_f=
-an_controller.c
-index 75cc78d..00ca803 100644
---- a/drivers/hwmon/arctic_fan_controller.c
-+++ b/drivers/hwmon/arctic_fan_controller.c
-@@ -17,6 +17,7 @@
-#include <linux/jiffies.h>
-#include <linux/minmax.h>
-#include <linux/module.h>
-+#include <linux/moduleparam.h>
-#include <linux/spinlock.h>
-#include <linux/string.h>
-#include <linux/unaligned.h>
-@@ -36,6 +37,14 @@
-=C2=A0 */
-#define ARCTIC_ACK_TIMEOUT_MS=09=091000
-=C2=A0
-+static int all_fan_default =3D 100;
-+module_param(all_fan_default, int, 0);
-+MODULE_PARM_DESC(all_fan_default, "This parameter controls the default val=
-ue that the fan(s) will have once the module is loaded. The default is 100/=
-255 (which correspond to 50%).");
-+
-+static int fanx_default[ARCTIC_NUM_FANS] =3D {-1, -1, -1, -1, -1, -1, -1, =
--1, -1, -1};
-+module_param_array(fanx_default, int, NULL, 0);
-+MODULE_PARM_DESC(fanx_default, "This parameter controls the default value =
-that each individual fan will have once the module is loaded. This paramete=
-r takes precedence over the global default. If you don't want to set a defa=
-ult speed for a specific fan, specify -1 in the array. The default is -1 fo=
-r all fans in the array (so use the global default for all of them).");
-+
-struct arctic_fan_data {
-struct hid_device *hdev;
-struct device *hwmon_dev;=09/* stored for explicit unregister in remove() *=
-/
-@@ -254,16 +263,20 @@ static int arctic_fan_reset_resume(struct hid_device =
-*hdev)
-{
-struct arctic_fan_data *priv =3D hid_get_drvdata(hdev);
-unsigned long flags;
-+=09int i;
-=C2=A0
-/*
-* The device resets its PWM channels to hardware defaults on power
--=09 * loss during suspend. Clear the cached duty values so they reflect
--=09 * the unknown hardware state, consistent with probe-time behaviour
--=09 * (the device has no GET_REPORT support). Hold in_report_lock so
--=09 * this does not race with a concurrent pwm read or write callback.
-+=09 * loss during suspend. Set the requested default state again to
-+=09 * reconfigure the hardware correctly. Hold in_report_lock so this
-+=09 * does not race with a concurrent pwm read or write callback.
-*/
-spin_lock_irqsave(&priv->in_report_lock, flags);
--=09memset(priv->pwm_duty, 0, sizeof(priv->pwm_duty));
-+=09for (i =3D 0; i < ARCTIC_NUM_FANS; i++) {
-+=09=09int speed_selected =3D fanx_default[i] =3D=3D -1 ? all_fan_default :=
- fanx_default[i];
-+
-+=09=09arctic_fan_write(&hdev->dev, hwmon_pwm, hwmon_pwm_input, i, speed_se=
-lected);
-+=09}
-spin_unlock_irqrestore(&priv->in_report_lock, flags);
-return 0;
-}
-@@ -272,7 +285,7 @@ static int arctic_fan_probe(struct hid_device *hdev,
-=C2=A0=C2=A0=C2=A0 const struct hid_device_id *id)
-{
-struct arctic_fan_data *priv;
--=09int ret;
-+=09int ret, i;
-=C2=A0
-if (!hid_is_usb(hdev))
-return -ENODEV;
-@@ -317,6 +331,17 @@ static int arctic_fan_probe(struct hid_device *hdev,
-priv->hwmon_dev =3D hwmon_device_register_with_info(&hdev->dev, "arctic_fan=
-",
-=C2=A0 priv, &arctic_fan_chip_info,
-=C2=A0 NULL);
-+=09/*
-+=09 * Check which fan default value to use, chosen between the array of fa=
-n(s)
-+=09 * values or the default fans value (first takes precedence) and write =
-the
-+=09 * corresponding value to the hardware.
-+=09 */
-+=09for (i =3D 0; i < ARCTIC_NUM_FANS; i++) {
-+=09=09int speed_selected =3D fanx_default[i] =3D=3D -1 ? all_fan_default :=
- fanx_default[i];
-+
-+=09=09arctic_fan_write(&hdev->dev, hwmon_pwm, hwmon_pwm_input, i, speed_se=
-lected);
-+=09}
-+
-if (IS_ERR(priv->hwmon_dev)) {
-ret =3D PTR_ERR(priv->hwmon_dev);
-goto out_close;
+To: Thomas Richard <thomas.richard@bootlin.com>
+To: Guenter Roeck <linux@roeck-us.net>
+To: Jonathan Corbet <corbet@lwn.net>
+To: Shuah Khan <skhan@linuxfoundation.org>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Werner Gartner <Werner.Gartner@congatec.com>
+Cc: linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+
+---
+Thomas Richard (congatec GmbH) (2):
+      hwmon: (cgbc-hwmon): Fix current sensors ID lookup
+      hwmon: (cgbc-hwmon): Add some sensors
+
+ Documentation/hwmon/cgbc-hwmon.rst |  42 +++++++-----
+ drivers/hwmon/cgbc-hwmon.c         | 129 +++++++++++++++++++++++--------------
+ 2 files changed, 106 insertions(+), 65 deletions(-)
+---
+base-commit: d2587340a8575100d9ddd10270c7a5c216766b5b
+change-id: 20260806-cgbc-hwmon-fix-and-new-sensors-21a7ab5387b3
+
+Best regards,
+--  
+Thomas Richard (congatec GmbH) <thomas.richard@bootlin.com>
 
