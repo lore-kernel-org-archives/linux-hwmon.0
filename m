@@ -1,63 +1,72 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B994915A2;
-	Fri, 11 Sep 2026 13:59:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9380493D54;
+	Fri, 11 Sep 2026 14:00:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789135194; cv=none; b=kMgZjY5sFupa897dFPckjIV7rQPTaXdH6vkG284rwc/VZVNKyiD5aqRK7OGEybb7f3y8aBNY36rNdwDSqUUVvAPVsiMVqlZJK2/f+ceYFEEPecTCxih3tOMHdRMczMw9DFTuiW4vzue9xCIxpjSQ1bX8jHFGkU1jkjGyi4z5XY4=
+	t=1789135204; cv=none; b=covhoujufOEfIkJMRUULX9OI9sJ4mwQ5dBpDEwabC1aRqfnU/wYuCRwgculWBeP5fPYeOD5uuBu5H6F7lfKbFf9OCb6KeJMpX+dvewAcbbxueHic4y9V6pryAHeRHW9K2bcAj1uahxZNSeyaxYdMatDoqQjHmCoWL3MAjjPpmBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789135194; c=relaxed/simple;
-	bh=ZpWRz/+Tc9xhHy79grLwWJbkxQL/aqbkdYdZJ1mHVJA=;
+	s=arc-20240116; t=1789135204; c=relaxed/simple;
+	bh=1zdElfbT6fuBB7nVR3A1GsNdFTaIjencuWS04atsJ0Y=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=FR25uIocM/7NsijlWVhqCbublX3heYaN/cjQYklxHRPMk3o+RXgHOVlj67mC+bFOer7ibQBDT60Ph63z/w8+PPjX/ZFn4XykXCBWH3LFyOcGVKoF2P71Ui3MAACnF6owpZJdAxNTvhcRaOfW8csuxGHZlEz/ZGKeTyIIypSSUbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g4j2llbc; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=DJXAw7kC6cn7UM3UadM+muR3EV0k8TSGUTUzufx6+p1LLzSxxneVc4k/a3RgFDwVbIixXGLQ43rUjh92Q9cjcfK+UFaxJJLrnnzNgFzw/4A0bI5P0+IBZn25yw1t2wgBjy93JTvqwT28BgdSfDetM36nvHiKGe1dBOZRxFyX1x4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YVjWgfDq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g4j2llbc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 631F11F00893;
-	Fri, 11 Sep 2026 13:59:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YVjWgfDq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 511891F000FF;
+	Fri, 11 Sep 2026 14:00:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789135187;
-	bh=ZpWRz/+Tc9xhHy79grLwWJbkxQL/aqbkdYdZJ1mHVJA=;
+	s=k20260515; t=1789135203;
+	bh=1zdElfbT6fuBB7nVR3A1GsNdFTaIjencuWS04atsJ0Y=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=g4j2llbchArqLojHIUaQcX7OoaEceCux5OWo7FY2XQJtRbhbwqaR4ya75VCXkKpIl
-	 eDvGQ0RsgyusaxoWB+e6OIcYArA8VgeTQsueNFcCc/MaQvX71Ey4Lwupmi7MdHMDcW
-	 Y8L8nv2G9XWhgA/Uz/IgFjp5D97spHuydJn7wpvNuIyKAthF47csdiA+8Ukk09ecaE
-	 H10pg5e3t1qFVUiQ15jm0hgXf2/3tek/CUBpcovYS4Vvk10WI0i77Ub7LyRo67ExHU
-	 UmGSLpfaNqDBvpNFMzgliO6hAd546wjJcgMTBA3tL+PiK8B0PGeYzUJzU6hXVmgk+Q
-	 wtUeawr5vEX7A==
+	b=YVjWgfDqb8IsDw4t0SrEm3g/c3YH+58ru9PlJR261ig7RKRDyes/DNWOfp+05FXb9
+	 v3Gs2DkA/n9b56Aq4fWd3F7zxw6QhYXg+0jBXsNdwaU+QhYf9U48DIW0YyiKYNusMN
+	 2bQGmntpjFRlPd2nGBLi2WuAXPopoqmEoAFU47dq2fdxosKPKwPIeuGo31g2iVCx8f
+	 nShes3sywdhKLPuJsCzNLXtQa1bWdPvCsZR3jxbR7yqRrs/uK1nGFV7gJ13bQyyP3N
+	 lRM/CabwyT/H9Vqo9o/o6p9smjZwJ4+yqRLLjitu0jtzDq/f5/uZn48yNknOW2EJ5J
+	 rE1sPMSVoy2xQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/4] hwmon: (pmbus/core) Add mapping function to
- pmbus_read_block_data()
+Subject: Re: [PATCH v2 3/4] dt-bindings: hwmon/pmbus: Document MAX20826 and
+ similar devices
 Reply-To: sashiko-reviews@lists.linux.dev
 To: =?utf-8?b?TnVubyBTw6E=?= <nuno.sa@analog.com>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org
-In-Reply-To: <20260911-hwmon-max20826-support-v2-2-5e30cbd97d84@analog.com>
+Cc: conor+dt@kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20260911-hwmon-max20826-support-v2-3-5e30cbd97d84@analog.com>
 References: <20260911-hwmon-max20826-support-v2-0-5e30cbd97d84@analog.com>
- <20260911-hwmon-max20826-support-v2-2-5e30cbd97d84@analog.com>
+ <20260911-hwmon-max20826-support-v2-3-5e30cbd97d84@analog.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 11 Sep 2026 13:59:46 +0000
-Message-Id: <20260911135947.631F11F00893@smtp.kernel.org>
+Date: Fri, 11 Sep 2026 14:00:02 +0000
+Message-Id: <20260911140003.511891F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-> This is in preparation for adding support to a device which needs to
-> use it's own read_block implementation.
+> The MAX20826 IC and similar provide a high-density, flexible and scalable
+> dual-loop solution for high current cores for AI applications. These are
+> dual loop solutions multiphase voltage regulators. Between Rails A and B,
+> MAX20855B and MAX20908 supports up to 8 phases total configurable from
+> 8+0 to 4+4 phases, MAX20912 supports up to 12 phases from 12+0 to 6+6,
+> and MAX20826 and MAX20916 supports up to 16 phases from 16+0 to 8+8.
 >=20
-> The MAX20826 family is one such device. When not in PMBus page mode, each
-> of its two rails sits at a different I2C address, so selecting the rail
-> cannot be done through pmbus_set_page() and has to be handled by the
-> driver.
+> The output voltage of each rail is controlled either through PMBus or
+> through the high-speed processor voltage-control interface (Intel SVID,
+> AMD SVI3, Nvidia PWMVID or AVSBus, depending on the device). Which one is
+> in use is part of the configuration the device powers up with and is read
+> back from it, hence adi,rail-a-high-speed and adi,rail-b-high-speed only
+> tell whether the high-speed interface or PMBus controls the output voltage
+> of the respective rail.
 >=20
+> Co-developed-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+> Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 > Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
 
 Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260911-hwmon-max2=
-0826-support-v2-0-5e30cbd97d84@analog.com?part=3D2
+0826-support-v2-0-5e30cbd97d84@analog.com?part=3D3
 
