@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75CDC3F23C0;
-	Fri, 11 Sep 2026 04:58:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AEEA3F4DE2;
+	Fri, 11 Sep 2026 04:58:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789102720; cv=none; b=h/6QKLSHw+/oqBZGq0YNyrhAZrUKh5Em/Ro+F4WA/2tdG8/n5fc4iHNGFop9h2Fd4DUMvX/Cf300n0Oqy4xuqk6jMCq21/hEhf5fH+aoGTh7P9nh35+rJJcKJkE0cQxYmY7MaGXkRcPSwVE70EHnegSL6Ms1ql0W+RTRWB1ruu4=
+	t=1789102723; cv=none; b=Gp1NCBuBrTTG8rFGN4WKZzqKRHhrGzoKHZezQoVXcIHLjK2Rp6P7Q4Gz+3wCw47MyziP6z4QOK12c9uvut1b+VeTAG9CYefGoervPFYTzC1nBZ0UAJIvMXkB483LP44gRRPDNC1ieVa598olvN7USkcOCQdANDRZ9+w9CVdQxII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789102720; c=relaxed/simple;
-	bh=991G3kkdWHXq7o1Os+yFHZ05JHDg0qE6C0idCcCmiok=;
+	s=arc-20240116; t=1789102723; c=relaxed/simple;
+	bh=nbSWmJfP5ITQ4Rj7cX0eODGXaPQAwd6Rmj1d24RdDbc=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YYp2IKDur1ucE8PM7Bn0Aam8LBWDzUmleinsP1qx6Ujls6b7M2sLGLn07gsMPYR7daGLBJV/IeIkuedGM8x9tEc98lc3dJtjmoTEYmgktWdB8MLvefVSl7LL7sjQgHI45OgrVzi5THapimIeBKFVIT4SRQ4C0noiWqdJfcFOUlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eQc9ULJf; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=lb/WIJru+Vp6DERzE9yFNc91MhnHEIswTt8P5INAuwRWHNMgmSqJPWFHYf2t/OswOWT6ARfMchlyUeWk99aF/1NPBzRPPfiv+cv7H29YrpuTpXaX7JFAf+qNY0AXXenWbcuTw3QDNF5kMZuBlG4EoimxDyPAXu53GX+tOOrjhvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dht5lf7N; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eQc9ULJf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 919C21F00893;
-	Fri, 11 Sep 2026 04:58:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dht5lf7N"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F25CA1F000FF;
+	Fri, 11 Sep 2026 04:58:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789102719;
-	bh=NKms6hWDvQ0rPKNH+lvtzKVDIw7PqNTPLtvYchcjz0A=;
+	s=k20260515; t=1789102720;
+	bh=PTCW1o8sx1p57yZ7X6GT6IbEGRiGJoCqBn62nOwKH88=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=eQc9ULJf+R5CMhNTlDB/629z4ZLwXtAkmcU9+pab0KBr4nOU9KN+7B/EEM8QPI0N0
-	 I6/vYyUHzlZoCm+I+9OeQuHIzMVh3MfiH4i9B/NJF+GWB6PrnEVFze+W+HFRqR6miY
-	 4pxUoBb2tPnWrIylnLqxTgLah1IlQtP21b19K6Mk0GjQqkFaCwU2JiGK9JK97cklqk
-	 oa+Np9/sMR3Cn8VbJvjOgnU6G4XUVUk0DvQBcct7lBd0WVAjIuhmMrNR8hZGAWFlgx
-	 HKsGvwCdUKQ9cleVemz88rjxRJakrzu6x6V0HUPw+yyHenV/pkmfJLSs2cD41W++G5
-	 isoSDs+Pi0Naw==
-Subject: Re: [PATCH net-next v3 5/6] eth: fbnic: report temperature and
- voltage alarms via hwmon
+	b=dht5lf7N5eVa33MLTNdxJq6TGE+OPhSWv3KCUXaLWwSC2ue9VdKlAd0TBcmkekuv/
+	 A8c1iv6SXmtriOedkcKq5LSnHh1aCg1LZjr4InGlvVDlNPlnB1S3lbDhG5VRfSivRD
+	 s8BA6GAyoP5oehanXP9MnmC5bC2ixN/QQzHz15jY3eXem2j4sQ1ojdWTivdl/vcarY
+	 J7vVfrTuRz1U2oqC4d8knPKDPksAGFkXTuScWH9DqgTajxRGs8nwstTX0HG6nqvrar
+	 pAFKHnSsNisx033whD5dYk6xdBqqI5B2DsnAmLOzB0jxIPHjjARC6uV6pRLuN+QHXV
+	 Dqh79eoLJIwjg==
+Subject: Re: [PATCH net-next v3 6/6] eth: fbnic: firmware notifies hwmon on
+ sensor threshold events
 From: netdev-bot+sashiko@kernel.org
 To: limzhineng2@gmail.com
 Cc: alexanderduyck@fb.com, kuba@kernel.org, andrew+netdev@lunn.ch,
@@ -35,10 +35,10 @@ Cc: alexanderduyck@fb.com, kuba@kernel.org, andrew+netdev@lunn.ch,
  linux@roeck-us.net, horms@kernel.org, mohsin.bashr@gmail.com,
  kernel-team@meta.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-hwmon@vger.kernel.org, zinclim@meta.com
-Date: Fri, 11 Sep 2026 04:58:38 +0000
-Message-ID: <178910271815.219967.14604591538922575723@kernel.org>
-In-Reply-To: <20260908225737.3034403-6-limzhineng2@gmail.com>
-References: <20260908225737.3034403-6-limzhineng2@gmail.com>
+Date: Fri, 11 Sep 2026 04:58:39 +0000
+Message-ID: <178910271954.219967.804405505124993424@kernel.org>
+In-Reply-To: <20260908225737.3034403-7-limzhineng2@gmail.com>
+References: <20260908225737.3034403-7-limzhineng2@gmail.com>
 X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -49,219 +49,351 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential
+Thank you for your contribution! Sashiko AI review found 4 potential
 issue(s) to consider:
 
-Critical: 0 · High: 1 · Medium: 1 · Low: 1
+Critical: 0 · High: 1 · Medium: 1 (1) · Low: 2
 
-- [High] The five new alarm attributes (temp1_min_alarm, temp1_max_alarm,
-  temp1_crit_alarm, in0_min_alarm, in0_max_alarm) are synthesized in…
-- [Medium] For alarm attributes whose threshold was never populated by
-  firmware (fbd->fw_cap.temp.{min,max,crit} / volt.{min,max} ==…
-- [Low] The number of hwmon attributes whose read triggers a TSENE
-  firmware mailbox round-trip grows from 2 (temp1_input, in0_input) to 7…
+- [High] fbnic_hwmon_notify_event()
+  (drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c:248-288) classifies the…
+- [Medium] fbnic_hwmon_unregister() open-codes its teardown drain as
+  'WRITE_ONCE(fbd->hwmon, NULL); synchronize_irq(fbd->fw_msix_vector);'…
+- [Low] fbnic_hwmon_is_visible() returns 0444 unconditionally
+  (fbnic_hwmon.c:10-15) and fbnic_hwmon_info[] advertises every…
+- [Low] The newly registered hwmon device pointer is published to the
+  concurrently running firmware mailbox IRQ thread with a plain…
+
+Pre-existing issues:
+- [Medium] A malformed firmware mailbox message can cause
+  uninitialized/stale page contents to be dumped into the kernel log.
 
 --
 
-eth: fbnic: report temperature and voltage alarms via hwmon
+eth: fbnic: firmware notifies hwmon on sensor threshold events
 
-This adds temp1_{min,max,crit}_alarm and in0_{min,max}_alarm to the fbnic
-hwmon device.  Each alarm is derived by taking a live TSENE sensor reading
-and comparing it against the matching threshold stored in fbnic_fw_cap.
-Thresholds that firmware did not populate are meant to report -ENODATA.
+This adds a parser for the unsolicited
+FBNIC_TLV_MSG_ID_SENSOR_THRESHOLD_EXCEEDED_RESP firmware message and
+translates it into a hwmon alarm notification through
+hwmon_notify_event().  It also reworks publish/teardown of fbd->hwmon with
+WRITE_ONCE()/READ_ONCE() plus a synchronize_irq() drain in the unregister
+path.
 
-A few questions on the new alarm attributes below.
+No Link: tags present in the commit header.
 
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-> index 7dc4d705f566..11fa8aab0f5b 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-> @@ -86,34 +86,84 @@ static int fbnic_hwmon_read_threshold(long thr, long *val)
->  	return 0;
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_fw.c b/drivers/net/ethernet/meta/fbnic/fbnic_fw.c
+> index e5669dfd9790..fd96a3962e3f 100644
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic_fw.c
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_fw.c
+> @@ -1639,6 +1639,57 @@ fbnic_fw_parser_test(void *opaque, struct fbnic_tlv_msg **results)
+>  	return err;
 >  }
 >  
-> +static int fbnic_hwmon_read_alarm(long a, long b, long *val)
+> +static const struct fbnic_tlv_index fbnic_threshold_exceeded_resp_index[] = {
+> +	FBNIC_TLV_ATTR_S32(FBNIC_FW_TSENE_THERM_EXCEEDED_FLAG),
+> +	FBNIC_TLV_ATTR_S32(FBNIC_FW_TSENE_VOLT_EXCEEDED_FLAG),
+> +	FBNIC_TLV_ATTR_S32(FBNIC_FW_TSENE_THERMAL),
+> +	FBNIC_TLV_ATTR_S32(FBNIC_FW_TSENE_VOLTAGE),
+> +	FBNIC_TLV_ATTR_LAST
+> +};
+> +
+> +static int fbnic_fw_parse_threshold_exceeded_resp(void *opaque,
+> +						  struct fbnic_tlv_msg **results)
 > +{
-> +	if (a == FBNIC_SENSOR_NO_DATA || b == FBNIC_SENSOR_NO_DATA)
-> +		return -ENODATA;
+> +	bool therm_exceeded, volt_exceeded;
+> +	struct fbnic_dev *fbd = opaque;
+> +	s32 value;
 > +
-> +	*val = a >= b;
-> +	return 0;
-> +}
-
-[Severity: High]
-Is deriving the alarm bits in software compatible with the documented hwmon
-alarm semantics?  Documentation/hwmon/sysfs-interface.rst says:
-
-    Alarms are direct indications read from the chips. The drivers do NOT
-    make comparisons of readings to thresholds. This allows violations
-    between readings to be caught and alarmed.
-
-Here fbnic_hwmon_read_alarm() is a stateless comparison of one live sample
-against a stored threshold, so nothing is latched.  If the temperature
-crosses fbd->fw_cap.temp.crit and falls back before the next read(), does
-temp1_crit_alarm read back 0 and lose the excursion entirely?
-
-Looking at the firmware side, the TSENE response only carries the
-instantaneous values plus an error code:
-
-drivers/net/ethernet/meta/fbnic/fbnic_fw.c
-static const struct fbnic_tlv_index fbnic_tsene_read_resp_index[] = {
-	FBNIC_TLV_ATTR_S32(FBNIC_FW_TSENE_THERM),
-	FBNIC_TLV_ATTR_S32(FBNIC_FW_TSENE_VOLT),
-	FBNIC_TLV_ATTR_S32(FBNIC_FW_TSENE_ERROR),
-	...
-
-so there appear to be no alarm/status bits available to report.  Would it
-make sense to base these files on latched state fed by the firmware
-threshold-exceeded events instead, or to leave the attributes out until
-such state exists?
-
-This also seems to interact with the last patch of the series ("eth: fbnic:
-firmware notifies hwmon on sensor threshold events"): can that path call
-hwmon_notify_event() for temp1_crit_alarm while a subsequent read of the
-same file returns 0 because the fresh sample is back under the threshold?
-
->  static int fbnic_hwmon_temp_read(struct fbnic_dev *fbd, u32 attr, long *val)
->  {
-> +	int err;
+> +	therm_exceeded =
+> +		fta_get_sint(results, FBNIC_FW_TSENE_THERM_EXCEEDED_FLAG);
+> +	volt_exceeded =
+> +		fta_get_sint(results, FBNIC_FW_TSENE_VOLT_EXCEEDED_FLAG);
 > +
->  	switch (attr) {
-> -	case hwmon_temp_input:
-> -		return fbnic_hwmon_sensor_read(fbd, FBNIC_SENSOR_TEMP, val);
->  	case hwmon_temp_min:
->  		return fbnic_hwmon_read_threshold(fbd->fw_cap.temp.min, val);
->  	case hwmon_temp_max:
->  		return fbnic_hwmon_read_threshold(fbd->fw_cap.temp.max, val);
->  	case hwmon_temp_crit:
->  		return fbnic_hwmon_read_threshold(fbd->fw_cap.temp.crit, val);
-> +	case hwmon_temp_input:
-> +	case hwmon_temp_min_alarm:
-> +	case hwmon_temp_max_alarm:
-> +	case hwmon_temp_crit_alarm:
-> +		break;
->  	default:
->  		return -EOPNOTSUPP;
->  	}
-> +
-> +	err = fbnic_hwmon_sensor_read(fbd, FBNIC_SENSOR_TEMP, val);
-> +	if (err)
-> +		return err;
+> +	if (!therm_exceeded && !volt_exceeded) {
+> +		dev_err(fbd->dev,
+> +			"Threshold exceeded message with no flag set\n");
+> +		return -EINVAL;
+> +	}
 
 [Severity: Medium]
-Should the FBNIC_SENSOR_NO_DATA test happen before the firmware round-trip?
 
-The alarm cases break out of the first switch without looking at
-fbd->fw_cap.temp.{min,max,crit}, so a permanently unsupported alarm still
-enters fbnic_hwmon_sensor_read(), which can block:
+This isn't a problem introduced by this patch, but these new -EINVAL
+returns add fresh ways to reach the malformed-message hex dump in
+fbnic_mbx_process_rx_msgs(), which can print bytes the firmware never
+wrote.
 
-	if (!wait_for_completion_timeout(&fw_cmpl->done, 10 * HZ)) {
-		dev_err(fbd->dev, "Timed out waiting for TSENE read\n");
-		err = -ETIMEDOUT;
+RX mailbox pages are not zeroed:
 
-Older firmware that omits FBNIC_FW_CAP_RESP_TEMP_{MIN,MAX,CRIT} leaves the
-sentinel in place:
+drivers/net/ethernet/meta/fbnic/fbnic_fw.c:fbnic_mbx_alloc_rx_msgs() {
+	...
+		msg = (struct fbnic_tlv_msg *)__get_free_page(GFP_KERNEL);
+	...
+}
+
+and the error path dumps the full firmware-supplied descriptor length
+rather than the validated TLV extent:
+
+drivers/net/ethernet/meta/fbnic/fbnic_fw.c:fbnic_mbx_process_rx_msgs() {
+	...
+			print_hex_dump(KERN_WARNING, "fbnic:",
+				       DUMP_PREFIX_OFFSET, 16, 2,
+				       msg, length, true);
+	...
+}
+
+Can this print stale page contents into the kernel log when firmware
+advertises a large descriptor length but writes only a short malformed
+threshold message?  Would bounding the dump to the parsed TLV length, or
+allocating the RX pages with __GFP_ZERO, be preferable?
+
+> +
+> +	if (therm_exceeded) {
+> +		if (!results[FBNIC_FW_TSENE_THERMAL]) {
+> +			dev_err(fbd->dev,
+> +				"Thermal threshold exceeded but no value received\n");
+> +			return -EINVAL;
+> +		}
+> +		value = fta_get_sint(results, FBNIC_FW_TSENE_THERMAL);
+> +		dev_err(fbd->dev, "Thermal threshold exceeded: %d mC\n", value);
+> +		fbnic_hwmon_notify_event(fbd, FBNIC_SENSOR_TEMP, value);
+> +	}
+> +
+> +	if (volt_exceeded) {
+> +		if (!results[FBNIC_FW_TSENE_VOLTAGE]) {
+> +			dev_err(fbd->dev,
+> +				"Voltage threshold exceeded but no value received\n");
+> +			return -EINVAL;
+> +		}
+> +		value = fta_get_sint(results, FBNIC_FW_TSENE_VOLTAGE);
+> +		dev_err(fbd->dev, "Voltage threshold exceeded: %d mV\n", value);
+> +		fbnic_hwmon_notify_event(fbd, FBNIC_SENSOR_VOLTAGE, value);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+
+[ ... ]
+
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
+> index 11fa8aab0f5b..2dff59bc0e8b 100644
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
+
+[ ... ]
+
+> @@ -213,22 +215,75 @@ void fbnic_hwmon_register(struct fbnic_dev *fbd)
+>  	fbd->hwmon_cache.temp_mdeg = FBNIC_SENSOR_NO_DATA;
+>  	fbd->hwmon_cache.volt_mv = FBNIC_SENSOR_NO_DATA;
+>  
+> -	fbd->hwmon = hwmon_device_register_with_info(fbd->dev, "fbnic",
+> -						     fbd, &fbnic_chip_info,
+> -						     NULL);
+> -	if (IS_ERR(fbd->hwmon)) {
+> +	hwmon = hwmon_device_register_with_info(fbd->dev, "fbnic", fbd,
+> +						&fbnic_chip_info, NULL);
+> +	if (IS_ERR(hwmon)) {
+>  		dev_notice(fbd->dev,
+>  			   "Failed to register hwmon device %pe\n",
+> -			   fbd->hwmon);
+> -		fbd->hwmon = NULL;
+> +			   hwmon);
+> +		return;
+>  	}
+> +
+> +	WRITE_ONCE(fbd->hwmon, hwmon);
+
+[Severity: Low]
+
+Is WRITE_ONCE() strong enough for publishing this pointer?  The FW mailbox
+threaded IRQ is requested in fbnic_probe() before fbnic_hwmon_register()
+runs, so fbnic_hwmon_notify_event() can load fbd->hwmon on another CPU and
+pass it straight to hwmon_notify_event(), which touches dev->kobj.
+
+WRITE_ONCE()/READ_ONCE() prevent tearing but carry no release/acquire
+ordering, so on arm64 or ppc64 the store publishing fbd->hwmon is not
+ordered after the stores that initialized the device inside
+hwmon_device_register_with_info().  Would smp_store_release() here paired
+with smp_load_acquire() in the notify path express the intended ordering?
+
+>  }
+>  
+>  void fbnic_hwmon_unregister(struct fbnic_dev *fbd)
+>  {
+> +	struct device *hwmon;
+> +
+>  	if (!IS_REACHABLE(CONFIG_HWMON) || !fbd->hwmon)
+>  		return;
+>  
+> -	hwmon_device_unregister(fbd->hwmon);
+> -	fbd->hwmon = NULL;
+> +	hwmon = fbd->hwmon;
+> +	/* Pair with READ_ONCE() in fbnic_hwmon_notify_event(). Publish NULL
+> +	 * and wait for any in-flight FW mailbox IRQ handler to finish so it
+> +	 * cannot dereference the hwmon device after we unregister it.
+> +	 */
+> +	WRITE_ONCE(fbd->hwmon, NULL);
+> +	synchronize_irq(fbd->fw_msix_vector);
+
+[Severity: Medium]
+
+Is fbd->fw_msix_vector guaranteed to still name an IRQ owned by this
+driver when fbnic_hwmon_unregister() runs?
+
+fbnic_pm_suspend() tears the mailbox IRQ down while hwmon stays
+registered:
+
+drivers/net/ethernet/meta/fbnic/fbnic_irq.c:fbnic_fw_free_mbx() {
+	...
+	free_irq(fbd->fw_msix_vector, fbd);
+	fbd->fw_msix_vector = 0;
+}
+
+fbnic_hwmon_unregister() is only called from fbnic_remove(), so if
+__fbnic_pm_resume() then fails at fbnic_alloc_irqs() the driver stays bound
+with fbd->hwmon != NULL and fw_msix_vector == 0.  A later unbind would pass
+the !fbd->hwmon guard and call synchronize_irq(0); irq_to_desc(0) is
+non-NULL on x86, so this waits on a descriptor owned by another device.
+
+There is a second variant on the request side:
+
+drivers/net/ethernet/meta/fbnic/fbnic_irq.c:fbnic_fw_request_mbx() {
+	...
+	err = __fbnic_fw_enable_mbx(fbd, vector);
+	if (err)
+		free_irq(vector, fbd);
+
+	fbd->fw_msix_vector = vector;
+	...
+}
+
+The vector number is stored even when the IRQ was freed, so after a
+resume-time failure and pci_free_irq_vectors() the stored number can be
+stale and may have been handed to another driver.
+
+Since fbnic_remove() already does:
+
+drivers/net/ethernet/meta/fbnic/fbnic_pci.c:fbnic_remove() {
+	...
+	fbnic_hwmon_unregister(fbd);
+	fbnic_dbg_fbd_exit(fbd);
+	fbnic_devlink_unregister(fbd);
+	fbnic_fw_log_disable(fbd);
+	fbnic_fw_free_mbx(fbd);
+	...
+}
+
+would moving fbnic_hwmon_unregister() after fbnic_fw_free_mbx() give the
+same barrier without keying it on a mutable vector number?
+
+> +
+> +	hwmon_device_unregister(hwmon);
+> +}
+> +
+> +void fbnic_hwmon_notify_event(struct fbnic_dev *fbd, int id, long val)
+> +{
+> +	enum hwmon_sensor_types type;
+> +	struct device *hwmon;
+> +	s32 attr = -1;
+> +
+> +	if (!IS_REACHABLE(CONFIG_HWMON))
+> +		return;
+> +
+> +	switch (id) {
+> +	case FBNIC_SENSOR_TEMP:
+> +		type = hwmon_temp;
+> +
+> +		if (val <= fbd->fw_cap.temp.min)
+> +			attr = hwmon_temp_min_alarm;
+> +		else if (val >= fbd->fw_cap.temp.crit)
+> +			attr = hwmon_temp_crit_alarm;
+> +		else if (val >= fbd->fw_cap.temp.max)
+> +			attr = hwmon_temp_max_alarm;
+> +
+> +		break;
+> +	case FBNIC_SENSOR_VOLTAGE:
+> +		type = hwmon_in;
+> +
+> +		if (val <= fbd->fw_cap.volt.min)
+> +			attr = hwmon_in_min_alarm;
+> +		else if (val >= fbd->fw_cap.volt.max)
+> +			attr = hwmon_in_max_alarm;
+> +
+> +		break;
+
+[Severity: High]
+
+Do these comparisons handle the case where firmware never advertised a
+threshold?  fbnic_fw_parse_cap_resp() stores the FBNIC_SENSOR_NO_DATA
+sentinel for any threshold the capability response omits:
 
 drivers/net/ethernet/meta/fbnic/fbnic_fw.c:fbnic_fw_parse_cap_resp() {
 	...
-	fbd->fw_cap.temp.min =
-		fbnic_tlv_attr_get_signed(results[FBNIC_FW_CAP_RESP_TEMP_MIN],
+	fbd->fw_cap.temp.crit =
+		fbnic_tlv_attr_get_signed(results[FBNIC_FW_CAP_RESP_TEMP_CRIT],
 					  FBNIC_SENSOR_NO_DATA);
 	...
 }
 
-In that case, when the mailbox transaction fails, does the attribute report
--ENOMEM/-ETIMEDOUT (with a dev_err() console line) rather than the
--ENODATA promised by the commit message text "A threshold the firmware did
-not populate reports -ENODATA for both the threshold attribute and its
-alarm"?  The sentinel check looks order independent and could be folded
-into the first switch, which would also avoid the discarded firmware read.
-The same ordering applies to in0_min_alarm and in0_max_alarm in
-fbnic_hwmon_in_read().
+and that sentinel is the smallest s32:
 
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_input:
-> +		return 0;
-> +	case hwmon_temp_min_alarm:
-> +		return fbnic_hwmon_read_alarm(fbd->fw_cap.temp.min, *val, val);
-> +	case hwmon_temp_max_alarm:
-> +		return fbnic_hwmon_read_alarm(*val, fbd->fw_cap.temp.max, val);
-> +	case hwmon_temp_crit_alarm:
-> +		return fbnic_hwmon_read_alarm(*val, fbd->fw_cap.temp.crit, val);
+drivers/net/ethernet/meta/fbnic/fbnic_fw.h:
+#define FBNIC_SENSOR_NO_DATA			S32_MIN
+
+So with temp.crit unset, "val >= fbd->fw_cap.temp.crit" is always true and
+every threshold event is reported as temp1_crit_alarm.  Does that also make
+the temp1_max_alarm arm below unreachable, since the crit test runs first
+even when temp.max is a real value?  The voltage case looks the same:
+an unset volt.max turns any reported value into in0_max_alarm.
+
+The read paths filter the sentinel explicitly:
+
+drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c:fbnic_hwmon_read_alarm() {
+	if (a == FBNIC_SENSOR_NO_DATA || b == FBNIC_SENSOR_NO_DATA)
+		return -ENODATA;
+	...
+}
+
+which means userspace gets woken on an attribute that then reads back as
+-ENODATA.  Should the notify path skip thresholds equal to
+FBNIC_SENSOR_NO_DATA the same way?
+
+> +	default:
+> +		return;
 > +	}
 > +
-> +	return -EOPNOTSUPP;
+> +	/* Pair with WRITE_ONCE() in fbnic_hwmon_unregister(). Skip the
+> +	 * notification if hwmon failed to register or has already been torn
+> +	 * down.
+> +	 */
+> +	hwmon = READ_ONCE(fbd->hwmon);
+> +	if (attr >= 0 && hwmon)
+> +		hwmon_notify_event(hwmon, type, attr, 0);
 >  }
->  
->  static int fbnic_hwmon_in_read(struct fbnic_dev *fbd, u32 attr, long *val)
->  {
-
-[ ... ]
-
-> +
-> +	err = fbnic_hwmon_sensor_read(fbd, FBNIC_SENSOR_VOLTAGE, val);
-> +	if (err)
-> +		return err;
 
 [Severity: Low]
-The commit message says:
 
-    only attributes that actually need a live value fall through to a single
-    sensor read that then feeds input and every alarm
+This isn't a bug in the new notify path itself, but related to the
+attributes it notifies on: fbnic_hwmon_is_visible() returns 0444
+unconditionally and fbnic_hwmon_info[] advertises every threshold and
+alarm:
 
-Is that accurate across attributes?  hwmon_attr_show() in
-drivers/hwmon/hwmon.c invokes ->read() once per attribute file, so there is
-no shared read; the only coalescing is the exact-tick comparison in
-fbnic_hwmon_sensor_read():
+drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c:
+	HWMON_CHANNEL_INFO(in,
+			   HWMON_I_INPUT |
+			   HWMON_I_MIN | HWMON_I_MIN_ALARM |
+			   HWMON_I_MAX | HWMON_I_MAX_ALARM),
 
-	if (*cached != FBNIC_SENSOR_NO_DATA && cache->last_read == jiffies) {
-		*val = *cached;
-		return 0;
-	}
+so temp1_{min,max,crit}, in0_{min,max} and the matching *_alarm files exist
+even when the capability response omitted the threshold and
+fbnic_hwmon_read_threshold() can only ever return -ENODATA.
 
-With that, does a sequential sweep of the channel (sensors, or a monitoring
-daemon) issue up to seven FBNIC_TLV_MSG_ID_TSENE_READ_REQ transactions
-where the pre-patch driver issued two, each serialized and able to wait up
-to 10 s?  Could the commit message be reworded, or the cache given a
-coarser validity window than a single jiffy?
+Documentation/hwmon/sysfs-interface.rst says:
 
-> +
-> +	switch (attr) {
-> +	case hwmon_in_input:
-> +		return 0;
-> +	case hwmon_in_min_alarm:
-> +		return fbnic_hwmon_read_alarm(fbd->fw_cap.volt.min, *val, val);
-> +	case hwmon_in_max_alarm:
-> +		return fbnic_hwmon_read_alarm(*val, fbd->fw_cap.volt.max, val);
-> +	}
-> +
-> +	return -EOPNOTSUPP;
->  }
+  All entries (except name) are optional, and should only be created in a
+  given driver if the chip has the feature.
 
-[ ... ]
-
-> @@ -138,10 +188,14 @@ static const struct hwmon_ops fbnic_hwmon_ops = {
->  
->  static const struct hwmon_channel_info *fbnic_hwmon_info[] = {
->  	HWMON_CHANNEL_INFO(temp,
-> -			   HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
-> -			   HWMON_T_CRIT),
-> +			   HWMON_T_INPUT |
-> +			   HWMON_T_MIN | HWMON_T_MIN_ALARM |
-> +			   HWMON_T_MAX | HWMON_T_MAX_ALARM |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_ALARM),
->  	HWMON_CHANNEL_INFO(in,
-> -			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX),
-> +			   HWMON_I_INPUT |
-> +			   HWMON_I_MIN | HWMON_I_MIN_ALARM |
-> +			   HWMON_I_MAX | HWMON_I_MAX_ALARM),
->  	NULL
->  };
-
-These five entries create the user-visible alarm files, and their semantics
-become part of the ABI once merged, which is why the question above about
-latched versus computed alarm state seems worth settling first.
+Could fbnic_hwmon_is_visible() key visibility off the corresponding
+capability value, and hide an alarm when its threshold is unavailable?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260908225737.3034403-1-limzhineng2%40gmail.com
