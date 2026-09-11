@@ -1,69 +1,68 @@
-Received: from mail-oo2-f42.google.com (mail-oo2-f42.google.com [74.125.231.170])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAFE1349AE0
-	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 14:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98D035203A
+	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 14:24:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789136218; cv=none; b=e2PL4ulIHEtui7uQjb/pwnjaP5nEd/V09/H6euX0Lga9bCv7nG4uyf3AmyukgwTZfZfPMioAuOckE2hmJICsbH/M/yGRWPAiIcMJRSOgLxAryJ46eUUvQeBawbt3E/ZvkbWetYt3pbePnp3Hy2HZr9Q/M7/KccPtzWDpCD9QUS4=
+	t=1789136697; cv=none; b=qz44q/lujrPZJ4X0R36/hfq4WfzuY3bh8P+SFMShFxIdKto4y51Wj9HBSEmEX9JztTq6/UVqfk6lEFEDju/Eji9GLn/mITY8D9/xml/+8hwyYnX0790NrM2ayT1aYi89r2BXXNm/kJATjXkQApTZWlGF6Y8PD2FQ5XI/NVgABEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789136218; c=relaxed/simple;
-	bh=kiSWLP1eNUSGPQCliihnmIyxoN3d5qoP3JCsIs56mXY=;
+	s=arc-20240116; t=1789136697; c=relaxed/simple;
+	bh=0BnFyfpHxaN7X8M6MZfoZRsJTH8vdE5rSC5tlArxTuA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q1JwzYBXxR8AGrTkgivpLubW8zvPVr5OX+/aNJ/TNcJt7oETcPQYB3U//+Y/PD31/oqAD6NfJX3DZ1+e1hIWjdSA4+gte5pFckbwCRTX66SCKSm7kOWts6TPPDsOFFL3DmCu8mA6BLjSnv3M0NHh305k28ZrVMGkShe5jp/TCpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HmF3VblH; arc=none smtp.client-ip=74.125.231.170
+	 In-Reply-To:Content-Type; b=McRfekbfDg+U59Ekl+MZNt5y7cpkwNuClgYxZ7RhD1/VoIPbyiF61MwrkW1gLRStKV+9LFRvzUPJvykMciaWrvAv6eWQJTZhpW6M9jdMwPXLIejsR6E+bqsAugKPabzi/wSPTEXPC0MbkKxA4cy4FKKQ0DtkcxbHkocs/yC8gLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=op1WeirU; arc=none smtp.client-ip=209.85.128.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HmF3VblH"
-Received: by mail-oo2-f42.google.com with SMTP id 46e09a7af769-7fc4034841cso801174a34.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 07:16:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="op1WeirU"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-878ed0f17bfso7934487b3.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 07:24:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789136215; x=1789741015; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789136694; x=1789741494; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=lzESgw1FhZRMEULjQ2VIw5gEjh8pVkl3QN7J61DD380=;
-        b=HmF3VblHaC4zJXItNF73llXT0CvDp1FE+GXBRvqNqN/I6Enyxw6S9jx74JNGQXp4Ai
-         rgb7TIY6WMaYFtvSqlatz8Z0WSwsoER7s79oW6b4ZSBo6EZ97fCWyfFHOH4ZGfej/fMz
-         s8SxW0bwkkCfUg83j7xme3AtWFHQke6jghST7XxxlPR88OsSlPD2R0xtnQXu3um6Xr6s
-         vogtmgDAcaHoR8Xo10+BlHyfkORTlqwE6XKgj0u3pgNduhVgB/xTmg/pqcn2nk5fy/Se
-         /txsrP/062jtdGaHCjC85EOLp+X6v5RrqpvMseG4d4D/8cAjx1Wc2QQTNgViUOXltj8B
-         WOZw==
+        bh=bYsFM9rsy1NhxpJuuAZTc7GVdXZGCbrElo639f3wOAM=;
+        b=op1WeirU66fVo4Y4YOcG3jbmpi2sasOdg8+flx7Kct6RmsGggHlhqM6qNHNk9BPwLq
+         oBvJdpYMUA6XJITQDn2rh6a+MU0Z1IUpAJ/wwFHOM4YXX7GTG+AwGlFFtZidvbg/Nxcf
+         jjrEs+x2POUUlYILHIJFM5Tk3ik8Ym4NAbFweZWOi9EaCqD0sbb6/4Gg5yZUZpTAwNWa
+         Ql/tqhmGqTmBUo1MCREzJGXUWfHjac8FinLLR0HETYnaSelBuzlxISgtqd0BPXrtt2dv
+         AIiC+crOl0ESqQCuPhvEiF9HCguy88gpCgIv+PXvH31iyABxX1at9ZhsZKrOosNFdAiT
+         hRyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789136215; x=1789741015;
+        d=1e100.net; s=20251104; t=1789136694; x=1789741494;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=lzESgw1FhZRMEULjQ2VIw5gEjh8pVkl3QN7J61DD380=;
-        b=m0Uk3ILimO5tZ0OUnnTVNndh/aebhd06TknBgfLdeiHYbAE+evmodfxBwNDJ/DodoJ
-         kLD9U8XmKt8lpisp0Goo30eEb9S486NmuP0Uj6U2LsgyjT8WVjTcIrsNhP17YhhPcqoL
-         BZV6XTyqvFsEHh+A3YDwRHmO9S8BJ1IyipiFfugLLHt3tFqW53fP5KfoSpTEsv6mcvLH
-         Z2Ggc0UKofePJRJQcpX7INPMOTg8Gz5iYS+Rz7TBHBVYx7F5Gz5RCvTuX9S6EWa29hIA
-         GxPEsUz+n3AY7WWrwg4vcMqf5SN1PAkbNPs0di7GbTDQWDOn/Lg8V14nNAEjA+Ly3ep5
-         fERg==
-X-Forwarded-Encrypted: i=1; AKwUvBw/3FT8SSX/ap+8CWoqoan1m2oXQwo5GyqXAkyzTLsNX/60pbYKYXwbc+tPXvO8nv1uQ7VzvPrlAnTmfw==@vger.kernel.org
-X-Gm-Message-State: AFuF++nI38ICkbkSB8f4kFcUlp8oIZfvzJ4O4PPJsWhDq7boW0zk235y
-	rEtunJH8IDwS8ATSP5LGBRc8IjiKeZkb97RXhZNh6mOSDHhwn5T585Iy
-X-Gm-Gg: AYBFou0YMSefsKKRqvEYBvXbeFzuGdJNXNyT+ubXyBzq9nd2szINeW4/csZ9gvs+O5o
-	YSRqePJuYy6XqOR46Sq6ianNmw+C3FvQjtlN95YVI3KFG1ezruyAjpeGEyZHwcAwb9NZjNZf41g
-	v6PVkWyFzcwVhNRreRlkwYwLRbs7mZeStrIecnb0N70jxobuYzMcxjEnrtbZL9YLxKO3/FlEWHs
-	NhCSJrKC8OhWCv1Gv2+uBZFy08H6Uv8DKVI899pwvBO1U/IvhmF1rC42xdGxMJxftWaEc4F7TrG
-	cbfz50uR3cP7Z7WWj4D2+6C72HZ5GYgLT6WSSQ535q1+hBaCd1FJ7ZyMCzHLIt8QR49A7XXOjA8
-	QZqt4QER4QiShlgbTvb6CpcKKX7wEo1eBOOcdJUKJ1pF4eJPJuY35h30IwxH2x3Wu20Iud5af8f
-	IBT404VKTxfIQ9wHlmQZ090+OKbVI4S9S+9wj6CGnkcb6VhkEeNFT87si96Qxn9mN7WPsHfOh7T
-	53+JgLQVRnlb426fu7cD1KrOvMXMSxGonqUWfEukidgkFfo
-X-Received: by 2002:a05:6820:1845:b0:6b7:46fa:1699 with SMTP id 006d021491bc7-6c0bc7c3857mr3255417eaf.46.1789136215533;
-        Fri, 11 Sep 2026 07:16:55 -0700 (PDT)
+        bh=bYsFM9rsy1NhxpJuuAZTc7GVdXZGCbrElo639f3wOAM=;
+        b=Av9sk3dzz4z/OHyYylZrQhyjqZgFW+4dpxioprYd69dQis6mXJ7XKd/47b1928V5EQ
+         bBNXl8rKXUjBR9tuj9uEOb0ybutQe1MNfJYTz4NfG4ud0luthxu48FOVTHLydWaz105U
+         fvzaBBF6OjfxQwxnK9oAUG27LxthQu3ofrlpaZXHxm9YWZ5KJh3Lk5HibuoXxibZt3cV
+         yPuGDuIL500/LU7jQIvf1wwDJnXFjI3C17jZWgb+Klqb+Lb4mwkuiPeGrO6uxruRJQVD
+         5vYhDO4olndiXSEqofk6t6vjF6xetqI8A1wfIUDclskhO+3dPVXTW9tNP7SUK+nlJ8pq
+         LtSw==
+X-Gm-Message-State: AFuF++k4J8qqPds3NDm2yRXiIu7vlukGAwWRsKmsldyujYZuDF9W4iSn
+	nse6P/aPCrdp5FAg5gKzD8IVkmB/WLzwxtWhY/MujkPIGlv/BI9f8Paz
+X-Gm-Gg: AYBFou02eHhjTUArFge4TSO85xXCuRETYDDUHBu4+Xh2AlrQ6zlQSmaWgPEO3CCtzRg
+	JHv+dNRLxtqjopsLAIQhDMJKT+sNx4OP5Brdh7TwphQ0JqI6AQl93MsW0si42hn+ZiBgWKs7urS
+	ENPXNLw9ZMvHbADHE3o3nKsNH0yKgZA4ll1PlBLrCUpMR9bp2KC7iMqau9qAAplMDTuR2vOTEqd
+	uJz24JXFLvb8j2KxPOucOR1FNvH6iJ1YFcKhINdNOQTUPPthKAyIXJ9PxZ4OwgzX3hcP/3Z0WBX
+	R0IQbzfJJHpg0JXE6qOHEdf8lG0FeK1Txf8VwZHjv1UlSsMEo/LxjhtO8jtaqHx9qExq3qmyA6X
+	0fQv5KJSpGhVF6eIn4eKTB3BZ/JIzGhbbdB/R4o1WnL/ojQOgznCrpSOxwVft0Cd72gKbouverB
+	wpcjUmiza8QrfVsTjuVPcqOmrwSBL9M/ey6Ez7Oug/4YlgewoSsVm5EQddZjlS4JFR88oe2pKX5
+	Q56DhWTvaxCd6QSwfZkQcJw8glTWbeVny9cqIlB8Lvugz8h
+X-Received: by 2002:a05:690c:385:b0:873:5ddf:d85d with SMTP id 00721157ae682-884b2bcf9d2mr14489137b3.40.1789136694108;
+        Fri, 11 Sep 2026 07:24:54 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14365b348cbsm6930530c88.3.2026.09.11.07.16.53
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-88488c3ab26sm10799867b3.40.2026.09.11.07.24.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Sep 2026 07:16:54 -0700 (PDT)
+        Fri, 11 Sep 2026 07:24:53 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <49109bf9-7765-45c5-bd28-4a3d9ceb2636@roeck-us.net>
-Date: Fri, 11 Sep 2026 07:16:52 -0700
+Message-ID: <091d3bdd-f9f5-4f67-a9be-ff9e49ecaee1@roeck-us.net>
+Date: Fri, 11 Sep 2026 07:24:51 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,15 +70,11 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: (lm75) Add support for Nuvoton NCT7715
-To: hsyemail2@gmail.com, linux-hwmon@vger.kernel.org
-Cc: Sheng-Yuan Huang <syhuang3@nuvoton.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Jean Delvare <jdelvare@suse.com>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org
-References: <20260911072654.15722-1-syhuang3@nuvoton.com>
+Subject: Re: [PATCH] hwmon: (k10temp): Add PCI IDs for 1ah/80h
+To: Mario Limonciello <mario.limonciello@amd.com>, clemens@ladisch.de,
+ bhelgaas@google.com
+Cc: linux-hwmon@vger.kernel.org, linux-pci@vger.kernel.org
+References: <20260911134304.226286-1-mario.limonciello@amd.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -125,217 +120,50 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260911072654.15722-1-syhuang3@nuvoton.com>
+In-Reply-To: <20260911134304.226286-1-mario.limonciello@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/11/26 00:26, hsyemail2@gmail.com wrote:
-> From: Sheng-Yuan Huang <syhuang3@nuvoton.com>
+On 9/11/26 06:43, Mario Limonciello wrote:
+> 1ah/80h uses same base as other programs.  It only supports Tctl.
 > 
-> The Nuvoton NCT7715 is compatible with the LM75 temperature and
-> limit register layout. Add support for the NCT7715, including its
-> 16-bit configuration register.
-> 
-> Handle its conversion-rate field and shutdown bit separately, since
-> their bit positions differ from the standard LM75 layout.
-> 
-> Signed-off-by: Sheng-Yuan Huang <syhuang3@nuvoton.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
-> v2:
-> - Use the standard SMBus word representation for the NCT7715
->    configuration register, removing the NCT7715-specific byte swapping
->    and updating its configuration masks accordingly.
+>   drivers/hwmon/k10temp.c | 1 +
+>   include/linux/pci_ids.h | 1 +
+>   2 files changed, 2 insertions(+)
 > 
->   .../devicetree/bindings/hwmon/lm75.yaml       |  1 +
->   Documentation/hwmon/lm75.rst                  |  6 +++
->   drivers/hwmon/lm75.c                          | 52 ++++++++++++++++++-
->   3 files changed, 57 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Documentation/devicetree/bindings/hwmon/lm75.yaml
-> index b48bf3fd721f..832a8c5d83e9 100644
-> --- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
-> @@ -31,6 +31,7 @@ properties:
->         - nxp,p3t1750
->         - nxp,p3t1755
->         - nxp,pct2075
-> +      - nuvoton,nct7715
->         - st,stds75
->         - st,stlm75
->         - microchip,tcn75
-> diff --git a/Documentation/hwmon/lm75.rst b/Documentation/hwmon/lm75.rst
-> index ca46754e028b..fac0b8f29ddc 100644
-> --- a/Documentation/hwmon/lm75.rst
-> +++ b/Documentation/hwmon/lm75.rst
-> @@ -150,6 +150,12 @@ Supported chips:
->   
->                  https://ams.com/documents/20143/36005/AS6200_DS000449_4-00.pdf
->   
-> +  * Nuvoton NCT7715
-> +
-> +    Prefix: 'nct7715'
-> +
-> +    Addresses scanned: none
-> +
->   Author: Frodo Looijaard <frodol@dds.nl>
->   
->   Description
-> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-> index 2d2d752aeac9..ad7128629e56 100644
-> --- a/drivers/hwmon/lm75.c
-> +++ b/drivers/hwmon/lm75.c
-> @@ -39,6 +39,7 @@ enum lm75_type {		/* keep sorted in alphabetical order */
->   	max6626,
->   	max31725,
->   	mcp980x,
-> +	nct7715,
->   	p3t1750,
->   	p3t1755,
->   	pct2075,
-> @@ -107,6 +108,15 @@ static const unsigned short normal_i2c[] = { 0x48, 0x49, 0x4a, 0x4b, 0x4c,
->   #define LM75_REG_MAX		0x03
->   #define PCT2075_REG_IDLE	0x04
->   
-> +#define NCT7715_CONFIG_RESOLUTION_12_BIT	GENMASK(6, 5)
-> +#define NCT7715_CONFIG_SHUTDOWN			BIT(0)
+> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+> index 3e7e63edc6a30..b00081deb2e86 100644
+> --- a/drivers/hwmon/k10temp.c
+> +++ b/drivers/hwmon/k10temp.c
+> @@ -582,6 +582,7 @@ static const struct pci_device_id k10temp_id_table[] = {
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M50H_DF_F3) },
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M60H_DF_F3) },
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M70H_DF_F3) },
+> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M80H_DF_F3) },
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M90H_DF_F3) },
+>   	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
+>   	{}
+> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> index 63774ae2bf71d..57a4ad9984798 100644
+> --- a/include/linux/pci_ids.h
+> +++ b/include/linux/pci_ids.h
+> @@ -585,6 +585,7 @@
+>   #define PCI_DEVICE_ID_AMD_1AH_M20H_DF_F3 0x16fb
+>   #define PCI_DEVICE_ID_AMD_1AH_M60H_DF_F3 0x124b
+>   #define PCI_DEVICE_ID_AMD_1AH_M70H_DF_F3 0x12bb
+> +#define PCI_DEVICE_ID_AMD_1AH_M80H_DF_F3 0x1243
 
-Same as LM75_SHUTDOWN, and thus unnecessary.
+Please define locally in drivers/hwmon/k10temp.c. I can not touch
+this file, and additions for single-use defines are usually rejected
+by the maintainers.
 
-> +#define NCT7715_CONFIG_CONVERSION_RATE_MASK	GENMASK(15, 14)
-> +#define NCT7715_CONFIG_EXTENDED_MODE		BIT(12)
-> +#define NCT7715_CONFIG_RATE_0_25HZ		0
-> +#define NCT7715_CONFIG_RATE_1HZ			BIT(14)
-> +#define NCT7715_CONFIG_RATE_4HZ			BIT(15)
-> +#define NCT7715_CONFIG_RATE_8HZ			GENMASK(15, 14)
-> +
-
-This matches the bit settings of TMP112, meaning the code working for TMP112
-works here just fine.
-
->   struct lm75_data {
->   	const char *label;
->   	struct regmap			*regmap;
-> @@ -122,6 +132,10 @@ struct lm75_data {
->   /*-----------------------------------------------------------------------*/
->   
->   static const u8 lm75_sample_set_masks[] = { 0 << 5, 1 << 5, 2 << 5, 3 << 5 };
-> +static const u16 nct7715_sample_set_masks[] = {
-> +	NCT7715_CONFIG_RATE_8HZ, NCT7715_CONFIG_RATE_4HZ,
-> +	NCT7715_CONFIG_RATE_1HZ, NCT7715_CONFIG_RATE_0_25HZ
-> +};
->   
->   #define LM75_ALERT_POLARITY_HIGH_8_BIT	(BIT(2))
->   #define LM75_ALERT_POLARITY_HIGH_16_BIT	(BIT(2) << 8)
-> @@ -259,6 +273,15 @@ static const struct lm75_params device_params[] = {
->   		.sample_times = (unsigned int []){ 30, 60, 120, 240 },
->   		.resolutions = (u8 []) {9, 10, 11, 12 },
->   	},
-> +	[nct7715] = {
-> +		.config_reg_16bits = true,
-> +		.set_mask = NCT7715_CONFIG_RESOLUTION_12_BIT,
-> +		.clr_mask = NCT7715_CONFIG_EXTENDED_MODE,
-
-We don't use chip specific defines for any of the other chips,
-so don't do it here either.
-
-> +		.default_resolution = 12,
-> +		.default_sample_time = 250,
-> +		.num_sample_times = 4,
-> +		.sample_times = (unsigned int []){ 125, 250, 1000, 4000 },
-> +	},
->   	[tmp100] = {
->   		.set_mask = 3 << 5,	/* 12-bit mode */
->   		.clr_mask = 1 << 7,	/* not one-shot mode */
-> @@ -354,6 +377,11 @@ static inline long lm75_reg_to_mc(s16 temp, u8 resolution)
->   static inline int lm75_write_config(struct lm75_data *data, u16 set_mask,
->   				    u16 clr_mask)
->   {
-> +	if (data->kind == nct7715)
-> +		return regmap_update_bits(data->regmap, LM75_REG_CONF,
-> +					  clr_mask | set_mask | NCT7715_CONFIG_SHUTDOWN,
-
-NCT7715_CONFIG_SHUTDOWN == LM75_SHUTDOWN, so this conditional
-is unnecessary. There are several similar instances of unnecessary duplication
-in the code. Please drop all that. The chip appears to be a clone of tmp112,
-and there is no reason to handle this chip differently. If you want to use
-a different sample time default, fine, but that does not warrant the extra code.
-
-I'll stop the review here. Please drop all the extra code.
-
-Regarding Sashiko's feedback: It doesn't understand that the byte order
-is swapped in the regmap write function. THis is a false positive.
+Also, it would be nice to list the chip family in the commit message
+and add it to Documentation/hwmon/k10temp.rst. But then I see that
+all chips from family 1ah are missing from there, so maybe that should
+be a separate patch.
 
 Thanks,
 Guenter
-
-> +					  set_mask);
-> +
->   	return regmap_update_bits(data->regmap, LM75_REG_CONF,
->   				  clr_mask | set_mask | LM75_SHUTDOWN, set_mask);
->   }
-> @@ -486,6 +514,13 @@ static int lm75_update_interval(struct device *dev, long val)
->   		if (data->params->resolutions)
->   			data->resolution = data->params->resolutions[index];
->   		break;
-> +	case nct7715:
-> +		err = lm75_write_config(data, nct7715_sample_set_masks[index],
-> +					NCT7715_CONFIG_CONVERSION_RATE_MASK);
-> +		if (err)
-> +			return err;
-> +		data->sample_time = data->params->sample_times[index];
-> +		break;
->   	case tmp112:
->   	case as6200:
->   		err = regmap_update_bits(data->regmap, LM75_REG_CONF,
-> @@ -770,7 +805,7 @@ static int lm75_generic_probe(struct device *dev, const char *name,
->   	data->orig_conf = status;
->   
->   	/* Enforce polarity active-low (default) or active-high (devicetree) */
-> -	if (!data->params->config_reg_16bits)
-> +	if (!data->params->config_reg_16bits || data->kind == nct7715)
->   		pol_mask = LM75_ALERT_POLARITY_HIGH_8_BIT;
->   	else
->   		pol_mask = LM75_ALERT_POLARITY_HIGH_16_BIT;
-> @@ -848,6 +883,7 @@ static const struct i2c_device_id lm75_i2c_ids[] = {
->   	{ .name = "max31725", .driver_data = max31725 },
->   	{ .name = "max31726", .driver_data = max31725 },
->   	{ .name = "mcp980x", .driver_data = mcp980x },
-> +	{ .name = "nct7715", .driver_data = nct7715 },
->   	{ .name = "p3t1750", .driver_data = p3t1750 },
->   	{ .name = "p3t1755", .driver_data = p3t1755 },
->   	{ .name = "pct2075", .driver_data = pct2075 },
-> @@ -972,6 +1008,10 @@ static const struct of_device_id lm75_of_match[] = {
->   		.compatible = "nxp,pct2075",
->   		.data = (void *)pct2075
->   	},
-> +	{
-> +		.compatible = "nuvoton,nct7715",
-> +		.data = (void *)nct7715
-> +	},
->   	{
->   		.compatible = "st,stds75",
->   		.data = (void *)stds75
-> @@ -1129,13 +1169,21 @@ static int lm75_suspend(struct device *dev)
->   {
->   	struct lm75_data *data = dev_get_drvdata(dev);
->   
-> -	return regmap_update_bits(data->regmap, LM75_REG_CONF, LM75_SHUTDOWN, LM75_SHUTDOWN);
-> +	if (data->kind == nct7715)
-> +		return regmap_update_bits(data->regmap, LM75_REG_CONF,
-> +					  NCT7715_CONFIG_SHUTDOWN,
-> +					  NCT7715_CONFIG_SHUTDOWN);
-> +	return regmap_update_bits(data->regmap, LM75_REG_CONF,
-> +				  LM75_SHUTDOWN, LM75_SHUTDOWN);
->   }
->   
->   static int lm75_resume(struct device *dev)
->   {
->   	struct lm75_data *data = dev_get_drvdata(dev);
->   
-> +	if (data->kind == nct7715)
-> +		return regmap_update_bits(data->regmap, LM75_REG_CONF,
-> +					  NCT7715_CONFIG_SHUTDOWN, 0);
->   	return regmap_update_bits(data->regmap, LM75_REG_CONF, LM75_SHUTDOWN, 0);
->   }
->   
 
