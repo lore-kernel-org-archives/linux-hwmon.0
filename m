@@ -1,114 +1,90 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9B2296BBC
-	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 00:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F6C24293C
+	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 00:50:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789087708; cv=none; b=meNxVTguwBx6Wzzsk1qOpAgpNvDXnMHoLsH4yAgP4Pl/Gk33Rloi0oOSfyL4Uxsv+iWiSIgvqd/muN5RKNC3ati5mfA8r8ZLDLv1kmkDcllihMDJDZmKF6uY7zsDo6Q3nC1qe9jpeHWG3u88qDOET7Jp0Vr/UR9KX0CdZBX72Gk=
+	t=1789087828; cv=none; b=sH1hngEJgwxlm+FcEbuSs938dbZzUieAMg0L84lJf0ByRwOS5cOANvflkrsGN9pt7obPfUCQ3QhvvX/H8RmjjmIivCyJGwXNCdBlgApDLg22xsP9eoyYf5J8jaMZPvxCLOgueHAK9eFrabIhBTVLg5dFmkJWEIqITD2ywOKTouc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789087708; c=relaxed/simple;
-	bh=5QUvirxnBbcXVaWpIRvOp+xlEii7ODtudQKqtm0wib0=;
+	s=arc-20240116; t=1789087828; c=relaxed/simple;
+	bh=k9CP8Uv0Cu5u05P+agi/B49fuH19D4pukpuoBfrG+Fs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dIqQ06goEP+3xBc/YKqc2rEaLRQis/rcgEk2pVmRF0z9bHjIsbUQIKD2mxRwZmuAsB3CIPRLro7pSYHXLGhNnMSO1xeKUQHmo/nS0VFdgOVBmjl6exZPeRgVdXDGQJ8dG5ptbdeRFlIPlN7TlI28AT3xhV5VPwn4n8YLL+zfwX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aJho2FDY; arc=none smtp.client-ip=74.125.228.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=G/2/LkasIJFlNGs+MVnRp/Ku1E9259icg0irKJr14rrqAmitisb5eDixakkIaS+BDe0vgiZL6UtQ6jLa0UlrPDCYFw68XW48ptd0gcEGscUJX9LL6Tbaoq8W9K55mmBJRoBZRMVHEFpyC4fdrVRAABh0N26kuyMzUpQIlula0S4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hiPoQwQl; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aJho2FDY"
-Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-85469e25400so205961b3a.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 17:48:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hiPoQwQl"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747ed9865so2329845ad.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 17:50:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789087707; x=1789692507; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/DPZA7vd5t7QEIfkeBG49EyEomkUElo6uwu/PYojC2Q=;
-        b=aJho2FDY2tzTby88iGJ/KVr7BTYNH1Q+/t62XSgv7r83qZVfWl5ZCBNgRyRczdH58A
-         +WRub4aNILLkgSTbL88JjYo9u5d0i6aZcjhiyjvARMxaKTcdRi+Kou1mCxVJzt2MYuPB
-         I65MJ1VKkskyJQY9FPqprhleM81oVeudFzw2waUQdh9c/vZyydcT+Uolc+u5LQXBDUUj
-         87J6EtjVdnZYShaSMkbVNlkblvQ23TYpf+7CkOMuP6lsz4NsXNU33oE4GNkajct+AYeU
-         LHFqbEpLLNaVghsYCtimt7IPx0k6fhuiB7pqJbKF2jNcsZ3Y5IptqWnRZjv2VC8pojSj
-         Sn3A==
+        d=gmail.com; s=20251104; t=1789087826; x=1789692626; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=E7Qs/YRK7iSN+nJFDW3LjPkoxVBPiWNImGpW7cLgflI=;
+        b=hiPoQwQlyh2nUrzuMYs7uEcMegbxewr1F7yWWFwGUFa169RaDJvuwtSwxjiEt/xRnd
+         R3D679OubVdHq0jlueVaAoX6diE9YN6t2xeS46H1K/rheVRSwsIp+xwtRjSUyRBDnC/p
+         4c6wTaYBc2NmJvO5+xZLJj/o3L6JtJ1wYYA6v0Xkm5chaOW8pcS32eJ01RqDO+jvwCo9
+         1a6ht4j3Z68+6mrs8EZ2TMxPPR4OlThezyJgLufmLVldWWU/BXrN9U7BENnT7znOPdgr
+         VgZ9v0QpFELpDHKcIzuGb9KKR+4bVUfqpToRxHwtAp1i9LV/3JKxzAdV0LCkOCzgmHB/
+         3TVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789087707; x=1789692507;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=/DPZA7vd5t7QEIfkeBG49EyEomkUElo6uwu/PYojC2Q=;
-        b=UPCDIz6ETm02jh9HZAatQ4yvqvOg1+pa7eyLXukmxbg9s99D7c5bVpG9Fify3gzYdQ
-         Tfy3BRFGoijBCF34Fx+A+hCOrXp7r0/14PXzEgXYTwq+KerGujyhmwfxHXqpI69Vm/Xd
-         xXT/fn3SYcgS9Z+yEdtd3YElYiwL+vtViJSkvPkRMSKn/1pa7zSSHBf0UOlsciNxR/ek
-         gy3i8LA2tpebbcZAHcGCSZ7pJHHzSqiOmhxGXOBu5/Z7KCaX6jvVttNEtFPUK4m5T+cR
-         TmII4cczrdvmxca4IMIN68E9JIjgyH3A30HeZqVOJ3niyaKAuBohbsGY1j95d4SmIjN3
-         MEMA==
-X-Forwarded-Encrypted: i=1; AKwUvBx2cYgq+7D2AZLKrCjB5kb0bCIUyrjK7fp6Yt9iRbb+3iJPabXI1lsBOda5OZo8P4BtpxXx1H9OyEFH7A==@vger.kernel.org
-X-Gm-Message-State: AFuF++mD+N3GGmf3O/NrCxUIi2AWCND+nnJkyWjSurD7chN4lqs6vRuP
-	O3Ki79YYzruQpOlGZgCOFqV5uz3ZGDPZIk6rU8RB07skoju2cZOon8H2
-X-Gm-Gg: AYBFou3Sl9skS+wqgI/hY8VY4Re9gRtQ0eL5i7/3T4htlyv20Zf4uFVmG4NwlmGOWtE
-	Fhoc6oXzVH2F5drOzJu0yYwkEQ7L/vLxypAmiskBb4oUkx1eId6rhrpKjeTAIX41XbyUkTqeBrZ
-	M9WQ00wQ1U4Kovuku6Ias6MWwf+KvTol+SdcDsC2I/7MwQVsEojqTHxjsj2KLwxLIUjj5+1QTdU
-	X/My1cD5ZFrEIPSQun/D+DMjc7cGnSXUlaYNoy4XvvjndCAzAWBchzNJ0TRjb5/vaCXTvSJ6ym+
-	Lm5DtTzhz2MPPpeLZB9bzr3X109YxGmc8sSRrmuCveyL7uXZzV33U1LZhigWriaJxqR6m/7uHSu
-	/8eGelEDxo71gnwGbBJJnkt6w376csWdQAnKfKfiLwnBMOqw5DyRgwazZEsEz/Y/zb2t+/TsGhx
-	6c6kTU/YIt6h34DAcZINZD6UoAyTNwn1cPTvqaIYmsfCqGV8XSclZ3lblEtcH/zgGxWWp4pDKlg
-	H8i0gZeAhYG
-X-Received: by 2002:a05:6a20:b08d:b0:3cc:3d08:da3e with SMTP id adf61e73a8af0-3daed217b76mr3313536637.2.1789087706544;
-        Thu, 10 Sep 2026 17:48:26 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1789087826; x=1789692626;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=E7Qs/YRK7iSN+nJFDW3LjPkoxVBPiWNImGpW7cLgflI=;
+        b=OpS646o85ffEvnCn4eU5RPEInFSpNlUTgQuQE798/0pqcJHUyF8cR2Bpru6l0l3h85
+         rBEuGKv8JSdGgwlbOV7wumn5VskxssbXd711V4boLrjVgMiE1g0rI1ZeDW3y9GBcUnf6
+         lDeF/1n1tkrztfIDaHpVGslG+Cz0F43Lo7jd1tumtqOwHemWFzYKAV/LqD/NZcSj64ur
+         nFpO4jhrk2hsfMG5mvbmZedywJBgTGi7WlOqFTQUMqFUR4f5lsH0cuGyk3B1jq70QbVI
+         r+uSte9eF5dYfhgX/Du3N57SlVuJ+hpGa2j8HJyzBiEX1ryHZ2OCH5Y9bpZNBocpDNrI
+         O3OQ==
+X-Gm-Message-State: AFuF++k5ineR2/2GRK2OEjfLKn4dtOUZ7qlFT5gODMzhXXHYq542Suq3
+	POyu8yI7O8l2K8RUGA3pVy9sD0V6hYmEdPo1OL2NygiYuODYo7h7LgdSuyvqA/No
+X-Gm-Gg: AYBFou2dV+OM6/rXnqVmqAeTBLyXNSWv+SrFEikR8Ol+CpZqntZXdobEpWmW3jo+yL2
+	QkL34mK+iwEbBtF6Kn27xY27iCJwks7ya4ccqb1yRnxh+oxcEQWUT3QbWNm5wlPtqprC0KmAA0x
+	/W7cohzTxw3kFuMBz4uOAdl7RtTThk3Z2VRA4dMrclHjOKm25dxHxvd/b3Ie+RZ85RdLeDDPOex
+	ERpK1WrLLxR4T4rYxj9053wIu0SNXXB+bRQTwrn6pni8r9WVdM9X5Ym+6Bs+9HGHMzUZtaGZzL+
+	mCF+h2pqaGB7Ku612Pe9uVE1qfcYv6gtmFI+3XzQe3PhZybXTlxr/05+dLGU9/OyvnflA1kkhDw
+	5xDEJoyB/NZFK4FtzgHr6R3XaVQ5KH1a7bAWznrq+AiytQf7bhMAligSRSkJOCYGoWtoBjXzw7M
+	8jqyHsMCbkiHs5lQ9t7UXJKwHMDUYe1uxU5pM+fT1bqq4tL+BU7jcluW4M+AMtG/9dGUVswr4MT
+	U71ZknlOoJM
+X-Received: by 2002:a17:902:cf4b:b0:2d6:fee6:65ae with SMTP id d9443c01a7336-2dd2a1c9c3bmr39121265ad.4.1789087826066;
+        Thu, 10 Sep 2026 17:50:26 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-143659a9a06sm2164759c88.0.2026.09.10.17.48.25
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33ba4ee07f2sm1454199eec.18.2026.09.10.17.50.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 17:48:25 -0700 (PDT)
+        Thu, 10 Sep 2026 17:50:25 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 10 Sep 2026 17:48:24 -0700
+Date: Thu, 10 Sep 2026 17:50:24 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Rong Zhang <i@rong.moe>
-Cc: Clemens Ladisch <clemens@ladisch.de>, Gabriel Ford <gabriel@gford.dev>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (k10temp) Fix model id range of Zen5 Turin
-Message-ID: <0bf3bb99-a37f-4d8e-9ee2-1346240c89f0@roeck-us.net>
-References: <20260911-k10temp-fix-zen5-epyc-v1-1-643f5a248ae1@rong.moe>
+To: Sergio Melas <sergiomelas@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] Documentation: hwmon: (yogafan) Update model
+ reference table and contributors
+Message-ID: <fa4b19f5-730d-4069-a868-c1281d26895e@roeck-us.net>
+References: <20260910184322.1816996-1-sergiomelas@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260911-k10temp-fix-zen5-epyc-v1-1-643f5a248ae1@rong.moe>
+In-Reply-To: <20260910184322.1816996-1-sergiomelas@gmail.com>
 
-On Fri, Sep 11, 2026 at 02:39:25AM +0800, Rong Zhang wrote:
-> Model 20h-2Fh are mobile processors with single CCD. For example, model
-> 24h is Strix Point, i.e., Ryzen AI 7 (PRO) (H/HX) 360/365/370.
+On Thu, Sep 10, 2026 at 08:43:22PM +0200, Sergio Melas wrote:
+> Add the new IdeaPad 3 15ALC6 Ub model and Yoga 740-15IML, update existing
+> model entries, include corresponding contributors, and adjust the
+> reStructuredText table layout and column separators to accommodate the
+> longer strings and prevent Sphinx build warnings.
 > 
-> Including mobile processors in the model id range of Zen5 Turin
-> processors leads to bogus reporting:
-> 
->   k10temp-pci-00c3
->   Adapter: PCI adapter
->   Tctl:         +54.1°C
->   Tccd4:       +148.6°C
->   Tccd6:       +148.4°C
->   Tccd7:       +149.1°C
->   Tccd8:       +149.2°C
->   Tccd9:       +149.2°C
->   Tccd12:      +149.1°C
->   Tccd14:       +22.0°C
->   Tccd15:       +22.0°C
->   Tccd16:       +22.0°C
-> 
-> Fix it by removing the said range.
-> 
-> Fixes: 8440d5aca227 ("hwmon: (k10temp) Add per-CCD temperature monitoring for Zen5 Turin")
-> Signed-off-by: Rong Zhang <i@rong.moe>
-> Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
-
-Ok, I assume this is authoritative.
+> Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
 
 Applied.
 
