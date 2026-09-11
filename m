@@ -1,186 +1,277 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322794A4EF0
-	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 21:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F133246ED;
+	Fri, 11 Sep 2026 23:29:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789163217; cv=none; b=ks/XcAXlLVzzbc6NnD3PK7mwoIZjoOopqrTeOAmUER69ryJ7hUdg6eKeXVj4wERumRJU0S214PwMNOBoZWSnYG/755F1KIcOn5sBrZxDqeRgaP/aKYCAfbCU5VV6SN9ojVvV9bhYLAoUM7eu3JCELCS8Bnm9+vEm/GQgRvIRvTA=
+	t=1789169376; cv=none; b=feWdW11ctLoxf2Z9/4O681Uziq+r44PP0Ss+qPithqG2ecpzSLB6tg6hpjfzO5dSXFmsgDqSzmPbe4jtX19hL2gvtbzmneXbxBDB6kRVHOiGinvaC2JU4J4sdYS4JSs5+C5QyNaFQtMu5JWC7vnHx8PE8c20R/cls/bRTktyF6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789163217; c=relaxed/simple;
-	bh=PiaKAyD7d+00pfdZ8SrbGYWHzdANSMetJuvQBoxbsXw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T6bYm7B1X6iykKQaPUA1pxV0V7DTglsGMT+aXHznIxssG0iEkKQWONBgReXfhpXeKBzSsXoD8tZID71KL4Q+RBPi5OLMchxE0ZcR3eHDLRZ6uA/9+xAEHGX2hsY2R4EgEbYUIkQQdEtlwPHZ/vEr7E/ZWd7Z5TfDG8SQh1g8yO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bkUrAZH/; arc=none smtp.client-ip=74.125.227.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789169376; c=relaxed/simple;
+	bh=7lwcmw3oOfQJEkgyBkIMGhKBHj1UPW1+VFZ59Qe3eQI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Gh32qZnAvwnZL3egO9UYi2d22ok1gommVNp4oupNqTNXjih7ar2937J2pMpyp4hdStJ41kBHVMgZwuENdLlyd5hq4p13023PRposT1zCyFFmBgMfxOooqfsSy4b410k+scnmKIxWuIIjuJVxSVax9CWp9Tyq0pcyNtFh0+MC7j8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=X0L5iUHT; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bkUrAZH/"
-Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccafb74fso275507a91.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 14:46:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789163215; x=1789768015; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=CvF6mXV4/o8ZVJXR1oq5jFHP/ZPq+7AJoMWbWxqY8mo=;
-        b=bkUrAZH/qds+Ws9yZnIK6TXBuUT1YkjzdzB48Zkdd1etRDYChRU5os0IvbUI4DCgf+
-         gqRK2AWnRisK69KoHRL3fPwym9YBS0tW0AZs59jV1TkbmsykIdDO19iNDhNkEsx0W3If
-         EOrrDUvGJH6shlCkzqyesXpic9t9ggHTKw1pB5lBUqZ1LTbsqR9SbLMKwHq81NI5Jwiu
-         ETGzLR4YYV4B8iWP7xHoToaMcla18RWHDUPO8fsgKDU0NSfMoRa7rVlmZR97TQzgjtCW
-         DEUEh5SzadzYm6izRzhNZ5F2OJ9C+vezY2D4O+2Pbr8v/d+UQIU3v2HYD/gGn3qgpFad
-         HgFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789163215; x=1789768015;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=CvF6mXV4/o8ZVJXR1oq5jFHP/ZPq+7AJoMWbWxqY8mo=;
-        b=YbdWbNdB7X8D2RFsPKfpnM3bpDS5ZIdFc54c7bSig7IZQ3OEGGZAbLHIF9itMycS8r
-         t1dj9wzD03IZfhEB3E+X11ccE/I5eF+xGAO9JxmT4CxRpSFJgoVNbFU5iTvMnGkt1/X9
-         MmwSNRc2//RarcN/lvo+jV30aruEvTBxYuL0QBLFfJDSUUxujRR558toQKBukUedrKr5
-         XtsN6iou6Kh1XjixqbDFyTCSBl6LbN+V0Y0Dy/PGSaLV9myqr+dAzqIrr0dJVEpbJgfa
-         JRGqOHE0xQ8CnZHjmROVZGhEY+0Rhw1elVkqi37QDEjzMyWDFtGqtjfy6e2xDuY8bSGa
-         vFdg==
-X-Gm-Message-State: AFuF++kkZuFjH9aCeFOufE1XA5BIBf2Qc1mjqeMudeLulAQhtM6GzL3y
-	6zCPrw4rYH6ERW5J1KoYDZMfoF0i0t8tlmZkPWtoHbBK/CQSu/7EgAqr
-X-Gm-Gg: AYBFou30qo7G470w7k7wMmJiQObh4PCO6aM/9R7IsOVFBOLiHLkgfmhWKa/vCwZ0Iqu
-	LGqhulJvJ9JBnETaS7yDUJfbP3Vnz0tYLP8GZMUqWSdl06EmZXjlz/CWWsvRbsXVXDL+iNgveWO
-	T9YT1vZf/4nT2AtbHkVceYjbY0o58pabSswLj7wfH0pUkBKiiXz6HZ14+1LxcF0HWYjERQ/IY3j
-	yupzCV4H1+bJi2qP23RUUr17RGCpKONIZ8DzIz/urQR4lFOEIFt3Xo33ptZBauGT2n74JhOZpUC
-	zV4U9wXUsOY6CVffnCfgKc13PWnSoPgLiA7T7ctU8LQH7XSCXsqx0j3AlFvRWOECpHY7Q9snVw3
-	vgQU/e5ITk3s85CxJvsUvxNCKxjZnGUsODgT4ibkCvw+OJT6YzIG8yfGOFYK4VX5/SuwsQq6nX3
-	2qDvhpXCF4PK8hsqo/40+yFpOUPrp3svwtMACQ73vKKZMr1HIli3gosaJpRj0hqj2q/z5E48nVo
-	pIdUEuJ+T52e+rcyfAfvUI=
-X-Received: by 2002:a17:90b:548f:b0:392:b509:b1a5 with SMTP id 98e67ed59e1d1-39d9c1db3d4mr10747178a91.14.1789163215212;
-        Fri, 11 Sep 2026 14:46:55 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14365bb6ba0sm8657061c88.15.2026.09.11.14.46.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 14:46:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 11 Sep 2026 14:46:53 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: marco.rodolfi@tuta.io
-Cc: Linux Hwmon <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH] arctic_fan_controller: Add a way to set a default value
- state on kernel bootup
-Message-ID: <5684d0e8-9ac9-48e3-9f81-3c7c9b63d65a@roeck-us.net>
-References: <P1G6-or--F-9@tuta.io>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="X0L5iUHT"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=tlQQvF1b+LoQVB9XRaUbbPD8hANIsVjq3TZJg8ASnTw=; b=X0L5iUHTRwYhwkzF16rcwqBBKs
+	1qga73wtg/r0iRou6O98urcmLPTKRa4esBDCXGEsnaoaxFHwdYHK4FFWaBlZM9s45MvloNU6NUNlO
+	hRUW73Vrv9bvBNYeqmD2D/O0JyKULSo1zLhtm4ih+xlHcRc5JDB8s0jaKdy7cLyqdliYHZQhxKbA9
+	cEEVhBIGuTY9h3nTuZ24zHvzQbZDPEhI/w6qOBIKBU/kFuw+M95M6qF9BY1GLYlubBeJnoqtrO0Nw
+	rPj6irzpQXFvbqdsaeOHociOw0IJvOkyLnYPyJ7N9Vyzz9NOhb25FeGl9SsoWCMriFD+11SkWccur
+	Rqli2UEw==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1x5AgH-00000000MHz-1aVp;
+	Fri, 11 Sep 2026 23:29:17 +0000
+Message-ID: <5cd22376-6921-4a2b-acba-371bcbbfa00f@infradead.org>
+Date: Fri, 11 Sep 2026 16:29:15 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <P1G6-or--F-9@tuta.io>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] i3c: add i3cdev character device module for
+ user-space access
+To: Meagan Lloyd <meaganlloyd@linux.microsoft.com>,
+ linux-i3c@lists.infradead.org
+Cc: alexandre.belloni@bootlin.com, vitor.soares@toradex.com,
+ samagazaryan@google.com, gregkh@linuxfoundation.org, arnd@arndb.de,
+ boris.brezillon@collabora.com, oleksandr.shulzhenko.viktorovych@intel.com,
+ tgopinath@linux.microsoft.com, corbet@lwn.net, skhan@linuxfoundation.org,
+ linux@roeck-us.net, Frank.Li@nxp.com, jorge.marques@analog.com,
+ pgaj@cadence.com, wsa+renesas@sang-engineering.com,
+ tommaso.merciai.xr@bp.renesas.com, nuno.sa@analog.com,
+ Michael.Hennerich@analog.com, jic23@kernel.org, dlechner@baylibre.com,
+ andy@kernel.org, lorenzo@kernel.org, enelsonmoore@gmail.com,
+ rppt@kernel.org, pratyush@kernel.org, giovanni.cabiddu@intel.com,
+ gabewhigham@gmail.com, haren@linux.ibm.com, pasha.tatashin@soleen.com,
+ jirislaby@kernel.org, adrian.ho.yin.ng@altera.com, ustc.gu@gmail.com,
+ jszhang@kernel.org, adrian.hunter@intel.com, akhilrajeev@nvidia.com,
+ tze.yee.ng@altera.com, manikanta.guntupalli@amd.com,
+ shubhrajyoti.datta@amd.com, jarkko.nikula@linux.intel.com,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux@analog.com, linux-iio@vger.kernel.org
+References: <20260911210935.1353126-1-meaganlloyd@linux.microsoft.com>
+ <20260911210935.1353126-4-meaganlloyd@linux.microsoft.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20260911210935.1353126-4-meaganlloyd@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Sep 11, 2026 at 05:36:13PM +0200, marco.rodolfi@tuta.io wrote:
-> This allows to quickly set the connected fan(s) speed on bootup to a 
-> sensible value, rather than the randomly initialized values as the 
-> default behavior was.
+
+
+On 9/11/26 2:09 PM, Meagan Lloyd wrote:
+> The i3cdev driver is a character device driver that allows user-space
+> to control and interact with I3C devices.
 > 
-> Signed-off-by: Marco Rodolfi <marco.rodolfi@tuta.io>
-
-This patch is corrupted. On top of that, it has various checkpatch issues
-which could easily be discovered by running checkpatch. On top of that, it
-conflicts with a patch that I just accepted, which sets the default speed
-to 40%. I think that is sufficient.
-
-Anything further should explore the possibility of caching the current
-values prior to suspend and restoring it on resume. I do not see the need
-for module parameters.
-
-Thanks,
-Guenter
-
-
+> Currently, it has the ability to perform Single Data Rate (SDR)
+> transfers - basic reads/writes.
+> 
+> With the addition of sysfs driver_override, there is now a
+> straightforward and direct way to match the i3cdev driver to any i3c
+> device without stepping on the toes of more specialized drivers that are
+> loaded automatically.
+> 
+> This is accomplished by the i3cdev driver not having any entries in the
+> i3c_device_id table. After boot, simply set the driver_override to
+> "i3cdev" and bind the device manually via the sysfs bind knob. This can
+> also be automated with udev rules as well.
+> 
+> The character device interface will be exposed at:
+> /dev/bus/i3c/<bus id>-<Provisional ID>
+> 
+> Signed-off-by: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
+> Assisted-by: Claude:claude-opus-4.8 copilot
 > ---
-> arctic_fan_controller.c | 34 ++++++++++++++++++++++++++++------
-> 1 file changed, 28 insertions(+), 6 deletions(-)
+>  Documentation/userspace-api/i3c/i3cdev.rst    | 152 ++++
+>  .../userspace-api/ioctl/ioctl-number.rst      |   1 +
+>  MAINTAINERS                                   |   7 +
+>  drivers/i3c/Kconfig                           |  12 +
+>  drivers/i3c/Makefile                          |   1 +
+>  drivers/i3c/i3cdev.c                          | 730 ++++++++++++++++++
+>  include/uapi/linux/i3c/i3cdev.h               |  70 ++
+>  7 files changed, 973 insertions(+)
+>  create mode 100644 Documentation/userspace-api/i3c/i3cdev.rst
+>  create mode 100644 drivers/i3c/i3cdev.c
+>  create mode 100644 include/uapi/linux/i3c/i3cdev.h
 > 
-> diff --git a/drivers/hwmon/arctic_fan_controller.c b/drivers/hwmon/arctic_fan_controller.c
-> index 75cc78d..00ca803 100644
-> --- a/drivers/hwmon/arctic_fan_controller.c
-> +++ b/drivers/hwmon/arctic_fan_controller.c
-> @@ -17,6 +17,7 @@
-> #include <linux/jiffies.h>
-> #include <linux/minmax.h>
-> #include <linux/module.h>
-> +#include <linux/moduleparam.h>
-> #include <linux/spinlock.h>
-> #include <linux/string.h>
-> #include <linux/unaligned.h>
-> @@ -36,6 +37,14 @@
->   */
-> #define ARCTIC_ACK_TIMEOUT_MS		1000
->  
-> +static int all_fan_default = 100;
-> +module_param(all_fan_default, int, 0);
-> +MODULE_PARM_DESC(all_fan_default, "This parameter controls the default value that the fan(s) will have once the module is loaded. The default is 100/255 (which correspond to 50%).");
+> diff --git a/Documentation/userspace-api/i3c/i3cdev.rst b/Documentation/userspace-api/i3c/i3cdev.rst
+> new file mode 100644
+> index 000000000000..ad246bf28919
+> --- /dev/null
+> +++ b/Documentation/userspace-api/i3c/i3cdev.rst
+> @@ -0,0 +1,152 @@
+> +.. SPDX-License-Identifier: GPL-2.0
 > +
-> +static int fanx_default[ARCTIC_NUM_FANS] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
-> +module_param_array(fanx_default, int, NULL, 0);
-> +MODULE_PARM_DESC(fanx_default, "This parameter controls the default value that each individual fan will have once the module is loaded. This parameter takes precedence over the global default. If you don't want to set a default speed for a specific fan, specify -1 in the array. The default is -1 for all fans in the array (so use the global default for all of them).");
+> +====================
+> +I3C Device Interface
+> +====================
 > +
-> struct arctic_fan_data {
-> struct hid_device *hdev;
-> struct device *hwmon_dev;	/* stored for explicit unregister in remove() */
-> @@ -254,16 +263,20 @@ static int arctic_fan_reset_resume(struct hid_device *hdev)
-> {
-> struct arctic_fan_data *priv = hid_get_drvdata(hdev);
-> unsigned long flags;
-> +	int i;
->  
-> /*
-> * The device resets its PWM channels to hardware defaults on power
-> -	 * loss during suspend. Clear the cached duty values so they reflect
-> -	 * the unknown hardware state, consistent with probe-time behaviour
-> -	 * (the device has no GET_REPORT support). Hold in_report_lock so
-> -	 * this does not race with a concurrent pwm read or write callback.
-> +	 * loss during suspend. Set the requested default state again to
-> +	 * reconfigure the hardware correctly. Hold in_report_lock so this
-> +	 * does not race with a concurrent pwm read or write callback.
-> */
-> spin_lock_irqsave(&priv->in_report_lock, flags);
-> -	memset(priv->pwm_duty, 0, sizeof(priv->pwm_duty));
-> +	for (i = 0; i < ARCTIC_NUM_FANS; i++) {
-> +		int speed_selected = fanx_default[i] == -1 ? all_fan_default : fanx_default[i];
+> +This interface allows access to I3C devices from userspace.
 > +
-> +		arctic_fan_write(&hdev->dev, hwmon_pwm, hwmon_pwm_input, i, speed_selected);
+> +As I3C devices adhere to the I3C protocol, simple transfers can be accomplished
+> +using a generic driver. Currently, this interface supports private Single Data
+> +Rate (SDR) read and write transfers.
+> +
+> +The i3cdev module will not auto-bind to devices. Userspace needs to explicitly
+> +bind the device to the driver. This is to avoid interfering with the binding of
+> +specialized drivers.
+> +
+> +Once bound, a character device interface will be created at:
+> +/dev/bus/i3c/<bus id>-<Provisional ID>.
+> +
+> +====================
+> +Usage
+> +====================
+> +
+> +Any discovered I3C devices by the I3C subsystem will have device folders under /sys/bus/i3c/devices/<bus id>-<Provisional ID>.
+> +To allow binding of a device with i3cdev driver, set the driver_override:
+> +
+> +::
+> +
+> +    # echo "i3cdev" > /sys/bus/i3c/devices/<bus id>-<Provisional ID>/driver_override
+> +
+> +If the i3cdev driver is not yet loaded, load it and it will cause the driver to bind
+> +to any devices with the override in place.
+> +
+> +If the i3cdev driver is already loaded, go ahead and perform a manual bind:
+> +
+> +::
+> +
+> +    # echo "<bus id>-<Provisional ID>" > /sys/bus/i3c/drivers/i3cdev/bind
+> +
+> +Set driver override
+> +::
+> +
+> +    # echo "i3cdev" > /sys/bus/i3c/devices/0-deadbeef001/driver_override
+> +    # echo "i3cdev" > /sys/bus/i3c/devices/0-deadbeef002/driver_override
+> +
+> +Bind the device to the driver
+> +::
+> +
+> +    # echo "0-deadbeef001" > /sys/bus/i3c/drivers/i3cdev/bind
+> +    # echo "0-deadbeef002" > /sys/bus/i3c/drivers/i3cdev/bind
+> +
+> +Observe the resulting character device files under /dev/bus/i3c/
+> +::
+> +
+> +    # ls -ltr /dev/bus/i3c/
+> +    crw-------    1 root     root      235,   1 Jun 30 17:49 0-deadbeef002
+> +    crw-------    1 root     root      235,   0 Jun 30 17:49 0-deadbeef001
+> +
+> +BASIC CHARACTER DEVICE API
+> +===============================
+> +The API supports private Single Data Rate (SDR) read and write transfers.
+> +Those transaction can be achieved by the following:
+> +
+> +``read(file, buffer, sizeof(buffer))``
+> +  The standard read() operation will work as a simple transaction of private
+> +  SDR read data followed a stop.
+> +  Return the number of bytes read on success, and a negative error otherwise.
+> +
+> +``write(file, buffer, sizeof(buffer))``
+> +  The standard write() operation will work as a simple transaction of private
+> +  SDR write data followed a stop.
+> +  Return the number of bytes written on success, and a negative error otherwise.
+> +
+> +``ioctl(file, I3CDEV_XFER, struct i3cdev_xfers *xfers)``
+> +  It combines read/write transactions without a stop in between.
+> +  Return 0 on success, and a negative error otherwise.
+> +
+> +C EXAMPLE (PSEUDO CODE)
+> +=======================
+> +You need to open (and get a file descriptor) to /dev/bus/i3c/<bus id>-<Provisional ID>,
+> +do your operations (read, write, ioctl), and then close it.
+> +
+> +The following header files should be included in an I3C program::
+> +
+> +#include <fcntl.h>
+> +#include <unistd.h>
+> +#include <sys/ioctl.h>
+> +#include <i3c/i3cdev.h>
+> +#include <stdint.h>
+> +
+> +These additionally are used by this example::
+> +
+> +#include <stdlib.h>
+> +#include <assert.h>
+> +
+> +To work with an I3C device, one must call open and get a file descriptor::
+> +
+> +	int fd;
+> +
+> +	fd = open("/dev/bus/i3c/0-deadbeef001", O_RDWR);
+> +	if (fd < 0)
+> +		exit(EXIT_FAILURE);
+> +
+> +Now that the file is open, we can do some operations::
+> +
+> +	int ret;
+> +
+> +	/* Write function */
+> +	uint8_t  buf[] = {0x00, 0xde, 0xad, 0xbe, 0xef};
+> +	ret = write(fd, buf, 5);
+> +	if (ret != 5) {
+> +		/* ERROR HANDLING: I3C transaction failed */
 > +	}
-> spin_unlock_irqrestore(&priv->in_report_lock, flags);
-> return 0;
-> }
-> @@ -272,7 +285,7 @@ static int arctic_fan_probe(struct hid_device *hdev,
->     const struct hid_device_id *id)
-> {
-> struct arctic_fan_data *priv;
-> -	int ret;
-> +	int ret, i;
->  
-> if (!hid_is_usb(hdev))
-> return -ENODEV;
-> @@ -317,6 +331,17 @@ static int arctic_fan_probe(struct hid_device *hdev,
-> priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "arctic_fan",
->   priv, &arctic_fan_chip_info,
->   NULL);
-> +	/*
-> +	 * Check which fan default value to use, chosen between the array of fan(s)
-> +	 * values or the default fans value (first takes precedence) and write the
-> +	 * corresponding value to the hardware.
-> +	 */
-> +	for (i = 0; i < ARCTIC_NUM_FANS; i++) {
-> +		int speed_selected = fanx_default[i] == -1 ? all_fan_default : fanx_default[i];
 > +
-> +		arctic_fan_write(&hdev->dev, hwmon_pwm, hwmon_pwm_input, i, speed_selected);
+> +	/*  Read function */
+> +	ret = read(fd, buf, 4);
+> +	if (ret < 0) {
+> +		/* ERROR HANDLING: I3C transaction failed */
+> +	} else {
+> +		/* Iterate over buf[] to get the read data */
 > +	}
 > +
-> if (IS_ERR(priv->hwmon_dev)) {
-> ret = PTR_ERR(priv->hwmon_dev);
-> goto out_close;
+> +	/* IOCTL function */
+> +	struct i3cdev_xfer xfers[2] = {0}; /* Must zero out for compatibility */
+> +	struct i3cdev_xfers xfers_metadata = { .nxfers = 2,
+> +					       .xfers = (uintptr_t) xfers,
+> +					       .xfer_size = sizeof(struct i3cdev_xfer)
+> +					     };
+> +
+> +	uint8_t tx_buf[] = {0x00, 0xde, 0xad, 0xbe, 0xef};
+> +	uint8_t rx_buf[10];
+> +
+> +	xfers[0].data = (uintptr_t) tx_buf;
+> +	xfers[0].len = 5;
+> +	xfers[0].rnw = 0;
+> +	xfers[1].data = (uintptr_t) rx_buf;
+> +	xfers[1].len = 10;
+> +	xfers[1].rnw = 1;
+> +
+> +	ret = ioctl(fd, I3CDEV_XFER, (uintptr_t) &xfers_metadata);
+> +	if (ret < 0) {
+> +		/* ERROR HANDLING: I3C transaction failed */
+> +	} else {
+> +		/* For reads, optionally verify that the response matches expectations */
+> +		assert(xfers[1].len == xfers[1].actual_len);
+> +
+> +		/* For reads, iterate through response data using xfers[i].actual_len */
+> +	}
+> +
+> +The device can be closed when the open file descriptor is no longer required::
+> +
+> +	close(fd);
+> \ No newline at end of file
+
+Fix the warning above, please.
+Also:
+Documentation/userspace-api/i3c/i3cdev.rst: WARNING: document isn't included in any toctree [toc.not_included]
+
+add that file to the table of contents (somewhere).
+
+thanks.
+-- 
+~Randy
+
