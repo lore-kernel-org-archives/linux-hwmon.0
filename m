@@ -1,116 +1,191 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05FD933BBAF
-	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 14:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B13283515CC
+	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 14:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789138212; cv=none; b=t4Q+hKR4qoI2CUVvzLEzBFmSvUB8YroJ0liFW3oHs33PHsyCMbcdJy2iX0kSK52tsAeRbowO8+T9tCTCVdWeV2K66bbWf4kQba/EG8U5EeDYt86Bz4i20iDL/TE0Atu+wPkfQz1Xy2Ojqco0bucZJW1pyf9vvadRHraipgYWvec=
+	t=1789138380; cv=none; b=l4g1OLB8hEtG0fXeQN2UoJUVpIXExYpGAeahZ/59GrilFoJgHLJ6+q2kTU/zMQjC5A9Et8grOuEzgilvmcGCMLHhwOO6+wGcmmMzX7ixgAzDEdikBWoWaV6RUnSXJNHmZaswJiW8A2TlM0yShPno3Fd70+mor8UEUyZ+yu/6srU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789138212; c=relaxed/simple;
-	bh=MZZFH2RiZCO5VD1jdY4GuTbEQSKBZF1HexyL/oLxyuA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HNxgbtABHJt7LK0Gb+sGH3xM4+BNlbrtc8j7TB5G2YUG73bCxVpbZCQqx0PwcZMBcN6N43yTuRyyc7rUULFa5sCxi+dBA2XDdYtd2zngZaWXiu3jcRNvOyvJwLBg4mQ1WXJKUxroxGi0zs+i1l+ppckbICtY3n23N+qu6smHJO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=beq4rqWj; arc=none smtp.client-ip=209.85.214.172
+	s=arc-20240116; t=1789138380; c=relaxed/simple;
+	bh=fpmxr0cgb7peufCFX/fraHzTpsYDsX16E32Gu2HRJUc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BSMoFjmAMUmy8Fj9Oi1D+JLJ4VKMXsE7o8uf74tbie8c5ITr462gUXzCRd1z9a+VQxZTxtp8TEUg8f1vpc7emG9vLEJYatnxQ5qwfLBlCSmpY2EaZEemDsj/bjBr9RZ+cFBVsPAeUl798wbhMR+CvXW2nYRuGIPv+qd8PjanC3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CP4n0Fok; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="beq4rqWj"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2cace91f112so8380865ad.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 07:50:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CP4n0Fok"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2d6d28aa26cso7360155ad.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 07:52:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789138210; x=1789743010; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=uF9YgASjNxZc1az0Lm4LSS7mti+D9Zg05V8N/WBDhjw=;
-        b=beq4rqWj3fxPPbO0K0gCHHnDTzTupcUalOIQVCjKVtb6Z9Sq3KXOoQMBgcD1pnLZal
-         uf+NSsZ2E891njitL9+C8EOE2VB8WFMnSJOZ+8idE7x1qF8SfBns9FRzRHEX0GXU/sl6
-         E/4QtK/gR7P2vbYNp3+zBUS9nfyhUDj+x/Pvr+UncDn4d2ED1BWqblOfuCVk/Uxc3/Ew
-         hXInTKlzruH6oQ5MOObg5GuZrAdHh4vHViyjSJVXTpdF2MX4JRB+TWtgsIwkuaWq0RrC
-         VlVxeW4vTBPWOk+ANk9MP948aJn3gJUOPIRrES2zKudQ1MFIb9XjiACSeKO1shaJYxx0
-         uQXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789138210; x=1789743010;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1789138378; x=1789743178; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=uF9YgASjNxZc1az0Lm4LSS7mti+D9Zg05V8N/WBDhjw=;
-        b=TPOr+2T3L3KCThFd2SD3LGUFstAJqIA5c8gyEkNBIlMIrS/WAUpw9xZVUfzdH/TAlx
-         uAKJ16+XvhUmh37Fe9fHRF9KYVfefQfz1gd39Q2ILAvdLYJcxcqt16rE76ERBe/HClNI
-         f57WWaov1Qtb9dDeNQD7L1mfSyFM15WWpSvxVO1wXzvczJe2mgIJ149NWWcx5iWPQQOC
-         gFGVcANLp/BYUJ+du5BEfk/2ecm91XSASM5h/u5XxOSNVEvCa/SHucyps/O18ozeKdra
-         3p2j0Nkr2h4txLoLyCg3H6GkjIo7+1ydNGRl470SGOiGQeHcPnS6SWhj+LAQttWM+K7L
-         s4og==
-X-Forwarded-Encrypted: i=1; AKwUvBx7+e+7UWoceH3maQjt76Cjh7u7h7+pgyQKosV+1PA0KapJ9l1bVQqsaAUmm4xKP9yzQh8X0z5nW/T/GQ==@vger.kernel.org
-X-Gm-Message-State: AFuF++k5lJ/iQdabhjiNHTWSDDkDGXfXKYwF7b8xqF8LBqSvxSYNMqjG
-	LiBchANKIobU3HJHyZLpBd9mH621Qu/DIMb9yu+b7NyJtJqxQjzvinD2Ykn+iA==
-X-Gm-Gg: AYBFou2xrRo3XDO+61KlvyDnoTUw17/OdjUNySV/Tzoyy6x7nnVMXZjkcNNPsIVpXNp
-	MZykPs/dZEiom7RnDBnn+frv22HcitYFfCkK3o7jymckGWUtP5dPyvhMAcdrEgchN6/KoWiIl9n
-	POFAKcT9VZ96o0IxVtenC0QBBAVqOuMcG4aUIL5d/3Rw4aIV0GBC5kABuJEjOIxsw1JYwTEY0Jg
-	t0xJ9whweDxMXPtw+DYE3JGwykNyd1hMUFvM3oP+NW/8a4vrVcc9YbH1ePqcd8m0WNXh+e0U5j9
-	5js+mxOWP4H6Mn35w2KELVu9i6/qf3plpLFg++lC7uh0nmu3B8xo29e7QRZN70SN+L2UObt0tHt
-	r1q+4pTua+DFTcp3y0w0W9rr43rbKMRWO0aZBU/mlaLf3SDf1ukOwZ6vMoq65+SQoBs9r6SZM+N
-	Ohl+kGjWaTggz27hw2tAemKRHGlzFRdXhum2AUuSD41IpBpSHNQK8+J3YG4hnRTUEvb3G1RidGu
-	KKGrOpKG7RD
-X-Received: by 2002:a17:902:e891:b0:2c0:a555:80d6 with SMTP id d9443c01a7336-2dd2a1c3a84mr80855195ad.2.1789138210144;
-        Fri, 11 Sep 2026 07:50:10 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd2cec8483sm12749235ad.44.2026.09.11.07.50.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 07:50:09 -0700 (PDT)
+        bh=LdoXE+ewf5jb6LQYyxh8lGBqTy0FzOqpYpBgqMKD8BI=;
+        b=CP4n0FokueOIkLaqHEum6A2E1+govAVCb88p7EccdT3A2bXJxTbrThB21hzskyKVZE
+         /Mw/FsmnsT74q/bL/RGdwuFHA1+KFVpG8UDqnQKGgYHWnhDAHAw1aYxFiJ+D/dxhIeQA
+         AqqJJoLU6sQm5TB53nKxdsLmyeVKdGsExhC27PmWh5sT1BmBiMW0t4CuMMWlsBwHfh07
+         xoGhmNDpC/pDfaD+JYZzWqZjQMUGLwetXXIv1mJFJrWhLzQz0HD6tICkfkZsoJ7OdSL2
+         4AVJAie3Cny9VT8UYh8/h8SI6f9xRGBLkWhmTEda+KqzXJznHF9NucRQcNlozKL79Si0
+         Wedg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789138378; x=1789743178;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=LdoXE+ewf5jb6LQYyxh8lGBqTy0FzOqpYpBgqMKD8BI=;
+        b=YHkOY+Za64xVaYjsmFE+rRRWNDixBf9M1XkclDudVSSBx9Cz0cMjn5aK6fV+Pc/RUd
+         gTmlsa9s+5jWz3oO6pps7Ajfd0XGgsMyTYJTp0SloSNX93KI0uho2BBqRH7nOL2uHSHt
+         wwb1RiHXbczLXgQKVlr85sdrk4TnL7YFj/yp69ILsGp913035hm4CkE8+qFgbAF+wxkX
+         hvkDGJYyJtUZzfa1KYMJCMOLOUQnFydniQePwFnJ308V6KWJjn/xemlly3Wj6SI8nHIQ
+         IpVhjMSLQR5njXZjQJBkglZjAYPnN+X3v5/vjjlRZIwH9TbYId6mXRuSXVjbYV98LWxk
+         qrRA==
+X-Forwarded-Encrypted: i=1; AKwUvBx2sk07xEtMc7TjZpKFyY+PGgcftKV3Ug7iwu7XQaQySjiMp0qSDbcbEhwD0RhUuuInUbBizKL2UhIWcw==@vger.kernel.org
+X-Gm-Message-State: AFuF++nh6dVxKIbHn1UuRtE0jblM4OYpL/H2yRPbjNjUjUkBWpyjPHVk
+	VWzFs/pNnzX4hm4U1kPqkUB7Lgq2CykkcpJuyQmdWLeis31MAgqIZzH9
+X-Gm-Gg: AYBFou0e5HmctlaypzayAZwYV10yfdbG0IPX/EUyOwCAI+Hwx9rrHcrCLhm4EQ99XX0
+	SjOiyZ+PZmwn9Id7IsgEz3Yl31zem24+cDq6OanGARwDWPYssUyN8eskYrEi8g3uK+590JqqzaJ
+	wnz6ntrHH/AZLEezpiNotSIxmUQfjLohvqHWteSdP8YbHpnjUbdzWWp/SYGEAMI3nSyLL5/6rDA
+	xq/cYfRA9wALrct2IdCP8OEoN8PysvvOZVRnQtJhbv8KAOUgUe/e8kue2LVL7POP9F/gTd2wEx/
+	Jd0JW3+hkZzi3ZBpApuNIMnPN0HbxSz8Ga8JTJ/Rw+OHXxAY/jryW/8MOwRV40anKH9ExzsmFn2
+	v/pJTXXzXVzcttabdYnD3GiZApm+VaSh31E9F1ndzKQtSrfhvmbIB2HW1Aaipj3b5PKhZ05J4Dg
+	Z42cI9asKOCrp1oSC/GDBYZkFm3d6h5LKmZJgWtR2uWVj1B3GIbbW6yNHr2MDr9rf4T49Vt3ERr
+	KwXQ3Xiq9N3B8bV+GWSoFa4599VbW7hictg6/QcLXDxwUYL
+X-Received: by 2002:a17:903:1b4f:b0:2dd:40cb:a054 with SMTP id d9443c01a7336-2dd40cba32bmr20018355ad.19.1789138377973;
+        Fri, 11 Sep 2026 07:52:57 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd2ccaceafsm12899705ad.9.2026.09.11.07.52.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Sep 2026 07:52:57 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 11 Sep 2026 07:50:08 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Yibo Tan <lhfff@tju.edu.cn>
-Cc: Paul Barker <pbarker@konsulko.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] hwmon: (pwm-fan) Stop RPM timer before freeing tach
- data
-Message-ID: <6bd382f6-5e41-435e-8ebe-2f5598a393bb@roeck-us.net>
-References: <20260911071809.130151-1-lhfff@tju.edu.cn>
+Message-ID: <518aea33-277a-4d8f-8bf7-7469879f6f56@roeck-us.net>
+Date: Fri, 11 Sep 2026 07:52:56 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260911071809.130151-1-lhfff@tju.edu.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] hwmon: add Axiado AX3000 and AX3005 PWM fan
+ controller driver
+To: sashiko-reviews@lists.linux.dev, Petar Stepanovic <pstepanovic@axiado.com>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org,
+ conor+dt@kernel.org
+References: <20260903-axiado-ax3000-pwm-fan-v2-0-ef43df46163e@axiado.com>
+ <20260903-axiado-ax3000-pwm-fan-v2-2-ef43df46163e@axiado.com>
+ <20260903084844.D1CC11F000E9@smtp.kernel.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
+ oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
+ VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
+ 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
+ onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
+ DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
+ rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
+ WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
+ qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
+ 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
+ qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
+ H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
+ njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
+ dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
+ j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
+ scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
+ zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
+ RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
+ F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
+ FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260903084844.D1CC11F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Sep 11, 2026 at 03:18:09PM +0800, Yibo Tan wrote:
-> sample_timer() rearms the RPM timer and accesses the devm-managed
-> ctx->tachs and ctx->pulses_per_revolution arrays. The cleanup action
-> which stops the timer is registered before those arrays are allocated.
-> 
-> Since devres releases entries in reverse order, driver detach can free
-> the arrays before pwm_fan_cleanup() shuts down the timer. A timer expiry
-> in that window accesses the freed tach data.
-> 
-> With a KASAN kernel, a test-only kprobe delayed entry to
-> pwm_fan_cleanup() while normal sysfs unbind ran. Each of three runs
-> reported three four-byte reads and two four-byte writes in sample_timer()
-> after its backing devm allocations had been freed. The helper did not
-> invoke the timer callback, cleanup actions or free functions.
-> 
-> With the fix, three matching unbind runs completed without KASAN, BUG,
-> WARNING, Oops or panic. Instrumentation confirmed that timer retirement
-> completed before the first timer backing allocation was released.
-> 
-> Split timer retirement from the power cleanup and register its devres
-> action after the timer backing data and IRQ actions are installed. This
-> preserves the early power rollback action while ensuring the timer is
-> retired before its backing data is released. Use timer_shutdown_sync()
-> because the callback can rearm itself.
-> 
-> Fixes: 01695410d452 ("hwmon: (pwm-fan) Store tach data separately")
-> Cc: stable@vger.kernel.org
-> Assisted-by: Codex:GPT-5
-> Signed-off-by: Yibo Tan <lhfff@tju.edu.cn>
+Petar,
 
-Applied.
+On 9/3/26 01:48, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] The interrupt handler incorrectly returns IRQ_HANDLED for unhandled device interrupts, potentially causing an IRQ storm.
+> --
+> 
+> commit ac0edffb2c72d464c05c340c5df147fdcf10b0f4
+> Author: Petar Stepanovic <pstepanovic@axiado.com>
+> 
+> hwmon: add Axiado AX3000 and AX3005 PWM fan controller driver
+> 
+> This commit adds support for the PWM fan controller found on the Axiado AX3000
+> and AX3005 SoCs. It measures fan speed via a hardware tachometer interrupt and
+> controls the fan via an external PWM signal.
+> 
+>> diff --git a/drivers/hwmon/axiado-pwm-fan.c b/drivers/hwmon/axiado-pwm-fan.c
+>> new file mode 100644
+>> index 0000000000000..ac153afded47a
+>> --- /dev/null
+>> +++ b/drivers/hwmon/axiado-pwm-fan.c
+> [ ... ]
+>> +static irqreturn_t axiado_tach_irq_handler(int irq, void *dev)
+>> +{
+>> +	struct axiado_pwm_fan_ctx *ctx = dev;
+>> +	u32 status;
+>> +
+>> +	status = ioread32(ctx->tach_base + AX_TACH_INT_STATUS_REG);
+>> +
+>> +	if (!status)
+>> +		return IRQ_NONE;
+> 
+> [Severity: High]
+> Will this handler cause an IRQ storm if the hardware asserts an interrupt
+> where the status is non-zero but AX_TACH_INT_PENDING is not set?
+> 
+> Since the condition only checks if status is zero, an unexpected bit could
+> bypass the IRQ_NONE return path. The handler would then proceed to clear only
+> the AX_TACH_INT_PENDING bit and return IRQ_HANDLED, leaving the actual
+> hardware interrupt active and bypassing the kernel's spurious IRQ protection.
+> 
+> Should this explicitly check if the AX_TACH_INT_PENDING bit is set before
+> processing the interrupt?
+> 
+
+Please address this problem, or explain why it does not apply.
 
 Thanks,
 Guenter
+
+>> +
+>> +	scoped_guard(spinlock_irqsave, &ctx->tach_lock) {
+>> +		ctx->tach.count = ioread32(ctx->tach_base + AX_TACH_COUNT_REG);
+>> +	}
+>> +
+>> +	iowrite32(AX_TACH_INT_PENDING, ctx->tach_base + AX_TACH_INT_STATUS_REG);
+>> +
+>> +	return IRQ_HANDLED;
+>> +}
+> 
+
