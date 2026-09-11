@@ -1,191 +1,153 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.w14.tutanota.de (mail.w14.tutanota.de [185.205.69.214])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B13283515CC
-	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 14:52:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83D23E7BC7
+	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 15:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.205.69.214
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789138380; cv=none; b=l4g1OLB8hEtG0fXeQN2UoJUVpIXExYpGAeahZ/59GrilFoJgHLJ6+q2kTU/zMQjC5A9Et8grOuEzgilvmcGCMLHhwOO6+wGcmmMzX7ixgAzDEdikBWoWaV6RUnSXJNHmZaswJiW8A2TlM0yShPno3Fd70+mor8UEUyZ+yu/6srU=
+	t=1789140977; cv=none; b=FlPawcNIZLO5i/ZaQoUe8jGUrbCA6TqvhTWAG8y13Sic734iizLghYCjjLz+MLAm2Koi42YLjeAxwZm1B7DBmOVyXz7gve37qEqx9UkNMMIWoa7uajeNjPc5rxPf+Fix2sFNiYcB84S30XFKfDmkStGUSsGIffNM8R3raPm+8K4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789138380; c=relaxed/simple;
-	bh=fpmxr0cgb7peufCFX/fraHzTpsYDsX16E32Gu2HRJUc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BSMoFjmAMUmy8Fj9Oi1D+JLJ4VKMXsE7o8uf74tbie8c5ITr462gUXzCRd1z9a+VQxZTxtp8TEUg8f1vpc7emG9vLEJYatnxQ5qwfLBlCSmpY2EaZEemDsj/bjBr9RZ+cFBVsPAeUl798wbhMR+CvXW2nYRuGIPv+qd8PjanC3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CP4n0Fok; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789140977; c=relaxed/simple;
+	bh=XyMFeppzzeXq9kSD0cskeUQGJv/U8X0oVp+C4DmjupI=;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type; b=J7fBg1OE1WxlNwjlSvSEJBX5llN7SayVFnU2ErVmLGMLQhXlZF7MDJsEcRIzrBqZXsu46xjd5GVoCsMS3XPPIC9Yl8qEgfP33bLnKLWhoF9hW+mP5GaUaLyRVu7yLzv+J6n0/iyeecuVX/NA8IxfNVbllhK6fLV6o+HfC5qBpsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuta.io; spf=pass smtp.mailfrom=tuta.io; dkim=pass (2048-bit key) header.d=tuta.io header.i=@tuta.io header.b=y/n1YTef; arc=none smtp.client-ip=185.205.69.214
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuta.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuta.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CP4n0Fok"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2d6d28aa26cso7360155ad.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 07:52:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789138378; x=1789743178; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LdoXE+ewf5jb6LQYyxh8lGBqTy0FzOqpYpBgqMKD8BI=;
-        b=CP4n0FokueOIkLaqHEum6A2E1+govAVCb88p7EccdT3A2bXJxTbrThB21hzskyKVZE
-         /Mw/FsmnsT74q/bL/RGdwuFHA1+KFVpG8UDqnQKGgYHWnhDAHAw1aYxFiJ+D/dxhIeQA
-         AqqJJoLU6sQm5TB53nKxdsLmyeVKdGsExhC27PmWh5sT1BmBiMW0t4CuMMWlsBwHfh07
-         xoGhmNDpC/pDfaD+JYZzWqZjQMUGLwetXXIv1mJFJrWhLzQz0HD6tICkfkZsoJ7OdSL2
-         4AVJAie3Cny9VT8UYh8/h8SI6f9xRGBLkWhmTEda+KqzXJznHF9NucRQcNlozKL79Si0
-         Wedg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789138378; x=1789743178;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=LdoXE+ewf5jb6LQYyxh8lGBqTy0FzOqpYpBgqMKD8BI=;
-        b=YHkOY+Za64xVaYjsmFE+rRRWNDixBf9M1XkclDudVSSBx9Cz0cMjn5aK6fV+Pc/RUd
-         gTmlsa9s+5jWz3oO6pps7Ajfd0XGgsMyTYJTp0SloSNX93KI0uho2BBqRH7nOL2uHSHt
-         wwb1RiHXbczLXgQKVlr85sdrk4TnL7YFj/yp69ILsGp913035hm4CkE8+qFgbAF+wxkX
-         hvkDGJYyJtUZzfa1KYMJCMOLOUQnFydniQePwFnJ308V6KWJjn/xemlly3Wj6SI8nHIQ
-         IpVhjMSLQR5njXZjQJBkglZjAYPnN+X3v5/vjjlRZIwH9TbYId6mXRuSXVjbYV98LWxk
-         qrRA==
-X-Forwarded-Encrypted: i=1; AKwUvBx2sk07xEtMc7TjZpKFyY+PGgcftKV3Ug7iwu7XQaQySjiMp0qSDbcbEhwD0RhUuuInUbBizKL2UhIWcw==@vger.kernel.org
-X-Gm-Message-State: AFuF++nh6dVxKIbHn1UuRtE0jblM4OYpL/H2yRPbjNjUjUkBWpyjPHVk
-	VWzFs/pNnzX4hm4U1kPqkUB7Lgq2CykkcpJuyQmdWLeis31MAgqIZzH9
-X-Gm-Gg: AYBFou0e5HmctlaypzayAZwYV10yfdbG0IPX/EUyOwCAI+Hwx9rrHcrCLhm4EQ99XX0
-	SjOiyZ+PZmwn9Id7IsgEz3Yl31zem24+cDq6OanGARwDWPYssUyN8eskYrEi8g3uK+590JqqzaJ
-	wnz6ntrHH/AZLEezpiNotSIxmUQfjLohvqHWteSdP8YbHpnjUbdzWWp/SYGEAMI3nSyLL5/6rDA
-	xq/cYfRA9wALrct2IdCP8OEoN8PysvvOZVRnQtJhbv8KAOUgUe/e8kue2LVL7POP9F/gTd2wEx/
-	Jd0JW3+hkZzi3ZBpApuNIMnPN0HbxSz8Ga8JTJ/Rw+OHXxAY/jryW/8MOwRV40anKH9ExzsmFn2
-	v/pJTXXzXVzcttabdYnD3GiZApm+VaSh31E9F1ndzKQtSrfhvmbIB2HW1Aaipj3b5PKhZ05J4Dg
-	Z42cI9asKOCrp1oSC/GDBYZkFm3d6h5LKmZJgWtR2uWVj1B3GIbbW6yNHr2MDr9rf4T49Vt3ERr
-	KwXQ3Xiq9N3B8bV+GWSoFa4599VbW7hictg6/QcLXDxwUYL
-X-Received: by 2002:a17:903:1b4f:b0:2dd:40cb:a054 with SMTP id d9443c01a7336-2dd40cba32bmr20018355ad.19.1789138377973;
-        Fri, 11 Sep 2026 07:52:57 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd2ccaceafsm12899705ad.9.2026.09.11.07.52.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Sep 2026 07:52:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <518aea33-277a-4d8f-8bf7-7469879f6f56@roeck-us.net>
-Date: Fri, 11 Sep 2026 07:52:56 -0700
+	dkim=pass (2048-bit key) header.d=tuta.io header.i=@tuta.io header.b="y/n1YTef"
+Received: from tutadb.w10.tutanota.de (w10.api.tuta.com [IPv6:fd:ac::d:10])
+	by mail.w14.tutanota.de (Postfix) with ESMTP id 0361F181F3331
+	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 17:36:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1789140973;
+	s=s1; d=tuta.io;
+	h=From:From:To:To:Subject:Subject:Content-Description:Content-ID:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Cc:Date:Date:In-Reply-To:MIME-Version:MIME-Version:Message-ID:Message-ID:Reply-To:References:Sender;
+	bh=XyMFeppzzeXq9kSD0cskeUQGJv/U8X0oVp+C4DmjupI=;
+	b=y/n1YTef+p7URbijKZhghJsXGRQLYrxJoCJC76GxsliX+H7qjzU+ocDT/Jmg7osW
+	Tf/rjBz/ly8WL2uk4ugcBD5RuCPquHKquDVNNef0ZNB9WT6zkQ/9u7//wlzaXs6Gzvr
+	xBRuzqf5xJtOl9m/wMy6VlDHRMeXPq2c4AMqeWH+6bUsrxtYGCLcIuVjbeoYnSmBvXN
+	SUuPjmZ/FN2VV2/LVUiMQxRVezTttJuaD/7sjrMVVCBU1m2PHct0bMB/A4OFr1sFl+S
+	zg6AnvjjWNo6MQQKPrzJq+VMPEiRINQCEp9u7Zm3Iop2EpLN0yR+qGdzki0in/rk5wK
+	WQxAABzeDA==
+Date: Fri, 11 Sep 2026 17:36:13 +0200 (CEST)
+From: marco.rodolfi@tuta.io
+To: Linux Hwmon <linux-hwmon@vger.kernel.org>
+Message-ID: <P1G6-or--F-9@tuta.io>
+Subject: [PATCH] arctic_fan_controller: Add a way to set a default value
+ state on kernel bootup
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] hwmon: add Axiado AX3000 and AX3005 PWM fan
- controller driver
-To: sashiko-reviews@lists.linux.dev, Petar Stepanovic <pstepanovic@axiado.com>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org,
- conor+dt@kernel.org
-References: <20260903-axiado-ax3000-pwm-fan-v2-0-ef43df46163e@axiado.com>
- <20260903-axiado-ax3000-pwm-fan-v2-2-ef43df46163e@axiado.com>
- <20260903084844.D1CC11F000E9@smtp.kernel.org>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260903084844.D1CC11F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Feedback-ID: 0163f6a5f9f5e848d73c81ce5fcf742ebdce5d09ec4a6e1e0c86da1a30d302df15f5fd9ef5f65e49aba77d8913841fe1f28c355371ed1bac58d58a6370859b24fd:TurnOnPrivacy!:tutamail
 
-Petar,
+This allows to quickly set the connected fan(s) speed on bootup to a=C2=A0
+sensible value, rather than the randomly initialized values as the=C2=A0
+default behavior was.
 
-On 9/3/26 01:48, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] The interrupt handler incorrectly returns IRQ_HANDLED for unhandled device interrupts, potentially causing an IRQ storm.
-> --
-> 
-> commit ac0edffb2c72d464c05c340c5df147fdcf10b0f4
-> Author: Petar Stepanovic <pstepanovic@axiado.com>
-> 
-> hwmon: add Axiado AX3000 and AX3005 PWM fan controller driver
-> 
-> This commit adds support for the PWM fan controller found on the Axiado AX3000
-> and AX3005 SoCs. It measures fan speed via a hardware tachometer interrupt and
-> controls the fan via an external PWM signal.
-> 
->> diff --git a/drivers/hwmon/axiado-pwm-fan.c b/drivers/hwmon/axiado-pwm-fan.c
->> new file mode 100644
->> index 0000000000000..ac153afded47a
->> --- /dev/null
->> +++ b/drivers/hwmon/axiado-pwm-fan.c
-> [ ... ]
->> +static irqreturn_t axiado_tach_irq_handler(int irq, void *dev)
->> +{
->> +	struct axiado_pwm_fan_ctx *ctx = dev;
->> +	u32 status;
->> +
->> +	status = ioread32(ctx->tach_base + AX_TACH_INT_STATUS_REG);
->> +
->> +	if (!status)
->> +		return IRQ_NONE;
-> 
-> [Severity: High]
-> Will this handler cause an IRQ storm if the hardware asserts an interrupt
-> where the status is non-zero but AX_TACH_INT_PENDING is not set?
-> 
-> Since the condition only checks if status is zero, an unexpected bit could
-> bypass the IRQ_NONE return path. The handler would then proceed to clear only
-> the AX_TACH_INT_PENDING bit and return IRQ_HANDLED, leaving the actual
-> hardware interrupt active and bypassing the kernel's spurious IRQ protection.
-> 
-> Should this explicitly check if the AX_TACH_INT_PENDING bit is set before
-> processing the interrupt?
-> 
+Signed-off-by: Marco Rodolfi <marco.rodolfi@tuta.io>
+---
+arctic_fan_controller.c | 34 ++++++++++++++++++++++++++++------
+1 file changed, 28 insertions(+), 6 deletions(-)
 
-Please address this problem, or explain why it does not apply.
-
-Thanks,
-Guenter
-
->> +
->> +	scoped_guard(spinlock_irqsave, &ctx->tach_lock) {
->> +		ctx->tach.count = ioread32(ctx->tach_base + AX_TACH_COUNT_REG);
->> +	}
->> +
->> +	iowrite32(AX_TACH_INT_PENDING, ctx->tach_base + AX_TACH_INT_STATUS_REG);
->> +
->> +	return IRQ_HANDLED;
->> +}
-> 
+diff --git a/drivers/hwmon/arctic_fan_controller.c b/drivers/hwmon/arctic_f=
+an_controller.c
+index 75cc78d..00ca803 100644
+--- a/drivers/hwmon/arctic_fan_controller.c
++++ b/drivers/hwmon/arctic_fan_controller.c
+@@ -17,6 +17,7 @@
+#include <linux/jiffies.h>
+#include <linux/minmax.h>
+#include <linux/module.h>
++#include <linux/moduleparam.h>
+#include <linux/spinlock.h>
+#include <linux/string.h>
+#include <linux/unaligned.h>
+@@ -36,6 +37,14 @@
+=C2=A0 */
+#define ARCTIC_ACK_TIMEOUT_MS=09=091000
+=C2=A0
++static int all_fan_default =3D 100;
++module_param(all_fan_default, int, 0);
++MODULE_PARM_DESC(all_fan_default, "This parameter controls the default val=
+ue that the fan(s) will have once the module is loaded. The default is 100/=
+255 (which correspond to 50%).");
++
++static int fanx_default[ARCTIC_NUM_FANS] =3D {-1, -1, -1, -1, -1, -1, -1, =
+-1, -1, -1};
++module_param_array(fanx_default, int, NULL, 0);
++MODULE_PARM_DESC(fanx_default, "This parameter controls the default value =
+that each individual fan will have once the module is loaded. This paramete=
+r takes precedence over the global default. If you don't want to set a defa=
+ult speed for a specific fan, specify -1 in the array. The default is -1 fo=
+r all fans in the array (so use the global default for all of them).");
++
+struct arctic_fan_data {
+struct hid_device *hdev;
+struct device *hwmon_dev;=09/* stored for explicit unregister in remove() *=
+/
+@@ -254,16 +263,20 @@ static int arctic_fan_reset_resume(struct hid_device =
+*hdev)
+{
+struct arctic_fan_data *priv =3D hid_get_drvdata(hdev);
+unsigned long flags;
++=09int i;
+=C2=A0
+/*
+* The device resets its PWM channels to hardware defaults on power
+-=09 * loss during suspend. Clear the cached duty values so they reflect
+-=09 * the unknown hardware state, consistent with probe-time behaviour
+-=09 * (the device has no GET_REPORT support). Hold in_report_lock so
+-=09 * this does not race with a concurrent pwm read or write callback.
++=09 * loss during suspend. Set the requested default state again to
++=09 * reconfigure the hardware correctly. Hold in_report_lock so this
++=09 * does not race with a concurrent pwm read or write callback.
+*/
+spin_lock_irqsave(&priv->in_report_lock, flags);
+-=09memset(priv->pwm_duty, 0, sizeof(priv->pwm_duty));
++=09for (i =3D 0; i < ARCTIC_NUM_FANS; i++) {
++=09=09int speed_selected =3D fanx_default[i] =3D=3D -1 ? all_fan_default :=
+ fanx_default[i];
++
++=09=09arctic_fan_write(&hdev->dev, hwmon_pwm, hwmon_pwm_input, i, speed_se=
+lected);
++=09}
+spin_unlock_irqrestore(&priv->in_report_lock, flags);
+return 0;
+}
+@@ -272,7 +285,7 @@ static int arctic_fan_probe(struct hid_device *hdev,
+=C2=A0=C2=A0=C2=A0 const struct hid_device_id *id)
+{
+struct arctic_fan_data *priv;
+-=09int ret;
++=09int ret, i;
+=C2=A0
+if (!hid_is_usb(hdev))
+return -ENODEV;
+@@ -317,6 +331,17 @@ static int arctic_fan_probe(struct hid_device *hdev,
+priv->hwmon_dev =3D hwmon_device_register_with_info(&hdev->dev, "arctic_fan=
+",
+=C2=A0 priv, &arctic_fan_chip_info,
+=C2=A0 NULL);
++=09/*
++=09 * Check which fan default value to use, chosen between the array of fa=
+n(s)
++=09 * values or the default fans value (first takes precedence) and write =
+the
++=09 * corresponding value to the hardware.
++=09 */
++=09for (i =3D 0; i < ARCTIC_NUM_FANS; i++) {
++=09=09int speed_selected =3D fanx_default[i] =3D=3D -1 ? all_fan_default :=
+ fanx_default[i];
++
++=09=09arctic_fan_write(&hdev->dev, hwmon_pwm, hwmon_pwm_input, i, speed_se=
+lected);
++=09}
++
+if (IS_ERR(priv->hwmon_dev)) {
+ret =3D PTR_ERR(priv->hwmon_dev);
+goto out_close;
 
