@@ -1,77 +1,77 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F6E930649C
-	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 00:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B127E3033E6
+	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 00:56:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789088146; cv=none; b=E7Uhb3UkN2I+cR/l+14uOH29BLo0s/6YmlOElPn1885yJ8MstdZHY3KdDGGabcp+kPqLclyAci6noM8dsa33r/n/2GPTPYXGQSELNjntgctbN9TnBxqRLDVJYhFPQhMQqCowJRqBJARk2JhL0zfsqqBHKG8G3HKtY2iplDf/ayo=
+	t=1789088208; cv=none; b=FKa3B0kwdVjxaxN1NhO1anasVbSts8BqFZAZy1HJffgcWMf0rzp7NU5NuwjY1fZnj5w+LBwZyNqvIEMl0kjZwKmSGsPwuXmhCJ5D9V7ATeQGCaLjSVorE4CKaVQrSFOQaZPLgRzPuAnVcj8+s4khcF0ukK+AYQ9iZsHcu0c2hds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789088146; c=relaxed/simple;
-	bh=kQWpc3BV+U9JUEReCtGuwJXKFGM1uWH1U0sMLM6Pdcc=;
+	s=arc-20240116; t=1789088208; c=relaxed/simple;
+	bh=nKNuesHM0VjAY9kiLoRrBVVAoGMjPhKuxQKlQzK44GY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hG7xkL7Hu/Y+dxaIRzNXp17D1xwvFvK+CVpu6OcmIXOIMYvZKw97tYJSGgLuPsnx5cDp26qBnuTSMYDLGJr5yEYXayDevt8s2W+iveiQsi1uJVtMsTQX685u9hGeJtonSawhjeZXytGuPwJxyRoM5dN+j/o865MNPe9Bb6iHmCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JLOEP7dw; arc=none smtp.client-ip=209.85.210.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=EDOZ8P2QPZolcNXKlQaB3HznscWTuvjT+J7I9/0yhSSm/h1049Xzw1HtQSukGTmGwXaqp4MIZHrRmkmXJcjrggVYjkhFK5iYg6OSu2bLcZpxCHDNsJsA2ONfHejpYQyTZZpIThpxZMo5pfdaJguF0gdrAHqvCkSjgHMSOkTVrSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rTQrcI7M; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JLOEP7dw"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-8520161fdb9so368909b3a.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 17:55:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rTQrcI7M"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2d8f265cbe6so3321915ad.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 17:56:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789088144; x=1789692944; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789088206; x=1789693006; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=M8L8TbJZToCP2k41SeR8S++Lennpcrk/WxA9QKMKSdM=;
-        b=JLOEP7dwPdT9A4akfGf74DcuSKrE6mXkflVWY95Hv4VnlXqUTcMYg4IPbNhryibEpg
-         qIxTvlnQbyk1hwEzRjeUUlfKmKatkSPhZWlrbqVfvBHBA8zK9S+J7FtnI7jJ5nHIv3wD
-         BU6ULdGw7Cs3thAq2W5CUDnfUzxhbQi2G6Etk3j7QglfeJzQdyGSd/XaNZf/XA2pPHzH
-         mUvfN6mni2nnb/9/VeRVdpiQpnxmo5AG+CYAbL/pirX44QkGYmAFoBsd2Vc14gOT/ZE5
-         gSQzEP10rH/dkZfhcQ+vsEXk493bP2is/OKFle0stkHDqlaJ5f55o1sC+3QmhSOUfe9A
-         7f6w==
+        bh=Ogc/WBlD+uYeOl0wYLOQ6BjMKr9zLaEHN9sUG+KrTjY=;
+        b=rTQrcI7M4rvzowPDLuCFIewU2aJshRdTX8R4MF1ECs/rm6Q6XUOrKZrwZImHV3c+Wh
+         4faHXTrKkFOx3ztHoy6ymFYEHEri+5mCXsMYAV6i6S5spUsSiD2HFYZyrLepdUdXq0YE
+         w5X4R/UL1NGgAA5cB/6OwRkw3Fy9mNCuMa+jOKkqEBcew+pPWo1tSpZeW3ckn4fDc8lC
+         sU7HGK2sgte3c/3FKK9/yh7OWRuR6Y9rW5dKfAansN0jcHgztpLCQ+hfNG3EpwI95H/D
+         7caY4/zY+kheuzxz+1KmuSH9okkRkx8uEOviHDCG91fcX26O20bzA85y9/smNGE9xSFE
+         mi4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789088144; x=1789692944;
+        d=1e100.net; s=20251104; t=1789088206; x=1789693006;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=M8L8TbJZToCP2k41SeR8S++Lennpcrk/WxA9QKMKSdM=;
-        b=r41VwjD/6UQIPn7rH2n20Rd64s77SaRrnkYlhAHPEVxFU+rXF5hsXYQiFjues7cLM4
-         +HiOzhQwjCnZ2KkKV/PRRPrZF/fUUszBxvEN7yBimRP1GTAr8pdUDswzeEPjxVMI8Dew
-         p/CYdv3l7Plqy7ROwhRihQTiJ++wbBs1VAcZvKHy5m+mBJgQxPLvN+xWj2jx9VJPcFSN
-         WAIXJnfcUFdRrUzGwCOe4bBZEFtsdXinvawC5kOl+eQMnqwlGOhkgdIAGE6eYrVTDJc8
-         a38pvrCx7veJ7iY7nxMMFBDy5ARX2vSy3re+a9A4TUXisnOH3lwdzEOojrkhXqj4atPz
-         ccUA==
-X-Gm-Message-State: AFuF++kedfqzDJje3doUhWI3mifsAY3H9jqlX/kPPnQDD6Df848QSFOn
-	snzgvE7aXc2Y+Nmu3Dd+GduFwalYY2OrbjQktCURG19ZXk971+kufpEO
-X-Gm-Gg: AYBFou2syZBnDxH7/I37RlImtIVHZA51fNy3gybu4GUbb/Z8cziIE+THCnmediD1vY5
-	Ho3UwUbHLD0Q+5Pv5vDzEUdemS20XlKP1+9YKSqnkwImOzKR0juUOhxCJTIu68T/RU6clB5/dq+
-	A5i9v6Tdi7tnfjaXjSr1KTLw4XiZAZ9HKE3+9RUK2sY5/GfmVkO+yEIkRkWwcPzBwD6KZ6bEUVy
-	wg45xtSvfzVMlKNzbPFRQKcptvkrizIL9rADQk6i61Ph+JdKRN6vSIOZk7wZseaDHbU+Tx2LZaC
-	5/56wleEZUinLnVFunf11ex/CcT3YiZM6Xs3zVxGZH8SVRbfL9v+Wsp1J6CmQ9Dms5mbMDshaur
-	fKPvUpqi+IPecz0t9ImhwKT3IrEKqz0n+oSYses/CihYlvGGYfiNsFh91SNq5H4QzoMjHqSb5+W
-	g9oUQE1EWYxDjBDqamutIfwutJGSGFPFbFJSQ5J25kVU7UekPxLX3N0Xt7oS8lw5gyZT8WzoDOH
-	9hD/WsYBO8P
-X-Received: by 2002:a05:6a21:a96:b0:3d3:afeb:880 with SMTP id adf61e73a8af0-3daed895710mr2723199637.28.1789088143739;
-        Thu, 10 Sep 2026 17:55:43 -0700 (PDT)
+        bh=Ogc/WBlD+uYeOl0wYLOQ6BjMKr9zLaEHN9sUG+KrTjY=;
+        b=ZRAlHKXmUBFHlWWlpcRqBL3o9Z0jPR2zboR2PUM/dMSMtioL3Tf5hTveMrgquolvgP
+         Wk9uj2EihquveltUOOSXaVTUZvIsi+CZfFE2+sCu/suRoaz7aCcP97Vb7gzO1h5AM2zv
+         NpDiPP7FAT500cQWvKHN7LqdnzDR+kDcH5o2ozbkm6MGQadWfJdnOw44nEd1Ml1a8CGb
+         wtquZRqLUAZ7fH54zkmicp70KP962wAXRR26ZtAEXekGihLogNj+iAtuxNzqiqJkcxzA
+         4y9k+MbLfb6FbO6g5m0k54J96zDEs1E0vNcAJl3yltX/4fRRugCGZzmiinVP/Y+KwZGw
+         A3xw==
+X-Gm-Message-State: AFuF++knYzEFBXqnqcJcUUy07nMZktoJiPQRfSepmQ4hCF3AiWfX2VBx
+	Wu0xXbVxNIg2QCVp377h7U9hH4Bb5TraCTWj1xfjBra96fudee0ZddzMvkfDyPKC
+X-Gm-Gg: AYBFou1wggXr9NM+RnRU7Hw7cyOh0VfkiCVtLAJ3xoKJx9ExQYKkZsE0wocZqOk9yUS
+	KkNYz52st5XoaHUIuNAgGy2iuqCDSAbX1Jz2NNON1oX6sQrtjv9eGLLXFo7lPJ9J5dfC3oKvJoP
+	39VkrV4IOW56M/S05P181Oh58ONby1bPsTO8v6//YAFnbRjkBqP34gP6VQpHPYWngZvf95G/fJA
+	pnJozUyKlDO6mkhGH1n9TZ83rzTLO0KXwqRBTtMHK0z6pzsriBvEZ63QjnEL9rtJjtJyM0BxPBe
+	J8GBZn4h/unrJsgPpkNjvbU6GqeozbFF4RzRbtsl9U23eG3axK8bZBlnggY1dBOuS5zFvR2U5xg
+	WXE39JttsWdKKPXUpSGHvmzDUadOVyNNtTL9+Mg+dzuGjrtqhOQtBNI+nlGRP1OMtg14eZA99yh
+	5ZTg/T9ydjpQV1RYs5ilEH3FjnK5rc9zUxtOE6G8aij4cAaLihcDgPOcNgX0N5w9Z36X9SgORWh
+	jDmlYV+5Msq
+X-Received: by 2002:a17:90b:1d45:b0:398:9be9:ab8f with SMTP id 98e67ed59e1d1-39d9c21cf40mr2318273a91.20.1789088205743;
+        Thu, 10 Sep 2026 17:56:45 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33ba4fb3ddasm1469131eec.30.2026.09.10.17.55.42
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14365bb6ba0sm2006097c88.15.2026.09.10.17.56.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 17:55:43 -0700 (PDT)
+        Thu, 10 Sep 2026 17:56:45 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 10 Sep 2026 17:55:42 -0700
+Date: Thu, 10 Sep 2026 17:56:44 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Aureo Serrano de Souza <aureo.serrano@arctic.de>
 Cc: linux-hwmon@vger.kernel.org, linux@weissschuh.net,
 	arctic.it.hk@arctic.de, corbet@lwn.net, skhan@linuxfoundation.org,
 	rdunlap@infradead.org, linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] hwmon: arctic_fan_controller: default PWM cache to
- MCU 40%
-Message-ID: <ecc9ba0f-03cd-444d-8b47-f0e8719089fd@roeck-us.net>
+Subject: Re: [PATCH 2/3] hwmon: arctic_fan_controller: dual-license
+ GPL-2.0-or-later OR BSD-2-Clause
+Message-ID: <c640dcbc-784e-4847-a5c0-ec6ab42fde49@roeck-us.net>
 References: <20260910050401.279868-1-aureo.serrano@arctic.de>
- <20260910050401.279868-2-aureo.serrano@arctic.de>
+ <20260910050401.279868-3-aureo.serrano@arctic.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -80,24 +80,12 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260910050401.279868-2-aureo.serrano@arctic.de>
+In-Reply-To: <20260910050401.279868-3-aureo.serrano@arctic.de>
 
-On Thu, Sep 10, 2026 at 01:03:59PM +0800, Aureo Serrano de Souza wrote:
-> The device has no GET_REPORT and every OUT report carries all 10
-> channels, so the cache has to start at some value. Starting at 0
-> means the first sysfs write to a single channel also sends 0% on
-> the other nine.
-> 
-> The MCU factory default is 40%. Initialize pwm_duty[] to 102 (40%
-> on the 0-255 sysfs scale) at probe and on reset-resume. Any initial
-> cache can be stale if the module is reloaded without a device
-> reset. 40% matches the hardware after power-on or power-loss
-> resume, and a first single-channel write leaves the fans running
-> at a safe speed.
-> 
-> PWM is still not taken from periodic IN reports: the device is
-> manual-only and the host cache stays authoritative after the first
-> successful write.
+On Thu, Sep 10, 2026 at 01:04:00PM +0800, Aureo Serrano de Souza wrote:
+> The in-tree driver is solely authored by ARCTIC. Keep the existing
+> GPL-2.0-or-later grant and add BSD-2-Clause so the files may be used
+> under either license.
 > 
 > Signed-off-by: Aureo Serrano de Souza <aureo.serrano@arctic.de>
 
