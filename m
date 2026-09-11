@@ -1,73 +1,82 @@
 Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F6C24293C
-	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 00:50:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE562F616B
+	for <linux-hwmon@vger.kernel.org>; Fri, 11 Sep 2026 00:52:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789087828; cv=none; b=sH1hngEJgwxlm+FcEbuSs938dbZzUieAMg0L84lJf0ByRwOS5cOANvflkrsGN9pt7obPfUCQ3QhvvX/H8RmjjmIivCyJGwXNCdBlgApDLg22xsP9eoyYf5J8jaMZPvxCLOgueHAK9eFrabIhBTVLg5dFmkJWEIqITD2ywOKTouc=
+	t=1789087957; cv=none; b=cHIKfpwLMrumc/g7/MGOKPPYGtVlAdgIwnfURJbzKcIJ2lWjIY2oCXaT28WFT6JV1rHw6jekv+gq4PsVtBaJiWUhIV2Qtr4nDKD5ijNeuFsCofTptgIlVWbE4NmFFre7yPBQdBqEZKr7joWUvRb6tY2DHGQJjDRc83rFSU10Wjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789087828; c=relaxed/simple;
-	bh=k9CP8Uv0Cu5u05P+agi/B49fuH19D4pukpuoBfrG+Fs=;
+	s=arc-20240116; t=1789087957; c=relaxed/simple;
+	bh=BQwhpDXzKhlCLOD2afisIUCnbjz9JJ1EqqAaObvs5Tg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G/2/LkasIJFlNGs+MVnRp/Ku1E9259icg0irKJr14rrqAmitisb5eDixakkIaS+BDe0vgiZL6UtQ6jLa0UlrPDCYFw68XW48ptd0gcEGscUJX9LL6Tbaoq8W9K55mmBJRoBZRMVHEFpyC4fdrVRAABh0N26kuyMzUpQIlula0S4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hiPoQwQl; arc=none smtp.client-ip=74.125.227.140
+	 Content-Type:Content-Disposition:In-Reply-To; b=BiVm1O2GV3djKD5D0LRQoOXpZGHh5EN+H9KMyZQZ+IhNRRo7/jdsicG4RUJFoplZdLz5FL7eupVRJjpI2WblejvJPZc6cZKTvx2Ly5cyOwUi7F+biLANytA0q2f/jDi8wI4nOM1VaqC5eEBi69RQ7fq5rqPAd6/d7hCj9lnSyiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZBX9KeOt; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hiPoQwQl"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747ed9865so2329845ad.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 17:50:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZBX9KeOt"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747ed9865so2339605ad.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Sep 2026 17:52:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789087826; x=1789692626; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789087955; x=1789692755; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=E7Qs/YRK7iSN+nJFDW3LjPkoxVBPiWNImGpW7cLgflI=;
-        b=hiPoQwQlyh2nUrzuMYs7uEcMegbxewr1F7yWWFwGUFa169RaDJvuwtSwxjiEt/xRnd
-         R3D679OubVdHq0jlueVaAoX6diE9YN6t2xeS46H1K/rheVRSwsIp+xwtRjSUyRBDnC/p
-         4c6wTaYBc2NmJvO5+xZLJj/o3L6JtJ1wYYA6v0Xkm5chaOW8pcS32eJ01RqDO+jvwCo9
-         1a6ht4j3Z68+6mrs8EZ2TMxPPR4OlThezyJgLufmLVldWWU/BXrN9U7BENnT7znOPdgr
-         VgZ9v0QpFELpDHKcIzuGb9KKR+4bVUfqpToRxHwtAp1i9LV/3JKxzAdV0LCkOCzgmHB/
-         3TVA==
+        bh=jBly9NASd9J69NDrsbFKmvoK4r9VuFsqJ2PKUMl518Y=;
+        b=ZBX9KeOt2lUFbN6TnbzRVMZfrdoeZ2a/Y7GvH/KqKOPjHrmqYIHAQ3YAGKm0sa2vzk
+         0AHAc1VX5ycw/s9zlWAfzDuqSAipWV1DywWaiABdXm9FoTF7HNGwyUwOfGgLZNTwgez3
+         KuyfKdeH1q/Oam4EHg6cbmzLztl7cabH634bJJ3+yAfSJMdX6F3thQRPmfjaH5jkikD1
+         g6N4YN8XlQjsf72EuePZyjeYrI+F8LEwlCBufLNTlNTd7vjnTLkqAR/XI7/eC4wpUMMA
+         SfDYryrAXG8ayzQW1qpZwoFARB98lkMYYCkMaadfOwnjRJz0k7txreiOuzZCQQhWg1ZP
+         IvnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789087826; x=1789692626;
+        d=1e100.net; s=20251104; t=1789087955; x=1789692755;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=E7Qs/YRK7iSN+nJFDW3LjPkoxVBPiWNImGpW7cLgflI=;
-        b=OpS646o85ffEvnCn4eU5RPEInFSpNlUTgQuQE798/0pqcJHUyF8cR2Bpru6l0l3h85
-         rBEuGKv8JSdGgwlbOV7wumn5VskxssbXd711V4boLrjVgMiE1g0rI1ZeDW3y9GBcUnf6
-         lDeF/1n1tkrztfIDaHpVGslG+Cz0F43Lo7jd1tumtqOwHemWFzYKAV/LqD/NZcSj64ur
-         nFpO4jhrk2hsfMG5mvbmZedywJBgTGi7WlOqFTQUMqFUR4f5lsH0cuGyk3B1jq70QbVI
-         r+uSte9eF5dYfhgX/Du3N57SlVuJ+hpGa2j8HJyzBiEX1ryHZ2OCH5Y9bpZNBocpDNrI
-         O3OQ==
-X-Gm-Message-State: AFuF++k5ineR2/2GRK2OEjfLKn4dtOUZ7qlFT5gODMzhXXHYq542Suq3
-	POyu8yI7O8l2K8RUGA3pVy9sD0V6hYmEdPo1OL2NygiYuODYo7h7LgdSuyvqA/No
-X-Gm-Gg: AYBFou2dV+OM6/rXnqVmqAeTBLyXNSWv+SrFEikR8Ol+CpZqntZXdobEpWmW3jo+yL2
-	QkL34mK+iwEbBtF6Kn27xY27iCJwks7ya4ccqb1yRnxh+oxcEQWUT3QbWNm5wlPtqprC0KmAA0x
-	/W7cohzTxw3kFuMBz4uOAdl7RtTThk3Z2VRA4dMrclHjOKm25dxHxvd/b3Ie+RZ85RdLeDDPOex
-	ERpK1WrLLxR4T4rYxj9053wIu0SNXXB+bRQTwrn6pni8r9WVdM9X5Ym+6Bs+9HGHMzUZtaGZzL+
-	mCF+h2pqaGB7Ku612Pe9uVE1qfcYv6gtmFI+3XzQe3PhZybXTlxr/05+dLGU9/OyvnflA1kkhDw
-	5xDEJoyB/NZFK4FtzgHr6R3XaVQ5KH1a7bAWznrq+AiytQf7bhMAligSRSkJOCYGoWtoBjXzw7M
-	8jqyHsMCbkiHs5lQ9t7UXJKwHMDUYe1uxU5pM+fT1bqq4tL+BU7jcluW4M+AMtG/9dGUVswr4MT
-	U71ZknlOoJM
-X-Received: by 2002:a17:902:cf4b:b0:2d6:fee6:65ae with SMTP id d9443c01a7336-2dd2a1c9c3bmr39121265ad.4.1789087826066;
-        Thu, 10 Sep 2026 17:50:26 -0700 (PDT)
+        bh=jBly9NASd9J69NDrsbFKmvoK4r9VuFsqJ2PKUMl518Y=;
+        b=LZOBP7zkATL91WkyqwkqX1WKA9XAqvLU2sZWT6W/nMH8I+6XdfF+0n4ntG0bwAAzea
+         PsO0gtSa06KJYFASOV9GUSATgozTtyOhchBOmXDaNofWi492vzPwO9FQwJ6kDgAd0NY3
+         lXhYSqubWVQZLo1vDTKHLqkmsF4gIxnz1MFiOukXPCh8l/W1VlZypFJltBlRZmFTZWzM
+         SQJoINNM9U3iQBFu0AeVNOuXc8p+WtnH3qEcE35YxfiyyjZ7ZnTKg7aaybgqB6FG+kPC
+         asXlPmBSMTd22aTvR5PATQ8IdUMdfUpQfcxholeT5bVYqmI9kyzhiFzKrjWWTJThXNPe
+         u5rg==
+X-Forwarded-Encrypted: i=1; AKwUvBzUooacvQcovAiql+Bx/ERtuMavRg/TauTQJj6QTAGDcg8L8RcOma7k43Mz5d3ZI2PNJ8LxIS5DsvFFOw==@vger.kernel.org
+X-Gm-Message-State: AFuF++m/Mfhu3QDyXunffP7IgFJZJPyq9L8NE2ivTm1iqCK3Dg4wuy8V
+	khjjoz5Qmz0sl2wm8mV0hhDN5EAa6BNvAJTNqBvzQ0pIgdMMPPSZTIfY
+X-Gm-Gg: AYBFou1xaAsMTLnzEIAg/zutC4s+Q6jS1j0n3UiwETZ7D9mGe7hlD3GhwElD8QIP1ha
+	wI0cYU8XC7bAx0TbON3esyOuZY/CUP27EgC01Li86gRKHEke814nGN0cISlIzXZ5y7rGkjm24Xz
+	eZNL+nitexcX4IjMdIYHLZuMLpJzhQTXradV5W3lJOj+1y8vjj7wIbYdGcjVZLjUoKMSTYVtBy0
+	BkwmLwAm5Lg9alj3bVutTor8HEtWI7PQGm7MNf/6l1TN7qNgjTNISvzzFhdni2e/ez8Mlw+WdN9
+	v5897K8C6eunFl+ZON/4LzfKYxYhYN5GulTx9hO/CiMnN/YET1CffGMEBOFLosXfbQI1c95mz3m
+	IPuVyC93cx+juPlEFh9vKPyehfU2WYKcQsE8kdRbN6xah0Cm8Wr7z4Jxxo7qpG+e6zYGfHEZO5o
+	eC4XbA+2gY8OA5KMP83u8oooN+z6Y00KFQGJgVkBVRL2ZcdtvAQsE4iBk1nU21tpG3IMmG6zkIr
+	14E4IIXNo4w
+X-Received: by 2002:a17:90b:574b:b0:39d:985b:4274 with SMTP id 98e67ed59e1d1-39d9bc66ac4mr2247804a91.5.1789087955396;
+        Thu, 10 Sep 2026 17:52:35 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33ba4ee07f2sm1454199eec.18.2026.09.10.17.50.25
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33ba4cf2e22sm1744557eec.2.2026.09.10.17.52.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 17:50:25 -0700 (PDT)
+        Thu, 10 Sep 2026 17:52:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 10 Sep 2026 17:50:24 -0700
+Date: Thu, 10 Sep 2026 17:52:34 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Sergio Melas <sergiomelas@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] Documentation: hwmon: (yogafan) Update model
- reference table and contributors
-Message-ID: <fa4b19f5-730d-4069-a868-c1281d26895e@roeck-us.net>
-References: <20260910184322.1816996-1-sergiomelas@gmail.com>
+To: Lin Wang <wanglin@open-hieco.net>
+Cc: Borislav Petkov <bp@alien8.de>, Yazen Ghannam <yazen.ghannam@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Pu Wen <puwen@hygon.cn>, Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+	Clemens Ladisch <clemens@ladisch.de>, x86@kernel.org,
+	linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 5/8] hwmon: (k10temp) Stop matching Hygon devices
+Message-ID: <591be587-d6be-4fcb-bfeb-a92812e25b34@roeck-us.net>
+References: <20260910082734.3771675-1-wanglin@open-hieco.net>
+ <20260910082734.3771675-6-wanglin@open-hieco.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -76,17 +85,25 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260910184322.1816996-1-sergiomelas@gmail.com>
+In-Reply-To: <20260910082734.3771675-6-wanglin@open-hieco.net>
 
-On Thu, Sep 10, 2026 at 08:43:22PM +0200, Sergio Melas wrote:
-> Add the new IdeaPad 3 15ALC6 Ub model and Yoga 740-15IML, update existing
-> model entries, include corresponding contributors, and adjust the
-> reStructuredText table layout and column separators to accommodate the
-> longer strings and prevent Sphinx build warnings.
+On Thu, Sep 10, 2026 at 04:27:31PM +0800, Lin Wang wrote:
+> k10temp matches the Hygon F3 device and uses the AMD SMN accessors.
+> These accessors derive an SMN node number by subtracting PCI slot 0x18
+> from the F3 slot, then pass the result to amd_smn_read(). Hygon PCI
+> slots do not encode DF node identity, and their SMN roots are grouped
+> by socket.
 > 
-> Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
+> The derived node number therefore has no defined relationship to the
+> Hygon DF node or its SMN root.
+> 
+> Remove the Hygon PCI match and Family 0x18 branch. Hygon temperature
+> monitoring requires the Hygon node and SMN interfaces and will be added
+> separately.
+> 
+> Signed-off-by: Lin Wang <wanglin@open-hieco.net>
 
-Applied.
+As reported by Sasjiko, the documentation should be updated as well.
 
 Thanks,
 Guenter
