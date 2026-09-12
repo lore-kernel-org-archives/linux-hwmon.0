@@ -1,184 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978A12DE702;
-	Sat, 12 Sep 2026 13:34:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 037B0340400
+	for <linux-hwmon@vger.kernel.org>; Sat, 12 Sep 2026 14:20:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789220060; cv=none; b=MfUbBYPQBfVD6omuTyRmmqBUfY50W/YkvGoGdK9PYuafCnCT7QXd/zTy8t/34g5KxgZZ+SD80O5zP/m4a/m2gbaLV5dvAvpJZ7I13ty+Wp7DPVmh3wVCdurw8J4z3Tsv+bFV0rps+21vbBlyDJI7tF8xyFh519JpTjS7FPyTu2I=
+	t=1789222823; cv=none; b=Rplcpt+AyfpUKx5jTi7xmqTMf8D0PU5jtPWP5VoGQeyTDrurdaGtKO3OZLScfbMIAKi3aOSJz4IEqPhoj5105GOFiRSBQOXF2HDuXp2O5DxVpYc2V+i+MvQYsL5+I27Ifu3zp2zj9BhTYzSfkT1b97DcROIzJuCv9wleG4mP5Bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789220060; c=relaxed/simple;
-	bh=uI2lCWjKinwIjNkbZnJCkiN0pNFLG9IVNnoW/AIIabA=;
+	s=arc-20240116; t=1789222823; c=relaxed/simple;
+	bh=biqxF2WqF9FsEWFi0SeRE5ItXS6SATDbQxMgWQtNwgc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VlXENT8511lmhw9obU32eeyCb4dzCPKG0f6HFtNxDRkcue6/hFHD+wnHxS2yAc7BmsjVd3mzPdaVDoJAd8mJMCWCylWuvDShOY+O+qQIZc66M2rUjOl/HEBhybMUWmmk7FvrT0ey3hLouxcrq27cv73bh2ARTARxa0lxdgPgXJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FU5nUZaK; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=lO61woYv011jiT29ijbdewwmAWvF29Lv91MqZE5skPH+3cmYlH0FgQW3xPoIeHTtnVKo1EnHmYekLbotvfvc8JWHgesZbPIdPSHZHMUeL2HhrJbjZ5iho9tRNJpGv5V2kGZihmiMSchB5Ed/5j0xac+QMapJGxNKmuH25sJd/P0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X9wS6sgy; arc=none smtp.client-ip=74.125.227.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FU5nUZaK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789220059; x=1820756059;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uI2lCWjKinwIjNkbZnJCkiN0pNFLG9IVNnoW/AIIabA=;
-  b=FU5nUZaKX9cY4oIaRcgFuRGys9Bn/V0s7jyHgvQfMOgr+oESi/8tBZ56
-   PEvIlSuEBLSm54Pr4TOH8S2mVZe/LBJS4sjOn1Jf+5SmDD32PCCq4cOpC
-   MR+rcAYn7Hy9Q0+CZIIok+ekuAR/E1zm1yKh3pXGIb3WTLsiF2XTV9aMI
-   eqrPR5Qi1hHJeU/O/l4JEeWCg47f6dmUc9gTMZINi2AvudPdujysveAns
-   nWCHGk5EzYNTa5fIreCxEpPI1pO+j19BNQvB7Ae8Kee+8aQdVGDqo3g65
-   i/sdmWe0rDroC7PskbWDfiZiGpzMsn4/6M6SRn5BnFUENnLLeMKN8MFw4
-   Q==;
-X-CSE-ConnectionGUID: khb92MqWQUGELUVjOCbIJg==
-X-CSE-MsgGUID: qX5crewMRjW2FTIrkWJQ3A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11902"; a="101012558"
-X-IronPort-AV: E=Sophos;i="6.27,99,1787036400"; 
-   d="scan'208";a="101012558"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2026 06:34:13 -0700
-X-CSE-ConnectionGUID: 2+Td6OM1QkugSBdDOgfs5A==
-X-CSE-MsgGUID: VwpzJuGpQN2oirhn156mRg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,99,1787036400"; 
-   d="scan'208";a="275933395"
-Received: from klitkey1-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.239])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2026 06:34:03 -0700
-Date: Sat, 12 Sep 2026 16:34:01 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
-Cc: linux-i3c@lists.infradead.org, alexandre.belloni@bootlin.com,
-	vitor.soares@toradex.com, samagazaryan@google.com,
-	gregkh@linuxfoundation.org, arnd@arndb.de,
-	boris.brezillon@collabora.com,
-	oleksandr.shulzhenko.viktorovych@intel.com,
-	tgopinath@linux.microsoft.com, corbet@lwn.net,
-	skhan@linuxfoundation.org, linux@roeck-us.net, Frank.Li@nxp.com,
-	jorge.marques@analog.com, pgaj@cadence.com,
-	wsa+renesas@sang-engineering.com, tommaso.merciai.xr@bp.renesas.com,
-	nuno.sa@analog.com, Michael.Hennerich@analog.com, jic23@kernel.org,
-	dlechner@baylibre.com, andy@kernel.org, lorenzo@kernel.org,
-	enelsonmoore@gmail.com, rppt@kernel.org, pratyush@kernel.org,
-	giovanni.cabiddu@intel.com, gabewhigham@gmail.com,
-	haren@linux.ibm.com, pasha.tatashin@soleen.com,
-	jirislaby@kernel.org, adrian.ho.yin.ng@altera.com,
-	ustc.gu@gmail.com, jszhang@kernel.org, adrian.hunter@intel.com,
-	akhilrajeev@nvidia.com, tze.yee.ng@altera.com,
-	manikanta.guntupalli@amd.com, shubhrajyoti.datta@amd.com,
-	jarkko.nikula@linux.intel.com, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux@analog.com, linux-iio@vger.kernel.org
-Subject: Re: [PATCH 3/3] i3c: add i3cdev character device module for
- user-space access
-Message-ID: <aqVUyYkpKT8iX4Jz@ashevche-desk.local>
-References: <20260911210935.1353126-1-meaganlloyd@linux.microsoft.com>
- <20260911210935.1353126-4-meaganlloyd@linux.microsoft.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X9wS6sgy"
+Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccd66bb5so446593a91.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 12 Sep 2026 07:20:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789222821; x=1789827621; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=we0ycuhD13NPMWrxsYvOqSZt4f6T+4762jU+NZLRKXc=;
+        b=X9wS6sgyPv70YucXExX/1Ce4CRnkgEBlcbO4tXFe2BDHC5ArRqa3qtidYPXbc+Eb86
+         t0mtTuUgnC3wg6ofDeOJ0aTvX3bUhY5Ktd7u/+uecMOcrv+vBAhjk/aq9zz+u/HFyO+/
+         j35JVG5kq7mNh+HuEE3Yye9zQxxnTCTJ+GuoOyhGUkS5sUPnXXGr4/ZHm0BPUWIbpty1
+         Kq4WauWQpzAb/3mjBQtH6WP4wQm4W4uV+2X8I5QHGgF3Jgx7UaiH3mOKt2who7ft2dck
+         plOwJ3A5714iuVwbgSw5ymHhx7MgqNunxTATC7VsY4aQe6zVBWd+3OgROJDd1P+Xs1Yr
+         XOsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789222821; x=1789827621;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=we0ycuhD13NPMWrxsYvOqSZt4f6T+4762jU+NZLRKXc=;
+        b=FofbOKHOljy3juCQEapvp+4R1I1zdDGhd8ChR986qFnAuoBhDC6FV1wyYeOlOaA0kv
+         xep8DR9vuReKPX/jJpsBkNBoikG/mRvrnG4MX40O/njqHDpBirYLJ8HpHxHX72wCcc5M
+         6S0kPyaoTr69SZfQahT+MCloRW7dL6OekKcLLCP3X3z1Gil+DcuKElPIG3vvOvT094Ao
+         Hwf7C0eQ0SGgNnuHqdIE8JkOtxNzgC2xUa65z0hH2Za2v6gshx5CCsyaXuJvB4xXFpBb
+         HrLsASS9zLFTARHQkbGbFZE5IynDB9Zq4Pgbs3IyQUCDLYIkOLjX988HvI8rIGG/fjOg
+         kdeg==
+X-Gm-Message-State: AFuF++krHInvdgX0+wdyrHTrshDn6BM32JbvZ61jdBdh/DrI3/T1yOk2
+	SmV9vq9bdGGk/2YbYaRT53E750gxk4pnSbF7hDC9MtdqHywJ7vJ4dbdq/iZ7MQlO
+X-Gm-Gg: AYBFou33NO4cD/2d37H326959wWltE3OuFe4aHlAqN+sTSmJuNLOYfQoKMYd+w6sT+/
+	STmJDGaS0u18A6KTyQHfDPhkjQdFgL5kej1XFR67dz+QDzYoEAV3nvYDEUmqtWGEc76JSiTSyc9
+	B9VYWltULGxGMRMGWIUmSYysTfAiOd1+o1s8YWV0vpaa6SSVtGIl2RiRzBxfJBgJ/ZnA8GFe7//
+	8S0sCh2sXlKQNAtrUVMHos8xXC7zS/1fRwRSoa5WiHcxA+2M4MIuUwUScRfzkeBbO3Pb3dRNlgj
+	bDKsw46zQja0edkccazfueFiGd2sBsaTB86vNi61y+sEweWZGp5biOWUwywkHj2WWgEZ8nuP3kR
+	hvUzKrsm30vndOxNEfUp1inrR5HZVMWl5L2oHWv3J3yfd5WBo5IODSR2LlRpyveJXhCcvSi0Zub
+	AdJcNieDQXbFsPh3ikZ8oeEi4IU95tr7hX33bzG6Lcs3UdVGlHldP1FWFJ1hbhE1TFEmd9UjlP+
+	jTzaU7CigIZ
+X-Received: by 2002:a17:90b:2dcd:b0:398:dcfe:967a with SMTP id 98e67ed59e1d1-39dbc6d53e5mr5724044a91.17.1789222821301;
+        Sat, 12 Sep 2026 07:20:21 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d95994375sm10641268a91.17.2026.09.12.07.20.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Sep 2026 07:20:20 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sat, 12 Sep 2026 07:20:19 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v2 1/4] hwmon: (pmbus/core) increase number of phases and
+ add new mask
+Message-ID: <5d6bb7de-5cd2-4708-b894-fe8648a9c49c@roeck-us.net>
+References: <20260911-hwmon-max20826-support-v2-0-5e30cbd97d84@analog.com>
+ <20260911-hwmon-max20826-support-v2-1-5e30cbd97d84@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260911210935.1353126-4-meaganlloyd@linux.microsoft.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260911-hwmon-max20826-support-v2-1-5e30cbd97d84@analog.com>
 
-On Fri, Sep 11, 2026 at 02:09:35PM -0700, Meagan Lloyd wrote:
-> The i3cdev driver is a character device driver that allows user-space
-> to control and interact with I3C devices.
-
-> Currently, it has the ability to perform Single Data Rate (SDR)
-> transfers - basic reads/writes.
+On Fri, Sep 11, 2026 at 02:53:37PM +0100, Nuno Sá wrote:
+> Increase the number of phases to 16 as a new upcoming device supports
+> such a number.
 > 
-> With the addition of sysfs driver_override, there is now a
-> straightforward and direct way to match the i3cdev driver to any i3c
-> device without stepping on the toes of more specialized drivers that are
-> loaded automatically.
-
-Is it safe? Why on the earth do we need this? The commit message has not enough
-information.
-
-> This is accomplished by the i3cdev driver not having any entries in the
-> i3c_device_id table. After boot, simply set the driver_override to
-> "i3cdev" and bind the device manually via the sysfs bind knob. This can
-> also be automated with udev rules as well.
+> While at it, add a new mask for controlling the source of the output
+> voltage.
 > 
-> The character device interface will be exposed at:
-> /dev/bus/i3c/<bus id>-<Provisional ID>
+> Signed-off-by: Nuno Sá <nuno.sa@analog.com>
 
-...
+Applied.
 
-> +	struct i3c_xfer xfer = {
-> +		.rnw = I3C_WRITE
-
-In such cases always leave a trailing comma. It will reduce possible churn in
-the future.
-
-> +	};
-
-...
-
-> +	return !ret ? len : ret;
-
-My gosh, wouldn't Elvis just work naturally?
-
-	return ret ?: len;
-
-...
-
-> +	for (int i = 0; i < metadata->nxfers; i++) {
-
-Why is 'i' signed?
-
-> +		ret = copy_struct_from_user(k_uxfer,
-> +					    sizeof(*k_uxfers),
-> +					    uxfer,
-> +					    metadata->xfer_size);
-> +		if (ret)
-> +			goto out_free_k_uxfers;
-> +
-> +		/* Enforce that padding must be zero */
-> +		if (memchr_inv(k_uxfer->pad, 0, sizeof(k_uxfer->pad))) {
-> +			ret = -EINVAL;
-> +			goto out_free_k_uxfers;
-> +		}
-> +
-> +		uxfer += metadata->xfer_size; /* u8 pointer so use xfer_size */
-> +		k_uxfer++;		      /* struct i3cdev_xfer pointer */
-> +	}
-
-...
-
-> +		if (!ret)
-> +			total_bytes += i3c_xfers[i].len;
-> +		else
-> +			return ret;
-
-Yeah, you really need to reconsider patterns you use in the code. Here 'else'
-is redundant. Homework to understand how (#easy).
-
-...
-
-> +/**
-> + * print_i3c_err() - Prints the I3C error encountered during the prior
-> + * call to the core's transfer function.
-> + * @i3cdev: i3cdev_data object
-> + * @metadata: Kernel's copy of i3cdev_xfers (ioctl I3CDEV_XFER input)
-> + * @i3c_xfers: i3c_xfer array that was sent to the I3C core
-
-> + * Returns: void
-
-Huh?! Where is this coming from?
-
-> + */
-
-...
-
-Please, rely less on AI and more on the common sense and proof-reading.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks,
+Guenter
