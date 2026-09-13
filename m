@@ -1,185 +1,222 @@
-Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2131.outbound.protection.partner.outlook.cn [139.219.17.131])
+Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F0F361DDC;
-	Sun, 13 Sep 2026 07:11:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.131
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789283478; cv=fail; b=Z21k/fvv4PulFNXDFI7a5oyi7SsLD/D+4DoGTCxqwobNOh6Glc/IFIHNZqy1z5EdP1PHKaE7M/D2cMx8JbTePp8kIV2f2tVU2TbgsR9OOIytqjVGyT/yf08C06Bv32u7OYhCe9vbyYJ1TD1qoBV2U5ytzheCEl5cL8DVCXaUzgo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789283478; c=relaxed/simple;
-	bh=ZYeGvNDyBFWHz0HKP+BTOA2zhmp+WxQqqJC0b+BIr4A=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=QGk98lS/xIdZiKXCr/QD570RK3TxBEqRloryI0WM4JH1hVKEi6vBxuShHnxveWpv2Kl3Qs2rVik6n0I2LOK5oZxs49RjaHxmcmvItmgYSIxsAbgITw+TQ0ZB5YRXxcL9u7nXDjELFzgRorakHKCIspB20gdQZfVpGUCrqFxSsi4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FB18QA8KUY8Tw/0tzu9Mk9f+l2Es06TZ0re2d2dLGp8L9fLTPqiLWlcOnqtYPHOkz/RXxV+ZAIL74gESBddWKaneCPhzyJhEjqbXt0imXiAK87UrLw0KRpf5fiBdM1EdbjtT5gGc1856aYAa9hDijqCDcgL7p/zR2uKVr4O42r8gBsfZfhuQrfE+adg9VjliXTwcfLHtHk9RYlamk38e4k6GBrM2Xa2NvIEJK4sIllBhzGTlCFELLsuzz+/V7+skq+vTZwgjMmuT7ErreG1a5s0KAwr6UJ50QVDXIFsreNDGA+k1J1aFZY2j/gvzMJLwIze9PxzKZMDqUYbC6VVDeg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZYeGvNDyBFWHz0HKP+BTOA2zhmp+WxQqqJC0b+BIr4A=;
- b=N6ZrbeL0a5ytW8s/+vM2tOi9qYo3p1Dk1RKEwk7R8jtpaodCTKhbXv+GOFE+E/m5QePV8DXEBAGtqyo5vxhI480IZfEkdEk5mmemDExS3UxHxPk12D5ihLK37G8+6OFjEW5gjfBRgw1ejPCF5N7nJy/zpmbAvJ/SOSM2at8Z6ivEFkGF4N4UIYOAvvY/5G6lAPv3uRTGs9kQ8RAKwJwy56D83PMBHO6APoGzQrr365mr8s0S+N4smd/0chxg3Eyny0XJuAP8pQ5JE76aBTCF/qq+dg+ApS1H9rlKU3RmqUpufmDni6kZ2scx0AjcHrb4eTVRK+W3qYi9LgwqXBb8/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Received: from ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:17::6) by ZQ4PR01MB1251.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:14::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.11; Sun, 13 Sep
- 2026 03:36:27 +0000
-Received: from ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn
- ([fe80::e7d4:256c:b066:850d]) by
- ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn ([fe80::e7d4:256c:b066:850d%4])
- with mapi id 15.21.0406.007; Sun, 13 Sep 2026 03:36:27 +0000
-From: Changhuang Liang <changhuang.liang@starfivetech.com>
-To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	Iwona Winiarska <iwona.winiarska@intel.com>
-CC: "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, Philipp Zabel
-	<p.zabel@pengutronix.de>
-Subject: Re: [PATCH v1 5/6] hwmon: (peci/cputemp) Add support for Granite
- Rapids (GNR)
-Thread-Topic: [PATCH v1 5/6] hwmon: (peci/cputemp) Add support for Granite
- Rapids (GNR)
-Thread-Index: AQHdO6kWobiqEWs+306uaml9udyWb7bLG0uAgADPftA=
-Date: Sun, 13 Sep 2026 03:36:27 +0000
-Message-ID:
- <ZQ4PR01MB120212E0FFA32C9501736A94F2BC2@ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn>
-References: <20260903133408.110847-1-changhuang.liang@starfivetech.com>
- <20260903133408.110847-6-changhuang.liang@starfivetech.com>
- <b47789a3-731e-44c4-a954-e9352529cdf5@roeck-us.net>
-In-Reply-To: <b47789a3-731e-44c4-a954-e9352529cdf5@roeck-us.net>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: ZQ4PR01MB1202:EE_|ZQ4PR01MB1251:EE_
-x-ms-office365-filtering-correlation-id: 4a9c9f74-d799-45cc-290d-08df1148315a
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|366016|7416014|23010399003|1800799024|6133799003|22082099003|18002099003|38070700021|4143699003|10067099003|56012099006;
-x-microsoft-antispam-message-info:
- fH9g9GxYVbGtc01sy4TxLeqYhKl6in1qaMsZJr54Bty5szojwS/gkMSvGKxzuZ/WJRgyHUE/11Y3BUWwaPOTaBd5ME/Atu+gSh8B/IiOgXkTebS78en/XNmGex3gt5+zVc0ln6q/c8s7tSjaHF65HruCFbgM6JiLbG1F2UDylORAuzYphy3bJIBIUDAxYWg0OBX2Ywec6dpMxKRo8MHIc9ctFbeoM1DvtMQJOGikR2GQdzMb4Vt8TDXFtLieStwJxiO+51+xPcZK/09qeioam1XBjBQSzhky4I/9IA1t2o0iS/TiJu4IMtzq8cT4EmULmi89R6/PIi5bl1L24XcKSUh9Uf8H6PDUQnCbE3Rft5EAw2yoJEMNCFKtZtvjnYykrodNK8uuXUtODlmAU13Mu8h5ibhZoGYixmHP7oniBJYVWGDgJzSz2ex/Vy3NJ0P3QIRTbkFl5QpmF10Cek/P07HM0UdfK6THOVzl3MscPjS3P7KixfgbOeZBv4T/5Zam9ctWd39Y6nhMcdwEYwTbE5GZsxDu7ZvPr5Lsm6CPY06DNB/1Oo7UdGVyKdfQiy1D
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:zh-cn;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(7416014)(23010399003)(1800799024)(6133799003)(22082099003)(18002099003)(38070700021)(4143699003)(10067099003)(56012099006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?dWNOVlA4VmZlZVlFSlVhdE1UQWlLMi9DTDBWcytrSnlMTUtCZiswVDU5UzNI?=
- =?utf-8?B?TWZKYlRTUW1qWTRVTW5YOERQMnRNalRwNTFXdlhBTk9PbU0vMmtXNmRrNHpY?=
- =?utf-8?B?MHdtZUc1NmU0QjdCcG0yb2FuZmdCOGFsamkzVlBRVGVNbXQvZ3A1a2xGNCtD?=
- =?utf-8?B?bjBZVFBkdlcrYUJlQlZXYTBjVG1PdE9WbTJrU211MVVyZmoycDNGM3JWRUcr?=
- =?utf-8?B?YktBc1RkL1FDQXVaamhzMGVqeU0zRG9GdUZ4SDZuRkd1TXlwcjFsd2ZUeDZT?=
- =?utf-8?B?Zm95L3JJakZ3VkdSTmljU0tmN25XSjEvWmlVS2dPS0pqL1p1WjlOUVo4VmN1?=
- =?utf-8?B?MDY4Z0VpZVpxUGNkWGFRUE5lNG5pY3RzOTIvRHhZRlpUUzhTVGd3Wno2MVpK?=
- =?utf-8?B?bURRRDdFSDk4VkdCa1BQcHkrQzhjN0JOYkcvbndHUm42ZVROM2JpaEwvWkFy?=
- =?utf-8?B?cUlMNTY1S1N4NEtyOWptakxxeUkyRUQ2bmNLaHNVYmx6aEttTGR4OWtXSHZL?=
- =?utf-8?B?SStjenl0cmpHOVBiYlFrSUdhZkhjck93UitsZ0pHWXlCK2FMV0R1cVVKdVd3?=
- =?utf-8?B?cU1CMXpQdTdrbmd5N1hwSnoyYVlDc2xrRXVIelZtSVNPWHZGRnFXVU8xcDJt?=
- =?utf-8?B?ZWQ4aHlDclNVSXd4YmFsZjNRVGNDK1kyRU1XbFZBWGNESkplL3FSZ3RXd1Bu?=
- =?utf-8?B?aDBxcEFtZ3JUb1pIWmp0alFsRWxqZmpjRGRvM3VSajBzY1k1a3FTdmUrdG9X?=
- =?utf-8?B?WmdUM1g1QTJzSDJQY1BzZ2RIU1RDMVFTdEpxazd6N0Zja3FzVHA3RmppMVht?=
- =?utf-8?B?dEZMNS8xNmdhd0U3Y0wzcmhNdW1QNFN3YnpsMlFBVlZWa21vd21ick9KQWlU?=
- =?utf-8?B?bS9hQXFRaFVHbE8zZzF4b0draER3RkcwcFhRSDZrU1Q3WFRQelFJUEhrNS9E?=
- =?utf-8?B?M01yZDRyalpaTjNjMWZOc05sOVpLdWhKTktsZzB4czExb1hETC84THhIVFVn?=
- =?utf-8?B?ZUFRbG8rWEZ3M0NiZ21DUFFpeVMvRmZ3YlRza3JFZTJoeS9wZ0g4TmRvVklB?=
- =?utf-8?B?bjBRSytSb0lBSkpuODkya256dGVjMVdRZlhBdGtpM1FsOVViRkFaZWMrZFFt?=
- =?utf-8?B?WmNZWjhkeDJzdEdxVmVlVHF0SWZjWVpKblJldnNMM2c0N043NHlGWkdhSWhR?=
- =?utf-8?B?NUVJUkExUzdqbG1rQ1dLRjlaVzhNSFFHYkRrQ1R6VEJNM1Z5dG5zQUZlR2ZX?=
- =?utf-8?B?eFB2VDB5cjVmMm5mV2RPZmg5TkU2ZDhzRlczNVJWMVVYdHByL3ljRmF0NGx5?=
- =?utf-8?B?dmx6Zy9IMlJrMi9VSHNMdGV2ekQzVmVvVHlXcU5yYzBSZ1FBMnFkN3Nhek14?=
- =?utf-8?B?ajMycHh5eUdDeDJhSmt6K0FaOEpodzljU0xXR3pnYUtUZ3kybjJUc2w3M0xX?=
- =?utf-8?B?MTJMMlpWTFgxTkRPaDZ3V3p5cFl2OUt0bUVsK1AxaERSNkd1M2FpSGlmT2ZI?=
- =?utf-8?B?Nk5HNUNYb2p6QWwrRkRNTFRCZXhLanluYnNtRkFKQUdGa0xHNlg5SWJNS0k4?=
- =?utf-8?B?aEtNV3RhQUNLWG96ZEVxZ29IL0M1TnVqMWlqb05Pc0RQK01EZlVtVEdPejdX?=
- =?utf-8?B?OTNSaTNZM3o4WWxOa0tkM1o2OG5VWmFjbHhTWEpRcDdBVkNGVnFOeGc4SjBK?=
- =?utf-8?B?clFWeWh1cXczbEgwM0JYektOZ2ZscFdzL1RWcEdSdVhoVW5acVp2emdUMGU1?=
- =?utf-8?B?di8vT0xDanVvRVUxL3NYTWZGK0JGdWhlQUVSdHBqQ3ZJeU1qcWdidFlLeWs0?=
- =?utf-8?B?eTVTMEtvbkxITEVlMlEvZWNKbExFWFNuUXhMV0Ric0N2cDZUN20vM3IzTml3?=
- =?utf-8?B?WWNOb2Z3U0k4OUNXa2FVSzV6SEtuZ3VPOWwyQVJoRDdqeDdmdDNSSThlOWdT?=
- =?utf-8?B?TWowbVcvL3E1VHgvRzRPMkdOOXYrN2RVaWErYjRPWlJOUk45VzRkT3dLY09Y?=
- =?utf-8?B?eG5qV0RpVnQ2Q0lzR28wNVBCbTZXQUNVZGp5WEtnWndjTFNmSkJZYW5sejN1?=
- =?utf-8?B?dzR2MVRZdlBNeDA4WE50Y3FTTHlwSlNqK2xhZk1OSTV2Rmw2cWRiZUVIYi80?=
- =?utf-8?B?Y2NnY0xwSWh0RXZ3dUx3U1FVYnJpS3BwMXJhemx5dlVjNWhDOFUzVnRQOUVl?=
- =?utf-8?B?ZldoTUdNVVkzQ1B3ZFBOQm9lc2RUMG1VZVJxdmJXNnl0ODI3cmhBVWxpUlBz?=
- =?utf-8?B?SGlPang0U0ZUZzNNT1M1MUVpVUlaUzc2TUtUK25OQ0hCOXoyRHg3S2k2VHVU?=
- =?utf-8?B?VmkvZ05wdWJ6Rk8za0hxSXkzVmJtY2RjbUlMaWtBdnVhdE9Eb1pWeExoMWh0?=
- =?utf-8?Q?DgBkYdJUpnNAKNpA=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 919FF381E92;
+	Sun, 13 Sep 2026 08:34:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789288443; cv=none; b=oWR60WUWAMvRCRSYlm56i48yaj+Q5RxThtk1WFeNlQYBNOZQ4bmMj29fiDqgA7UD+IFdm0r9Oo0sft4SbLBv67S521fyw+FUgj/c7S85AQK4HxHznRN/R6/NmDuZp3dCpGGhtYbDgmV9gF1wu6NerUt0XXv+LDwozkHu6PoAgAo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789288443; c=relaxed/simple;
+	bh=l21u1VfuTUk80ee1/KqRN/TTYww9xGQuE4vEMp/bBy0=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=amxxgufPOZT09XmoTHFO+Oy04bCak6y5OKiCcpfEI/2/ApcFMmsVDcFBVGj5dQzHbyueDBZ4VEz92MpXa28mc7JIpaBPVWhbLz3EiMZ9MfwJSLi5P21s7s7IsV5PahHXUricLe1B8be/e9R1ayy32BYyt6/+wBJG14+lvsuONac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=hP4uSJGU; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=nvm4EGrz; arc=none smtp.client-ip=202.12.124.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="hP4uSJGU";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nvm4EGrz"
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailflow.stl.internal (Postfix) with ESMTP id 3F049130010C;
+	Sun, 13 Sep 2026 04:33:55 -0400 (EDT)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Sun, 13 Sep 2026 04:33:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1789288434;
+	 x=1789295634; bh=FK/hgn5ztNrzJ8FzxNsGVH8sTakZzoGmnSB/QJ0ZjK4=; b=
+	hP4uSJGU4LPNyh7tNOFYiOwyUhoJjvn+rtx/gV1jNxsXli24Yj4H9OHWbSCUCOYp
+	1LmeKkR/FDUTxfeVUcR3PW6hzHXaeKbqkwhguEsHXcWXM+EqRDq6Mutivw7D6AP7
+	zxcO7/7iOjRUeRDtvmwTdGVJi91XV93oTtX2lrN8t5oAK8MveTvPjOJLHdwKGLDv
+	WDY18MwDH078GeQblDSx50OkW8RYXHIL1Py1DTJXQ6l5yXDv8UpvOCwggfr73muh
+	tjWCnmei/4Ederp7aq+6q9XhHyjG3orbvr7iO3P4pOWy80p3tGPWWzvPjFz6Xoj/
+	l/E+uRa80heywM28ZQPbng==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1789288434; x=
+	1789295634; bh=FK/hgn5ztNrzJ8FzxNsGVH8sTakZzoGmnSB/QJ0ZjK4=; b=n
+	vm4EGrz4F6jR5JXE4wigJ8Ry7JX5M0AcC921ZlsuVqc/YpoeL8SAT+tKWa33nB0T
+	ZjwnZB7JaKQBbZtda19Ii6izZqboxNE1agBJILSQAvcaL8wIdNQhGx6H6fTk7CiJ
+	9DNwc7XlhvV+mMoGxebUGze3s1kX5uyoEPunC4jlIgaJyiyTX4Sbb7UtBOpcgTkm
+	GA9daUeYKwy5LcIt5VDo8mzbeUuePrI+JBZLjzF/J2KeYkeu+nmvT4YELvXjrCdX
+	MgxF8P55rsqI0lTOj9w6JBgCin8AMz9HlCAbF/Hl/i9h5rN/siDdaojxzhTnkeU0
+	a5HBpRoQJPWwTY7SPsEjQ==
+X-ME-Sender: <xms:6V-mapGAWvvTCYmPsF0gHXxbEy2q1VIUbPN28RqMGUUZtzTOrnEvuA>
+    <xme:6V-mapLXRXStV_91mp4cNlBE7UDv4i1YnLRZiVf3ZoCTB1V3wH1kzPlEqS463DWcH
+    jBKPFdmoJWdTPPrTaq2cSmCN-or1svTLHlOTE8BeqZQDBbr6-RKxf_M>
+X-ME-Proxy-Cause: dmFkZTFlVhM1xA9XUYL3SefhQrC0hRhFkTaBBJIQ3su2kNz4MfZ3F028vj/UpSaZ9vtqdo
+    wovmypaSI/+/Azrkn02Yb8tOmVCj78ufH0HthXhTBRf6WeFoUXig393+d5/MfEq2pSRnyw
+    LvkfDeXAZA0b/j/z/1yiQhabfROQmtQB7KcVHYhL5U/1ONNfzRfrULV/TAUFjNOKXvZqHU
+    1d3D75czeqAluQHI4FwbSCqywRuOSl2dbfCEwiQwzFVuJIGYTmYp+6BhJS/cWlHc13mRMu
+    JCF4bc/fUM2PhFgmF6DfLis1vMU0ddqwu1kq89fIC1RtR0wlPT1taz0+6qP2fokAV623EC
+    7WvNLhWl3kVw2NxV4IcXin9Y98/yDUmwATW+ikygGBZJ6YYQmvcBkxJjwY6s1s0lBnkurW
+    dgFHyjPldyFsZBx8c3uSdH5l15d1REZen5gyrGPU1HE169zMMgo3KEmBEUmtacwkM75/YY
+    grwFCl6KM0Bz9faJrynux+UReF8cohlyDGeVV9rTC5y20vL4mU3p+bx1hfEaXHZ84F3XO2
+    v2UOS2mSdQ64QMhfWRfWITFHODS475vwD85qi+Wj3j/4MpFov5LCO3ZCpCX0NoG23iGgHA
+    cDtOhMrnZ/x93jpFr/xtrmhKYEtASmslgyDXrwp3akV21xiDzYSAeZt4Xing
+X-ME-Proxy: <xmx:7l-marCsxWSQh7GyHEJQeExs04vUHwGvSpX6l3ZVDsiTwMGzIFCPpg>
+    <xmx:7l-mamy6bQq8k5lrbzz61NVzb-U8lzuLCWChRPmqZFuL-W1-V1RBnA>
+    <xmx:7l-mapO3Ea7pdRgQSbEG743m78cgcMsUglEvHhQP6eVdBbbYwVXaDw>
+    <xmx:7l-matdXxH-1ltZbtCG0gBd_mR1zKSCO473ThhfLCbYY-V19IRKADw>
+    <xmx:8l-maj_96L_YD-vKCf9QRDIxzcji6jyg1fRDZfFt7ZuAErCOtrULUMr4>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id DB07132A007E; Sun, 13 Sep 2026 04:33:44 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4a9c9f74-d799-45cc-290d-08df1148315a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Sep 2026 03:36:27.2858
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NCu5xDnRC+cuv8QKwsETuvv04g1vaDfFZsOD9Ky0vHmserTTwnTWcXpmjYTGZhcffpmC2uX7c5d9k3SaczBf6zD3SX5J0teSjWhH+DEIsrUMeXTqw4Z3RbxnFBu8PdS3
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ4PR01MB1251
+X-ThreadId: AK-jVwBtQCQR
+Date: Sun, 13 Sep 2026 10:33:04 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Jonathan Cameron" <jic23@kernel.org>
+Cc: "Svyatoslav Ryhel" <clamor95@gmail.com>,
+ "Arnd Bergmann" <arnd@kernel.org>,
+ "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+ "Bartosz Golaszewski" <brgl@kernel.org>,
+ "Mark Brown" <broonie@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Daniel Thompson" <danielt@kernel.org>, "Helge Deller" <deller@gmx.de>,
+ devicetree@vger.kernel.org,
+ "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+ dri-devel@lists.freedesktop.org, "Jingoo Han" <jingoohan1@gmail.com>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Lee Jones" <lee@kernel.org>,
+ "Liam Girdwood" <lgirdwood@gmail.com>,
+ "Linus Walleij" <linusw@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+ linux-fbdev@vger.kernel.org,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ "Guenter Roeck" <linux@roeck-us.net>, linuxppc-dev@lists.ozlabs.org,
+ llvm@lists.linux.dev, "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+ mfd@lists.linux.dev, "Michael Hennerich" <michael.hennerich@analog.com>,
+ patches@opensource.cirrus.com, "Pavel Machek" <pavel@kernel.org>,
+ "Rob Herring" <robh@kernel.org>, "Sebastian Reichel" <sre@kernel.org>,
+ "Support Opensource" <support.opensource@diasemi.com>
+Message-Id: <e53ae695-99ed-4f14-855b-b922a938438c@app.fastmail.com>
+In-Reply-To: <20260912232047.19c4cb10@jic23-hlaptop>
+References: 
+ <CAPVz0n0ryOns2sCJE_jFana9MVzwEj1QZuPEa8FNhGbHXnMB+A@mail.gmail.com>
+ <11652e5e-053e-45b0-98a0-0c1cb2aeedc4@app.fastmail.com>
+ <20260912232047.19c4cb10@jic23-hlaptop>
+Subject: Re: [PATCH 08/14] mfd: remove unused aat2870 driver
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-SGksIEd1ZW50ZXINCg0KVGhhbmtzIGZvciB0aGUgcmV2aWV3Lg0KDQo+IE9uIDkvMy8yNiAwNjoz
-NCwgQ2hhbmdodWFuZyBMaWFuZyB3cm90ZToNCj4gPiBBZGQgR3Jhbml0ZSBSYXBpZHMgKEdOUikg
-Q1BVIHN1cHBvcnQgdG8gdGhlIFBFQ0kgY3B1dGVtcCBkcml2ZXIuIFRoZQ0KPiA+IEdOUiBwbGF0
-Zm9ybSBkb2VzIG5vdCBzdXBwb3J0IHRoZSBjb3JlIG1hc2sgc2NhbiB2aWEgUENJIGxvY2FsIHJl
-YWQsDQo+ID4gc28gaGFuZGxlIHRoaXMgY2FzZSBleHBsaWNpdGx5IGJ5IHJldHVybmluZyAtRVBF
-Uk0gYW5kIHNraXBwaW5nIHRoZQ0KPiA+IGNvcmUgbWFzayBpbml0aWFsaXphdGlvbi4NCj4gPg0K
-PiANCj4gQWZ0ZXIgcmVhZGluZyB0aGUgbmV4dCBwYXRjaCBvZiB0aGUgc2VyaWVzOiBBcmUgeW91
-IHN1cmUgdGhhdCB0aGlzIGlzIHRoZSBjYXNlLCBvcg0KPiBpcyBpdCBwb3NzaWJsZSB0aGF0IEdy
-YW5pdGUgUmFwaWRzIGp1c3QgdXNlcyBhIGRpZmZlcmVudCBhY2Nlc3MgbWVjaGFuaXNtIHRvDQo+
-IHByb3ZpZGUgdGhlIGluZm9ybWF0aW9uID8NCj4gDQoNClRoaXMgaXMgdGhlIGluZm9ybWF0aW9u
-IEkgb2J0YWluZWQgYnkgcmVmZXJyaW5nIHRvIHRoZSBjb21taXQgYmVsb3cuIA0KT2YgY291cnNl
-LCBpdCB3b3VsZCBiZSBiZXN0IGlmIEl3b25hIGNvdWxkIGFsc28gaGVscCB2ZXJpZnkgaXQuDQoN
-Cmh0dHBzOi8vZ2l0aHViLmNvbS9vY3AtaG0tb3BlbmJtYy1vcGYtYW1pL2xpbnV4L2NvbW1pdC85
-NGI0YjBjODNkMzNiZWM3MGRjYzkyZjY4N2M0YTMyZTFhMWUyNTNjDQoNCj4gVGhhbmtzLA0KPiBH
-dWVudGVyDQo+IA0KPiA+IERlZmluZSBuZXcgY3B1X2luZm8gc3RydWN0dXJlIGZvciBHTlIgd2l0
-aCBtaW5pbXVtIFBFQ0kgcmV2aXNpb24gMHg0MA0KPiA+IGFuZCB0aGUgdGhlcm1hbCBtYXJnaW4g
-Y29udmVyc2lvbiBmdW5jdGlvbg0KPiBkdHNfdGVuX2RvdF9zaXhfdG9fbWlsbGlkZWdyZWUoKS4N
-Cj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IENoYW5naHVhbmcgTGlhbmcgPGNoYW5naHVhbmcubGlh
-bmdAc3RhcmZpdmV0ZWNoLmNvbT4NCj4gPiAtLS0NCj4gPiAgIGRyaXZlcnMvaHdtb24vcGVjaS9j
-cHV0ZW1wLmMgfCAyMCArKysrKysrKysrKysrKysrKysrKw0KPiA+ICAgMSBmaWxlIGNoYW5nZWQs
-IDIwIGluc2VydGlvbnMoKykNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL3Bl
-Y2kvY3B1dGVtcC5jDQo+ID4gYi9kcml2ZXJzL2h3bW9uL3BlY2kvY3B1dGVtcC5jIGluZGV4IDQ1
-NzA4OWM1NjFiNC4uNDNlNTJhNmRiNzliDQo+IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvaHdt
-b24vcGVjaS9jcHV0ZW1wLmMNCj4gPiArKysgYi9kcml2ZXJzL2h3bW9uL3BlY2kvY3B1dGVtcC5j
-DQo+ID4gQEAgLTMzOSw2ICszMzksMTcgQEAgc3RhdGljIGludCBpbml0X2NvcmVfbWFzayhzdHJ1
-Y3QgcGVjaV9jcHV0ZW1wDQo+ICpwcml2KQ0KPiA+ICAgCXUzMiBkYXRhOw0KPiA+ICAgCWludCBy
-ZXQ7DQo+ID4NCj4gPiArCS8qDQo+ID4gKwkgKiBTb21lIHBsYXRmb3JtcyAoZS5nLiBHcmFuaXRl
-IFJhcGlkcykgZG8gbm90IGV4cG9zZSB0aGUNCj4gUkVTT0xWRURfQ09SRVMNCj4gPiArCSAqIHJl
-Z2lzdGVyIG92ZXIgUEVDSSAtIHBlci1jb3JlIHRlbXBlcmF0dXJlcyBhcmUgc2ltcGx5IG5vdCBh
-dmFpbGFibGUuDQo+ID4gKwkgKi8NCj4gPiArCWlmICghcmVnKSB7DQo+ID4gKwkJZGV2X2RiZyhw
-cml2LT5kZXYsDQo+ID4gKwkJCSJyZXNvbHZlZCBjb3JlcyBzY2FuIGlzIG5vdCBzdXBwb3J0ZWQg
-b24gdmVuZG9yLWZhbWlseS1tb2RlbA0KPiAweCV4XG4iLA0KPiA+ICsJCQlwZWNpX2Rldi0+aW5m
-by54ODZfdmZtKTsNCj4gPiArCQlyZXR1cm4gLUVPUE5PVFNVUFA7DQo+ID4gKwl9DQo+ID4gKw0K
-PiA+ICAgCS8qIEdldCB0aGUgUkVTT0xWRURfQ09SRVMgcmVnaXN0ZXIgdmFsdWUgKi8NCj4gPiAg
-IAlzd2l0Y2ggKHBlY2lfZGV2LT5pbmZvLng4Nl92Zm0pIHsNCj4gPiAgIAljYXNlIElOVEVMX0lD
-RUxBS0VfWDoNCj4gPiBAQCAtNTQzLDYgKzU1NCwxMSBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGNw
-dV9pbmZvIGNwdV9lbXIgPSB7DQo+ID4gICAJLnRoZXJtYWxfbWFyZ2luX3RvX21pbGxpZGVncmVl
-ID0NCj4gJmR0c190ZW5fZG90X3NpeF90b19taWxsaWRlZ3JlZSwNCj4gPiAgIH07DQo+ID4NCj4g
-PiArc3RhdGljIGNvbnN0IHN0cnVjdCBjcHVfaW5mbyBjcHVfZ25yID0gew0KPiA+ICsJLm1pbl9w
-ZWNpX3JldmlzaW9uID0gMHg0MCwNCj4gPiArCS50aGVybWFsX21hcmdpbl90b19taWxsaWRlZ3Jl
-ZSA9ICZkdHNfdGVuX2RvdF9zaXhfdG9fbWlsbGlkZWdyZWUsIH07DQo+ID4gKw0KPiA+ICAgc3Rh
-dGljIGNvbnN0IHN0cnVjdCBhdXhpbGlhcnlfZGV2aWNlX2lkIHBlY2lfY3B1dGVtcF9pZHNbXSA9
-IHsNCj4gPiAgIAl7DQo+ID4gICAJCS5uYW1lID0gInBlY2lfY3B1LmNwdXRlbXAuaHN4IiwNCj4g
-PiBAQCAtNTc2LDYgKzU5MiwxMCBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGF1eGlsaWFyeV9kZXZp
-Y2VfaWQNCj4gcGVjaV9jcHV0ZW1wX2lkc1tdID0gew0KPiA+ICAgCQkubmFtZSA9ICJwZWNpX2Nw
-dS5jcHV0ZW1wLmVtciIsDQo+ID4gICAJCS5kcml2ZXJfZGF0YSA9IChrZXJuZWxfdWxvbmdfdCkm
-Y3B1X2VtciwNCj4gPiAgIAl9LA0KPiA+ICsJew0KPiA+ICsJCS5uYW1lID0gInBlY2lfY3B1LmNw
-dXRlbXAuZ25yIiwNCj4gPiArCQkuZHJpdmVyX2RhdGEgPSAoa2VybmVsX3Vsb25nX3QpJmNwdV9n
-bnIsDQo+ID4gKwl9LA0KPiA+ICAgCXsgfQ0KPiA+ICAgfTsNCj4gPiAgIE1PRFVMRV9ERVZJQ0Vf
-VEFCTEUoYXV4aWxpYXJ5LCBwZWNpX2NwdXRlbXBfaWRzKTsNCg0KQmVzdCBSZWdhcmRzLA0KQ2hh
-bmdodWFuZw0KDQo=
+On Sun, Sep 13, 2026, at 00:20, Jonathan Cameron wrote:
+> On Thu, 10 Sep 2026 20:14:15 +0200 "Arnd Bergmann" <arnd@arndb.de> wrote:
+>> 
+>> I tried to be careful about figuring out exactly which drivers are
+>> unused, but I'm sure there are still a few false positive and false
+>> negative ones in there. I've added the current list of driver files below,
+>> let me know if you see something that shouldn't be there.
+> Hi Arnd
+>
+> For I2C and SPI at least, there doesn't need to be explicit
+> device tree support as long as they have defaults when platform
+> data isn't there. Those two buses will happily bind based on
+> a dt-compatible and their i2c_device_id or spi_device_id tables
+> for example.
+>
+> So unless they fail to probe (some might?) we don't have
+> a clear signal on whether they are in use via DT or not.
+>
+> For vast majority of IIO drivers we don't have an upstream
+> DTS as there is no clear motivation for anyone to upstream
+> the dts for a random industrial control board or similar.
+
+Right, that was my general rule, if I had tried to remove
+all drivers that could plausibly probe with an external dtb
+but have no internal users, that would have easily doubled
+the 300 patches I already did.
+
+>> drivers/iio/adc/ad7266.c
+> No to dropping this.
+>
+>
+>> drivers/iio/adc/ad7791.c
+> No to dropping this one.
+>
+>> drivers/iio/adc/ad7793.c
+> Maybe. Analog devices ack needed.
+>
+> Production part but this one indeed fails to probe.  Analog
+> folk, do you want to fix this one up?
+>
+>> drivers/iio/adc/ad7887.c
+> No to dropping this.
+>
+> Production part - should work fine with defaults in driver.
+> Could like the others drop the platform data handling.
+
+This was one patch that I wasn't sure about myself (all four
+drivers together) since it looks like even when they do probe
+from dtb, the feature set would be limited without a DT
+binding, and they have been in the tree for a rather long time
+without users.
+
+I've dropped the patch now. I looked at dropping the platform_data
+handling, but I think that only makes sense if we get a
+proper DT binding first.
+
+>> drivers/iio/adc/lp8788_adc.c
+> Probably
+>
+> Sub driver of an MFD.  I'm fine with that going if we know
+> the mfd is no longer in use.
+
+Ok, I posted that one as
+https://lore.kernel.org/all/20260909132153.1596191-8-arnd@kernel.org/
+
+and so far, everyone agreed on removing it.
+
+>> drivers/iio/adc/lpc18xx_adc.c
+>> drivers/iio/dac/lpc18xx_dac.c
+> Probably
+>
+> Likewise these two.
+
+Right, this one of course should follow the removal of
+CONFIG_ARCH_LPC18XX in arch/arm/
+
+>> drivers/iio/frequency/ad9523.c
+> Maybe. Analog Devices ack needed.
+>
+> Fails to probe without platform data and marked not recomended
+> for new designs. If we get an Ack from Analog devices folk
+> I'm fine with this one going away.
+
+This matches what I wrote in 
+https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?id=20c1515b0caec2769c0916d087326f640bfb8aab
+
+I'll keep the patch in the series and we'll see what the
+maintainers think when I post it.
+
+Thanks a lot for taking a look!
+
+I wonder if some of the older Analog drivers were only ever used
+on Blackfin. My series still removes a few more drivers outside
+of iio list that had platform_data in arch/blackfin/ until we
+removed that in 2018. These all fail to probe without
+platform_data, which means they also wouldn't work with the
+downstream adsp-sc5xx/sc8xx port or any other upstream Arm
+platform:
+
+a4bdf847e0e1 backlight: remove unused adp8860/8870 drivers
+c71829e110e9 Input: touchscreen: remove unused ad7877 driver
+b4d4ca64500b Input: misc: remove unused ad714x driver
+978426a3fe1a usb: remove unused sl811 driver
+0860c9f297c3 mfd: remove unused adp5520 driver
+
+       Arnd
