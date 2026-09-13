@@ -1,30 +1,30 @@
-Received: from outbound.mr.icloud.com (mr-2006h-snip4-11.eps.apple.com [57.103.70.63])
+Received: from outbound.mr.icloud.com (mr-2006f-snip4-11.eps.apple.com [57.103.70.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FBCC3E168C
-	for <linux-hwmon@vger.kernel.org>; Sun, 13 Sep 2026 23:14:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.70.63
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85C943E1D05
+	for <linux-hwmon@vger.kernel.org>; Sun, 13 Sep 2026 23:14:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.70.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789341257; cv=none; b=MvDbJwFKj2EIEhCDf0h4cxtgBZHnkxMOxhYoTquX/SWKhpWPXfCCQ0mBRD4miYQ1jxYNBkYtAjpd4WoZ1LCLPbfTa4TjUPVB5QNw7h0As/a5omRCBZ6PCIzeqFuqAHXlspWSklDcAAQW6Z9IYCd1ZniT/phpjaqvIOjLP3S3ztY=
+	t=1789341260; cv=none; b=a9CCZRF+qpp3je4WoNSizllnvqvViKia7qTaJCYkuXw2NR+2bOGEnoKAOVl4oClyveCNplCWRqTvsTozJ3ntPEtMT9+gznL01klhc16QC1nMdUh2qNYM8o7WgpZxjEBBV88q4VK0hg+VYfedLFTB1DcPJe1R/NQxbX0zpGgNtSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789341257; c=relaxed/simple;
-	bh=bnSkmaWuXatZvhpJzFRbFNs7tJg2h1mzIergUF6+rqY=;
+	s=arc-20240116; t=1789341260; c=relaxed/simple;
+	bh=dlW9ZAR0IbGBRHH7lrs5MMmhRgC5Snm58uA1DU2sT8o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bgB2qf88DZP2DgAxj8b+FOr1sNomm8+pbz8+K75sYNu5W3RPObGAK+z0XtMPDYew8z7G7qX9+A24sRstqtp5Z35GkSD/QD4BZJxCsNaEKCgqiNvjF1XYjFZbzD2Gb9dESWWnHmnlmyJskJPrCKrergy/a7EsF7jKyXoR5yxe0GU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brough.org; spf=pass smtp.mailfrom=brough.org; dkim=pass (2048-bit key) header.d=brough.org header.i=@brough.org header.b=zPUe4xMk; arc=none smtp.client-ip=57.103.70.63
+	 MIME-Version; b=dQNH2Q7MzsEZE+Qs6bisGaCPm7kHuXhDxbGT9049N2lUZQiMmsIqjyDNQrGGt6ZGDRvIbql/BX8ncp3C2jo7Hc+VcDwtlxv5ofMXufTtLeB2M/arqXgA3RRWzE4Akig85tOf0hmX2Y8zw80lLE10J1LD1qaYo7UzOHk4Nvn+Iac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brough.org; spf=pass smtp.mailfrom=brough.org; dkim=pass (2048-bit key) header.d=brough.org header.i=@brough.org header.b=hfLsYTzB; arc=none smtp.client-ip=57.103.70.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brough.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=brough.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brough.org header.i=@brough.org header.b="zPUe4xMk"
+	dkim=pass (2048-bit key) header.d=brough.org header.i=@brough.org header.b="hfLsYTzB"
 Received: from outbound.mr.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-west-2a-100-percent-7 (Postfix) with ESMTPS id B92DB18000F7;
+	by p00-icloudmta-asmtp-us-west-2a-100-percent-7 (Postfix) with ESMTPS id 81A1F18003C6;
 	Sun, 13 Sep 2026 23:14:12 +0000 (UTC)
-X-ICL-RepId: 01a09d0c-bc54-7a79-84de-f173b26aca1f
-X-ICL-Out-Info: HUtFAUMHWwJACUgATUQeDx5WFlZNRAJCTQhLBUMEXRxIDlYCWwdLVxQEElwfUwpcMFsKXBhQAxwfSx8TC1NWUAJWDVQFGQRAFxkKUFAGWxIYXBRcUFgeRhJWDV0JGQZAXlAbXwJCDxwTVhUTHUMZDysISgRDB0UCXgslEwlTVlACVg1UBRkEQBcZFVoJClcAQAtOA1QGWABDCEwCXRlfA0YASgFABEZYH0scUgN3CUAfTB9bQ1gZVU4ZDEodUlZRBUoMXABoD10dWBFd
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=brough.org; s=sig1; t=1789341254; x=1791933254; bh=cj/fhADZ2zjZtvXL9yjl1t+Ug89ENPAw07jdlhd1+ss=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=zPUe4xMk/DjiH5AwF1u+tAl+agMQaSkU3Z6Owvu4QLoOMtDpqxXfZ5MkHxkCHYlhrJWTycRaiwBkP2HctYDYNwZwuIkhALGLIG1U6WQGsAw/Zs3VfU0rfmF0ftSW30Xa+vMKIAgET71r5HwUl38jQlG8GpA4JxuBwElLP4XkL9zMtKQ/8iDWqNgRoEaAEaaSONrNOzbDlLYPf87rbx+mRQ5kwQKbWcO1Au6HaTCUw8qDz6Ol1//A/nwReIYztmgr93TuV0gBgFlDB4uhuwpdtKX1kBgeOC8cdBd8gHlVsHUBr3SzkhmSnz9sYg9A0XEZ1Zlr9pe01j572G+WF/lnIQ==
+X-ICL-RepId: 01a09d0c-bb61-7eec-b510-3ad7747e85f1
+X-ICL-Out-Info: HUtFAUMHWwJACUgATUQeDx5WFlZNRAJCTQhLBUMEXRxIDlYCWwdLVxQEElwfUwpcMFsKXBhQAxwfSx8TC1NWUAJWDVQFGQRAFxkKUFAGWxIYXBRcUFgeRhJWDV0JGQZAXlAbXwJCDxwTVhUTHUMZDysISgRDB0UCXgslEwlTVlACVg1UBRkEQBcZFVoJClcAQAtOA1QGWABDCEwCXRlfA0YASgFABUZYH0scUgN3CUAfTB9bQ1gZVU4ZDEodUlZRBUoMXABoD10dWBFd
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=brough.org; s=sig1; t=1789341255; x=1791933255; bh=ApvqrzqiuAetXstUSKvkfMR2Zu+HwcCmcYY2HROSg+M=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=hfLsYTzBJX0U1CYcTpFEy54QJ6VhiIZW3LlX07QWYx9Lr/4Nk2kOEnUEZ9lkuihUdu74oA3icGbnozpdtsDNntdI8WVp8xSjytVKZFD74ppViEA248TxxwhKGhGoNSDEV8GSigM03hXJWqQtv4tMPRKlzjzgOC6m17Krv+ebPgsJC/Ltnw17/+7MzyR82DxNdXpRGcZvm8vqbf0Hm3R2ufYVySOLUHgQg12wk1CmjauBKVUJks+bXrWym779NyGOikElE5vozuRRjK/jORVhylVEwW4YimXV+J7azlL+pEAHAGuv7QMfgDGyixZg95tGjllrKquEqC4irCRf9osSJg==
 mail-alias-created-date: 1646594351620
 Received: from jb-desktop (unknown [17.156.200.36])
-	by p00-icloudmta-asmtp-us-west-2a-100-percent-7 (Postfix) with ESMTPSA id F381318002BC;
+	by p00-icloudmta-asmtp-us-west-2a-100-percent-7 (Postfix) with ESMTPSA id 9EF9D18002AD;
 	Sun, 13 Sep 2026 23:14:11 +0000 (UTC)
 From: Jordan Brough <jordan@brough.org>
 To: rafael@kernel.org,
@@ -37,9 +37,9 @@ Cc: lenb@kernel.org,
 	acpica-devel@lists.linux.dev,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] hwmon: (applesmc) add charge_control_end_threshold support
-Date: Sun, 13 Sep 2026 17:14:10 -0600
-Message-ID: <20260913231410.416922-3-jordan@brough.org>
+Subject: [PATCH 1/2] ACPI: sbs: add battery hook mechanism for SBS-registered batteries
+Date: Sun, 13 Sep 2026 17:14:09 -0600
+Message-ID: <20260913231410.416922-2-jordan@brough.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260913231410.416922-1-jordan@brough.org>
 References: <20260913231410.416922-1-jordan@brough.org>
@@ -50,281 +50,264 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: I0UtamjwptGDrqdn_T_3LoC5GgpkKv2b
-X-Proofpoint-GUID: I0UtamjwptGDrqdn_T_3LoC5GgpkKv2b
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTEzMDMzMyBTYWx0ZWRfX8oKgogVRCJSU
- Eq9h0J/wm8VxPBQ+y5EiGPq5Wj7b9b9MfRWQo/JeoWiDY7nxCtFP1kWB995GmYIV7MUDU8lIhBQ
- 10Nu0EX9IEOAkCCeXAKJwjUMEjOwP0Sjkig4KAszBTkwpI0Nt/Wksnv3h8NKU9ZcY1PdW/oNwnp
- 6Ps8cfJwb7K36mSutxEA/ik4qlj2u+C+rMQOk6s0J3WaTLABNYjwH94FF58l3hdWKnXWEkvgcFU
- 6Wyjo8GGsxpZeRaeg1nWgG9sOKD/KxEsV85YpBrtLtAEg+5VimzDt+nafiFPZhpKU9QvJ/Z2bde
- 78aF/coO0rBl9yuPhq27bFxiGVOr6AqPmpqwNF0z7lPXBC9/bK/sQWbpfeNsz0=
-X-Authority-Info-Out: v=2.4 cv=NvDcssdJ c=1 sm=1 tr=0 ts=6aa72e45
+X-Authority-Info-Out: v=2.4 cv=Q5DfIo2a c=1 sm=1 tr=0 ts=6aa72e45
  cx=c_apl:c_pps:t_out a=9mRn2PO/+PIrVdEbaIuMPg==:117
  a=9mRn2PO/+PIrVdEbaIuMPg==:17 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=gFGppuTrAAAA:8 a=_qiZed2BUF8c7og7XssA:9 a=_Y0xhhAoguY4gwfEQMhp:22
-X-JNJ: AAAAAAAB6B96uLboEv/K0/PuIITrRM26v5rl89l/GGukEQbmSBL0beNXXYxpG5qMgqzCTfY3ZtLPhSVoeQYhCAxr7OSs48uk5aBh+wdF4SdbilDJf8s/uoOHveekYMzsopujjtpN9w3OQZkSlQ7QTL46Lo5x7cJV0hXkmZlvEad3OpW9A7FTeskcznIDIniPGhBWHEQZkrreykURiucj14bTnLFpA0tJsAfN0vxptNR/vLLvtHdT77e3dMeHpin1TX6zwiYOOvBCdDgrNTVNhW3EKkvdrCLlOyFVrR1toDTvsryH1f4GxJUtAfglloY+cPs2lOAoHCQdEt0iYXORldtZMD75hU282DfxjE3VHZKU24d8tmNCEAsNRxhN3g7q/7gpRzwBt1VWNvCgPwUFJz3aTKkZpFCYMX+aN+LysnPWEyILDXGmFrGn3WMfx0Ec+aNhb/jCFxW2HRR0EMAmA3gSFuifcGwsDK2FHFy2C6c7tNE7fBw9qMKKUu8UATotCV1E9YGBkV/HrSrAiNfrVIu821rp+P4M3qpdpoKN5h/cpFcPzrh/BlS489ECc8wrz1/tCtYN+t0SIC+2VsEhZ852fEEuYZuIN6A5KNLXV53dDg/Nr4ApW5EeWfVkMoagK2PUFxsRg5DWjbF3tiUTRtqcRa48BL6qvsULp81aWO+gGcYs6JH51BwwebhEb2EFVtCvenpVccGjY61YcG9h81zJtsT9n5DuVeH0bT0Vi8IRKumFSq0ka4x+wlUOlGshUQ143cps/x/p8cj5og/s2Rkjlni0vF26dTuilNqVeDz2m8MMqmJoBIwSGEF0YBppAfJ9Fvlrwd/SWfbb5X7ppCaYPFS9kMh94KOucJb/Ik4ADkcXGQLYjYGdN48vSOABVTRgf86UZTCnKVI=
+ a=gFGppuTrAAAA:8 a=9ZG6tJcGPwO3Ozu3yHEA:9 a=_Y0xhhAoguY4gwfEQMhp:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTEzMDMzMyBTYWx0ZWRfXwWivDplbJuFv
+ vIZbWrYeYQBAxexNO4Hypcu7V7Tvk9O2XXOWVYDukOM19TV+Ab72T7CzyZwYWvLwwc/8j8Edh1f
+ 0AHeYeFwOW0B25d83Cfigg7Gb8XgI6Yh/jpwtaidwZbyZJXV6K1IOWiaEjbTvfOjZPMBvY0tSJl
+ tljYS+tT7joS8S2cMb778y9u5DU4e4nqyU3R2YrgI+6zkF/uIfPtKmRKhEXh1prppqCZVoX/1GK
+ JXPO7DETYCRGEO1KBNj8YHrxPy9aHzfEpj2OXM5HH9qQdzvMh3tttqGS6ZccqxB/5S/R06ajGZW
+ UrgN0EHENY3gHtP+bp+ObKKHxeiyOubHMCtmd7sVk3pQo1jXa+DSgX3SCkV+Tg=
+X-Proofpoint-ORIG-GUID: AWtmS5vvUN46HZTO4-DBswCSboc_DLqs
+X-Proofpoint-GUID: AWtmS5vvUN46HZTO4-DBswCSboc_DLqs
+X-JNJ: AAAAAAABf1q1lXFTDr1IuhUyCBHPRWwNY8MrD7khVDGbTKrZgUaXgAiIicurQkKV2OOaCQSroVtVaZBNADmxwHgEZ6+rbYW3tuVhhHIzsiaMpsCl7pVyAnSSIxKlH7Ci20QPwB6nRUyJ+NYtNWtQKYAMxs+8td8c9VrnnRp7b/1EqAvkKGXTE+NidOP9fIPtMX4ZHuXwZN2WpM8FB/ElViTUvKU3pW7n2lWDiOOlFzlES2nTOWSG6vv8RaCldRMSsdyzRoWQBPm3lq4As10Ly+TJWt6EKX+J5zr9FVWfmeobtwT81M/Qtx+jVv2YnyrPVXLnIx5IynO4GLCDFiC0MYXVNbu5wlKWvsEjKAhkjuJur/C2htq4lkh9KxusB3M7JVVzLTd8vFaFBioe8pP3yk4kyNN+b56Dck0sAVb5z+Av49hJ1g/pDlpx3ctivi6zqsoIJc/c9LrXOghnCuWytAecH2G24/hguTubYp6CardEhkUEtfU30YHqug0dLAvDg6WGEgRGtbvvOWbWyml+MSfCgs4cr2DQpf7qd77sTCvbisnFeHoOUSxw7IUOdPjXtod1zMKwswWazoX+vUYMWHtpnZpTfH5mvUoGG0suwCgB088nRiBHEsFbmVg5laF2ve5rT4VQTXlYPhtWMRMCSvy+lhhMeQedxs+s3VaINRHm47/SxzY4B3IxDRC6B/yEAsfB5oVBa+73lhmHzEEvqq2Nwiwn2t0rB0YkohC7yB/Ss3pMH7opZd3+VH5HQ8i4fIGHdOc2l8hRse/kewnFmgGlm/bqwX0DMO5M1K+mC3FovUkVi2M1ZctMCSi/mKpH6CcJkUeciDZM7HtbleSmd660vUA1WMlzWG0mjYQ=
 
-Apple's SMC firmware exposes a real charging-cutoff control via the
-BCLM (Battery Charge Limit Max) key, and a separate cosmetic BFCL
-(Battery Final Charge Level) key that only controls when the MagSafe
-LED switches from orange to green. Userspace tools and out-of-tree
-kernel patches have historically conflated the two or exposed neither
-through a standard interface, leaving desktop environments unable to
-offer a native charge-limit control on Intel MacBooks.
+drivers/acpi/battery.c provides a battery_hook_register()/unregister()
+mechanism that lets other drivers (e.g. hwmon drivers exposing vendor-
+specific charge control) attach extra power_supply properties to an
+ACPI Control Method Battery (HID PNP0C0A, "CmBatt").
 
-Add native charge_control_end_threshold support to applesmc using the
-power_supply_ext extension API, so that generic userspace (UPower,
-KDE Powerdevil, GNOME Settings) can read and write the threshold
-through the standard sysfs attribute with no vendor-specific daemon.
-BFCL is kept in sync automatically (BCLM - 5) purely so the MagSafe
-LED still changes color at a sensible point relative to the real
-cutoff; it is not independently exposed.
+Some machines instead expose their battery through the ACPI Smart
+Battery System (HID ACPI0002, "SBS") driver in drivers/acpi/sbs.c,
+which has no equivalent hook point. On these machines a hwmon driver
+has no supported way to attach additional properties to the battery's
+power_supply device.
 
-Apple MacBooks register their battery through either the ACPI Control
-Method Battery driver (CmBatt, drivers/acpi/battery.c) or the ACPI
-Smart Battery System driver (SBS, drivers/acpi/sbs.c), depending on
-model. Register against both hook mechanisms, guarded at compile/link
-time with IS_REACHABLE() so this stays a no-op when the corresponding
-subsystem isn't built in, and at runtime with a probe of the BCLM SMC
-key so this is a no-op on any Mac (or non-Mac, given applesmc's DMI
-match table) that doesn't actually implement it.
+Add a parallel sbs_battery_hook_register()/unregister() mechanism to
+drivers/acpi/sbs.c, mirroring the existing CmBatt hook API in name and
+behavior so that callers can support both battery registration paths
+symmetrically. This is purely additive: no existing hook consumer or
+code path in drivers/acpi/battery.c is touched, and sbs.c's own
+behavior is unchanged for any driver that does not call the new API.
 
-Tested on a MacBookAir6,2 (SBS-registered battery): the sysfs
-attribute appears, reads/writes correctly propagate to the real SMC
-BCLM key end-to-end via KDE's charge-limit slider, and BFCL tracks
-BCLM - 5 as designed. Tested on a non-Mac laptop (CmBatt-registered
-battery, no BCLM key) to confirm both new hook registrations are
-true no-ops there: no new sysfs attributes, no behavioral change,
-clean module load/unload.
+This is a prerequisite for hwmon/applesmc gaining
+charge_control_end_threshold support, since the Intel MacBook hardware
+being targeted registers its battery via SBS, not CmBatt.
 
 Signed-off-by: Jordan Brough <jordan@brough.org>
 ---
- drivers/hwmon/applesmc.c | 164 +++++++++++++++++++++++++++++++++++++--
- 1 file changed, 159 insertions(+), 5 deletions(-)
+ drivers/acpi/sbs.c     | 147 ++++++++++++++++++++++++++++++++++++++++-
+ include/acpi/battery.h |  16 +++++
+ 2 files changed, 162 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-index d0baa10502f..39276cdba3d 100644
---- a/drivers/hwmon/applesmc.c
-+++ b/drivers/hwmon/applesmc.c
-@@ -33,6 +33,8 @@
- #include <linux/workqueue.h>
- #include <linux/err.h>
- #include <linux/bits.h>
-+#include <linux/power_supply.h>
-+#include <acpi/battery.h>
- #include <asm/barrier.h>
+diff --git a/drivers/acpi/sbs.c b/drivers/acpi/sbs.c
+index 86b7c797585..305bf62eae3 100644
+--- a/drivers/acpi/sbs.c
++++ b/drivers/acpi/sbs.c
+@@ -10,6 +10,7 @@
+ #define pr_fmt(fmt) "ACPI: " fmt
  
- /* data port used by Apple SMC */
-@@ -76,6 +78,26 @@
- 
- #define TEMP_SENSOR_TYPE	"sp78"
- 
-+/*
-+ * BCLM caps charging at a percentage; it is the only key that affects
-+ * charging behavior. BFCL only controls when the charging LED switches
-+ * from orange to green and has no effect on charging itself.
-+ */
-+#define BATTERY_CHARGE_LIMIT_KEY	"BCLM" /* r/w ui8 */
-+#define BATTERY_CHARGE_LIMIT_LED_KEY	"BFCL" /* r/w ui8 */
-+
-+/*
-+ * Margin kept between BCLM and BFCL so the charging LED still reports
-+ * "done" once BCLM halts charging below 100%. Left equal to BCLM, the
-+ * two can race: charging can stop a moment before the SMC's internal
-+ * (sub-percent) charge counter actually reaches BFCL, leaving the LED
-+ * stuck on "charging" indefinitely since no further current ever flows
-+ * to push it over the threshold. A margin of 1 was sufficient to avoid
-+ * this on a MacBookAir6,2; 5 matches Apple's own firmware convention and
-+ * gives headroom on hardware we haven't tested.
-+ */
-+#define APPLESMC_BATTERY_CHARGE_LIMIT_LED_MARGIN 5
-+
- /* List of keys used to read/write fan speeds */
- static const char *const fan_speed_fmt[] = {
- 	"F%dAc",		/* actual speed */
-@@ -131,6 +153,7 @@ static struct applesmc_registers {
- 	int num_light_sensors;		/* number of light sensors */
- 	bool has_accelerometer;		/* has motion sensor */
- 	bool has_key_backlight;		/* has keyboard backlight */
-+	bool has_battery_charge_limit;	/* has BCLM battery charge limit */
- 	bool init_complete;		/* true when fully initialized */
- 	struct applesmc_entry *cache;	/* cached key entries */
- 	const char **index;		/* temperature key index */
-@@ -633,17 +656,21 @@ static int applesmc_init_smcreg_try(void)
- 	if (ret)
- 		return ret;
- 	ret = applesmc_has_key(BACKLIGHT_KEY, &s->has_key_backlight);
-+	if (ret)
-+		return ret;
-+	ret = applesmc_has_key(BATTERY_CHARGE_LIMIT_KEY, &s->has_battery_charge_limit);
- 	if (ret)
- 		return ret;
- 
- 	s->num_light_sensors = left_light_sensor + right_light_sensor;
- 	s->init_complete = true;
- 
--	pr_info("key=%d fan=%d temp=%d index=%d acc=%d lux=%d kbd=%d\n",
--	       s->key_count, s->fan_count, s->temp_count, s->index_count,
--	       s->has_accelerometer,
--	       s->num_light_sensors,
--	       s->has_key_backlight);
-+	pr_info("key=%d fan=%d temp=%d index=%d acc=%d lux=%d kbd=%d bat=%d\n",
-+		s->key_count, s->fan_count, s->temp_count, s->index_count,
-+		s->has_accelerometer,
-+		s->num_light_sensors,
-+		s->has_key_backlight,
-+		s->has_battery_charge_limit);
- 
- 	return 0;
+ #include <linux/init.h>
++#include <linux/list.h>
+ #include <linux/slab.h>
+ #include <linux/module.h>
+ #include <linux/moduleparam.h>
+@@ -54,6 +55,7 @@ struct acpi_battery {
+ 	struct power_supply *bat;
+ 	struct power_supply_desc bat_desc;
+ 	struct acpi_sbs *sbs;
++	struct list_head list;		/* node in sbs_hook_battery_list */
+ 	unsigned long update_time;
+ 	char name[8];
+ 	char manufacturer_name[ACPI_SBS_BLOCK_MAX];
+@@ -518,6 +520,145 @@ static int acpi_battery_read(struct acpi_battery *battery)
+ 	return result;
  }
-@@ -724,6 +751,120 @@ static struct platform_driver applesmc_driver = {
- 	},
- };
  
-+static int applesmc_bat_get_property(struct power_supply *psy,
-+				     const struct power_supply_ext *ext,
-+				     void *data,
-+				     enum power_supply_property psp,
-+				     union power_supply_propval *val)
-+{
-+	u8 limit;
-+	int ret;
++/*
++ * Battery hook support, mirroring the mechanism in drivers/acpi/battery.c
++ * for batteries registered there. That mechanism only sees batteries
++ * added via drivers/acpi/battery.c, not the ones this driver registers,
++ * so drivers wanting to attach optional functionality (e.g. an extra
++ * power_supply_ext) to an SBS battery need this separate copy; see the
++ * comment above the declarations in include/acpi/battery.h.
++ */
++static LIST_HEAD(sbs_hook_list);
++static LIST_HEAD(sbs_hook_battery_list);
++static DEFINE_MUTEX(sbs_hook_mutex);
 +
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
-+		ret = applesmc_read_key(BATTERY_CHARGE_LIMIT_KEY, &limit, 1);
-+		if (ret)
-+			return ret;
-+		val->intval = limit;
-+		return 0;
-+	default:
-+		return -EINVAL;
++static void sbs_battery_hook_unregister_unlocked(struct acpi_battery_hook *hook)
++{
++	struct acpi_battery *battery;
++
++	/*
++	 * In order to remove a hook, we first need to
++	 * de-register all the batteries that are registered.
++	 */
++	list_for_each_entry(battery, &sbs_hook_battery_list, list) {
++		if (!hook->remove_battery(battery->bat, hook))
++			power_supply_changed(battery->bat);
 +	}
++	list_del_init(&hook->list);
 +}
 +
-+static int applesmc_bat_set_property(struct power_supply *psy,
-+				     const struct power_supply_ext *ext,
-+				     void *data,
-+				     enum power_supply_property psp,
-+				     const union power_supply_propval *val)
++void sbs_battery_hook_unregister(struct acpi_battery_hook *hook)
 +{
-+	u8 limit, led_limit;
-+	int ret;
++	mutex_lock(&sbs_hook_mutex);
++	/*
++	 * Ignore already unregistered battery hooks. This might happen
++	 * if a battery hook was previously unloaded due to an error when
++	 * adding a new battery.
++	 */
++	if (!list_empty(&hook->list))
++		sbs_battery_hook_unregister_unlocked(hook);
++	mutex_unlock(&sbs_hook_mutex);
++}
++EXPORT_SYMBOL_GPL(sbs_battery_hook_unregister);
 +
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
-+		if (val->intval < 20 || val->intval > 100)
-+			return -EINVAL;
++void sbs_battery_hook_register(struct acpi_battery_hook *hook)
++{
++	struct acpi_battery *battery;
 +
-+		limit = val->intval;
-+		ret = applesmc_write_key(BATTERY_CHARGE_LIMIT_KEY, &limit, 1);
-+		if (ret)
-+			return ret;
++	mutex_lock(&sbs_hook_mutex);
++	list_add(&hook->list, &sbs_hook_list);
++	/*
++	 * Now that the driver is registered, we need
++	 * to notify the hook that a battery is available
++	 * for each battery, so that the driver may add
++	 * its attributes.
++	 */
++	list_for_each_entry(battery, &sbs_hook_battery_list, list) {
++		if (hook->add_battery(battery->bat, hook)) {
++			/*
++			 * If a add-battery returns non-zero,
++			 * the registration of the hook has failed,
++			 * and we will not add it to the list of loaded
++			 * hooks.
++			 */
++			pr_err("hook failed to load: %s", hook->name);
++			sbs_battery_hook_unregister_unlocked(hook);
++			goto end;
++		}
 +
-+		led_limit = limit > APPLESMC_BATTERY_CHARGE_LIMIT_LED_MARGIN ?
-+			limit - APPLESMC_BATTERY_CHARGE_LIMIT_LED_MARGIN : limit;
-+		applesmc_write_key(BATTERY_CHARGE_LIMIT_LED_KEY, &led_limit, 1);
-+		return 0;
-+	default:
-+		return -EINVAL;
++		power_supply_changed(battery->bat);
 +	}
++	pr_info("new hook: %s\n", hook->name);
++end:
++	mutex_unlock(&sbs_hook_mutex);
 +}
++EXPORT_SYMBOL_GPL(sbs_battery_hook_register);
 +
-+static int applesmc_bat_property_is_writeable(struct power_supply *psy,
-+					      const struct power_supply_ext *ext,
-+					      void *data,
-+					      enum power_supply_property psp)
++static void devm_sbs_battery_hook_unregister(void *data)
 +{
-+	return psp == POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD;
++	struct acpi_battery_hook *hook = data;
++
++	sbs_battery_hook_unregister(hook);
 +}
 +
-+static const enum power_supply_property applesmc_bat_props[] = {
-+	POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD,
-+};
-+
-+static const struct power_supply_ext applesmc_bat_ext = {
-+	.name			= "applesmc-charge-control",
-+	.properties		= applesmc_bat_props,
-+	.num_properties		= ARRAY_SIZE(applesmc_bat_props),
-+	.get_property		= applesmc_bat_get_property,
-+	.set_property		= applesmc_bat_set_property,
-+	.property_is_writeable	= applesmc_bat_property_is_writeable,
-+};
-+
-+static struct power_supply *applesmc_hooked_battery;
-+
-+static int applesmc_battery_add(struct power_supply *battery, struct acpi_battery_hook *hook)
++int devm_sbs_battery_hook_register(struct device *dev, struct acpi_battery_hook *hook)
 +{
-+	if (applesmc_hooked_battery)
-+		return 0;
++	sbs_battery_hook_register(hook);
 +
-+	applesmc_hooked_battery = battery;
-+	return power_supply_register_extension(battery, &applesmc_bat_ext, &pdev->dev, NULL);
++	return devm_add_action_or_reset(dev, devm_sbs_battery_hook_unregister, hook);
 +}
-+
-+static int applesmc_battery_remove(struct power_supply *battery, struct acpi_battery_hook *hook)
-+{
-+	if (applesmc_hooked_battery != battery)
-+		return 0;
-+
-+	power_supply_unregister_extension(battery, &applesmc_bat_ext);
-+	applesmc_hooked_battery = NULL;
-+	return 0;
-+}
++EXPORT_SYMBOL_GPL(devm_sbs_battery_hook_register);
 +
 +/*
-+ * Two separate hook registrations are required: Intel Macs register
-+ * their battery through either drivers/acpi/battery.c (ACPI Control
-+ * Method Battery) or drivers/acpi/sbs.c (ACPI Smart Battery System,
-+ * common on hardware with SMBus/SBS fuel-gauge chips), depending on
-+ * model, and each mechanism only sees batteries registered through
-+ * itself. A single struct acpi_battery_hook cannot be registered with
-+ * both, since its embedded list node can only belong to one list at a
-+ * time. Whichever mechanism matches the actual hardware will hook the
-+ * battery; the other simply never finds one to call back for.
++ * This function gets called right after the battery sysfs
++ * attributes have been added, so that the drivers that
++ * define custom sysfs attributes can add their own.
 + */
-+static struct acpi_battery_hook applesmc_battery_hook = {
-+	.name = "Apple SMC Battery Charge Control",
-+	.add_battery = applesmc_battery_add,
-+	.remove_battery = applesmc_battery_remove,
-+};
++static void sbs_battery_hook_add_battery(struct acpi_battery *battery)
++{
++	struct acpi_battery_hook *hook_node, *tmp;
 +
-+static struct acpi_battery_hook applesmc_sbs_battery_hook = {
-+	.name = "Apple SMC Battery Charge Control (SBS)",
-+	.add_battery = applesmc_battery_add,
-+	.remove_battery = applesmc_battery_remove,
-+};
++	mutex_lock(&sbs_hook_mutex);
++	INIT_LIST_HEAD(&battery->list);
++	list_add(&battery->list, &sbs_hook_battery_list);
++	/*
++	 * Since we added a new battery to the list, we need to
++	 * iterate over the hooks and call add_battery for each
++	 * hook that was registered. This usually happens
++	 * when a battery gets hotplugged or initialized
++	 * during the battery module initialization.
++	 */
++	list_for_each_entry_safe(hook_node, tmp, &sbs_hook_list, list) {
++		if (hook_node->add_battery(battery->bat, hook_node)) {
++			/*
++			 * The notification of the hook has failed, to
++			 * prevent further errors we will unload the hook.
++			 */
++			pr_err("error in hook, unloading: %s",
++			       hook_node->name);
++			sbs_battery_hook_unregister_unlocked(hook_node);
++		}
++	}
++	mutex_unlock(&sbs_hook_mutex);
++}
 +
- /*
-  * applesmc_calibrate - Set our "resting" values.  Callers must
-  * hold applesmc_lock.
-@@ -1563,6 +1704,13 @@ static int __init applesmc_init(void)
- 		goto out_light_ledclass;
++static void sbs_battery_hook_remove_battery(struct acpi_battery *battery)
++{
++	struct acpi_battery_hook *hook;
++
++	mutex_lock(&sbs_hook_mutex);
++	/*
++	 * Before removing the hook, we need to remove all
++	 * custom attributes from the battery.
++	 */
++	list_for_each_entry(hook, &sbs_hook_list, list) {
++		hook->remove_battery(battery->bat, hook);
++	}
++	/* Then, just remove the battery from the list */
++	list_del(&battery->list);
++	mutex_unlock(&sbs_hook_mutex);
++}
++
+ /* Smart Battery */
+ static int acpi_battery_add(struct acpi_sbs *sbs, int id)
+ {
+@@ -555,6 +696,8 @@ static int acpi_battery_add(struct acpi_sbs *sbs, int id)
+ 		goto end;
  	}
  
-+	if (smcreg.has_battery_charge_limit) {
-+		if (IS_REACHABLE(CONFIG_ACPI_BATTERY))
-+			battery_hook_register(&applesmc_battery_hook);
-+		if (IS_REACHABLE(CONFIG_ACPI_SBS))
-+			sbs_battery_hook_register(&applesmc_sbs_battery_hook);
-+	}
++	sbs_battery_hook_add_battery(battery);
 +
- 	return 0;
- 
- out_light_ledclass:
-@@ -1589,6 +1737,12 @@ static int __init applesmc_init(void)
- 
- static void __exit applesmc_exit(void)
+       end:
+ 	pr_info("%s [%s]: Battery Slot [%s] (battery %s)\n",
+ 	       ACPI_SBS_DEVICE_NAME, acpi_device_bid(sbs->device),
+@@ -566,8 +709,10 @@ static void acpi_battery_remove(struct acpi_sbs *sbs, int id)
  {
-+	if (smcreg.has_battery_charge_limit) {
-+		if (IS_REACHABLE(CONFIG_ACPI_BATTERY))
-+			battery_hook_unregister(&applesmc_battery_hook);
-+		if (IS_REACHABLE(CONFIG_ACPI_SBS))
-+			sbs_battery_hook_unregister(&applesmc_sbs_battery_hook);
+ 	struct acpi_battery *battery = &sbs->battery[id];
+ 
+-	if (battery->bat)
++	if (battery->bat) {
++		sbs_battery_hook_remove_battery(battery);
+ 		power_supply_unregister(battery->bat);
 +	}
- 	hwmon_device_unregister(hwmon_dev);
- 	applesmc_release_key_backlight();
- 	applesmc_release_light_sensor();
+ }
+ 
+ static int acpi_charger_add(struct acpi_sbs *sbs)
+diff --git a/include/acpi/battery.h b/include/acpi/battery.h
+index c93f16dfb94..ddbfa4ed135 100644
+--- a/include/acpi/battery.h
++++ b/include/acpi/battery.h
+@@ -18,8 +18,24 @@ struct acpi_battery_hook {
+ 	struct list_head list;
+ };
+ 
++/*
++ * battery_hook_register() and friends only see batteries registered by
++ * drivers/acpi/battery.c, the ACPI Control Method Battery driver (ACPI HID
++ * "PNP0C0A"). Batteries registered by drivers/acpi/sbs.c, the ACPI Smart
++ * Battery System driver (ACPI HID "ACPI0002", common on hardware with
++ * SMBus/SBS fuel-gauge chips such as many Intel MacBooks), are invisible
++ * to them; use the sbs_battery_hook_* equivalents below for those. A
++ * caller wanting to support both kinds of hardware needs two separate
++ * struct acpi_battery_hook instances, one per registration call, since a
++ * given instance's embedded list node can only belong to one list at a
++ * time.
++ */
+ void battery_hook_register(struct acpi_battery_hook *hook);
+ void battery_hook_unregister(struct acpi_battery_hook *hook);
+ int devm_battery_hook_register(struct device *dev, struct acpi_battery_hook *hook);
+ 
++void sbs_battery_hook_register(struct acpi_battery_hook *hook);
++void sbs_battery_hook_unregister(struct acpi_battery_hook *hook);
++int devm_sbs_battery_hook_register(struct device *dev, struct acpi_battery_hook *hook);
++
+ #endif
 -- 
 2.55.0
 
