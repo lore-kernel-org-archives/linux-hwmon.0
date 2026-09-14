@@ -1,32 +1,33 @@
-Received: from mail-106111.protonmail.ch (mail-106111.protonmail.ch [79.135.106.111])
+Received: from mail-43172.protonmail.ch (mail-43172.protonmail.ch [185.70.43.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0781F3B0AD3
-	for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 23:37:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0453B27D1;
+	Mon, 14 Sep 2026 23:37:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789429073; cv=none; b=lk9GJJ0/C90LxSxhHuBP/rbozhkxvlWSy0YObGzvHvVeMZdls2McmhdtziGWZ0KTx0YzawY0zQbtI26Nf4fPgc1oGzlrhBxz3r3p4TYzJ82w6LyXUWI41zgh7O6DhuGzKWB5gI4IeBrKa4f8CZb6ZKGDk7/aC73WfuYExVm3SO4=
+	t=1789429075; cv=none; b=vESbIYz1kwmuSXhzaPfoeo04VNe6LKu6DPQ6FFv0e1Hc/Cvrncnmr2YlQSI6VpNQfwCkfQn4bnbu2eHjwZz4Z/sMfThnSYhL9jPFJr1DO+J5FdRLIUIawpEE7AAS7pL3bolWlBFjo1SaF5ixH5NkIfkNmckjEhZnWVtcH8Crkl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789429073; c=relaxed/simple;
-	bh=QAUxjGI5TxT/Xrun8/+iXgykTgc7YxBk6r5VOLa/my8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ar4yVDT6z/+Tx/nTl4K368Wc8hmiFCo8umlU4vudS4byn9UjykMhVYWISMG9vPLXhVjZaFrztNVQU6jwFcDtMUjXIpo/a+STc04TammdLVrSwscvQlmWyy7NmAvjEczc4Yk4+lUR3gpBwS+RLwPgMC5AUKB4CsQONmrezp2wSmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc; spf=pass smtp.mailfrom=vasily.cc; dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b=aGzQ055d; arc=none smtp.client-ip=79.135.106.111
+	s=arc-20240116; t=1789429075; c=relaxed/simple;
+	bh=73dEZSYKQyrnCp6rva3qeY6ZIPnE2gMcsRY7zPXy3mo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=q7aOpp1Yo6ikcUzyG0M580AXPuy4fhbkkQ/csdna04n/LCMIWUV7Zc9DYWqiq+ww2/7Oz8IFvGQ6UDcKirasdpGXGiBrZvytsa+1KbLEVdfMU8tEjvtw0OYI9GgAkEbv+PPbLE6n5h90KAj/y8U/1dD/GypCjSAtBYiNmn3TFxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc; spf=pass smtp.mailfrom=vasily.cc; dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b=rFcH7POk; arc=none smtp.client-ip=185.70.43.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vasily.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b="aGzQ055d"
+	dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b="rFcH7POk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vasily.cc;
-	s=protonmail2; t=1789429067; x=1789688267;
-	bh=YSVnX4Jvacy6T1gV7Hqcr9WgSmXcyvrQmUksEOriBYA=;
-	h=From:To:Cc:Subject:Date:Message-ID:From:To:Cc:Date:Subject:
-	 Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=aGzQ055d3xo0qaK483INjdPOl690K6aRZ6asItwSQI0sRNc//sFyclt0hFuPvxrc3
-	 82jcVeV3YNoAgdlSH/XPnfs6ozuoTtD6fEaEzci2pOJv3Tr9ecUjKEWqT4dizVC70I
-	 VMEkkSp7MI/fKbBUtgEerv/fW2aoVxjRGq14nsWsAQskMqknounYrFE3NZajb3qMCx
-	 TPqsO6L9/MVNfhMoiJZIeqBGODYpbNk1HrZmL+imNy/zMpaiQMwYx3juVt/5CyeFmn
-	 MdlQ41U4fLAQIZ/1ndSqNkTfnZowLDO22CMpqSfbYFH6dXvp88fPnriLjtZODDUBHe
-	 VAvu1o5QOIF/A==
-X-Pm-Submission-Id: 4hkM5P3V9yz1DDKv
+	s=protonmail2; t=1789429069; x=1789688269;
+	bh=afo39gMY1xRYx9X5Pi1btnvze6/snqsc7LiHy0/rX5w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:From:To:
+	 Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=rFcH7POknqLR1leSHsIGj2tHj6lBtpQXFYPrGnONAofETHbu9JyO46f76200gMBxC
+	 X45m7e6C89Pe/7JwimjHLcRpVvjvhX07wEUcnSlRat1CAKDV6J0QnacWE69/ybu0tT
+	 r9kTup1HlWUrQuYK5pUn3h0MptGszmmJDTDAR8avlR9GaawvFcMdb3IhZvm5u0IMNF
+	 NfmKrs+2Oxpipu10O9QVAwS67+Jp7bB6IXIv9GzzGE8zd1DanHajG8ECsB+qj6lz65
+	 xeBLYLxpXzHC9F1aDSDsZvkCD8E/+OHAHFnrYQGtkKv48hamz+k10AnwGAdqhpYDLE
+	 amLtxYAJ5Hz0A==
+X-Pm-Submission-Id: 4hkM5Q6wxDz1DDX8
 From: Vas Zayarskiy <contact@vasily.cc>
 To: linux@roeck-us.net,
 	Aleksa Savic <savicaleksa83@gmail.com>,
@@ -40,10 +41,12 @@ Cc: linux-hwmon@vger.kernel.org,
 	Jonathan Corbet <corbet@lwn.net>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v3 0/4] hwmon: AMPINEL support and shared fixes
-Date: Tue, 15 Sep 2026 02:37:24 +0300
-Message-ID: <20260914233728.22725-1-contact@vasily.cc>
+Subject: [PATCH v3 1/4] HID: generic: Respect specialized drivers match callbacks
+Date: Tue, 15 Sep 2026 02:37:25 +0300
+Message-ID: <20260914233728.22725-2-contact@vasily.cc>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260914233728.22725-1-contact@vasily.cc>
+References: <20260914233728.22725-1-contact@vasily.cc>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -52,76 +55,40 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This revision addresses Guenter's review by separating shared fixes from
-AMPINEL support and leaving the keyboard interface with hid-generic.
+A driver can reject an interface in its match callback even when its ID
+table matches. hid-generic currently yields based on the ID table alone,
+leaving such an interface without a driver.
 
-Changes since v2:
-- Add a HID prerequisite: hid-generic must consult a specialized driver's
-  match callback before yielding. ID-table matching alone makes it yield
-  the keyboard even if the hwmon driver rejects that interface. The AMPINEL
-  match callback accepts only USB interface 1 and retains the transport
-  check before accessing the parent. HID maintainers are copied for review.
-- Widen the shared power/current caches, clamp overflowing power to
-  LONG_MAX, handle unavailable power, and prevent negative Aquastream XT
-  calibration results from wrapping into the unsigned current cache.
-- Expire the initial cache for every device in a separate patch.
-- Use the existing raw-event path for serial numbers, temperatures and
-  timestamps. Store AMPINEL values in hwmon units during decoding.
-- Omit current deviation until its semantics are established; remove
-  AMPINEL keyboard callbacks and the unrelated expiry documentation.
+Consult the callback after matching the ID table so hid-generic can keep
+interfaces declined by specialized drivers. This allows the AMPINEL
+hwmon driver to leave the separate keyboard interface to hid-generic.
 
-Validation:
-- Both modules build and link against Linux 7.2.5. Both changed objects
-  build on this 7.3-rc3 base for x86_64 and i386 with W=1 and Sparse.
-- All 995 captured AMPINEL reports pass the C replay harness with ASan/UBSan.
-  Shared regression cases cover High Flow Next power and unavailable data,
-  existing fan/pump power paths, Aquastream XT current, and initial expiry.
-  The tests reproduce failures with the previous conversion/cache code.
-- A userspace harness extracts the actual core/generic/AMPINEL match
-  functions and tests both driver registration orders, keyboard fallback,
-  non-USB rejection and special-driver overrides. The original hid-generic
-  fails the fallback test. Probe descriptor validation is also covered.
-- All seven Python tests pass. Strict checkpatch passes for all four
-  signed patches. The changed RST renders without warnings.
+The same callback check was proposed previously for Logitech devices:
 
-Both revised modules are now installed on Hearth, Linux 7.2.5. Their loaded
-ELF build IDs match the packaged binaries. All 60 raw USB/hwmon comparisons
-matched across initial loading, telemetry-driver reload, persistent
-activation, deep suspend/resume and reboot. The AMPINEL keyboard stays bound
-to hid-generic, with its input registration unchanged through the reload
-and resume. HID input names and capabilities were preserved across reboot.
-The reboot selected both revised binaries without manual intervention.
-The installation journal had no warnings or faults. Resume reinitialized
-the USB controller and reset several devices including AMPINEL; the same
-warning pattern is present in logs from 2026-08-29, before v3. Both interfaces
-recovered without intervention. No Oops, BUG or call trace was found during
-resume or reboot. Boot had no AMPINEL failure or USB-controller reset warning;
-it retained the expected out-of-tree module notice and existing system
-warnings. Live loading used generic-first order; the opposite order is
-covered only by the userspace harness. Power-off cold boot and alarm-generated
-keys remain untested. Shared-device numeric tests are synthetic. The HID
-prerequisite needs review with the AMPINEL patch.
+Link: https://lkml.iu.edu/hypermail/linux/kernel/2212.0/06724.html
 
-Telemetry units were checked against the device display at idle and under
-load. Channel labels are report order. Alarms, protection configuration,
-negative hotspot temperatures and other firmware remain unverified.
+Assisted-by: LLM sparse
+Signed-off-by: Vas Zayarskiy <contact@vasily.cc>
+---
+ drivers/hid/hid-generic.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-AI assistance: Codex assisted with the implementation, tests and submission
-text; Sparse was used for static analysis.
-
-V2: https://lore.kernel.org/linux-hwmon/20260914220128.287145-1-contact@vasily.cc/
-
-Vas Zayarskiy (4):
-  HID: generic: Respect specialized drivers match callbacks
-  hwmon: (aquacomputer_d5next) Avoid truncating scaled sensor readings
-  hwmon: (aquacomputer_d5next) Expire the initial sensor cache
-  hwmon: (aquacomputer_d5next) Add AMPINEL support
-
- Documentation/hwmon/aquacomputer_d5next.rst |  11 ++
- drivers/hid/hid-generic.c                   |   8 +-
- drivers/hwmon/Kconfig                       |   4 +-
- drivers/hwmon/aquacomputer_d5next.c         | 121 ++++++++++++++++++--
- 4 files changed, 132 insertions(+), 12 deletions(-)
-
-
-base-commit: 46fde107b4e881f179bf02bca69d8a0020561b3c
+diff --git a/drivers/hid/hid-generic.c b/drivers/hid/hid-generic.c
+index c2de91674..ebc38ae76 100644
+--- a/drivers/hid/hid-generic.c
++++ b/drivers/hid/hid-generic.c
+@@ -31,7 +31,13 @@ static int __check_hid_generic(struct device_driver *drv, void *data)
+ 	if (hdrv == &hid_generic)
+ 		return 0;
+ 
+-	return hid_match_device(hdev, hdrv) != NULL;
++	if (!hid_match_device(hdev, hdrv))
++		return 0;
++
++	if (hdrv->match)
++		return hdrv->match(hdev, false);
++
++	return 1;
+ }
+ 
+ static bool hid_generic_match(struct hid_device *hdev,
