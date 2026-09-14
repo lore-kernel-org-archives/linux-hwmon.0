@@ -1,110 +1,58 @@
-Received: from mta0.migadu.com (out-92.mta0.migadu.com [91.218.175.92])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 297A340DB51
-	for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 08:20:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D88BD2F28FC;
+	Mon, 14 Sep 2026 08:21:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789374036; cv=none; b=Y2B28e/CwU7Cj3+0kQCEHAbd3UqTNbTjeDByXFy6A+KQu8ntJieMj5LLLIhGrTklM6Q90dqnjTgfz/gz9Ydu7MHfLi/5FbpJH0mUS6UXDvO+dM8x8lL54VxsQ3TXeurYhd/EapJaF+OS/mO5Ruvv2C3UXASXwJsj8aMPPjfdZ20=
+	t=1789374114; cv=none; b=l0sUE5FPGrwRWBVeEgu5DyrBothgPtniHn6qKFWJ1fCnlFpuWv6o1lmszB4cULuaLFmr6NSTnbuOfgFbg5zGbtOHVRrJvT2dxSYq/niMTJsMM1XP8MDK2SFIHOWxN042uu5cFNBSfajTByuJqwoaZj0RhLRJR9ij7JxcrEZwy8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789374036; c=relaxed/simple;
-	bh=+88ROtLrCstIdLndNiAde/JzZl0qUsawtPJuqfY6oGs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc:
-	 In-Reply-To:References; b=VDgvcwPEwbO2ue+As/cpfTzqeVitm2ZhViGhJXAV9P6qynzRIxxvs9IvjvZdqAvJO5oD6y4c0EfhExgr2/wW5fkkK9dHSj8q8rJOCAv7DzTppSoYCc2xRLu53YuXyFIiRRJ76JuKhzyT/A9WQGcDPJN4OKGL10QeVjYOeSPg7ks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cyHlnfdM; arc=none smtp.client-ip=91.218.175.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789374114; c=relaxed/simple;
+	bh=ZAGRE73qI9THXhpR9Cz31V71k0lX7CTNwxtzFTo9THY=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=gnBGO6cZZoqGI6jlIMVu6F3ZxIHZc1e1NaHTtISp7WzjSKLrn6ZzAaSOdq6bkhcb5gqp+e6HHeEf0tOuAwa80POHpcya1rC/yJ3BDjWUPZSuEMb2azEm3f1gNW25C13ckopPfcD08NLdxcHLuZnWtP3JN6t5RkdE6hD4leRO+Ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gGt4aOox; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cyHlnfdM"
-X-Envelope-To: linux-hwmon@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=+88ROtLrCstIdLndNiAde/JzZl0qUsawtPJuqfY6oGs=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789374032; v=1; x=1789978832;
- b=cyHlnfdMRNSlRtZvnv7GekeN1F7Ww265QlaZ1Rbm7H/cM64WGaTrF52ivdUjX7w3jM5NfCs8
- 6ffayg7JqFoc4UMKpbyTdpZGYgrUmCth9Tf09CZblMVJKVzwvFfT2WVIm5Nw+MbFLT4vxkj0a0A
- cmVMOsCt3oEwxvtthYykf6Kc=
-X-Envelope-To: linux-hwmon@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id efc6a5f5c4e9eadc;
-	Mon, 14 Sep 2026 08:20:31 +0000
-X-Mizu-Trace-ID: efc6a5f5c4e9eadc
-X-Migadu-Flow: FLOW_OUT
-From: Troy Mitchell <troy.mitchell@linux.dev>
-Date: Mon, 14 Sep 2026 16:18:06 +0800
-Subject: [PATCH v5 6/6] riscv: dts: spacemit: Add CTF2301 on K3 CoM260
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gGt4aOox"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B5631F000FF;
+	Mon, 14 Sep 2026 08:21:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789374113;
+	bh=ZAGRE73qI9THXhpR9Cz31V71k0lX7CTNwxtzFTo9THY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=gGt4aOoxi0YbF8xQrhyzjZmSsAxxglOKrgAVy0M3ePBqJJxPejlsupjUU0MCPbzoC
+	 1yacvc/DTzPcqBy5SN8tVm95EhhrmOhpoivjM5kMSkjNMhaJL3KOMZzccYISLUkp+h
+	 zuZrnZg9BAr2GEX3rUlOrGi+yTZ2mBDRsoyIypR7ml4vPgzZjGxclsOrLHlj2rXCmx
+	 KaOvLvnJEvhsxYOiQGPfch9N1Sv2K0g3JYDXyWeGXCSQh0qCMz2MNp+9J2XoQ2fFDA
+	 Ku1OwCcKE5D9O5EXn/RimxnWHrkQH0XreSL2xK9l9mydLJLK7FS5CEUWsElXtDMB8z
+	 qQvftjLH31YDw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v5 1/6] dt-bindings: vendor-prefixes: Add Sensylink
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Troy Mitchell" <troy.mitchell@linux.dev>
+Cc: devicetree@vger.kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org
+In-Reply-To: <20260914-ctl2301-v5-1-b44b81cd2c3c@linux.dev>
+References: <20260914-ctl2301-v5-0-b44b81cd2c3c@linux.dev>
+ <20260914-ctl2301-v5-1-b44b81cd2c3c@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 14 Sep 2026 08:21:52 +0000
+Message-Id: <20260914082153.1B5631F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260914-ctl2301-v5-6-522def70acb4@linux.dev>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Yixun Lan <dlan@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>
-Cc: Troy Mitchell <troy.mitchell@linux.dev>, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
- linux-doc@vger.kernel.org
-X-Mailer: b4 0.15.2
-In-Reply-To: <20260914-ctl2301-v5-0-b44b81cd2c3c@linux.dev>
-References: <20260914-ctl2301-v5-0-b44b81cd2c3c@linux.dev>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1044;
- i=troy.mitchell@linux.dev; h=from:subject:message-id;
- bh=+88ROtLrCstIdLndNiAde/JzZl0qUsawtPJuqfY6oGs=;
- b=owGbwMvMwCU2g/N9w09jE33G02pJDFnL1x77WOvBI3yosrjbVvL49Q1N3uEV8cuvJmz80XtvQ
- fTnvJcNHaUsDGJcDLJiiizdD3i2FfhE2RYIFPrCzGFlAhnCwMUpABPZ9Y/hn3GrUaRJ5VfZdfM6
- W9jDEo+E94n/C9T3iD1f9uYKJ6vxVYb/TsXd7haJBzv06mc+3Na87Mb/hVNuusYbPivJ7au4qPG
- ZHQA=
-X-Developer-Key: i=troy.mitchell@linux.dev; a=openpgp;
- fpr=3FE5535CF1B0E658E57DB59BAE1C2FBEA7DB42E1
 
-Enable I2C6 on the K3 CoM260 module and describe the Sensylink
-CTF2301 temperature sensor and fan controller at address 0x4c.
+> Add the vendor prefix for Sensylink Microelectronics.
+>=20
+> Link: https://en.sensylink.com/
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+> Signed-off-by: Troy Mitchell <troy.mitchell@linux.dev>
 
-Override the I2C6 pin power source at board level because the IO rail
-voltage is board-specific.
+Sashiko has reviewed this patch and found no issues. It looks great!
 
-Signed-off-by: Troy Mitchell <troy.mitchell@linux.dev>
----
- arch/riscv/boot/dts/spacemit/k3-com260.dtsi | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/arch/riscv/boot/dts/spacemit/k3-com260.dtsi b/arch/riscv/boot/dts/spacemit/k3-com260.dtsi
-index 37627963a6492..92dea86397798 100644
---- a/arch/riscv/boot/dts/spacemit/k3-com260.dtsi
-+++ b/arch/riscv/boot/dts/spacemit/k3-com260.dtsi
-@@ -58,6 +58,23 @@ serial-number {
- 	};
- };
- 
-+&i2c6_1_cfg {
-+	i2c6-1-pins {
-+		power-source = <3300>;
-+	};
-+};
-+
-+&i2c6 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c6_1_cfg>;
-+	status = "okay";
-+
-+	temperature-sensor@4c {
-+		compatible = "sensylink,ctf2301";
-+		reg = <0x4c>;
-+	};
-+};
-+
- &i2c8 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&i2c8_cfg>;
-
--- 
-2.55.0
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914-ctl2301-v5=
+-0-b44b81cd2c3c@linux.dev?part=3D1
 
