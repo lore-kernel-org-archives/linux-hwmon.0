@@ -1,33 +1,33 @@
-Received: from mail-43172.protonmail.ch (mail-43172.protonmail.ch [185.70.43.172])
+Received: from mail-244106.protonmail.ch (mail-244106.protonmail.ch [109.224.244.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0453B27D1;
-	Mon, 14 Sep 2026 23:37:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22AA23B38B9;
+	Mon, 14 Sep 2026 23:37:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789429075; cv=none; b=vESbIYz1kwmuSXhzaPfoeo04VNe6LKu6DPQ6FFv0e1Hc/Cvrncnmr2YlQSI6VpNQfwCkfQn4bnbu2eHjwZz4Z/sMfThnSYhL9jPFJr1DO+J5FdRLIUIawpEE7AAS7pL3bolWlBFjo1SaF5ixH5NkIfkNmckjEhZnWVtcH8Crkl4=
+	t=1789429079; cv=none; b=LDCXATZ6LDVxsDkNZsp83kbX31jYotbig79ggTEd9aL/86/SUCOAoyO6/zYIDW1K4N4bzD5PCbS0PcMcumMba2zYHGzIUZ2xzmODy0Fb3DvHF5Ez6gsMrliVhpyYqGDMrQ03stxlSo2VhKIP3dz5QoPvHhew7z9oi96QBKtv2ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789429075; c=relaxed/simple;
-	bh=73dEZSYKQyrnCp6rva3qeY6ZIPnE2gMcsRY7zPXy3mo=;
+	s=arc-20240116; t=1789429079; c=relaxed/simple;
+	bh=/piCQHWynLJMYlEKRDmxYhMXbGX5DC4ax41GYe7gL/Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q7aOpp1Yo6ikcUzyG0M580AXPuy4fhbkkQ/csdna04n/LCMIWUV7Zc9DYWqiq+ww2/7Oz8IFvGQ6UDcKirasdpGXGiBrZvytsa+1KbLEVdfMU8tEjvtw0OYI9GgAkEbv+PPbLE6n5h90KAj/y8U/1dD/GypCjSAtBYiNmn3TFxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc; spf=pass smtp.mailfrom=vasily.cc; dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b=rFcH7POk; arc=none smtp.client-ip=185.70.43.172
+	 MIME-Version; b=OEJEYrPIPoPPycwAxZwLHm1KfuVwwALqjccF0iyMfK9e7WkKx9ovwhyeyZtAwqZwAx9V3aS9nLHPWfRTnfqQdsTlwTUovOnozhTvjHrBwFT9uOFSE4rxA6NCnl128b3VdazB8korAUZA4gDhmecx+EoySZPUgR0vXawCdRPMvQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc; spf=pass smtp.mailfrom=vasily.cc; dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b=GiAsiS1Z; arc=none smtp.client-ip=109.224.244.106
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vasily.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b="rFcH7POk"
+	dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b="GiAsiS1Z"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vasily.cc;
-	s=protonmail2; t=1789429069; x=1789688269;
-	bh=afo39gMY1xRYx9X5Pi1btnvze6/snqsc7LiHy0/rX5w=;
+	s=protonmail2; t=1789429071; x=1789688271;
+	bh=XYDhupGIvX56tzutwpJ8Da0yVLb5FcjQ1xOgf2r+n1w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:From:To:
 	 Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=rFcH7POknqLR1leSHsIGj2tHj6lBtpQXFYPrGnONAofETHbu9JyO46f76200gMBxC
-	 X45m7e6C89Pe/7JwimjHLcRpVvjvhX07wEUcnSlRat1CAKDV6J0QnacWE69/ybu0tT
-	 r9kTup1HlWUrQuYK5pUn3h0MptGszmmJDTDAR8avlR9GaawvFcMdb3IhZvm5u0IMNF
-	 NfmKrs+2Oxpipu10O9QVAwS67+Jp7bB6IXIv9GzzGE8zd1DanHajG8ECsB+qj6lz65
-	 xeBLYLxpXzHC9F1aDSDsZvkCD8E/+OHAHFnrYQGtkKv48hamz+k10AnwGAdqhpYDLE
-	 amLtxYAJ5Hz0A==
-X-Pm-Submission-Id: 4hkM5Q6wxDz1DDX8
+	b=GiAsiS1Z4NWedVAsxKfantIxopq/kqpEnktHNCGm+vlLU3qmBSbpe9tKSTuRtcNdf
+	 Wgwgfr1zcAZDcCcdxW2GfVggd4mRdmCDyELt0585henTi2rX235+0UI7VYKmEomoKl
+	 +eymGYD0B3KfnS0Akf7edxREuJef8S9lQK7qFadue0+sKyb9f2x9JRwLpH+9YTaYTV
+	 FdSQ58Jo/KG59GAhbHtbt3zs2R8z7wI+DiTFbj46bPaoBkftmM67MXS9R42NgfLKhT
+	 SboPrJT8xkWvVFY4n1CPKWP6PvdcDOcnkmTTlukwfoMK4Ngh5BoakhZooPOAUqiaIX
+	 LNTqNInrmsqGw==
+X-Pm-Submission-Id: 4hkM5S5DLtz1DDXF
 From: Vas Zayarskiy <contact@vasily.cc>
 To: linux@roeck-us.net,
 	Aleksa Savic <savicaleksa83@gmail.com>,
@@ -41,9 +41,9 @@ Cc: linux-hwmon@vger.kernel.org,
 	Jonathan Corbet <corbet@lwn.net>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v3 1/4] HID: generic: Respect specialized drivers match callbacks
-Date: Tue, 15 Sep 2026 02:37:25 +0300
-Message-ID: <20260914233728.22725-2-contact@vasily.cc>
+Subject: [PATCH v3 2/4] hwmon: (aquacomputer_d5next) Avoid truncating scaled sensor readings
+Date: Tue, 15 Sep 2026 02:37:26 +0300
+Message-ID: <20260914233728.22725-3-contact@vasily.cc>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260914233728.22725-1-contact@vasily.cc>
 References: <20260914233728.22725-1-contact@vasily.cc>
@@ -55,40 +55,73 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A driver can reject an interface in its match callback even when its ID
-table matches. hid-generic currently yields based on the ID table alone,
-leaving such an interface without a driver.
+High Flow Next power is reported in watts. Multiplying the 16-bit value
+by one million can overflow both the signed intermediate and the u32
+cache. Store power in long, perform the conversion in u64, and clamp to
+LONG_MAX. The other existing power conversions fit in a signed 32-bit
+value. Return ENODATA for unavailable power instead of exposing the
+stored error as a reading.
 
-Consult the callback after matching the ID table so hid-generic can keep
-interfaces declined by specialized drivers. This allows the AMPINEL
-hwmon driver to leave the separate keyboard interface to hid-generic.
-
-The same callback check was proposed previously for Logitech devices:
-
-Link: https://lkml.iu.edu/hypermail/linux/kernel/2212.0/06724.html
+Widen the shared current cache to u32. The Aquastream XT calibration can
+exceed 65535 mA; clamp its negative calibration results to zero before
+assigning to the unsigned cache. This also permits devices with scaled
+aggregate currents to store milliamperes directly.
 
 Assisted-by: LLM sparse
 Signed-off-by: Vas Zayarskiy <contact@vasily.cc>
 ---
- drivers/hid/hid-generic.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/hwmon/aquacomputer_d5next.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hid/hid-generic.c b/drivers/hid/hid-generic.c
-index c2de91674..ebc38ae76 100644
---- a/drivers/hid/hid-generic.c
-+++ b/drivers/hid/hid-generic.c
-@@ -31,7 +31,13 @@ static int __check_hid_generic(struct device_driver *drv, void *data)
- 	if (hdrv == &hid_generic)
- 		return 0;
+diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+index 1ca70e726..9178ac4cb 100644
+--- a/drivers/hwmon/aquacomputer_d5next.c
++++ b/drivers/hwmon/aquacomputer_d5next.c
+@@ -19,6 +19,7 @@
+ #include <linux/hwmon.h>
+ #include <linux/jiffies.h>
+ #include <linux/ktime.h>
++#include <linux/limits.h>
+ #include <linux/module.h>
+ #include <linux/seq_file.h>
+ #include <linux/unaligned.h>
+@@ -599,9 +600,9 @@ struct aqc_data {
+ 	u32 speed_input_min[1];
+ 	u32 speed_input_target[1];
+ 	u32 speed_input_max[1];
+-	u32 power_input[8];
++	long power_input[8];
+ 	u16 voltage_input[8];
+-	u16 current_input[8];
++	u32 current_input[8];
  
--	return hid_match_device(hdev, hdrv) != NULL;
-+	if (!hid_match_device(hdev, hdrv))
-+		return 0;
-+
-+	if (hdrv->match)
-+		return hdrv->match(hdev, false);
-+
-+	return 1;
- }
+ 	/* Label values */
+ 	const char *const *temp_label;
+@@ -976,7 +977,7 @@ static int aqc_legacy_read(struct aqc_data *priv)
  
- static bool hid_generic_match(struct hid_device *hdev,
+ 		/* Calculation derived from linear regression */
+ 		sensor_value = get_unaligned_le16(priv->buffer + AQUASTREAMXT_PUMP_CURR_OFFSET);
+-		priv->current_input[0] = DIV_ROUND_CLOSEST(sensor_value * 176, 100) - 52;
++		priv->current_input[0] = max(DIV_ROUND_CLOSEST(sensor_value * 176, 100) - 52, 0);
+ 
+ 		sensor_value = get_unaligned_le16(priv->buffer + AQUASTREAMXT_PUMP_VOLTAGE_OFFSET);
+ 		priv->voltage_input[0] = DIV_ROUND_CLOSEST(sensor_value * 1000, 61);
+@@ -1070,6 +1071,8 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 		}
+ 		break;
+ 	case hwmon_power:
++		if (priv->power_input[channel] == -ENODATA)
++			return -ENODATA;
+ 		*val = priv->power_input[channel];
+ 		break;
+ 	case hwmon_pwm:
+@@ -1426,7 +1429,8 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
+ 			priv->power_input[0] = -ENODATA;
+ 		else
+ 			priv->power_input[0] =
+-			    get_unaligned_be16(data + HIGHFLOWNEXT_POWER) * 1000000;
++			    min_t(u64, get_unaligned_be16(data + HIGHFLOWNEXT_POWER) * 1000000ULL,
++				  LONG_MAX);
+ 
+ 		priv->voltage_input[0] = get_unaligned_be16(data + HIGHFLOWNEXT_5V_VOLTAGE) * 10;
+ 		priv->voltage_input[1] =
