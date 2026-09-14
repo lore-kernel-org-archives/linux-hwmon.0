@@ -1,187 +1,304 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs2-f12.google.com (mail-vs2-f12.google.com [74.125.227.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E883D9DB1
-	for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 11:55:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789386902; cv=none; b=AMZsSE/WcW/v2PtfAJiuQEx0uwdU8QbvbUIg+xAkez38bxyeMU5No9uH6HC/e4hItxFtuUCN1FK4baKOpHIkVqptpVkDdw2qhrm2OvsPUPBwPn58s+F8uOjkUX/uPv6I+qwaUYm8qE5CMOwMUZ91E0LufcESp3lwoFynlvZKpV0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789386902; c=relaxed/simple;
-	bh=ld9A26SqQN1lVgq8lzuhQCSXMCTt+XvGo1LR9CKMKkM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ctpXcPXgt5ISbL5TIke/ax9LGvX44R7Khy6SUAmQ+3leGbjzg+i0zFp0Ndo1bFVBFYkMgHYMA6ReYSaAOacWl8RLebh+UG8pbPuhcQXDPlsswftbRZOKNWni3TxpziWKkZSIZGKTRP6Z+1+Yf2AvVa1JR1f3tkOlD+5FYMKxGQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ivRRYdKg; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8564582F3
+	for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 12:06:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789387601; cv=pass; b=ofsojuvb3QAE2UKkTtRbIQDiKT5Q9suPm5qNjkghvLvPSv2/9vLCBtNG46BMYiBXQhNNYi/WuCw+IX9lEWl//7XNRYd+nnibeTuUCX2NXVt+wSZSibfON7c7XHcYRHcy3BbXuo7gO+YsynU/zWaaemhPAZTOEXTqyHI0iHpJGu0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789387601; c=relaxed/simple;
+	bh=dAQLslpPj1WS5Id3+o7zx/jx5tvNIaiKqLwvi1h/rME=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HG4jhnb8hZ7M1Lpv3xAvv2Gg96WZtym3HUdcnV710wpCAZhEcxNbQJqPxQuaG/NHaHKoonNcCDd3pSNMkejyWNsXLgvwYyhMlnFK9DQ+o4Mwz4KFiETcSyV5eetm5esDmv7lH2cOvB42ZOmHZJuusDG9sOGJaj8eyvoy4CcC8mc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T+t5UHxD; arc=pass smtp.client-ip=74.125.227.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ivRRYdKg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AC9C1F0089C;
-	Mon, 14 Sep 2026 11:55:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789386900;
-	bh=imPMqOZOw7gRpXZn9Jr3Ro3jOMD4qxo2hGxpY7Zp3Pw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ivRRYdKgKyvqL1FIZhyx+EpdMv794Hbscrw07ZqlzFV9T+15de5aieWIwwNTUop+d
-	 F53sR1PXB73Jq4vPUoPvEqX13r/qWJhDfLN/o108OHr5jaVUPAA3jHeF1w/8wjF8Rw
-	 ficHt4N+zunf2dzSCl1roSf4y038qw+l5wZHLGUZwaSxeYIGXIe56hd5Icsyh9P0Rg
-	 KAAhs+SbqXTLnNDVMeBgp6CyJ6x50XuV4tnYkNQYQ7T5OQ90tFUYmQKYa1V6x1sGGk
-	 2x/LIB5OT2OE6oxBDFXVWMBUSwrN2Kp+8Sh95WajnMzMJdqcizzRyGc0vFNq9ZAkje
-	 Xjt7ZZ4RKBaVw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4] hwmon: (gpio-fan) fix pm_runtime imbalance for
- alarm-only fans
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Cong Nguyen" <congnt264@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260914113856.1987128-1-congnt264@gmail.com>
-References: <20260914113856.1987128-1-congnt264@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 14 Sep 2026 11:54:59 +0000
-Message-Id: <20260914115500.6AC9C1F0089C@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T+t5UHxD"
+Received: by mail-vs2-f12.google.com with SMTP id ada2fe7eead31-7935ecb5d8fso466542137.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 05:06:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789387597; cv=none;
+        d=google.com; s=arc-20260327;
+        b=QTTSiVkav2GpDpp5J+agHvFnbo1+Nz/XbBR7pIHK1aqP58pXjXhnXztD0PqJvuxyB6
+         wtHbKM5l3nI9y/wd9ShAnWYxshazJ7jY0M+hzfhT0O1VB5mPQ0iKRff8bDRV936BRQMy
+         QOv3HLG6gSAy3noUyaMITkSgrflfuFwQxEL5nCWwZI/CiVEaI7vABk6KVFpntq9BUiC8
+         wIm+7x2ittWCyQeKuYXH+iSQhV4KWeXXUzfuLzTpSjZVlExxOT7pu4D9viw5WGYsRBGa
+         n46CpsNJ+iC4XOglUvVhR/wWYIEGc7GXjEFgsId0q1vyWB54RUsdU6udVM6rP8RpW1gs
+         nPRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=W3f2wMp0p9GaB9K8wv/S8QvGH6qPT0Hv0ZLvGcfuJsk=;
+        fh=TC0JMAHgrZm8g6ZCSQbGTTaMZ/u5IUMO2ZHBgtJezis=;
+        b=AcVBxXDNq5Pq3iILnu5fQ3ElOYqHUiZ1bMzEH3xVS23def0FfJLNCKTvn+WZ/yacGU
+         bTdreDxFY/F7FFD9Nb29BVtGv7fNNKp3RvhnKrw3OU6QTZdjDPY6EJdnxL461MKXyIPq
+         vYJBrpQ08WDV7MbztLacxg/8177g70LXW3r5/wowLZRVEWq2+PVFAZ0Xc7OMSfaQzRul
+         Ewe7kDuM7ZjB6Iq+XvkywmWmzDkxyOqWrkut0+52uVewvZQnpHzZRyVLSvSnoH3qDRhv
+         aLOMkXsvieU91ZDfkVqQubw73wgYfnKwK9SyblQcfO6mLsf4cV8vlh2R2HVIssCIgQwG
+         uw+g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789387597; x=1789992397; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=W3f2wMp0p9GaB9K8wv/S8QvGH6qPT0Hv0ZLvGcfuJsk=;
+        b=T+t5UHxDGs+bcV9iWAS7LO+KmsIPI42yGhLz5oEfqs6SPEpvPhxF98Shja7irTkSLq
+         A/C90OkRujFq8qSq/yEHy++HH4iUyE0wSYdZaaKK6F2/2rKFj4tGB9ITtt1mQyr/34bt
+         ebt2S2et3mM2nyl/d+YKLvlyACRY+YDpQqKT3DF55ElI0wHLFCiVzMMA6Rzvy5jFWkdB
+         G1+TFvJXZCt3+6S4Rd1kdERxfJ046GRc5bBg+qmNozXpi5i/ELXOVFqEwSZ6/yd88PmC
+         Jk6mJbDS+HnoxWDvc5TeK0rws5vIEArdViBJSA3w790OiU+AKtN7CKmB09dkV0fJDfIH
+         X95g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789387597; x=1789992397;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=W3f2wMp0p9GaB9K8wv/S8QvGH6qPT0Hv0ZLvGcfuJsk=;
+        b=ou2MAb/FaNWIwSMEuYTKxKbPB7pX0CGL+APEOaonmidgXup60sgZRw+oDh8L0wGdhd
+         t6APTfdkxH7HGQ+QrK0GMJMhPv0xu3CmNvUx2o6/iJ3wo+vu9UJm7ZlOm8Qn0vWPxBYr
+         1QDIe8U5j1eL++Th7Z16yMbRM6XdXgGqXO4EQy0Ej6r1RZ7HgpDh0yNC0jfxOizKE4do
+         TFaBmA4mFKDnq2xKOlwXfRY3w2tBVGi0usSv5YEtLZwA8YOaWtmRQ4F2XYO1tty7zyCN
+         Vq8yorOY36mVLgFN9YS18HhLTCyeL+5VR+6N/Kc8RLN/jr8Fq9yBUVzSS2xpJNhoPAxq
+         NNDg==
+X-Forwarded-Encrypted: i=1; AKwUvBwkfberoXDUQWT3kB8muLDQrXHHiv1xOHf74WPuusR1PeZqXLGP2aMhm0NRzbTZw/hVfkla+ssEJ6DnyA==@vger.kernel.org
+X-Gm-Message-State: AFuF++lio/7xZIZEntm2VE0pcXBxvBjMVufhic3Vge5h8XQWVWpbhBTu
+	TwF9e9FkwAFXIpxoXdOmgYdLarjyRQJPdJ3kXibO6GFnTEz3SrfpJh77+yGRW4Oxui5RVZfYXD8
+	3xqKl13X1iGE9K1ofs/D6ysX3k2iW0k0=
+X-Gm-Gg: AYBFou0k9xKnYsd/i64YSVxUplEhe2UddDCY5gtQJHr7p8V1o/lOc7a17F6wgW8yqna
+	TNsb/RwhKyvTMjFAsk+PSBnmSCvmlg+XqOx8r7Gr53s3YTbbAI9WQPIG+/+AVz8yCkJUBqz3oZ3
+	d3uqzbw5SvL0y2BO7+Jka/+hXd9Ftw+Jp6Sd/5wjz5Z1NKl2JohBHfXP25j+tKaE/kY4o3DpEAP
+	Gy0XuoN/Q7ILHpYnCWGV6E5OBKltjy846dHrjtbyMyEmfve+bev7uKtMH6u5PSRhBslAV2IcDEf
+	g/sgJYt7azykMk6rM6UMahefg62W3HPRGWa4dNWZHuvffqJq7EoFtTZfmw/3qw7MHrjP
+X-Received: by 2002:a05:6102:a50:b0:79c:23df:6fc1 with SMTP id
+ ada2fe7eead31-79c23df7745mr548775137.2.1789387596957; Mon, 14 Sep 2026
+ 05:06:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260907-add-raa229639-and-raa229640-v1-0-8f7218cba85d@gmail.com>
+ <20260907-add-raa229639-and-raa229640-v1-1-8f7218cba85d@gmail.com>
+ <20260907-chimp-pectin-20f4ea3b772c@spud> <CAPBH0A9GZSD5R657xo1woijKfgS6gecUND4uabguaqUON2exXw@mail.gmail.com>
+ <20260908-dinner-atrophy-757595146656@spud>
+In-Reply-To: <20260908-dinner-atrophy-757595146656@spud>
+From: Colin Huang <u8813345@gmail.com>
+Date: Mon, 14 Sep 2026 20:06:25 +0800
+X-Gm-Features: AcwNN1WwTccuI-E0Tg8O_HU6Y7-t9R9kzYG63DP3-KVuGmrC7El7wKFW8D4dhcc
+Message-ID: <CAPBH0A9yKhvDA_pda45Me1c0tXcSj3zLqLoFgUOQj3MES0Mk1A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pmbus: isl68137: Add Renesas
+ RAA229639 and RAA229640
+To: Conor Dooley <conor@kernel.org>
+Cc: Colin Huang <colin.huang2@amd.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	Grant Peltier <grant.peltier.jg@renesas.com>, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+Conor Dooley <conor@kernel.org> =E6=96=BC 2026=E5=B9=B49=E6=9C=889=E6=97=A5=
+=E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=8812:57=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Tue, Sep 08, 2026 at 02:31:40PM +0800, Colin Huang wrote:
+> > Conor Dooley <conor@kernel.org> =E6=96=BC 2026=E5=B9=B49=E6=9C=888=E6=
+=97=A5=E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=881:01=E5=AF=AB=E9=81=93=EF=BC=9A
+> > >
+> > > On Mon, Sep 07, 2026 at 03:03:29PM +0800, Colin Huang wrote:
+> > > > From: Colin Huang <u8813345@gmail.com>
+> > > >
+> > > > Add Device Tree compatible strings for Renesas RAA229639 and
+> > > > RAA229640 PMBus devices.
+> > >
+> > > Driver change suggests fallback compatibles could be used.
+> > > Why aren't they? If they can be, add them. Otherwise, explain why not=
+ in
+> > > your commit message.
+> > >
+> > > pw-bot: changes-requested
+> > >
+> > > Thanks,
+> > > Conor.
+> > >
+> > Hi Conor
+> >   Thanks for the review.
+> >
+> >   I didn't add a fallback compatible because I only have document for
+> > RAA229639 and RAA229640
+> >   and could not verify full DT level compatibility with any existing
+> > supported devices. While both devices
+> >   are handled by the existing raa_dmpvr2_2rail driver variant, I don't
+> > have sufficient information to establish
+> >   a compatible fallback relationship.
+>
+> Given that the match data table looks like this:
+> static const struct of_device_id isl68137_of_match[] =3D {
+>         { .compatible =3D "isil,isl68137", .data =3D (void *)raa_dmpvr1_2=
+rail },
+>         { .compatible =3D "renesas,isl68220", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "renesas,isl68221", .data =3D (void *)raa_dmpvr=
+2_3rail },
+>         { .compatible =3D "renesas,isl68222", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "renesas,isl68223", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "renesas,isl68224", .data =3D (void *)raa_dmpvr=
+2_3rail },
+>         { .compatible =3D "renesas,isl68225", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "renesas,isl68226", .data =3D (void *)raa_dmpvr=
+2_3rail },
+>         { .compatible =3D "renesas,isl68227", .data =3D (void *)raa_dmpvr=
+2_1rail },
+>         { .compatible =3D "renesas,isl68229", .data =3D (void *)raa_dmpvr=
+2_3rail },
+>         { .compatible =3D "renesas,isl68233", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "renesas,isl68239", .data =3D (void *)raa_dmpvr=
+2_3rail },
+>
+>         { .compatible =3D "renesas,isl69222", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "renesas,isl69223", .data =3D (void *)raa_dmpvr=
+2_3rail },
+>         { .compatible =3D "renesas,isl69224", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "renesas,isl69225", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "renesas,isl69227", .data =3D (void *)raa_dmpvr=
+2_3rail },
+>         { .compatible =3D "renesas,isl69228", .data =3D (void *)raa_dmpvr=
+2_3rail },
+>         { .compatible =3D "renesas,isl69234", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "renesas,isl69236", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "renesas,isl69239", .data =3D (void *)raa_dmpvr=
+2_3rail },
+>         { .compatible =3D "renesas,isl69242", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "renesas,isl69243", .data =3D (void *)raa_dmpvr=
+2_1rail },
+>         { .compatible =3D "renesas,isl69247", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "renesas,isl69248", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "renesas,isl69254", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "renesas,isl69255", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "renesas,isl69256", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "renesas,isl69259", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "isil,isl69260", .data =3D (void *)raa_dmpvr2_2=
+rail },
+>         { .compatible =3D "renesas,isl69268", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>         { .compatible =3D "isil,isl69269", .data =3D (void *)raa_dmpvr2_3=
+rail },
+>         { .compatible =3D "renesas,isl69298", .data =3D (void *)raa_dmpvr=
+2_2rail },
+>
+>         { .compatible =3D "renesas,raa228000", .data =3D (void *)raa_dmpv=
+r2_hv },
+>         { .compatible =3D "renesas,raa228004", .data =3D (void *)raa_dmpv=
+r2_hv },
+>         { .compatible =3D "renesas,raa228006", .data =3D (void *)raa_dmpv=
+r2_hv },
+>         { .compatible =3D "renesas,raa228228", .data =3D (void *)raa_dmpv=
+r2_2rail_nontc },
+>         { .compatible =3D "renesas,raa228244", .data =3D (void *)raa_dmpv=
+r2_2rail_nontc },
+>         { .compatible =3D "renesas,raa228246", .data =3D (void *)raa_dmpv=
+r2_2rail_nontc },
+>         { .compatible =3D "renesas,raa229001", .data =3D (void *)raa_dmpv=
+r2_2rail },
+>         { .compatible =3D "renesas,raa229004", .data =3D (void *)raa_dmpv=
+r2_2rail },
+>         { .compatible =3D "renesas,raa229621", .data =3D (void *)raa_dmpv=
+r2_2rail },
+>         { },
+> };
+>
+> It's probably pretty safe to assume that a fallback would work here,
+> given how many devices are served by the same data structures but
+> maybe one of the Renesas folks on CC can confirm that for us.
+> At the very least, you have documents for two devices and should be able
+> to confirm if they're compatible with one another.
+>
+> Thanks,
+> Conor.
+>
+Hi Conor,
+  Thanks for the review.
+  I found a very similar precedent here:
+      Link: https://lore.kernel.org/r/20260325090208.857-2-dawei.liu.jy@ren=
+esas.com
+      RAA228942 and RAA228943 use renesas,raa228244 as fallback compatible
 
-New issues:
-- [High] If pm_runtime_resume_and_get() fails during probe, the devres clea=
-nup path drops a PM reference that was never acquired, causing a runtime PM=
- usage counter underflow. The patch attempts to fix early probe underflows =
-by adding a `pm_enabled` guard, but prematurely sets it to `true` before su=
-ccessfully acquiring the reference.
+  Therefore, I plan to followthe same approach:
+  RAA229639 and RAA229640 also use renesas,raa228244 as fallback compatible=
+.
 
-Pre-existing issues:
-- [High] Sysfs attributes are exposed to userspace before runtime PM is ini=
-tialized, allowing concurrent writes to interact with uninitialized PM stat=
-e and corrupt the PM usage counter.
-- [High] Treating non-fatal errors from `pm_runtime_put_sync()` (like `-EAG=
-AIN`) as fatal errors leaves the driver's software state permanently desync=
-hronized from the hardware state, leading to subsequent PM usage counter un=
-derflows.
---
+```
+@@ -60,13 +60,13 @@ properties:
+           - renesas,raa229001
+           - renesas,raa229004
+           - renesas,raa229621
 
-commit 394e1be2ff739d7471e6b17d6005457a66be35ae
-Author: Cong Nguyen <congnt264@gmail.com>
+       - items:
+           - enum:
+               - renesas,raa228942
+               - renesas,raa228943
++              - renesas,raa229639
++              - renesas,raa229640
+           - const: renesas,raa228244
 
-hwmon: (gpio-fan) fix pm_runtime imbalance for alarm-only fans
+   reg:
+```
+Does this look reasonable?
 
-This commit registers the PM runtime disable cleanup before
-pm_runtime_enable() is called to fix an imbalance for alarm-only fans.
-It also adds a pm_enabled guard and a mutex to protect the enable block.
+Best regards,
+Colin Huang
 
-Link: https://lore.kernel.org/r/20260901111903.660681-1-congnt264@gmail.com
-
-> diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-> --- a/drivers/hwmon/gpio-fan.c
-> +++ b/drivers/hwmon/gpio-fan.c
-> @@ -528,10 +529,21 @@ static void gpio_fan_stop(void *data)
->  	struct gpio_fan_data *fan_data =3D data;
-> =20
->  	mutex_lock(&fan_data->lock);
-> -	set_fan_speed(data, 0);
-> +	/* set_fan_speed(0) drops a PM ref; only valid once PM is enabled. */
-> +	if (fan_data->pm_enabled)
-> +		set_fan_speed(data, 0);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but non-fatal errors from
-pm_runtime_put_sync() appear to be treated as fatal in set_fan_speed().
-
-When set_fan_speed() turns off the fan, it physically stops the fan and then
-calls pm_runtime_put_sync():
-
-set_fan_speed()
-   ...
-   if (fan_data->speed_index > 0 && speed_index =3D=3D 0) {
-       ret =3D pm_runtime_put_sync(fan_data->dev);
-       if (ret < 0 && ret !=3D -ENOSYS)
-           return ret;
-   }
-
-If the PM core returns -EAGAIN, set_fan_speed() returns immediately without
-updating fan_data->speed_index =3D 0.
-
-The hardware is now OFF, but the software state remains ON.
-
-A subsequent sysfs write to turn the fan off will cause set_fan_speed() to
-call pm_runtime_put_sync() a second time, dropping a PM reference it no
-longer holds.
-
-Does set_fan_speed() need to update the software state even if
-pm_runtime_put_sync() returns a non-fatal error like -EAGAIN?
-
-> +	else
-> +		__set_fan_ctrl(fan_data, fan_data->speed[0].ctrl_val);
->  	mutex_unlock(&fan_data->lock);
-> +}
-
-[ ... ]
-
-> @@ -586,16 +603,22 @@ static int gpio_fan_probe(struct platform_device *p=
-dev)
->  			return err;
->  	}
-> =20
-> +	/* Lock so a racing sysfs write can't double-take a PM ref here. */
-> +	mutex_lock(&fan_data->lock);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but this lock doesn't fully close
-the race window.
-
-Sysfs attributes are exposed to userspace before runtime PM is initialized:
-
-gpio_fan_probe()
-   ...
-   fan_data->hwmon_dev =3D devm_hwmon_device_register_with_groups(...);
-
-A userspace process can immediately write to the pwm1 attribute, triggering
-pwm1_store() and set_fan_speed().
-
-If the user writes 0 during this window, set_fan_speed() calls
-pm_runtime_put_sync() while PM is disabled.
-
-This unconditionally decrements the usage counter and causes an underflow.
-
-Does this lock need to be taken earlier, or should PM be initialized before
-hwmon registration?
-
->  	pm_runtime_set_suspended(&pdev->dev);
->  	pm_runtime_enable(&pdev->dev);
-> +	fan_data->pm_enabled =3D true;
->  	/* If current GPIO state is active, mark RPM as active as well */
->  	if (fan_data->speed_index > 0) {
->  		int ret;
-> =20
->  		ret =3D pm_runtime_resume_and_get(&pdev->dev);
-> -		if (ret)
-> +		if (ret) {
-> +			mutex_unlock(&fan_data->lock);
->  			return ret;
-> +		}
-
-[Severity: High]
-If pm_runtime_resume_and_get() fails here, does it lead to a runtime PM
-usage counter underflow?
-
-Because fan_data->pm_enabled is set to true before the reference is
-successfully acquired, a failure from pm_runtime_resume_and_get()
-(e.g. regulator failure) will return an error, triggering the devres
-LIFO teardown.
-
-The teardown calls gpio_fan_stop(), which checks pm_enabled and then calls
-set_fan_speed(data, 0).
-
-Since the initial state was active, this calls pm_runtime_put_sync(),
-dropping a PM reference the driver never successfully acquired.
-
-Should pm_enabled only be set to true after the initial PM reference is
-successfully acquired?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914113856.1987=
-128-1-congnt264@gmail.com?part=3D1
+> >
+> >   I will clarify this in commit message in v2.
+> >
+> > Thanks.
+> > Colin
+> > > >
+> > > > Signed-off-by: Colin Huang <u8813345@gmail.com>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/hwmon/pmbus/isil,isl68137.yaml |=
+ 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/isil,isl=
+68137.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/isil,isl68137.ya=
+ml
+> > > > index 8216cdf758d8..3537c7ddfb09 100644
+> > > > --- a/Documentation/devicetree/bindings/hwmon/pmbus/isil,isl68137.y=
+aml
+> > > > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/isil,isl68137.y=
+aml
+> > > > @@ -60,6 +60,8 @@ properties:
+> > > >            - renesas,raa229001
+> > > >            - renesas,raa229004
+> > > >            - renesas,raa229621
+> > > > +          - renesas,raa229639
+> > > > +          - renesas,raa229640
+> > > >
+> > > >        - items:
+> > > >            - enum:
+> > > >
+> > > > --
+> > > > 2.34.1
+> > > >
