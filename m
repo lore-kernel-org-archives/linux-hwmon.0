@@ -1,33 +1,33 @@
-Received: from mail-244106.protonmail.ch (mail-244106.protonmail.ch [109.224.244.106])
+Received: from mail-43171.protonmail.ch (mail-43171.protonmail.ch [185.70.43.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22AA23B38B9;
-	Mon, 14 Sep 2026 23:37:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305243B38BD;
+	Mon, 14 Sep 2026 23:37:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789429079; cv=none; b=LDCXATZ6LDVxsDkNZsp83kbX31jYotbig79ggTEd9aL/86/SUCOAoyO6/zYIDW1K4N4bzD5PCbS0PcMcumMba2zYHGzIUZ2xzmODy0Fb3DvHF5Ez6gsMrliVhpyYqGDMrQ03stxlSo2VhKIP3dz5QoPvHhew7z9oi96QBKtv2ds=
+	t=1789429079; cv=none; b=h5kSDHgYV6emvwSNRDlHJNrZnLyC/LmLUn/1VJqF/PHUpVDbYxt+ghwNcXMBLk5il73yZO6nAtT1tL5slgT3vR+UZQo4XdePk96wDdkodcuOYxc0G0npV6HK7Ptt9/iZpFXAwMk0MkMoJ1KozK7OS4tt+5Rzug4KZMn4ONzqyWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789429079; c=relaxed/simple;
-	bh=/piCQHWynLJMYlEKRDmxYhMXbGX5DC4ax41GYe7gL/Y=;
+	bh=UNFThLNzlgQn3xGsJH+W8fOTAc4yA9tzNHzeyyZNtG8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OEJEYrPIPoPPycwAxZwLHm1KfuVwwALqjccF0iyMfK9e7WkKx9ovwhyeyZtAwqZwAx9V3aS9nLHPWfRTnfqQdsTlwTUovOnozhTvjHrBwFT9uOFSE4rxA6NCnl128b3VdazB8korAUZA4gDhmecx+EoySZPUgR0vXawCdRPMvQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc; spf=pass smtp.mailfrom=vasily.cc; dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b=GiAsiS1Z; arc=none smtp.client-ip=109.224.244.106
+	 MIME-Version; b=N4mBcHeZSTxW9hvOKvrLYf4WXc3E3VKTqqYZkDKWTjutuctV9Oj0nqoMSsQzX6vMy/nK5N2346+OlaTExNtbPgMOT0IIbqM6yY1/tRelrwCmSkcljKA44WQZMzKEwhKEy2FwRF3fPoepip8D1Hnyh0NCz43049sU2bz0sN5eNXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc; spf=pass smtp.mailfrom=vasily.cc; dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b=NrUN4bkS; arc=none smtp.client-ip=185.70.43.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vasily.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b="GiAsiS1Z"
+	dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b="NrUN4bkS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vasily.cc;
-	s=protonmail2; t=1789429071; x=1789688271;
-	bh=XYDhupGIvX56tzutwpJ8Da0yVLb5FcjQ1xOgf2r+n1w=;
+	s=protonmail2; t=1789429072; x=1789688272;
+	bh=4tZj5Jn525QkA17zwkfjXmztpwCqZhcxjdiG+hyLmBM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:From:To:
 	 Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=GiAsiS1Z4NWedVAsxKfantIxopq/kqpEnktHNCGm+vlLU3qmBSbpe9tKSTuRtcNdf
-	 Wgwgfr1zcAZDcCcdxW2GfVggd4mRdmCDyELt0585henTi2rX235+0UI7VYKmEomoKl
-	 +eymGYD0B3KfnS0Akf7edxREuJef8S9lQK7qFadue0+sKyb9f2x9JRwLpH+9YTaYTV
-	 FdSQ58Jo/KG59GAhbHtbt3zs2R8z7wI+DiTFbj46bPaoBkftmM67MXS9R42NgfLKhT
-	 SboPrJT8xkWvVFY4n1CPKWP6PvdcDOcnkmTTlukwfoMK4Ngh5BoakhZooPOAUqiaIX
-	 LNTqNInrmsqGw==
-X-Pm-Submission-Id: 4hkM5S5DLtz1DDXF
+	b=NrUN4bkSpGQmbk0q5mJWBGEUR3FTs4IG4cmmfIy8JFQ5dYMCPWD6M/tmHhbtaErOf
+	 pRNZmq79QAPVhUIew2K2wQjGCwsnfFMOLItHylxYayMoikjqCHiJxxrC/MGBXveB13
+	 bIIHRwbr+pogcB0LhMi5uTbyzuF/YdEi5eavHess1r6SXAMjUwk4ZT7QA/QO2Kpi5J
+	 B2jiC2MANlGWAHd2CJuFGk61AXIXxf0HcXgKZ3F/lnCCYXWysShU6OzP5qE2VF7Y3V
+	 qe5DS+UndK3FKG3JKBKCJg3jF6OfZWhyiJMzr813VZphEM1fvj2RcSSAa4hD55ul0E
+	 fTPWKRz/hjfaQ==
+X-Pm-Submission-Id: 4hkM5V46g4z1DDKv
 From: Vas Zayarskiy <contact@vasily.cc>
 To: linux@roeck-us.net,
 	Aleksa Savic <savicaleksa83@gmail.com>,
@@ -41,9 +41,9 @@ Cc: linux-hwmon@vger.kernel.org,
 	Jonathan Corbet <corbet@lwn.net>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v3 2/4] hwmon: (aquacomputer_d5next) Avoid truncating scaled sensor readings
-Date: Tue, 15 Sep 2026 02:37:26 +0300
-Message-ID: <20260914233728.22725-3-contact@vasily.cc>
+Subject: [PATCH v3 3/4] hwmon: (aquacomputer_d5next) Expire the initial sensor cache
+Date: Tue, 15 Sep 2026 02:37:27 +0300
+Message-ID: <20260914233728.22725-4-contact@vasily.cc>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260914233728.22725-1-contact@vasily.cc>
 References: <20260914233728.22725-1-contact@vasily.cc>
@@ -55,73 +55,29 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-High Flow Next power is reported in watts. Multiplying the 16-bit value
-by one million can overflow both the signed intermediate and the u32
-cache. Store power in long, perform the conversion in u64, and clamp to
-LONG_MAX. The other existing power conversions fit in a signed 32-bit
-value. Return ENODATA for unavailable power instead of exposing the
-stored error as a reading.
+The initial update timestamp makes the cache expire at the current
+jiffy. Since aqc_read() uses time_after(), a read in that same jiffy can
+expose zero-initialized data or skip the first legacy report request.
 
-Widen the shared current cache to u32. The Aquastream XT calibration can
-exceed 65535 mA; clamp its negative calibration results to zero before
-assigning to the unsigned cache. This also permits devices with scaled
-aggregate currents to store milliamperes directly.
+Initialize the timestamp one tick earlier so the cache starts expired
+for every supported device.
 
 Assisted-by: LLM sparse
 Signed-off-by: Vas Zayarskiy <contact@vasily.cc>
 ---
- drivers/hwmon/aquacomputer_d5next.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/hwmon/aquacomputer_d5next.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-index 1ca70e726..9178ac4cb 100644
+index 9178ac4cb..b58f5b5c9 100644
 --- a/drivers/hwmon/aquacomputer_d5next.c
 +++ b/drivers/hwmon/aquacomputer_d5next.c
-@@ -19,6 +19,7 @@
- #include <linux/hwmon.h>
- #include <linux/jiffies.h>
- #include <linux/ktime.h>
-+#include <linux/limits.h>
- #include <linux/module.h>
- #include <linux/seq_file.h>
- #include <linux/unaligned.h>
-@@ -599,9 +600,9 @@ struct aqc_data {
- 	u32 speed_input_min[1];
- 	u32 speed_input_target[1];
- 	u32 speed_input_max[1];
--	u32 power_input[8];
-+	long power_input[8];
- 	u16 voltage_input[8];
--	u16 current_input[8];
-+	u32 current_input[8];
+@@ -1531,7 +1531,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 	priv->hdev = hdev;
+ 	hid_set_drvdata(hdev, priv);
  
- 	/* Label values */
- 	const char *const *temp_label;
-@@ -976,7 +977,7 @@ static int aqc_legacy_read(struct aqc_data *priv)
+-	priv->updated = jiffies - STATUS_UPDATE_INTERVAL;
++	priv->updated = jiffies - STATUS_UPDATE_INTERVAL - 1;
  
- 		/* Calculation derived from linear regression */
- 		sensor_value = get_unaligned_le16(priv->buffer + AQUASTREAMXT_PUMP_CURR_OFFSET);
--		priv->current_input[0] = DIV_ROUND_CLOSEST(sensor_value * 176, 100) - 52;
-+		priv->current_input[0] = max(DIV_ROUND_CLOSEST(sensor_value * 176, 100) - 52, 0);
- 
- 		sensor_value = get_unaligned_le16(priv->buffer + AQUASTREAMXT_PUMP_VOLTAGE_OFFSET);
- 		priv->voltage_input[0] = DIV_ROUND_CLOSEST(sensor_value * 1000, 61);
-@@ -1070,6 +1071,8 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 		}
- 		break;
- 	case hwmon_power:
-+		if (priv->power_input[channel] == -ENODATA)
-+			return -ENODATA;
- 		*val = priv->power_input[channel];
- 		break;
- 	case hwmon_pwm:
-@@ -1426,7 +1429,8 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
- 			priv->power_input[0] = -ENODATA;
- 		else
- 			priv->power_input[0] =
--			    get_unaligned_be16(data + HIGHFLOWNEXT_POWER) * 1000000;
-+			    min_t(u64, get_unaligned_be16(data + HIGHFLOWNEXT_POWER) * 1000000ULL,
-+				  LONG_MAX);
- 
- 		priv->voltage_input[0] = get_unaligned_be16(data + HIGHFLOWNEXT_5V_VOLTAGE) * 10;
- 		priv->voltage_input[1] =
+ 	ret = hid_parse(hdev);
+ 	if (ret)
