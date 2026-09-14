@@ -1,137 +1,187 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AECCE443A81
-	for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 11:54:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E883D9DB1
+	for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 11:55:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789386897; cv=none; b=cu6p4jOsKYeepyKiy/rC847hAqKNWdVj43ZoDMrLkAlCGEy7WXFEjLvJmJohOhCwXwQLOfwUEsTl22bod8nRVaM5Rb7X+NKECwtO+Sftlowpg3G7VteKQBKBTzsKL8ZdWBe+8gk5W/bZuVph9ClMEVwwElWrPL6eUwMYjd0xvQo=
+	t=1789386902; cv=none; b=AMZsSE/WcW/v2PtfAJiuQEx0uwdU8QbvbUIg+xAkez38bxyeMU5No9uH6HC/e4hItxFtuUCN1FK4baKOpHIkVqptpVkDdw2qhrm2OvsPUPBwPn58s+F8uOjkUX/uPv6I+qwaUYm8qE5CMOwMUZ91E0LufcESp3lwoFynlvZKpV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789386897; c=relaxed/simple;
-	bh=3uWLS0zXi8hbzN1pQ7fg4WKf5YdWAavl/C0SrqFsdwc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kptwLV3Qv1QSjwkjn+BVXazol17dbtdF2smtr6AQpj+vs4c5ewFdUNpLxstzf1ueCmhaAdWGBmfuzRRfydl72mVV8Il3Hehc2xeHC0Z9WaFJcOPowYDM4iej9ddXdcK9Gs+2bGSCCDOvhPx4W2NM4gXdl0EbQ/gG4xo4eM1pVYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RtDFJXqA; arc=none smtp.client-ip=74.125.228.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789386902; c=relaxed/simple;
+	bh=ld9A26SqQN1lVgq8lzuhQCSXMCTt+XvGo1LR9CKMKkM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ctpXcPXgt5ISbL5TIke/ax9LGvX44R7Khy6SUAmQ+3leGbjzg+i0zFp0Ndo1bFVBFYkMgHYMA6ReYSaAOacWl8RLebh+UG8pbPuhcQXDPlsswftbRZOKNWni3TxpziWKkZSIZGKTRP6Z+1+Yf2AvVa1JR1f3tkOlD+5FYMKxGQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ivRRYdKg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RtDFJXqA"
-Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-85469a3490bso1710580b3a.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 04:54:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789386895; x=1789991695; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Xz1oPaQal4obx4wv+mUPfBXv881JUQVzx0KD6p2In74=;
-        b=RtDFJXqAAFrXir1v0Kh8V4WaZraUQrGnH6QvzOu1plXMa255tGCbcQBeaEqygkj91I
-         Kbmsj8iEiHvZZVaqgT8s+mNbaD2EX+PPeKrIvMl8brEsx87dLOr+xLboLM4sR3htvn7i
-         mzQq88e45+yyZ1NXFEnNmHqASQNvrAQfajCuxyThvL0FbIMWa6QmDJSSJOzi7q+vrk4/
-         BdG/uudI1FV+tzAD+lIjjpD6MCX9qCkovW72wcm8Y/iZCIhFYd6dgOoTnIoGWHv8xZJv
-         7B4li6XahmlKxmC5i8rtm8SciXIma8PdB0mOcXZutGiZTKu1TXVjYCccCTBOgojOVBgB
-         0DAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789386895; x=1789991695;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Xz1oPaQal4obx4wv+mUPfBXv881JUQVzx0KD6p2In74=;
-        b=ZI9QYe1aaj/ho06Mq+FdevtaDuohp5zsatj4lRetQ7TCRgRJA70UiIccgpIS1h871Y
-         Ik0+V1ry1pv1/CA9PvRKw1JLl4HYXqGSgwzFrKt1SBC2xn8VXNqzg9i8jEcfoiEptqTC
-         hnFBH7b2PiUTQoSlIYWdULJ4XwX+F6jHNgPO4/Qy+K9i29KZmXPg7D4XLJvxY4C48bef
-         w42c0zj2uPTesHF4PiQkoKaz3OWWeezF8VlTygHD/jZsh66/5SnPqFFjpKmjV6NKZCiw
-         N5Mh6zn+mbZ+YaAe2rhFILlGE7P1hWPAsOSN5T8KNRPjJPjAKgPn4VWmPXHNybMW039i
-         PKyQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxxR0aY9z7bbm9aPxKQVHrs7rc37TpIhZHGggUXTJPwmzOU9QjmvAKVYFSYb2RQI5q5Z3YQghYwWvlguw==@vger.kernel.org
-X-Gm-Message-State: AFuF++m+MFPjYVBk2JpDkQL3yu6vXTH88rU+oDuo7UWV89KN2Sytuyjq
-	5Vyj6UfH6VrypDOsuIiK0NfdqLJNkhjcfl2pjO4XPWbtJCBoB5VRFWwg
-X-Gm-Gg: AYBFou08Fsx+fgYUuO3G7VcQcsL6eScBMHamSiIude5Qv/lwRUFqpyMVcWy32wO1vlr
-	57STZ7/fnoOh/uz8hqbgURaqk0JclWFHsjiHPkpviLAqEa1E4CKideg2WSWPibR/1WS8mC9lDHD
-	pgdmADMVX2iRdwKjGerT3Ix0XMnbhhYoCqivIfqWSjLnarv1y+qdAq6nhX2msdMGGrNKzAL3bZ/
-	e7XCfmaWZ8RY+GALF9v8aPQi5NgRmLk36h5YdKQssL4jLvr+JsNQNXgQajRclpgfBWH8xSlxujj
-	sE2io9mHH30tOM1ZPy0e78t+4e2H38QqmT/bUvHp/bjGVtq/lxtE8/kPekVC/U6XZ9PHSem0TxF
-	n5LKGtZhS/Wa+dIfG/+1Euj9lEsUkUjBwE0Rztr6uOECpUZOBH6vWpXBmkPpYGrKdGfE/osKyze
-	QukS/6Ql8zwBhMkIj1lb/8hat5sbxA16sGcV/2WziFwG/Dp3k11LyvWWmSlhNif21I7UFbpBNgh
-	+e61R21DbN/wkm0rA==
-X-Received: by 2002:a05:6a00:2444:b0:857:7337:5dba with SMTP id d2e1a72fcca58-86f862c48a6mr4632403b3a.24.1789386894733;
-        Mon, 14 Sep 2026 04:54:54 -0700 (PDT)
-Received: from SGN-LDSENG.tasernet.com ([2405:4800:5cc3:11a:1ac0:4dff:fe8b:4a69])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-86b29bb9ff4sm4565342b3a.44.2026.09.14.04.54.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 04:54:54 -0700 (PDT)
-From: Cong Nguyen <congnt264@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Simon Guinot <sguinot@lacie.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (gpio-fan) fix use-after-free of alarm_work on unbind
-Date: Mon, 14 Sep 2026 18:54:48 +0700
-Message-Id: <20260914115448.2039438-1-congnt264@gmail.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ivRRYdKg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AC9C1F0089C;
+	Mon, 14 Sep 2026 11:55:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789386900;
+	bh=imPMqOZOw7gRpXZn9Jr3Ro3jOMD4qxo2hGxpY7Zp3Pw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ivRRYdKgKyvqL1FIZhyx+EpdMv794Hbscrw07ZqlzFV9T+15de5aieWIwwNTUop+d
+	 F53sR1PXB73Jq4vPUoPvEqX13r/qWJhDfLN/o108OHr5jaVUPAA3jHeF1w/8wjF8Rw
+	 ficHt4N+zunf2dzSCl1roSf4y038qw+l5wZHLGUZwaSxeYIGXIe56hd5Icsyh9P0Rg
+	 KAAhs+SbqXTLnNDVMeBgp6CyJ6x50XuV4tnYkNQYQ7T5OQ90tFUYmQKYa1V6x1sGGk
+	 2x/LIB5OT2OE6oxBDFXVWMBUSwrN2Kp+8Sh95WajnMzMJdqcizzRyGc0vFNq9ZAkje
+	 Xjt7ZZ4RKBaVw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v4] hwmon: (gpio-fan) fix pm_runtime imbalance for
+ alarm-only fans
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Cong Nguyen" <congnt264@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260914113856.1987128-1-congnt264@gmail.com>
+References: <20260914113856.1987128-1-congnt264@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 14 Sep 2026 11:54:59 +0000
+Message-Id: <20260914115500.6AC9C1F0089C@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-fan_alarm_irq_handler() schedules alarm_work, but nothing ever cancels
-it. free_irq() (via devm) only waits for an in-progress IRQ handler,
-not queued work -- a pending alarm_work can run after fan_data is
-devm-freed, dereferencing it in fan_alarm_notify().
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-Cancel it via a devm action registered before devm_request_irq(), so
-teardown frees the IRQ first, then cancels whatever's already queued.
+New issues:
+- [High] If pm_runtime_resume_and_get() fails during probe, the devres clea=
+nup path drops a PM reference that was never acquired, causing a runtime PM=
+ usage counter underflow. The patch attempts to fix early probe underflows =
+by adding a `pm_enabled` guard, but prematurely sets it to `true` before su=
+ccessfully acquiring the reference.
 
-Fixes: d6fe1360f42e ("hwmon: add generic GPIO fan driver")
-Reported-by: Sashiko AI review <sashiko-bot@kernel.org>
-Link: https://lore.kernel.org/r/20260830152150.27F5F1F000E9@smtp.kernel.org
-Cc: stable@vger.kernel.org
-Assisted-by: Claude:claude-opus-4
-Signed-off-by: Cong Nguyen <congnt264@gmail.com>
----
- drivers/hwmon/gpio-fan.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+Pre-existing issues:
+- [High] Sysfs attributes are exposed to userspace before runtime PM is ini=
+tialized, allowing concurrent writes to interact with uninitialized PM stat=
+e and corrupt the PM usage counter.
+- [High] Treating non-fatal errors from `pm_runtime_put_sync()` (like `-EAG=
+AIN`) as fatal errors leaves the driver's software state permanently desync=
+hronized from the hardware state, leading to subsequent PM usage counter un=
+derflows.
+--
 
-diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-index 084828e1e281..b1b57bb63a33 100644
---- a/drivers/hwmon/gpio-fan.c
-+++ b/drivers/hwmon/gpio-fan.c
-@@ -81,9 +81,16 @@ static ssize_t fan1_alarm_show(struct device *dev,
- 
- static DEVICE_ATTR_RO(fan1_alarm);
- 
-+static void gpio_fan_cancel_alarm_work(void *data)
-+{
-+	struct gpio_fan_data *fan_data = data;
-+
-+	cancel_work_sync(&fan_data->alarm_work);
-+}
-+
- static int fan_alarm_init(struct gpio_fan_data *fan_data)
- {
--	int alarm_irq;
-+	int alarm_irq, err;
- 	struct device *dev = fan_data->dev;
- 
- 	/*
-@@ -95,6 +102,17 @@ static int fan_alarm_init(struct gpio_fan_data *fan_data)
- 		return 0;
- 
- 	INIT_WORK(&fan_data->alarm_work, fan_alarm_notify);
-+
-+	/*
-+	 * Register before devm_request_irq() below: LIFO teardown must free
-+	 * the IRQ (stopping new schedule_work() calls) before this cancels
-+	 * whatever alarm_work is already queued or running.
-+	 */
-+	err = devm_add_action_or_reset(dev, gpio_fan_cancel_alarm_work,
-+					fan_data);
-+	if (err)
-+		return err;
-+
- 	irq_set_irq_type(alarm_irq, IRQ_TYPE_EDGE_BOTH);
- 	return devm_request_irq(dev, alarm_irq, fan_alarm_irq_handler,
- 				IRQF_SHARED, "GPIO fan alarm", fan_data);
--- 
-2.25.1
+commit 394e1be2ff739d7471e6b17d6005457a66be35ae
+Author: Cong Nguyen <congnt264@gmail.com>
 
+hwmon: (gpio-fan) fix pm_runtime imbalance for alarm-only fans
+
+This commit registers the PM runtime disable cleanup before
+pm_runtime_enable() is called to fix an imbalance for alarm-only fans.
+It also adds a pm_enabled guard and a mutex to protect the enable block.
+
+Link: https://lore.kernel.org/r/20260901111903.660681-1-congnt264@gmail.com
+
+> diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
+> --- a/drivers/hwmon/gpio-fan.c
+> +++ b/drivers/hwmon/gpio-fan.c
+> @@ -528,10 +529,21 @@ static void gpio_fan_stop(void *data)
+>  	struct gpio_fan_data *fan_data =3D data;
+> =20
+>  	mutex_lock(&fan_data->lock);
+> -	set_fan_speed(data, 0);
+> +	/* set_fan_speed(0) drops a PM ref; only valid once PM is enabled. */
+> +	if (fan_data->pm_enabled)
+> +		set_fan_speed(data, 0);
+
+[Severity: High]
+This isn't a bug introduced by this patch, but non-fatal errors from
+pm_runtime_put_sync() appear to be treated as fatal in set_fan_speed().
+
+When set_fan_speed() turns off the fan, it physically stops the fan and then
+calls pm_runtime_put_sync():
+
+set_fan_speed()
+   ...
+   if (fan_data->speed_index > 0 && speed_index =3D=3D 0) {
+       ret =3D pm_runtime_put_sync(fan_data->dev);
+       if (ret < 0 && ret !=3D -ENOSYS)
+           return ret;
+   }
+
+If the PM core returns -EAGAIN, set_fan_speed() returns immediately without
+updating fan_data->speed_index =3D 0.
+
+The hardware is now OFF, but the software state remains ON.
+
+A subsequent sysfs write to turn the fan off will cause set_fan_speed() to
+call pm_runtime_put_sync() a second time, dropping a PM reference it no
+longer holds.
+
+Does set_fan_speed() need to update the software state even if
+pm_runtime_put_sync() returns a non-fatal error like -EAGAIN?
+
+> +	else
+> +		__set_fan_ctrl(fan_data, fan_data->speed[0].ctrl_val);
+>  	mutex_unlock(&fan_data->lock);
+> +}
+
+[ ... ]
+
+> @@ -586,16 +603,22 @@ static int gpio_fan_probe(struct platform_device *p=
+dev)
+>  			return err;
+>  	}
+> =20
+> +	/* Lock so a racing sysfs write can't double-take a PM ref here. */
+> +	mutex_lock(&fan_data->lock);
+
+[Severity: High]
+This isn't a bug introduced by this patch, but this lock doesn't fully close
+the race window.
+
+Sysfs attributes are exposed to userspace before runtime PM is initialized:
+
+gpio_fan_probe()
+   ...
+   fan_data->hwmon_dev =3D devm_hwmon_device_register_with_groups(...);
+
+A userspace process can immediately write to the pwm1 attribute, triggering
+pwm1_store() and set_fan_speed().
+
+If the user writes 0 during this window, set_fan_speed() calls
+pm_runtime_put_sync() while PM is disabled.
+
+This unconditionally decrements the usage counter and causes an underflow.
+
+Does this lock need to be taken earlier, or should PM be initialized before
+hwmon registration?
+
+>  	pm_runtime_set_suspended(&pdev->dev);
+>  	pm_runtime_enable(&pdev->dev);
+> +	fan_data->pm_enabled =3D true;
+>  	/* If current GPIO state is active, mark RPM as active as well */
+>  	if (fan_data->speed_index > 0) {
+>  		int ret;
+> =20
+>  		ret =3D pm_runtime_resume_and_get(&pdev->dev);
+> -		if (ret)
+> +		if (ret) {
+> +			mutex_unlock(&fan_data->lock);
+>  			return ret;
+> +		}
+
+[Severity: High]
+If pm_runtime_resume_and_get() fails here, does it lead to a runtime PM
+usage counter underflow?
+
+Because fan_data->pm_enabled is set to true before the reference is
+successfully acquired, a failure from pm_runtime_resume_and_get()
+(e.g. regulator failure) will return an error, triggering the devres
+LIFO teardown.
+
+The teardown calls gpio_fan_stop(), which checks pm_enabled and then calls
+set_fan_speed(data, 0).
+
+Since the initial state was active, this calls pm_runtime_put_sync(),
+dropping a PM reference the driver never successfully acquired.
+
+Should pm_enabled only be set to true after the initial PM reference is
+successfully acquired?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914113856.1987=
+128-1-congnt264@gmail.com?part=3D1
