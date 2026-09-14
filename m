@@ -1,65 +1,61 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21832224AF2;
-	Mon, 14 Sep 2026 08:23:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2364A1E5B88;
+	Mon, 14 Sep 2026 08:24:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789374234; cv=none; b=NlMOmSkVtOKymosmjgbT+sMul8Iq6qS8SOo7UVh81RaW6dw4JkG03RN7FHf+kAQARBDJuOqbyjo7zTI5GctvzB9g/QJyEnRUHZdeuX5F5ORjY1nijGutP5sTdaC3LK4PlMoppHiPgu5O/FEb38KEYPOZacXkpnLWy0WcuuxV8ZQ=
+	t=1789374270; cv=none; b=ANtzayjAekMomKQFgRKhv8LAxNVifd8PqCIJQlCg8GtsYqB5euXaFmp7MVozpTJhIjCTvk7Sb0QqNDiL2p8TPwSpMG1se4522IOkUhnLQyrOw6k22HDc8HbZ5KaNuLDGXp4O7uFIIB8pK1DozXN8X7wCdyWbD6f5bn+Z4nGdQgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789374234; c=relaxed/simple;
-	bh=67ct0lyxHF3GzAGZ/KR9FKhg81oSNsM3UuijxdlWD4M=;
+	s=arc-20240116; t=1789374270; c=relaxed/simple;
+	bh=X+dyPXNbQ5okxSNJOsncS3NtPB4XWj6X/Tip6CM87Z4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Gq5OsKWtSSwcB12bvA+ICCVEa3h/77A3i71oTEHZuQ5BQc2QLX0+j6u+txBwFd4u44qHy3QgsLjQFY3QU+SF+hFOt/QqKFxZ3HmM7nhN428dSLS16dMp5pX5PE0FAZq9U3Ie2MmZEHrfZ/rAtYG4OVaaan7vZbBC27LPmHhEn2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SxGbzJ2I; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=cKEJAhsAzEg6R6ORV86nrge65JDxIgC0U0KdNHAyJVNxyLPDzjeyRddL9ykWh7w4iTD34HlvoB/iwOCPmbnjs2dOg2e9b6HR1TwbIX/OBtzBUkIJuUpArD2DV4MDAdRkUaanw5hIpNo5a0JS3NoCXhucgfH7qHT91My9rcG7FRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CjtFklG1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SxGbzJ2I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AB5C1F000FF;
-	Mon, 14 Sep 2026 08:23:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CjtFklG1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56FE61F000FF;
+	Mon, 14 Sep 2026 08:24:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789374232;
-	bh=67ct0lyxHF3GzAGZ/KR9FKhg81oSNsM3UuijxdlWD4M=;
+	s=k20260515; t=1789374268;
+	bh=X+dyPXNbQ5okxSNJOsncS3NtPB4XWj6X/Tip6CM87Z4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SxGbzJ2IlkJFBCvCRMVZcTIk/1NJhpBXwooFYqo3LEhTkzKL8EXZBJqR3bxRzkdi/
-	 AiViQPfxkJaVO4k22wCkPC0MTNYSdEKI/2HHxEsH1mRJhBZXllNGNywuz0W2YmiDP2
-	 lu/CymAFhxK28ZgGqRtve2clg73JxDTyA/snDamRxNzzZFaRDJTMpcBwuO1WyoWzP5
-	 nGWfc/83ApF/Sd6z6dZtddcntYypR30mwZT+S1BSBJlDcCvDhjyLpdWS+tPsREwlvc
-	 kdSdOwsYbn/d4t+y7ghhVMEhWUqzwPr3OEZalQEYmlN8VAL00Jkwptrs6Dlu0VNfWx
-	 Grika2V+XHRxQ==
+	b=CjtFklG1AbxiPPXz8Pn9ZsMqZbPFQ2HUmoZ2Z2WzIZ0HMQgq3MBwACfXw/RYnVKZ+
+	 VuDDgV/IKzYVPhPcypyu6Df8lPlH/0dJGSPmdNcyMXz+6Powo2n8aUu8UDoGIq8RYf
+	 a5wkcYEFVsDjx5e9DFzo/RaGECpx2xVbn+c4M6HSiaf1fQ5G2S+DWznudlh9YnOFjJ
+	 FoFuy4hfUj3Ni5SAdkgYQio48vkDEuaze+K4ENOMZnFPAvGrKpLVRBbSDK/PKQoSYB
+	 /komu2djrbgXbwJxU06XmwJrgsCz9ZShfbJd8RO906J2vRPTEzF4ecBWfrg5/up7D6
+	 x9W4Zqi3sglfQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 3/6] dt-bindings: hwmon: Add Sensylink CTF2301
+Subject: Re: [PATCH v5 2/6] dt-bindings: hwmon: Move LM63 family to a
+ dedicated binding
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Troy Mitchell" <troy.mitchell@linux.dev>
-Cc: devicetree@vger.kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org, conor+dt@kernel.org
-In-Reply-To: <20260914-ctl2301-v5-3-522def70acb4@linux.dev>
+Cc: robh@kernel.org, linux-hwmon@vger.kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20260914-ctl2301-v5-2-b44b81cd2c3c@linux.dev>
 References: <20260914-ctl2301-v5-0-b44b81cd2c3c@linux.dev>
- <20260914-ctl2301-v5-3-522def70acb4@linux.dev>
+ <20260914-ctl2301-v5-2-b44b81cd2c3c@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 14 Sep 2026 08:23:52 +0000
-Message-Id: <20260914082352.7AB5C1F000FF@smtp.kernel.org>
+Date: Mon, 14 Sep 2026 08:24:27 +0000
+Message-Id: <20260914082428.56FE61F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-> Add the Sensylink CTF2301 temperature sensor and fan controller to the
-> LM63 family binding. The chip follows the LM63 register model and can
-> provide a thermal cooling device when #cooling-cells is present.
+> Move the National Semiconductor LM63, LM64, and LM96163 compatibles out
+> of trivial-devices.yaml and into a dedicated binding. Describe their
+> integrated fan control and preserve the optional interrupt used by the
+> ALERT output. Permit use as thermal cooling devices via #cooling-cells.
 >=20
-> Do not provide a national,lm63 fallback because the CTF2301 is not fully
-> compatible with LM63. It uses different conversion-rate encodings,
-> extended local-temperature registers, additional fan lookup table
-> entries, and device-specific PWM and ALERT/TACH configuration. An older
-> LM63 driver would therefore not operate the device correctly.
->=20
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 > Signed-off-by: Troy Mitchell <troy.mitchell@linux.dev>
 
 Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914-ctl2301-v5=
--0-b44b81cd2c3c@linux.dev?part=3D3
+-0-b44b81cd2c3c@linux.dev?part=3D2
 
