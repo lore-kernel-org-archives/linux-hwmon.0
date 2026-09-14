@@ -1,127 +1,123 @@
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3A5743CE7F
-	for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 10:41:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789382506; cv=none; b=p8IPwJ5wCMV/YVLZoCNVDuK3x4kiOZS10csvMulQMaumEfhmvXRKPZRyCNG6s6k2BEBHFhgID4RdpXNvN3KFERiTodUEAqaTyN9dmVYPj5v/BmWgtVoHvpEgbyKg0/yZWPClxrR3s7JCe7RmToXW5xhLSq7S6osVlw5SOuxzmO0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789382506; c=relaxed/simple;
-	bh=8RMjW2GZiFLdZ5ZhXAK6hKwmt70RrGO/ubTXCPobtc8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uJ1nScumdzDD9zqJrZiUbh5AnjY18M6MKdVuQXm8PapelTrP3dNwj6gv+8RtPTFNzFOITbTn51c8O5suk/huX4eXjl1iYkoi/wPXJMZkhOzJwNVeJozxqIs/WzgZYv6lrFnCR3e7KXVanEIA6Fc0ecSDCvaxMEl06VYLoR0dIIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fncPsz6e; arc=none smtp.client-ip=209.85.161.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 439A343CEF8
+	for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 10:42:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.140
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789382555; cv=pass; b=SqY7x69PN8sy2hSIsVrxrIt0onme/LMU7RPZ8YxvJWBJowD2memjfugKhg9QSBYLdC7F4panCDaeJ3x9MIXDfULOj7SwjWM3f6UNfjDsDumSh+QZnVlZ0RY0gfP5nUcLygJOVOJQVicQehGf3YAunIJ9v0CTQZCaz5VOmLON0YQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789382555; c=relaxed/simple;
+	bh=aH3qUfclucTu65C79a8F+WYWXexvD6ufiksGY7byA4Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NquXNLxT83mopkgb00YHgGImz3HqxU02pFRoWAE1Y/3MZ5ZBiuM8ZEjQ2B7TQJxmZgLDDCsBz3LeBgKMV0PZDG/mNH4GjJqN2ShTKY2fa1O+FM1TYnoRhGGGxCk0bJDHm+/JzUUFNXkDmyV9p94y2Q9nhzC9KcMSqjAcSiYk6R4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ifj0LWdG; arc=pass smtp.client-ip=74.125.224.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fncPsz6e"
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-6c1983dfaffso2284568eaf.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 03:41:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ifj0LWdG"
+Received: by mail-yx2-f12.google.com with SMTP id 00721157ae682-85d43ac6072so12963277b3.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 03:42:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789382553; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Nh2EBlNp2Z/yh7wSaHfhM6IUZIjljvmQF/guTEknW42FZXutzarSj0D88emB34vBNi
+         Cxjcj6Nuy+ighdhmEWXtTiT8DdnqOJ4st8xxzSiIuoXeo/Xu2G+snMiMsII6esYn+RHw
+         jM+VFb+Xh/j1fNme/9Gdu8Ltcx4JVnbjOXHZC78kIZdBae46o+7z/D0+bzdwmxF6Qlpu
+         7ZvLVoi9R0CX23JvQBxbAYvcrJLAY9unuWtjcRx/f6JatRCld5wESBqL7HJsUSZhwzmj
+         XDtNJrU6a/cQefL2+0cy7jcUrlZLZ4H38NpLciYMjchZi/LyVLaJOtmCUOU8vMzV9rbp
+         3e6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=aH3qUfclucTu65C79a8F+WYWXexvD6ufiksGY7byA4Q=;
+        fh=MOrQ7Mg3rPP2nWm7rRoHN3cJJuL0/I2wlTZS1N91iZU=;
+        b=nhWyR+4T65ZlPJdW4E5o6dKSqPIEQ/ODvg9I9WqLi3JHDRApn8aNjyfYaUc4MktOcK
+         3SJgvpFqigOMZMJPqUGX9galNdtpnGBOpgA36X26sthrQIHTzJlgTNrP4dw7KQXXye2D
+         FFhUQqzPuvxmSlJ7t0Tpcz/L29mIt2sPq/7keGCRMErAvuHwJtOVZHSF2HwfDDOdoBAy
+         fIt2ofr3LOWvmrFvyrmdHUeg+xdS2fXiZdEH+VpQLgsS7KGfuF/bHZM0Ug5AxCGWjYRA
+         wtnVwOJjJCTYsYj3g/3nJoFBw8mrrWhYnSO1P530txFnlQPTmUSBq+4MgLo8QklEqthw
+         SGcA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789382504; x=1789987304; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=VeYhK5Bct0822vB0fqa5xHImLPh+u4sb5Rd0DXecL4M=;
-        b=fncPsz6e+TJPGaLubeOK2THYTbEXgq+KHuDX5sxHfEH8kYwIoDrjy0jsfR7eGO1qD+
-         gfJmomiCJLKwgYJpt0Ko2h5XpUJrs0RJnTeUt9MzUrDn5j+43p3Au1Kt9YEvrIeEkG22
-         OeGVQ0P/Mf8wBuThBzAT/ILl5LpEwoPR/zhdCXtR7m7SHKMdCNMdfkKEre8Dt3cB47+j
-         VYOQNpffM95Gk59jGI9lMdBaEGIh8qjht+FUPyZNuHwFTeWA3yEShUcm9ApQVXkDZAbg
-         hZdh17WyJ+mTScVjauk/z5riZ8BpP8uuytu7caymRAtL184l1bkxdQqDZ8X8WtZ7W7Ze
-         sdDg==
+        d=gmail.com; s=20251104; t=1789382553; x=1789987353; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=aH3qUfclucTu65C79a8F+WYWXexvD6ufiksGY7byA4Q=;
+        b=Ifj0LWdGH+S3rfrHyiBtQrObYWeEe3+NcWCykRqDuivoTIYGSyNNHpdBe+/zwDkkFs
+         74mryv4YCjoiB2IUA9m64DswCg4jEYToYLNhfPSoqvNC5E/2Xh9169ncHKQtYaADJ++1
+         ZYPc88FkiuV0tDlJeg/3esOqbmgzfXQbhOBhvgAiO/w0wH4ro5HyYB+4VB64A/p6Ddc5
+         EkRkbhfABQimGN1o3XGz8PvKqswSh7ZxMqk8FKuaDSgyjwFnuuriuhGsFx4naB0C7qUz
+         nkFPXBOmErZxKN2+TqCZiIKtafwqDTzYBoqog7/jzm/byzNgCZc2H6u2OA5GieMBI60n
+         HpwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789382504; x=1789987304;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=VeYhK5Bct0822vB0fqa5xHImLPh+u4sb5Rd0DXecL4M=;
-        b=FO+ltENm6Wz61b2LLSDrAO3TPSQWIf2yyKH4Y6hVQSysgtCy4qTKAfQvP4MNlW2od0
-         ATGD9vSqmtV9i4pS113kX8eyKKFJu/1bjdxRNZr4Xy/tNH2RPj7R1Elhb5vPgCr5vGs7
-         DWMXXVn2iSZ98pBVZz/D8Fhsg1d/lXqFhvI813NnIaoTCDSHr0g6PQRCnZj73mfVgDuS
-         NuBgWelbpsBhV0tGuExOVt1EgYnpfBnxz4CSTIHl/ONKfEBCMiPvfJe+2O1+6gZn+a7S
-         XOLlOaxLrUmJPkEL+mF1RstYXF92H6bp/UoQDYC46MSgWQVDNhXmUsdrhQmbrhcBiKpw
-         bUBg==
-X-Forwarded-Encrypted: i=1; AKwUvBz5/uuKLVFX5lWdm2YZSKby4ioTHssehQAfQ75AVSWqx6ZOIr1zMnaAUm+qXmZ3aemqYKQuhTVECvjFew==@vger.kernel.org
-X-Gm-Message-State: AFuF++kH8/ep24AlwoBNogXbtpan8tXBxauU9OldAyvRNvfKXYW8En62
-	e0IIaeKcZE9hhXGHPky+KkgH7wykjtG5lX6feNS2Pc9jJ7Kdlz6jXB3W
-X-Gm-Gg: AYBFou32DiEz/Rmh6urc7plFjW5bxBQrCwi42PYmWofBEJzcNvTEeM/uajQGQtEX4VP
-	vqsHEsdi8brGlylCwMfU/k6780q6s1sV3WXsxp2Nw5frf7b0V3bs1GGn7++8vZkLdHgxr9kakLY
-	fwef7+sy2UMn9k9R8r1+D/R8xKIBI16y1Xk/lOwhS6UDp0IxwJWQ5lHr+EAXnXFuv3jKCOuLyGr
-	RCw03NgI0C9tmvnpoN9DeDBELceePwUXDIK1ZKJ+rpwUf+hk3zuOml1lRiyzilagHLTrSrMvZnP
-	nMwUK6innG40EmeIVmayMx5LC7ZjoaQ0IcqLkoraU3JG61/H3wCdaPNhm9CHN5zXb7l6P4S5dK7
-	DWZ1IWNt7YFUvhKxkCps0SkvkSmtV+UMjZHq5o1tM4wGpXuJlaR1VnFGIn+p4XgekGJTjVSv5F2
-	IhPpJK/ACLQRakRW7w5NnvY3cekKPU+JeMwc2K1zWr9N50PoEeTnt+rOil7Ayf/ewhtD0z6tq6Z
-	QmVJbybg6EOcTyT
-X-Received: by 2002:a05:6820:81c5:b0:6b7:8415:d77e with SMTP id 006d021491bc7-6c541f45b3bmr748644eaf.41.1789382503583;
-        Mon, 14 Sep 2026 03:41:43 -0700 (PDT)
-Received: from SGN-LDSENG.tasernet.com ([2405:4800:5cc3:11a:1ac0:4dff:fe8b:4a69])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14365b347e6sm23213037c88.4.2026.09.14.03.41.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 03:41:43 -0700 (PDT)
-From: Cong Nguyen <congnt264@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Simon Guinot <sguinot@lacie.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hwmon: (gpio-fan) return IRQ_HANDLED from the shared alarm IRQ handler
-Date: Mon, 14 Sep 2026 17:41:36 +0700
-Message-Id: <20260914104136.1797979-1-congnt264@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20251104; t=1789382553; x=1789987353;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=aH3qUfclucTu65C79a8F+WYWXexvD6ufiksGY7byA4Q=;
+        b=ccUnT85s1yC6E0cOJsZ+SlsRdusa4C5m2w/u0LMiK7rH9DVL+x075dB2e6M2Z7VElp
+         1Hc4yfPKp/6uOXLuX0uBoQ7FtURN/tbkfI86PNgR0IU2S9bCN98LuKIA8W0SDL7HYZeS
+         QCd0cbGGRtHCmYjXzrPhr9WwjvCgGdSBy247WrYycAxHlcZhHAgwkweJ0MjJFTkvENM8
+         ctHH5OlyLhH8NXktBg9t6Tt3UD26pR3CT8YHuaQErrQkfbtqsHCJ38+/nlu0HwzYDXXQ
+         K/ogNgE3HYLDvk+Xo5wSMM6S8qg9bE2Oh44rMGKlxDgLhSOZytXQkxf/k/0otaL7sdVo
+         Bpqg==
+X-Forwarded-Encrypted: i=1; AKwUvBzRQrAT7poGWGXNwYSNwx73I7v+/ET9ceWu0LHflx9ZyI/uOtKw/SNKNtNxJt7jFNeJ0kR94hY0q+ncUg==@vger.kernel.org
+X-Gm-Message-State: AFuF++lNRRG2VTsUTXFyvKsGrWAtKoZWASiMARQp1D90En+f4Pwmvimx
+	3+Vj0jl4QdE6/1MNJKy34S5+mblT6KLxoXMl0YDeblKCM7bMsFLvTuzm5XQ2yizyKRDE7Q0q8zD
+	0Iq9uxoEPEICY1GY4bBQ227wvRsccos6ZX04n
+X-Gm-Gg: AYBFou3NnH3FPHkK/55ryw8cjowI9Ig03yb9FjG8qqFaFsNinOSZaedV2TQClPuNwzx
+	WaPxt2NU+1mNogI3pEe/1lXIun/OHnJQz8xFcFafdYee8o1G5KHb4OBv38/Q0/jO30xF4rVw9M4
+	Bxh+vEDSKtGdRnZdX3hgz/dh1mjRYkcLsUyGOpeTBKha/gUiOM6CuCALz7GgDBiRByvDZnRp1Pt
+	HHazW8ypV2mPFGkchMfrQ+11RyRzRqY9dtMa2EukjKVYvfl7RCwrxWZTr8UZ+FGAP6EtoEcEVA4
+	f4u/ifo64TBT/aoazjYYr/OLetmGdb/kU0/kzgS6S1nqF+2OSgkgSVbBT7wqlBRE14lTabcrJkS
+	UUMnQz2zx+H0p
+X-Received: by 2002:a05:690c:a5c1:b0:873:5c7b:c109 with SMTP id
+ 00721157ae682-88d23a93ae9mr3186947b3.65.1789382553231; Mon, 14 Sep 2026
+ 03:42:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260901155648.1538876-1-congnt264@gmail.com> <20260901160931.DD3811F00A3D@smtp.kernel.org>
+ <fbb88a92-02c4-48cb-93a2-678ee169e88e@roeck-us.net>
+In-Reply-To: <fbb88a92-02c4-48cb-93a2-678ee169e88e@roeck-us.net>
+From: =?UTF-8?B?Tmd1eeG7hW4gQ8O0bmc=?= <congnt264@gmail.com>
+Date: Mon, 14 Sep 2026 17:42:21 +0700
+X-Gm-Features: AcwNN1Xp6V1imZJqUrnncRhJzwCc7a07hx1hIztm_bzgAQo-zBxQwj_SL_Ey-Dw
+Message-ID: <CAJpJ=Gsj2-m6kCc-jT8KiP2tGUDxKZ45ZdaZ+HXvOU3wH_ww8A@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (gpio-fan) return IRQ_HANDLED from the shared
+ alarm IRQ handler
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: sashiko-reviews@lists.linux.dev, linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-fan_alarm_irq_handler() always schedules alarm_work but returns IRQ_NONE,
-so the kernel treats every alarm interrupt as unhandled. On a shared
-line that risks the whole line being disabled as spurious.
+On Wed, Sep 2, 2026 at 1:28=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> w=
+rote:
+>
+> On 9/1/26 09:09, sashiko-bot@kernel.org wrote:
+> > Thank you for your contribution! Sashiko AI review found 2 potential is=
+sue(s) to consider:
+> >
+> > New issues:
+> > - [High] The interrupt handler unconditionally returns IRQ_HANDLED whil=
+e registered as IRQF_SHARED, neutralizing spurious interrupt detection and =
+risking a CPU lockup.
+> >
+>
+> As I suspected. This interrupt must not be configured as IRQF_SHARED.
 
-v1 just fixed that, but it was still IRQF_SHARED, and always returning
-IRQ_HANDLED there defeats spurious-interrupt detection for the line --
-if the interrupt ever fires without a real event, nothing catches it,
-and a fault could spin the CPU in the handler.
+Agreed, sent as v2 -- drops IRQF_SHARED too.
 
-Sashiko flagged this in v1, and Guenter confirmed: this interrupt must
-not be shared. So v2 drops IRQF_SHARED too.
+thanks,
+Cong
 
-Fixes: d6fe1360f42e ("hwmon: add generic GPIO fan driver")
-Reported-by: Sashiko AI review <sashiko-bot@kernel.org>
-Link: https://lore.kernel.org/r/20260901160931.DD3811F00A3D@smtp.kernel.org
-Assisted-by: Claude:claude-opus-4
-Signed-off-by: Cong Nguyen <congnt264@gmail.com>
----
-Changes in v2:
-- Also drop IRQF_SHARED (Guenter): always returning IRQ_HANDLED on a
-  still-shared line defeats spurious-interrupt detection for it. v2
-  is a full patch with both fixes, not a delta on top of v1.
-
- drivers/hwmon/gpio-fan.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-index 084828e1e281..0dbd07f5dc53 100644
---- a/drivers/hwmon/gpio-fan.c
-+++ b/drivers/hwmon/gpio-fan.c
-@@ -67,7 +67,7 @@ static irqreturn_t fan_alarm_irq_handler(int irq, void *dev_id)
- 
- 	schedule_work(&fan_data->alarm_work);
- 
--	return IRQ_NONE;
-+	return IRQ_HANDLED;
- }
- 
- static ssize_t fan1_alarm_show(struct device *dev,
-@@ -97,7 +97,7 @@ static int fan_alarm_init(struct gpio_fan_data *fan_data)
- 	INIT_WORK(&fan_data->alarm_work, fan_alarm_notify);
- 	irq_set_irq_type(alarm_irq, IRQ_TYPE_EDGE_BOTH);
- 	return devm_request_irq(dev, alarm_irq, fan_alarm_irq_handler,
--				IRQF_SHARED, "GPIO fan alarm", fan_data);
-+				0, "GPIO fan alarm", fan_data);
- }
- 
- /*
--- 
-2.25.1
-
+>
+> Thanks,
+> Guenter
+>
