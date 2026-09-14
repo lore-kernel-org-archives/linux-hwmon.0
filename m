@@ -1,121 +1,232 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387C13F4DE2
-	for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 07:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2080E3EE1F8;
+	Mon, 14 Sep 2026 07:46:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789371412; cv=none; b=bxyz7WDUtkzYCipxhT8m/e5hPnwVuk9iABM/vj9Xebkby5Q4cUy/Sswb7LxctWJZ/fb0nx4LUK5bD1hdWlgx7Lv2IJjJnvPa455Bvn1glkDf0nL0ad1JmzYEOKAU3ezufcycWYVvTycTU0lq+9rgB+Atf/FCml3nA4/6b7A2Ph8=
+	t=1789372001; cv=none; b=R16qKteYiMJGhqwKQoJ8OdyScQiat+daXFF2PfDNOYIBkl5LRoOBm0zSYxeInH5S6OFfBRN5pQGizeX5LXWQIYrMYNm6lveLP89ZmWNSNQ4Vuq7KFPxpb8PXWpPKlVXYLRxupGdxJG2Eh0IC9yRBz+3eZ4ySAZOR28vkhHXHYRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789371412; c=relaxed/simple;
-	bh=43eSICE1JFCHbUysIojzxY8vifR5XctKj84YnjLrDo0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VZpcE08/mfeA1DtjwkUV8UXmWcc2i2ZDKo8uCamuv+4MlGmjh01PGmACwxx2oX/HKgfJO8kmO8jKxN4kqMw9SJ0CB7uJXUAaLlOti7zXzHxsP/hlX9MtXu2nPsRnh+7Fnem4+oAyQX7k/cMUUqMumNFbtty3/ncTxdA00IZA7Rk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DlUc9Cay; arc=none smtp.client-ip=74.125.227.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789372001; c=relaxed/simple;
+	bh=QIWfivjx2GOW8s4orZRtQu6ys0g6jRn4SzCAEClhEY4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=g5+qJIIE9VeovUB4rfMaqQusvg2DJRVOrXNQCBpBGPie5FY9tVcyzdE9boJhAseRlacqrSaLThK4LM7yz+WzorXU9Td2XcCQJVqNl7x3enppgvtm3sebp8oC2ZtumuDtFW/LU4H90YKFXeV5Zs3+dP+v2gUFyCR2As8wD/NcJUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=1DeEcovY; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DlUc9Cay"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-39b2ad83dc6so1840174a91.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 00:36:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789371409; x=1789976209; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Zs5RXec5ahUX7Llb9LiQLgtyAF4x1ZaNDold6Hb9HRg=;
-        b=DlUc9CayapBhnz0xNIZhbbaeGZX+YLmkBUwihPws8llhzf6+vYqjMXR6T9dZ4702AZ
-         o5egEuu3JjZbcTPCqS80ly+Vwwh1brO+iohquJd46hWPKC9LJhNaFE1/GD0ErRh2aBY4
-         4fkr2gJr4FG0NtBdGnLouoWtYrEFRT32iJanUkNFitPZSEZR2dhX+q1KqJHW1iUAMzsr
-         ibecJ7LmjIDYjFokSSH9CWB1WG2y93GZPHgqFdg5Yj2hzLIf1MHRZYJ5br8ma6D+X0bS
-         xnkGz+YnsdL/L5/c9mkRqhy7ymCBmt5br6MUVovOvAXJIhDeKsxWOgtUlwLsDn50itWK
-         ebSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789371409; x=1789976209;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Zs5RXec5ahUX7Llb9LiQLgtyAF4x1ZaNDold6Hb9HRg=;
-        b=P9EvltgRFnqFbc1P4XlYAg8kDl5vxj5ivZLr4Nh6EgEPbT+PeoyN/bYIsLGQ4MuwVJ
-         E3OV2uU4ZUDP3ii31Y9rJECQkWw684uNuw0xjLaKHNZwzBWzYHm89jn5rl/L+OS6yat8
-         WsVikhA2P34kEy3jM2aPnmKrYZcu2icdeu64ZDHbap4cyoEmRzU6up8ae7gqnqDsvtrG
-         sqnS47WLPm89U54DeLvKmJESjaqW6xEhSB6RIYHiLKM3exc4HKyRBct7dUp2PtELkNxq
-         84TqA/SJvOGMCsbUcJwfhmX5rmuKhtyPqpMASvVDwk+6SJm5V1TGbKMnAn4O7sOwwIot
-         LoLg==
-X-Forwarded-Encrypted: i=1; AKwUvBzf2w+97DD4Tk9JK1upx1xgQiL4sU0+J62/X5a8BGjy/KAdPaEZr8rg72xvKyMqdAq9prbViV9fNHGPsA==@vger.kernel.org
-X-Gm-Message-State: AFuF++mKtY5Dy3iP7LKkFWHMWsb7ihalLsclsjLqh2gPZiALUkHbiZYt
-	lM6KI4LnXuCidj3vSPg/4ILDZSsmfN06rMlQFrT60etq+vmUhgwMHd2k
-X-Gm-Gg: AYBFou0XZPB5pMqElowQpdZaw6+ZSi88tCmqhX8w9xOb6NBZmuX5MFC6s+mCvr8nD9Q
-	42DbzUwK7Bn3kAYT4XdWI+tiwjK+Ke1nQ/Rg0c4y4QD5rSV+KzgdgsfGRZlFSpxIkMrBf5mK54L
-	r+LLH3DSU9pOnZewz4G58yuxuk31yUXi8u8r7JpYWc24NKrgGlb8Bzddt8+8l7T3VwkUea/zHW9
-	KsxJOXUbNlB/RNShjZyzIhsd+TK1LCQcztEokM4Edz1iG+ODqJMAbJZ7wWOxE5pQ9kbqhRHz9hj
-	VfZjwH8PBgaT6iziSy5JzDqCnE8mdOyqo45aMf0R/Wuz218WqYfxpZCALLJz/sKa8Fvkfh0VpeU
-	K8yIv6e1D+IHDekehPmxmW5XDcM6oktr93brVRdWA9Dd6vQTH1c8gIrijEESVROHhIab6W8K6YU
-	sY5XZcg7nGh4Y8vptkQUSmBeZM+9oLg3ZEGo97q7byi6kATL0YiAGjjQ==
-X-Received: by 2002:a17:90b:2c88:b0:398:e969:87ef with SMTP id 98e67ed59e1d1-39dec0f773fmr3230664a91.24.1789371408788;
-        Mon, 14 Sep 2026 00:36:48 -0700 (PDT)
-Received: from lgs.. ([2001:250:5800:1002::de93])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39dada5c76asm17870870a91.12.2026.09.14.00.36.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 00:36:48 -0700 (PDT)
-From: Guangshuo Li <lgs201920130244@gmail.com>
-To: Rudolf Marek <r.marek@assembler.cz>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Sven Anders <anders@anduras.de>,
-	Jean Delvare <khali@linux-fr.org>,
-	Hans de Goede <hansg@kernel.org>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Guangshuo Li <lgs201920130244@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] hwmon: (w83793) release probe data through kref
-Date: Mon, 14 Sep 2026 15:36:38 +0800
-Message-ID: <20260914073638.1662500-1-lgs201920130244@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="1DeEcovY"
+Received: from pps.filterd (m0375855.ppops.net [127.0.0.1])
+	by mx0b-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68E5gaVs490418;
+	Mon, 14 Sep 2026 03:46:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=WPCsp3n8DXeeLf7tNTMYsUERDfb
+	n++9ND/Bwb+vOmI8=; b=1DeEcovYKQDZhyC9mTQLZno61GTPsW510UTPzUrLpCv
+	UQoB+yeHIszptkmi4o1v0FEZTvuW0pARtDK3oIrhXvBSF41AS67Wz55n/uVSlN1f
+	KJk4Jqs80mtjM2Q/tg9nV1/FsTG5I3DjswZkElzBYjC0EZQ0EHO/panciMnFs6Np
+	kgtplrOnilGXEaJFaRA/Vjzi2k7nygzsASn7LFiKsHKhIUotV5n7xih/al6nWLNL
+	N81nNjv62qu/beTUT0fBgEtzcZyeqGmDhokY4oqWxjO4TWABX+Kx8O+38cQ32EDT
+	grsUi4ayoUlcHv4QBvLUsrQ2I8ZZw4pRooevhakTHVw==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 4gnn2ccmtt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 14 Sep 2026 03:46:11 -0400 (EDT)
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 68E7kAUS009379
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 14 Sep 2026 03:46:10 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.37; Mon, 14 Sep
+ 2026 03:46:10 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.1748.37 via Frontend
+ Transport; Mon, 14 Sep 2026 03:46:09 -0400
+Received: from ATORRENO-L02.ad.analog.com ([10.66.6.192])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 68E7juAU031751;
+	Mon, 14 Sep 2026 03:45:59 -0400
+From: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Date: Mon, 14 Sep 2026 15:45:17 +0800
+Subject: [PATCH] hwmon: (pmbus/max34440): Add support for ADPM12300
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20260914-dev_adpm12300-v1-1-15fc8143d457@analog.com>
+X-B4-Tracking: v=1; b=H4sIAAymp2oC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDS0MT3ZTUsvjElIJcQyNjAwNdY0MT07TEpNQ0MzMDJaCegqLUtMwKsHn
+ RsbW1ACHROXRfAAAA
+X-Change-ID: 20260914-dev_adpm12300-3145fabef660
+To: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+CC: <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Alexis Czezar Torreno
+	<alexisczezar.torreno@analog.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1789371956; l=5505;
+ i=alexisczezar.torreno@analog.com; s=20250213; h=from:subject:message-id;
+ bh=QIWfivjx2GOW8s4orZRtQu6ys0g6jRn4SzCAEClhEY4=;
+ b=M4+H6J796rM3s3lUGEy41M3aTNU4w4j61ZZmjXdDhdwc0WZ/d9pOtKsVYXwbu3fWtrlztcTpa
+ rY6j5hk9F0pDXS2H8j/xK7T1qPnMCrdNortlLn7yy9VrB/AlB/hQM1h
+X-Developer-Key: i=alexisczezar.torreno@analog.com; a=ed25519;
+ pk=XpXmJnRjnsKdDil6YpOlj9+44S+XYXVFnxvkbmaZ+10=
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: JeXnKaFR6CB4kWs3kSFpIilAiklGsRjS
+X-Proofpoint-ORIG-GUID: JeXnKaFR6CB4kWs3kSFpIilAiklGsRjS
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE0MDEwOCBTYWx0ZWRfX6aLIMX32YrOv
+ G8XWHysNPIpOQb8ed5CleLMrBGGKOduw2T5fWnysP0KpWE13gVBxv1qqZZBUAmZFB08RqGurC1p
+ DHJVDULD0Hp87XlhzNJguOlznK1vMOwHNNVABrUNxlPZ9EbAnaXNKiuYiQKFiSQcVSo9+iERghy
+ o+QiAmZ2BQ4yRjNQ4YCyM5+wVb7jhDWkWTV9m27cdFTbvxEkjHA5M8v8PyMiG/XRFZzDosRWvBt
+ 7J5ESXGcru2Rz55GPkb+zgJKSlTP5mCd1+TpaEIe35vJ6GxM5rxXnrv2PINfMuG8THY3PLjs4aQ
+ CSSYWGBlD4jv0cERPYqUrKboor9ewL8ut81Sm3zWlLvHSYCpcadV0QD1RjQikwQKBHYCG4mRL2m
+ 5a83ta+rYuN2zQkviQZAwm0MtQwvLvjZRw45zzE+ye1UogjTG1HRmt/Z2u/sto59MTu4M6X0MMq
+ bBTioLu6eYYcYaffoDA==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE0MDEwOCBTYWx0ZWRfX68Hbm2BWeYEX
+ TZQ89IP/g5uyCYXTBNq86SUpxl143k9hZhRiJJBEaMA1ewfBIDDjFkjTwA7WzR9juAN+Mhh+6W8
+ ZBus57o2Ryp8Noq6ZyBm5qnZOW/1q+RZJ7bsHI0J2ylmcWANOnlW
+X-Authority-Analysis: v=2.4 cv=bcH+w+PB c=1 sm=1 tr=0 ts=6aa7a643 cx=c_pps
+ a=3WNzaoukacrqR9RwcOSAdA==:117 a=3WNzaoukacrqR9RwcOSAdA==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=0sLvza09kfJOxVLZPwjg:22 a=N--XFCr6TIEc_64PeIT2:22 a=gAnH3GRIAAAA:8
+ a=Xpb0v-N9-WCVBoyP4joA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-14_02,2026-09-13_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 impostorscore=0 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 phishscore=0 adultscore=0 spamscore=0 malwarescore=0
+ clxscore=1011 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2609040000
+ definitions=main-2609140108
 
-w83793_probe() initializes data->kref to manage the lifetime of the
-driver data. The normal remove path drops the driver-owned reference
-with kref_put(), while watchdog users take and release additional
-references through the same kref.
+ADPM12300 is a quarter brick DC/DC Power Module. It is a high power
+non-isolated converter capable of delivering regulated 12V with
+continuous power level of 3000W. Uses PMBus.
 
-However, the probe error path still frees data directly with kfree().
-This bypasses the kref-managed lifetime and discards the initial
-reference without a matching kref_put(), leaving the reference
-accounting unbalanced.
-
-Drop the probe-owned reference with kref_put() instead and let
-w83793_release_resources() perform the final free, matching the normal
-remove path.
-
-This issue was found by manual code inspection.
-
-Fixes: 5852f9609d21 ("hwmon: (w83793) Add watchdog functionality")
-Cc: stable@vger.kernel.org
-Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
+Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 ---
- drivers/hwmon/w83793.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ADPM12300 is a quarter brick DC/DC Power Module. It is a high power
+non-isolated converter capable of delivering regulated 12V with
+continuous power level of 3000W. Identical to ADPM12250, it simply
+has a higher power rating. Uses PMBus.
+---
+ Documentation/hwmon/max34440.rst | 28 ++++++++++++++++++----------
+ drivers/hwmon/pmbus/Kconfig      |  4 ++--
+ drivers/hwmon/pmbus/max34440.c   |  2 ++
+ 3 files changed, 22 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/hwmon/w83793.c b/drivers/hwmon/w83793.c
-index a548586369e1..c6ef04c69856 100644
---- a/drivers/hwmon/w83793.c
-+++ b/drivers/hwmon/w83793.c
-@@ -1928,7 +1928,9 @@ static int w83793_probe(struct i2c_client *client)
- 	for (i = 0; i < ARRAY_SIZE(w83793_temp); i++)
- 		device_remove_file(dev, &w83793_temp[i].dev_attr);
- free_mem:
--	kfree(data);
-+	mutex_lock(&watchdog_data_mutex);
-+	kref_put(&data->kref, w83793_release_resources);
-+	mutex_unlock(&watchdog_data_mutex);
- exit:
- 	return err;
+diff --git a/Documentation/hwmon/max34440.rst b/Documentation/hwmon/max34440.rst
+index 866f22b88e9b360ff54aa52807484bb3e859e56e..8ce10aa425d5db30d13f3868c3466ef32efefdee 100644
+--- a/Documentation/hwmon/max34440.rst
++++ b/Documentation/hwmon/max34440.rst
+@@ -27,6 +27,14 @@ Supported chips:
+ 
+     Datasheet: -
+ 
++  * ADI ADPM12300
++
++    Prefixes: 'adpm12300'
++
++    Addresses scanned: -
++
++    Datasheet: -
++
+   * Maxim MAX34440
+ 
+     Prefixes: 'max34440'
+@@ -105,11 +113,11 @@ This driver supports multiple devices: hardware monitoring for Maxim MAX34440
+ PMBus 6-Channel Power-Supply Manager, MAX34441 PMBus 5-Channel Power-Supply
+ Manager and Intelligent Fan Controller, and MAX34446 PMBus Power-Supply Data
+ Logger; PMBus Voltage Monitor and Sequencers for MAX34451, MAX34452, MAX34460,
+-and MAX34461; PMBus DC/DC Power Module ADPM12160, ADPM12200, and ADPM12250. The
+-MAX34451 and MAX34452 support monitoring voltage or current of 16 channels based
+-on GIN pins. The MAX34460 supports 12 voltage channels, and the MAX34461 supports
+-16 voltage channels. The ADPM12160, ADPM12200, and ADPM12250 also monitor both
+-input and output of voltage and current.
++and MAX34461; PMBus DC/DC Power Module ADPM12160, ADPM12200, ADPM12250 and
++ADPM12300. The MAX34451 and MAX34452 support monitoring voltage or current of 16
++channels based on GIN pins. The MAX34460 supports 12 voltage channels, and the
++MAX34461 supports 16 voltage channels. The ADPM12160, ADPM12200, ADPM12250 and
++ADPM12300 also monitor both input and output of voltage and current.
+ 
+ The driver is a client driver to the core PMBus driver. Please see
+ Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
+@@ -167,8 +175,8 @@ in[1-6]_reset_history	Write any value to reset history.
+ .. note::
+ 
+     - MAX34446 only supports in[1-4].
+-    - ADPM12160, ADPM12200, and ADPM12250 only supports in[1-2]. Label is "vin1"
+-      and "vout1" respectively.
++    - ADPM12160, ADPM12200, ADPM12250, and ADPM12300 only supports in[1-2].
++      Label is "vin1" and "vout1" respectively.
+ 
+ Curr
+ ~~~~
+@@ -190,9 +198,9 @@ curr[1-6]_reset_history	Write any value to reset history.
+ 
+     - in6 and curr6 attributes only exist for MAX34440.
+     - MAX34446 only supports curr[1-4].
+-    - For ADPM12160, ADPM12200, and ADPM12250, curr[1] is "iin1"
++    - For ADPM12160, ADPM12200, ADPM12250, and ADPM12300, curr[1] is "iin1"
+     - For ADPM12160, and ADPM12200 curr[2-6] are "iout[1-5]".
+-    - For ADPM12250, curr[2-4] are "iout[1-3]".
++    - For ADPM12250, and ADPM12300 curr[2-4] are "iout[1-3]".
+ 
+ Power
+ ~~~~~
+@@ -228,7 +236,7 @@ temp[1-8]_reset_history	Write any value to reset history.
+ .. note::
+    - temp7 and temp8 attributes only exist for MAX34440.
+    - MAX34446 only supports temp[1-3].
+-   - ADPM12160, ADPM12200, and ADPM12250 only supports temp[1].
++   - ADPM12160, ADPM12200, ADPM12250, and ADPM12300 only supports temp[1].
+ 
+ 
+ .. note::
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 3289ab50a0280d93204ea5fab22e2435c8f01328..90305d5d59e8249b83f33ccef1cb749615bd75e3 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -454,8 +454,8 @@ config SENSORS_MAX34440
+ 	help
+ 	  If you say yes here you get hardware monitoring support for Maxim
+ 	  MAX34440, MAX34441, MAX34446, MAX34451, MAX34452, MAX34460, and
+-	  MAX34461. Other compatible devices are ADPM12160, ADPM12200, and
+-	  ADPM12250.
++	  MAX34461. Other compatible devices are ADPM12160, ADPM12200,
++	  ADPM12250, and ADPM12300.
+ 
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called max34440.
+diff --git a/drivers/hwmon/pmbus/max34440.c b/drivers/hwmon/pmbus/max34440.c
+index 866d25ae8971c49d3e296efb69fc486e5dbac668..7f71dfe486438752fbbded6ed9c4172dd8ab8534 100644
+--- a/drivers/hwmon/pmbus/max34440.c
++++ b/drivers/hwmon/pmbus/max34440.c
+@@ -812,10 +812,12 @@ static int max34440_probe(struct i2c_client *client)
+ 	return pmbus_do_probe(client, &data->info);
  }
+ 
++/* ADPM12300 is just ADPM12250 with higher power capacity. Reuses driver data */
+ static const struct i2c_device_id max34440_id[] = {
+ 	{ .name = "adpm12160", .driver_data = adpm12160 },
+ 	{ .name = "adpm12200", .driver_data = adpm12200 },
+ 	{ .name = "adpm12250", .driver_data = adpm12250 },
++	{ .name = "adpm12300", .driver_data = adpm12250 },
+ 	{ .name = "max34440", .driver_data = max34440 },
+ 	{ .name = "max34441", .driver_data = max34441 },
+ 	{ .name = "max34446", .driver_data = max34446 },
+
+---
+base-commit: 1f7154a56e446d4f68542fc04f7376a7d6404609
+change-id: 20260914-dev_adpm12300-3145fabef660
+
+Best regards,
 -- 
-2.43.0
+Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 
