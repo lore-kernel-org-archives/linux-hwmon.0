@@ -1,104 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail-244106.protonmail.ch (mail-244106.protonmail.ch [109.224.244.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAF5549DBB9
-	for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 20:08:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35C8340281
+	for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 21:59:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789416516; cv=none; b=Djg1BEnRkJ9rJHoewM6kdGz0FZ6QowQZyzpOkjDBm3Ub2FsCa0oY+5m2jpSTlgiwoXRigVQLBH9PjkYzsqzUo9B6yUCAH/X2M2/ZAdLXfbIELlrqWJ4sc5DHkPQ8c3wCPnizo50yjy06v7nCTabS41eliN8QU7h9Ts9PMuzdWTc=
+	t=1789423185; cv=none; b=B+de2tRkTTEUeY1YNz6P3aaEdfz+VRfJsk5qEWGBN5JksC9o6NNiGeaLFq7Oz3h5waLc1djKBsQhAP871vENMRpkwSFpaCWtpicFtddoADMnMnxuemzfxU4hWsNTWGbmgxglZSA+yAvIEiic2WfpM/yQxSFiwX7gOh0rNBm9NRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789416516; c=relaxed/simple;
-	bh=0qWASQxNX7me/zJovLeUVn1vHfqtPSMVYdfjNgn54UA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=BLkvEBzRN7HW2wbR1zDRp7/MLfOmeATlBeLkMapI9f53qhEebMftHid/Y2t3GgOniq8ZRp3B64+texozyqfAlieRWXw3GXkr998flyaemT9DHlLrpEJVgOmIMjmuw9iCLu1mHtZMJUHOy3kAkXE6L594Hd21+aHfqJSLUdjAdAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ON1tINMe; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789423185; c=relaxed/simple;
+	bh=+LzYP2KKgx177AigxhPhM8V1oWR5s8y8QPFx79rLFHY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=n1qdXw4FFcRFDa1K89cPVxUZ5810wyyYURKzyKGEukrsYm1JolNNkvajb8mtgCn10v8RvDB0kDTc0ga4e3avpoOkZseoXWRHZDrBtb+CeLLT6M5u5aZCBe95ZSIlPrUG/OMxBywxOpzvINtf6ctSusB9yimRliDFJBYcHDlfcuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc; spf=pass smtp.mailfrom=vasily.cc; dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b=FpEukLBW; arc=none smtp.client-ip=109.224.244.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vasily.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ON1tINMe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5642E1F000FF;
-	Mon, 14 Sep 2026 20:08:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789416511;
-	bh=rnuQSxJZUX/OWlVExrPUbwpChQ7gIoIJaYxt+X3CzHw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ON1tINMeAGJxBWewTSBwHlSRw09vimRvkRYa0uXFIibbRaXTihA9tIe++oKbD8/te
-	 REyxYYsV+X9IEck/lszLq9krYDL2Tub54B1m7Vu6B6mwO9Zw3faf4RFT7hyiONM0yV
-	 8afM2gPBHEfwuY9Peukg000MRuX+OhuEdQMe1gLzSUx44dCAKCpFaSW1RtMiJOxIZ8
-	 wfzJjF4mXsY4n6dhyyxQzcdto1syH+BdHTRrh8BkFoUb2hZZloEjpQKleVQrq2cbJ2
-	 KycBrIW9utW242aX8BhUCYsNzaaSQf9rFYXZpky/cgxausWEmzrL23nLblzYG0/Wn1
-	 vr516Cgue0/Cw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add AMPINEL support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Vas Zayarskiy" <contact@vasily.cc>
+	dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b="FpEukLBW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vasily.cc;
+	s=protonmail2; t=1789423175; x=1789682375;
+	bh=+LzYP2KKgx177AigxhPhM8V1oWR5s8y8QPFx79rLFHY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:From:To:
+	 Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=FpEukLBWsbWgfvXnEP6f6ux/H8eRJE+UQYZYgFTCYiotATFR8dg6+rdRpDK2TZAJk
+	 DvCh1B4Pk1eZGYvWhvQ2yoszfA7CgDHFLCThxOuRCKJEcVyy1FYMeIvXdtivMECeI+
+	 gMMD0GK/lAwI/+mbavUkV7iOGyq4kpBIz0ckAIQk4tiESA18lpxWU03Qw0ATT2hidq
+	 7No0Pr4d0mO9Vt4tG7GMqpyGMxgUPE3WiKoDGJeIi1ZwpW2CqfknhF7B4cdzfiEL3h
+	 rBQBh75DoRxEbMWeEU/Yvur3WsOz8KYRHAiO/fQvk+nZVZdbBNz0/irSQqRXl1EQhw
+	 bPbL5HOzlUKFA==
+X-Pm-Submission-Id: 4hkJw60H5lz1DDrw
+From: Vas Zayarskiy <contact@vasily.cc>
+To: sashiko-reviews@lists.linux.dev
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260914195759.171524-1-contact@vasily.cc>
-References: <20260914195759.171524-1-contact@vasily.cc>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 14 Sep 2026 20:08:30 +0000
-Message-Id: <20260914200831.5642E1F000FF@smtp.kernel.org>
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add AMPINEL support
+Date: Tue, 15 Sep 2026 00:59:17 +0300
+Message-ID: <20260914215917.285155-1-contact@vasily.cc>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260914200831.5642E1F000FF@smtp.kernel.org>
+References: <20260914195759.171524-1-contact@vasily.cc> <20260914200831.5642E1F000FF@smtp.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Critical] The driver unconditionally casts the device parent to a `usb_i=
-nterface` without verifying that the device is actually bound to a USB tran=
-sport, which can lead to an invalid cast and kernel crash.
---
+> Would it be better to add a hid_is_usb(hdev) check before attempting this
+> cast?
 
-commit ab9f1cda999fbdfa626d75acef47522f86ec7022
-Author: Vas Zayarskiy <contact@vasily.cc>
+Thanks for catching this. HID_USB_DEVICE() only matches the advertised bus;
+UHID can supply BUS_USB while using a different low-level transport and a
+non-USB parent. The cast therefore needs an actual transport check.
 
-hwmon: (aquacomputer_d5next) Add AMPINEL support
+I have prepared v2 with hid_is_usb(hdev) checked before to_usb_interface(),
+returning -ENODEV for other transports. A probe-prefix userspace harness
+reaches the invalid-parent cast with v1 and rejects it before the cast with
+v2. The real-USB telemetry and keyboard paths also pass the harness checks.
 
-This commit adds read-only hardware monitoring support for the Aquacomputer
-AMPINEL power monitor. It decodes the USB HID input reports to expose total
-power, voltage, current, and temperature telemetry through standard hwmon
-interfaces.
+The revised module builds on 7.2.5; x86_64 and i386 object builds, sparse and
+the 995-report parser replay pass. No crashing UHID device was created on
+the host during testing.
 
-> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomp=
-uter_d5next.c
-> index 1ca70e7262988..b33d0ccc02183 100644
-> --- a/drivers/hwmon/aquacomputer_d5next.c
-> +++ b/drivers/hwmon/aquacomputer_d5next.c
-[ ... ]
-> @@ -1533,6 +1626,27 @@ static int aqc_probe(struct hid_device *hdev, cons=
-t struct hid_device_id *id)
->  	if (ret)
->  		return ret;
-> =20
-> +	if (hdev->product =3D=3D USB_PRODUCT_ID_AMPINEL) {
-> +		intf =3D to_usb_interface(hdev->dev.parent);
-
-[Severity: Critical]
-Is it safe to cast the parent device to a usb_interface here without first
-verifying that this is a USB device?
-
-If a non-USB HID device matching this vendor (0x0c70) and product (0xf015) =
-ID
-is registered (for example, spoofed over Bluetooth or by a local attacker
-using /dev/uhid), to_usb_interface() will perform an invalid cast.=20
-
-The subsequent dereference of intf->cur_altsetting could then cause an OOPS
-or memory corruption due to type confusion.
-
-Would it be better to add a hid_is_usb(hdev) check before attempting this
-cast?
-
-> +		/*
-> +		 * hid-generic yields every interface matching our product ID.
-> +		 * Preserve input and hidraw on the separate keyboard interface.
-> +		 */
-> +		if (intf->cur_altsetting->desc.bInterfaceNumber !=3D AMPINEL_DATA_INTE=
-RFACE) {
-> +			hdev->quirks |=3D HID_QUIRK_INPUT_PER_APP;
-> +			return hid_hw_start(hdev, HID_CONNECT_DEFAULT);
-> +		}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914195759.1715=
-24-1-contact@vasily.cc?part=3D1
+Thanks,
+Vas
