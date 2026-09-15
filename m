@@ -1,178 +1,471 @@
-Received: from mail-yx2-f13.google.com (mail-yx2-f13.google.com [74.125.224.141])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF6944028C4
-	for <linux-hwmon@vger.kernel.org>; Tue, 15 Sep 2026 03:55:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.141
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789444562; cv=pass; b=a1Wi/IMXmgiTFWKBxwee/T8ea2lN8bZ8jzU4A2sLaTxumrSA8TnCB/9mdbn+6cMIjZzhNCwK3AraWGKUZ1B3Opsh7i4Vhr+F2JRsBtN/uKJZzW+5kSs2sHlNsH9fmCaSUvGKWpKXxwABFNqRnh5AS6uu6f4/KwF+RjemAFEx+cg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789444562; c=relaxed/simple;
-	bh=IQ8qzRaj8tpoW8rhpnZaW1weLubpSHwKHelZMz6tzLA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nWE+7dpdQm5wtty0pU2e6k3yuou2g6Gll5iYjFyGdNb4khu12i6xsLqpbXo5J9/uRwGGuLDWCD6C8nu4laaPs8JUAB73dCPVOukbxZ/KgoabFz2bsQEdtAk1+kH4Pnftagz1AGrdKOXW5klU/DxeyPOdfp8bv50wDiggPpNJH28=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QcTGU1dQ; arc=pass smtp.client-ip=74.125.224.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78B4A3E7BC6
+	for <linux-hwmon@vger.kernel.org>; Tue, 15 Sep 2026 04:30:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789446610; cv=none; b=rlmAlRFoWvFisN91KxEfQBcdikrMjVv/4NmnBD+Z6Lp2gwi1FlfNXVhr5Fbl0zsiPO2inpAYrIQfXVQBK+VGAoH9/mID4ZFwNuIi76hjHI9gFLx2Rf6KQP/9VHgh0k/xvwMFLYc+7QTQ0q6sjva8iAO/cFcKNJhWVWzdJ2V6Nlc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789446610; c=relaxed/simple;
+	bh=M0S5yaTWV2jxon3GXnqFx3016pw+W1iE559NuEKUOQc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZVmEI5GTKsWbv/7Ymp0vHOTPzEBM5yrL3W5PF6cIyyG/qvWcX6GY2lNcn1azNGCIxYW2cYCPwhwZFinQFg4lg6ljbFP+aD7qPRQHgQWanttrvytBgIgPRWcebxG4e64L742NeZg9KnZg1ANfq9xUG55uaIOtxvQoTuLQxZ0RW70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V34f3ikb; arc=none smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QcTGU1dQ"
-Received: by mail-yx2-f13.google.com with SMTP id 00721157ae682-85d43ac6090so26125987b3.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 20:55:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789444559; cv=none;
-        d=google.com; s=arc-20260327;
-        b=p0gGfWYZ20NHXGS5QACY5HvJmWyu6mI6E8IC/ZyZalswIQNhqVRTZzOKIRTzAGP5np
-         ymnio7Zw02YN3nusEaHf8PLDLS4sUdV8XYn5Fw40RJsRO9gCy8oJ4fbqaUp6wDcdJmos
-         Wtwp4nAQXL+qEk0o5lrh1s5EARhUF1SJwJ7BtL4tk+xhNxAgfq7YDHUOmXtEC2a/w9c9
-         q7eztvNkX9EQsxDJEng+CjFUuU7n8TtsEXJl7Qpv19UvhzPShblNwURvu67gI4pzo8e5
-         WTng1kltLcFoRisHEHi29qqLJ/ferKo6LLlu2ZFKdjZCW3bAo9D6nOxOE7T7SMuccXdy
-         LGTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=eO/9u+qepRyuWo0/nmbsdH5lUnNgat0VZD6Mn6ZV5GU=;
-        fh=kX8ReOIVDObd9+MsT1TESMhclhh7k0QWMwenzSCShvA=;
-        b=VmRbSIAaTtlIF14Hxi2CkzplOkYrM1KjBDntrt7T/lZ043vQqgF6KYBlnt1aFa/nDK
-         HGdEA2q/mFMed2he/WQhxGZzlThPJ0Aa1oaoO95IP8A5tpQYbY6LQO/Ii/s2tlzKyDqj
-         o+VaV+oEJb3nZ5iF1m2xPgWgsB9bXv88Ego3zW9kXPZfsGr4KBChJw4fEaRNXPSUdS7V
-         9Amn8M276KMZDRctoue0M+Y0lrvkPh5yh9gDYo8QrEFTrRLlqyFwMhw5rbqm36UC/C5G
-         BZ+W2JywXwYXPJtjSnCzNERN7q1im9bKvMLvpWOuIpdrwtplJsSyriNZH136ZMDlGocE
-         5T1g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V34f3ikb"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccd66bb4so2398189a91.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 14 Sep 2026 21:30:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789444559; x=1790049359; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=eO/9u+qepRyuWo0/nmbsdH5lUnNgat0VZD6Mn6ZV5GU=;
-        b=QcTGU1dQUv1oNo96CC5Vs0PfG+Orbp+0mINQuUW26XAsULHKYyYIRCkMDrJ67pme8t
-         xaOkUc2F1pZk7Pqsfkz9++vqsao/ysg1pxxEq7Xdyei+ZeM8+iHsaSJgYnQStbmmO3Hm
-         vZ5OdVAvrUPkth24bG/Lqy5eUQ4UjNYFAK52n+efm3xqX9POJN8BYcSN91SVNvF7TyUr
-         BD36TjQA4wC8+BPvuCO5v7UikKiLeQ9sifZjtJrczNyRPRVtIaYD9mj7Lph6PbRklts8
-         UfPThKedX4zO45jO4lk0PXzOo9XDB1igcSN3VWaynCugKHcr5L/q9BYU3tGkrTil8TZz
-         yYaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789444559; x=1790049359;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1789446607; x=1790051407; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=eO/9u+qepRyuWo0/nmbsdH5lUnNgat0VZD6Mn6ZV5GU=;
-        b=oF1/JCs59HaXxz71hbRetEMeE48j7yFRMPFyBSoPv51dOvzP+t/z5CW0qaGcPj+iQ1
-         hWmBVwqIM6lBnHajI+biPCWgxOHbES9lfvnxwfJiIWJHHpeq2NrM0+s13XV4k52RImha
-         iJHojsGAQPHxi81smPwLbkJxYIHIPZJFE9XQlK66l5ecdoSYqRQH6+u/HSVZYMtcfZ9O
-         U9qmY53yK/YtqbPKwfIqFjOnIxEB3p4Xg76p46ifFtBMQmbS7d2JyiE5bLh79XxxtyId
-         INRWQKpU8jvKZMXUPIweHheZwdYRgfZaO8d+qlubMpUG8i1O/Rz+dNnmYUNGE2aOBRd9
-         QwyA==
-X-Forwarded-Encrypted: i=1; AKwUvBxdl05XhYJuzQ2w7WO1bdnMeo0CW+pqFuExP3lXgexV1x2ZHFozKjLvTrJ59non2cedwHXLC0mNmCCLYA==@vger.kernel.org
-X-Gm-Message-State: AFuF++lWiTD0zV4Z9gECik+eYdX4111v+TwVcZ5VnXLE51272kXXAUwx
-	yzOTgLCX3sPbH4wySOalyuWQ74LzTN2oVOKK+nlWBq5k9K0NCxhnhR4tQRokmLaPnRMEdc+l1BY
-	OARGphFznzeL8/d+I7nc+qnV10tC/p6E=
-X-Gm-Gg: AYBFou2wzN0F+UCRj13ssaDKB9gNTdMzA9bsd95eggRQAskGj88H6TVWODGfjoh5Fa4
-	hPLYOsLPdFgFNGaYv1XpnkqObJGJBoHI2qCNNduUhKflSW0wvL9FqabbwrAdsnohXkM2JUYaRPg
-	7GEAMisx/y0dVhrYV8MVROw5bI5g15Wprb7p/fK6Ok1JYQ628KOAsc7dgR+Ej25dBUSmhjDCv16
-	r0ieXSHxxS5JzelD7Iq+S6W6br6lXe4pgX1OhoIzGrR3U/W5C6bWpELrO0OhsSCjk0otrEzI/oC
-	Rm49OkVb1Rx0ew/oubeHluJJA3KyzCyvQphmChX4p/2Qzjshthx3L2Op5ekCqFMEhw==
-X-Received: by 2002:a05:690c:a79c:b0:873:5c7b:c0fc with SMTP id
- 00721157ae682-88d22cdc932mr13897057b3.52.1789444558685; Mon, 14 Sep 2026
- 20:55:58 -0700 (PDT)
+        bh=BDvQuJ/rOoLrMqyktLy0LXLmDbVDlpOcUTTqLm4pVrE=;
+        b=V34f3ikbsQ/qwEI8jee4vw2bfxE65NUVS+FAC4DX9KBUgRBjiUpQvyzcYhDzkQqgGj
+         MfXSu9PYHgqbElkcnOC9dLddQnpL7TF3LqR9YPyB4NjANbTuaQgFG4/wRBbhbRNJJXNr
+         8MqHDpxOTg0kGB3Y9pvyXAvOoHVXEB9rZp7wnOL+IItIUMIeN3+LcLJr7JNGtoxBBepT
+         tatOWJl9aKqeK5QI1KUObwdc+Ktqoa1gbC6Cxa8nWxxiblrYiCIHSjFXBR7lv/RfYdDe
+         ZhT3X0U7D6cG4M5D5zNGeMDvFm8aI02w+fEwbBRhv0lfUic5hXk2UTOLvwJUqWJxytD4
+         B1Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789446607; x=1790051407;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=BDvQuJ/rOoLrMqyktLy0LXLmDbVDlpOcUTTqLm4pVrE=;
+        b=G2TKNut0eGcmn+uHBjqKIPgOCU9ri4mJ0QlzFu602gahsMrxZflPFL9dLyP8xUXnFh
+         Ivv7hzyROqF3TI+VnP/ceAp1zqdv1PzLhAkEjf/IC3W/Do7uURjgfCE/tZmihWMwHG+r
+         Z/+2XexeJGropAeTlTJhTzWpkQBTDcax7c31WSvArhNVAi7bwitF2xXRyQ9Z37GN7zlK
+         LcGj1QZHrN5hxA8ckdiOaE/H98DGP4+tFip270+jt17ngav6VpBwFjTYmBFHYd9Rcpuj
+         jhuA1pbrCUgyXArFoYIJkXHo6mryE1zALdmKheDecN9csw78FXrqcZL7sO4hCwhXUojy
+         fN3w==
+X-Gm-Message-State: AFuF++mDLwfb/Zdw2l34Vd7GG8V3Yx3wm7ncRQy11J8JjrlLg9OF5Qtz
+	7ltRfmOQZSgjgQcoM77MSAfM/agK0Uvo71fB5b6ARPZxzkUC3N5VHI8a
+X-Gm-Gg: AYBFou1ZcX0ef/o5KptYtG8IrB8M5W0k6iJw8iw6u7Dz4Gqz7UfhiBFaJkAdMhvlHxM
+	Mso3WPQsmR8cf6WbkJPEXB9XjovQCZM5Qec6lr4m6Evx+jlZkShpBAkyvgGtgfaCyGUfMG/YRY6
+	WRn3ohxHOXsAmptO2ZgWRw1FK2qmVb5lF723/CMJ9pJYH3NLWAdPTqmW/S80iPguxtXxIxZnSW9
+	68hK5RcFwOa2QSLDDsEzpSML80TsmrV2A5QQlZ+GJM9096aSY9IBklk+3zoGMJW58jK47gvHrlV
+	/b+EDwaFnNQIBTxCpApVjABz8L0409b61u8eZjmbmSzD5IzJvSt985dl/+49ias2yOvIcL7wUIo
+	Q+bDQK6+gDzozbWDtjrhSZLPgb7XW4nj6d9tsdYdPVWZQncvhMW+XAr4I0WHj71MHckgX9YfT8U
+	uMOvJJoERUq4I9UA3pKO60A2Z77y0nQ4kekC+XoHs2pH+tTP+Eb4rxFOtBonxBntmzCbfvgrQV+
+	bfObZ6dEflQxbyBMpph8o+e2bhnUhjV/t0qzt80Heqoj1jG
+X-Received: by 2002:a17:90b:390f:b0:398:c315:fa6f with SMTP id 98e67ed59e1d1-39dec079f10mr10567966a91.14.1789446607196;
+        Mon, 14 Sep 2026 21:30:07 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1438d89556asm3021593c88.13.2026.09.14.21.30.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Sep 2026 21:30:06 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a968a02f-c513-42f0-993f-ede4f785025c@roeck-us.net>
+Date: Mon, 14 Sep 2026 21:30:04 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260914115448.2039438-1-congnt264@gmail.com> <44026532-e454-458a-847a-9e66e7ddc3ad@roeck-us.net>
-In-Reply-To: <44026532-e454-458a-847a-9e66e7ddc3ad@roeck-us.net>
-From: =?UTF-8?B?Tmd1eeG7hW4gQ8O0bmc=?= <congnt264@gmail.com>
-Date: Tue, 15 Sep 2026 10:55:47 +0700
-X-Gm-Features: AcwNN1UQndXSIj7-fzZashgJyte07l53UHSD32h1DonXihx6AU1VTZUaNN2VuGI
-Message-ID: <CAJpJ=Gvz0_kFZ2UWKA5qss07z+jbOdf7BqLEnpt7F673ZgE30Q@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (gpio-fan) fix use-after-free of alarm_work on unbind
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Simon Guinot <sguinot@lacie.com>, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 4/4] hwmon: (aquacomputer_d5next) Add AMPINEL support
+To: Vas Zayarskiy <contact@vasily.cc>, Aleksa Savic
+ <savicaleksa83@gmail.com>, Jack Doan <me@jackdoan.com>,
+ Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>
+References: <20260914233728.22725-1-contact@vasily.cc>
+ <20260914233728.22725-5-contact@vasily.cc>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
+ oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
+ VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
+ 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
+ onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
+ DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
+ rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
+ WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
+ qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
+ 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
+ qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
+ H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
+ njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
+ dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
+ j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
+ scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
+ zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
+ RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
+ F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
+ FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260914233728.22725-5-contact@vasily.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Sep 14, 2026 at 10:40=E2=80=AFPM Guenter Roeck <linux@roeck-us.net>=
- wrote:
->
-> On 9/14/26 04:54, Cong Nguyen wrote:
-> > fan_alarm_irq_handler() schedules alarm_work, but nothing ever cancels
-> > it. free_irq() (via devm) only waits for an in-progress IRQ handler,
-> > not queued work -- a pending alarm_work can run after fan_data is
-> > devm-freed, dereferencing it in fan_alarm_notify().
-> >
-> > Cancel it via a devm action registered before devm_request_irq(), so
-> > teardown frees the IRQ first, then cancels whatever's already queued.
-> >
-> > Fixes: d6fe1360f42e ("hwmon: add generic GPIO fan driver")
-> > Reported-by: Sashiko AI review <sashiko-bot@kernel.org>
-> > Link: https://lore.kernel.org/r/20260830152150.27F5F1F000E9@smtp.kernel=
-.org
-> > Cc: stable@vger.kernel.org
-> > Assisted-by: Claude:claude-opus-4
-> > Signed-off-by: Cong Nguyen <congnt264@gmail.com>
-> > ---
-> >   drivers/hwmon/gpio-fan.c | 20 +++++++++++++++++++-
-> >   1 file changed, 19 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-> > index 084828e1e281..b1b57bb63a33 100644
-> > --- a/drivers/hwmon/gpio-fan.c
-> > +++ b/drivers/hwmon/gpio-fan.c
-> > @@ -81,9 +81,16 @@ static ssize_t fan1_alarm_show(struct device *dev,
-> >
-> >   static DEVICE_ATTR_RO(fan1_alarm);
-> >
-> > +static void gpio_fan_cancel_alarm_work(void *data)
-> > +{
-> > +     struct gpio_fan_data *fan_data =3D data;
-> > +
-> > +     cancel_work_sync(&fan_data->alarm_work);
->
-> I think this still leaves a window on teardown, if an interrupt happens a=
-fter
-> the work was canceled. I would suggest to use disable_work_sync() instead=
-.
->
-> Thanks,
-> Guenter
+On 9/14/26 16:37, Vas Zayarskiy wrote:
+> Add read-only total power, total current, input voltage, hotspot
+> temperature and six channel currents for the Aquacomputer AMPINEL.
+> 
+> Decode its 544-byte input report through the existing serial-number,
+> temperature and update path, with power, current and voltage handled in
+> the device-specific switch. Store all readings in hwmon units.
+> 
+> Match only the USB telemetry interface, leaving the separate keyboard
+> interface to hid-generic. Validate the telemetry collection and report
+> size before opening the device. Channel labels follow report order;
+> configuration and alarms are not supported.
+> 
+> Assisted-by: LLM sparse
+> Signed-off-by: Vas Zayarskiy <contact@vasily.cc>
+> ---
+>   Documentation/hwmon/aquacomputer_d5next.rst |  11 ++
+>   drivers/hwmon/Kconfig                       |   4 +-
+>   drivers/hwmon/aquacomputer_d5next.c         | 107 +++++++++++++++++++-
+>   3 files changed, 116 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
+> index 49163f387..faf1c51c1 100644
+> --- a/Documentation/hwmon/aquacomputer_d5next.rst
+> +++ b/Documentation/hwmon/aquacomputer_d5next.rst
+> @@ -13,6 +13,7 @@ Supported devices:
+>   * Aquacomputer Quadro fan controller
+>   * Aquacomputer High Flow Next sensor
+>   * Aquacomputer Leakshield leak prevention system
+> +* Aquacomputer AMPINEL power monitor
+>   * Aquacomputer Aquastream XT watercooling pump
+>   * Aquacomputer Aquastream Ultimate watercooling pump
+>   * Aquacomputer Poweradjust 3 fan controller
+> @@ -69,6 +70,16 @@ The Aquastream XT pump exposes temperature readings for the coolant, external se
+>   and fan IC. It also exposes pump and fan speeds (in RPM), voltages, as well as pump
+>   current.
+>   
+> +The AMPINEL exposes total power, total current, input voltage, hotspot
+> +temperature and six channel currents. Channel numbers follow report order;
+> +their mapping to physical connector pins has not been verified. The readings
+> +are received approximately twice per second. Only sensor reads are supported;
+> +the driver does not configure protection settings or report alarms.
+> +
+> +For AMPINEL, ``power1_input`` is total power, ``in0_input`` is input voltage,
+> +``temp1_input`` is hotspot temperature, ``curr1_input`` is total current, and
+> +``curr[2-7]_input`` are the six channel currents.
+> +
+>   The Aquastream Ultimate pump exposes coolant temp and an external temp sensor, along
+>   with speed, power, voltage and current of both the pump and optionally connected fan.
+>   It also exposes pressure and flow speed readings.
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 3d8b2c958..06cb246ff 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -257,14 +257,14 @@ config SENSORS_AHT10
+>   	  will be called aht10.
+>   
+>   config SENSORS_AQUACOMPUTER_D5NEXT
+> -	tristate "Aquacomputer D5 Next, Octo, Quadro, Farbwerk, Farbwerk 360, High Flow Next"
+> +	tristate "Aquacomputer D5 Next and other USB devices"
+>   	depends on USB_HID
+>   	select CRC16
+>   	help
+>   	  If you say yes here you get support for sensors and fans of
+>   	  the Aquacomputer D5 Next watercooling pump, Octo and Quadro fan
+>   	  controllers, Farbwerk and Farbwerk 360 RGB controllers, High Flow
+> -	  Next sensor, where available.
+> +	  Next sensor and AMPINEL power monitor, where available.
+>   
+>   	  This driver can also be built as a module. If so, the module
+>   	  will be called aquacomputer_d5next.
+> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+> index b58f5b5c9..e661c4dfa 100644
+> --- a/drivers/hwmon/aquacomputer_d5next.c
+> +++ b/drivers/hwmon/aquacomputer_d5next.c
+> @@ -2,7 +2,7 @@
+>   /*
+>    * hwmon driver for Aquacomputer devices (D5 Next, Farbwerk, Farbwerk 360, Octo,
+>    * Quadro, High Flow Next, Aquaero, Aquastream Ultimate, Leakshield,
+> - * High Flow USB/MPS Flow family)
+> + * High Flow USB/MPS Flow family, AMPINEL)
+>    *
+>    * Aquacomputer devices send HID reports (with ID 0x01) every second to report
+>    * sensor values, except for devices that communicate through the
+> @@ -23,6 +23,7 @@
+>   #include <linux/module.h>
+>   #include <linux/seq_file.h>
+>   #include <linux/unaligned.h>
+> +#include <linux/usb.h>
+>   
+>   #define USB_VENDOR_ID_AQUACOMPUTER	0x0c70
+>   #define USB_PRODUCT_ID_AQUAERO		0xf001
+> @@ -33,6 +34,7 @@
+>   #define USB_PRODUCT_ID_OCTO		0xf011
+>   #define USB_PRODUCT_ID_HIGHFLOWNEXT	0xf012
+>   #define USB_PRODUCT_ID_LEAKSHIELD	0xf014
+> +#define USB_PRODUCT_ID_AMPINEL		0xf015
+>   #define USB_PRODUCT_ID_AQUASTREAMXT	0xf0b6
+>   #define USB_PRODUCT_ID_AQUASTREAMULT	0xf00b
+>   #define USB_PRODUCT_ID_POWERADJUST3	0xf0bd
+> @@ -41,7 +43,7 @@
+>   enum kinds {
+>   	d5next, farbwerk, farbwerk360, octo, quadro,
+>   	highflownext, aquaero, poweradjust3, aquastreamult,
+> -	aquastreamxt, leakshield, highflow
+> +	aquastreamxt, leakshield, highflow, ampinel
+>   };
+>   
+>   static const char *const aqc_device_names[] = {
+> @@ -56,7 +58,8 @@ static const char *const aqc_device_names[] = {
+>   	[aquaero] = "aquaero",
+>   	[aquastreamult] = "aquastreamultimate",
+>   	[poweradjust3] = "poweradjust3",
+> -	[highflow] = "highflow" /* Covers MPS Flow devices */
+> +	[highflow] = "highflow", /* Covers MPS Flow devices */
+> +	[ampinel] = "ampinel"
 
-Makes sense, sent as v2 -- disable_work_sync() instead.
+Add "," at the end to avoid having to change it whenever a new device is added.
 
-thanks,
-Cong
+>   };
+>   
+>   #define DRIVER_NAME			"aquacomputer_d5next"
+> @@ -111,6 +114,16 @@ static u8 aquaero_secondary_ctrl_report[] = {
+>   #define AQC_FAN_POWER_OFFSET		0x06
+>   #define AQC_FAN_SPEED_OFFSET		0x08
+>   
+> +/* AMPINEL offsets include the report ID byte. */
+> +#define AMPINEL_DATA_INTERFACE		1
+> +#define AMPINEL_STATUS_REPORT_SIZE	544
+> +#define AMPINEL_NUM_CHANNELS		6
+> +#define AMPINEL_CHANNEL_CURRENT_START	0x6f
+> +#define AMPINEL_POWER			0xc7
+> +#define AMPINEL_CURRENT			0xc9
+> +#define AMPINEL_VOLTAGE			0xcf
+> +#define AMPINEL_HOTSPOT			0xe1
+> +
+>   /* Specs of the Aquaero fan controllers */
+>   #define AQUAERO_SERIAL_START			0x07
+>   #define AQUAERO_FIRMWARE_VERSION		0x0B
+> @@ -516,6 +529,24 @@ static const char *const label_highflow_speeds[] = {
+>   	"Flow speed [dL/h]"
+>   };
+>   
+> +static const char *const label_ampinel_temp[] = {
+> +	"Hotspot"
+> +};
+> +
+> +static const char *const label_ampinel_power[] = {
+> +	"Total power"
+> +};
+> +
+> +static const char *const label_ampinel_voltage[] = {
+> +	"VCC In"
+> +};
+> +
+> +static const char *const label_ampinel_current[] = {
+> +	"Total current",
+> +	"Channel 1", "Channel 2", "Channel 3",
+> +	"Channel 4", "Channel 5", "Channel 6"
+> +};
+> +
+>   struct aqc_fan_structure_offsets {
+>   	u8 voltage;
+>   	u8 curr;
+> @@ -869,6 +900,10 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+>   		break;
+>   	case hwmon_power:
+>   		switch (priv->kind) {
+> +		case ampinel:
+> +			if (channel == 0)
+> +				return 0444;
+> +			break;
+>   		case aquastreamult:
+>   			/* Special case to support pump and fan power */
+>   			if (channel < 2)
+> @@ -889,6 +924,10 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+>   		break;
+>   	case hwmon_curr:
+>   		switch (priv->kind) {
+> +		case ampinel:
+> +			if (channel < AMPINEL_NUM_CHANNELS + 1)
+> +				return 0444;
+> +			break;
+>   		case aquastreamult:
+>   			/* Special case to support pump and fan current */
+>   			if (channel < 2)
+> @@ -907,6 +946,10 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+>   		break;
+>   	case hwmon_in:
+>   		switch (priv->kind) {
+> +		case ampinel:
+> +			if (channel == 0)
+> +				return 0444;
+> +			break;
+>   		case d5next:
+>   			/* Special case to support +5V and +12V voltage sensors */
+>   			if (channel < priv->num_fans + 2)
+> @@ -1336,12 +1379,17 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
+>   		return 0;
+>   
+>   	priv = hid_get_drvdata(hdev);
+> +	if (priv->kind == ampinel &&
+> +	    (report->type != HID_INPUT_REPORT || size != AMPINEL_STATUS_REPORT_SIZE ||
+> +	     data[0] != STATUS_REPORT_ID))
+> +		return 0;
+>   
 
-> > +}
-> > +
-> >   static int fan_alarm_init(struct gpio_fan_data *fan_data)
-> >   {
-> > -     int alarm_irq;
-> > +     int alarm_irq, err;
-> >       struct device *dev =3D fan_data->dev;
-> >
-> >       /*
-> > @@ -95,6 +102,17 @@ static int fan_alarm_init(struct gpio_fan_data *fan=
-_data)
-> >               return 0;
-> >
-> >       INIT_WORK(&fan_data->alarm_work, fan_alarm_notify);
-> > +
-> > +     /*
-> > +      * Register before devm_request_irq() below: LIFO teardown must f=
-ree
-> > +      * the IRQ (stopping new schedule_work() calls) before this cance=
-ls
-> > +      * whatever alarm_work is already queued or running.
-> > +      */
-> > +     err =3D devm_add_action_or_reset(dev, gpio_fan_cancel_alarm_work,
-> > +                                     fan_data);
-> > +     if (err)
-> > +             return err;
-> > +
-> >       irq_set_irq_type(alarm_irq, IRQ_TYPE_EDGE_BOTH);
-> >       return devm_request_irq(dev, alarm_irq, fan_alarm_irq_handler,
-> >                               IRQF_SHARED, "GPIO fan alarm", fan_data);
->
+This is again a bug fix affecting other controllers as well (report size and
+input type check).
+
+>   	/* Info provided with every report */
+>   	priv->serial_number[0] = get_unaligned_be16(data + priv->serial_number_start_offset);
+>   	priv->serial_number[1] = get_unaligned_be16(data + priv->serial_number_start_offset +
+>   						    SERIAL_PART_OFFSET);
+> -	priv->firmware_version = get_unaligned_be16(data + priv->firmware_version_offset);
+> +	if (priv->firmware_version_offset)
+> +		priv->firmware_version = get_unaligned_be16(data + priv->firmware_version_offset);
+
+Unrelated to adding support for ampinel.
+
+>   
+>   	/* Physical temperature sensor readings */
+>   	for (i = 0; i < priv->num_temp_sensors; i++) {
+> @@ -1394,6 +1442,17 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
+>   
+>   	/* Special-case sensor readings */
+>   	switch (priv->kind) {
+> +	case ampinel:
+> +		priv->power_input[0] =
+> +			min_t(u64, get_unaligned_be16(data + AMPINEL_POWER) * 100000ULL,
+> +			      LONG_MAX);
+> +		priv->current_input[0] = get_unaligned_be16(data + AMPINEL_CURRENT) * 10;
+> +		for (i = 0; i < AMPINEL_NUM_CHANNELS; i++)
+> +			priv->current_input[i + 1] =
+> +				get_unaligned_be16(data + AMPINEL_CHANNEL_CURRENT_START +
+> +						   i * AQC_SENSOR_SIZE);
+> +		priv->voltage_input[0] = get_unaligned_be16(data + AMPINEL_VOLTAGE);
+> +		break;
+>   	case aquaero:
+>   		/* Read calculated virtual temp sensors */
+>   		i = priv->num_temp_sensors + priv->num_virtual_temp_sensors;
+> @@ -1519,8 +1578,26 @@ static void aqc_debugfs_init(struct aqc_data *priv)
+>   		debugfs_create_file("power_cycles", 0444, priv->debugfs, priv, &power_cycles_fops);
+>   }
+>   
+> +static bool aqc_match(struct hid_device *hdev, bool ignore_special_driver)
+> +{
+> +	struct usb_interface *intf;
+> +
+> +	if (ignore_special_driver || hdev->quirks & HID_QUIRK_IGNORE_SPECIAL_DRIVER)
+> +		return false;
+> +
+> +	if (hdev->product != USB_PRODUCT_ID_AMPINEL)
+> +		return true;
+> +
+> +	if (!hid_is_usb(hdev))
+> +		return false;
+> +
+> +	intf = to_usb_interface(hdev->dev.parent);
+> +	return intf->cur_altsetting->desc.bInterfaceNumber == AMPINEL_DATA_INTERFACE;
+> +}
+> +
+>   static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>   {
+> +	struct hid_report *report;
+>   	struct aqc_data *priv;
+>   	int ret;
+>   
+> @@ -1537,6 +1614,14 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>   	if (ret)
+>   		return ret;
+>   
+> +	if (hdev->product == USB_PRODUCT_ID_AMPINEL) {
+> +		report = hdev->report_enum[HID_INPUT_REPORT].report_id_hash[STATUS_REPORT_ID];
+> +		if (hdev->maxcollection != 1 ||
+> +		    hdev->collection[0].usage != (HID_UP_MSVENDOR | 1) ||
+> +		    !report || report->size != (AMPINEL_STATUS_REPORT_SIZE - 1) * 8)
+> +			return -ENODEV;
+> +	}
+
+USB_PRODUCT_ID_AQUAERO has the same or a similar problem and handles it
+in the switch statement below. I do not see a reason to handle this one
+differently (including the need for the match function which doesn't seem
+to be needed for USB_PRODUCT_ID_AQUAERO).
+
+If the match function _is_ needed, the reason needs to be explained, even
+more so since this may impact USB_PRODUCT_ID_AQUAERO.
+
+> +
+>   	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
+>   	if (ret)
+>   		return ret;
+> @@ -1546,6 +1631,15 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>   		goto fail_and_stop;
+>   
+>   	switch (hdev->product) {
+> +	case USB_PRODUCT_ID_AMPINEL:
+> +		priv->kind = ampinel;
+> +		priv->num_temp_sensors = 1;
+> +		priv->temp_sensor_start_offset = AMPINEL_HOTSPOT;
+
+FWIW, the raw even can happen prior to this, which will result
+in bad data. This also affetcs other devices supported by this
+driver (and those with fans can crash when it happens).
+
+> +		priv->temp_label = label_ampinel_temp;
+> +		priv->power_label = label_ampinel_power;
+> +		priv->voltage_label = label_ampinel_voltage;
+> +		priv->current_label = label_ampinel_current;
+> +		break;
+>   	case USB_PRODUCT_ID_AQUAERO:
+>   		/*
+>   		 * Aquaero presents itself as three HID devices under the same product ID:
+> @@ -1795,6 +1889,9 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>   	}
+>   
+>   	switch (priv->kind) {
+> +	case ampinel:
+> +		priv->serial_number_start_offset = AQC_SERIAL_START;
+> +		break;
+>   	case aquaero:
+>   		priv->serial_number_start_offset = AQUAERO_SERIAL_START;
+>   		priv->firmware_version_offset = AQUAERO_FIRMWARE_VERSION;
+> @@ -1890,6 +1987,7 @@ static const struct hid_device_id aqc_table[] = {
+>   	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_QUADRO) },
+>   	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_HIGHFLOWNEXT) },
+>   	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_LEAKSHIELD) },
+> +	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_AMPINEL) },
+>   	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_AQUASTREAMXT) },
+>   	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_AQUASTREAMULT) },
+>   	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_POWERADJUST3) },
+> @@ -1902,6 +2000,7 @@ MODULE_DEVICE_TABLE(hid, aqc_table);
+>   static struct hid_driver aqc_driver = {
+>   	.name = DRIVER_NAME,
+>   	.id_table = aqc_table,
+> +	.match = aqc_match,
+>   	.probe = aqc_probe,
+>   	.remove = aqc_remove,
+>   	.raw_event = aqc_raw_event,
+
