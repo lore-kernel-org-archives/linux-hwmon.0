@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 659C3217723;
-	Tue, 15 Sep 2026 09:04:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216533B7767;
+	Tue, 15 Sep 2026 09:05:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789463077; cv=none; b=MP0haAhI24p2yx8cy8LsPcC/m/ZbtSQ06Hh0UrdK4WBGrCupyep2kNvaKx0Hl0IcFLN1Ub20zjuTLG0YnceMdEVoWpxasZFcbGxTmNxYD9UGgJuTOte251HTA88AK/HvhaKHMjELujNIL8WFGn8GwVmOFXqMWncrcGLGVsn42m8=
+	t=1789463114; cv=none; b=QpswTbO0VXWOZnquWBfxMjyjpUsdkXyEf8/SFGeDYc3bVsxA/bkfYXH5P/qDQG6T6+uyGHXXDxlaDeDzXucSf1LNXVVTDb1kAaX2bHK4a8XdkiAQmLICRmoDBV/usAZMIFTH0NzHMnYT2XWkzLwhCTxMsdOa/TEmjJnOyo7PWA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789463077; c=relaxed/simple;
-	bh=GG48I8OWLWCSwjZr3rcBebDHnJKLfxy+gd5eLuX2XAo=;
+	s=arc-20240116; t=1789463114; c=relaxed/simple;
+	bh=y/vUqzrKeu/r7XdZR4ORRSmgFmJFbw3RdKT2VQhAyi0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oqqE1TyF8qGhkt9shnPGb0C9atnewFu/W05dr96xmHihbEig97O/mb9Ns1Jr72ec7zInp9aK6mZVT+SO5cUVf/X5eBQOdUnrGxUaksVLCWc1TSf90HhlwSOldcayOOY1MK41Lj8Mtal5QHoQOVsjiyWqfB07n7dhHesD2yE+OZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RtmCRRAb; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=nAlKNXgeSr5HldrPKrDktYPLQ1yj97EVJHfyeH3a444iYoLmtrtfD5/bNiDLonrtFScA98MCv9uNzLi/8ke5vodoYILlcy9qAfjiuzQcDzO5ZLYYAEe+mH4M4gyzjlbBv3unD1Ah2xIL3XCN1dPp919XMh9MbCWkEJPdPwDhFqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JOmntclh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RtmCRRAb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CACD1F000FF;
-	Tue, 15 Sep 2026 09:04:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JOmntclh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1876F1F000FF;
+	Tue, 15 Sep 2026 09:05:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789463075;
-	bh=zthCAJeSZpEWPywmDOQWxavC456glJ2WFVFFKTOL7DI=;
+	s=k20260515; t=1789463112;
+	bh=DJ0y64alg7jGYdmLdKrHS632yEcH2PEJo6faH44x4cU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=RtmCRRAb0iFKzgb5tVG5KbJPE3N6ACkkgtVipfBxrrxmkoMSm8j7V+eoz0JHfsAHE
-	 pkSvL8oei6rjfNcYglnAMRlAq8oKUvWELGIyVYNB1k6G2wAXv8/TFiWLmSlgvdhT/k
-	 9HGg3xxik7+XXJQIe7dX/88QUeOCBuEqsnSxJuSVw1frBVSdSRP9nL4EDQTDp/7xCs
-	 48HS/twhh9xHhd1IpQVAtZnmREbtJNUJoXCVbk/TOEUnoL8Io4CvLdY6slPLXpcfcR
-	 DfWUs8mkVwVFYIsVxevsOSQ+GYKrs8bXVRGzUUl41h0DZLd22nT6Q4CCPhoz657mlO
-	 bs5UPlNikpRpA==
-Date: Tue, 15 Sep 2026 09:04:33 +0000
+	b=JOmntclhVD5AGN4cYEQa6rgCkMfFEXrRaYFqUBZbQ8f4ogIEybqKN4tGn8UpWi49/
+	 YsUNjkl0/8sAv4SUgDrSMUckib1MqTiVA24YdqbSyZEB8jEHdn+ui+P21Ob478ONXE
+	 cK5c+CW4I0nqFreZIMp8bm/qa1lyZFQC4Bt2l2eIBntnBNtzF0R4UJDy/koOM0JkBH
+	 x5cLquISXKUrmsQ599V6spaFG3prgfqiqRuoHlNlMbNmoPZBDxPYrnlkrU9gIrOG4l
+	 lAtt7U+RYboJicMyBeVofxR613HxXjxqr0iqPZ1GJDzDpJr92EFGWE0q5Pqa0O+W7v
+	 EJC29/N/KFu6Q==
+Date: Tue, 15 Sep 2026 09:05:10 +0000
 From: Yixun Lan <dlan@kernel.org>
 To: Troy Mitchell <troy.mitchell@linux.dev>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -40,10 +40,10 @@ Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
 	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
 	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v5 5/6] riscv: dts: spacemit: Add K3 I2C6 pinctrl state
-Message-ID: <20260915090433-GKA266329@kernel.org>
+Subject: Re: [PATCH v5 6/6] riscv: dts: spacemit: Add CTF2301 on K3 CoM260
+Message-ID: <20260915090510-GKB266329@kernel.org>
 References: <20260914-ctl2301-v5-0-b44b81cd2c3c@linux.dev>
- <20260914-ctl2301-v5-5-522def70acb4@linux.dev>
+ <20260914-ctl2301-v5-6-522def70acb4@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -52,45 +52,54 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260914-ctl2301-v5-5-522def70acb4@linux.dev>
+In-Reply-To: <20260914-ctl2301-v5-6-522def70acb4@linux.dev>
 
 Hi Troy,
 
+
 On 16:18 Mon 14 Sep     , Troy Mitchell wrote:
-> Add the K3 I2C6 pinctrl state used by boards that route I2C6 to pads 7
-> and 8. Use a 25 mA drive strength, which is supported for both K3 IO
-> voltage domains, and leave board-specific IO voltage selection to board
-> files.
+> Enable I2C6 on the K3 CoM260 module and describe the Sensylink
+> CTF2301 temperature sensor and fan controller at address 0x4c.
+> 
+> Override the I2C6 pin power source at board level because the IO rail
+> voltage is board-specific.
 > 
 > Signed-off-by: Troy Mitchell <troy.mitchell@linux.dev>
 > ---
->  arch/riscv/boot/dts/spacemit/k3-pinctrl.dtsi | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+>  arch/riscv/boot/dts/spacemit/k3-com260.dtsi | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 > 
+
 Reviewed-by: Yixun Lan <dlan@kernel.org>
 
-> diff --git a/arch/riscv/boot/dts/spacemit/k3-pinctrl.dtsi b/arch/riscv/boot/dts/spacemit/k3-pinctrl.dtsi
-> index 6482d24be1394..cb4f4f4e33aff 100644
-> --- a/arch/riscv/boot/dts/spacemit/k3-pinctrl.dtsi
-> +++ b/arch/riscv/boot/dts/spacemit/k3-pinctrl.dtsi
-> @@ -101,6 +101,17 @@ i2c2-1-pins {
->  		};
+> diff --git a/arch/riscv/boot/dts/spacemit/k3-com260.dtsi b/arch/riscv/boot/dts/spacemit/k3-com260.dtsi
+> index 37627963a6492..92dea86397798 100644
+> --- a/arch/riscv/boot/dts/spacemit/k3-com260.dtsi
+> +++ b/arch/riscv/boot/dts/spacemit/k3-com260.dtsi
+> @@ -58,6 +58,23 @@ serial-number {
 >  	};
+>  };
 >  
-> +	/omit-if-no-ref/
-> +	i2c6_1_cfg: i2c6-1-cfg {
-> +		i2c6-1-pins {
-> +			pinmux = <K3_PADCONF(7, 6)>,	/* i2c6 scl */
-> +				 <K3_PADCONF(8, 6)>;	/* i2c6 sda */
-> +
-> +			bias-pull-up = <0>;
-> +			drive-strength = <25>;
-> +		};
+> +&i2c6_1_cfg {
+> +	i2c6-1-pins {
+> +		power-source = <3300>;
 > +	};
+> +};
 > +
->  	/omit-if-no-ref/
->  	i2c8_cfg: i2c8-cfg {
->  		i2c8-pins {
+> +&i2c6 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&i2c6_1_cfg>;
+> +	status = "okay";
+> +
+> +	temperature-sensor@4c {
+> +		compatible = "sensylink,ctf2301";
+> +		reg = <0x4c>;
+> +	};
+> +};
+> +
+>  &i2c8 {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&i2c8_cfg>;
 > 
 > -- 
 > 2.55.0
