@@ -1,182 +1,163 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A168E42F712;
-	Tue, 15 Sep 2026 17:05:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43292435A80
+	for <linux-hwmon@vger.kernel.org>; Tue, 15 Sep 2026 17:09:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789491917; cv=none; b=T0h8/AefP5JnjR+mXM8ngOKB7d0x2AoIKqlEWiY0pQgzARqvJ5ehbnM0cLpg61LiH/7+QwkuizOdHIixy+SUVdColTRKmourGl9Arryf7+xV8tdGOIFiLU76LKofXqOoLq33qjztp/oPuoHtzxJ/pJlsVvSoq82hYy6iNnWa5FI=
+	t=1789492180; cv=none; b=lsjOuNC3kVbxThOIBhji5JJ8oEkEE5yc5Ux/YRRC2EA/xg4wZmzgp0wAQx8ZVGnUVPlPaJahLsyFlvoyaa8PveH0YVaLpyAt5oMkZx5EJJrTY9+UFmuO5pqQZfIypDBRRtC8bbIxNWuTpfjUP8YiNTSKQJnxBkBjRDcqquAJAXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789491917; c=relaxed/simple;
-	bh=N9bp9aIdX/UF3pDoQFbzq22XXlePpDCVw0pCjcDP8rY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OztrLRZ9nCvWACSN/joQu84alVdrdqlVCANw2ftN58Lv37CvqiaaZ6AlWgNmtSt3QvhXt8+qb5L+ceZl9Zkj40P0KMuSZO1cdYD/D7VA5Pde0mQ/aMnj3x1LdU0D2Hsh3Cpr6fpNMSIRPlV2cGbR30rLLikd36Rfy/phOoBdIGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LeT8o7dr; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789492180; c=relaxed/simple;
+	bh=C3zoy/9VsAfZabk3hbv9KlBEnMZNR9UmRIwAl2VpG2o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jzxnqY3QZtMsTzIUcewCekS6lRK+KpFkwMczk15mKke/3/kPwW2n19H0U7KWGUlT0YcqCWqG6eD4J9K4tjcyljiCcnkm/ha6DKwGkjKe57u3GGxih8Wuq6ZIZwIDdlx09wl8ccmP1QEc1PbyIeR2EsbvF07F0LZff45MKqv9HKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AwxGMjyO; arc=none smtp.client-ip=74.125.227.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LeT8o7dr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71C941F000FF;
-	Tue, 15 Sep 2026 17:05:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789491915;
-	bh=P0BetlmHOEhoxbhXpdfaDNlWbCytk0FwLw4b3iIAtAg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=LeT8o7dr2m4dSzTzJXbOz1Af1CG6DaGb6szdjWB9dFY+otDJkCJmXp1G4qQjc/xD6
-	 arotaN0/5RwyHjotNA55SJUQalRAyx1G7uX/5lzoijXz37yyD3AgVjDYsX4qrzedSZ
-	 hsaf7p8dRXIGDTuatPNgDyzTkx3STTsyBA4Cp/9xPPuqHhtgGVWtyqPZcBFJu7v3jz
-	 vYA7UYEli5luZAQZu9mntc45U133FbihKcMKuznxlXmTtXaer2nmAOEfQ25AboFowC
-	 wpvXtK/kXw0SZieORsp/RK49MOs6QG0kvwA4f4bd3YcFue83h3Dj5cOkBx3Xp3p3H5
-	 iYLekI28n+gBg==
-Date: Tue, 15 Sep 2026 18:05:11 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Colin Huang <u8813345@gmail.com>
-Cc: Colin Huang <colin.huang2@amd.com>, Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: pmbus: Add Infineon tda38740
- and tda38725
-Message-ID: <20260915-uneasy-mute-f2ec9cb2715b@spud>
-References: <20260910-add-tda38740-and-tda38725-v3-0-3e87637da3d6@gmail.com>
- <20260910-add-tda38740-and-tda38725-v3-1-3e87637da3d6@gmail.com>
- <aqKTZCPto32Ur-CI@squawk>
- <CAPBH0A-voEks+jygGaBErgFwqNMuk6QnO9PPiYzrRLKVua0mGg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AwxGMjyO"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d8fb334ddcso233835ad.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 15 Sep 2026 10:09:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789492170; x=1790096970; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=i7mmyqxL4Ir0d/CfwYClhfzZRHAjxnBiwBulaRxIKo8=;
+        b=AwxGMjyO3w0ZFJysg9WSkLH+6ScUYJLSO1aqzkesrvGqdRERTAOvxMEVSrfYGrnXuj
+         zjT1DITrCJ3WHAmiEXzPEhJuCAjRcCPAxHDYhbNr+u1tgDMPPuZh0k7SYk8hVPiF1waK
+         FBrMYG8wwmZ5T9guURYeM6x4tlrGn/zbr/EKeenrD9y+4M3ZKczwRjfLKX+Rq6JfD3SN
+         9DJnmNrdPMXoMq66qyMywYz/J6rDZVcDZTMfNSBW8LGiZRJreXiDg3ip+nS1KzO2YSeC
+         INMr5rc+06I6bStcphKGh+oa0Qds0E/a+VVj5wvaxcEQrT37aht2kuAiAcmoYCXTuMEj
+         oBeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789492170; x=1790096970;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=i7mmyqxL4Ir0d/CfwYClhfzZRHAjxnBiwBulaRxIKo8=;
+        b=htDwED/PJrS1fg4hA48luE6OwD1GWhq5dxuqvxRVEiosBjVHX4hKxaAGaDJJPLSUOo
+         f40vuaV+ax83fnk/jXAVYd+6pDkeyooW0KNtrMVdjxGf27sM/CoUKDVV1fKH8bEXb78/
+         falFbYQPGaGUo0Idpr0BLQiru11AdD1HdzrBDERPM7KUYyU3vE6p7LT9g7INsrKCVCDM
+         W1fWXjyO0295byBGqgndaaKZlX4fXaRsECIlwO4rrAhm8RfSOOZfZNHiVNxqU+/xM9EE
+         XSTBPt9Da4T2XFWkDFvgebkfQquEBzZjjzhsxDi2ABdBCMhguPJp0wZN+7vVSA8f5Yy0
+         XjcQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzYkoLfomwicIxPok0FnGl+nMSt5yfjw6PjTTs5hDiN7m9hPOo8cfnxk0XmSJH8kTTs+k+gUkudbge2rg==@vger.kernel.org
+X-Gm-Message-State: AFuF++mVG72y+q5mNo0S6riYF6gP1vpI2mwRJGVNc9gFNBQqGCyOaA82
+	4zAMI0PG5FL9dg8Z2sMgxjhlHPyHpht7rAbya3gaV4XqdPizHQ5/XOqK
+X-Gm-Gg: AYBFou2c5GdeaYSPYqvIB42SCEYf0mEbgrHbVvPF9TxhJcGIucT8oQI85ur/Uhqjrm+
+	faltIOCsYSUz3ZRbcq2U3VF59j4CfKJieIYr4hl4jNKZEYXpbYRx46G+ByqnlyGpu/LVAgmUmB4
+	oMnL84wlKpaNYRY5DM9emyjBGYUN72y/gBE8sl6a5LXhjn9dMTkjb6ez0NvT97tsuWoJTL/QBsE
+	fBlZueZDLZCqspdZ/FGhHfHOt6q3uhUe0rEEywS1utssvxSMtaKR810NVFcmwP3eHNKhjwXVP0c
+	6sUIjiwZcUWtZi/WXBhpb9XNJlbyD2pRbkKjOAVkuUni7dY2BTwsxAjDVH52ctLt3P/GasaUFez
+	3dM4kn7cr7JQUpNC32gr6W36LT6gLgQ6gQTAmmP1zxDkRhw+eSIbK73ffMX3V+86JkYfF1748yz
+	gWPCCQwQlBXEwvaMnBTLpmOreEj0bonYfO4N6BWJLtUX3yL9qwDBAUcG+LjeZvPuVchKRnBpy0D
+	jZEgZ4Pe4Qq9IZuEspYjt4ZMBr+eCszV85tBP+xPZ73LSYs
+X-Received: by 2002:a17:90a:e7d2:b0:39b:92bb:9ef0 with SMTP id 98e67ed59e1d1-39dec0bdc60mr15161562a91.20.1789492169910;
+        Tue, 15 Sep 2026 10:09:29 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e1a033df0sm58769a91.4.2026.09.15.10.09.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Sep 2026 10:09:29 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d45d4de8-6925-40ad-a5b7-b8cef6356175@roeck-us.net>
+Date: Tue, 15 Sep 2026 10:09:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ZOF7tPBN+k7uYQZ/"
-Content-Disposition: inline
-In-Reply-To: <CAPBH0A-voEks+jygGaBErgFwqNMuk6QnO9PPiYzrRLKVua0mGg@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 4/4] hwmon: (aquacomputer_d5next) Add AMPINEL support
+To: Vas Zayarskiy <contact@vasily.cc>
+Cc: Aleksa Savic <savicaleksa83@gmail.com>, Jack Doan <me@jackdoan.com>,
+ Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
+ linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>
+References: <20260914233728.22725-1-contact@vasily.cc>
+ <20260914233728.22725-5-contact@vasily.cc>
+ <a968a02f-c513-42f0-993f-ede4f785025c@roeck-us.net>
+ <ICzeTYsqVwKewqbj_Gv2WM93k1Kr6uygPhcTJ3M8PBtvmoV3AlfEnRWAspP-fQgdmRW4IR1OPPpDLhmQiIqEAh5OuCKvwRzxAHSO-7rnYAQ=@vasily.cc>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
+ oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
+ VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
+ 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
+ onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
+ DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
+ rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
+ WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
+ qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
+ 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
+ qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
+ H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
+ njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
+ dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
+ j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
+ scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
+ zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
+ RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
+ F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
+ FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <ICzeTYsqVwKewqbj_Gv2WM93k1Kr6uygPhcTJ3M8PBtvmoV3AlfEnRWAspP-fQgdmRW4IR1OPPpDLhmQiIqEAh5OuCKvwRzxAHSO-7rnYAQ=@vasily.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
---ZOF7tPBN+k7uYQZ/
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 9/14/26 22:29, Vas Zayarskiy wrote:
+> Hi Guenter,
+> 
+> Thanks for the review. I will add the trailing comma and separate the shared report validation and handling of an unknown firmware-version offset from the AMPINEL addition. I also noted the -ENODATA and conversion/scaling wording corrections on patch 2.
+> 
+>> If the match function _is_ needed, the reason needs to be explained, even
+>> more so since this may impact USB_PRODUCT_ID_AQUAERO.
+> 
+> The requirement is to keep AMPINEL's keyboard interface bound to hid-generic while the hwmon driver handles telemetry. Both interfaces share the same VID/PID and match aqc_table. With the existing __check_hid_generic(), that ID match is enough for hid-generic to decline the keyboard. Returning -ENODEV from aqc_probe(), or rejecting it in aqc_match() alone, does not make it eligible for hid-generic.
+> 
+> The Aquaero collection check rejects its non-telemetry interfaces during probe, but that check alone does not establish keyboard fallback to hid-generic. V3 leaves Aquaero's collection filtering in probe: aqc_match() accepts it subject to the same generic-driver override checks the core already applies when there is no match callback. I do not have Aquaero hardware and have not validated its keyboard behavior.
+> 
+> The matcher test demonstrates the AMPINEL rejection with the original hid-generic logic and passes with patch 1. This is a userspace harness, not a live kernel fallback test. With both revised modules loaded on the physical AMPINEL, the keyboard registration/capabilities survived hwmon reload and suspend/resume, and its capabilities were preserved on reboot. I will make the matching rationale explicit in the next revision.
+> 
+>> FWIW, the raw even can happen prior to this, which will result
+>> in bad data. This also affetcs other devices supported by this
+>> driver (and those with fans can crash when it happens).
+> 
+> Could you clarify the path that permits raw_event during probe here? I checked the series base, 46fde107b4e881f179bf02bca69d8a0020561b3c. include/linux/hid.h documents that callbacks are blocked during probe unless the driver calls hid_device_io_start(). In hid-core.c, hid_device_probe() holds driver_input_lock around the driver's probe, and __hid_input_report() returns -EBUSY when it cannot acquire that lock.
+> 
+> aqc_probe() does not call hid_device_io_start(), and neither hid_hw_start() nor hid_hw_open() releases that lock. My reading is that normal USB reports cannot reach aqc_raw_event() until initialization has completed. Is there another path that bypasses this protection? I have not reproduced the race, and would like to understand it before adding a shared initialization fix.
+> 
 
-On Mon, Sep 14, 2026 at 05:12:59PM +0800, Colin Huang wrote:
-> Conor Dooley <conor@kernel.org> =E6=96=BC 2026=E5=B9=B49=E6=9C=8810=E6=97=
-=A5=E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=887:24=E5=AF=AB=E9=81=93=EF=BC=9A
-> >
-> > On Thu, Sep 10, 2026 at 02:18:55PM +0800, Colin Huang wrote:
-> > > From: Colin Huang <u8813345@gmail.com>
-> > >
-> > > Add devicetree bindings for the Infineon TDA38740 and TDA38725
-> > > single-voltage synchronous buck regulators with PMBus interface.
-> > >
-> > > Signed-off-by: Colin Huang <u8813345@gmail.com>
-> > > ---
-> > >  .../bindings/hwmon/pmbus/infineon,tda38740.yaml    | 87 ++++++++++++=
-++++++++++
-> > >  1 file changed, 87 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,t=
-da38740.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38=
-740.yaml
-> > > new file mode 100644
-> > > index 000000000000..28e6ff9d9d9c
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38740=
-=2Eyaml
-> > > @@ -0,0 +1,87 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +
-> > > +$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,tda38740.yam=
-l#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Infineon TDA38740 and TDA38725 PMBus Synchronous Buck Regulat=
-or
-> > > +
-> > > +maintainers:
-> > > +  - Colin Huang <u8813345@gmail.com>
-> > > +
-> > > +description: |
-> > > +  The Infineon TDA38740/TDA38725 is a 40A/25A single-voltage synchro=
-nous
-> > > +  buck regulator with a PMBus interface designed for industrial use.
-> > > +
-> > > +  Datasheet:
-> > > +  https://www.infineon.com/row/public/documents/24/49/infineon-tda38=
-740-tda38725-datasheet-en.pdf
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    oneOf:
-> > > +      - const: infineon,tda38740
-> > > +      - const: infineon,tda38725
-> > > +    description: |
-> > > +      The Infineon TDA38740 and TDA38725 share the same PMBus progra=
-mming
-> > > +      model. Use infineon,tda38740 as the preferred compatible strin=
-g;
-> > > +      infineon,tda38725 is kept as a compatibility alias.
-> >
-> > This is not how this should be done. Instead, tda38725 should list
-> > tda38740 as a fallback compatible. Take a look at the example schema for
-> > how this can be done.
-> > Otherwise, this looks okay to me.
-> >
-> > pw-bot: changes-requested
-> >
-> > Thanks,
-> > Conor.
-> >
-> Hi Conor,
-> Thanks for review and explanation.
-> I misunderstood the intended use of fallback compatible.
-> My v4 proposal was not correct approach.
-> ```v4 used:
->  compatible:
->    enum:
->      - infineon,tda38725
->      - infineon,tda38740
-> ```
->=20
-> I plan to change it and examples to:
-> ```
->   compatible:
->     oneOf:
->       - const: infineon,tda38740
->       - items:
->           - const: infineon,tda38725
->           - const: infineon,tda38740
->=20
-> examples:
->   - |
->     i2c {
->         #address-cells =3D <1>;
->         #size-cells =3D <0>;
->=20
->         regulator@40 {
->             compatible =3D "infineon,tda38725",
->                          "infineon,tda38740";
->             reg =3D <0x40>;
->         };
->     };
->=20
-> ```
-> Is this what you had in mind?
-
-Yea that is what I was looking for.
+You are correct. Sorry, I missed the part about callbacks being blocked during probe
+unless hid_device_io_start() is called.
 
 Thanks,
-Conor.
+Guenter
 
---ZOF7tPBN+k7uYQZ/
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaql6xwAKCRB4tDGHoIJi
-0pZjAP9TVW0sB3kVOhH/IqDafhvi0NzG49UDaDEUGlGLIMdRzwEA1WiBJ88wmCco
-N9e0RS1Ogb5cX63O56W/YxScFHmHcAI=
-=3Ivx
------END PGP SIGNATURE-----
-
---ZOF7tPBN+k7uYQZ/--
