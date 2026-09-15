@@ -1,69 +1,68 @@
 Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43292435A80
-	for <linux-hwmon@vger.kernel.org>; Tue, 15 Sep 2026 17:09:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2EF4BA9FA
+	for <linux-hwmon@vger.kernel.org>; Tue, 15 Sep 2026 17:31:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789492180; cv=none; b=lsjOuNC3kVbxThOIBhji5JJ8oEkEE5yc5Ux/YRRC2EA/xg4wZmzgp0wAQx8ZVGnUVPlPaJahLsyFlvoyaa8PveH0YVaLpyAt5oMkZx5EJJrTY9+UFmuO5pqQZfIypDBRRtC8bbIxNWuTpfjUP8YiNTSKQJnxBkBjRDcqquAJAXQ=
+	t=1789493480; cv=none; b=Dj8Mpa7hSZM7AQLmlkAExw0hlVhY1aYgqQA1KWmkT3DfSRSHo2D2cDySGl9gTKQtrMcPall9TvemXij2t8wQXaYHPvJWx7Du04AxL94dOov/TerIfHbCUJpr/IK5oBUTu9dLaqtpLZC2U2/UyDa1U4dVAEx1ojhlel13JZ1tSh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789492180; c=relaxed/simple;
-	bh=C3zoy/9VsAfZabk3hbv9KlBEnMZNR9UmRIwAl2VpG2o=;
+	s=arc-20240116; t=1789493480; c=relaxed/simple;
+	bh=o9xq46vXu5Tdoa925A4y5EdPo5VNKEplp1aJ/lym32Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jzxnqY3QZtMsTzIUcewCekS6lRK+KpFkwMczk15mKke/3/kPwW2n19H0U7KWGUlT0YcqCWqG6eD4J9K4tjcyljiCcnkm/ha6DKwGkjKe57u3GGxih8Wuq6ZIZwIDdlx09wl8ccmP1QEc1PbyIeR2EsbvF07F0LZff45MKqv9HKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AwxGMjyO; arc=none smtp.client-ip=74.125.227.141
+	 In-Reply-To:Content-Type; b=kp7GZYt/HE8cu7UBRrNip/OyX0wAjsr3liWwBTSAmWbyj0DeMShT84AENK7nXOQm228CVOMY7E84wIEoXrXmvEowzIuFyUSp2/yflXG1kISvDjvOTj0iQj///8DpUMn9nQ/HyddQtkED51MwbUkXD7uU0v/YaKS0xOsveMzntvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CJqWvuh/; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AwxGMjyO"
-Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d8fb334ddcso233835ad.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Sep 2026 10:09:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CJqWvuh/"
+Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccafb74fso3553969a91.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 15 Sep 2026 10:31:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789492170; x=1790096970; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789493477; x=1790098277; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=i7mmyqxL4Ir0d/CfwYClhfzZRHAjxnBiwBulaRxIKo8=;
-        b=AwxGMjyO3w0ZFJysg9WSkLH+6ScUYJLSO1aqzkesrvGqdRERTAOvxMEVSrfYGrnXuj
-         zjT1DITrCJ3WHAmiEXzPEhJuCAjRcCPAxHDYhbNr+u1tgDMPPuZh0k7SYk8hVPiF1waK
-         FBrMYG8wwmZ5T9guURYeM6x4tlrGn/zbr/EKeenrD9y+4M3ZKczwRjfLKX+Rq6JfD3SN
-         9DJnmNrdPMXoMq66qyMywYz/J6rDZVcDZTMfNSBW8LGiZRJreXiDg3ip+nS1KzO2YSeC
-         INMr5rc+06I6bStcphKGh+oa0Qds0E/a+VVj5wvaxcEQrT37aht2kuAiAcmoYCXTuMEj
-         oBeg==
+        bh=Ybh+8iD5mGNcd8ks8NS+pX/Np+RtyJxn1trRvhxScPk=;
+        b=CJqWvuh/GZHITGkwwN1wlA/gXya0cBi6C0thJSOcBJcPo6268fvWrxtTe1yvEEahjC
+         afJJgvv3SMj7mZx0vWibFbS3vGoRFuZgumC6s34WxzDqUJnsvGpr8wmmu3fRbk/L9wVf
+         5TvYuHNUGxeJK8HxOGUmNE6smHZ63hQl9f+EsDiHq00R7IUIpMgRh+Ul2BofEJDrswrZ
+         q6j82SwlJjhK7omnW9RFbF8MX6GngyVBNNP9HF62wRyUH6v4Xy6Dflr2kBEKLA3cCIvk
+         kVKp7E0JxVcI+P2EzxQuwdl75isUmSkxR5VbFsu68mIzB9/uGaK1dyDy/xupBfL1NQon
+         wBrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789492170; x=1790096970;
+        d=1e100.net; s=20260707; t=1789493477; x=1790098277;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=i7mmyqxL4Ir0d/CfwYClhfzZRHAjxnBiwBulaRxIKo8=;
-        b=htDwED/PJrS1fg4hA48luE6OwD1GWhq5dxuqvxRVEiosBjVHX4hKxaAGaDJJPLSUOo
-         f40vuaV+ax83fnk/jXAVYd+6pDkeyooW0KNtrMVdjxGf27sM/CoUKDVV1fKH8bEXb78/
-         falFbYQPGaGUo0Idpr0BLQiru11AdD1HdzrBDERPM7KUYyU3vE6p7LT9g7INsrKCVCDM
-         W1fWXjyO0295byBGqgndaaKZlX4fXaRsECIlwO4rrAhm8RfSOOZfZNHiVNxqU+/xM9EE
-         XSTBPt9Da4T2XFWkDFvgebkfQquEBzZjjzhsxDi2ABdBCMhguPJp0wZN+7vVSA8f5Yy0
-         XjcQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzYkoLfomwicIxPok0FnGl+nMSt5yfjw6PjTTs5hDiN7m9hPOo8cfnxk0XmSJH8kTTs+k+gUkudbge2rg==@vger.kernel.org
-X-Gm-Message-State: AFuF++mVG72y+q5mNo0S6riYF6gP1vpI2mwRJGVNc9gFNBQqGCyOaA82
-	4zAMI0PG5FL9dg8Z2sMgxjhlHPyHpht7rAbya3gaV4XqdPizHQ5/XOqK
-X-Gm-Gg: AYBFou2c5GdeaYSPYqvIB42SCEYf0mEbgrHbVvPF9TxhJcGIucT8oQI85ur/Uhqjrm+
-	faltIOCsYSUz3ZRbcq2U3VF59j4CfKJieIYr4hl4jNKZEYXpbYRx46G+ByqnlyGpu/LVAgmUmB4
-	oMnL84wlKpaNYRY5DM9emyjBGYUN72y/gBE8sl6a5LXhjn9dMTkjb6ez0NvT97tsuWoJTL/QBsE
-	fBlZueZDLZCqspdZ/FGhHfHOt6q3uhUe0rEEywS1utssvxSMtaKR810NVFcmwP3eHNKhjwXVP0c
-	6sUIjiwZcUWtZi/WXBhpb9XNJlbyD2pRbkKjOAVkuUni7dY2BTwsxAjDVH52ctLt3P/GasaUFez
-	3dM4kn7cr7JQUpNC32gr6W36LT6gLgQ6gQTAmmP1zxDkRhw+eSIbK73ffMX3V+86JkYfF1748yz
-	gWPCCQwQlBXEwvaMnBTLpmOreEj0bonYfO4N6BWJLtUX3yL9qwDBAUcG+LjeZvPuVchKRnBpy0D
-	jZEgZ4Pe4Qq9IZuEspYjt4ZMBr+eCszV85tBP+xPZ73LSYs
-X-Received: by 2002:a17:90a:e7d2:b0:39b:92bb:9ef0 with SMTP id 98e67ed59e1d1-39dec0bdc60mr15161562a91.20.1789492169910;
-        Tue, 15 Sep 2026 10:09:29 -0700 (PDT)
+        bh=Ybh+8iD5mGNcd8ks8NS+pX/Np+RtyJxn1trRvhxScPk=;
+        b=N0MKtxHElVOiayyADLQug2XJE6UNKgGvsGen+A+BSygriac0xnq5AAC1VL1WyH8n7H
+         4cN1NBnoprcxy3CzhGz7pXmAXjk/6Kr1Ye3JAbAm7a5vABNR3vuu1NoX+GbQ0WFBt+1i
+         jIdxlC5sOPkrtbXGZq1Yl14uWTzmgupehODG4eqGjUFfFpmxBKjv/sDRox/JK4tXqELd
+         HiagU4ZvZfD2vzAHjKsYNQBBIzgMTM9unPEIElpHWaMvYLK7EEJFivVPSiUqKAq9fTLe
+         IKeq7xnhkt9+FINKTjaJ40SJm5Z2NAljBEUrtvb0t9EwHnhphAkZGP1CTdzc1W3yk0WB
+         wv9Q==
+X-Gm-Message-State: AFuF++msEB3tQHfg9KaRdoKwhyP1AFyQIq7SUA8Ya7OX5t+1IeR8rVW6
+	B0QjyY3R6NguAs2h7g9yHvFiYIvwOKYx4Ib6rBpPVJeoE0HtPuP+J/c0
+X-Gm-Gg: AYBFou1xNyta7/J7Iog2jTXymJJH+eXHpDfU0zlVpD0MHUIYny+JHW7K1CmLJPV/Kg4
+	8uwd4lFnKYvffa1XyV4fzlqtV511tAvs4wNVbNaUJZWRXYN3x+JQsPLtQvOuXmgT0MfNjmSA9Cp
+	WgsjwbxSgXCPcVqbPQJTm3FHARq9ScTGoRitFvyZA0HxHoH3NIvmyaAtIv1LyqoWH1+Id+U5Tsk
+	bWlfuzxuKTICTggVZYwe5sg736nsbq7kS5EiyMkr05VzmosRYc4kXYdFZrJOEZ+Yk1ZKiL0cQ1Q
+	GyEYm0hA+tgStOfqJYxi9SKOzLRjCO7kpahq8fCTShB3YEKRiQolZkEX92bEOuMdlBlCJEGqd3y
+	e/hCvQz00qYnX+QZ6KFpwdPz6+nljTpr0S80ZLvvE+ChUnqXRI3jNLG8YhyKURb4g9j/k0AtHrw
+	GGS+Ah6p3075NR55raYnsrX4z0baeYt9HEToRic1jtVuE6vUVuVUEEZ4QbzOIuKWTRXbKEPit4V
+	GUmSE0t2MCP8X6O6E1gJ7VueQ2QJkhEXZRPIW3VtNDtsEAe
+X-Received: by 2002:a17:90b:50c8:b0:39d:f773:37b5 with SMTP id 98e67ed59e1d1-39df7733906mr14510340a91.0.1789493472947;
+        Tue, 15 Sep 2026 10:31:12 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e1a033df0sm58769a91.4.2026.09.15.10.09.28
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39dfbb55b01sm2153011a91.4.2026.09.15.10.31.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Sep 2026 10:09:29 -0700 (PDT)
+        Tue, 15 Sep 2026 10:31:12 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d45d4de8-6925-40ad-a5b7-b8cef6356175@roeck-us.net>
-Date: Tue, 15 Sep 2026 10:09:28 -0700
+Message-ID: <64518f1b-9c17-4fa7-8582-dc399728111a@roeck-us.net>
+Date: Tue, 15 Sep 2026 10:31:10 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,18 +70,19 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/4] hwmon: (aquacomputer_d5next) Add AMPINEL support
-To: Vas Zayarskiy <contact@vasily.cc>
-Cc: Aleksa Savic <savicaleksa83@gmail.com>, Jack Doan <me@jackdoan.com>,
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
- linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>
-References: <20260914233728.22725-1-contact@vasily.cc>
- <20260914233728.22725-5-contact@vasily.cc>
- <a968a02f-c513-42f0-993f-ede4f785025c@roeck-us.net>
- <ICzeTYsqVwKewqbj_Gv2WM93k1Kr6uygPhcTJ3M8PBtvmoV3AlfEnRWAspP-fQgdmRW4IR1OPPpDLhmQiIqEAh5OuCKvwRzxAHSO-7rnYAQ=@vasily.cc>
+Subject: Re: [PATCH v2 1/3] hwmon: (pmbus/tps53679) Fix TPS53676 phase page
+ decoding
+To: "Pradhan, Sanman" <sanman.pradhan@hpe.com>,
+ Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Sanman Pradhan <psanman@juniper.net>,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20260915164823.160977-1-sanman.pradhan@hpe.com>
+ <20260915164823.160977-2-sanman.pradhan@hpe.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -128,36 +128,56 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <ICzeTYsqVwKewqbj_Gv2WM93k1Kr6uygPhcTJ3M8PBtvmoV3AlfEnRWAspP-fQgdmRW4IR1OPPpDLhmQiIqEAh5OuCKvwRzxAHSO-7rnYAQ=@vasily.cc>
+In-Reply-To: <20260915164823.160977-2-sanman.pradhan@hpe.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/14/26 22:29, Vas Zayarskiy wrote:
-> Hi Guenter,
+Hi,
+
+On 9/15/26 09:48, Pradhan, Sanman wrote:
+> From: Sanman Pradhan <psanman@juniper.net>
 > 
-> Thanks for the review. I will add the trailing comma and separate the shared report validation and handling of an unknown firmware-version offset from the AMPINEL addition. I also noted the -ENODATA and conversion/scaling wording corrections on patch 2.
+> tps53676_identify() reads the USER_DATA_03 phase configuration to count
+> the phases assigned to each channel and derive the number of PMBus pages.
+> In each 16-bit phase descriptor the channel (PAGE) is encoded in bit 4 and
+> the firing order in bits 3:0, but the code tested bit 3 (0x08), which is
+> part of the firing-order field.
 > 
->> If the match function _is_ needed, the reason needs to be explained, even
->> more so since this may impact USB_PRODUCT_ID_AQUAERO.
+> TPS53676 supports up to seven phases, so firing-order bit 3 is never set.
+> As a result the existing test classifies every enabled phase as channel A.
+> On a dual-channel configuration the phases assigned to channel B are
+> therefore miscounted as channel A and page 1 is not exposed.
 > 
-> The requirement is to keep AMPINEL's keyboard interface bound to hid-generic while the hwmon driver handles telemetry. Both interfaces share the same VID/PID and match aqc_table. With the existing __check_hid_generic(), that ID match is enough for hid-generic to decline the keyboard. Returning -ENODEV from aqc_probe(), or rejecting it in aqc_match() alone, does not make it eligible for hid-generic.
-> 
-> The Aquaero collection check rejects its non-telemetry interfaces during probe, but that check alone does not establish keyboard fallback to hid-generic. V3 leaves Aquaero's collection filtering in probe: aqc_match() accepts it subject to the same generic-driver override checks the core already applies when there is no match callback. I do not have Aquaero hardware and have not validated its keyboard behavior.
-> 
-> The matcher test demonstrates the AMPINEL rejection with the original hid-generic logic and passes with patch 1. This is a userspace harness, not a live kernel fallback test. With both revised modules loaded on the physical AMPINEL, the keyboard registration/capabilities survived hwmon reload and suspend/resume, and its capabilities were preserved on reboot. I will make the matching rationale explicit in the next revision.
-> 
->> FWIW, the raw even can happen prior to this, which will result
->> in bad data. This also affetcs other devices supported by this
->> driver (and those with fans can crash when it happens).
-> 
-> Could you clarify the path that permits raw_event during probe here? I checked the series base, 46fde107b4e881f179bf02bca69d8a0020561b3c. include/linux/hid.h documents that callbacks are blocked during probe unless the driver calls hid_device_io_start(). In hid-core.c, hid_device_probe() holds driver_input_lock around the driver's probe, and __hid_input_report() returns -EBUSY when it cannot acquire that lock.
-> 
-> aqc_probe() does not call hid_device_io_start(), and neither hid_hw_start() nor hid_hw_open() releases that lock. My reading is that normal USB reports cannot reach aqc_raw_event() until initialization has completed. Is there another path that bypasses this protection? I have not reproduced the race, and would like to understand it before adding a shared initialization fix.
+> Test the PAGE field (bit 4) instead.
 > 
 
-You are correct. Sorry, I missed the part about callbacks being blocked during probe
-unless hid_device_io_start() is called.
+tps53676_identify() has a second problem: It does not set the current page
+to 0 for single-page systems. If the BIOS/ROMMON had selected page 1 for
+some reason, the page register is never updated because pmbus_set_page()
+does not set the page number if the number of pages is 1. Please fix that
+as well.
 
 Thanks,
 Guenter
+
+> Fixes: cb3d37b59012 ("hwmon: (pmbus/tps53679) Add support for TI TPS53676")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sanman Pradhan <psanman@juniper.net>
+> ---
+>   drivers/hwmon/pmbus/tps53679.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
+> index fa0fdf1e3e6c9..680339a6b90fe 100644
+> --- a/drivers/hwmon/pmbus/tps53679.c
+> +++ b/drivers/hwmon/pmbus/tps53679.c
+> @@ -188,7 +188,7 @@ static int tps53676_identify(struct i2c_client *client,
+>   		return -EIO;
+>   	for (i = 0; i < 2 * TPS53676_MAX_PHASES; i += 2) {
+>   		if (buf[i + 1] & 0x80) {
+> -			if (buf[i] & 0x08)
+> +			if (buf[i] & BIT(4))
+>   				phases_b++;
+>   			else
+>   				phases_a++;
 
