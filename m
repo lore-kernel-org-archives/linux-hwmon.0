@@ -1,140 +1,98 @@
-Received: from mail-10625.protonmail.ch (mail-10625.protonmail.ch [79.135.106.25])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CDD3439F68
-	for <linux-hwmon@vger.kernel.org>; Tue, 15 Sep 2026 05:23:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBAD53BD635;
+	Tue, 15 Sep 2026 05:28:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789449787; cv=none; b=RnAgn2aQlITPUPfwUZR9a9IvVU9pD2YyzeJDg6gYmqRWNYfM3NAzhkLp6064KP/NHP+xNnYUnWvVdO733VcNSDjlGAUKk5pROluQftqRo36gsR/h02OWnXAzlBTz9nJrj7JBojEArdrpEXQtEPbQB/lSCQbzAys33f9im+8tBck=
+	t=1789450125; cv=none; b=q4oa2s+qSiaeYiguf9p7s3aIr765cHoS30rt71XVBR3bueB4wdEB8J2brcYDrDTG3h2KMuofhKDlrPqBKY8ypobIVG9VIbgphrfzTdn0XrYR/AsTyqbSbZoN6Bszy2opWuaKLIRGGrqVAGt8pBMYLrg0FmFB3S4pMFat4pOLtjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789449787; c=relaxed/simple;
-	bh=jyHf8WbXjIhWw5PDgBgJVPysvBHwJ+Gb90CwBkglMqE=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cS1u8EmOtBOt9fl7PDW14Jvqh37fsIeQNp8DvMCuxe02pdBg8k0OeJcP4nWfrfh5dKhuuH1HzG26LrDKMOwlXEslvQ/LKB9ceej2PBj/XaOdikQMPA4WPJphzf0ebNDNVkwGOMU8GCJpXsG7Ta3odRzFeZcXPLZ5z0kCKBo9ysc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc; spf=pass smtp.mailfrom=vasily.cc; dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b=Ae8uSLrG; arc=none smtp.client-ip=79.135.106.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vasily.cc
+	s=arc-20240116; t=1789450125; c=relaxed/simple;
+	bh=wQlwETqwXipUPXIDuPSAuFPc6VRfLQB1Nv5syzGhgQ0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=PADYdjkGQzUrWQEdjci0dfE7W5uFcIVumd2OgMQDBtq2H05+boKIXV8OyI+C4FowXiQjPC2YxJDCiE8r9GpA3ZzOkMFj8lbueh8aNDrfkTWubmG5PFRTACtq7b30hTXmkRrb92z0hwIMjxeCuGf2bciCve14J48sc2qSAVRX5Rk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ejG7x/D8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b="Ae8uSLrG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vasily.cc;
-	s=protonmail2; t=1789449777; x=1789708977;
-	bh=YOjkT0WRYH9ZTgYOKmI+YvNyNviW0Bc5NH9GRz2IL6Y=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=Ae8uSLrGbsd9t0kQBv3LCjo8GHuqcon+ZBcqWs9vnJsPi4vBkUDe4P0FSJfIyfBJs
-	 iqG/ZddFrrcd2h8h2pHR3Q5RWEMvcJQw2/S3I0FKePTedL8Gb+ym1hdzepvcQT4ogT
-	 LIolXaTrvHzXSrQaNeVMVIQK0uBwRkBkqF2O4a+EFQa+auYJZ3tSpSFYPhr6Q/GYh2
-	 +NObTKVpyM8HuLxWo6xNAnBIgbu6jqLYKJl6OE/ErfCe9EqFJZZ15FlM4w3EiF6y5z
-	 phefRQ+YIDtMhQMslDJyHsv3G2YHvJcscigIqw1u2Q4Ot7Dl43Icocqd9PVu13Cs9i
-	 AIKXXm21DUfdQ==
-Date: Tue, 15 Sep 2026 05:22:52 +0000
-To: Guenter Roeck <linux@roeck-us.net>
-From: Vas Zayarskiy <contact@vasily.cc>
-Cc: Aleksa Savic <savicaleksa83@gmail.com>, Jack Doan <me@jackdoan.com>, Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v3 1/4] HID: generic: Respect specialized drivers match callbacks
-Message-ID: <5g3KauGo4e-yup8ACh6gfs0kZHbWatAAG3hXvT9HlYXSEbcNFslfWO7kfnaOtVtHPrl9w51LTnUhmOpLbAeoo8NfVaRIu2CU3GKsZcuW4nQ=@vasily.cc>
-In-Reply-To: <feb99d33-074e-444b-8fc3-ae53ec365965@roeck-us.net>
-References: <20260914233728.22725-1-contact@vasily.cc> <20260914233728.22725-2-contact@vasily.cc> <feb99d33-074e-444b-8fc3-ae53ec365965@roeck-us.net>
-Feedback-ID: 162318860:user:proton
-X-Pm-Message-ID: 78560f0f608a43a1f54be93cbb1ef2a516160b2a
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ejG7x/D8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 397FF1F000FF;
+	Tue, 15 Sep 2026 05:28:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789450123;
+	bh=fcgYNv4PDpRpFoxYdAkDYWw39suppSbOYfkZMz3ZVio=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ejG7x/D8YATnzUSGsGtPpKfJeRKrIPeVrqIb8bQI/jafrtFSfT/+VvMC03IgkpV00
+	 6WSurLlOJigQxo6rtoJ16hVWowRUbtodMJoknaAmXEZCFD2MMp+mQM+ylrnRwQzKK5
+	 /7yv4W0z75q6Xye6NDX7+RhBvBjSnfYvt0XaRZPtrk4CMkmeE8sNyew+dSIaN1oNkg
+	 T4TksRAkL2TDR9sf4uzUFQ9brY1Yy00r6jfU59h/kdK5kzN1MH1M0TtxlvHMLbgHF/
+	 2V7+v5DpOyPJPv5HZ81MnfX7IoM+FlvVaEDPvsA+k2w0neV0MdRBRGQuJ7HxqW7MxM
+	 ntd3+tvGUgPTQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v3] hwmon: (lm75) Add support for Nuvoton NCT7715
+Reply-To: sashiko-reviews@lists.linux.dev
+To: hsyemail2@gmail.com
+Cc: robh@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
+In-Reply-To: <20260915052021.6959-1-syhuang3@nuvoton.com>
+References: <20260915052021.6959-1-syhuang3@nuvoton.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 15 Sep 2026 05:28:42 +0000
+Message-Id: <20260915052843.397FF1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-Hi Guenter,
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] hwmon: lm75: NCT7715 initialization fails to clear bit 14 of con=
+fig register
+--
 
-> That was from 2022 and seems to have been abandoned, making me wonder
-> if it is still broken for Logitech devices or if another solution
-> was found.
+commit 7bd04866b8e88a3003be284539483cdda6599844
+Author: Sheng-Yuan Huang <syhuang3@nuvoton.com>
 
-The 2022 ->match() change was proposed to repair the fallback problem expos=
-ed by wildcard enrollment of Logitech Bluetooth devices. Maintainers instea=
-d reverted that wildcard enrollment in a9d9e46c755a, restoring the previous=
- explicit device matching (https://github.com/torvalds/linux/commit/a9d9e46=
-c755a189ccb44d91b8cf737742a975de8). The way I understand it, the wildcard e=
-nrollment was reverted, and that's why the ->match() change simply was not =
-needed anymore.
+hwmon: (lm75) Add support for Nuvoton NCT7715
 
-In the hwmon-next base used for this series, Bluetooth devices are still se=
-lected through explicit entries in hidpp_devices[], and hid-logitech-hidpp =
-has no match callback. So the Logitech regression was resolved without adop=
-ting the generic matching change.
+This commit adds support for the Nuvoton NCT7715 temperature sensor to the
+lm75 hardware monitoring driver. It introduces a new device parameter entry
+that reuses much of the TMP112 handling for configuration and alarms.
 
-For AMPINEL, the reason for patch 1 is to leave its separate keyboard inter=
-face bound to hid-generic, so it can issue e.g. shutdown commands on abnorm=
-al readings. Both interfaces match the hwmon driver's ID table. The existin=
-g __check_hid_generic() therefore rejects the keyboard even when the hwmon =
-match callback declines that interface. The hwmon fixes and sensor readings=
- do not depend on this HID change; it is needed by this design to preserve =
-the keyboard's generic binding.
+> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+> --- a/drivers/hwmon/lm75.c
+> +++ b/drivers/hwmon/lm75.c
 
-Jiri, Benjamin: is there a preferred way to express this per-interface sele=
-ction while retaining hid-generic for the keyboard? I would welcome guidanc=
-e on whether this callback check is the appropriate approach.
+[ ... ]
 
+> @@ -259,6 +260,16 @@ static const struct lm75_params device_params[] =3D {
+>  		.sample_times =3D (unsigned int []){ 30, 60, 120, 240 },
+>  		.resolutions =3D (u8 []) {9, 10, 11, 12 },
+>  	},
+> +	[nct7715] =3D {
+> +		.config_reg_16bits =3D true,
+> +		.set_mask =3D 0x8060,	/* 12-bit mode, 4 samples / second */
+> +		.clr_mask =3D 1 << 7,	/* no one-shot mode */
 
-Thanks,
-Vas
+[Severity: Medium]
+Will this leave bit 14 unchanged if it was previously set by a bootloader or
+left over from a warm reboot?
 
+During driver probe, lm75_generic_probe() calls lm75_write_config() to
+initialize LM75_REG_CONF. The regmap update mask used is:
+clr_mask | set_mask | LM75_SHUTDOWN
 
+For nct7715, set_mask is 0x8060 and clr_mask is 0x0080. Bit 14 (0x4000) is
+missing from both masks. Because of this, regmap_update_bits() will
+silently ignore the 0 in bit 14 of set_mask and preserve its prior value
+from the hardware configuration register.
 
+If bit 14 remains set, can the sensor operate at 8 Hz instead of the
+intended 4 Hz, leading to a mismatch between the hardware state and the
+driver state which expects and reports a 250ms interval?
 
-On Tuesday, September 15th, 2026 at 7:31 AM, Guenter Roeck <linux@roeck-us.=
-net> wrote:
+Should 0x4000 be included in clr_mask to ensure the hardware is properly
+initialized to 4 samples / second?
 
-> On 9/14/26 16:37, Vas Zayarskiy wrote:
-> > A driver can reject an interface in its match callback even when its ID
-> > table matches. hid-generic currently yields based on the ID table alone=
-,
-> > leaving such an interface without a driver.
-> >
-> > Consult the callback after matching the ID table so hid-generic can kee=
-p
-> > interfaces declined by specialized drivers. This allows the AMPINEL
-> > hwmon driver to leave the separate keyboard interface to hid-generic.
-> >
-> > The same callback check was proposed previously for Logitech devices:
-> >
-> > Link: https://lkml.iu.edu/hypermail/linux/kernel/2212.0/06724.html
->=20
-> That was from 2022 and seems to have been abandoned, making me wonder
-> if it is still broken for Logitech devices or if another solution
-> was found.
->=20
-> Guenter
->=20
-> >
-> > Assisted-by: LLM sparse
-> > Signed-off-by: Vas Zayarskiy <contact@vasily.cc>
-> > ---
-> >   drivers/hid/hid-generic.c | 8 +++++++-
-> >   1 file changed, 7 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/hid/hid-generic.c b/drivers/hid/hid-generic.c
-> > index c2de91674..ebc38ae76 100644
-> > --- a/drivers/hid/hid-generic.c
-> > +++ b/drivers/hid/hid-generic.c
-> > @@ -31,7 +31,13 @@ static int __check_hid_generic(struct device_driver =
-*drv, void *data)
-> >   =09if (hdrv =3D=3D &hid_generic)
-> >   =09=09return 0;
-> >
-> > -=09return hid_match_device(hdev, hdrv) !=3D NULL;
-> > +=09if (!hid_match_device(hdev, hdrv))
-> > +=09=09return 0;
-> > +
-> > +=09if (hdrv->match)
-> > +=09=09return hdrv->match(hdev, false);
-> > +
-> > +=09return 1;
-> >   }
-> >
-> >   static bool hid_generic_match(struct hid_device *hdev,
->=20
-> 
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260915052021.6959=
+-1-syhuang3@nuvoton.com?part=3D1
