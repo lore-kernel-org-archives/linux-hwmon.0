@@ -1,75 +1,75 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C07B386423
-	for <linux-hwmon@vger.kernel.org>; Wed, 16 Sep 2026 15:00:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81AAC372EE4
+	for <linux-hwmon@vger.kernel.org>; Wed, 16 Sep 2026 15:05:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789570842; cv=none; b=l3g36Q97bdbkFip0D3XyZViQF4sCIsH+uNeoSzTEhIupV/oqWIMC2dK6OglMPMYR9P6HboKS1W4WLBl+pPvnkQGxgna0hCmE9SrrKhgBcr/WM5osbdwT7d/ZVmrisSGu1QFkI7Wwu8BIJM2GaSoblJbJAyR2jpiys6Vclo3FX/I=
+	t=1789571110; cv=none; b=on2ymlyARlGqPXDSZUB3Edh7RAXF2/ZnVO5AEYJ6cobvSGs46EwohpQ8zy/V2cxQ+u2au7a+DoQiVWTi6mR1kRZOmjadVngvmrRxIERu0j68vDMCH+9fA01BoIuGpQTQo0abpdeFtU7G8+1Yl7RKGLm2LBfTXkZbcxQdaP5XVjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789570842; c=relaxed/simple;
-	bh=uU04HW0rlwbhgWn7yH5GWNie4AC/PYWKfZPU/6xM78M=;
+	s=arc-20240116; t=1789571110; c=relaxed/simple;
+	bh=UGH2BzlDTaQAN3ngnFgegpzeVSHQi2yZ8hlwGyKZ2nA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B+O8u+72j+bRMHPma1eFT5JrDCFmy4Kzt7MuaTPeEvPdlTdsNP09k42O1h86pAH4uBzayFD7Ebs+GwlWwRFScAQqy99+DDGW/flXaFAUmTlDQ6exw3F8jTyeZzNri7YDceYVBG08e+18ZEzn/wv3kRjbQNcPrvE2cGc3HJqUh18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ldLV0S2T; arc=none smtp.client-ip=209.85.210.179
+	 Content-Type:Content-Disposition:In-Reply-To; b=dpacFATv6esXxPePU4nqq7b6auuhPQUI86ecrNpL6kStuvdfJUt9U9HvRG2ynLUZMzTFW1xm/hnRxf2GsnUtXrj6Gp9BIGkEklFclnW+kH8FIFH8We7jtbYz9GpGMCfLqTcaL41JrMn7WdDbRHEBoONivtoedN77qEt36kNcRSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gvnJhKQC; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ldLV0S2T"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-86ec25cf7ecso2155035b3a.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 16 Sep 2026 08:00:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gvnJhKQC"
+Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-39d654f02baso849647a91.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 16 Sep 2026 08:05:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789570841; x=1790175641; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789571109; x=1790175909; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=UxeLBpawt5FLZ4rmHBRsuTB8sPX9iH6xiZFrfBJ+a50=;
-        b=ldLV0S2TDPBfm9mP7nDUmw2J+2ypLJo1/qe+fdBmPnhXWhk86x72csVvvfdxm0CPAW
-         64X+yKOPIUfv0jsRUYvlcgSvcqHVGPbAAqHH3UH9F90ql3HzBSu7KjzzXR/RRdhoujtX
-         rJTYS4GSltXm47eeny1tRdPsWccdgIpkCbNVUwva6gS+1+QlCvOXoNHfeM+YjrWin6Ku
-         V4sm0FtMRhly4syPid4ov9y0fSM/T5U/2vkRF4OouB3r6m+ARZ0rmNWO5m+WSGIUX44B
-         a/dv6ZVCfAz2RL0OfBdcUSo0o3t3SP/7+Dw3O3CP0zVRh17+xrFClwOL+0hVOXhH47w/
-         7r+g==
+        bh=DSGg7k4lXbnMmb+PSQkP+q66W4gnIscXzR3JqjEjm5M=;
+        b=gvnJhKQCi1EL9sFh4P9gym2zHyPis5esjYqD7qh0arnMbgGUyAJOX9LuuXZSw/K5dL
+         BO+qburCP4ZYAFa1DvbI9OZFmWApaA2w8oenGpkiwvRQ4b1ka1egAqVSukimP99uk1FH
+         RHBmez8qc1YbM3AJjP4zpM2RpSVnnUK+Yw5+nVWWmuF7uxi6els2EAcEOLaCb+i5e2ru
+         dqUd/XrfuMh6hKlZsiMDSDIUy7ihAjl2JlrkKD74cNggvjeYsrSwJhvfpat/mkd23AB8
+         wFlp+/rsTYEsSEnjNVGmpvd/Th4cwJgarj3b1G4Sk9WKD8GCUqS8lfepxTty6TtlXbK7
+         uxmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789570841; x=1790175641;
+        d=1e100.net; s=20260707; t=1789571109; x=1790175909;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=UxeLBpawt5FLZ4rmHBRsuTB8sPX9iH6xiZFrfBJ+a50=;
-        b=Y9LWKDwgW+CLQNuZmzwJxvq9NxO4CbC02ViTOvZUxdOvLhLeaSpxKHw41iyIFdf4hz
-         YC58rKWfyYRwGjRkWk6R2Y9KUtCHjtbbWm+B9tb0y6h043xHA0rAY3qkLCxFxKV1Irp4
-         Ukx3gd8tPz0K+LLM47JWRzk/leJide5//EDtlJTFgXkfjGwmZGrjK+3WCvjLCHOrNrGP
-         Neo9AnB/g5kVBBLEmvwE6DK60Eh/XnIXBeTSCxqc9s102U5RaOZhsSUbCgS8KK+mU810
-         3h/aHQjqO1eRPI68Q51MrG9ul4ddk1ypu+KiVau5KZHzovF1GZ3dmIgAXUEZOPY2q6G1
-         79rg==
-X-Forwarded-Encrypted: i=1; AKwUvBxqyIwm0FNR9MekRa3VI4QrobtlLkWw9r2VBeIBUpmTVbwHBhUkEHIdjadRHdC/FmbpuwsUc/ZhNCx2ZA==@vger.kernel.org
-X-Gm-Message-State: AFuF++nk+TFWWeRnsFBEKhcP67x8SVRnkiqdDzPjy0kzIfEMowH6Nq+w
-	n3igQliJ70MGovNN7q1IzIJGMAAHrD/TX/JCEYCK2b5EPQbOi1Lq8f0F
-X-Gm-Gg: AYBFou1mzOpvVjRifpLw7ocV3s2b1VhceEULxojhix72y543xG/I3FoxPB3DErbjW3w
-	nWaxbQDzQoNYXLdMnyWMfSLyBZuNTPM7+OIa4KpGSu5jyJZOn0KioVueIMD71bS17C+sHCmdPan
-	0yTOGiWnOgyVM3k4pryhPuCJUBep0sDjBfm1MT2UZ3LSjtAivL/CJYQxPoRgo193Hu4hPtlmsga
-	F5uJajIj7c+oISAMYaTswWeEn56INlGyXgHyhiJgacv2F7LsxUTOrXx9YoUe1Xh0/ctRgQFb7aU
-	SEU/o2BlirAKXfWOk4pdYh0B/W4vvBBxZ7dyFIwo9e3f1IPcxnRDPzEUIibClirdBNHaQp3jg/D
-	Eh5QrLNxVJX/wGL6HNw+CdAClGrLVxCO+irZu+DoNU4qSbwK2y1twQqUQMKrM5YKDmRCuS6KB/m
-	NIaSD0iMXI3PSetxCZeoAnGSLGVcCnySOmO1sg/qWOa6MfjdhgB8hTGPLFyH+TVvCA+1P4pPuH+
-	KDV7t+K6cx8
-X-Received: by 2002:a05:6a00:414f:b0:842:3c77:5996 with SMTP id d2e1a72fcca58-8708981c156mr10606570b3a.1.1789570840509;
-        Wed, 16 Sep 2026 08:00:40 -0700 (PDT)
+        bh=DSGg7k4lXbnMmb+PSQkP+q66W4gnIscXzR3JqjEjm5M=;
+        b=nsI0CvndjBAqVcfEHA3KwqD844zG2T6onpejLtzsGNXerWxlidT1ZOqsBZFlTuAvpI
+         ubG2d67VyHKa73YA7Q2XWJ4Av9PcmvRlfWWGjkv8ZTWRtsAitFPVLyA/lOnKklsarx1n
+         gUItzoWjGP660rQYD1t5PloB2FSJptgsgu3UZBwUcc5st9O0B2dcQlcDtDT4wJu5Mx/x
+         84BdNod4UiT7z07RiB/GqhhIDhXmc12QSiSj8PyrzlOdMZa+caMmPBvVoO42pFwxW8i6
+         6ShVUJlRzniGyquX1aYyundtvn5215q7AqvWFxGz6YpVB9r1xjuSP4lZerxfFqjfS2/O
+         2lZA==
+X-Forwarded-Encrypted: i=1; AKwUvBxxO6zjv4y8gHLUurslZduiRjgrcO02u6Y2Np5FAryPc4pLkki6uouQQTykOrzOhO5HSakzmm21FXKzJA==@vger.kernel.org
+X-Gm-Message-State: AFuF++mPAXeef96jQZPcCoPn5LesZOhRQ9vHL/Ar1siU2gemMRleoLTv
+	dQpn43LxofIxVSUn0cMdazenj4wnMmpGHykN5r9G7SAsq90BrSWXtTFzwhrKDniR
+X-Gm-Gg: AYBFou0/kn25CFYC9gax6W8liz8g1bRKyLmEUN9fEqtqX4UjWmqNk9oQbZtQuS3N/5i
+	jPhUUfaFeClChOiOpqedEtb3EMWX6o6Nh62OpQq0lCpxeChzXtTH0D9pxp6Qm2e7B3kIDOAiyhA
+	YvI6Y0SEHFgutkiX9pJ7KjpvOppk88w/X7IgUhZfEbGYeMq+bXwJ6VHzs6Pe7LknpfnEc+Szdkh
+	cZs8wclBr2lhxOXV73w2VuqTJPTedFbrKIOtWV1dpHujMwR+PAA35LdShPGvlAIdEbSdmATLb93
+	g1k9u54GlpsA9+nUtiIoqidnAeOrim6hn7/NFYzbGtaXagAcdZUPG1vU+F6d6JpWNKEEjFB9yI9
+	asBdNl7RWPBBsFpimtzxC+8Coxo1wid8WZMB/yolwYusYJZodYBHAPh8MW0fecN8Y68udx4yZsV
+	Q6xebhu+XSseRtW4hPs/+0o52y8v6VDXVunonLg2xVcFzFjwhK+INxk8J5DT771h6eArz1oHPkU
+	Lz+yd8xg9VH
+X-Received: by 2002:a17:90b:4ad0:b0:39e:3559:12df with SMTP id 98e67ed59e1d1-39e35592079mr119891a91.1.1789571108738;
+        Wed, 16 Sep 2026 08:05:08 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc50abb30a3sm1719789a12.28.2026.09.16.08.00.39
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e1bb9f395sm5935562a91.8.2026.09.16.08.05.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2026 08:00:40 -0700 (PDT)
+        Wed, 16 Sep 2026 08:05:08 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 16 Sep 2026 08:00:39 -0700
+Date: Wed, 16 Sep 2026 08:05:07 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Pawel Zalewski <pzalewski@thegoodpenguin.co.uk>
-Cc: Luca Tettamanti <kronos.it@gmail.com>,
-	Cosmo Chou <cosmo.chou@quantatw.com>, linux-hwmon@vger.kernel.org,
+To: Cong Nguyen <congnt264@gmail.com>
+Cc: Simon Guinot <sguinot@lacie.com>, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: use named initializers for acpi_device_id
-Message-ID: <2b837c9b-791a-4465-ad7e-8d9c7329d41f@roeck-us.net>
-References: <20260915-acpi-hwmon-v2-1-39d17c748eb6@thegoodpenguin.co.uk>
+Subject: Re: [PATCH v2] hwmon: (gpio-fan) fix use-after-free of alarm_work on
+ unbind
+Message-ID: <9ff67a19-204a-49f8-98ea-0ed839ff02a5@roeck-us.net>
+References: <20260915035409.4177780-1-congnt264@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -78,20 +78,28 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260915-acpi-hwmon-v2-1-39d17c748eb6@thegoodpenguin.co.uk>
+In-Reply-To: <20260915035409.4177780-1-congnt264@gmail.com>
 
-On Tue, Sep 15, 2026 at 02:48:20PM +0100, Pawel Zalewski wrote:
-> Use a designated initializer for the acpi_device_id fields which makes the
-> code more readable and consistent with how lists are initialized in the
-> rest of the kernel code base. Also drop explicitly setting fields to 0
-> where it is redundant.
+On Tue, Sep 15, 2026 at 10:54:09AM +0700, Cong Nguyen wrote:
+> fan_alarm_irq_handler() schedules alarm_work, but nothing ever cancels
+> it. free_irq() (via devm) only waits for an in-progress IRQ handler,
+> not queued work -- a pending alarm_work can run after fan_data is
+> devm-freed, dereferencing it in fan_alarm_notify().
 > 
-> Unify the list terminator to have a single space between the brackets and
-> no trailing comma.
+> Cancel it via a devm action registered before devm_request_irq(), so
+> teardown frees the IRQ first, then cancels whatever's already queued.
+> Guenter pointed out cancel_work_sync() still leaves a window if
+> something schedules the work again after it's canceled; use
+> disable_work_sync() instead, which permanently disables it too.
 > 
-> Signed-off-by: Pawel Zalewski <pzalewski@thegoodpenguin.co.uk>
+> Fixes: d6fe1360f42e ("hwmon: add generic GPIO fan driver")
+> Reported-by: Sashiko AI review <sashiko-bot@kernel.org>
+> Link: https://lore.kernel.org/r/20260830152150.27F5F1F000E9@smtp.kernel.org
+> Cc: stable@vger.kernel.org
+> Assisted-by: Claude:claude-opus-4
+> Signed-off-by: Cong Nguyen <congnt264@gmail.com>
 
-Applied.
+Turns out this was already fixed with upstream commit a2471ed17b0e ("hwmon:
+(gpio-fan) Fix use-after-free in alarm work").
 
-Thanks,
 Guenter
