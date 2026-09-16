@@ -1,104 +1,104 @@
-Received: from mail-qv2-f12.google.com (mail-qv2-f12.google.com [74.125.230.140])
+Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2B533947AE
-	for <linux-hwmon@vger.kernel.org>; Wed, 16 Sep 2026 14:34:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.140
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789569248; cv=pass; b=SRWRB+GqhIMiiAInNm5PmLDzIlXc1c3qmru1M1IDSlPozXD63UBdvXg8SOqdPe6UeGkNFJoyI58aNLW97RzYOpTvp3sGYpZWOahKMqqjmZm9eeEdDkxc1Yx0Q+GwAf4rDMayI6xqC3vlXBeS47Cvs0dmozFXmi/ESzBFWHW4yGw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789569248; c=relaxed/simple;
-	bh=OwB/d5OxQu18uidgzkX2hP3f7HqNP/l7GdXuCXOPh30=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W9ut8+3ziOpDyNhyU8Q0AX1ETLFDwnJWGYhnZC6Wmq5hvwYfMz5H9J2JAbxJI2mVO42tR5tPuSw0iLDkTecdIo9xlOzPSG5fykWAASIWf42jP3IHP8uM8tmDagin7TueghOKRBv66ssTIN8GzVVRAoPdjWNOZyg0CL+xnMugbho=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=thegoodpenguin.co.uk; spf=pass smtp.mailfrom=thegoodpenguin.co.uk; dkim=pass (2048-bit key) header.d=thegoodpenguin-co-uk.20251104.gappssmtp.com header.i=@thegoodpenguin-co-uk.20251104.gappssmtp.com header.b=Oll1lZy4; arc=pass smtp.client-ip=74.125.230.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=thegoodpenguin.co.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thegoodpenguin.co.uk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067DC33DEE5
+	for <linux-hwmon@vger.kernel.org>; Wed, 16 Sep 2026 14:53:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789570396; cv=none; b=lfnyooN4DmCRYaZ6KlZfO9O+RqMiH2J1ZcVDy3gzQcGycUD+zrPD5ADbMSZIWiexLRuTHCFqosELUDEya8/GYucDOjFKtaSRLGnckLAspJ9L9iLcvEy5Qm/wOzwlPsJUZksLIW12dibcDw7DgJmmXC/EAjhP/dFzt2up7im3xAU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789570396; c=relaxed/simple;
+	bh=kz9c7562LzZnfgeH6LbintREMCJHlKCKlc4kEhyiQ58=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=omL9WkNBJ+D9Qnb/dtFF4gJxrPfw28f18TyGEzFfzDlrPIzHS4aoCwb9zjWPCGZ3fNtNBO4YTI0Ekt/7wpxcJ6/6jH2gdpJRpekCXotrH+SV9Cd0VUiGb/dAsFRxkPtaGJZlMmyfE4HRWmcdyR1oNB0xrpT/5Jg2rvwmJ97q5LM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lvtOl32w; arc=none smtp.client-ip=74.125.228.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=thegoodpenguin-co-uk.20251104.gappssmtp.com header.i=@thegoodpenguin-co-uk.20251104.gappssmtp.com header.b="Oll1lZy4"
-Received: by mail-qv2-f12.google.com with SMTP id 6a1803df08f44-9107051ba26so6650736d6.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 16 Sep 2026 07:34:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789569245; cv=none;
-        d=google.com; s=arc-20260327;
-        b=jwC7VqA7LE803omUWPSS4N3o7pARk9f0XklQUmJvQ9DiKb1dExy7Wlfwgh28AyFL53
-         yNiwkTqaFf22DLCTDvpaeYrYctIHNx38sZMB/z7zljr23Mr1EQI8pjWzRmTfUIsxqWLq
-         BbBd0EHDofB9MUAKVfCkrGYu4nuBtdIo/+kx92xjF/r31mIC1HgZ1CXlx0dd6NNQES41
-         0xduPicAGlSQkxxUs9aZY90Xsv5CaB7jskkwkbYnn0vFHaDJ324DpDPf+FPFk0UyZMN0
-         47p26SJKNLtflGSWDkiCGeQUx+0h4SAkf5isSh7DWbiOQSW0CMO6zo7C7t/1vqEHeIYp
-         94Ew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=OwB/d5OxQu18uidgzkX2hP3f7HqNP/l7GdXuCXOPh30=;
-        fh=GfumxlPTR30jD8D05ps3LZj2dp0z/ovt9O7LXhFS/fo=;
-        b=ocwTVUFUGX2/A6YE7SJry4yxo2I9CqoaLXpHyz/hJe2W+7b7qbCNQ63l0pziyE+aCp
-         lJUTEbONJbxWYJsoVURTeavxve6XlqI8FLuECf2uD34QcYf9joGydI8cdsWjliqkgJVF
-         /B8TKDk+ydOsW55BhIoiyBtBXGIBRpe7i3cY/LO984FT0/SzzcwnlXLR1/RedAnKgzL4
-         42SyOdmd4E+99s0mCJNS1zzuSZCGeNceW4v/NOBysJxxHewaeShYoMkPrxPpTKD6VEzY
-         3LXyL5q5jABZqu9uuuzlq327pjkjwKA78ZoHWdqdwYL/KPf2XbG4Gv6feNZlIi6ELGsa
-         pfiw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lvtOl32w"
+Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc4aa0f1766so839238a12.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 16 Sep 2026 07:53:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=thegoodpenguin-co-uk.20251104.gappssmtp.com; s=20251104; t=1789569245; x=1790174045; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1789570394; x=1790175194; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=OwB/d5OxQu18uidgzkX2hP3f7HqNP/l7GdXuCXOPh30=;
-        b=Oll1lZy4gw6gjhCnHbEPsz8oAxrITzPHBEO+pTrlwesZHv77BjN8RHNzXwB6febAod
-         0f/RTNZqryn5AhmR2Ea1DgkOit8YqEzJ1rT2gyYss708XuT6j33phXVMgXUKxMuXiqpl
-         1reUpKK/mzHXX7sGAi4Y7to89yQ/Dy72ig7k19sSWYSBv1mDh6MZInu6xVPCLUOn5On0
-         lrq2BwW2t2aLQJQEqPRNKUtn6r/8ostWb/EFTkXCBmvL0EA3+lRDIFnZ0fEtrSiV0Bjb
-         ujCpbkkdj8TX0Ip2qEjlUx8Syx2mVxVNH+2LuOaiCymCk0dIfprnVortIQGf0HiSQVLT
-         4kQA==
+        bh=fihMhWTIB+kY15B3X2oY9LnEH/m2Tdo1vVD8z5jRtG4=;
+        b=lvtOl32wdpUneEwagp+SRBQYZTa2C1EeYNxL1k2SjvgEpOL/MVrNbsUnM1MZS39Y1V
+         Brtx8TSCUKQ4HGgDag52TOYLWEMfKpFqUi7WKiQZXlN0NvkfVSRRgFse21lmIC6otrs9
+         w151xgu6gNFtaFPTXHfNDrW5TfCqbeATpONmOd2sdTxbYU13Z5GrUh+N3/MJ3FLrMvnU
+         hIPm15oO0ZHO2TBAR0hoC2a/BSw3bXchPHTQUHnixSrBqlf3zgwV6IMx5BIyIC/zPPZJ
+         esCzDKAfOuU3Gl9GUlaDqzDPKs60lkuhB6xy/4mdr2FrFpAFxEbPw6puuwtv6l4HgNE8
+         ULiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789569245; x=1790174045;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=OwB/d5OxQu18uidgzkX2hP3f7HqNP/l7GdXuCXOPh30=;
-        b=zm2Q8TbhbwV7m7Za1sERoVx3fntqu3KBnaj9//w17/H80cM8YET2AjsP29suYWNcA4
-         HWQfrUBRnwg7otugsKs9xekrmvD8AV/Exsu5QCYOHJBBE0uJjPZp5s7SMhJiDz5nmer9
-         bJCYX4/SBwfIuearVrHQ2I0yweLnMTz/4Avd1C3yUau3TC0O25KGhQstIvomi1p4B1RT
-         RmLP/8bqtB68bNJE65BhDXM2NHOXBQOf0Ew6csz+aQ/BCMgAJUfc8VyS2VCCn2ZVfYvn
-         7BUpwbXhWj5818fWhqotui+kxxBDSxyWBo68hM2AtjZRl5dAN+cEvZ678ZavZcx9WpJA
-         w3XQ==
-X-Forwarded-Encrypted: i=1; AKwUvBz0Inozc4uAHRJ5oKjOrtkNt++GKYTacQej5bPdNunTV4sHjSd87vapl9UbCtkDg4A4O3xbfwydMqso6Q==@vger.kernel.org
-X-Gm-Message-State: AFuF++lGTycFUgqlUjb+7Mb+CEZ52aVPMIEqwUie1JixiFLkvLDz8Grq
-	1KzvuIxFtB4ncgSXusm7mTTlcWpoxfKDkR1lDsC0o61r125WyosaeT5m4n1KKAnQYvK/k3LNlct
-	gzcKQoPl7A+pNr/L+M1xD6HcIGKNrOmMVetUd2hfFcA==
-X-Gm-Gg: AYBFou2DKke2aH5h2S4O/UMMTH4HaAk/x6FW2Lmw2Iiufp4A4gGxzOVVPncMrTwOj5H
-	0y2MTl0NLVrTsFKyBr7X7s4JtYZK+9jY8E2cf8mM3vKKyO1L0BbWmEVBvBr21vu9Xq51tYVPro/
-	fvmPtWhfZFcITY9SQHGr2Ii8q9Npu4taVDkzzbKuhHdZ2b7mSk6Ry4J289j9OqSlt4K8y8z9cLM
-	qsNoNoA85jTx5nwb+OWBadYg9vvVCJFLv3r5yrCtAhvA+9omkSzZTblVKfuRWOXx2HJA0nSm6Dm
-	T2dcbyWW9pTFDqLgZ3XujEsrRt8j/70H9xpYFPM+cmnzV2WtjQzlMf+0G9N+TkYVjt1NCFWpBQa
-	o16p8CfXXzj4E
-X-Received: by 2002:a05:6214:2307:b0:90e:9dea:82f0 with SMTP id
- 6a1803df08f44-9123d72e492mr50551696d6.15.1789569245319; Wed, 16 Sep 2026
- 07:34:05 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1789570394; x=1790175194;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=fihMhWTIB+kY15B3X2oY9LnEH/m2Tdo1vVD8z5jRtG4=;
+        b=Uj/fmG+gzVGaSaowGExqR8OO0iyKAKVszxE7d9wnD1BtP8EhJLJgdJtkc+JFNGrnW0
+         iVSfcL52LbHBBaOmaS8pu3WlUPTJ2OUoqHEWQiTq9MBm2rE0lueHmub1mNilVFHQBtKk
+         HOu6uuuZaCuXT3aHtznQ2oc52/op44qKvZzMnM/NVNg9xRafAUfb1eY9eHyrW5pRlgAN
+         ttv7GCVX8cNwkqnjeffNgd1BYt1VLfduREDqnBjEAARLNzhBihJ+SRpEU0IWy0Buxrrq
+         ++8ACfJApWxvKKIr/fozUakjlw7lIOhTcSoCBH1qaRIC6ph5C4PAeE/VH+0tkUWAKmMV
+         VdyQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzQSmcQOnGzIib7xCJa3VSuBGAyHovF4GaDwnN8XxgHwvgKI2sStpAp5Uqel+dsQxyz+Fiw3FvcNeSYsg==@vger.kernel.org
+X-Gm-Message-State: AFuF++kbElzlKk4EomW/1QFDkCzh2brgs1YBGsEq4dNrDcEeGXMr6VsX
+	gbZ1Ys2FWoxK8zH/tfZhhl7V9lXLn9oabay11GNIaFFq8F3LmTCBtX3W
+X-Gm-Gg: AYBFou2g9sJjyHHVwulW7OjUqgLhvyB1CwB/nlfcF7H06SmXREJszrbRr/SsMl/H29m
+	kLoIuXL4doqWwPTHCm1fDYQ+k9lChdsf+x55n2xLo61kz+TyLLYGGZMTCjmbEEiwua4xMSv7HzQ
+	aN9I/rf/5DG+xcQZOVRRwFUDQr+ThGNKddfepJMJ8IFL7xXoTxikH7KR9fnYmX/wahqyzAEDjZQ
+	zXNiomyLhgP/Cewtt7BpwVtV421T1Yj/HT5iJAV9C58m/0m9435oZ3tXOH2r0KgzsGGd7Hfl5cu
+	wNVnXeO3PWuyIIZBwRpyE+9e2vqvv5Y4IUZSa+Oc11S88ghQaZzAD70MIvsjMfYhB+8PVo+DHhq
+	spSyfDIlyf0KZzZ9zo7Yg5SH3qnIOYFIg0U3YYTjSLrUEmdxghtZ9L2K4TnXrrY32T6LZBkx3lh
+	CHPZrUBo3Dqn9+SnPLcjUyz0l7nKni7CyMUehlgroMpkbBLwQBmqdNiq6OqIqrf56cS/FQHPrm4
+	2iOuEZnlcfZ
+X-Received: by 2002:a17:90b:548f:b0:398:9c00:29ec with SMTP id 98e67ed59e1d1-39e1e4c9d71mr6984128a91.20.1789570394061;
+        Wed, 16 Sep 2026 07:53:14 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e1d0be48csm1586133a91.3.2026.09.16.07.53.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Sep 2026 07:53:13 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 16 Sep 2026 07:53:12 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Patrick Pepin <patpep@me.com>
+Cc: Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+	Armin Wolf <W_Armin@gmx.de>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (dell-smm) Add Dell Precision 3650 Tower to
+ fan control whitelist
+Message-ID: <4e5f8714-4257-484f-8f8c-0fc8033ecab6@roeck-us.net>
+References: <20260913112925.11393-1-patpep@me.com>
+ <20260914080955.87925-1-patpep@me.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260915-acpi-hwmon-v2-1-39d17c748eb6@thegoodpenguin.co.uk> <70746c77-e113-4bc6-93b6-7ac6027c86a4@roeck-us.net>
-In-Reply-To: <70746c77-e113-4bc6-93b6-7ac6027c86a4@roeck-us.net>
-From: Pawel Zalewski <pzalewski@thegoodpenguin.co.uk>
-Date: Wed, 16 Sep 2026 15:33:54 +0100
-X-Gm-Features: AcwNN1XL40ERZH8e0Yhs7auCFY005nLn5S0ImA1LSDoKwV3HLcPsYK0Xe6yniGo
-Message-ID: <CAA6zWZ+8KUSzah7y4TXrkvOnChDyEur=HCXgukcFke2dEjgQ2g@mail.gmail.com>
-Subject: Re: [PATCH v2] hwmon: use named initializers for acpi_device_id
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Luca Tettamanti <kronos.it@gmail.com>, Cosmo Chou <cosmo.chou@quantatw.com>, 
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260914080955.87925-1-patpep@me.com>
 
-> It also replaces pointers to empty strings with NULL pointers,
-> which is a functional change and still neither documented nor explained.
+On Mon, Sep 14, 2026 at 08:09:55AM +0000, Patrick Pepin wrote:
+> On the Dell Precision 3650 Tower, the EC ignores fan speed writes unless
+> automatic BIOS fan control is disabled first. The I8K_FAN_30A3_31A3 SMM
+> code pair works on this machine through the WMI-SMM backend: after
+> writing 1 to pwm1_enable, all three fans (CPU, front, top) accept the
+> three fan states and report matching RPM, and writing 2 hands control
+> back to the BIOS. I8K_FAN_34A3_35A3 was tested as well and also works;
+> I8K_FAN_30A3_31A3 is used since it matches recent OEM software.
+> 
+> Tested on BIOS 1.48.0 with kernels 7.0.0-30 and 7.0.0-31 (Ubuntu 26.04).
+> 
+> Signed-off-by: Patrick Pepin <patpep@me.com>
+> Acked-by: Pali Rohár <pali@kernel.org>
 
-Please note that the 'id' here is an __u8[] array, not a const char *
-and that the generated .o objects are equal pre/post the patch as both
-methods just initialize the array to 0s. So I think the commit message
-explains what the patch is doing, perhaps it might be worth mentioning
-that the 'id' field is a byte array in the message.
+Applied.
+
+Thanks,
+Guenter
