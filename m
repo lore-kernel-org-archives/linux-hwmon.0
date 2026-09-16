@@ -1,210 +1,226 @@
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DEB7412C1A;
-	Wed, 16 Sep 2026 23:07:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.147.86
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789600054; cv=fail; b=OgnefLKk2P2oScspPYvknnzq7LJ8QhKtYzBdWrRTyeLTpawrZ5b+AG3K8MNyqpsfqkOVk0+VlbsvNGUOfNsd8LxrvzPs6PtzO9zvQKEoIAxh8t4JyRbtqorV/fRzxAf14TwcQD4RRz36SC3jetJHB4unDcUgO4nXfUTs44IxBZw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789600054; c=relaxed/simple;
-	bh=7rj9Au84kYqLHdJTcebVh/c43QCzXzvgzDc148XX9BQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=NsHoUyEBX9R0OoM+EadTKqdjXtaS1GrYtiIge4TRiSFzISXzmDMNRigaG/hOrExc5ZLWHdG6Pl0QJl5pfEf8jXP6kbQk010/3nOYd29pXPh/dfL2encwS6rXFkxKXKREkKs0MuWhEG3BN5v3tNhBvlq3/evtddSx5q0OUW2U55M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=FHEJxMcZ; arc=fail smtp.client-ip=148.163.147.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A8549A3CA
+	for <linux-hwmon@vger.kernel.org>; Wed, 16 Sep 2026 23:34:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789601643; cv=none; b=VoC6g8z/ylePtfiEZbCVw+HfDt69W2KRhMhBZn4spEdVdVGv70OfkW+rzxwRKVGnfYXfxsphqjludUg6RT0Rt0nazozN8AEm44rVN86JTJgrrH4QzKI3EpApVV+gQ5+/hFFU/3O2RpwcVx+t0Zd0Rri+3/qXu4hyVYt9Kbkqd/0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789601643; c=relaxed/simple;
+	bh=22LhRkvj8Sld+sglUKrnO+ExPKvk6aEMmWFMUaXEMsE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BxjfqTEQplwmUTiWvhZxspUkzca//yc07cNOQATQVSttK5RXf13NGQd+ClGWhpTBsZpl1XKdrjgEpdIcCPP+lhvF8159u+H2MSGfbOMWuYydSKzOvy4qtrkFSYb1+Sezk+LxnAzPYwRAcXWfS3aiD9xDwmI9wSvqtZa6nC8q0T0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dbS4mVG8; arc=none smtp.client-ip=74.125.227.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="FHEJxMcZ"
-Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
-	by mx0a-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68GL8wgI2045811;
-	Wed, 16 Sep 2026 23:07:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pps0720; bh=7r
-	j9Au84kYqLHdJTcebVh/c43QCzXzvgzDc148XX9BQ=; b=FHEJxMcZRNDLYlMcVT
-	D0AMW6x7XA1jJh1cX8py52+zwLvUWA2mYhzjbo8TJpQBXadEtUlok6Kc9uKOkH32
-	Q75UGEN6paSampsnGX2xjLKxd62O2Ge2IV8ZJPlGt2uD7mh4N+d7vD8XEYj5X4Yv
-	+TdDXCgaefalrl1CNXxMMv3tYcJ4YbxddwzsZJvK1m8FD8EseD2odrwh6iAh0RNv
-	0xpFC0qHjTd4W6feBeG6l9cy31rrBHaAjo70McPuA3f3xhtgDL2hpCT76oJZ5q5x
-	g8qobWT9F1q5OQqLWSTHJGLjP3YR5DH2vm6WLhh2g9upXtWLjKLAtDcGTgJLezdO
-	mAxA==
-Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
-	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 4gqw7g6jd6-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Wed, 16 Sep 2026 23:07:16 +0000 (GMT)
-Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id DBBB214781;
-	Wed, 16 Sep 2026 23:07:15 +0000 (UTC)
-Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
- p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.43; Wed, 16 Sep 2026 11:06:48 -1200
-Received: from p1wg14926.americas.hpqcorp.net (10.119.18.115) by
- p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.43; Wed, 16 Sep 2026 11:06:48 -1200
-Received: from P1WG14918.americas.hpqcorp.net (16.230.19.121) by
- p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.43 via Frontend Transport; Wed, 16 Sep 2026 11:06:48 -1200
-Received: from DS2PR08CU001.outbound.protection.outlook.com (192.58.206.38) by
- edge.it.hpe.com (16.230.19.121) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.43; Wed, 16 Sep
- 2026 23:06:48 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=m9lSnTyiXnHpIG7B4btDds0AHGkPdP4dWk67yS02LYK3lb7VD1TRdams5lPyxEXhTjMN8qveFLrrUan2lyOedEiWJF+ZN7wAmQZoj8SuDBu1XGaPcTXJLQlj6fT7BssUMBSzcRbmlrR3JhI9EViJZQ1p/XuYEJ3HKfx/cvyh+0n8xGoh1fy+SlpvEAVJ+xgjPPS9fAsr/IzJz/36UkRC/Kv2UFTC+VAZPyikZD0P5iK4QhwXUaxdnbhyjViCiTG8U23dlvR0p7+qKr5b5fTYut4V4OhM8gYFtNTNlIut6OpirW8xhPXJ7VmOREvIef9H4sSB4gFBYydBeenHDf3LXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7rj9Au84kYqLHdJTcebVh/c43QCzXzvgzDc148XX9BQ=;
- b=mLVh1zkQi9b2I3b9YM4a9VCgo7n7b4QDF5+3RvA4O+91PpTUUP/U+qe8Ni+JJ/Lfp/tGoeBJnRdwPXNshMx6cnRgJjtLaQ8PkVF0IAejwUhJDubGgNXEGqkFETF2UmdABwAW+FpeSSLGzyMf2fUhR7IvPJm+VQcvvmk/oF24/rerjibw/1LEQqUEgZhlMFYIhM1b5qwXHzHaWoeadnoc4sOvPsvxhh6WYdaZlV19lsB1Dkjtk4l12Ry+p7e6Y/Mv4OlFfWLjDZ5CA8fBOcJBjgdVBAgMEqmugYmVIhoXpE3jq2DRlk8lSbpTr7xrVKg9hg3Nqi0zntrQ4nocogKn+w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:610:1cc::7)
- by SA1PR84MB3932.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:806:3e9::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.12; Wed, 16 Sep
- 2026 23:06:38 +0000
-Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::2c54:3534:122f:e74f]) by CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::2c54:3534:122f:e74f%5]) with mapi id 15.21.0406.007; Wed, 16 Sep 2026
- 23:06:38 +0000
-From: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
-To: Guenter Roeck <linux@roeck-us.net>
-CC: Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh@kernel.org>,
-        "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        "linux-hwmon@vger.kernel.org"
-	<linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>,
-        "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org"
-	<stable@vger.kernel.org>,
-        Sanman Pradhan <psanman@juniper.net>
-Subject: Re: [PATCH 1/2] hwmon: (pmbus/tps53679) Select page 0 for single-page
- TPS53676
-Thread-Topic: [PATCH 1/2] hwmon: (pmbus/tps53679) Select page 0 for
- single-page TPS53676
-Thread-Index: AQHdRhaHbswEx7nqh0iFEPfe68X9ErbRvB2AgAAXtwA=
-Date: Wed, 16 Sep 2026 23:06:38 +0000
-Message-ID: <20260916230628.677441-1-sanman.pradhan@hpe.com>
-References: <b155cdd8-54d5-49d9-b276-c24dde766dbe@roeck-us.net>
-In-Reply-To: <b155cdd8-54d5-49d9-b276-c24dde766dbe@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH3PR84MB3523:EE_|SA1PR84MB3932:EE_
-x-ms-office365-filtering-correlation-id: bfa268f6-388e-4f92-7f64-08df144729a7
-x-ld-processed: 105b2061-b669-4b31-92ac-24d304d195dc,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024|23010399003|18002099003|22082099003|38070700021|10067099003|56012099006;
-x-microsoft-antispam-message-info: fvp5dGZ5HAUgy8x6yEz7tP1FaG/UJbgSpSp008iDrCyjRFKB3lbHsOYb8N0j1R/SKIW0nh293ppdu8hkm7sLO/Qe0XXUifBmbjzYvFTqY7lHrvhNj8j9zV0b8mc7uEaU7h0vP/p49ANBkkO9eFkBOSLbatyJO5eKx1/VO9HIM/6k0r2/WeXjfODj1K1V7mml6G+Aode0Uhhy/r/jAstKbG8v5uihcVb7GZpsQpygbnyA8LmPc2r1E8LorjvnaEfpbaSfwhzQ7bnnAMYvO73mPUIf41whTaRNdfh/VwKTnjb94KBeyqtpZNdjbgrPlpQZK4tV8fVRk6BH/5PuERHxNIdcGb1N+67R1JvDuB3/DWE+3hTbt+oOwazrZY5S2YKrUQnsWmPLXpg12/86pKPFjQzLcMus5yXZk9C/+gHJse3fhyZeW0rjc5S/6Bm+Nh7zXd9jMq6YCAaY20eRk2fguvuiXID3cd4E75fUav/jpeeA4AHpAcqMl2WONhObqjikVZTaQDeuOKaYj5IryAua2d/fIgYVEaQ4cJm0Xhocf4qeIp1hXhfRleoez4U3tnmN8XCbVvsrwaqAdOEiyE32+p/7Kqj4nwzhTNs7eqsLuCS55ZlYtg07K5zOlUn7bi9z8Ma6wrcU5eDUp/aNVqzSfEOHN9ozKfYAfNRR7a59l3SHh82pWKzGmImJcM+KRSt3BVbSJmQ28TGC98eHaUZPge0FmGbq9bzN1rsyTdb7+AA=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(23010399003)(18002099003)(22082099003)(38070700021)(10067099003)(56012099006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aFB2Y0d4TnFzQm1xKzhEQnQ3VzAzNWptK3FWSkhTYTNlSndRSW5zM3V1MkJv?=
- =?utf-8?B?U00rR1RyYzZSdmxldk1QazFUS3llaWxDZ2hwVzBmQlRhcmVTMm94c3JpZlpu?=
- =?utf-8?B?YStMV2IweFZsL3ZhVzIxaENUcVRoNWFZTkR6TVBNcVAySnJBa29tN0N2Q2Ex?=
- =?utf-8?B?RlVkR0F1NVNJbXNveVpydzIwZXZsQU92azl6YUpYYTY5NC83cXpERU5sR2I0?=
- =?utf-8?B?Y29SYkUwRjY2ek1ieVo2a1l6OEc3TXVNa3IrMlBuS0dldzFpOTdTU1Ivd2ll?=
- =?utf-8?B?eUZBWGtndmU2MGtzRERMR3NkUFNvVkxaaFVLNU9jbTIzMzVCZkthWnJEK0U0?=
- =?utf-8?B?WXBuRUd5Q3ViWjB5K2NEbUZoSURMaXBSdHdFK3VyRG03Mi84WGtjMjV6d3ow?=
- =?utf-8?B?cTlkeXlrSkJuVCthblg1TzkydjQ0WGxwRzBTeklqek96RXlHVlpDMjNzcUFm?=
- =?utf-8?B?QnE5cEgzM0cxTjFEUm5ncXFzWW05MW1PbzRkWjNjOXdITFJUVFpYbmg1UEg5?=
- =?utf-8?B?ZCs1em4yNkVaMm5hTyt3VHVpNTVZTHhyblRnSDNtTGgzRTVtWWpQL3Q3Umtt?=
- =?utf-8?B?dVdBYmFUb1hMZDUwSjd6eEVZL3BsQ0d2eTVGMkZ1b01tSGVXMHk5dHNYeEw2?=
- =?utf-8?B?Ujl1azhNYTA4azRBbHBlNHBKVzNsOWJ4MnhoNkxMWEdlNmpLTytsSk9ycGdj?=
- =?utf-8?B?VXljRlg2NFpRWnJ0ZTdIWmVPdE0vZ2tNK2xyQWFSbmo1OXRxcHVJVUJqYmdk?=
- =?utf-8?B?S3FVaVZCSVVNL1UwbXdWUmFnS084dzVkTk83NEdNWWN1dG5PcEpuMGRYblZj?=
- =?utf-8?B?OW1NeTY5ZTJoaHJ1ZFFNd0tOWE5NYzVQdjdhZkoxVUVSc3FwV1RBUjFtU1hP?=
- =?utf-8?B?VHpRaHhMNDRlSEhraTUyN09qeUhqKzVxY0ZXelZ0RC9Jb2xSYS9iVmROc2pL?=
- =?utf-8?B?U255YWZVZTZIbHVFcm0yZzEyZVlTOG0wT0FTbFpUUlNWOTZaME9Iemt5WWhI?=
- =?utf-8?B?RnJtNVBIZ1RQTjlkZjRQWFVhQWdwRDNYV2RrUmtGOWM1TnVYeDVRNEtIa2xJ?=
- =?utf-8?B?UU4yczVsZkJvWWdoK0NEUHdLc2xtQ0p1YlZjb2lXaGZuRVdGaEprVVJocVN3?=
- =?utf-8?B?bFZVVDNISDB6M0dGRjRmNHpGak1wK2xvZit5YlRrL21SUTd2M2F3a2sybkhl?=
- =?utf-8?B?MXFwMW1QaVQ0YkRuSzhxMjRzaFZObWhCb25ZUVZlczFzL2NTMFN1dkFDeHE2?=
- =?utf-8?B?dUdoM3pOalJ1RDRuWlBhTTdzUlcvSG5WZHJ0OWJqODI1NVBPbEdxTmpjL3hY?=
- =?utf-8?B?blVKZjdkc01xcndOMDNCODF0K2d0azdISDkvdmpSSEZ6TlZEZk5WRHZSZnBz?=
- =?utf-8?B?L3VSU3RrSGF0Q0xtZmE0em5yV1JLbTBUZE1BRVVOOWk1R0RRS3E2NFdvWStw?=
- =?utf-8?B?eW84WjBSci9RQWl6bmxRZG1ML29sQ3dqSEN6T001Tk8rNVBkMXZYcGJ6QkZC?=
- =?utf-8?B?c3RnSmc2VEY2S20vMjYrMnhrUGU0N3hUUXIyMzVOQi9KOVNHNDR6Um1jektl?=
- =?utf-8?B?WkFwMTJINEZSd1p2U0JjOUo5N2JuQmxHa1RVdTB5cTR2MGFCREQ4eGpWaGZh?=
- =?utf-8?B?cW1NODNpVjQwSERadERsTUxZMEh4eXhodjlRQWF2TkZITkRGUWs4Ymd3TGhS?=
- =?utf-8?B?cDlhdnJLYmxXbHBHUy9IT0U2V0VsUzZCaUZwQlVDL0VhckhFNFFSRlBLajRM?=
- =?utf-8?B?YVlIaThSMUFCZ2t6d2lIUVQzUGVtdi96cHEyTXVSRXo5M0l2K0h6UTE4dWhE?=
- =?utf-8?B?Ui9wMTROQmNqOGU2andhUEV3NWRjZzZ3Wmxlc0djYTd0Z0U0SHhveTdudGUv?=
- =?utf-8?B?TEZWcnd4T0JNS0JXSnhwYmp4bUNYdVhGMWo0OS9CVlJYU09Zeit5NjRwWFBN?=
- =?utf-8?B?MG94RDVpNkp6WXpvdzE4RHlSeHBXN2t2UHJzSFBObjUweE9nM1huMUxnS2J0?=
- =?utf-8?B?em5Hb3Q4TGE4WnB0VEVWbGRPSWRWVWpScW51N0sxSnVMcHYzVEJBMDhRTDBH?=
- =?utf-8?B?T05iNDd5R0w4WGtIUTRuM0cxVk1jTnhGR0djNS9OaE5hRW1sdDZlY3poVkRE?=
- =?utf-8?B?VERIcDhOMWtMZ2Q5Y0M5ZWRSemdyMGtaTEhQQnNvMG4zWldxU2lwQUlKanFn?=
- =?utf-8?B?aXcwL21FcmN1dlRtRFI4RWV4Zmx3VnZDQUdQOXBlTjAwZGRVRWtDbjZodVEv?=
- =?utf-8?B?bTJabmZFREhVeUsvTGptK08rNHZhUFBGNm1BU2IwbkJkUXJLU0Rwd1FHckk1?=
- =?utf-8?B?VjUvemtyK3lzcElUdjNtZDVvM1ZkS1dJVXJNdndaNzZTSHpSR2FCUT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dbS4mVG8"
+Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-396ccafb752so202442a91.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 16 Sep 2026 16:34:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789601640; x=1790206440; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jBlfwGeEPCPTAE5asTKk+nZQwiJmQBVdeLfzvcJ3wA4=;
+        b=dbS4mVG89745VNDyUK/5r7KgfmcvGHD0ywmMItLOoVfIMHElBpKR/BYJQYLVI/b7Q8
+         gan6GFBhHv9Ls4UxHarOHY3uhoIkLRLKRQwkNZ0cljFIItI+IN57n+RXQdU5FBNzHXXl
+         2ucbQEJN/9pXoAIKy0lWg2Re6Y7t5m1KvToxy1m2Dc8mWephfN2LTXJn+MUbHlbSUpjx
+         Ss98Lmt3/7Q9qerYR9aT4VPewEcnJn5Cg2q3nieQUCpN38LjMCN4esIkmMXSVMI2qght
+         DdkoiQo1t+pnqrf4cgpuEeME+/4zilt4nzBvd2hkdS3UFc8qVKUe32PKH6x4ubtgU8cv
+         l88Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789601640; x=1790206440;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=jBlfwGeEPCPTAE5asTKk+nZQwiJmQBVdeLfzvcJ3wA4=;
+        b=snDS7oy+CtqrjMjAFMHb2+prUcZ9Ul6PwH+IJ8ILa6TG5qaouBDuQsNl8v/ythzVzm
+         JRqObK3MRAC4VPl4a8DyKNFzF+NStlBaJSeBawtYkCn3zhDqMoKEZ4ocTkFuSXT6iPrp
+         cyGEV3iA1rGIFJ+ifq7g/T/ntvBxDrq1PqlVhTl0N7UBmV5w1zd4uVY002D3gRHctiTn
+         7BkbP5RRyDB/xe4P8IptliPbUkZCvmDp8fEUmsPwFROvl+MhcGT/zXRuLYRvc/sGGp6Q
+         DLTPTnaFxVSfmad/cd2biRgi6Z982aj4Orm6tNJ3tjpirx9yWqie04MNRnPJwloGPNAN
+         EFCw==
+X-Gm-Message-State: AFuF++mNsNAUCtGllSlYuUVklGJCBpGMA+zrurjnHsW9bxf27sWvV5RI
+	vY52lqeskmDDWrrr23qPttm8zo+jUYKVY4Xc4i7IvOpnA+NPyBbzEmxW8xcFoqTI
+X-Gm-Gg: AYBFou0WOVLQsF3S0VxDULMbfzMZeFc0bLFd54/b+xJPGABGjReAyMIszmHSetn9lsY
+	TWnl4defdlz6kcVGC1FpNgBOilEqqcA+w9w/fFEPJp1apQKTb5tw7QijxuoAipiMTjQ9l3DMuZE
+	xF7oY0kYPV0F0wrEJtwUWRNRRD9q72SvIkGSuwxT9+wjESlbMB7u1Hw2iW5KyDnTzekzXi6fcL4
+	R/LEGoGAEjb9vwglnwKBp4v1EPJ2pcFwVtd0kDLhqz7JoyBNu0IQjHEiXxwIadILoBg7Wcn7X8h
+	6UGt6b95EWJFUvdiBBOlV0Yca7FCeDcH7NUbSHRbvmZaAKBzSOrAimtKzyRic317heoiYFPiU1P
+	rqQxZdW0qXs17+VdaxsqwxLEI8PQdH31sXwVcD1t0jHHv6AE9YiGEGyHSmbFM86lw1sIi8GJU82
+	bcyNG95WPSMGgwiTxzC3n+b9SkT3U6ZH1E6EQlQBbaGUxl+S3wip/Z+ujoUHMsCktrjgGZBAgN3
+	nh9z39x8x1ZtmBLYOOIcSaM70H4v3cuqh5OQqVKZUA/rnpg
+X-Received: by 2002:a17:90b:2748:b0:39d:f06f:79be with SMTP id 98e67ed59e1d1-39e1e4649camr13354819a91.15.1789601640181;
+        Wed, 16 Sep 2026 16:34:00 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33bf5aa1194sm12174595eec.14.2026.09.16.16.33.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Sep 2026 16:33:59 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <3a49ebfc-ac1c-449f-8261-d4c28f4070a1@roeck-us.net>
+Date: Wed, 16 Sep 2026 16:33:58 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked: VkN0xtYRNzBRSKgiNxyyRaNH7GFJ6QyQo+dcxEZr8IoZWfvMY9ea7YjkHuGsklrR+RpZapbmmt42wES7coOqjYBOg5uy0vZQx6b8paLCeYoJwb3yjdomdujEQNI4p875h+eRyk/R0HXxNHWKFTtNTRHAQ7SMjIDV+p6PPyVnQwHjpdbo7HTkm99lzkYwC9euy3dmdS8aRN2Uhvk3p7v16PfZI+2owjlS/AEh55dQbJsYqKdIU0n3WlZJKosm9ZMCoJ5A886bi/MEDtmkfb7lwK2Ls0xlJFeZZNvGK42b5l21IwavJPUZEj3KTQZZIBRUoQXpRYFnxoPy/40rQXTSvQ==
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: bfa268f6-388e-4f92-7f64-08df144729a7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Sep 2026 23:06:38.3794
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: D8vg28pR9zU4rRsdCE3zkNhHBBgq7cMRpMAC4KoQZxgzs4gWprFosA4A2rVGPmFCWuyjuLewXbUkh98EwJku/A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR84MB3932
-X-OriginatorOrg: hpe.com
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: 1_2OUpJxCB5BmMChktqK-5fmy8qTUa7d
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE2MDMyMyBTYWx0ZWRfX9cU4GaFGBCFr
- JuDrJWRFOAd9cHcJjNpYAw6k5KgAaVfjREyKhpzpon17Uvj2YKJ2D5khW+nzEYWuulmgyfEgui6
- WTf3kQDqAA5u4OH7bHfbGqofYgbzjb4=
-X-Authority-Analysis: v=2.4 cv=RdUFmFtv c=1 sm=1 tr=0 ts=6aab2124 cx=c_pps
- a=5jkVtQsCUlC8zk5UhkBgHg==:117 a=5jkVtQsCUlC8zk5UhkBgHg==:17
- a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
- a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=gQcMVamqm3wCPoSYhaRC:22 a=_ZmgHqWwjZUDpi_pur5s:22
- a=OUXY8nFuAAAA:8 a=c4gwNIlIdBMQgB6tUQAA:9 a=QEXdDO2ut3YA:10 a=q5mp2vxMLvQA:10
- a=cAcMbU7R10T-QSRYIcO_:22
-X-Proofpoint-GUID: 40TH8JgxKbL4XC8aOYq0hDR34sNV3yMN
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE2MDMyMyBTYWx0ZWRfXxEzeFN+z8yWQ
- id26EFKYR1BaulpO3dFWTuHspTbzxxjHj+E0VuFogriA6+NTDSUmUEEvvQFfyj3fXY5K32FHOwm
- 7mG5Mp9JBazuUW+e0dor6QLk7arUHJPEzq7IezL+5eGXToGtmUJOl558GHEncVaZTmZ4AaWFQgb
- npIL9xWnLgIfH1/AT+RccsIKONnAEcZACzyhNL31v0UuSxGzZqQncAygJFPi5w1OX8bpK/llr+m
- dilykTzBlzKq/oWRhf6AE0j0+7wW4E3AaaR2fqiXdj60MDEYzsQb+3Qg7X3KZmrYxlDLLYih4o3
- VI5pUGiS7IBnXp3ej29uS/s5v5DorGDZ8d7kiMTj3AUnAx6oMAfbPEK+SV18xdPEXWKaDKiljuw
- lOWbMhuGIrHEpnO1gOCTIOPpLIA1t19OtvEzv3ey5GOg6J9slC6xPOwsdx6vp7mvu4pn5/l5CKb
- WVYTKpdG8JGqzXQSvkA==
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-16_03,2026-09-16_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 clxscore=1015 bulkscore=0 priorityscore=1501 impostorscore=0
- phishscore=0 lowpriorityscore=0 suspectscore=0 spamscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609160323
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (hp-wmi-sensors) Improve raw WMI string handling
+To: James Seo <james@equiv.tech>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Muhammad Bilal <meatuni001@gmail.com>
+References: <20260916221912.434119-5-james@equiv.tech>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260916221912.434119-5-james@equiv.tech>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-RnJvbTogU2FubWFuIFByYWRoYW4gPHBzYW5tYW5AanVuaXBlci5uZXQ+CgpUaGFua3MgZm9yIHRo
-ZSByZXZpZXcuCgpNeSB0aG91Z2h0IHdhcyB0aGF0IHJlYWQtYmFjayBzaG91bGQgYmUgdGhlcmUK
-dG8gY2F0Y2ggYSB3cml0ZS1wcm90ZWN0ZWQgUEFHRSB3cml0ZS4KCllvdXIgYXBwcm9hY2ggbWFr
-ZXMgc2Vuc2UsIEknbGwgZHJvcCB0aGUgcmVhZC1iYWNrCmFuZCBqdXN0IHdyaXRlIFBBR0UgMCBp
-biB2Mi4KClRoYW5rIHlvdS4KClJlZ2FyZHMsClNhbm1hbiBQcmFkaGFuCg==
+On 9/16/26 15:19, James Seo wrote:
+> Commit c9ba59258094 ("hwmon: (hp-wmi-sensors) Fix failure to load on
+> EliteDesk 800 G6") left out some logic for recognizing raw WMI
+> strings in check_numeric_sensor_wobj(). This issue was reported by a
+> user along with an incomplete and unsuitable proposed solution [1].
+> 
+> Add the missing logic and properly remedy the issue. Also slightly
+> refactor how raw WMI strings are recognized elsewhere to make the
+> intent that they should be treated as regular ACPI strings clearer.
+> 
+> Reported-by: Muhammad Bilal <meatuni001@gmail.com>
+> Link: https://lore.kernel.org/linux-hwmon/20260916002907.161210-1-meatuni001@gmail.com/ [1]
+> Fixes: c9ba59258094 ("hwmon: (hp-wmi-sensors) Fix failure to load on EliteDesk 800 G6")
+> Signed-off-by: James Seo <james@equiv.tech>
+
+Is this v2 ? Resend of v1 ? A new patch ?
+
+Guenter
+
+> ---
+>   drivers/hwmon/hp-wmi-sensors.c | 30 ++++++++++++++++++++++--------
+>   1 file changed, 22 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/hwmon/hp-wmi-sensors.c b/drivers/hwmon/hp-wmi-sensors.c
+> index 03c684ba83bd..cb2eb9bd278a 100644
+> --- a/drivers/hwmon/hp-wmi-sensors.c
+> +++ b/drivers/hwmon/hp-wmi-sensors.c
+> @@ -526,14 +526,12 @@ static int check_wobj(const union acpi_object *wobj,
+>   	for (prop = 0; prop <= last_prop; prop++) {
+>   		type = elements[prop].type;
+>   		valid_type = property_map[prop];
+> -		if (type != valid_type) {
+> -			if (type == ACPI_TYPE_BUFFER &&
+> -			    valid_type == ACPI_TYPE_STRING &&
+> -			    is_raw_wmi_string(elements[prop].buffer.pointer,
+> -					      elements[prop].buffer.length))
+> -				continue;
+> +		if (type == ACPI_TYPE_BUFFER &&
+> +		    is_raw_wmi_string(elements[prop].buffer.pointer,
+> +				      elements[prop].buffer.length))
+> +			type = ACPI_TYPE_STRING;
+> +		if (type != valid_type)
+>   			return -EINVAL;
+> -		}
+>   	}
+>   
+>   	return 0;
+> @@ -579,6 +577,7 @@ static int check_numeric_sensor_wobj(const union acpi_object *wobj,
+>   	int prop = HP_WMI_PROPERTY_NAME;
+>   	acpi_object_type valid_type;
+>   	union acpi_object *elements;
+> +	union acpi_object *element;
+>   	u32 elem_count;
+>   	int last_prop;
+>   	bool is_new;
+> @@ -602,13 +601,20 @@ static int check_numeric_sensor_wobj(const union acpi_object *wobj,
+>   	    elem_count > HP_WMI_MAX_PROPERTIES)
+>   		return -EINVAL;
+>   
+> -	type = elements[HP_WMI_PROPERTY_SIZE].type;
+> +	element = &elements[HP_WMI_PROPERTY_SIZE];
+> +	type = element->type;
+>   	switch (type) {
+>   	case ACPI_TYPE_INTEGER:
+>   		is_new = true;
+>   		last_prop = HP_WMI_PROPERTY_RATE_UNITS;
+>   		break;
+>   
+> +	case ACPI_TYPE_BUFFER:
+> +		if (!is_raw_wmi_string(element->buffer.pointer,
+> +				       element->buffer.length))
+> +			return -EINVAL;
+> +		fallthrough;
+> +
+>   	case ACPI_TYPE_STRING:
+>   		is_new = false;
+>   		last_prop = HP_WMI_PROPERTY_CURRENT_READING;
+> @@ -631,6 +637,10 @@ static int check_numeric_sensor_wobj(const union acpi_object *wobj,
+>   	for (i = 0; i < elem_count && prop <= last_prop; i++, prop++) {
+>   		type = elements[i].type;
+>   		valid_type = hp_wmi_property_map[prop];
+> +		if (type == ACPI_TYPE_BUFFER &&
+> +		    is_raw_wmi_string(elements[i].buffer.pointer,
+> +				      elements[i].buffer.length))
+> +			type = ACPI_TYPE_STRING;
+>   		if (type != valid_type)
+>   			return -EINVAL;
+>   
+> @@ -651,6 +661,10 @@ static int check_numeric_sensor_wobj(const union acpi_object *wobj,
+>   			/* PossibleStates[0] has already been type-checked. */
+>   			for (j = 0; i + 1 < elem_count && j + 1 < count; j++) {
+>   				type = elements[++i].type;
+> +				if (type == ACPI_TYPE_BUFFER &&
+> +				    is_raw_wmi_string(elements[i].buffer.pointer,
+> +						      elements[i].buffer.length))
+> +					type = ACPI_TYPE_STRING;
+>   				if (type != valid_type)
+>   					return -EINVAL;
+>   			}
+
