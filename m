@@ -1,147 +1,290 @@
-Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B787377EC3
-	for <linux-hwmon@vger.kernel.org>; Wed, 16 Sep 2026 15:07:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E367124886E;
+	Wed, 16 Sep 2026 16:00:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789571265; cv=none; b=BoL4XH3mejcTrXTHoDMmQbOMpPRZqoOcwkplZOLhMmWdoaMbxnNsnp0BPWwdXQS/bxdmYKH2Vhaxjm4o7v9XahaCdqbiO4v1iSrnWwElRSTfTpzwywD9GxTi+odUcUXz58uc76q2CSEi9FlGvMPBlqp7yj9ojlqlFjUAKnbBglI=
+	t=1789574438; cv=none; b=tFat+06vRCQ53TXa8ys3BonE7PHBBMxN4MDj8BZVyO0La/sGyW0bcwfwpbwMMmG4kyJZcfAR1k46V59WeH89nOy+eeEglFzzQyjbUQJMaEdqFC7ydKXjJ7DuQ178WmXNo28EXoCS3EgJHSTyD+J/ZxCSnliWARHrK2nS2kLAyxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789571265; c=relaxed/simple;
-	bh=9ptK272UmUXCYLv4ne/mizdEeZwa3NL7MbAui3XKul0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lQj6Byr7G+ucULIfZ3PXLlwxk1LlY+sGSySg3Jo+BzkjfRAQTUleaV4wpDnukDX5PAYY4c+veud0Q7IrS6n+TbymKT+D4i3M2mQc0kmKX3ydWIcQZKHmPS8reXPQ550E+X4V5kbUzuKadIUPD3/Mp4lc3hNen3YND4HxF0FEB4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ni/jN0pP; arc=none smtp.client-ip=74.125.228.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789574438; c=relaxed/simple;
+	bh=GHdhcu2Fzga0ZT4BsriYfEoIiEckq9fEim3YXDjIyyM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lg8yBcztc5L0bsT+mI4pZLd0mLsNGCDD2748RoZbRqifhOY+GqDIGgBbCynPeuHdXqABUvSazIadevc1ZmExFxVX8XIvjrXts/hlXNocLtF0NIYLcjlcu8b3WmHdbvgKH+YV+FKijpJz7xv0f2CGDa6lOWWHqqgRR7Ku6ecFItE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=fMKQE9kv; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ni/jN0pP"
-Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc1cea4c7a0so681317a12.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 16 Sep 2026 08:07:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789571263; x=1790176063; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=FmDUnv3dz6RwL5QOQmwdsG0HAL/+njqCyjmAnfq84xM=;
-        b=ni/jN0pPUWTcxX+QI02PJ+WjuP8tiMkBYXc7AVZY7tp4dBMiUyrKpckpW1ScfRp1Qe
-         e68rSy96bZCy6s+UpAyECmgQX6dkhS5UOthtF31dWI4OHHHOu9hhLndottu/3L+FjHz2
-         a8mdkU62j2hNCIIL0HQPftUA+mv33jKDaRuJ4OcqtF4bHlkjxNb9O2S0MMQas1YSOX3a
-         oAjzKEOS26kx76EG6O3fobYXMrLyAf93Msj9mAEv9Z3eACrwILfvvhDCHeiBkvBI4ry4
-         mnO0atDXra9qYOgaiYJ6hNsn/Xpq/nzivoeG8mNFYQ4gENmAL4M6flsjwkIehlWRCpxg
-         FofA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789571263; x=1790176063;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=FmDUnv3dz6RwL5QOQmwdsG0HAL/+njqCyjmAnfq84xM=;
-        b=xBGLnKSwifxSB+hyxxiy68pDP/SGc69N9LIhyl9cVNjV5uUxKGBuHs1/9bwVKbzzlF
-         tnrRZeNreNslchkvApCqg/gQ4SXX45BjFgIsg5zmBDmimaUJkCV8zKF0rEnNNAoWxoHK
-         YwtUaLN/KQGg8EjxA+P0M8/U86il74sjcQrWo2G0QmsJj4dN0Fg+cqKStJzKGzJgli5K
-         W20TOLo0W3q+nscWo4szYNeNAkI96wBrurkgXiMdSVnrmlu5vXo3Fy6O5TL9D9dn/9ej
-         0DXd5UFxy2AGq1UgEMBb0mgXk2aeGR6kBIwdDs3ITFoJbfVtasSxQE7Mu7wo315kVFee
-         QMYA==
-X-Forwarded-Encrypted: i=1; AKwUvBwitw/5Xq+a7FyEN/zPHdI0uY9bmdEAZ3otaXwUgBAr4QWUN0ah0SMpTPCIFgPmisTwiev730gyhYc9nA==@vger.kernel.org
-X-Gm-Message-State: AFuF++nuAnpMPBvDNwRcb9cpaxC4H2IngPX4lsUlkqf0HKyNoZifV9t2
-	i34ectPq4DrciDo1z6okcuvdqGZGLHTodoA/v2vHDjvwrdsUA8RU5ohp
-X-Gm-Gg: AYBFou3G2t3dEAtOZvE9ydSmkifqLAxWkuMncc4laJga5+VmGtAOG4I2bz/4DREZAFQ
-	O+PCYTJzYK0n0z/KqCXQA1SfbYS3Rosg06cIcZwqs2vt6Jv7JBb3+4F2RxqNmofIz/3eG8TUwGi
-	dYD8lUjMxyTuuk0tnkySobEtwc9nEIlmEyxURLoY+0gpb2khptyreQmMle7AO2dYI+udq7Aiy9b
-	1VQVxHQat3BmqIDnRadrgL2eqbdMi4ETRjcE+8WPWUlY6CEzz7OH6kRnH4CU9E3BoJr7U7bmLT/
-	4Z3uKlDISyN1clFIpD4Jo5TRq1Umrw6CPexLgqPEkF6Hx2iet9itdkKQwTI09Ynlq0VN+lxWpXu
-	nZMJcGaBKQt9vgfMlce7UEUa8SbzIBYguZTzFbI9FEbW8bl0Z7qAnMeXfIL0ZU4dtiVnecPvfTn
-	0z9wVuJAO5hUUfEFt5LXFAxf+7mn/Krwub3atbb/MDrfWCw9ryIzegBaEDtskpDDAEYNzOhgWt+
-	XSJT0Nip9g+hx62yNW9/+rQEWaqRODzYyThf8tGJZsOJIklEXRI8KRhCuk=
-X-Received: by 2002:a17:90b:280a:b0:39d:fcbe:fdcf with SMTP id 98e67ed59e1d1-39e1e2659a8mr7386821a91.1.1789571263345;
-        Wed, 16 Sep 2026 08:07:43 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e1b90a5a0sm5209457a91.2.2026.09.16.08.07.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Sep 2026 08:07:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9ea1fcf0-ad68-441c-9394-5722b00a4d7e@roeck-us.net>
-Date: Wed, 16 Sep 2026 08:07:41 -0700
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="fMKQE9kv"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A27B540E022C;
+	Wed, 16 Sep 2026 16:00:25 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id FMO6eo6vP5J4; Wed, 16 Sep 2026 16:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1789574415; bh=VhBXz8iUfZiZKp7U7NIYUPZWL1BpaHmabXO0Jw0Rm/E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fMKQE9kvpqtYfy18piC+NRwzDIuE6812sWel8qizaefesZZORBwMe2n5lvYE0Z5r6
+	 mtgfdMvDT8nKFQcUkSV/79iv6Cx4HlC7lPoS10iB8oT595ixyDnGIoAQYfffZLGoIb
+	 7PPO8wvLvfEbt50WU0iwd8XhoE5noP2VBTuxoKCojc540TjPoUiAxU5jdSUxTlV4s8
+	 oyAQuMH+O53RfboI2GAAd3iBgO2+ZMSgT9YTHW1zXI+iFgtG4Llv/Aqkr+4I8/3ZFE
+	 4X1+8LoBwV5CxeMr4Trwl0QDC0RdtjZa5Rp0Ekm9QcvOG3op8og19c/lc3ANp2RDAz
+	 2k+m2+L0FT1CcLi8gngnuQBJijr6CgRWOgoha6cQEGIEUItljR9jG8QTh6r4hx0LFv
+	 UqJKz1MomghTRAUqWbPkTEmF3M586CZJhEaCKauMqZY3GbJtPgJ287OfIxr7NqQ1Ps
+	 G4dlTvaXdTbWZtKTj0TXv3+ogXXjpHDSF1k6bgHC8DZQzWliVi0nAJdXhPbq3XNmN7
+	 gfMSyuDUTKRLE3sXvh/vX5vHby21dSHoAHym0Dhnoe28MMWrx1HsFutDvE3nKuw9SF
+	 ZxlWDRFMYN6Z7nw3ceJQgWQY7uSD1nKVGmtw8sxn9Cm9dmTncAyDib/e3QPoDsswFa
+	 1q1TiNEylgXUmGnVDRqOUU+4=
+Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::a])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DB16E40E015B;
+	Wed, 16 Sep 2026 15:59:59 +0000 (UTC)
+Date: Wed, 16 Sep 2026 08:59:56 -0700
+From: Borislav Petkov <bp@alien8.de>
+To: Lin Wang <wanglin@open-hieco.net>
+Cc: Yazen Ghannam <yazen.ghannam@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Pu Wen <puwen@hygon.cn>, Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+	Clemens Ladisch <clemens@ladisch.de>,
+	Guenter Roeck <linux@roeck-us.net>, x86@kernel.org,
+	linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/8] x86/hygon: Add Family 0x18 DF node enumeration
+Message-ID: <20260916155956.GBaqq8_BsuLkBKp-Ia@fat_crate.local>
+References: <20260910082734.3771675-1-wanglin@open-hieco.net>
+ <20260910082734.3771675-2-wanglin@open-hieco.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: use named initializers for acpi_device_id
-To: Pawel Zalewski <pzalewski@thegoodpenguin.co.uk>
-Cc: Luca Tettamanti <kronos.it@gmail.com>,
- Cosmo Chou <cosmo.chou@quantatw.com>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260915-acpi-hwmon-v2-1-39d17c748eb6@thegoodpenguin.co.uk>
- <70746c77-e113-4bc6-93b6-7ac6027c86a4@roeck-us.net>
- <CAA6zWZ+8KUSzah7y4TXrkvOnChDyEur=HCXgukcFke2dEjgQ2g@mail.gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <CAA6zWZ+8KUSzah7y4TXrkvOnChDyEur=HCXgukcFke2dEjgQ2g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260910082734.3771675-2-wanglin@open-hieco.net>
 
-On 9/16/26 07:33, Pawel Zalewski wrote:
->> It also replaces pointers to empty strings with NULL pointers,
->> which is a functional change and still neither documented nor explained.
-> 
-> Please note that the 'id' here is an __u8[] array, not a const char *
-> and that the generated .o objects are equal pre/post the patch as both
-> methods just initialize the array to 0s. So I think the commit message
-> explains what the patch is doing, perhaps it might be worth mentioning
-> that the 'id' field is a byte array in the message.
+On Thu, Sep 10, 2026 at 04:27:27PM +0800, Lin Wang wrote:
+> +/*
+> + * Cached identity for one DF instance.  After sorting, CDDs occupy
+> + * nodes[0..num_cdd-1].
+> + *
+> + * The PCI BDF is the access point for a DF node, not its identity.
+> + * socket_id and dfid, read from DF registers, together identify the
+> + * node in hardware.
+> + */
+> +struct hygon_node {
+> +	struct pci_dev	*misc;		/* DF function 3 */
+> +	struct pci_dev	*link;		/* DF function 4 */
+> +	u8		socket_id;	/* F1x200[30:28] */
+> +	u8		dfid;		/* model-dependent DFID */
+> +	bool		is_cdd;		/* DFID >= 4 */
+> +};
+> +
+> +struct hygon_node_cache {
+> +	struct hygon_node	*nodes;		/* sorted: CDD first, then IOD */
+> +	u16			num_nodes;	/* CDD + IOD = total */
+> +	u16			num_cdd;	/* CDD only */
+> +	u16			num_sockets;
+> +
+> +	/* Set after DF node collection, sorting and validation complete. */
+> +	bool			ready;
+> +};
 
+verify_comment_style: WARNING: No tail comments please:
+ arch/x86/kernel/hygon_node.c:76 [+	struct pci_dev	*misc;		/* DF function 3 */]
 
-Thanks for the information.
+verify_comment_style: WARNING: No tail comments please:
+ arch/x86/kernel/hygon_node.c:77 [+	struct pci_dev	*link;		/* DF function 4 */]
 
-I accepted the patch as-is.
+verify_comment_style: WARNING: No tail comments please:
+ arch/x86/kernel/hygon_node.c:78 [+	u8		socket_id;	/* F1x200[30:28] */]
 
-Guenter
+verify_comment_style: WARNING: No tail comments please:
+ arch/x86/kernel/hygon_node.c:79 [+	u8		dfid;		/* model-dependent DFID */]
 
+verify_comment_style: WARNING: No tail comments please:
+ arch/x86/kernel/hygon_node.c:80 [+	bool		is_cdd;		/* DFID >= 4 */]
+
+verify_comment_style: WARNING: No tail comments please:
+ arch/x86/kernel/hygon_node.c:84 [+	struct hygon_node	*nodes;		/* sorted: CDD first, then IOD */]
+
+verify_comment_style: WARNING: No tail comments please:
+ arch/x86/kernel/hygon_node.c:85 [+	u16			num_nodes;	/* CDD + IOD = total */]
+
+verify_comment_style: WARNING: No tail comments please:
+ arch/x86/kernel/hygon_node.c:86 [+	u16			num_cdd;	/* CDD only */]
+
+verify_comment_style: WARNING: No tail comments please:
+ arch/x86/kernel/hygon_node.c:101 [+	u16	f5_id;			/* 0 = not available */]
+
+From: Documentation/process/maintainer-tip.rst
+
+Please peruse that doc.
+
+No tail comments (see below):
+       
+  Please refrain from using tail comments. Tail comments disturb the
+  reading flow in almost all contexts, but especially in code::
+
+        if (somecondition_is_true) /* Don't put a comment here */
+                dostuff(); /* Neither here */
+       
+        seed = MAGIC_CONSTANT; /* Nor here */
+
+  Use freestanding comments instead::
+       
+        /* This condition is not obvious without a comment */
+        if (somecondition_is_true) {
+                /* This really needs to be documented */
+                dostuff();
+        }
+
+        /* This magic initialization needs a comment. Maybe not? */
+        seed = MAGIC_CONSTANT;
+
+  Use C++ style, tail comments when documenting structs in headers to
+  achieve a more compact layout and better readability::
+
+        // eax
+        u32     x2apic_shift    :  5, // Number of bits to shift APIC ID right
+                                      // for the topology ID at the next level
+                                : 27; // Reserved
+        // ebx
+        u32     num_processors  : 16, // Number of processors at current level
+                                : 16; // Reserved
+
+  versus::
+
+        /* eax */
+                /*
+                 * Number of bits to shift APIC ID right for the topology ID
+                 * at the next level
+                 */
+         u32     x2apic_shift    :  5,
+                 /* Reserved */
+                                 : 27;
+
+        /* ebx */
+                /* Number of processors at current level */
+        u32     num_processors  : 16,
+                /* Reserved */
+                                : 16;
+
+...
+
+> +static int __init hygon_collect_nodes(struct hygon_node_cache *cache)
+> +{
+> +	struct hygon_node *nodes;
+> +	struct pci_dev *misc = NULL;
+> +	struct pci_dev *link = NULL;
+> +	u16 capacity = 0, count = 0;
+> +	u8 observed_socket_mask = 0;
+> +	u8 socket_present_mask = 0;
+> +	int ret;
+
+The tip-tree preferred ordering of variable declarations at the
+beginning of a function is reverse fir tree order::
+
+	struct long_struct_name *descriptive_name;
+	unsigned long foo, bar;
+	unsigned int tmp;
+	int ret;
+
+The above is faster to parse than the reverse ordering::
+
+	int ret;
+	unsigned int tmp;
+	unsigned long foo, bar;
+	struct long_struct_name *descriptive_name;
+
+And even more so than random ordering::
+
+	unsigned long foo, bar;
+	int ret;
+	struct long_struct_name *descriptive_name;
+	unsigned int tmp;
+
+Please audit all your functions in all patches.
+
+> +
+> +	while ((misc = next_hygon_dev(misc, hygon_nb_misc_ids)))
+> +		capacity++;
+> +
+> +	if (!capacity)
+> +		return -ENODEV;
+> +
+
+...
+
+> +int hygon_pci_dev_to_df_node(struct pci_dev *pdev)
+> +{
+> +	u16 i;
+> +
+> +	if (!pdev)
+> +		return -EINVAL;
+> +
+> +	if (!hygon_cache.ready)
+> +		return -ENODEV;
+> +
+> +	for (i = 0; i < hygon_cache.num_nodes; i++) {
+> +		struct pci_dev *misc = hygon_cache.nodes[i].misc;
+> +
+> +		if (pci_domain_nr(misc->bus) == pci_domain_nr(pdev->bus) &&
+> +		    misc->bus->number       == pdev->bus->number      &&
+> +		    PCI_SLOT(misc->devfn)   == PCI_SLOT(pdev->devfn))
+> +			return i;
+
+Something happened here to that whitespace.
+
+:)
+
+> +	}
+> +
+> +	return -ENODEV;
+> +}
+> +EXPORT_SYMBOL_GPL(hygon_pci_dev_to_df_node);
+> +
+> +/*
+> + * Build the Hygon DF node cache at fs_initcall.
+> + */
+> +static int __init hygon_node_init(void)
+> +{
+> +	int ret;
+> +
+> +	if (!hygon_get_df_cfg())
+> +		return 0;
+> +
+> +	ret = hygon_build_cache();
+> +	if (ret) {
+> +		pr_warn("DF node cache build failed: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	pr_info("%u DF nodes (%u CDDs, %u IODs) across %u sockets\n",
+> +		hygon_cache.num_nodes, hygon_cache.num_cdd,
+> +		hygon_cache.num_nodes - hygon_cache.num_cdd,
+> +		hygon_cache.num_sockets);
+> +
+> +	return 0;
+> +}
+> +fs_initcall(hygon_node_init);
+> -- 
+
+Sure looks complex... I hope you know what you're doing...
+
+:-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
