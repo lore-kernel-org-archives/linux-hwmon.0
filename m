@@ -1,95 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF8D58FD0C
-	for <linux-hwmon@vger.kernel.org>; Wed, 16 Sep 2026 16:56:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82FF4AB3C7;
+	Wed, 16 Sep 2026 17:22:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789577813; cv=none; b=bwlI5m9vmLjmQH/YuKi5EsRl13ISe+BC1yC+8DZU29ffbHJHudBpEkeOtEyRtKblVKvIRwLlpwsCvyd3I90n55nRrmmlUSWcojEBPXh6ibN02EsPAwjhledUdLd7K2UsYpSpQioMpOyPaMvyIvgBC2m4xQZ4X77/OyIz1eMSYE8=
+	t=1789579369; cv=none; b=KYQu+dQPAmKKm0cHvVeGdLoOD1mzbw4pStio4qfeYDJ2IMHD8v20PvhN3zVFZDQ/jRj9i2pfdlwrmf/XvSV8/5YiBiNnpOets3VGU+BrddBwIK5BXzAP5rW7tZDT6Zs/calCZmtddXeiwAqlsu5VhuDijg1WkK6I0WyeMwujnss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789577813; c=relaxed/simple;
-	bh=fuqbMSXmKaVksZQ0mp9Ucbs7t4/StAc7bwI5H6qAaCU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TODcL23monXzb0HZTM87ph3CxkeJadU15fqnyjnGDVtSsC8ARgMR/QmkKBpf6t5s8wx+0wmXp5mlGqe5vpj6zJ365RXRsxsds5gCYmOh40NZYHDciB7ICeZuye7yScQQDWMuGqBrbm7fo/345zrp/1xyJ3NuAXfdfmo31205dQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cg/A8+VC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789579369; c=relaxed/simple;
+	bh=DWgt2LzcztFfh2+x/mFEkw6gG1oj4varf62qZTyeixM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fF9cYcXx0ENvvlTM9BsTn6hVZUouA7Jz53QrGZ5y4zQaiMvOh0KCL1SJnXQi/N40kF/HkA1+GNHQm9GfKqxjOEZ56GGpgnv5rthcsHwPP4i0pOyr7JJCmrnmEVY/RPyMTAB4alwC7bCFmSmFwpClaDfvr4VXhFpLzojEtcyO1Tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=iGWrL/EK; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cg/A8+VC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBFC1F0089E
-	for <linux-hwmon@vger.kernel.org>; Wed, 16 Sep 2026 16:56:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789577791;
-	bh=fuqbMSXmKaVksZQ0mp9Ucbs7t4/StAc7bwI5H6qAaCU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=Cg/A8+VC9E080TzyvTpxu0YnPUmsHYmEPc7xtw8lOlwVWQFVXT213KsByPqqSIU2I
-	 YKezTVvqkqyFj8RCV6X6z796z+cgGL3/V6KKfDg+c71b1lvwwgWiG1EI1uwu/m3Th0
-	 3PiWWmOGjEHneUgz6Si80Fbz7NLf7VJpVq/lxnf4hkRztmLGONXApvwq5Bj6ihxbnh
-	 2DEb0f9/ARGDI62c/9rCPp7kYe7gh6X3Np4O26+gdKgWFKq9/xbV2rRVt1oCMkC32O
-	 lt6rPATnGQ4rlLkFzK27Q7Nts5BzFzoK5WLviocUhwMjzceCEZEyQbrc9KdJxu4ARU
-	 QjSSuos16jzVg==
-Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b5e4f15d00so1184158e87.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 16 Sep 2026 09:56:31 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBz2UnCb89UooS1YQ/tll4A6R1VOXZdJh1GNpxAktObHCv42sdeSaFaNE/AsFomwq0jdXywxsF4lDSNwBQ==@vger.kernel.org
-X-Gm-Message-State: AFuF++mNwN9W+m0VkmicAnlsyR11gt0F/JsX3xudgsPGEFbryF5k1QLh
-	VX9idVBXePW1gWqWnHncuHh8Y5vXA+CzVmFV1gmagHElCZo6PrpKMvBRnnlxJ6H0oXzVOShENco
-	MH+eJUym4UHGxKkkdmMQgXjzBbYJ5BqU=
-X-Received: by 2002:a05:6512:3a96:b0:5b6:1a7c:59dc with SMTP id
- 2adb3069b0e04-5b8b66504bdmr1056044e87.54.1789577790547; Wed, 16 Sep 2026
- 09:56:30 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="iGWrL/EK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1789579359;
+	bh=DWgt2LzcztFfh2+x/mFEkw6gG1oj4varf62qZTyeixM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iGWrL/EK7qATmCY5X22oQrljzYdFkH+oJGYk0iUCfxWvPITvZ4vl2H+9xOvCfPTT9
+	 MppvZTIOrPj/SdwOfxmKiAD5+JTNmDh3CDNvl1GDYnqP9NZwisMs5SZ2a0Cwgif0OI
+	 vybx76Z5JQSVrpr1lbXrysTPTKR8YSdxumSYeHhk=
+Date: Wed, 16 Sep 2026 19:22:37 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Jordan Brough <jordan@brough.org>
+Cc: rafael@kernel.org, rydberg@bitmath.org, linux@roeck-us.net, 
+	lenb@kernel.org, maciej.wieczor-retman@intel.com, pawel.chmielewski@intel.com, 
+	linux-acpi@vger.kernel.org, acpica-devel@lists.linux.dev, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] ACPI: sbs: add battery hook mechanism for
+ SBS-registered batteries
+Message-ID: <3bf6e328-f0d5-49d8-807e-9a212fbbb7e0@t-8ch.de>
+References: <20260913231410.416922-1-jordan@brough.org>
+ <20260913231410.416922-2-jordan@brough.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260909132153.1596191-1-arnd@kernel.org> <20260909132153.1596191-12-arnd@kernel.org>
-In-Reply-To: <20260909132153.1596191-12-arnd@kernel.org>
-From: Linus Walleij <linusw@kernel.org>
-Date: Wed, 16 Sep 2026 18:56:17 +0200
-X-Gmail-Original-Message-ID: <CAD++jL=LM2agPEcCxjtQuCNx4q7zqutFA6oDb61kKEDAADR4Vw@mail.gmail.com>
-X-Gm-Features: AcwNN1Uahpnh6JEjJOB4HtYt7IIRQWlpnYcwXmBiixUkMQ8clPYYJyQ4xy80br8
-Message-ID: <CAD++jL=LM2agPEcCxjtQuCNx4q7zqutFA6oDb61kKEDAADR4Vw@mail.gmail.com>
-Subject: Re: [PATCH 11/14] mfd: remove unused wm8350 driver
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Lee Jones <lee@kernel.org>, mfd@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>, 
-	Daniel Thompson <danielt@kernel.org>, Jingoo Han <jingoohan1@gmail.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Guenter Roeck <linux@roeck-us.net>, Bartosz Golaszewski <brgl@kernel.org>, 
-	Jonathan Cameron <jic23@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Pavel Machek <pavel@kernel.org>, Michael Hennerich <michael.hennerich@analog.com>, 
-	Support Opensource <support.opensource@diasemi.com>, Sebastian Reichel <sre@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Helge Deller <deller@gmx.de>, 
-	dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org, 
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, patches@opensource.cirrus.com, 
-	linux-watchdog@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-leds@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-fbdev@vger.kernel.org, 
-	linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260913231410.416922-2-jordan@brough.org>
 
-On Wed, Sep 9, 2026 at 3:23=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wrot=
-e:
+On 2026-09-13 17:14:09-0600, Jordan Brough wrote:
+(...)
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> This driver was used on the i.MX31 ADS reference board from Freescale
-> and the smdk6410 reference board from Samsung. Both used platform_data
-> based driver probing and are now gone from the kernel.
->
-> Since probing with devicetree has never been supported by wm8350,
-> it is clear that nothing can use the driver on an upstream kernel,
-> and it is unlikely that anyone is still interested in a devicetree
-> conversion, so remove it.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Add a parallel sbs_battery_hook_register()/unregister() mechanism to
+> drivers/acpi/sbs.c, mirroring the existing CmBatt hook API in name and
+> behavior so that callers can support both battery registration paths
+> symmetrically. This is purely additive: no existing hook consumer or
+> code path in drivers/acpi/battery.c is touched, and sbs.c's own
+> behavior is unchanged for any driver that does not call the new API.
 
-Reviewed-by: Linus Walleij <linusw@kernel.org>
+(...)
 
-Yours,
-Linus Walleij
+> ---
+>  drivers/acpi/sbs.c     | 147 ++++++++++++++++++++++++++++++++++++++++-
+>  include/acpi/battery.h |  16 +++++
+>  2 files changed, 162 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/acpi/sbs.c b/drivers/acpi/sbs.c
+> index 86b7c797585..305bf62eae3 100644
+> --- a/drivers/acpi/sbs.c
+> +++ b/drivers/acpi/sbs.c
+
+(...)
+
+> +/*
+> + * Battery hook support, mirroring the mechanism in drivers/acpi/battery.c
+> + * for batteries registered there. That mechanism only sees batteries
+> + * added via drivers/acpi/battery.c, not the ones this driver registers,
+> + * so drivers wanting to attach optional functionality (e.g. an extra
+> + * power_supply_ext) to an SBS battery need this separate copy; see the
+> + * comment above the declarations in include/acpi/battery.h.
+> + */
+
+(...)
+
+This completely duplicates the hooking logic in battery.c.
+Also it forces drivers to register both kinds of hooks explicitly.
+
+Couldn't we have a single shared hooking infrastructure and registry
+which avoid both issues?
+
+(...)
+
+
+Thomas
