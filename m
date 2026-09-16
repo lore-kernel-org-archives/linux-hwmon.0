@@ -1,213 +1,210 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 868174DF4BE;
-	Wed, 16 Sep 2026 22:58:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789599489; cv=none; b=MKKd9eOjThuC6UIkPCkIR2kdctgS5g0o+ayZxwgNlLzVCZ1q4Ot/HBWk+mmXtgBjZyeFKv3KY+ElaeNilcNWzFHouOXi7mSRUehfdiAG3pz4MDQzL+3Wn7u4l/5LwsgqUHYUhQ2r6XZ2Cy5lOi54AnvfAyLDzAw54GPisGzy2UE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789599489; c=relaxed/simple;
-	bh=ClCEok3CT57Zb0Uc0FasxIKpEnVdYyzMiUQspae6JfM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jwBiyr8ZaWfp3OtIAwUUBbKhb7y6xWzQtFmUbAnM+EE7zPHVqRs4dQ39RWKgHisDowlUIDAUesf+UfT2/DavGgjowVRV3tlCGzql38k9Ae1jacc2eF22jACAxazqzMNtCXiIcLfZgvn1tRNAhXqZj6upjc9cYiGAAEybuKSWhSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=oMNHj13y; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DEB7412C1A;
+	Wed, 16 Sep 2026 23:07:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.147.86
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789600054; cv=fail; b=OgnefLKk2P2oScspPYvknnzq7LJ8QhKtYzBdWrRTyeLTpawrZ5b+AG3K8MNyqpsfqkOVk0+VlbsvNGUOfNsd8LxrvzPs6PtzO9zvQKEoIAxh8t4JyRbtqorV/fRzxAf14TwcQD4RRz36SC3jetJHB4unDcUgO4nXfUTs44IxBZw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789600054; c=relaxed/simple;
+	bh=7rj9Au84kYqLHdJTcebVh/c43QCzXzvgzDc148XX9BQ=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=NsHoUyEBX9R0OoM+EadTKqdjXtaS1GrYtiIge4TRiSFzISXzmDMNRigaG/hOrExc5ZLWHdG6Pl0QJl5pfEf8jXP6kbQk010/3nOYd29pXPh/dfL2encwS6rXFkxKXKREkKs0MuWhEG3BN5v3tNhBvlq3/evtddSx5q0OUW2U55M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=FHEJxMcZ; arc=fail smtp.client-ip=148.163.147.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="oMNHj13y"
-Received: by linux.microsoft.com (Postfix, from userid 1223)
-	id 9622420B7169; Wed, 16 Sep 2026 15:57:10 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9622420B7169
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1789599430;
-	bh=0N7fIBRWd3/w9pGV5v/O/6SzjQp5f7M7FtwQz2jDFjc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oMNHj13yMDpsAxbsBEB4TdoxsOJUFK0CMVP4QtiWukYsqHK66WFNNHqJK+rG2msMn
-	 vLx2+IIAc+Ilq0yi7/xS8S8rtfuQKpfxLacDgtbk50xmASuuxqjRVSAos+PlqKqXGC
-	 lctB/o0//IR8mlYjqgJ2cfkO01n3HITlG17D2DrQ=
-Date: Wed, 16 Sep 2026 15:57:10 -0700
-From: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Meagan Lloyd <meaganlloyd@linux.microsoft.com>,
-	linux-i3c@lists.infradead.org, alexandre.belloni@bootlin.com,
-	vitor.soares@toradex.com, samagazaryan@google.com,
-	gregkh@linuxfoundation.org, arnd@arndb.de,
-	boris.brezillon@collabora.com,
-	oleksandr.shulzhenko.viktorovych@intel.com,
-	tgopinath@linux.microsoft.com, corbet@lwn.net,
-	skhan@linuxfoundation.org, linux@roeck-us.net, Frank.Li@nxp.com,
-	jorge.marques@analog.com, pgaj@cadence.com,
-	wsa+renesas@sang-engineering.com, tommaso.merciai.xr@bp.renesas.com,
-	nuno.sa@analog.com, Michael.Hennerich@analog.com, jic23@kernel.org,
-	dlechner@baylibre.com, andy@kernel.org, lorenzo@kernel.org,
-	enelsonmoore@gmail.com, rppt@kernel.org, pratyush@kernel.org,
-	giovanni.cabiddu@intel.com, gabewhigham@gmail.com,
-	haren@linux.ibm.com, pasha.tatashin@soleen.com,
-	jirislaby@kernel.org, adrian.ho.yin.ng@altera.com,
-	ustc.gu@gmail.com, jszhang@kernel.org, adrian.hunter@intel.com,
-	akhilrajeev@nvidia.com, tze.yee.ng@altera.com,
-	manikanta.guntupalli@amd.com, shubhrajyoti.datta@amd.com,
-	jarkko.nikula@linux.intel.com, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux@analog.com, linux-iio@vger.kernel.org
-Subject: Re: [PATCH 3/3] i3c: add i3cdev character device module for
- user-space access
-Message-ID: <20260916-454d66ca84cc91479b195aa5@linux.microsoft.com>
-References: <20260911210935.1353126-1-meaganlloyd@linux.microsoft.com>
- <20260911210935.1353126-4-meaganlloyd@linux.microsoft.com>
- <aqVUyYkpKT8iX4Jz@ashevche-desk.local>
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="FHEJxMcZ"
+Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
+	by mx0a-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68GL8wgI2045811;
+	Wed, 16 Sep 2026 23:07:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pps0720; bh=7r
+	j9Au84kYqLHdJTcebVh/c43QCzXzvgzDc148XX9BQ=; b=FHEJxMcZRNDLYlMcVT
+	D0AMW6x7XA1jJh1cX8py52+zwLvUWA2mYhzjbo8TJpQBXadEtUlok6Kc9uKOkH32
+	Q75UGEN6paSampsnGX2xjLKxd62O2Ge2IV8ZJPlGt2uD7mh4N+d7vD8XEYj5X4Yv
+	+TdDXCgaefalrl1CNXxMMv3tYcJ4YbxddwzsZJvK1m8FD8EseD2odrwh6iAh0RNv
+	0xpFC0qHjTd4W6feBeG6l9cy31rrBHaAjo70McPuA3f3xhtgDL2hpCT76oJZ5q5x
+	g8qobWT9F1q5OQqLWSTHJGLjP3YR5DH2vm6WLhh2g9upXtWLjKLAtDcGTgJLezdO
+	mAxA==
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 4gqw7g6jd6-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Wed, 16 Sep 2026 23:07:16 +0000 (GMT)
+Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id DBBB214781;
+	Wed, 16 Sep 2026 23:07:15 +0000 (UTC)
+Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
+ p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43; Wed, 16 Sep 2026 11:06:48 -1200
+Received: from p1wg14926.americas.hpqcorp.net (10.119.18.115) by
+ p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43; Wed, 16 Sep 2026 11:06:48 -1200
+Received: from P1WG14918.americas.hpqcorp.net (16.230.19.121) by
+ p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43 via Frontend Transport; Wed, 16 Sep 2026 11:06:48 -1200
+Received: from DS2PR08CU001.outbound.protection.outlook.com (192.58.206.38) by
+ edge.it.hpe.com (16.230.19.121) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.43; Wed, 16 Sep
+ 2026 23:06:48 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=m9lSnTyiXnHpIG7B4btDds0AHGkPdP4dWk67yS02LYK3lb7VD1TRdams5lPyxEXhTjMN8qveFLrrUan2lyOedEiWJF+ZN7wAmQZoj8SuDBu1XGaPcTXJLQlj6fT7BssUMBSzcRbmlrR3JhI9EViJZQ1p/XuYEJ3HKfx/cvyh+0n8xGoh1fy+SlpvEAVJ+xgjPPS9fAsr/IzJz/36UkRC/Kv2UFTC+VAZPyikZD0P5iK4QhwXUaxdnbhyjViCiTG8U23dlvR0p7+qKr5b5fTYut4V4OhM8gYFtNTNlIut6OpirW8xhPXJ7VmOREvIef9H4sSB4gFBYydBeenHDf3LXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7rj9Au84kYqLHdJTcebVh/c43QCzXzvgzDc148XX9BQ=;
+ b=mLVh1zkQi9b2I3b9YM4a9VCgo7n7b4QDF5+3RvA4O+91PpTUUP/U+qe8Ni+JJ/Lfp/tGoeBJnRdwPXNshMx6cnRgJjtLaQ8PkVF0IAejwUhJDubGgNXEGqkFETF2UmdABwAW+FpeSSLGzyMf2fUhR7IvPJm+VQcvvmk/oF24/rerjibw/1LEQqUEgZhlMFYIhM1b5qwXHzHaWoeadnoc4sOvPsvxhh6WYdaZlV19lsB1Dkjtk4l12Ry+p7e6Y/Mv4OlFfWLjDZ5CA8fBOcJBjgdVBAgMEqmugYmVIhoXpE3jq2DRlk8lSbpTr7xrVKg9hg3Nqi0zntrQ4nocogKn+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:610:1cc::7)
+ by SA1PR84MB3932.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:806:3e9::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.12; Wed, 16 Sep
+ 2026 23:06:38 +0000
+Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2c54:3534:122f:e74f]) by CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2c54:3534:122f:e74f%5]) with mapi id 15.21.0406.007; Wed, 16 Sep 2026
+ 23:06:38 +0000
+From: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
+To: Guenter Roeck <linux@roeck-us.net>
+CC: Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh@kernel.org>,
+        "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        "linux-hwmon@vger.kernel.org"
+	<linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>,
+        "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org"
+	<stable@vger.kernel.org>,
+        Sanman Pradhan <psanman@juniper.net>
+Subject: Re: [PATCH 1/2] hwmon: (pmbus/tps53679) Select page 0 for single-page
+ TPS53676
+Thread-Topic: [PATCH 1/2] hwmon: (pmbus/tps53679) Select page 0 for
+ single-page TPS53676
+Thread-Index: AQHdRhaHbswEx7nqh0iFEPfe68X9ErbRvB2AgAAXtwA=
+Date: Wed, 16 Sep 2026 23:06:38 +0000
+Message-ID: <20260916230628.677441-1-sanman.pradhan@hpe.com>
+References: <b155cdd8-54d5-49d9-b276-c24dde766dbe@roeck-us.net>
+In-Reply-To: <b155cdd8-54d5-49d9-b276-c24dde766dbe@roeck-us.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH3PR84MB3523:EE_|SA1PR84MB3932:EE_
+x-ms-office365-filtering-correlation-id: bfa268f6-388e-4f92-7f64-08df144729a7
+x-ld-processed: 105b2061-b669-4b31-92ac-24d304d195dc,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024|23010399003|18002099003|22082099003|38070700021|10067099003|56012099006;
+x-microsoft-antispam-message-info: fvp5dGZ5HAUgy8x6yEz7tP1FaG/UJbgSpSp008iDrCyjRFKB3lbHsOYb8N0j1R/SKIW0nh293ppdu8hkm7sLO/Qe0XXUifBmbjzYvFTqY7lHrvhNj8j9zV0b8mc7uEaU7h0vP/p49ANBkkO9eFkBOSLbatyJO5eKx1/VO9HIM/6k0r2/WeXjfODj1K1V7mml6G+Aode0Uhhy/r/jAstKbG8v5uihcVb7GZpsQpygbnyA8LmPc2r1E8LorjvnaEfpbaSfwhzQ7bnnAMYvO73mPUIf41whTaRNdfh/VwKTnjb94KBeyqtpZNdjbgrPlpQZK4tV8fVRk6BH/5PuERHxNIdcGb1N+67R1JvDuB3/DWE+3hTbt+oOwazrZY5S2YKrUQnsWmPLXpg12/86pKPFjQzLcMus5yXZk9C/+gHJse3fhyZeW0rjc5S/6Bm+Nh7zXd9jMq6YCAaY20eRk2fguvuiXID3cd4E75fUav/jpeeA4AHpAcqMl2WONhObqjikVZTaQDeuOKaYj5IryAua2d/fIgYVEaQ4cJm0Xhocf4qeIp1hXhfRleoez4U3tnmN8XCbVvsrwaqAdOEiyE32+p/7Kqj4nwzhTNs7eqsLuCS55ZlYtg07K5zOlUn7bi9z8Ma6wrcU5eDUp/aNVqzSfEOHN9ozKfYAfNRR7a59l3SHh82pWKzGmImJcM+KRSt3BVbSJmQ28TGC98eHaUZPge0FmGbq9bzN1rsyTdb7+AA=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(23010399003)(18002099003)(22082099003)(38070700021)(10067099003)(56012099006);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aFB2Y0d4TnFzQm1xKzhEQnQ3VzAzNWptK3FWSkhTYTNlSndRSW5zM3V1MkJv?=
+ =?utf-8?B?U00rR1RyYzZSdmxldk1QazFUS3llaWxDZ2hwVzBmQlRhcmVTMm94c3JpZlpu?=
+ =?utf-8?B?YStMV2IweFZsL3ZhVzIxaENUcVRoNWFZTkR6TVBNcVAySnJBa29tN0N2Q2Ex?=
+ =?utf-8?B?RlVkR0F1NVNJbXNveVpydzIwZXZsQU92azl6YUpYYTY5NC83cXpERU5sR2I0?=
+ =?utf-8?B?Y29SYkUwRjY2ek1ieVo2a1l6OEc3TXVNa3IrMlBuS0dldzFpOTdTU1Ivd2ll?=
+ =?utf-8?B?eUZBWGtndmU2MGtzRERMR3NkUFNvVkxaaFVLNU9jbTIzMzVCZkthWnJEK0U0?=
+ =?utf-8?B?WXBuRUd5Q3ViWjB5K2NEbUZoSURMaXBSdHdFK3VyRG03Mi84WGtjMjV6d3ow?=
+ =?utf-8?B?cTlkeXlrSkJuVCthblg1TzkydjQ0WGxwRzBTeklqek96RXlHVlpDMjNzcUFm?=
+ =?utf-8?B?QnE5cEgzM0cxTjFEUm5ncXFzWW05MW1PbzRkWjNjOXdITFJUVFpYbmg1UEg5?=
+ =?utf-8?B?ZCs1em4yNkVaMm5hTyt3VHVpNTVZTHhyblRnSDNtTGgzRTVtWWpQL3Q3Umtt?=
+ =?utf-8?B?dVdBYmFUb1hMZDUwSjd6eEVZL3BsQ0d2eTVGMkZ1b01tSGVXMHk5dHNYeEw2?=
+ =?utf-8?B?Ujl1azhNYTA4azRBbHBlNHBKVzNsOWJ4MnhoNkxMWEdlNmpLTytsSk9ycGdj?=
+ =?utf-8?B?VXljRlg2NFpRWnJ0ZTdIWmVPdE0vZ2tNK2xyQWFSbmo1OXRxcHVJVUJqYmdk?=
+ =?utf-8?B?S3FVaVZCSVVNL1UwbXdWUmFnS084dzVkTk83NEdNWWN1dG5PcEpuMGRYblZj?=
+ =?utf-8?B?OW1NeTY5ZTJoaHJ1ZFFNd0tOWE5NYzVQdjdhZkoxVUVSc3FwV1RBUjFtU1hP?=
+ =?utf-8?B?VHpRaHhMNDRlSEhraTUyN09qeUhqKzVxY0ZXelZ0RC9Jb2xSYS9iVmROc2pL?=
+ =?utf-8?B?U255YWZVZTZIbHVFcm0yZzEyZVlTOG0wT0FTbFpUUlNWOTZaME9Iemt5WWhI?=
+ =?utf-8?B?RnJtNVBIZ1RQTjlkZjRQWFVhQWdwRDNYV2RrUmtGOWM1TnVYeDVRNEtIa2xJ?=
+ =?utf-8?B?UU4yczVsZkJvWWdoK0NEUHdLc2xtQ0p1YlZjb2lXaGZuRVdGaEprVVJocVN3?=
+ =?utf-8?B?bFZVVDNISDB6M0dGRjRmNHpGak1wK2xvZit5YlRrL21SUTd2M2F3a2sybkhl?=
+ =?utf-8?B?MXFwMW1QaVQ0YkRuSzhxMjRzaFZObWhCb25ZUVZlczFzL2NTMFN1dkFDeHE2?=
+ =?utf-8?B?dUdoM3pOalJ1RDRuWlBhTTdzUlcvSG5WZHJ0OWJqODI1NVBPbEdxTmpjL3hY?=
+ =?utf-8?B?blVKZjdkc01xcndOMDNCODF0K2d0azdISDkvdmpSSEZ6TlZEZk5WRHZSZnBz?=
+ =?utf-8?B?L3VSU3RrSGF0Q0xtZmE0em5yV1JLbTBUZE1BRVVOOWk1R0RRS3E2NFdvWStw?=
+ =?utf-8?B?eW84WjBSci9RQWl6bmxRZG1ML29sQ3dqSEN6T001Tk8rNVBkMXZYcGJ6QkZC?=
+ =?utf-8?B?c3RnSmc2VEY2S20vMjYrMnhrUGU0N3hUUXIyMzVOQi9KOVNHNDR6Um1jektl?=
+ =?utf-8?B?WkFwMTJINEZSd1p2U0JjOUo5N2JuQmxHa1RVdTB5cTR2MGFCREQ4eGpWaGZh?=
+ =?utf-8?B?cW1NODNpVjQwSERadERsTUxZMEh4eXhodjlRQWF2TkZITkRGUWs4Ymd3TGhS?=
+ =?utf-8?B?cDlhdnJLYmxXbHBHUy9IT0U2V0VsUzZCaUZwQlVDL0VhckhFNFFSRlBLajRM?=
+ =?utf-8?B?YVlIaThSMUFCZ2t6d2lIUVQzUGVtdi96cHEyTXVSRXo5M0l2K0h6UTE4dWhE?=
+ =?utf-8?B?Ui9wMTROQmNqOGU2andhUEV3NWRjZzZ3Wmxlc0djYTd0Z0U0SHhveTdudGUv?=
+ =?utf-8?B?TEZWcnd4T0JNS0JXSnhwYmp4bUNYdVhGMWo0OS9CVlJYU09Zeit5NjRwWFBN?=
+ =?utf-8?B?MG94RDVpNkp6WXpvdzE4RHlSeHBXN2t2UHJzSFBObjUweE9nM1huMUxnS2J0?=
+ =?utf-8?B?em5Hb3Q4TGE4WnB0VEVWbGRPSWRWVWpScW51N0sxSnVMcHYzVEJBMDhRTDBH?=
+ =?utf-8?B?T05iNDd5R0w4WGtIUTRuM0cxVk1jTnhGR0djNS9OaE5hRW1sdDZlY3poVkRE?=
+ =?utf-8?B?VERIcDhOMWtMZ2Q5Y0M5ZWRSemdyMGtaTEhQQnNvMG4zWldxU2lwQUlKanFn?=
+ =?utf-8?B?aXcwL21FcmN1dlRtRFI4RWV4Zmx3VnZDQUdQOXBlTjAwZGRVRWtDbjZodVEv?=
+ =?utf-8?B?bTJabmZFREhVeUsvTGptK08rNHZhUFBGNm1BU2IwbkJkUXJLU0Rwd1FHckk1?=
+ =?utf-8?B?VjUvemtyK3lzcElUdjNtZDVvM1ZkS1dJVXJNdndaNzZTSHpSR2FCUT09?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aqVUyYkpKT8iX4Jz@ashevche-desk.local>
+X-Exchange-RoutingPolicyChecked: VkN0xtYRNzBRSKgiNxyyRaNH7GFJ6QyQo+dcxEZr8IoZWfvMY9ea7YjkHuGsklrR+RpZapbmmt42wES7coOqjYBOg5uy0vZQx6b8paLCeYoJwb3yjdomdujEQNI4p875h+eRyk/R0HXxNHWKFTtNTRHAQ7SMjIDV+p6PPyVnQwHjpdbo7HTkm99lzkYwC9euy3dmdS8aRN2Uhvk3p7v16PfZI+2owjlS/AEh55dQbJsYqKdIU0n3WlZJKosm9ZMCoJ5A886bi/MEDtmkfb7lwK2Ls0xlJFeZZNvGK42b5l21IwavJPUZEj3KTQZZIBRUoQXpRYFnxoPy/40rQXTSvQ==
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: bfa268f6-388e-4f92-7f64-08df144729a7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Sep 2026 23:06:38.3794
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: D8vg28pR9zU4rRsdCE3zkNhHBBgq7cMRpMAC4KoQZxgzs4gWprFosA4A2rVGPmFCWuyjuLewXbUkh98EwJku/A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR84MB3932
+X-OriginatorOrg: hpe.com
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: 1_2OUpJxCB5BmMChktqK-5fmy8qTUa7d
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE2MDMyMyBTYWx0ZWRfX9cU4GaFGBCFr
+ JuDrJWRFOAd9cHcJjNpYAw6k5KgAaVfjREyKhpzpon17Uvj2YKJ2D5khW+nzEYWuulmgyfEgui6
+ WTf3kQDqAA5u4OH7bHfbGqofYgbzjb4=
+X-Authority-Analysis: v=2.4 cv=RdUFmFtv c=1 sm=1 tr=0 ts=6aab2124 cx=c_pps
+ a=5jkVtQsCUlC8zk5UhkBgHg==:117 a=5jkVtQsCUlC8zk5UhkBgHg==:17
+ a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
+ a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=gQcMVamqm3wCPoSYhaRC:22 a=_ZmgHqWwjZUDpi_pur5s:22
+ a=OUXY8nFuAAAA:8 a=c4gwNIlIdBMQgB6tUQAA:9 a=QEXdDO2ut3YA:10 a=q5mp2vxMLvQA:10
+ a=cAcMbU7R10T-QSRYIcO_:22
+X-Proofpoint-GUID: 40TH8JgxKbL4XC8aOYq0hDR34sNV3yMN
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE2MDMyMyBTYWx0ZWRfXxEzeFN+z8yWQ
+ id26EFKYR1BaulpO3dFWTuHspTbzxxjHj+E0VuFogriA6+NTDSUmUEEvvQFfyj3fXY5K32FHOwm
+ 7mG5Mp9JBazuUW+e0dor6QLk7arUHJPEzq7IezL+5eGXToGtmUJOl558GHEncVaZTmZ4AaWFQgb
+ npIL9xWnLgIfH1/AT+RccsIKONnAEcZACzyhNL31v0UuSxGzZqQncAygJFPi5w1OX8bpK/llr+m
+ dilykTzBlzKq/oWRhf6AE0j0+7wW4E3AaaR2fqiXdj60MDEYzsQb+3Qg7X3KZmrYxlDLLYih4o3
+ VI5pUGiS7IBnXp3ej29uS/s5v5DorGDZ8d7kiMTj3AUnAx6oMAfbPEK+SV18xdPEXWKaDKiljuw
+ lOWbMhuGIrHEpnO1gOCTIOPpLIA1t19OtvEzv3ey5GOg6J9slC6xPOwsdx6vp7mvu4pn5/l5CKb
+ WVYTKpdG8JGqzXQSvkA==
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-16_03,2026-09-16_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 clxscore=1015 bulkscore=0 priorityscore=1501 impostorscore=0
+ phishscore=0 lowpriorityscore=0 suspectscore=0 spamscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609160323
 
-On Sat, Sep 12, 2026 at 04:34:01PM +0300, Andy Shevchenko wrote:
-> On Fri, Sep 11, 2026 at 02:09:35PM -0700, Meagan Lloyd wrote:
-> > The i3cdev driver is a character device driver that allows user-space
-> > to control and interact with I3C devices.
-> 
-> > Currently, it has the ability to perform Single Data Rate (SDR)
-> > transfers - basic reads/writes.
-> > 
-> > With the addition of sysfs driver_override, there is now a
-> > straightforward and direct way to match the i3cdev driver to any i3c
-> > device without stepping on the toes of more specialized drivers that are
-> > loaded automatically.
-> 
-> Is it safe? Why on the earth do we need this? The commit message has not enough
-> information.
->
-
-I can't see a reason that it'd be unsafe. To give additional confidence,
-it's already in-use in many bus_types:
-
-drivers/platform/wmi/core.c:    .driver_override = true,
-drivers/hv/vmbus_drv.c: .driver_override =      true,
-drivers/base/platform.c:        .driver_override = true,
-drivers/cdx/cdx.c:      .driver_override = true,
-drivers/s390/cio/css.c: .driver_override = true,
-drivers/vdpa/vdpa.c:    .driver_override = true,
-drivers/bus/fsl-mc/fsl-mc-bus.c:        .driver_override = true,
-drivers/pci/pci-driver.c:       .driver_override = true,
-drivers/rpmsg/rpmsg_core.c:     .driver_override = true,
-drivers/amba/bus.c:     .driver_override = true,
-
-To answer why we need it:
-If we want to write i3cdev as a standard device driver, it can't
-actually match anything by default. This is because, some devices on the
-system may need specific drivers and i3cdev is generic and should
-technically match every device.
-
-Since the driver_override is default NULL and is set via sysfs, this
-allows any specific drivers on boot to be loaded up and would allow
-explicit control on what device i3cdev gets bound to.
-
-This was my rational. I will refine the commit message with more details.
-
-> > This is accomplished by the i3cdev driver not having any entries in
-> > the i3c_device_id table. After boot, simply set the driver_override
-> > to "i3cdev" and bind the device manually via the sysfs bind knob.
-> > This can also be automated with udev rules as well.
-> > 
-> > The character device interface will be exposed at: /dev/bus/i3c/<bus
-> > id>-<Provisional ID>
-> 
-> ...
-> 
-> > +	struct i3c_xfer xfer = { +		.rnw = I3C_WRITE
-> 
-> In such cases always leave a trailing comma. It will reduce possible
-> churn in the future.
->
-
-Good point, I'll fix that.
- 
-> > +	};
-> 
-> ...
-> 
-> > +	return !ret ? len : ret;
-> 
-> My gosh, wouldn't Elvis just work naturally?
-> 
-> 	return ret ?: len;
-> 
-
-You're right, that is much nicer!
-
-> ...
-> 
-> > +	for (int i = 0; i < metadata->nxfers; i++) {
-> 
-> Why is 'i' signed?
->
-
-Mostly for readability and to make sure the line length on loop headers
-is kept below 80 chars. As a precaution, to make sure that 'i' can
-represent any metadata->nxfers value without overflow during loops, I
-check that metadata->nxfers is less than/equal to INT_MAX in
-get_metadata().
- 
-> > +		ret = copy_struct_from_user(k_uxfer, +
-> > sizeof(*k_uxfers), + uxfer, + metadata->xfer_size); + if (ret) +
-> > goto out_free_k_uxfers; + +		/* Enforce that padding must be
-> > zero */ +		if (memchr_inv(k_uxfer->pad, 0,
-> > sizeof(k_uxfer->pad))) { +			ret = -EINVAL; + goto
-> > out_free_k_uxfers; +		} + +		uxfer +=
-> > metadata->xfer_size; /* u8 pointer so use xfer_size */ + k_uxfer++;
-> > /* struct i3cdev_xfer pointer */ + }
-> 
-> ...
-> 
-> > +		if (!ret) +			total_bytes +=
-> > i3c_xfers[i].len; +		else +			return ret;
-> 
-> Yeah, you really need to reconsider patterns you use in the code. Here
-> 'else' is redundant. Homework to understand how (#easy).
->
-
-Thanks for pointing this out. It would read better if I removed the else
-block, opting to bail out early if ret is non-zero.
- 
-> ...
-> 
-> > +/** + * print_i3c_err() - Prints the I3C error encountered during
-> > the prior + * call to the core's transfer function.  + * @i3cdev:
-> > i3cdev_data object + * @metadata: Kernel's copy of i3cdev_xfers
-> > (ioctl I3CDEV_XFER input) + * @i3c_xfers: i3c_xfer array that was
-> > sent to the I3C core
-> 
-> > + * Returns: void
-> 
-> Huh?! Where is this coming from?
-> 
-
-In i3cdev_ioctl_do_xfers, if i3c_device_do_xfers failed, I wanted to
-print out the first I3C controller error encountered. The controller
-drivers can set this in the i3c_xfer.err field. Hence this function.
-
-It's to aid debugging and provide useful error information.
-I can certainly refine the wording on the print_i3c_err documentation
-header to make this more clear.
-
-> > + */
-> 
-> ...
-> 
-> Please, rely less on AI and more on the common sense and
-> proof-reading.
-> 
-> -- With Best Regards, Andy Shevchenko
-
-I think I gave you the wrong impression. The new contributions in this
-series were written and developed by me. I used AI for quality assurance
-and cross-referencing. Since I incorporated some AI-flagged suggestions,
-I tried to acknowledge that with the Assisted-by tag.
-
-Thank you,
-Meagan
-
+RnJvbTogU2FubWFuIFByYWRoYW4gPHBzYW5tYW5AanVuaXBlci5uZXQ+CgpUaGFua3MgZm9yIHRo
+ZSByZXZpZXcuCgpNeSB0aG91Z2h0IHdhcyB0aGF0IHJlYWQtYmFjayBzaG91bGQgYmUgdGhlcmUK
+dG8gY2F0Y2ggYSB3cml0ZS1wcm90ZWN0ZWQgUEFHRSB3cml0ZS4KCllvdXIgYXBwcm9hY2ggbWFr
+ZXMgc2Vuc2UsIEknbGwgZHJvcCB0aGUgcmVhZC1iYWNrCmFuZCBqdXN0IHdyaXRlIFBBR0UgMCBp
+biB2Mi4KClRoYW5rIHlvdS4KClJlZ2FyZHMsClNhbm1hbiBQcmFkaGFuCg==
