@@ -1,71 +1,70 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from k25.k3ae2098.use4.send.mailgun.net (k25.k3ae2098.use4.send.mailgun.net [204.220.183.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD9F3AC0CC
-	for <linux-hwmon@vger.kernel.org>; Thu, 17 Sep 2026 21:21:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B5804A5C2A
+	for <linux-hwmon@vger.kernel.org>; Thu, 17 Sep 2026 21:36:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=204.220.183.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789680079; cv=none; b=rO+EE9yi5UBkfYudoyTkWERiNuDQ/MSTPDvBQLh/MVYMSQXHlcf3UTcNfrsuSWNGq/0UUlWURVl2IfdI1BDRqAbPYBuyuVoYPuK0lG+yVkqDKk4nLVmUvWuZ6C9LBJkLudJrA+i+o8VHzhiB8h1z5QhJtt1fkP+A5R/yTdG11l4=
+	t=1789681019; cv=none; b=UnJ93sJYwqvW1rx0mu7khl9W9BKWsGWzYjgDLZJgnRSzVpKVl3N27f61FUq9XptkoXecKVSeqG46712C2+RF64y/bDSe6P5XoM2YwNTl1CK1AVDHqml54fD//xMQhTat7DuzRtI0EYr6iRTuEMiGbD30NLry0oaE2vHCt0swNQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789680079; c=relaxed/simple;
-	bh=q45x+OUZUM/qOLltXTmGgNMSNfP6JMvkebKD05IhQb8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Yatu7axnf+r1GVFx609OsZj3wY4DxKGpAbOijLAIcxa7tsg1EWYdiLZn1JUIhBqCubo4caMlAScYRz//KDEJXZpsM2jFvmKuGfJTcJVm0FVITPAil2iVrfL2pXBtuUDZb/N3bpVomT4CG/k1qzLiIFnTOHyGESuIPeic4Pu5Ems=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MFtjVL36; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789681019; c=relaxed/simple;
+	bh=t3N3cMXiQFEq4nhxvATM3kN0reVjqgVeSWrzjIzkV+c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tmWBK4L2vy7EhSaz0iYOE8FD3tnJUWCMuPxUY+HVlsZRVta+kUK2/WCUAAO3ZMDq9LpOALKBC5LQ7XuxsonfTGH3EjUy7V0skf2W8eXgUfPv2H40dO71YHd0u6+mdza3umAeXDggOuCRl+OOajEQdWCjl0/aLyIZjEV1ToHEyRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=equiv.tech; spf=pass smtp.mailfrom=equiv.tech; dkim=pass (2048-bit key) header.d=equiv.tech header.i=@equiv.tech header.b=mQyz4vp8; arc=none smtp.client-ip=204.220.183.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=equiv.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=equiv.tech
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MFtjVL36"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2D2C1F000FF;
-	Thu, 17 Sep 2026 21:21:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789680077;
-	bh=q45x+OUZUM/qOLltXTmGgNMSNfP6JMvkebKD05IhQb8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=MFtjVL36URYyFrFSk2y8HhILvJ/Yo4fcpbCxx6bNtgj+yv2YaC2Ch9sjwpiRxO3/8
-	 dlrHrh128Oqvm0JvkdSc1PUVux23kw4K1jzastlhxROyp4+qYir5NUi6bb8nKBbeVy
-	 92h45N2lk/YmH8UKHhU3A82sK/YEjCTc6FvA8nejCEaZHugC7ibiCpefIBwJ99SOxA
-	 Jik3BXsnmqYmhcIW3MLfIE2ky4cDbSNbjAJZ0mPWMUwI9OkZh2EmY7yqL3rQIvVZyc
-	 FrhT4AhXjmyrrj9I8ZNdYIC5B4shSQENZ33Nvfg93UZDN3BgKq6DTM4xpujDWpVVN5
-	 /P5lmoNjrXHPA==
-From: sashiko-bot@kernel.org
+	dkim=pass (2048-bit key) header.d=equiv.tech header.i=@equiv.tech header.b="mQyz4vp8"
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt; s=pdk1; t=1789681015; x=1789688215;
+ h=In-Reply-To: Content-Type: MIME-Version: References: Message-ID: Subject: Subject: Cc: To: To: From: From: Date: Sender: Sender;
+ bh=tmCjTtf74fJzZCxzPTtdpsX+Bj9MyF0VdQaJp6zwaZM=;
+ b=mQyz4vp81lPA9eTLGl57xhZdJQyClHEu949fRLdpmzB/VPCZqvYdMlmCpvplLCq3/IzzwEEITSI5Rb8YYU7QFr4rx5vOzAMVodw6An459Wq8ilBR7S7ZXV5qnBgzJpLbYCYRC1JJ2OCC2Y3+vNaa6AujYFbiPzXzOHW4fzo6yKWnyiezplDYf5OvApOYWBgonZ7w4seHJEwHFNBORIiKTKDu25DMbpSdwV1oW8LNUobyp44C3OzXG3wcL9m9YyS90pRW+ZMoaNsXk7kH1nt79Ozie+1nfY9bLCJ9tkHM3jWhS6ejt6uNrxlzv5QOsXoY0b8kuXVJAPayo4w5KxHCog==
+X-Mailgun-Sid: WyJkOWUwNSIsImxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZyIsIjkzZDVhYiJd
+Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by
+ 1d83990cfc41646456b83b879f462e6ff8167ee03124f26cddc22a86bca75460 with SMTP id
+ 6aac5d772dfa5e6eb605cebb (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 17 Sep 2026 21:36:55 GMT
+X-Mailgun-Sending-Ip: 204.220.183.25
+Sender: james@equiv.tech
+Date: Thu, 17 Sep 2026 14:36:54 -0700
+From: James Seo <james@equiv.tech>
+To: Kees Cook <kees@kernel.org>
+Cc: Kees Cook <kees+treewide@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
 Subject: Re: [PATCH] hwmon: hp-wmi-sensors: Fix info_map[] allocation type
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kees Cook" <kees@kernel.org>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260917211338.i.682-kees@kernel.org>
+Message-ID: <aqxddgcDH1khPlwq@equiv.tech>
 References: <20260917211338.i.682-kees@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 17 Sep 2026 21:21:16 +0000
-Message-Id: <20260917212116.F2D2C1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260917211338.i.682-kees@kernel.org>
 
-> From: Kees Cook <kees+treewide@kernel.org>
->=20
-> In preparation for making the devm_kmalloc family of allocators type
-> aware, we need to make sure that the returned type from the allocation
-> matches the type of the variable being assigned. (Before, the allocator
-> would always return "void *", which can be implicitly cast to any
-> pointer type.)
->=20
-> The assigned type of "info_map[type]" is "struct hp_wmi_info **", but
-> the converted allocation type would be "struct hp_wmi_info ***", as the
-> size was taken from "*info_map", which is one level of indirection too
-> many. Luckily both element types are pointers of the same size. Take the
-> size from the element type of the assignment target.
->=20
-> Build tested ARCH=3Dx86_64 allmodconfig with GCC 16.2.0:
-> drivers/hwmon/hp-wmi-sensors.o
->=20
-> Assisted-by: LLM coccinelle
-> Signed-off-by: Kees Cook <kees+treewide@kernel.org>
-
-Sashiko has reviewed this patch and found no issues. It looks great!
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260917211338.i.68=
-2-kees@kernel.org?part=3D1
+On Thu, Sep 17, 2026 at 02:13:39PM -0700, Kees Cook wrote:
+>  drivers/hwmon/hp-wmi-sensors.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/hp-wmi-sensors.c b/drivers/hwmon/hp-wmi-sensors.c
+> index 03c684ba83bd..cc193a8890f2 100644
+> --- a/drivers/hwmon/hp-wmi-sensors.c
+> +++ b/drivers/hwmon/hp-wmi-sensors.c
+> @@ -1788,7 +1788,7 @@ static int init_numeric_sensors(struct hp_wmi_sensors *state,
+>  
+>  		if (!info_map[type]) {
+>  			info_map[type] = devm_kcalloc(dev, channel_count[type],
+> -						      sizeof(*info_map),
+> +						      sizeof(*info_map[type]),
+>  						      GFP_KERNEL);
+>  			if (!info_map[type])
+>  				return -ENOMEM;
+> -- 
+> 2.34.1
+>
+Acked-by: James Seo <james@equiv.tech>
 
