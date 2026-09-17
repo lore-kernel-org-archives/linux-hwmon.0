@@ -1,180 +1,119 @@
-Received: from mail-oo2-f39.google.com (mail-oo2-f39.google.com [74.125.231.167])
+Received: from mail-lr2-f40.google.com (mail-lr2-f40.google.com [74.125.230.104])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 804FE42A96
-	for <linux-hwmon@vger.kernel.org>; Thu, 17 Sep 2026 00:08:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.167
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789603729; cv=none; b=RSF/oOpn2A/jXBtW6g2JEK5uYBXWzbtqPwLAJGIVeQ70PLwKd7Dq5sg74tvfcEzLT1gjmqJhMqMqSxpUz5X7N3oTq599ji1cSxvqUL9lNgoW0bx+dbGWirDUWh20JjPEFe5FwgEN4nN1zi91tqQvWGHNmpGoazFyZ9h/wImwv2Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789603729; c=relaxed/simple;
-	bh=axt0pyxvikct4TP8X4Wmmrq2ZpEZQ2m5UBXWa5Kgtkg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SVCbp+iNqV/oLk0hwZghZ1TgCQDV65O+YtmpQWZSU8TulTTI5sy8bUgD1zPPSfe7nANeKwtKraGimpvmwSi1lUXUpdMfrjdEdFU/t8tfVHgSBJf51EdXE3vN4iadXqAQB5dJ97irf1rnyee+OV0C+W1ZlvQ0NSNOYOSD/4L8Nqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=siP5ne7c; arc=none smtp.client-ip=74.125.231.167
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 403B42E737E
+	for <linux-hwmon@vger.kernel.org>; Thu, 17 Sep 2026 01:20:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.104
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789608049; cv=pass; b=R4xRWFouWMHymDxfsdqDXB/h+4rORk1q1CP21vyfm7WS1ZewYkesdOyDD7N6kL5/9PCCvpqRcTL5zh2zZ/x0oUGin6EBp6E2GkXQ/C8C7DB3yr3h84DNm0J9bzTsMxxnppL2vWlFqqJhAheRRMATmxPMJrFUT4kJ1NMC+PSEXP0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789608049; c=relaxed/simple;
+	bh=JE6JhFt7uwibX+/JwtwXQf+od6j4Kxf+0SEGWI7CQAQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p3st6OpRZcKP76meU/lju488JPHa3QhcaKAtMZde+xNPDdRP5EQNlWWniwPnl+jo0ZhSkPLp4ug6hsycecT21aZrdefbfFy9FOj1xCeJzkcCA/gW5bs/LU/1W+k7R6XfzJuf1MTadtkzLCdBBXyZ9VUTZRPjtJeGXEWAhiHQbOw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dvgdmQjr; arc=pass smtp.client-ip=74.125.230.104
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="siP5ne7c"
-Received: by mail-oo2-f39.google.com with SMTP id 006d021491bc7-6b1ae7089c1so94176eaf.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 16 Sep 2026 17:08:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dvgdmQjr"
+Received: by mail-lr2-f40.google.com with SMTP id 38308e7fff4ca-3a5da7416f9so2532101fa.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 16 Sep 2026 18:20:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789608046; cv=none;
+        d=google.com; s=arc-20260327;
+        b=mmOI4hge/QhejTYlwTR2D27Uf8puTagWlxgNiAmte30rfjnVPHls99/m1KE470zq96
+         XtNSwSdZQAoWB1OLoGArvF/x8h9jQUEIld631jh3crfwJyIBmb7GYv0gKnuwAclJTfkI
+         zJBbXUVB/Qd/trRfhuNWSU1cItB1sPziAhetfYIEIpK/H365lBY8ZxiO53aOpAoBAkiH
+         aBZ18FoakQdxtHvhIO0V3G4/oS3Dq3KLQjgMlTWMtSjatyF1j9CQevlisiusW3nd3TgM
+         fKk1kK9n9mHuSeIUJgHaSPqY2d5A0RiX5yMBlk3jnbWZebwmmKyKk09Dd8ZNeTMnbk8q
+         mmRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=nOOMHObQRBAIss4LauCRNXpDdTW1eSIKzzXC9H3Alhc=;
+        fh=Api1M4IRGx9r+LYDQLoTpZctpBiHaYmKwzyAQHBPOhc=;
+        b=V6Gwpe0K495CTM4K5HWNT2ZlgyQikTuZZmKhDAzjNh8zj4OCgJ2AOAv6OJ8mPPdTUo
+         vgP2nTt7Fn56+2ICVqfjowpCZjARqVJ0kZZlLwZMe4Qp2Eo80yVToALpPQ8q9+yT5U7c
+         VIwuKKAjAP98Cd920d2yfbvT6rTjbu9UXaOvtTCUxE/xYkLkb4IFqxRKtmdE9q+DHs60
+         2wf4l+MHl/fAmIhrqjMRT1P0yaV/SMmtXy/q61WKPU7nlathxX80Hf4rahR4SfcunTOT
+         +hIQsLqtv/3B0m9biuyIWaU7wmgctQ03dE9QDsh925GcqiFj8DVxGWXAexieRjlDF1OR
+         tK6Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789603726; x=1790208526; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Ij5FQ1cxo8ePhLeDltni+VDXBFGoj/hemI8tUtKAvVo=;
-        b=siP5ne7cdpE6qyoSfDKnBF9UvzXBJVWfSggJ7pxyxgWUtXzDQn+u/xQvaYJtmOqADX
-         hryhlua0r67mPATDeDqj6DvSw0Ti3bj627oa1z1oGXhCyBVs4I3m3Iwx1PZpwoe+PQaP
-         OPhcO+faiHf0EOXsLEOmIExQeeuQzYcgD4MCoI+mKJgMnuzhkmMdeHOig3LitJPm6VG4
-         qiZSvd4ZtjXx7AN5S+jj49oYgnm7+jd6OdDJxcNvYhvZPzmtNaRMHE8XIm1fRjJJa3xf
-         y22BJvrULyCc+VLXOFT60ihvGDeIFRB+l7CVSONVnNULjNNyg5+altKXxXfCzIKIG1wJ
-         9V9w==
+        d=gmail.com; s=20251104; t=1789608046; x=1790212846; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=nOOMHObQRBAIss4LauCRNXpDdTW1eSIKzzXC9H3Alhc=;
+        b=dvgdmQjrb1SXh7DQfch2NI+Wmlnb/4wTBgmBRnr7A8k/LlGOtY2X2bSagtfGEzJq6l
+         fRDRuk/dhYSQ/QpTgzK/wgEFGDuSQzuLeCHKBrYW4YS+8nylX7Fd7IM9dFdLmSx3K2FI
+         NGrw31WenG4IQ3MMICRGJuTMEF56Cthio/+kt4SBV8PeFnn6xezAtOoClYQpseo50uax
+         2UhKzRqYg5qn1lvTqmcJXY5/ZdnCGc/kBLiZbReqSqFraGDqGXaLRCBV1Hii8soQadr6
+         frT2sNCtv5uJzKNL98ZDHFbrTpAcYIW982z/+ZumgSe7fL4ooX58xxriv9KipAtraGaH
+         TWIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789603726; x=1790208526;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
+        d=1e100.net; s=20260707; t=1789608046; x=1790212846;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Ij5FQ1cxo8ePhLeDltni+VDXBFGoj/hemI8tUtKAvVo=;
-        b=N9cRnLjK7idUDIWlCzVdJt9wViYqrkWXsy9J//o1EHKe1nR32cO7hiSV2CJAGJ5IU7
-         HNkqFHAIv0/job+QTkYiGcDkqhb/qmwzT1sId2O/TeCG0hDVyyef7X3FJpxa7Uapg3rz
-         L0o4eIGwlNJTws7phy66uYYH5RNc3D7pfrwCIWeXVPW5kULdgyYZEA0JJrBs6uuhnXDd
-         Lwl1fquosA3SmhD0dxfr0u4h2+/3eBEOwDSGDkn1wiwS8YxVZMsEvFUGL9P2iUZlrVI3
-         OpkOouM/6IxpYUY2IPJj01cd3/+0pmxa+/p7xeFF12d65SdMiM2U88fP6Tp+W0Z3o9W+
-         2NEg==
-X-Gm-Message-State: AFuF++mzJwKxXWsObEI+5opnxKSIG2u+6lzXtIyMfgk8SZb01gK49NIf
-	IWBjOqsSRx3RWA5hXf9v8XS/GsPmifKVjXN6NwTaj0fbKHhXDnl/A8Bx
-X-Gm-Gg: AYBFou2p1KqosGswrc3CiD2YvQmNgP1p9W67bQAAYln5qcpqlkNrNgxRfjIeq7WViyZ
-	0VMfjSZCmR+gDobqXGptfSSGrdENjquV7vhB0MdkUAAGxiHzyn9uVFoSLUdFIXtfh5+GTBL9bQE
-	Nlrh3BioF1B6mtS8iLIuS5ab/ZmYg+svennmnkNyWnCdlAY4VSUmV/FjVHNsBiVRg5ib0EsSUsv
-	zEEkifXvHkfg9k1Vg7VIMEYHclKHdEJCqp/qB2WsOR+UqxQLHIaTxFLHawaJMnAHH85owEIBk/j
-	H2Y+q3od6TULcW5+B1MKxxJsr53Va7HBA0Si8qdh6xqG/77GNbgKlModRe667bcxfaSFWUSOa2y
-	T8DX4GxNuaFghrudPRv0hukd1le2eOBxHj2uUfGGXFAnTch601dSGkn5dMMidQZTTwC25G6Kq8o
-	Jg4T6USlmBI2WlFqSMS/rX9QrNBibwARJjm8DoPt6k02azKSz/BI9OEhs+Dd/puIKS/9vT66Pw9
-	vb4zByopD8J
-X-Received: by 2002:a05:6820:818e:b0:6b7:8396:f3cc with SMTP id 006d021491bc7-6c7d3ceffe5mr4919325eaf.46.1789603726487;
-        Wed, 16 Sep 2026 17:08:46 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14397197dc8sm8595889c88.3.2026.09.16.17.08.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2026 17:08:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 16 Sep 2026 17:08:45 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: James Seo <james@equiv.tech>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Muhammad Bilal <meatuni001@gmail.com>
-Subject: Re: [PATCH] hwmon: (hp-wmi-sensors) Improve raw WMI string handling
-Message-ID: <4fae6e7c-2667-4002-93d2-bb3c53910fe7@roeck-us.net>
-References: <20260916221912.434119-5-james@equiv.tech>
+        bh=nOOMHObQRBAIss4LauCRNXpDdTW1eSIKzzXC9H3Alhc=;
+        b=fn0yS+ALETBEj/bs80pZ6LMepIMM6EiJDsg6/AOy1knLgqJXTPtqJfS3nUdffTcJ98
+         it21rreYkql6JDrNSBl0zK2hjTY9ej+IfGCWwRsf2fznMN6DD7g2xSuQ1sQ4xkCoi6qG
+         Hl/aFq2kVXAEhskxVyL05+crxcyHSfTLxUKDMaLdxH9abOi5bIewxh5MPzLfG9FI6IHF
+         KXaZDA0M9A3O6jt+3j4b2S9Z9PyvNwT+tas++MLCOwZqRYUAN7b55ECbhqDg6wa3miCq
+         Le7Z9mk/R2ggz2HD9BKRPeFLaTwAFEbGwkp1/jTigUhknAQaXSEtrU6Vd0tqEGEj5bix
+         3SHQ==
+X-Gm-Message-State: AFuF++mGunISqC6EDmWAnhK7AtbAYoSdtmRj4fbGlVrpfPBsvAnDOyul
+	Kri1BKT2mmb9T6fW5fpacvVMkOGnWVMLJ1bpbmEk24jXAB2YHBU017K0Jo0Jy0QwCXwDjT2RgQo
+	9ZANz488vnx8hiZ22/Qz3+ogZMTQ0Yyo=
+X-Gm-Gg: AYBFou1wqXCVvhy5dSe797WpqpBkn6S1XAcC7g6dHI3+jQWWsEVPCqAi2ArANnVL/6i
+	xbsMcXxt1uAPUFUkAJ0GrHNTqSvkcP6c9nE8f5sd2yTs0VQmlL4VnNG7b7LE2675ueTRzyDVVHx
+	3aTszD16rb1mv7rKswJn2QJVaxHk7qQZpW4iRKytVAkJMLVUHOBRB6kDj9BNdMWlg6GuTgkOKWG
+	FpQbkxzcHC+tzj1goJMmhsk6knorRvCTsW2/38L2nIkNBp7IQLGCuERMHij5XgRfj5Nm9kW+5cU
+	+V3z7b2nOdlzyXa9eall4oFwfJl9wYT0U2oDntITYuL6st4yPDljas5p1SZ2fo60m1pp/pb2IGi
+	iHBVVpCSFDoqQmg==
+X-Received: by 2002:a2e:bc1e:0:b0:3a5:f041:d7c4 with SMTP id
+ 38308e7fff4ca-3a5f041da54mr299311fa.17.1789608045973; Wed, 16 Sep 2026
+ 18:20:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260916221912.434119-5-james@equiv.tech>
+References: <20260915052021.6959-1-syhuang3@nuvoton.com> <f60a440e-1b9d-457b-865f-b3c4778d966b@roeck-us.net>
+In-Reply-To: <f60a440e-1b9d-457b-865f-b3c4778d966b@roeck-us.net>
+From: Sheng-Yuan Huang <hsyemail2@gmail.com>
+Date: Thu, 17 Sep 2026 09:20:33 +0800
+X-Gm-Features: AcwNN1UXSRHVsaDtbTNimMW42Y1gjHq9uS4TxC2W27XMSX28femBTxPDTsjGqk0
+Message-ID: <CACW=pY7u2wOzgc05gHfRVJFx12CXGvZe7fCwgPZ_y8dSo02PSQ@mail.gmail.com>
+Subject: Re: [PATCH v3] hwmon: (lm75) Add support for Nuvoton NCT7715
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, Sheng-Yuan Huang <syhuang3@nuvoton.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 16, 2026 at 03:19:15PM -0700, James Seo wrote:
-> Commit c9ba59258094 ("hwmon: (hp-wmi-sensors) Fix failure to load on
-> EliteDesk 800 G6") left out some logic for recognizing raw WMI
-> strings in check_numeric_sensor_wobj(). This issue was reported by a
-> user along with an incomplete and unsuitable proposed solution [1].
-> 
-> Add the missing logic and properly remedy the issue. Also slightly
-> refactor how raw WMI strings are recognized elsewhere to make the
-> intent that they should be treated as regular ACPI strings clearer.
-> 
-> Reported-by: Muhammad Bilal <meatuni001@gmail.com>
-> Link: https://lore.kernel.org/linux-hwmon/20260916002907.161210-1-meatuni001@gmail.com/ [1]
-> Fixes: c9ba59258094 ("hwmon: (hp-wmi-sensors) Fix failure to load on EliteDesk 800 G6")
-> Signed-off-by: James Seo <james@equiv.tech>
+Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2026=E5=B9=B49=E6=9C=8815=E6=
+=97=A5=E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=8810:37=E5=AF=AB=E9=81=93=EF=BC=9A
 
-Never mind my previous reply. Applied.
+> > @@ -1129,7 +1147,8 @@ static int lm75_suspend(struct device *dev)
+> >   {
+> >       struct lm75_data *data =3D dev_get_drvdata(dev);
+> >
+> > -     return regmap_update_bits(data->regmap, LM75_REG_CONF, LM75_SHUTD=
+OWN, LM75_SHUTDOWN);
+> > +     return regmap_update_bits(data->regmap, LM75_REG_CONF,
+> > +                               LM75_SHUTDOWN, LM75_SHUTDOWN);
+>
+> Drop this change.
+>
+
+Thank you for pointing this out. I will address it in the next patch.
 
 Thanks,
-Guenter
-
-> ---
->  drivers/hwmon/hp-wmi-sensors.c | 30 ++++++++++++++++++++++--------
->  1 file changed, 22 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/hwmon/hp-wmi-sensors.c b/drivers/hwmon/hp-wmi-sensors.c
-> index 03c684ba83bd..cb2eb9bd278a 100644
-> --- a/drivers/hwmon/hp-wmi-sensors.c
-> +++ b/drivers/hwmon/hp-wmi-sensors.c
-> @@ -526,14 +526,12 @@ static int check_wobj(const union acpi_object *wobj,
->  	for (prop = 0; prop <= last_prop; prop++) {
->  		type = elements[prop].type;
->  		valid_type = property_map[prop];
-> -		if (type != valid_type) {
-> -			if (type == ACPI_TYPE_BUFFER &&
-> -			    valid_type == ACPI_TYPE_STRING &&
-> -			    is_raw_wmi_string(elements[prop].buffer.pointer,
-> -					      elements[prop].buffer.length))
-> -				continue;
-> +		if (type == ACPI_TYPE_BUFFER &&
-> +		    is_raw_wmi_string(elements[prop].buffer.pointer,
-> +				      elements[prop].buffer.length))
-> +			type = ACPI_TYPE_STRING;
-> +		if (type != valid_type)
->  			return -EINVAL;
-> -		}
->  	}
->  
->  	return 0;
-> @@ -579,6 +577,7 @@ static int check_numeric_sensor_wobj(const union acpi_object *wobj,
->  	int prop = HP_WMI_PROPERTY_NAME;
->  	acpi_object_type valid_type;
->  	union acpi_object *elements;
-> +	union acpi_object *element;
->  	u32 elem_count;
->  	int last_prop;
->  	bool is_new;
-> @@ -602,13 +601,20 @@ static int check_numeric_sensor_wobj(const union acpi_object *wobj,
->  	    elem_count > HP_WMI_MAX_PROPERTIES)
->  		return -EINVAL;
->  
-> -	type = elements[HP_WMI_PROPERTY_SIZE].type;
-> +	element = &elements[HP_WMI_PROPERTY_SIZE];
-> +	type = element->type;
->  	switch (type) {
->  	case ACPI_TYPE_INTEGER:
->  		is_new = true;
->  		last_prop = HP_WMI_PROPERTY_RATE_UNITS;
->  		break;
->  
-> +	case ACPI_TYPE_BUFFER:
-> +		if (!is_raw_wmi_string(element->buffer.pointer,
-> +				       element->buffer.length))
-> +			return -EINVAL;
-> +		fallthrough;
-> +
->  	case ACPI_TYPE_STRING:
->  		is_new = false;
->  		last_prop = HP_WMI_PROPERTY_CURRENT_READING;
-> @@ -631,6 +637,10 @@ static int check_numeric_sensor_wobj(const union acpi_object *wobj,
->  	for (i = 0; i < elem_count && prop <= last_prop; i++, prop++) {
->  		type = elements[i].type;
->  		valid_type = hp_wmi_property_map[prop];
-> +		if (type == ACPI_TYPE_BUFFER &&
-> +		    is_raw_wmi_string(elements[i].buffer.pointer,
-> +				      elements[i].buffer.length))
-> +			type = ACPI_TYPE_STRING;
->  		if (type != valid_type)
->  			return -EINVAL;
->  
-> @@ -651,6 +661,10 @@ static int check_numeric_sensor_wobj(const union acpi_object *wobj,
->  			/* PossibleStates[0] has already been type-checked. */
->  			for (j = 0; i + 1 < elem_count && j + 1 < count; j++) {
->  				type = elements[++i].type;
-> +				if (type == ACPI_TYPE_BUFFER &&
-> +				    is_raw_wmi_string(elements[i].buffer.pointer,
-> +						      elements[i].buffer.length))
-> +					type = ACPI_TYPE_STRING;
->  				if (type != valid_type)
->  					return -EINVAL;
->  			}
+Sheng-Yuan Huang
