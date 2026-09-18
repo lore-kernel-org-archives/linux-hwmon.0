@@ -1,77 +1,189 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8082472557
-	for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 17:59:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB6A3E49EE
+	for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 18:01:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789754366; cv=none; b=J2Nmh95L+aHIrNRWv9tuDoDNXGrE/hRA4A1vyLamqicOA5OeHcI07WvsL9sAHK8vZuXBimV6YiJfdZIQtE3n+cGH2csMwibGBMrs+kGtlyE3DBra5++RIRqiYalmEYG+L62vCSFBo2wCzfkRZAbKhI0sR4T8EQ5FHX3EajOKYGE=
+	t=1789754468; cv=none; b=bcST5El7VtvRZ7fHEw+ig41yhzGmFDdviuLkbyNcxv8VlnvrPx8m4K3B4+Ztzvql9ddmTIWipwcr7Fs2i0CMHCJxTrarkLXxtT91aqV58uvy1OJ+G6h6Xr4mlUZZDfjd/xuaLvdaf6UGBirrAAf4bq/8bAOBt1TO+QZlKYrrP00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789754366; c=relaxed/simple;
-	bh=GdMq8hso6usaa5GFOuvcYPalFu3ofIgpWJLjvsELFrg=;
+	s=arc-20240116; t=1789754468; c=relaxed/simple;
+	bh=0kQ5pc64muz7yZld8Ux4aYTX2JmN0iL8qn3XCO9PiFc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=EFHRg9XqBIwqRQUSw2TCbkxh5ImBl50OXA2a0/KadKAuc/caUcfV/WRIbI669nNs01DrExB3arteqrxYN7ddEuWs5Aur+wvVEdJdxZCaclvxtsHXQJoYrzb9/uCmYlwQ8PC26RI4T+JshjEIvdC/sa0qq7Lz6jwxrxgtiUQVCks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jyZNZIfM; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=qb7nAFuJyQZB+E+LcI4gjgQBzkcYANt9WU4lsGi+qtfP8P279/nRCTZAvv7LS6h9qsfsiNN8exHCMytAwZAoKlTmPJOD1SQM0R7/HircUz4le+O19MJ+ObttYc2bscN49bVunCXzqazFB8DNFlicfYnJDA564syZgKZJYDvxRBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iMx5OhZw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jyZNZIfM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43C271F000FF;
-	Fri, 18 Sep 2026 17:59:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iMx5OhZw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B42651F0089C;
+	Fri, 18 Sep 2026 18:01:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789754365;
-	bh=GdMq8hso6usaa5GFOuvcYPalFu3ofIgpWJLjvsELFrg=;
+	s=k20260515; t=1789754466;
+	bh=X2ntLi+3mjA0s/u31q3chpP7m+9QsaMdZHknjkhJpfo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jyZNZIfM+kRnmIt/rpbiL/PwBRrCsrpL5x8TQI3ouxei2m8kBqyr8u/e026wTMZzk
-	 h8ScwndkvtNkXYEf95eN9RNzg+XMJWwU19/Czw/vWHvO7S8hUBZX7/jeHWKcBlqiqJ
-	 OnqeAna7RweGGSKiHpY/YKf4oE4UPdk3oj+NMXuROBfVlS+sMOxRzi8Jiigf36FuB0
-	 zny/hC+2SQn3B6xvjeBLrJBVlz8zLtp2TCNGUUex21u2tDkTW55Lx6jH9F8ePlJvUY
-	 iktkxDVQ8eaYrXCqdP0HZHiPFQLsnZ0LGRC7yi+qDiZfM7U3kxe33CuS8wOK2j4JwU
-	 OEq5tdsneoQVQ==
+	b=iMx5OhZwUHZg3TMV5aE5R+UQB0G/+b2jU4G8z1Ur4et+fGJEXEWNhKcZX90Z6FWxr
+	 +UOkWPDL3K26TkR98ZwEgzH8NjlFN0bpFpjRlXnRL4dknXG3r4d/8idD14iWuBhyyB
+	 dCZJiyB2+NjRH3vbomU2fGStE5YEnMZ8YFhcKfaGiScefHYmkJH7dKEZ2ZmR91fFio
+	 BxcHRJpEvAODxXBM3nuiBe70xI3a8pMFVLj/F8AB8JaQJjSifQe3JHzNOVICbfI0L3
+	 cIWs4e1jChOoML+C+XIOAEmNLRBSCQ+chaWKwLTHq+4yQAwtx7y74k738Z7gITXFzM
+	 Bu0FuPJYLOb3Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/2] ACPI: battery: add unified battery hook
- mechanism for ACPI and SBS batteries
+Subject: Re: [PATCH v2 2/2] hwmon: (applesmc) add
+ charge_control_end_threshold support
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jordan Brough" <jordan@brough.org>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260918175052.85461-2-jordan@brough.org>
+In-Reply-To: <20260918175052.85461-3-jordan@brough.org>
 References: <20260918175052.85461-1-jordan@brough.org>
- <20260918175052.85461-2-jordan@brough.org>
+ <20260918175052.85461-3-jordan@brough.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 18 Sep 2026 17:59:24 +0000
-Message-Id: <20260918175925.43C271F000FF@smtp.kernel.org>
+Date: Fri, 18 Sep 2026 18:01:06 +0000
+Message-Id: <20260918180106.B42651F0089C@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-> drivers/acpi/battery.c provides a battery_hook_register()/unregister()
-> mechanism that lets other drivers (e.g. platform and hwmon drivers
-> exposing vendor-specific charge control) attach extra power_supply
-> properties to an ACPI Control Method Battery (HID PNP0C0A).
->=20
-> Some machines instead expose their battery through the ACPI Smart
-> Battery System (HID ACPI0002, "SBS") driver in drivers/acpi/sbs.c,
-> which has had no equivalent hook point.
->=20
-> Extract the battery hooking implementation out of drivers/acpi/battery.c
-> into a shared helper in drivers/acpi/battery_hook.c, built directly into
-> the ACPI core (acpi.o). Both drivers/acpi/battery.c and drivers/acpi/sbs.c
-> now register their power_supply devices with this shared hook
-> infrastructure via battery_hook_add_battery() and
-> battery_hook_remove_battery().
->=20
-> This unifies the hooking interface across both battery drivers so
-> callers only need to register a single struct acpi_battery_hook without
-> needing to know or care whether the underlying hardware exposes a Control
-> Method Battery or an SBS battery.
->=20
-> Suggested-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-> Signed-off-by: Jordan Brough <jordan@brough.org>
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] hwmon: applesmc: AB-BA deadlock between applesmc_bat_lock and exte=
+nsions_sem
+- [Medium] hwmon: applesmc: secondary battery functionality not implemented=
+ as auxiliary device
+--
 
-Sashiko has reviewed this patch and found no issues. It looks great!
+commit 1bfe7b94e596c2681653ce0f082904d5c162cf4d
+Author: Jordan Brough <jordan@brough.org>
+
+hwmon: (applesmc) add charge_control_end_threshold support
+
+This commit adds native charge_control_end_threshold support to the
+applesmc driver using the power_supply_ext API and ACPI battery hook
+infrastructure. It introduces read/write capabilities for battery charge li=
+mit
+registers (BCLM and BFCL) directly within the hwmon driver.
+
+> diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+> index d0baa10502f7d..2444bea8a0f19 100644
+> --- a/drivers/hwmon/applesmc.c
+> +++ b/drivers/hwmon/applesmc.c
+[ ... ]
+> @@ -724,6 +751,119 @@ static struct platform_driver applesmc_driver =3D {
+>  	},
+>  };
+> =20
+> +static DEFINE_MUTEX(applesmc_bat_lock);
+> +
+> +static int applesmc_bat_get_property(struct power_supply *psy,
+> +				     const struct power_supply_ext *ext,
+> +				     void *data,
+> +				     enum power_supply_property psp,
+> +				     union power_supply_propval *val)
+> +{
+> +	u8 limit;
+> +	int ret;
+> +
+> +	switch (psp) {
+> +	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
+> +		scoped_guard(mutex, &applesmc_bat_lock) {
+
+[Severity: High]
+Can this introduce an AB-BA deadlock with the power supply core's
+extensions_sem?
+
+When userspace reads a property via sysfs, the power supply core's
+__power_supply_get_property() acquires psy->extensions_sem for reading
+before invoking this get_property callback. This establishes a lock
+order where extensions_sem is held before attempting to acquire
+applesmc_bat_lock.
+
+However, in applesmc_battery_remove() below, applesmc_bat_lock is
+acquired before calling power_supply_unregister_extension(), which
+acquires psy->extensions_sem for writing, establishing the reverse lock
+order.
+
+> +			ret =3D applesmc_read_key(BATTERY_CHARGE_LIMIT_KEY, &limit, 1);
+> +			if (ret)
+> +				return ret;
+> +			val->intval =3D limit;
+> +			return 0;
+> +		}
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+[ ... ]
+> +static int applesmc_battery_add(struct power_supply *battery, struct acp=
+i_battery_hook *hook)
+> +{
+> +	int ret;
+> +
+> +	guard(mutex)(&applesmc_bat_lock);
+> +	if (applesmc_hooked_battery)
+> +		return 0;
+> +
+> +	ret =3D power_supply_register_extension(battery, &applesmc_bat_ext, &pd=
+ev->dev, NULL);
+
+[Severity: Medium]
+Is hooking directly into the power_supply subsystem from within the
+hwmon subsystem directory a violation of the hardware monitoring
+subsystem layering guidelines?
+
+The hwmon subsystem guidelines explicitly require that secondary
+functionality (like battery charge control) be implemented as an
+auxiliary device, with the driver residing in the appropriate subsystem
+directory.
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	applesmc_hooked_battery =3D battery;
+> +	return 0;
+> +}
+> +
+> +static int applesmc_battery_remove(struct power_supply *battery, struct =
+acpi_battery_hook *hook)
+> +{
+> +	guard(mutex)(&applesmc_bat_lock);
+> +	if (applesmc_hooked_battery !=3D battery)
+> +		return 0;
+> +
+> +	power_supply_unregister_extension(battery, &applesmc_bat_ext);
+
+This acquires psy->extensions_sem for writing while applesmc_bat_lock
+is already held, completing the AB-BA deadlock cycle mentioned above.
+
+> +	applesmc_hooked_battery =3D NULL;
+> +	return 0;
+> +}
+> +
+[ ... ]
+> @@ -1563,6 +1703,10 @@ static int __init applesmc_init(void)
+>  		goto out_light_ledclass;
+>  	}
+> =20
+> +	if (smcreg.has_battery_charge_limit &&
+> +	    (IS_REACHABLE(CONFIG_ACPI_BATTERY) || IS_REACHABLE(CONFIG_ACPI_SBS)=
+))
+> +		battery_hook_register(&applesmc_battery_hook);
+
+[Severity: Medium]
+Should this secondary battery functionality be implemented as an
+auxiliary device instead of being registered natively during the hwmon
+driver initialization?
+
+Embedding the ACPI battery hooks directly in drivers/hwmon/applesmc.c
+appears to bypass power supply subsystem maintainer review and violate
+layering rules.
+
+> +
+>  	return 0;
+> =20
+>  out_light_ledclass:
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260918175052.8546=
-1-1-jordan@brough.org?part=3D1
-
+1-1-jordan@brough.org?part=3D2
