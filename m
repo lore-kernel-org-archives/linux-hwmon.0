@@ -1,76 +1,74 @@
-Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
+Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 967834F96A2
-	for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 15:04:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA941AC45D
+	for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 15:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789743872; cv=none; b=kfDL9Qo5D3AH0g7aLceiNxBG8Zkn0Bga1IUZO+N6148xvhYF13suzKRaOjmM6bKcNVitr52OnqB7qjjBO1W7W1KDF/ufSicTJ+k7k4vi6DjShjL9d7/51F8II1W/hpaH66/ts/8bvRYGemiovQmH8lnnppxOqC1rvkFdBjppkZM=
+	t=1789743909; cv=none; b=Bdu/eeoeVNi3kHnXpBiMJgCBgxE7pkrKKVIHMjxW4UJyfPp4xBgadMzXXr+jVm1VzJ2bfVfR2d7jTB4jyfzLfO7WRJ9gzMo5oTeUzZZ8/P2d+svN/YI2V9h7OQBZrTESaXEIKyVgiNNsb0MWfd5YloQe9dPYNlLIEE6NtRaozp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789743872; c=relaxed/simple;
-	bh=hSYPaZd4QidUGUpkJDVqdSFkFz4HHsx9wagFErTa9e8=;
+	s=arc-20240116; t=1789743909; c=relaxed/simple;
+	bh=f8mvvksl1SUaVUErzE+wRXUolyqXSD1KXdzSFkjjDE0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LcTxV2I2/9+aycAtp9vQfekNzknT7FBrUiCFW0m/yf52ML83QYlN9Xrv9T6+cbzv10XVJtWfnTjIMMyHMdfm/zv/ojl7Nen3FCeuL7XxKyZAOFgS6l4xJJkq59YAWukfdI0px6pEHkpgX4k2iphQ9G8XBf+gfTQOop9rGXtSNjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cmrDfjbB; arc=none smtp.client-ip=74.125.227.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gwbr0wi2EkFKEKaRkJo6GsaPW0KJk2poFGjdtw7FdNN8M0QUowjHS1EIOl02xm4eW8Cwx4z9dUTHxfLQFedT5KShF3IvmquZlk4NeQJp/xaJy5fD+ihoBrstqJt7yl/UwdKYkGZ7tvMoAeyJSlowey5K/iHHr4EdIY4v0fg/Uws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LTT7/XGJ; arc=none smtp.client-ip=74.125.228.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cmrDfjbB"
-Received: by mail-pj2-f43.google.com with SMTP id d9443c01a7336-2db1ca069c8so8265425ad.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 08:04:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LTT7/XGJ"
+Received: by mail-pz2-f42.google.com with SMTP id d2e1a72fcca58-86dd69a1b15so278240b3a.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 08:05:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789743871; x=1790348671; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789743907; x=1790348707; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=6oH5lMiBGio7Tl7op1uAmsvZkVfuae8o7zdbV+2icCs=;
-        b=cmrDfjbB70iqh6q4unxNHbBj9Lz4keBtz1ja+QLJok8I6KZng7HhrPLxCpUeBBpOZJ
-         asSMiso8120MdLzV8Nml8fh/s2hvmwyDNdogSq3b+HTtF53hNfIAfcrmUVgQ2o39+fDk
-         af2/ra2mK5VsaIoePY1ynx9wEznrWh5w03feEnCauy3xwZ4xrSuYbavMsnwoxodIZEmT
-         UxG/VgthQdEONWlwYCmEqgEyT7pi7WgyqtwkWYBLCvMg7EGFFBKVr1blqbIurwtdljmF
-         8ugZTF/v8XVx4MKWUt+jVXNc6HgHgednG63rkXPiE0GKRIkZQkudutqYaxVecRmpY773
-         bHTA==
+        bh=e7y/CcPBO636TJGAw7k8rF+8LZq12IShhUAQly8K8oU=;
+        b=LTT7/XGJdCSSeGDn6WqL0si5ZPiQRGsWXA9G24uNBrdbQkiyE4jaP7vCPjT4a0ZGk0
+         X7nCTS5FOGS6wKbuCSOxXeLJ+b0I1x/xc7ICeiu4mGKd8dYYORqqEV67JXhBiNnzUbsd
+         hf/iv63j8k3zVTEvirym4XgqwoHrSICiCwKLJWavSKwGgqrFzPJjs2EE3OzfJnfgT8E8
+         oW9asAi+JlkvLLKHaBW2zig18FLEuBdMsUm63R7twIuvt0JhcIySv7qC5i1/9IPHcfO8
+         YEdCV7pK4krnGuthPnhHqRoWnpcO4uow2SywN8pm06aKE1PQrNyUdsi0eKo9E93Z7tne
+         n0/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789743871; x=1790348671;
+        d=1e100.net; s=20260707; t=1789743907; x=1790348707;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6oH5lMiBGio7Tl7op1uAmsvZkVfuae8o7zdbV+2icCs=;
-        b=goCPT8ltg57O8DZbNUFOFxvh+kH/NV4JFr7pc7+bRsL7C19K4Xm0VM9qdUqkEFmMAv
-         3GBKUbBE1fIYZsaFub05XR1u4VxOCs2Q4IM40NWQ/TuKWoRD8zYIwPj3BHbxqWDCC+pS
-         8yoMir4aXRzi2M1eY9p7l8SqUUN3pUZac1U30Bqg4fSusZADBB5UdCQo2Tz6xzd6c1JG
-         8g43FcyGYc6jl0JB8yM8lPnMjBNtgJw4h7swwUqytn5VzuChdFsKIsrRwz1WcAuM1UBZ
-         GcXr382NyVJiOCo1FZ9P/Ju8eH1aYzukHO4AoAczzUKZZ5+tuZmWymb3Gi9PM6xUqdAq
-         8ehg==
-X-Forwarded-Encrypted: i=1; AKwUvBxywlca+ic8C6K2ytmV4FgbQkvv8E6oZcvAPVamqGoccMusXFim3N2NYR1Z4waOxYZqe0Gken95PZlRiA==@vger.kernel.org
-X-Gm-Message-State: AFuF++muyu4Iziz/AIUpW64TfIW0j9omSDLPkzophNwpnbYqVoCNokqX
-	ZStm8MRVJ92YeDEAdAyDznHe2tUy8BdQY8JljHwRCPML7iqAzFImjSPl
-X-Gm-Gg: AYBFou19A+9qlnBeeZXi29S08cNeEC2nMaKkYFLV7eoChaSjyworDA/IE0F3bH4MMuW
-	LpCFl3UpN0QaN+cYTlNMwAYisMLTGucDL5QsgnCPWuUed7Oc6DHV4VoGV8FS8cESU0fi6C815z5
-	ReubTxAQ8o3zDace1TP8LbZu1Z3En+Kbx0BIp0g39K93Qle6Tc+/XRuHDJlNWKWBYTcQhMxV48o
-	qX7drZ8CL4zeIeqfZhzjGwtKfrX0N7/eWaff/NJyOk9kaY0UDeE/tpnAOjzr2C2oqrkYWgiL0qR
-	78xBv2Z1pSk0R0Zj+fuAMXKpht3Fw8ILxuE4lScTrAnrdCt4B5Q1TdrGkNvSyCLby8cK6hWZ8NJ
-	2Zm/+S9fgrnaiDW6KJFnFuj3BgyatAtaVOPgrPtJhS4GkNO0ZdQqfeYwNx0y6jAJJUGK6+7WmYL
-	+p+bnHfu+uE0PZrRB99wJJwlW9JAkEDW7mYQIjEYGu/jKvxRcCKWwkpcIILuOJ9xdoOLGd2JXkM
-	z8im/B2brhd2/qkG+ZYsnw=
-X-Received: by 2002:a17:902:f543:b0:2ca:6c8:abd8 with SMTP id d9443c01a7336-2ddb1b097f4mr62517815ad.12.1789743870738;
-        Fri, 18 Sep 2026 08:04:30 -0700 (PDT)
+        bh=e7y/CcPBO636TJGAw7k8rF+8LZq12IShhUAQly8K8oU=;
+        b=DV/8DTgkyp8WjT30OanAMgOyP8ooaVZKzQJqR1g5km5mTvub+ySVCecoh1byzA+TpL
+         nx3TJr4FvElsrvUPTZpzrDXBqu9Spp/7FdJmHPu3ncNrXmEwbKDTIN8YFJiM8wI5YeBu
+         3/rs8TR3FlPsyAXGn8QPWR4CzSoA2IU/JmxX6YR+uNmmGkAFdZ/nJh/Uy5iqPfDv1zK4
+         TIs6UWfjIgMg3Q6HMEZbGnBVRfzBnluaRj1JMjN6tSDVUN2ADxGX9w5tgPowkVdj2ThY
+         +lBYiNVY3g+HzUpf+hlM+nkMxxtcv5PlT5ANny25Ky+idbV7iUB9EwuzUUy2Dupujv2x
+         vgGA==
+X-Forwarded-Encrypted: i=1; AKwUvBy4m7/NXdGnvP283Y7fwYCWvkEX27JlvS2LwwGSUrN2sxnGg+sl9L5Rr9+RoSP56A0rFjO3YTvPb+j7jQ==@vger.kernel.org
+X-Gm-Message-State: AFuF++kljPHwV2H3YJkDF9hEEknpAH4US66OmdsU5cm0TnYxKiPxBXwh
+	YRJl7cncqWPBYoO2dt7QiHdsWh6RRhZQOH73/frJrLRHQVUh7k61Z651AyOCksuT
+X-Gm-Gg: AYBFou1DNXmZCJRt5fOQj2MWJGAZULkBZkj6BZfTbU1hXcVIlLb/CHuqgxYINESRyjH
+	1wsEnn10gjYjWFPANF9oR9x9cfyEymlB0DAqq5396XkD03KFRwGepeLZ30LECzNJee5hATk1bV9
+	jty4jDeiNx+Ichkv6vfPOBvSIHZIGdRT4hvatBeDMvDiYuqBODe6fyRCdh0sTcEwgvchfr7o56/
+	qrZaN3CwClZXvsJNL8EVZq5Qentk7rTpdtlsK7RIeda2fO5uwmghoZJ/EuTShnYsXUS717tpQQ5
+	YYtyUsw+AK1Ri5z/nk44LRNrt6uSMeDV4NoOrO/6+A6wc67lIeeRaQ7r1R5g/B/9myE2IGHtdUD
+	UHsPfIAFAgGXUNPV0sK6WDCIpdN10qUkW5iHPop0LnoKle9TB200I69KIoBORdl6GO87BnujQYx
+	aiJQpzzADenIXLrV/XJbU40iMXvIXSertxNmyFuQ1cEDEEiWZqj70t/+f+ApUS++koUveLSyZGf
+	7tv0daK2orc7oO+h5QTTF0=
+X-Received: by 2002:a05:6a00:6c93:b0:851:8bde:7861 with SMTP id d2e1a72fcca58-874d259ea4bmr4306819b3a.1.1789743907066;
+        Fri, 18 Sep 2026 08:05:07 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ddb757adaasm10060625ad.48.2026.09.18.08.04.30
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-875dc8fd8c3sm1042506b3a.16.2026.09.18.08.05.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 08:04:30 -0700 (PDT)
+        Fri, 18 Sep 2026 08:05:05 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 18 Sep 2026 08:04:28 -0700
+Date: Fri, 18 Sep 2026 08:05:05 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Kees Cook <kees@kernel.org>
-Cc: Ed Brindley <kernel@maidavale.org>,
-	Kees Cook <kees+treewide@kernel.org>,
-	Denis Pauk <pauk.denis@gmail.com>, linux-hwmon@vger.kernel.org,
+Cc: Kees Cook <kees+treewide@kernel.org>, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] hwmon: asus_wmi_sensors: Fix info[] allocation type
-Message-ID: <39707657-7ff4-41e2-b324-92fc571a746f@roeck-us.net>
-References: <20260917211332.i.711-kees@kernel.org>
+Subject: Re: [PATCH] hwmon: pwm-fan: Add const to channels allocation type
+Message-ID: <4db2b003-f66e-4c15-a9ae-a8b4483f1168@roeck-us.net>
+References: <20260917211417.i.173-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -79,9 +77,9 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260917211332.i.711-kees@kernel.org>
+In-Reply-To: <20260917211417.i.173-kees@kernel.org>
 
-On Thu, Sep 17, 2026 at 02:13:33PM -0700, Kees Cook wrote:
+On Thu, Sep 17, 2026 at 02:14:18PM -0700, Kees Cook wrote:
 > From: Kees Cook <kees+treewide@kernel.org>
 > 
 > In preparation for making the devm_kmalloc family of allocators type
@@ -90,15 +88,14 @@ On Thu, Sep 17, 2026 at 02:13:33PM -0700, Kees Cook wrote:
 > would always return "void *", which can be implicitly cast to any
 > pointer type.)
 > 
-> The assigned type of "sensor_data->wmi.info[type]" is
-> "const struct asus_wmi_sensor_info **", but the converted allocation
-> type would be "const struct asus_wmi_sensor_info ***", as the size was
-> taken from "*sensor_data->wmi.info", which is one level of indirection
-> too many. Luckily both element types are pointers of the same size. Take
-> the size from the element type of the assignment target.
+> The assigned type is "const struct hwmon_channel_info **", but the
+> converted allocation type would be "struct hwmon_channel_info **", which
+> is the same type without the const qualifier. As there is no general way
+> to safely add const qualifiers, take the size from the assignment target
+> instead. No change in allocation size results.
 > 
 > Build tested ARCH=x86_64 allmodconfig with GCC 16.2.0:
-> drivers/hwmon/asus_wmi_sensors.o
+> drivers/hwmon/pwm-fan.o
 > 
 > Assisted-by: LLM coccinelle
 > Signed-off-by: Kees Cook <kees+treewide@kernel.org>
