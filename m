@@ -1,68 +1,68 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9513937AA9E
-	for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 17:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC8C331EB2
+	for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 17:32:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789752626; cv=none; b=P0H1vVpjdMVY4gd+c3w92A1reHX8Kj6pzAe0XpzMTfvrNi3TcHFX0+9bhg2HUHyVxWpRgaZuTMNtGxcHQuhFUxXbFtEaGvoAPjEIhLgU9ZXfYrPi5FeCqQJd8xgM3KF5anwG7jif96Xu67RUd1wVoODbT/MGhMKH45zMsF5Ku8Q=
+	t=1789752742; cv=none; b=Jy9PfNi+XOb75gVsEAo+KYI61CEsymTno8Svdqrfww6KIuifs9iEwqEnOAhMDxGG3faOsBlT1dIvW10ZCc8QEyXFYwqpVNymibzWaZJD0IignX5FjwWZEtpt+Gfp0yjgKW1ZLPce/8O7eeeZUuedXDkCOmQrB+k5tJz0dDqB4WY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789752626; c=relaxed/simple;
-	bh=Cm2NMQCx89UMDVtgN8FqczOwNiBlbCdE5NyxRoG5AiE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UXsZrxl4eAea8SiRsX4NEF+fTlVzBOANYMZ8PQV9PCf82K3HO443BwIbFDk0rNzBQFl3N00WBybIVpcjJhZVF/JC7B0W4j5ARGxtNaMrt6qYw7U9RcGBMSRdjhg90ZbyVKWuD7NA/LLsEw+wiM/bV7E0SgmSzhqalJrA4IfissA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NFOWlQK7; arc=none smtp.client-ip=74.125.227.141
+	s=arc-20240116; t=1789752742; c=relaxed/simple;
+	bh=6FfrmzjH54GEcJ1wWK2iIQb91lI6OlRWrtkK0i6oGQ4=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=JkeXIRgeaPMuNIfwuBl2WN2lCHqMPLkwVjzTPMrXKr1p0Rmhcht+B2/thQKSxqvBiBAw9PNKpv9FVf3GvN2Tk+fK5oixXeCWccCAMObLI4VV0ukgpCUxzX7sz+Sa+qZEZKZ8ndOV+mq984V8azPgnWI3PhaD2ltd5m9zpyJveI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y0a8hqOj; arc=none smtp.client-ip=74.125.228.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NFOWlQK7"
-Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d93ff61046so10013165ad.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 10:30:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y0a8hqOj"
+Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc4d04d73b8so808874a12.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 10:32:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789752620; x=1790357420; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=DCaqfjYXY7u/ZFZD8Iz49PhiKKj9ZbiaFOLNIBWhhNc=;
-        b=NFOWlQK7vBkjNjwnyeHcXQxDpKntE45isQMurUu+tHXSnFTWbhUin5mS7MlsDCx5NM
-         97Xfhk+LpofgqW6H7NUR2vA0rnhjv07Qf6wP2dqRajCnKFdc+E7bh1k1vWqfWCI/Jwco
-         nnz6Q20M34AP6pe7gGAqTBUmC5/i2sIebxQtE0BtPTWpY8MaLuFfb35/a/rh/MO/WGmt
-         AmtUvA7+7iLT0zQWCnQbiu8LhxnVNez5xxxGuKbVoDTfoKfmHpi68DBkOWvNqWaQOPd/
-         FiwitUZiAyqWC7iHgx+RFOWttPUZxHqClz1mE+NL2ezd2ng0lGsIQwf6UBuksYe2QfA+
-         /KgA==
+        d=gmail.com; s=20251104; t=1789752732; x=1790357532; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt
+         :content-language:references:cc:to:from:subject:user-agent
+         :mime-version:date:message-id:sender:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=GBzAIA75tY6+1ABqxWJzAnAi665MvkZni2otJtamYAI=;
+        b=Y0a8hqOjSpKfMvcts1WbdVVBbRVjZEtNxApeWheJ/K5qEtz/KckIyjlgbQMCR94Yz0
+         sg+TomiPVw7Yk2wnXYXaQQPRszYK4gD5Sb/aQQ7ncrupdCD81CSA1YoqrRSEdM/+kMBl
+         Y+ruEcV1KZXGTC/OqEUrXPeWj1eopkytFZX9uX/KVlBWKY+g+4LsPRUcYfz5NtrA8PI/
+         5KpzV4ZAyIiFnhqjGpbJ76XvuWZicIv2BLETGz2FfmeUYqYuBh7rW8kwyYz97X+VM6lg
+         CQCUEavsDvS0HruBHZ1YOLOHSUo1cl1gl3Jnbk/x8WkiI6WpLds6pPI+d5ZHuCkPugFJ
+         RsTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789752620; x=1790357420;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=DCaqfjYXY7u/ZFZD8Iz49PhiKKj9ZbiaFOLNIBWhhNc=;
-        b=UJb+R5LhrD1FttNgyFVc9r6IdYrYUeWkOU7SLUJWtutmdMlmLgz3LuKJhytuVCVm30
-         gHjHJ9NgT8bYVqQfIAHEfOCcNw7IWsjjwy1IBQrb2EmIaR4agSid5nKSAM5xsPhJYPGK
-         aJeqi8kkPFkRxqeKar8PQcOR9pYeDw6BKdjo6gvsgERp69LpX8haSTBY4vXXmYmq9lI2
-         jdmVFtHtGYxjLo6hLRAa1VeN2aspbfVXiWneZ8aWtDfATu9Q7W5KdFPhd5ya04JqejQH
-         fl25GXvikqkzwDxvpKWwT+9+DQLsMVc3N/cj1sneu2mUiyCd4BVXSMbjjG+dyxholHDA
-         wA7w==
-X-Gm-Message-State: AFuF++kCdgsYQIF9GyA2pbB4XwPrsGqtGlxUnvQ97bfE4IasypoT7T1x
-	IWi/ukUiaq4bQ9niNt2nJ1Eotbo/DU0c/uz/KYJ5QFKVIT081Tu+ZLri
-X-Gm-Gg: AYBFou37mgcyPjbbsd52jXm9n42LoBN/NGemA7bZNV58lWrSLlhnFZ+jqGXgAXQrPP8
-	ZIns66AWeXs4pkTMe42vnEKMHTlRbJqD81+Op+8kNSnRsuG2B5xmHp4UIhXMNNek5RjGi0be1xF
-	ByeUJyzMe8JMVsS3IxuC8A2arKYIOZHk3unaEYGWTT2njESAIkZ329ECjceBTEoLE/gdkCuaqC3
-	9exx24j8pziTePl9OIUs+XcxezE2ARCibr8ROqrw+XTy/pY0dv9ciB4zoQthEVRkuLjGuaj2ZhH
-	eojuINf4CVj3c52xyl2u8EAI+VSBa7S1ShJ2DTqUVfkWmIN6QMQIAUL/ahMWYfg4YW/qZP4K2wV
-	ls9dhjuHjYJslSFS70KzDPaEscjhacMyLk/KtdndFnzhm19Ep4d4Ht06fsLltdXLQDX4eibq05J
-	Rf0rEx9Gn+4oahA3QuwOFll4H/BsVIpoKBx3XwJSmXBmHt8VzIgLi/gLTCyHCdZvjCpfSIWybDd
-	6OFnvus8d6YbhzFoy56k4E0n1QRdpcj2/mroRyPS9Z1JFdP
-X-Received: by 2002:a17:902:ebcb:b0:2dd:c054:1981 with SMTP id d9443c01a7336-2ddc0541cd8mr9489675ad.38.1789752620130;
-        Fri, 18 Sep 2026 10:30:20 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1789752732; x=1790357532;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt
+         :content-language:references:cc:to:from:subject:user-agent
+         :mime-version:date:message-id:sender:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=GBzAIA75tY6+1ABqxWJzAnAi665MvkZni2otJtamYAI=;
+        b=z7ULv2STOYJ6TG6v3qnGSYNvT5O/BdML3g4J2d+yeGFyLD8CofBiaq/cb3Isudodos
+         gemlQvfCPQbqu3WxxIAsw7g8wQ2Cjo1eLWQZ0mlhtN5oXKNDUidVFfwG8hf3AhS8nDik
+         klHi1ftkOPw6XzHvaoJ0xPjD+jUCGuPFMBpCcfKJVs5guGRnFEy3ckXGrQKw9+L5jXFj
+         SChi9GNbrntk9HYa81kwU151A1A6FTdzcqwUx4HadM0bPBHguD69MUONcpBbeGdGAKbC
+         iB1mB9HEczr4dT6DGo4I1ROZM6FbWB0RFlv/soSiMtdYXZfg6LxEDpY8KyqLvaGkHD9E
+         Fn4g==
+X-Gm-Message-State: AFuF++kt+gwLDKiXZf7cW0LjPtW3QGv88XeVAcH3361df8oQP4gqZ6bL
+	xp8wDIRj2XoDkhUqQpRvVaVhSt6zz6NDlNdRvAVDs1vbOyJ/gcefkAY0
+X-Gm-Gg: AYBFou3VWjq8X+s++ghKw1zn/UEkNBJtt6qY8ERCAjryWOgkTThERNtEf0iJa91fCTB
+	dsNv2us6hMFgF5piMZ8t5TBTyKPFb9VMJukv1mmJdavBCYh6EjE/MeNirbevLYT4mXBC95dFXy/
+	6x/b0Uaz2eD+HpGPIk4s6JkK6w7lCOepxCkr9BwjI7mYr2rqDuiNiZqHISdEp4ZWNrvJd7APbLG
+	Erv60TgV03kn+lvbIsaN2tPCvgGqbmGPHRPknORonFYI5LAWQMR7CdD80gLKAtX2mBJEpX/2g0o
+	2TTsDQWLXu0KKo2gHtDt2CEKx/f7UF/g7BiciYGWrSENDE2ySreanMO0bGiLE7Ifc/2/ESIQVe+
+	xwgi5GGTgvsiiC24zYxP5oQuFZkPRPCd5OykSO0RkkGN9P0+EX62rHDZ2W45GXiYLlHsCvNwpQ/
+	09Z8aRIMIEhV7tJN3YZTdvYxWVcaEmi+Y2lAWbSDbJnDzPRPzVAyQfhO9Y1Dg8RRoLmwMnRNift
+	8xy1kWRXhNuGS7IAQM1cbKF8/h+iqEWFUoXEB/l/zhdLzCs
+X-Received: by 2002:a17:90b:2f47:b0:39d:eca2:5c81 with SMTP id 98e67ed59e1d1-39e54b19f9fmr7592828a91.8.1789752731861;
+        Fri, 18 Sep 2026 10:32:11 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ddc17c4d58sm183265ad.58.2026.09.18.10.30.17
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e6c37c8e7sm465970a91.9.2026.09.18.10.32.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Sep 2026 10:30:18 -0700 (PDT)
+        Fri, 18 Sep 2026 10:32:11 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3a107337-8e2c-45b2-8847-6b4fb7b0405e@roeck-us.net>
-Date: Fri, 18 Sep 2026 10:30:16 -0700
+Message-ID: <a81ad111-43e7-4afa-8b2f-f75f5b47115a@roeck-us.net>
+Date: Fri, 18 Sep 2026 10:32:10 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,20 +70,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/2] hwmon: (pmbus/tda38740) Add driver for Infineon
- TDA38740/TDA38725
-To: Conor <mail@conchuod.ie>, Colin Huang <u8813345@gmail.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, colin.huang2@amd.com, linux-doc@vger.kernel.org
-References: <20260918-add-tda38740-and-tda38725-v6-0-a8b11018d850@gmail.com>
- <20260918-add-tda38740-and-tda38725-v6-2-a8b11018d850@gmail.com>
- <dbd0a721-898b-4524-a0cd-c9751fd4bd68@roeck-us.net>
- <2646A11E-8D13-4587-8027-1370E0007F36@conchuod.ie>
-Content-Language: en-US
+Subject: Re: [GIT PULL] watchdog fixes for v7.3-rc4
 From: Guenter Roeck <linux@roeck-us.net>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+References: <20260918162041.18444-1-linux@roeck-us.net>
+Content-Language: en-US
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
  RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
@@ -127,32 +120,76 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <2646A11E-8D13-4587-8027-1370E0007F36@conchuod.ie>
+In-Reply-To: <20260918162041.18444-1-linux@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/18/26 10:24, Conor wrote:
+On 9/18/26 09:20, Guenter Roeck wrote:
+> Hi Linus,
 > 
+> Please pull watchdog fixes for Linux v7.3-rc4 from signed tag:
 > 
-> On 18 September 2026 17:02:38 GMT+02:00, Guenter Roeck <linux@roeck-us.net> wrote:
->> On 9/18/26 03:23, Colin Huang wrote:
->>> Add a PMBus driver for Infineon TDA38740 and TDA38725
->>> single-voltage synchronous buck regulators.
->>>
->>> Signed-off-by: Colin Huang <u8813345@gmail.com>
->>
->> For my reference (waiting for DT patch approval):
->>
->> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+>      git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-fixes-for-v7.3-rc4
 > 
-> I'm on holiday and only have my phone, and cannot find the binding patch to reply to.
-> I found it on lore and it looks okay.
-> 
+> Thanks,
+> Guenter
 
-Hi Conor,
+Hmm, that was supposed to be copied to linux-watchdog@, not linux-hwmon@.
+Sorry for that. Copying now, and, yes, I know, I'll to fix my scripts.
 
-it was copied to "Conor Dooley <conor+dt@kernel.org>". Is that the wrong address ?
-
-Thanks,
 Guenter
+
+> ------
+> 
+> The following changes since commit fd73f4a6659897191fa0d40695fe370925dd3780:
+> 
+>    Linux 7.3-rc3 (2026-09-13 14:38:02 -0700)
+> 
+> are available in the Git repository at:
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/watchdog-fixes-for-v7.3-rc4
+> 
+> for you to fetch changes up to 7cb575b71ab98194d2e040bded3a7281e089c5ed:
+> 
+>    watchdog: da9063: fix suspend/resume handling of HW_RUNNING watchdog (2026-09-18 08:10:45 -0700)
+> 
+> ----------------------------------------------------------------
+> watchdog fixes for v7.3-rc4
+> 
+> * da9062, da9063: Fix suspend/resume handling of HW_RUNNING watchdog
+> 
+> * digicolor, rtd119x, and rzv2h: Avoid division by zero if clock rate is 0
+> 
+> * msc313e: Fix premature reset during timeout update, and propagate error
+>    code in resume()
+> 
+> * sp5100_tco: Fix pci_dev reference leak in sp5100_tco_init()
+> 
+> * starfive-wdt: Fix runtime PM leak in starfive_wdt_pm_start()
+> 
+> ----------------------------------------------------------------
+> Li Jun (2):
+>        watchdog: da9062: fix suspend/resume handling of HW_RUNNING watchdog
+>        watchdog: da9063: fix suspend/resume handling of HW_RUNNING watchdog
+> 
+> Tzung-Bi Shih (5):
+>        watchdog: digicolor: Avoid division by zero
+>        watchdog: rtd119x: Avoid division by zero
+>        watchdog: rzv2h: Avoid division by zero
+>        watchdog: msc313e: Propagate error code in resume()
+>        watchdog: msc313e: Fix premature reset during timeout update
+> 
+> Wentao Liang (2):
+>        watchdog: sp5100_tco: Fix pci_dev reference leak in sp5100_tco_init()
+>        watchdog: starfive-wdt: Fix runtime PM leak in starfive_wdt_pm_start()
+> 
+>   drivers/watchdog/da9062_wdt.c    |  4 ++--
+>   drivers/watchdog/da9063_wdt.c    |  4 ++--
+>   drivers/watchdog/digicolor_wdt.c | 13 +++++++++----
+>   drivers/watchdog/msc313e_wdt.c   | 16 +++++++++++++---
+>   drivers/watchdog/rtd119x_wdt.c   |  7 ++++++-
+>   drivers/watchdog/rzv2h_wdt.c     |  7 ++++++-
+>   drivers/watchdog/sp5100_tco.c    |  6 +++++-
+>   drivers/watchdog/starfive-wdt.c  |  2 +-
+>   8 files changed, 44 insertions(+), 15 deletions(-)
 
