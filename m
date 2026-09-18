@@ -1,172 +1,320 @@
-Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
+Received: from mail-ej2-f26.google.com (mail-ej2-f26.google.com [74.125.228.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16AB03E6396
-	for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 16:59:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A3E50255F
+	for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 17:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789750788; cv=none; b=eZIxYyyILtG0mXuJwiUpb3fZWPjYd3f6QCNtNWDPJJP1SMAqT9v1duVdRWol0msw77WDWzhKDODUVNl0U50FFhbUnmHcv+JMlP5KNGSmNTg4dHYkjb0X6ZJSUcwklpwcO8LpEkss8Q8x0nEnQ1KoeAWFcq+AzJCyMO3mNfRPuU8=
+	t=1789752255; cv=none; b=gjM8oxDePGmHy9w7a0Jfnx2L+zq4S/bUqMoOsFtnYCu8W1xVMK62M7fzX3K0KdxzY3IOg7AzLvPCLrHmGAxCjzG+naO8fIt4BN8RPPf7BqbbjEcy9HQa422zRwaCtjbtnO+TZXxvYIA0559AYTbO2Fdw6dsDjjW1gb0978Nre8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789750788; c=relaxed/simple;
-	bh=7MAUgk+sgbNvdd8ON7ni7gPcT/zwVM7BkjzKDHwRsmY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VysyU3xsNZQ5iwi2VR41ndMRbIe6DaMJjZdmKlWfuHLfKITEFdZ0N8ps9FkGlQES38qy2nOPy3ndceDVpp7huFBJl6JMkm5oeSxgG2KfuG6sVSzgMdADXp2R4ga/SHr7VdlvHdM1EgVlzbxc7lpcMhHNPO0CbodAkNarvWVoxtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IU8yuekA; arc=none smtp.client-ip=74.125.228.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789752255; c=relaxed/simple;
+	bh=pMGpEi39BEyUo6zCUXVX6ESUaX/7PwRrk/NnMo1pLNs=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=T93IJjfFNKzs5EvVEQ0X1tMfcQh1aRus8HqWylHzVLiea86yz4MPOfpohkVFlG0VARxp2sM93L2a944hSEugoEoll1Zdyhg6GA1/SwjVepceUYSYNKvNoK9/1nPEjlLg8ip1h8PajPye2PLfOCY+kVQefRCow2IfvQm1Q8hWyWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=conchuod.ie; spf=pass smtp.mailfrom=conchuod.ie; dkim=pass (2048-bit key) header.d=conchuod.ie header.i=@conchuod.ie header.b=AVPuxZE0; arc=none smtp.client-ip=74.125.228.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=conchuod.ie
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=conchuod.ie
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IU8yuekA"
-Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-85469a34907so1195717b3a.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 09:59:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=conchuod.ie header.i=@conchuod.ie header.b="AVPuxZE0"
+Received: by mail-ej2-f26.google.com with SMTP id a640c23a62f3a-c2940ef15d3so136492266b.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 10:24:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789750785; x=1790355585; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=wA4tmVoPxsXQFVURaD8KIg5IcFXnK99vMU7hA2iMDIc=;
-        b=IU8yuekAu5q+tTsseAnEQEUUrTv350/05We+lWT0Ue6w9rAvH30GMrJSXEfl4YMzV/
-         2IcdyROBQU7eLhwqPLdQjztFQ3v+2UUqNfd3gwx3RJJcYsPxcGVhP/kSHisDbU9h9mar
-         0NU2raPKg9UNtVJBzM8jOool9xihbj8enPt8Bfu+WXVT9+ilH6b4e6HuIevV+3q6HMLx
-         zJKjNTYBio6TnubLA2g+BgZUYNXakZTfdMCIoUWAg0bJr3UfUxXe8a0O0hLushlFoOhS
-         5H/O7JCLqMp/nlzuCpiNKikhyoCoKDhs5zv9Z1hB3D5jwIIEZKYYwV11p5n30koOXt+w
-         XBPQ==
+        d=conchuod.ie; s=google; t=1789752251; x=1790357051; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id
+         :references:in-reply-to:user-agent:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=Dvc/pEW/BAh9vZt3yE6d0wx7vktxXFNO+yS8WEG5HPw=;
+        b=AVPuxZE0Go4ylLpuXCX1B+XCYbodO6AB3mz+9eFeOkDcI+468csgyql7g13BThueD8
+         g3UQZNaKK0Qr51amDnZEiSKy0IHplH2YO36hEl47mL+KmkEfqot5jJDMgrNIuPudpi2J
+         A1AwOjquwvtZiED3jkQDOd517Njk6ymSPK9Kk01leRj9Eoqb+dHX4oiir6l7j5b6BGuR
+         oF8jhxSxCYCRw11ZX/mKPY96euvyYj+wIWVtnORZbRaLxx7dlQKkLssOoUBVIm6sQIZ8
+         UVx69qCJX+8Blq64+jMQxh3JNBhkPu721thAGkC/mwdzeYW9nt1h0eZW9CVaFmwGnvm5
+         yH3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789750785; x=1790355585;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
+        d=1e100.net; s=20260707; t=1789752251; x=1790357051;
+        h=content-transfer-encoding:content-type:mime-version:message-id
+         :references:in-reply-to:user-agent:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=wA4tmVoPxsXQFVURaD8KIg5IcFXnK99vMU7hA2iMDIc=;
-        b=ingnp2HDkz7nwnkH46vkd4u8JP4LIWhbfN2B+TW3ae2EbUDSUbBs6vN44Ojz8zigQ1
-         agQEa9HYcEcyNemc3fgjD9HWRHzRyUoqjpiMMxJICrI5Yfjq2238VmoJY/smWzGuiSS7
-         sj4p3ojwAwWh18erQto7X4IqL4dL3EduYF8fA2i8+I1PPwSFZSzO6hmvM6klpy+YYaV7
-         zvJCl0Wip5H6X8u10tC71v9NaugMdVQV1ZITTcA2uQ8L2BxdAnTzqObBAYniSdKWJ1PK
-         rM78NjR6cA7/rSs7GK+hK7C1TcIRIzplFbWCzGLM1bdjFk0Xa/VNGTFQj6NA6s0+kbfS
-         MJIw==
-X-Forwarded-Encrypted: i=1; AKwUvBxVIQ7foVH+eE1xQLGSMSTOohYGDANBRPRV/4n2kLe5n0Ew82OQBgcYD5ZmJJEgotXCacvdn8kLA2oj1w==@vger.kernel.org
-X-Gm-Message-State: AFuF++mQbUSw0O8LeKPwn1amwPiKIJyuWDoA5wE5FR+5nFkgmSk9rmOr
-	ssc6gBjYmMbB0U6/EB040Vc4lhjz6dS2W0G2XUceGzpl05uu9Zy8AUiU
-X-Gm-Gg: AYBFou3cvbavhqKqgyTUg8xRzKPwL1jcs4/qDkRmS48QY44USWB7E5q9mhsAHGnFgqT
-	29vNyjnTPY/MGePrznxLAHLHkRAe5IEvzmE/bFg0QUjltZS/BWG0+YIynfUy8VasnMlOo0p+U7c
-	26yUhNLfM7xzO5db6hCk/yyFPE9fjXVH0EiGPpp8H52SdYvOrlBm/fv3igAl8MmSA/x63Jl76L8
-	WjydDTjcM5r98bSa10yA+jIMSw/w5PMSF5RdShv5laRpzA5OylNxBRc1GJyjlDTY1Ux95wNKIJA
-	pg89P66z3h0C+HNd4t2p4mMXxHPC6xPkXe3h6N3FamOxViF9eUPpFU/00h4xofiV/YnKNi8r7Je
-	qQDKmLB4gwFjbB/uEZSz6rhcALVG9F4N1q0fWL2u+QtUi+VxNbRWQNcyhKynAWT73uzYqsqQrd3
-	XiMxPRyVH9x46mmOFDJ71BEvl6VlkdZJ64vI68K+8M5PSf/u8zY+nIYjBSt/DEK7dVEs+NQtaFH
-	3n9Kk7aPiLVQx8tgtcwMf3+
-X-Received: by 2002:a05:6a21:4cc7:b0:3dd:a196:69d8 with SMTP id adf61e73a8af0-3dda1967a02mr367760637.51.1789750784772;
-        Fri, 18 Sep 2026 09:59:44 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc5c50c821bsm1378768a12.22.2026.09.18.09.59.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 09:59:44 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 18 Sep 2026 09:59:43 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Jian Zhang <zhangjian.3032@bytedance.com>
-Cc: Iwona Winiarska <iwona.winiarska@intel.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: peci: dimmtemp: Retry unstable DIMM mask detection
-Message-ID: <26000aa9-86b0-4fd8-8bda-67f38372cdb7@roeck-us.net>
-References: <20260918031831.1937973-1-zhangjian.3032@bytedance.com>
+        bh=Dvc/pEW/BAh9vZt3yE6d0wx7vktxXFNO+yS8WEG5HPw=;
+        b=nQP4Ef/9JGBjWFIvGPQARNFyFXEeazmudk82KiUEaHKCJM/lXLAiXEP9cZpTH5j8dc
+         Q1hSMlmKsTj8veQ5v3/95nInFKi+j5u46vvG3dh6de9zt0Z6qt1rzyrYX5rPJm+VZnm/
+         jW3yP5TQ/wZG/iIcs9ELP6kotmKVVgHUIfv6BpEliP3cGNtX3LMh9VrKdsXys/qTD1TK
+         1rGArdW/1FUgfZ+WyddC/UOjvKYTgFNRrOcZOhqCO3EkQ5k8FjCRNuzjEXOgSmbHsUNd
+         X1CX6rIxGIbzU2vIpAl/vNM6+ziZuOnzfAJE5ol4K1S4sjMi/0zigQERzvBLMlz3+aIb
+         hgtA==
+X-Gm-Message-State: AFuF++lclWY8VVjCN79xZzoq+Y/ZWyQiofG4izRbcVSZ1sWgAZDKW3Rs
+	eIzHt3Dlgy3gdW8jVUblR+cG5nH1BOw3Xc1qqGoZHsMacIM71P04QjN5lI44lda8I8c=
+X-Gm-Gg: AYBFou28psL4eMNRU8KREWcAU3n2Xf9Nadr92Lin+sL9M6hxEulCKszD3c1YETmk1Kg
+	l+5EpMwuZ0TSfylVOODKYhaauohKqIip09tXAytSTDWMOtxWz84iwuuECyJ5L6BZ6ry22xkx29x
+	NSnmwcBOm6mHI4bwno7Q8/eEH44wHjwql5irTD2Lbwfq9wVbIr02ilcc/16yi9VaMBCHBbORxlN
+	+FD/JIWvAW2GF9ov+0WE5+M5rQu4ZcYhAeKZBr0DmevDTafkO5DUavb19TnnfBz4WswMXuKqSJN
+	YHcVfxiCntmcNmy9kxaLDs7osiHBBkmEmG1PuXFXCSitvmsCPNUTfFs5fE4hl8Xj4KGvy+OBfhx
+	+4j2Xj0PpWzVpO+Ag6G9N53gWvk7i2c4Z9ETWe3y6Otv9JdIIcNulLVptGpBTvby43FF24c/iyf
+	6MxK/Pt2wEXz9gX7STE11hBpD3IaW+/99oj/oWNkHTATI5LiSBBPpNmopxpsouLAAVDQ6u5ISEZ
+	r7xNrp4lCDnECPk+qHb7rZ3zXweFBgc0ZHNyRdEkTzlSizr2CojFVnFJ1+X1s8=
+X-Received: by 2002:a17:906:9f87:b0:c24:b11a:470f with SMTP id a640c23a62f3a-c2a152e3212mr337280966b.0.1789752251335;
+        Fri, 18 Sep 2026 10:24:11 -0700 (PDT)
+Received: from ehlo.thunderbird.net (ip-077-020-009-205.vkd66.pools.vodafone-ip.de. [77.20.9.205])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2a358868e1sm331666b.47.2026.09.18.10.24.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Sep 2026 10:24:10 -0700 (PDT)
+Date: Fri, 18 Sep 2026 19:24:05 +0200
+From: Conor <mail@conchuod.ie>
+To: Guenter Roeck <linux@roeck-us.net>, Colin Huang <u8813345@gmail.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>
+CC: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, colin.huang2@amd.com,
+ linux-doc@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v6_2/2=5D_hwmon=3A_=28pmbus/tda38740=29?=
+ =?US-ASCII?Q?_Add_driver_for_Infineon_TDA38740/TDA38725?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <dbd0a721-898b-4524-a0cd-c9751fd4bd68@roeck-us.net>
+References: <20260918-add-tda38740-and-tda38725-v6-0-a8b11018d850@gmail.com> <20260918-add-tda38740-and-tda38725-v6-2-a8b11018d850@gmail.com> <dbd0a721-898b-4524-a0cd-c9751fd4bd68@roeck-us.net>
+Message-ID: <2646A11E-8D13-4587-8027-1370E0007F36@conchuod.ie>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260918031831.1937973-1-zhangjian.3032@bytedance.com>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 18, 2026 at 11:18:31AM +0800, Jian Zhang wrote:
-> Add a stable DIMM mask check around PECI DIMM discovery.
-> 
-> During host DIMM initialization, PECI can answer the DIMM temperature
-> configuration reads before every DIMM has reached a stable ready state.
-> There is no separate all-DIMM-ready signal for this driver to wait on,
-> so a single early read can capture only part of the populated DIMM mask.
-> Retrying the mask check avoids locking that transient state into the
-> hwmon device layout.
-> 
-> The first successful scan is saved, and the driver immediately scans
-> again before registering hwmon channels. If the two masks differ, the
-> driver returns -EAGAIN so the existing delayed detection work can retry
-> instead of exposing a partial channel set.
-> 
-> Signed-off-by: Jian Zhang <zhangjian.3032@bytedance.com>
-> ---
-> 
-> This was tested on an affected platform where probing during
-> host DIMM initialization could expose an incomplete DIMM mask. With the
-> extra read, the driver observed the completed DIMM mask and exported the
-> expected hwmon channels.
-> 
-> This is intentionally a conservative retry of the existing detection
-> path. It does not add a sleep or force another delayed-work interval
-> between the two reads, so it avoids adding an unconditional probe delay.
-> However, this also means it is not a full proof that the host DIMM
-> initialization has completed.
-> 
-> I am not aware of an Intel-provided all-DIMM-ready indication for this
-> path. Feedback would be appreciated if there is a better way to decide
-> that the PECI DIMM mask is stable before registering the hwmon device.
-> 
->  drivers/hwmon/peci/dimmtemp.c | 28 +++++++++++++++++++++++++++-
->  1 file changed, 27 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
-> index bd3e8715dfec..983e1e415ec2 100644
-> --- a/drivers/hwmon/peci/dimmtemp.c
-> +++ b/drivers/hwmon/peci/dimmtemp.c
-> @@ -285,6 +285,32 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
->  	return 0;
->  }
->  
-> +static int check_populated_dimms_stable(struct peci_dimmtemp *priv)
-> +{
-> +	DECLARE_BITMAP(dimm_mask, DIMM_NUMS_MAX);
-> +	int ret;
-> +
-> +	ret = check_populated_dimms(priv);
-> +	if (ret)
-> +		return ret;
-> +
-> +	bitmap_copy(dimm_mask, priv->dimm_mask, DIMM_NUMS_MAX);
-> +
-> +	ret = check_populated_dimms(priv);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (!bitmap_equal(dimm_mask, priv->dimm_mask, DIMM_NUMS_MAX)) {
-> +		dev_dbg(priv->dev,
-> +			"Deferred unstable DIMM mask: %*pbl -> %*pbl\n",
-> +			DIMM_NUMS_MAX, dimm_mask, DIMM_NUMS_MAX,
-> +			priv->dimm_mask);
-> +		return -EAGAIN;
-> +	}
-> +
-> +	return 0;
-> +}
 
-I agree with the idea, but check_populated_dimms() already has retry
-support. I don't see why it would make sense to add retry detection
-(because additional DIMMs were detected) on top of retry detection
-(because no DIMMs were detected).
 
-Thanks,
-Guenter
+On 18 September 2026 17:02:38 GMT+02:00, Guenter Roeck <linux@roeck-us=2En=
+et> wrote:
+>On 9/18/26 03:23, Colin Huang wrote:
+>> Add a PMBus driver for Infineon TDA38740 and TDA38725
+>> single-voltage synchronous buck regulators=2E
+>>=20
+>> Signed-off-by: Colin Huang <u8813345@gmail=2Ecom>
+>
+>For my reference (waiting for DT patch approval):
+>
+>Reviewed-by: Guenter Roeck <linux@roeck-us=2Enet>
 
-> +
->  static int create_dimm_temp_label(struct peci_dimmtemp *priv, int chan)
->  {
->  	int rank = chan / priv->gen_info->dimm_idx_max;
-> @@ -322,7 +348,7 @@ static int create_dimm_temp_info(struct peci_dimmtemp *priv)
->  	 * All other states mean that the platform never reached the state that
->  	 * allows to check DIMM state - causing us to retry later on.
->  	 */
-> -	ret = check_populated_dimms(priv);
-> +	ret = check_populated_dimms_stable(priv);
->  	if (ret == -ENODEV) {
->  		dev_dbg(priv->dev, "No DIMMs found\n");
->  		return 0;
+I'm on holiday and only have my phone, and cannot find the binding patch t=
+o reply to=2E
+I found it on lore and it looks okay=2E
+
+Cheers,
+Conor=20
+
+>
+>> ---
+>>   Documentation/hwmon/index=2Erst    |  1 +
+>>   Documentation/hwmon/tda38740=2Erst | 65 +++++++++++++++++++++++++++++=
++++++++++++
+>>   drivers/hwmon/pmbus/Kconfig      |  9 ++++++
+>>   drivers/hwmon/pmbus/Makefile     |  1 +
+>>   drivers/hwmon/pmbus/tda38740=2Ec   | 64 +++++++++++++++++++++++++++++=
+++++++++++
+>>   5 files changed, 140 insertions(+)
+>>=20
+>> diff --git a/Documentation/hwmon/index=2Erst b/Documentation/hwmon/inde=
+x=2Erst
+>> index f07977a20271=2E=2Eaeff87b3d46d 100644
+>> --- a/Documentation/hwmon/index=2Erst
+>> +++ b/Documentation/hwmon/index=2Erst
+>> @@ -265,6 +265,7 @@ Hardware Monitoring Kernel Drivers
+>>      sy7636a-hwmon
+>>      tc654
+>>      tc74
+>> +   tda38740
+>>      thmc50
+>>      tmp102
+>>      tmp103
+>> diff --git a/Documentation/hwmon/tda38740=2Erst b/Documentation/hwmon/t=
+da38740=2Erst
+>> new file mode 100644
+>> index 000000000000=2E=2E55ce12f14914
+>> --- /dev/null
+>> +++ b/Documentation/hwmon/tda38740=2Erst
+>> @@ -0,0 +1,65 @@
+>> +=2E=2E SPDX-License-Identifier: GPL-2=2E0-only
+>> +
+>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> +Kernel driver tda38740
+>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> +
+>> +Supported chips:
+>> +  * Infineon TDA38740
+>> +  * Infineon TDA38725
+>> +
+>> +    Prefix: 'tda38740'
+>> +
+>> +    Addresses scanned: -
+>> +
+>> +    Datasheet:
+>> +      https://www=2Einfineon=2Ecom/row/public/documents/24/49/infineon=
+-tda38740-tda38725-datasheet-en=2Epdf
+>> +
+>> +Author: Colin Huang <u8813345@gmail=2Ecom>
+>> +
+>> +Description
+>> +-----------
+>> +
+>> +The TDA38740 and TDA38725 are single-output synchronous buck regulator=
+s with a
+>> +PMBus interface=2E They expose basic voltage, current, power and tempe=
+rature
+>> +telemetry through the standard PMBus hwmon interfaces=2E
+>> +
+>> +Sysfs entries
+>> +-------------
+>> +
+>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+>> +curr1_alarm		Input current alarm
+>> +curr1_input		Measured input current
+>> +curr1_label		"iin"
+>> +
+>> +curr2_crit		Critical maximum output current
+>> +curr2_crit_alarm	Output current critical high alarm
+>> +curr2_input		Measured output current
+>> +curr2_label		"iout"
+>> +
+>> +in1_crit		Critical maximum input voltage
+>> +in1_crit_alarm		Input voltage critical high alarm
+>> +in1_input		Measured input voltage
+>> +in1_label		"vin"
+>> +
+>> +in2_crit		Critical maximum output voltage
+>> +in2_crit_alarm		Output voltage critical high alarm
+>> +in2_input		Measured output voltage
+>> +in2_label		"vout"
+>> +in2_lcrit		Critical minimum output voltage
+>> +in2_lcrit_alarm		Output voltage critical low alarm
+>> +
+>> +power1_alarm		Input power alarm
+>> +power1_input		Measured input power
+>> +power1_label		"pin"
+>> +
+>> +power2_input		Measured output power
+>> +power2_label		"pout"
+>> +
+>> +temp1_crit		Critical high temperature
+>> +temp1_crit_alarm	Chip temperature critical high alarm
+>> +temp1_input		Measured temperature
+>> +temp1_max		Maximum temperature
+>> +temp1_max_alarm		Chip temperature high alarm
+>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+>> +
+>> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+>> index bcfdc4ce4c10=2E=2Ee4ca80dd0574 100644
+>> --- a/drivers/hwmon/pmbus/Kconfig
+>> +++ b/drivers/hwmon/pmbus/Kconfig
+>> @@ -763,6 +763,15 @@ config SENSORS_TDA38640_REGULATOR
+>>   	  If you say yes here you get regulator support for Infineon
+>>   	  TDA38640 as regulator=2E
+>>   +config SENSORS_TDA38740
+>> +	tristate "Infineon TDA38725/TDA38740"
+>> +	help
+>> +	  If you say yes here you get hardware monitoring support for Infineo=
+n
+>> +	  TDA38725 and TDA38740=2E
+>> +
+>> +	  This driver can also be built as a module=2E If so, the module will
+>> +	  be called tda38740=2E
+>> +
+>>   config SENSORS_TPS25990
+>>   	tristate "TI TPS25990"
+>>   	help
+>> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefil=
+e
+>> index e288fe72a437=2E=2Eeb06d47816fd 100644
+>> --- a/drivers/hwmon/pmbus/Makefile
+>> +++ b/drivers/hwmon/pmbus/Makefile
+>> @@ -70,6 +70,7 @@ obj-$(CONFIG_SENSORS_STEF48H28)	+=3D stef48h28=2Eo
+>>   obj-$(CONFIG_SENSORS_SQ24860)	+=3D sq24860=2Eo
+>>   obj-$(CONFIG_SENSORS_STPDDC60)	+=3D stpddc60=2Eo
+>>   obj-$(CONFIG_SENSORS_TDA38640)	+=3D tda38640=2Eo
+>> +obj-$(CONFIG_SENSORS_TDA38740)	+=3D tda38740=2Eo
+>>   obj-$(CONFIG_SENSORS_TPS25990)	+=3D tps25990=2Eo
+>>   obj-$(CONFIG_SENSORS_TPS40422)	+=3D tps40422=2Eo
+>>   obj-$(CONFIG_SENSORS_TPS53679)	+=3D tps53679=2Eo
+>> diff --git a/drivers/hwmon/pmbus/tda38740=2Ec b/drivers/hwmon/pmbus/tda=
+38740=2Ec
+>> new file mode 100644
+>> index 000000000000=2E=2E067de07ba9fb
+>> --- /dev/null
+>> +++ b/drivers/hwmon/pmbus/tda38740=2Ec
+>> @@ -0,0 +1,64 @@
+>> +// SPDX-License-Identifier: GPL-2=2E0+
+>> +/*
+>> + * Hardware monitoring driver for Infineon TDA38725/TDA38740
+>> + *
+>> + * Copyright (c) 2023 9elements GmbH
+>> + *
+>> + */
+>> +
+>> +#include <linux/err=2Eh>
+>> +#include <linux/i2c=2Eh>
+>> +#include <linux/init=2Eh>
+>> +#include <linux/kernel=2Eh>
+>> +#include <linux/module=2Eh>
+>> +#include "pmbus=2Eh"
+>> +
+>> +static struct pmbus_driver_info tda38740_info =3D {
+>> +	=2Epages =3D 1,
+>> +	=2Eformat[PSC_VOLTAGE_IN] =3D linear,
+>> +	=2Eformat[PSC_VOLTAGE_OUT] =3D linear,
+>> +	=2Eformat[PSC_CURRENT_OUT] =3D linear,
+>> +	=2Eformat[PSC_CURRENT_IN] =3D linear,
+>> +	=2Eformat[PSC_POWER] =3D linear,
+>> +	=2Eformat[PSC_TEMPERATURE] =3D linear,
+>> +	=2Efunc[0] =3D PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
+>> +	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
+>> +	    | PMBUS_HAVE_IIN
+>> +	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+>> +	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+>> +	    | PMBUS_HAVE_POUT | PMBUS_HAVE_PIN,
+>> +};
+>> +
+>> +static int tda38740_probe(struct i2c_client *client)
+>> +{
+>> +	return pmbus_do_probe(client, &tda38740_info);
+>> +}
+>> +
+>> +static const struct i2c_device_id tda38740_id[] =3D {
+>> +	{ =2Ename =3D "tda38725"},
+>> +	{ =2Ename =3D "tda38740"},
+>> +	{}
+>> +};
+>> +MODULE_DEVICE_TABLE(i2c, tda38740_id);
+>> +
+>> +static const struct of_device_id tda38740_of_match[] =3D {
+>> +	{ =2Ecompatible =3D "infineon,tda38725"},
+>> +	{ =2Ecompatible =3D "infineon,tda38740"},
+>> +	{}
+>> +};
+>> +MODULE_DEVICE_TABLE(of, tda38740_of_match);
+>> +
+>> +static struct i2c_driver tda38740_driver =3D {
+>> +	=2Edriver =3D {
+>> +		=2Ename =3D "tda38740",
+>> +		=2Eof_match_table =3D tda38740_of_match,
+>> +	},
+>> +	=2Eprobe =3D tda38740_probe,
+>> +	=2Eid_table =3D tda38740_id,
+>> +};
+>> +
+>> +module_i2c_driver(tda38740_driver);
+>> +
+>> +MODULE_DESCRIPTION("PMBus driver for Infineon TDA38725/TDA38740");
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_IMPORT_NS("PMBUS");
+>>=20
+>
