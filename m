@@ -1,195 +1,134 @@
-Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outbound.mr.icloud.com (mr-2006k-snip4-3.eps.apple.com [57.103.70.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC8C331EB2
-	for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 17:32:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B1DC44AB91
+	for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 17:50:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.70.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789752742; cv=none; b=Jy9PfNi+XOb75gVsEAo+KYI61CEsymTno8Svdqrfww6KIuifs9iEwqEnOAhMDxGG3faOsBlT1dIvW10ZCc8QEyXFYwqpVNymibzWaZJD0IignX5FjwWZEtpt+Gfp0yjgKW1ZLPce/8O7eeeZUuedXDkCOmQrB+k5tJz0dDqB4WY=
+	t=1789753863; cv=none; b=rTrKE+rhyxnJFvKvKNgx0G4/4cst9OdDkFLigMEplZ26E6yiAr8GPZa8q5rIcxedZl234piyiGQmrsdAVPDT0wsQajCLnqxG1j1ml1LWjbH7IhGWLkYIEtnTztywUw6P80tDOlX7bLA7p9oaLJeqqicgch7wolKSewPBnmCFjY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789752742; c=relaxed/simple;
-	bh=6FfrmzjH54GEcJ1wWK2iIQb91lI6OlRWrtkK0i6oGQ4=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=JkeXIRgeaPMuNIfwuBl2WN2lCHqMPLkwVjzTPMrXKr1p0Rmhcht+B2/thQKSxqvBiBAw9PNKpv9FVf3GvN2Tk+fK5oixXeCWccCAMObLI4VV0ukgpCUxzX7sz+Sa+qZEZKZ8ndOV+mq984V8azPgnWI3PhaD2ltd5m9zpyJveI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y0a8hqOj; arc=none smtp.client-ip=74.125.228.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789753863; c=relaxed/simple;
+	bh=A93bCpZEXHWwqVdlXoq9rx/HLy+Km47fXSQCnjgX3Hw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=i4jP6iGFF4wsyszRXo1Hw4FkqYW3YuPVs3f70elD5u/uiRdQ6oPBxurt/2vv+CwGMx7yW/XEvMs1JjrMk0rWomZjJ5nsIyDHJEejcAcxW2vz0gykpjTT7cu+M0B8Q5k+SxB9SDztMZMS20gC4QcJ8zB0mnY06Q3iaCZ24ZiAKFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brough.org; spf=pass smtp.mailfrom=brough.org; dkim=pass (2048-bit key) header.d=brough.org header.i=@brough.org header.b=fZ87l67w; arc=none smtp.client-ip=57.103.70.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brough.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=brough.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y0a8hqOj"
-Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc4d04d73b8so808874a12.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 10:32:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789752732; x=1790357532; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt
-         :content-language:references:cc:to:from:subject:user-agent
-         :mime-version:date:message-id:sender:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=GBzAIA75tY6+1ABqxWJzAnAi665MvkZni2otJtamYAI=;
-        b=Y0a8hqOjSpKfMvcts1WbdVVBbRVjZEtNxApeWheJ/K5qEtz/KckIyjlgbQMCR94Yz0
-         sg+TomiPVw7Yk2wnXYXaQQPRszYK4gD5Sb/aQQ7ncrupdCD81CSA1YoqrRSEdM/+kMBl
-         Y+ruEcV1KZXGTC/OqEUrXPeWj1eopkytFZX9uX/KVlBWKY+g+4LsPRUcYfz5NtrA8PI/
-         5KpzV4ZAyIiFnhqjGpbJ76XvuWZicIv2BLETGz2FfmeUYqYuBh7rW8kwyYz97X+VM6lg
-         CQCUEavsDvS0HruBHZ1YOLOHSUo1cl1gl3Jnbk/x8WkiI6WpLds6pPI+d5ZHuCkPugFJ
-         RsTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789752732; x=1790357532;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt
-         :content-language:references:cc:to:from:subject:user-agent
-         :mime-version:date:message-id:sender:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GBzAIA75tY6+1ABqxWJzAnAi665MvkZni2otJtamYAI=;
-        b=z7ULv2STOYJ6TG6v3qnGSYNvT5O/BdML3g4J2d+yeGFyLD8CofBiaq/cb3Isudodos
-         gemlQvfCPQbqu3WxxIAsw7g8wQ2Cjo1eLWQZ0mlhtN5oXKNDUidVFfwG8hf3AhS8nDik
-         klHi1ftkOPw6XzHvaoJ0xPjD+jUCGuPFMBpCcfKJVs5guGRnFEy3ckXGrQKw9+L5jXFj
-         SChi9GNbrntk9HYa81kwU151A1A6FTdzcqwUx4HadM0bPBHguD69MUONcpBbeGdGAKbC
-         iB1mB9HEczr4dT6DGo4I1ROZM6FbWB0RFlv/soSiMtdYXZfg6LxEDpY8KyqLvaGkHD9E
-         Fn4g==
-X-Gm-Message-State: AFuF++kt+gwLDKiXZf7cW0LjPtW3QGv88XeVAcH3361df8oQP4gqZ6bL
-	xp8wDIRj2XoDkhUqQpRvVaVhSt6zz6NDlNdRvAVDs1vbOyJ/gcefkAY0
-X-Gm-Gg: AYBFou3VWjq8X+s++ghKw1zn/UEkNBJtt6qY8ERCAjryWOgkTThERNtEf0iJa91fCTB
-	dsNv2us6hMFgF5piMZ8t5TBTyKPFb9VMJukv1mmJdavBCYh6EjE/MeNirbevLYT4mXBC95dFXy/
-	6x/b0Uaz2eD+HpGPIk4s6JkK6w7lCOepxCkr9BwjI7mYr2rqDuiNiZqHISdEp4ZWNrvJd7APbLG
-	Erv60TgV03kn+lvbIsaN2tPCvgGqbmGPHRPknORonFYI5LAWQMR7CdD80gLKAtX2mBJEpX/2g0o
-	2TTsDQWLXu0KKo2gHtDt2CEKx/f7UF/g7BiciYGWrSENDE2ySreanMO0bGiLE7Ifc/2/ESIQVe+
-	xwgi5GGTgvsiiC24zYxP5oQuFZkPRPCd5OykSO0RkkGN9P0+EX62rHDZ2W45GXiYLlHsCvNwpQ/
-	09Z8aRIMIEhV7tJN3YZTdvYxWVcaEmi+Y2lAWbSDbJnDzPRPzVAyQfhO9Y1Dg8RRoLmwMnRNift
-	8xy1kWRXhNuGS7IAQM1cbKF8/h+iqEWFUoXEB/l/zhdLzCs
-X-Received: by 2002:a17:90b:2f47:b0:39d:eca2:5c81 with SMTP id 98e67ed59e1d1-39e54b19f9fmr7592828a91.8.1789752731861;
-        Fri, 18 Sep 2026 10:32:11 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e6c37c8e7sm465970a91.9.2026.09.18.10.32.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Sep 2026 10:32:11 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a81ad111-43e7-4afa-8b2f-f75f5b47115a@roeck-us.net>
-Date: Fri, 18 Sep 2026 10:32:10 -0700
+	dkim=pass (2048-bit key) header.d=brough.org header.i=@brough.org header.b="fZ87l67w"
+Received: from outbound.mr.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-west-2a-10-percent-0 (Postfix) with ESMTPS id 6402A18000B4;
+	Fri, 18 Sep 2026 17:50:54 +0000 (UTC)
+X-ICL-RepId: 01a0b5a4-8969-7398-8984-51306ad7d757
+X-ICL-Out-Info: HUtFAUMHWwJACUgATUQeDx5WFlZNRAJCTQhLBUMEXRxIDlYCWwdLVxQEElwfUwpcMFsKXBhQAxwfSx8TC1NWUAJWDVQFGQRAFxkKUFAOS1oVVRcOAkIfUB9MFldDWhkcGVoUXBhTRVEfVFhDGUVWaUELTx1dGVscQmRYVwkKCUAfTB9bQ1gZVVBUEVdQC1kCQg9IClwPWgVFCU0BQw9eBkYIVQJAXQRAFFgWcw9FBEcXUVZcH1BVEgRACFZQVB5BBFYVbAlYBlMZVw==
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=brough.org; s=sig1; t=1789753856; x=1792345856; bh=Q53xC3A/SzIHxMkADXMrb47M9Wcqy5c7S5T6BoqbM3U=; h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:x-icloud-hme; b=fZ87l67wl4MQLY7tB/MmsawPy8wUv5RbIXqkVj1UxdGLF4Jwg2N6F5cbS+/7YcIdv7L7TN6cyE6Ee2MjcS/wTbmI+XoEHgHuhEqnkHEFNeObUYJ5Sat/7AYJTTjVsPoiDeAzKdXXZ8JOS0d9l8Jger2YHx1GlSnqzxvgbDJvX41vcCx0bVIs9LIT65b4ULwIou7mQsdh2HzwF35Ig6XaPv3SrBFU9X3439ieST+1M1hlgb5d4AyUD5rXtyiIFMX9+ELqGLu3jo/U+X0uGrVX7lXwCWwEHzw6grjNLwKfOrGpSCjAhk9CtkIU3Mzr1H3bxhy80OfkXxm9AUrUVd8Ryg==
+mail-alias-created-date: 1646594351620
+Received: from jb-desktop (unknown [17.156.200.36])
+	by p00-icloudmta-asmtp-us-west-2a-10-percent-0 (Postfix) with ESMTPSA id 61A45180012C;
+	Fri, 18 Sep 2026 17:50:53 +0000 (UTC)
+From: Jordan Brough <jordan@brough.org>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Cc: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	Henrik Rydberg <rydberg@bitmath.se>,
+	linux-hwmon@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jordan Brough <jordan@brough.org>
+Subject: [PATCH v2 0/2] hwmon: (applesmc) add charge_control_end_threshold support
+Date: Fri, 18 Sep 2026 11:50:50 -0600
+Message-ID: <20260918175052.85461-1-jordan@brough.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] watchdog fixes for v7.3-rc4
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-References: <20260918162041.18444-1-linux@roeck-us.net>
-Content-Language: en-US
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
- oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
- VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
- 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
- onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
- DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
- rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
- WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
- qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
- 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
- qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
- H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
- njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
- dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
- j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
- scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
- zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
- RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
- F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
- FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260918162041.18444-1-linux@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Authority-Info-Out: v=2.4 cv=JcaxbEKV c=1 sm=1 tr=0 ts=6aad79ff
+ cx=c_apl:c_pps:t_out a=9mRn2PO/+PIrVdEbaIuMPg==:117
+ a=9mRn2PO/+PIrVdEbaIuMPg==:17 a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=gFGppuTrAAAA:8
+ a=KkmlWvqn9QTkv74mO74A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=_Y0xhhAoguY4gwfEQMhp:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE4MDI1NiBTYWx0ZWRfX48U7TXftgdJY
+ x8TNAsXrnDJlGiw3LBUDr9X/t7Opg1J67RBa9NRLVZwH8A3CBskm4FBOgqyvSRwhxet8wkmdFWd
+ PAVuEyPkuOgguimQJCTezGr97bSC4vWRw6gRsDzVu9AlQpas4ZBKN/2zd5P0Es5iQQDGlp+2gAf
+ 9TvOqSFnf6s8wGl2dMgDVcmYMO5Yxv9diqX0raZPO7qxcLWDCLJq9A4Xc30hRZPQ0WlbeD3UK4m
+ kbxG6p9RW5Ozolsu77vkd0VK60xK1rsMese7LcdQWJdLJJH4lmgTJxlf3gUtOUcRXYIALz2glHt
+ cw88oT8uKl8v3j3+lV7V14V5yDnRcc5Ouf0BYpE8ABC/xVHDAlJsT16Ba0M7Go=
+X-Proofpoint-ORIG-GUID: YAe7-runcocFiPAgCfxOoHJZDiiZnojF
+X-Proofpoint-GUID: YAe7-runcocFiPAgCfxOoHJZDiiZnojF
+X-JNJ: AAAAAAABlqB8QIcVnpNAWCxnkzpOqdlvbS0vDyUxj28VgthQYptqGCQrg65icP62ei59L/lL2unulkpcA1gvs/HBZWW37IDmBPwlUyod7p6aWhCvqE1qlygKgRQgkU4kgzocZy6GR1+EtMe8TmXlyNJETwyJwc6hVNvvEV+oOxCfm56zkNFrxy1/Vi8t+FOkgDfN2MOH5I1LUlCWb+0UAqYk6JfPBcIfyLhwj9+X0veVOuTgwCz1HVyR9wFUzMaHn+pPh6WR5Fb6cku35mDoZJVfQ4rmWO+SuWvPazhGuCOtMIOSY1vwf/jzCNShgOCe1rWtbJcHoPUAXdOXCQCjqo8bGXx9R61SeNTwBJrqYfk4m48lSIdJQN1O9uQa+W7XuhYtF+gsfMTgwOSoeX2/lMqPWvqnSKQYqVtpI6pILx/IvoY8T39EBwGiTCTSrU5lMyMk4gOPJT2I0E9Wh6GNiC6+5NYdt0iGvvOOOLsjH0l2JZWITuJuT0zTYGNGXiNZDkB6vviAYqSjFZCtjRvmEQSuU9nStF6FttyUlQHELwPQ4FXcyEwTnxcvlBjBoKX3NGVrXJOKu7mGm/KmGW0o8pXxs8zWiWuZ9L/YFrVbWxDxcwPXMAPjczrkbokBkDvS37CkeV5o17UM0PxPhOa5/c8w1OU3qPSacDjlTwa4OfFBfixaEg5YmnvcWw4kddd9j7iJ1LGuAvFFDJ6NU/+4DWHPlhIlh1ZWV+Wv74ItZ7mc25+gty30vdwTseNp0v4YkNOSMdMkA+fU5LyZxKMHbbH+r6IfNZ1FkyHfsuMZYKuPSITNv7LQcHBlX5LWgy0QArNDiKrMsHQpsvZ+j2cc6dOhYqJhQJGnyLvyyXWzhNJQHmWfvZJImmLBlT6KRHbzhMjxVWgDTNV6SnoF/fXsc51gziXHyUwkkr6zHOtJ0arXOyaWnf8KiNl1opvM2wuk/TwNpUd7gYUIUisO0Ny5FPl5oLhOlbP
+ t2ljbYHnAupAOUf1nB2zXBvb59DcCT6Ra1JkZs3J/TolL9kGSQUoBb6TVwORlYPRKjRqQ2U3A/4JvaULd/DRL2WPcWQlp4gY7krZNrlM9AeCs+idjMcyMGRJZWiVpEykOkbOhUMo0py+Bg4PZnBcdUUt9rUMVL061BdChHUa0Ys+rnX+DnQYaSOGccHwBP3WeNm0XsXbiTBihwhefiXq7ZR35g+HAhywxG7S/FgHypeCCYV+tLomMIq6hodYIpgZn5d/oCQ1njqT+vbs2vFvdbKzdy08lzN+s0zHWmfNAVRFO/B4IzegiL5HzveF/JWd7lIbCjRFrydCzlfjYtsFkRHXRMbFgQvBSE8SPY1Jox1yrS6m+lTtcojwtCU0S/nw=
 
-On 9/18/26 09:20, Guenter Roeck wrote:
-> Hi Linus,
-> 
-> Please pull watchdog fixes for Linux v7.3-rc4 from signed tag:
-> 
->      git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-fixes-for-v7.3-rc4
-> 
-> Thanks,
-> Guenter
+This patch series adds battery charge threshold control support to the
+applesmc driver for Intel-based MacBooks, exposing the standard
+charge_control_end_threshold sysfs attribute on the battery power supply.
 
-Hmm, that was supposed to be copied to linux-watchdog@, not linux-hwmon@.
-Sorry for that. Copying now, and, yes, I know, I'll to fix my scripts.
+In v1, separate SBS battery hooking functions were introduced in sbs.c.
+Following reviewer feedback from Thomas Weißschuh, this version unifies
+the ACPI battery hooking mechanism across both ACPI Control Method
+batteries (drivers/acpi/battery.c) and ACPI Smart Battery Systems
+(drivers/acpi/sbs.c) into a shared helper in drivers/acpi/battery_hook.c
+built directly into the ACPI core (acpi.o).
 
-Guenter
+The public consumer API signatures (battery_hook_register(),
+battery_hook_unregister(), devm_battery_hook_register()) remain unchanged,
+so existing drivers require no modifications while gaining the ability
+to hook SBS batteries where present.
 
-> ------
-> 
-> The following changes since commit fd73f4a6659897191fa0d40695fe370925dd3780:
-> 
->    Linux 7.3-rc3 (2026-09-13 14:38:02 -0700)
-> 
-> are available in the Git repository at:
-> 
->    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/watchdog-fixes-for-v7.3-rc4
-> 
-> for you to fetch changes up to 7cb575b71ab98194d2e040bded3a7281e089c5ed:
-> 
->    watchdog: da9063: fix suspend/resume handling of HW_RUNNING watchdog (2026-09-18 08:10:45 -0700)
-> 
-> ----------------------------------------------------------------
-> watchdog fixes for v7.3-rc4
-> 
-> * da9062, da9063: Fix suspend/resume handling of HW_RUNNING watchdog
-> 
-> * digicolor, rtd119x, and rzv2h: Avoid division by zero if clock rate is 0
-> 
-> * msc313e: Fix premature reset during timeout update, and propagate error
->    code in resume()
-> 
-> * sp5100_tco: Fix pci_dev reference leak in sp5100_tco_init()
-> 
-> * starfive-wdt: Fix runtime PM leak in starfive_wdt_pm_start()
-> 
-> ----------------------------------------------------------------
-> Li Jun (2):
->        watchdog: da9062: fix suspend/resume handling of HW_RUNNING watchdog
->        watchdog: da9063: fix suspend/resume handling of HW_RUNNING watchdog
-> 
-> Tzung-Bi Shih (5):
->        watchdog: digicolor: Avoid division by zero
->        watchdog: rtd119x: Avoid division by zero
->        watchdog: rzv2h: Avoid division by zero
->        watchdog: msc313e: Propagate error code in resume()
->        watchdog: msc313e: Fix premature reset during timeout update
-> 
-> Wentao Liang (2):
->        watchdog: sp5100_tco: Fix pci_dev reference leak in sp5100_tco_init()
->        watchdog: starfive-wdt: Fix runtime PM leak in starfive_wdt_pm_start()
-> 
->   drivers/watchdog/da9062_wdt.c    |  4 ++--
->   drivers/watchdog/da9063_wdt.c    |  4 ++--
->   drivers/watchdog/digicolor_wdt.c | 13 +++++++++----
->   drivers/watchdog/msc313e_wdt.c   | 16 +++++++++++++---
->   drivers/watchdog/rtd119x_wdt.c   |  7 ++++++-
->   drivers/watchdog/rzv2h_wdt.c     |  7 ++++++-
->   drivers/watchdog/sp5100_tco.c    |  6 +++++-
->   drivers/watchdog/starfive-wdt.c  |  2 +-
->   8 files changed, 44 insertions(+), 15 deletions(-)
+Patch 1 extracts the shared hook mechanism into
+drivers/acpi/battery_hook.c and integrates both drivers/acpi/battery.c
+and drivers/acpi/sbs.c.
+Patch 2 adds charge_control_end_threshold support to
+drivers/hwmon/applesmc.c with mutex synchronization around SMC register
+writes (BCLM and BFCL) and error rollback on extension registration
+failure.
+
+Testing:
+- Validated on Intel MacBook Air (MacBookAir6,2) with ACPI SBS battery
+  (BAT0): verified sysfs threshold read/write, KDE Powerdevil UI
+  detection, bounds checking, and hardware MagSafe LED transition between
+  amber and green.
+- Validated on Lenovo IdeaPad with ACPI Control Method battery (BAT1)
+  to check that existing in-tree hook consumers (such as ideapad_laptop
+  conservation mode) continue operating as expected.
+
+Changes in v2:
+- Unified battery hook infrastructure into drivers/acpi/battery_hook.c
+  built into acpi.o, eliminating duplicate hook logic in sbs.c
+  (Thomas Weißschuh).
+- Kept public consumer API signatures unchanged
+  (battery_hook_register/unregister, devm_battery_hook_register).
+- Added applesmc_bat_lock mutex to serialize BCLM and BFCL SMC key writes,
+  preventing concurrent write desynchronization.
+- Added mutex protection and error rollback in applesmc_battery_add()
+  to ensure applesmc_hooked_battery is safely handled if extension
+  registration fails.
+- Added mutex protection for applesmc_bat_get_property() / set_property().
+- Note: v1 was acked by Rafael J. Wysocki; the Acked-by tag was dropped
+  from Patch 1 in v2 due to the architectural refactoring into
+  battery_hook.c.
+
+Link: https://lore.kernel.org/r/20260913231410.416922-1-jordan@brough.org [v1]
+
+Jordan Brough (2):
+  ACPI: battery: add unified battery hook mechanism for ACPI and SBS
+    batteries
+  hwmon: (applesmc) add charge_control_end_threshold support
+
+ drivers/acpi/Makefile       |   1 +
+ drivers/acpi/battery.c      | 165 +-----------------------------------
+ drivers/acpi/battery_hook.c | 112 ++++++++++++++++++++++++
+ drivers/acpi/sbs.c          |   8 +-
+ drivers/hwmon/applesmc.c    | 157 ++++++++++++++++++++++++++++++++--
+ include/acpi/battery.h      |  10 +++
+ 6 files changed, 285 insertions(+), 168 deletions(-)
+ create mode 100644 drivers/acpi/battery_hook.c
+
+-- 
+2.55.0
 
