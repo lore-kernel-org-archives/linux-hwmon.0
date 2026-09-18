@@ -1,124 +1,103 @@
-Received: from mail-ej2-f12.google.com (mail-ej2-f12.google.com [74.125.228.140])
+Received: from mail-pj2-f42.google.com (mail-pj2-f42.google.com [74.125.227.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85404A8431
-	for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 08:24:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDFBE54707D
+	for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 08:41:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789719849; cv=none; b=sI8xpdgxj9tycDDgQzeNHc7gmp+5tpyaOAUAOGxRE1iKAA5dvO0u97+1hmRyOr/OXLcS7q6tSDgG7/qwyBHjcOqOvsfsd0wfrjv7w73M9xDThqwQ9pV34cyFszMCbwpdgT9PJ9PW1NVndAgVFj84fzvzA/dn8BP5a/562J6/FYc=
+	t=1789720874; cv=none; b=T4kj46+0AQDsNHSKwtISfq30n2D7JoDuj7BrftwToLpvIBq+93oPzHLhPzoa7ASfnWmKLKisYavqv2YxJgmEN8PRw96Ovq2r8BkIQ49vMP2WOOlHd50XDAWTs+Rm9VTjb5rbWRVPLHatUh6Xyl2Ph7FQtm35Fs9HtG7rtSPIF64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789719849; c=relaxed/simple;
-	bh=0ORtPf5rfrOcpgyi/FO05MAHQySi4ZeH+yKwjJ5NuVg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=t0TbBVNStekREDm5TwIXFbT6BczN6rBUuVTDwja7/gRi+44Yo+nHe+2fAL4GkXcrYlDmblVX38qaPcWBKWHKpm+RoNss3eBJYogeT2Ab2iU+Obhy4o2erJGODYLS+T3JUJxUqlXFB4RmoIu5FnhE/yaU94m9Fme4GJrJvSISl/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=r5dN5UKT; arc=none smtp.client-ip=74.125.228.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1789720874; c=relaxed/simple;
+	bh=WrikJip0qJOgok3Qs2ZtaWrzosdRo3ElwXEOugSPauE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iHJlW6j52DX0SLJNu+fsvr0I5ZxKjTCgiEaPqGjIr4KU0eyCSNOaiKvGd536CwFaKCj52/KQuFhqA0QHmtW/FOjVxg+qCgSE6QjPBfYgOJqPELb3K1gmDyasq6VEjhmaP07H3kIBD12Q+AEeAPpxQfFCHr3XOUxEHMHZISHVFxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g0KjbbkF; arc=none smtp.client-ip=74.125.227.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="r5dN5UKT"
-Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c293c683202so61557666b.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 01:24:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g0KjbbkF"
+Received: by mail-pj2-f42.google.com with SMTP id 98e67ed59e1d1-396ccc09d65so479398a91.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 18 Sep 2026 01:41:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1789719846; x=1790324646; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=0ORtPf5rfrOcpgyi/FO05MAHQySi4ZeH+yKwjJ5NuVg=;
-        b=r5dN5UKT5wfIItQgqltovZCKdP6Usucx4w7xOge6GyKE1gyKIanLqslLmo+QYJGN5X
-         3toO7A6j1iBDwk1wOzoaucVHVP2c4OH6bSqnZ5RQwySz89ev0tu8c5kzrcKtt/6jL0C5
-         yp+AyhidBLMOJE/V8rTQ3DI+pZPXUizTfHiLmFBI4vC1V6V/WFh9jSIFWuPbMPo+5e45
-         1FtScQH+giAYlCVU8PRqHBwNNEQotbaNdPab0hoD6r+jlHJB/iz7baVIfGSiVi5qMIb3
-         FazHilzpnzSXPDlV3sDUoSBzhl27hLC8feqNgyc0Jf0zLiQX5X7KcLYAVhyy7HMT18D/
-         Dl4Q==
+        d=gmail.com; s=20251104; t=1789720872; x=1790325672; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=3c072zXp/Vpm7bvY0KHx0Qzz0xCebd4dsUebv1vmGqU=;
+        b=g0KjbbkFqTOq/rusBan+flMeOnWuZH0usHBSdl7kLsnCs76mW3XYe8mYwvsoNX4odA
+         6RDtwfHjLdLP8rBzipWGFzfVQM6EbHMG9HjLgM9aCFzYojQiK+/ybk9cGweX1wiPjuLT
+         T1KvJDOFwcmc4YHCMxz0MJAV61mbfP40W1OSNgAGfMwi/AUtzMZTAb1lmbM6Xuxje0eD
+         tiJEwgR04hbih5/t0bHWj0kboH2k7yW4eq2apBygmTMAXPGPZAM88qeKzXNi+JCoxEO3
+         yAMn/671NQdUbB14FiqUgjse1PrDETeGm/+xeRHB8OEAkI8JNioWGtnbTgjxPrpdZka1
+         mcNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789719846; x=1790324646;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0ORtPf5rfrOcpgyi/FO05MAHQySi4ZeH+yKwjJ5NuVg=;
-        b=ZHrTA5rIr/1tHnUgiIReUjuXkM+XNcsnmOJx5skC6dKivhTLbPAz9OWHq0LZkdKb1x
-         6ds9Y7X5qwNEMZmPCuQQZOiKOeIsjxHSbawZyemr8RGW190n+wxfLsblMzAo6B6qmyVM
-         1icbTxWv00t0+79udCIZYWFNVIQ2lS7WkA0M4lMMnyQebBawwBacbbJSEuWJRLQSwft9
-         GKnPjqgw/Chua8nPNr8wE2k4DX4lontYANIA3rxRe8EqUl8SzQTlHGl6Tw8ENaq4wmaX
-         H8vAS7gXfuHTCDyEBHdstiZviKHG1DT5GH3E8QOo9opx5ouByt4mBd+khR42wDtWM6nj
-         Sktw==
-X-Forwarded-Encrypted: i=1; AKwUvBzmF68lZgfOHLWitpnv0xtubcg3AnruTwVQwq3o1Ubc4boTZMUDHnkZZ1H7E2beTW2ozGlFWNB/NNOd/A==@vger.kernel.org
-X-Gm-Message-State: AFuF++lx2mDMVVPg4lTUAeNZpK1FrDsqgWamxtybMAj9PyJgIn6gjdyp
-	y/sbz0UA+DPpMquyGkmWcSQ2soZ+wbT748ZoSkGC5v3csmEoZeZ1mPBSIzuN/nueZj0=
-X-Gm-Gg: AYBFou22WhrLQ3KVp1eJfy00rk1EyWEZmJdGSDFtxBk0duURMZBXL0WaVMUZ+2nj3l2
-	cCJUw4jC9mY+WkGyuNLMHxApcDZ14tXfN6irDleBfluUhk/8H6EFas17K0sDNKqedkDMN88vcvm
-	d7zqSHV5S8zHMaE3B5RtQL6vm0/T+a8GWtWY5ZQnnSqQYxZ4nAKdFwvaoAgr6WNyW/dLldoXHCy
-	ctRjzPAu4h7FLmVSSfG8fjAqZpqRaUQi5JlG1Ax9n7gDbzYZBMuh39qF2cdB9OpUPTTcYWsgcvk
-	Mkuiu8H1+a2w4VKJYgiYOG5qfATNOl9HP7d/kSYPTqhs/pbQ7/Ybe2faz8smzULpXGXYJuePPqx
-	RdvQgcoW/P2xQ4mCz1svcKwwwj1be6iXMz4Pr8BiExUDratY/3WZ5rJ4yupJKYsclp1LZv5PXNM
-	0L6GMqCWcY1DQlx6w1FaaTa99IXDTEkMXqMpi5tpuH2LgIAIN7KfVIiJfQ8AVdY61hYddgrTFX5
-	Bc=
-X-Received: by 2002:a17:907:72c7:b0:c26:3190:296b with SMTP id a640c23a62f3a-c2a15e7df89mr192409366b.48.1789719845848;
-        Fri, 18 Sep 2026 01:24:05 -0700 (PDT)
-Received: from draszik.lan ([109.255.181.4])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2a1bbc6aafsm33384266b.51.2026.09.18.01.24.03
+        d=1e100.net; s=20260707; t=1789720872; x=1790325672;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=3c072zXp/Vpm7bvY0KHx0Qzz0xCebd4dsUebv1vmGqU=;
+        b=rVctwjA2i22o/v23dMiKXqqt1gH1Um7TTFLmBQ1fOX2RYNjsCMms+0uI7nYWGrWd2H
+         mxl8uZjzitpOqJ072qLpXv0L97xlvi3KpXHgrHrAc732ZYuTVodWIwV8UEpBxPB1eane
+         AZOkA/nDiZEDiS61WkqqrdXPgx/oDANLm/clX5Bg5FMFkQ0xTae6VdL4lcDiepIljAiO
+         DsMcanAznA91P4sfHQyF1D/pfw/1ZmGY4meWjDLfK8hJ1/onCNVgZ9P/lNBy7RY3NuhH
+         eDBg/VcDY4RBjxjcEB8tf1qXufYnmQii3Yl06GfpRBUnvqTK1PqVO2qGCzGmM72vJlRX
+         YM7Q==
+X-Forwarded-Encrypted: i=1; AKwUvBylk+cFnVR2FU1Gqz9/UdQQj2Xukcbyeg8I9Ts2kSJJK4D2I10DuwG2Aoyj52CVZE63QYlFsgIOUMHS1w==@vger.kernel.org
+X-Gm-Message-State: AFuF++kycj86omz/NJKLzzwDbPqS+YEa2nnM/eIBIWpeYfRy8EAJGMYh
+	9q/WCoL0gue0EzfjWJvDGnFvN8P/8SCKYFiTyt8tNUxE9cHp/dfmL9jS
+X-Gm-Gg: AYBFou208pvyDix0VYwYWON8s2HHrhUK3HPFA5QDJuxF/1PjzPMdFkYyrkd3L1i4DoP
+	pdraSXZgX7t4zHfkiaNvGwi+XwCsfmQGDkmsB9Spylo9EvOMbOoXmLNTpnvg8S02n1zQYG5eYGf
+	FVVQqi2wvxKyJHCuUmMqUU5dlmCtlKd8YSWcf4OA31wmgbY6HnJGCNXcjGei2heDvM2vQ8OhDyQ
+	NBNGgdDZLAfdKMa981QptHPJdoBPGbnZQhz9FRkUBwZT4P87hanif9E3dgK7e7agmxZy/IQm5y6
+	XgeS8kpZRGuGLtAx80Zrto67GIrAdzN47AHzDpSeO/RdEKWSaj3kH4jFytSqHsJilHrvQj+MetN
+	hw5eySJjU4j0OTO5ndYmq5QA5r0kqGQ1/TncXNdIg9fzRjEa8C0vY7dRkzLUheea3N5aBBeoGiv
+	LMuDS3VtXUQyzZ/+HZHmcQHuudRTq0K1fQvkMhGMkAYAw7gqbNPoIrxg5V7ctwKpYcNXdE5kcmW
+	VKavGkszaj0jGuMcGqucS8ERMer4aUhK5wLQca1oA1hHKm25tR1/N4+QXsqQnkZhUEfewQ3wp3y
+	eg==
+X-Received: by 2002:a17:90a:e7d1:b0:39d:f2a1:31 with SMTP id 98e67ed59e1d1-39e54e77eb2mr4097035a91.17.1789720872095;
+        Fri, 18 Sep 2026 01:41:12 -0700 (PDT)
+Received: from cs00-MS-7C09.. (2001-b400-e35f-d966-bfea-f724-5ada-7374.emome-ip6.hinet.net. [2001:b400:e35f:d966:bfea:f724:5ada:7374])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e5a50d332sm2093716a91.9.2026.09.18.01.41.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 01:24:05 -0700 (PDT)
-Message-ID: <b567cb05cf1508be7474e2874d267d8e8a09e49c.camel@linaro.org>
-Subject: Re: [PATCH] dt-bindings: Expand flow lists to block lists
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Daniel Matyas <matyasdaniel006@gmail.com>, Lee Jones <lee@kernel.org>, 
- Ulf Hansson <ulfh@kernel.org>, Liang Yang <liang.yang@amlogic.com>, Miquel
- Raynal	 <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>,
- Vignesh Raghavendra <vigneshr@ti.com>, Neil Armstrong
- <neil.armstrong@linaro.org>, Kevin Hilman	 <khilman@baylibre.com>, Jerome
- Brunet <jbrunet@baylibre.com>, Martin Blumenstingl
- <martin.blumenstingl@googlemail.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller"	 <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski	 <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Bjorn Helgaas	 <bhelgaas@google.com>, Lorenzo
- Pieralisi <lpieralisi@kernel.org>, Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?=	
- <kwilczynski@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, Ray Jui	
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, Broadcom
- internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Will
- Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,  Vinod Koul
- <vkoul@kernel.org>, Thierry Reding <thierry.reding@kernel.org>, Jonathan
- Hunter	 <jonathanh@nvidia.com>, Liam Girdwood <lgirdwood@gmail.com>, Mark
- Brown	 <broonie@kernel.org>
-Cc: Jose Abreu <joabreu@synopsys.com>, Ray Jui <ray.jui@broadcom.com>, Scott
- Branden <scott.branden@broadcom.com>, Atish Patra <atishp@rivosinc.com>,
- Shawn Guo	 <shawn.guo@linaro.org>, Dmitry Osipenko <digetx@gmail.com>,
- Thierry Reding	 <thierry.reding@gmail.com>, Ibrahim Tilki
- <Ibrahim.Tilki@analog.com>, Okan Sahin <Okan.Sahin@analog.com>,
- devicetree@vger.kernel.org, Paul Walmsley	 <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@sifive.com>, Conor Dooley	 <conor@kernel.org>,
- linux-rtc@vger.kernel.org, Ricard Wanderlof <ricardw@axis.com>, 
-	patches@opensource.cirrus.com, Lukas Wunner <lukas@wunner.de>, Chunfeng Yun
-	 <chunfeng.yun@mediatek.com>, Eugen Hristev <ehristev@kernel.org>, 
-	dri-devel@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux@analog.com, linux-input@vger.kernel.org, 
-	chrome-platform@lists.linux.dev, linux-riscv@lists.infradead.org
-Date: Fri, 18 Sep 2026 09:25:27 +0100
-In-Reply-To: <20260917144028.459053-1-matyasdaniel006@gmail.com>
-References: <20260917144028.459053-1-matyasdaniel006@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-9 
+        Fri, 18 Sep 2026 01:41:11 -0700 (PDT)
+From: hsyemail2@gmail.com
+X-Google-Original-From: syhuang3@nuvoton.com
+To: Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org
+Cc: Sheng-Yuan Huang <syhuang3@nuvoton.com>
+Subject: [PATCH v4 0/2] hwmon: (lm75) Add support for Nuvoton NCT7715
+Date: Fri, 18 Sep 2026 16:40:39 +0800
+Message-ID: <20260918084042.19541-1-syhuang3@nuvoton.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, 2026-09-17 at 17:40 +0300, Daniel Matyas wrote:
-> Running dt_bindings_check returned:
-> [error] string value is redundantly quoted with any quotes (quoted-string=
-s)
->=20
-> The files used quotation marks in flow lists because the strings had
-> commas and these commas were interpreted as separators. Convert flow
-> style lists to block style lists, so that there is no problems with the
-> commas.
->=20
-> Signed-off-by: Daniel Matyas <matyasdaniel006@gmail.com>
-> ---
+From: Sheng-Yuan Huang <syhuang3@nuvoton.com>
 
-Acked-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
+This series adds support for the Nuvoton NCT7715 temperature sensor
+to the lm75 driver.
+
+The NCT7715 is compatible with the LM75 temperature and limit register
+layout. Its 16-bit configuration register shares the TMP112
+configuration layout.
+
+Changes in v4:
+- Split the Device Tree binding changes into a separate patch.
+- Allow interrupts for the Nuvoton NCT7715 compatible.
+- Correct NCT7715 conversion-rate initialization during probe.
+
+Sheng-Yuan Huang (2):
+  dt-bindings: hwmon: lm75: Add Nuvoton NCT7715
+  hwmon: (lm75) Add support for Nuvoton NCT7715
+
+ .../devicetree/bindings/hwmon/lm75.yaml        |  2 ++
+ Documentation/hwmon/lm75.rst                   |  6 ++++++
+ drivers/hwmon/lm75.c                           | 18 ++++++++++++++++++
+ 3 files changed, 26 insertions(+)
+
+-- 
+2.43.0
+
