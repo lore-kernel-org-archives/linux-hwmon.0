@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0815D3624A9;
-	Sat, 19 Sep 2026 07:08:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B83C5248896;
+	Sat, 19 Sep 2026 07:18:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789801707; cv=none; b=iPhD5+iZh+JQ1UxMAYrLf76//2nDjqhUcXjiU8FAyGYzPu9sY+/RMLwcP9yyqtTZWYFMOIHDzCf4VVOJHSMQaso/i5SIsHzdfx33hnYKQ7sa3HkS4b5mfi4OfCH02teTui6X21MYpZcFNYkGZ6vDlWZFErQ1Ah9WRvraZ/roxjo=
+	t=1789802291; cv=none; b=Hqy8d+vXXiJeMNgYJ/HYh4CXXpnYFWFEBdE3Zpglo6o92Fg7G3SXwDhpnKCN6vwc350shN8+VvMG2JTH/FHusvDKvX84+s20AoeM31Ii4RuAtoIfMPydVUKo/W0IQ/36O/k32Rcsh4z8n8/iG9pnZtNBd1durdcl5lZzSxA84yQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789801707; c=relaxed/simple;
-	bh=5MGz3WuTKdMlxJLz4fLHKYHs7Zt62FQYjI6usArljZU=;
+	s=arc-20240116; t=1789802291; c=relaxed/simple;
+	bh=og9oFIsBLTXKtM7j0JBwaE9f8eMA9zwdbswAtUq1aBY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LZjZGC9/jx1bFCCAjPaIhprbj3iauy7fEXpRw6ROzh+mIOc7V37XUl1PySyl9Th3/9gFQrph6zV7O9zt/2F8uR7NI4XXwnNFbi01ZkNMNEtrBpjxAwKQ0RiMUN6NtDhLAVX4+P4h6ux5zq94063RX5zOwTF8Y0x9Ifmippcq1E8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BCh+Q1fk; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=amJmEAvSjQBtgrbXZsWfFAYYIYqTciRGmZdmsIgvYF63mWJJuj9MzNTNLdWJ3V9gu4Lo3qKBkoc++dh7yNzI5SaWP83DGqWvPnDWYgIbQvb1uc7czQ69ShCH74NVZHlmdi3eM7Phu6tNNyT5ox+QN7pZZArAZ1hff4wvUiOjUqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=St1DgtTu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BCh+Q1fk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC9F41F000FF;
-	Sat, 19 Sep 2026 07:08:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="St1DgtTu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A9811F000FF;
+	Sat, 19 Sep 2026 07:18:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789801705;
-	bh=uhaSLRWxWnpOZ1hMGZ3P8vEzC790v0CsHkY9724kydk=;
+	s=k20260515; t=1789802290;
+	bh=Q2KJ1GRGgG8/UfjblCq/zPeFtdBEO8EqtBnNzvHL6KI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=BCh+Q1fkXZMtjVafQ5YGFV+h5db354VNq/ELCWyC4KkM9EOKXmUTlqgi+ma1wXozp
-	 DftsecIquMnGZU/bn7dlqfHB0SFowcKCtqYqFYBKKfUSA8s3K9Rsk5SMYPxnV+DeBV
-	 Y5Sj2gXory2ScdEG5Sx21lZEfxqdEdqZ9ssZyQau7j9QTMvL/H4vwGIsnSHVVKjlqr
-	 r41sO26J5aU+9ztpXEn5Q6cqRxLTKJH0TIlovq31RymcWsd+tEVLn+dCLOvNd83tjr
-	 uc83mnTCusi1VsH/mO2vViF+aXTvauBuk/3UmRhVl0wbrNfua+U/YMiqJx6DLrDv5O
-	 AiKJ0In7NVj/A==
-Message-ID: <457bb3d5-1d73-4acb-9ef0-4e40de6bdc94@kernel.org>
-Date: Sat, 19 Sep 2026 09:08:04 +0200
+	b=St1DgtTuiLhxpCyS5dQyo/g8CNubeNk5hYa+tPtnR0eoNUj9BH9Ha+LcXy587DTTW
+	 9RIbr6IZUrLg4Dc02CKPcbK2QwrYmnG/lnxSdIyS8SSKVKOIktOpPhivww4rjNLHO3
+	 AXCfokDPZ7zCyqewJo2ueM5X6WLGom4HfTiGFW/J8MXFgG9OLyUyg7JUDVNjmAM2La
+	 Sg9rK94YgH4rHFOxz8ZF9PGbrBzlqwA/ndS/CCThrUhD6POCP7HCUvcrHeX01IIrW+
+	 R55xkvOnrrKVphekOiKk/vJioQTQwNcIyLX5NdPu1WrFNsw1GFeCVb7U4ZIFdDHw/+
+	 K65BA8EqJxkFQ==
+Message-ID: <2ea7cbcd-91ba-4f28-a910-428c03cc968c@kernel.org>
+Date: Sat, 19 Sep 2026 09:18:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,46 +35,16 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: Expand flow lists to block lists
-To: Daniel Matyas <matyasdaniel006@gmail.com>, Lee Jones <lee@kernel.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Ulf Hansson <ulfh@kernel.org>, Liang Yang <liang.yang@amlogic.com>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Bjorn Helgaas <bhelgaas@google.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- Manivannan Sadhasivam <mani@kernel.org>, Ray Jui <rjui@broadcom.com>,
- Scott Branden <sbranden@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Will Deacon <will@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>, Vinod Koul <vkoul@kernel.org>,
- Thierry Reding <thierry.reding@kernel.org>,
- Jonathan Hunter <jonathanh@nvidia.com>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>
-Cc: Jose Abreu <joabreu@synopsys.com>, Ray Jui <ray.jui@broadcom.com>,
- Scott Branden <scott.branden@broadcom.com>, Atish Patra
- <atishp@rivosinc.com>, Shawn Guo <shawn.guo@linaro.org>,
- Dmitry Osipenko <digetx@gmail.com>, Thierry Reding
- <thierry.reding@gmail.com>, Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
- Okan Sahin <Okan.Sahin@analog.com>, devicetree@vger.kernel.org,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@sifive.com>, Conor Dooley <conor@kernel.org>,
- linux-rtc@vger.kernel.org, Ricard Wanderlof <ricardw@axis.com>,
- patches@opensource.cirrus.com, Lukas Wunner <lukas@wunner.de>,
- Chunfeng Yun <chunfeng.yun@mediatek.com>, Eugen Hristev
- <ehristev@kernel.org>, dri-devel@lists.freedesktop.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, linux@analog.com,
- linux-input@vger.kernel.org, chrome-platform@lists.linux.dev,
- linux-riscv@lists.infradead.org
-References: <20260917144028.459053-1-matyasdaniel006@gmail.com>
+Subject: Re: [PATCH v6 1/2] dt-bindings: hwmon: pmbus: Add Infineon tda38740
+ and tda38725
+To: Colin Huang <u8813345@gmail.com>, Guenter Roeck <linux@roeck-us.net>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, colin.huang2@amd.com, linux-doc@vger.kernel.org
+References: <20260918-add-tda38740-and-tda38725-v6-0-a8b11018d850@gmail.com>
+ <20260918-add-tda38740-and-tda38725-v6-1-a8b11018d850@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -120,23 +90,42 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  K9bCVaboTA2T77QYkRcRJYSsO1alGX0ome/hMLD1daXlkrNUp1HWa3K4iytLRXjCSIorWiGs
  n+q3krnpXu3TFkA8qtOFZMdnIiFuiq1yLT8hptsV5xh1TA2nsVvSYiaCr3q4s4BKjS/KrLDb
  qoxzw8ISjdUp4pA85vb6YLCmb39NgidD+7PmAr65lBNveIFynTgsja1rRQ4=
-In-Reply-To: <20260917144028.459053-1-matyasdaniel006@gmail.com>
+In-Reply-To: <20260918-add-tda38740-and-tda38725-v6-1-a8b11018d850@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 17/09/2026 16:40, Daniel Matyas wrote:
-> Running dt_bindings_check returned:
-> [error] string value is redundantly quoted with any quotes (quoted-strings)
+On 18/09/2026 12:23, Colin Huang wrote:
+> Add devicetree bindings for the Infineon TDA38740 and TDA38725
+> single-voltage synchronous buck regulators with PMBus interface.
 > 
-> The files used quotation marks in flow lists because the strings had
-> commas and these commas were interpreted as separators. Convert flow
-> style lists to block style lists, so that there is no problems with the
-> commas.
+> Signed-off-by: Colin Huang <u8813345@gmail.com>
+> ---
+>  .../bindings/hwmon/pmbus/infineon,tda38740.yaml    | 55 ++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
 > 
-> Signed-off-by: Daniel Matyas <matyasdaniel006@gmail.com>
 
-Ignore this patch. Daniel sent it THREE times, so we need to respond
-three times that it is wrong.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+
+<form letter>
+This is an automated instruction, just in case, because many review tags
+are being ignored. If you know the process, just skip it entirely
+(please do not feel offended by me posting it here - no bad intentions
+intended, no patronizing, I just want to avoid wasted efforts). If you
+do not know the process, here is a short explanation:
+
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new versions
+of patchset, under or above your Signed-off-by tag, unless patch changed
+significantly (e.g. new properties added to the DT bindings). Tag is
+"received", when provided in a message replied to you on the mailing
+list. Tools like b4 can help here ('b4 trailers -u ...'). However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for tags received on the version they apply.
+
+Full context and explanation:
+https://elixir.bootlin.com/linux/v6.15/source/Documentation/process/submitting-patches.rst#L591
+</form letter>
+
 
 Best regards,
 Krzysztof
