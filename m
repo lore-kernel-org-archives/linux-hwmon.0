@@ -1,99 +1,161 @@
-Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
+Received: from va-1-112.ptr.blmpb.com (va-1-112.ptr.blmpb.com [209.127.230.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99F1C2F60CC
-	for <linux-hwmon@vger.kernel.org>; Sat, 19 Sep 2026 11:36:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2CD5175A9C
+	for <linux-hwmon@vger.kernel.org>; Sun, 20 Sep 2026 03:00:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.230.112
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789817786; cv=none; b=OQyusFdaqRb+vPsnx/xp/s2qCw70OOGtvuanGmIGk257V7AhXNbO8IANF7nbdX9MNZ5QmsYLk1ymuVn2t2nkKA4uqRamdnAjv+Yc0ZvyJAwiCKw56iU3XtOrytAJ4rpDkZ7q5HHO2jFkGZ3hU6LbyTNNLHVOa59Vz8/ToVijbds=
+	t=1789873223; cv=none; b=NCVN3UVqUORpxJtZmkVGdriJn9CejyJww2XZue9Zdk/oLMOfugZwdolpwFHJtRf/McGkcTVFNkesJnqGFWJoVde8T/Yn7hakfuQZ3dGzkQhUb9OJyEE0Sn+1szJiwaqHJPTnSfPc5ca9c0TIJ07L7pS+N1kqEVEkHLIJZda8/n8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789817786; c=relaxed/simple;
-	bh=kTqY5qpGtIvvRtxQ8u/RwVAIS2ddmQFY14gCuYLRjts=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DjWLgcQaqT7zNjxWi83PLWzIVrY/dx8ZvCPFBxWEahx6VLc4YC3+iireqQEcUoppmrTyt00aU1HX6S+0vEzwz8km8vWUWNb4p+wmDyCIEUKU0fGvhu88u3NsnX2lBNhWPclXaV+mFyYc91vS+JWdN8OW+VhE34bkYAQyn95Qf4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h1l/0OE8; arc=none smtp.client-ip=74.125.227.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789873223; c=relaxed/simple;
+	bh=a9zWynn0wGlYLsRFsMf3McHS/3/E2zODMA+SXVN94ZE=;
+	h=In-Reply-To:References:Content-Type:Date:From:Subject:Message-Id:
+	 Mime-Version:To:Cc; b=t+NS3vrFGwUdYbgZYbMRp/C6GTXLjZZzx+dbToQLvDoJQJ8no25BLwileWN4D1MSiI7ysIfe/Cz8B8YlV02rCBG2o0pSPHN/7SwTye4et6zTVQyi7dRfxVzzRxBJAzc1TT9v5+03yAuzhqPCXO8QrYOeyO0oMj8ar4iUgDaapWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=OMJMcldY; arc=none smtp.client-ip=209.127.230.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h1l/0OE8"
-Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-396ccafb752so1346676a91.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 19 Sep 2026 04:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789817784; x=1790422584; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=LOwTThtG1uC730wD4kNwwPDkUEg5WgY1ESba7svXy3A=;
-        b=h1l/0OE89T5QSpqSUrK8D8cD7BmZJ3g+b5j/xSfioKtWOBSdN4sV+iG8jsT6NFAT7v
-         3O74B+oRIvJykfxya8/cllh6mYhvZIPc4UB0NH8F2oLVoTkyjMDpBI17wh8MAD+OAzwk
-         AURPUCxTJWnwtURY058H/niIvNgo4UWBSvo5lxZFu6ljEOqPb5Ota+FYyj3ZeJOth8zW
-         AlJKMoQCoLswrOAgDWDBNHDnOUeP+B2aqAbVKAQ3RDEKYnRkRNWECuYNbezZrw9wJ6h1
-         /+fzdGWIeIDuzLhLLks0dLuHnZHb9THkYKA8FyBf7LXuDz4R8G92BuJKDjbZJoRP4+C6
-         SpOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789817784; x=1790422584;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LOwTThtG1uC730wD4kNwwPDkUEg5WgY1ESba7svXy3A=;
-        b=jWk+HEtyaIyz5qp+k2cn15GocufOvGumyiGiQwhF5n9zhKE2gIcVKAuMVLnKyZkMgd
-         fOvHWwfObNx8DfsVsh5EXvxZQqJwGNhv0O6+jT06lPXK7eiz05Yg2S4DHW7n50uOdx9I
-         1ndY8oCVmBz+FUrRcdlRCK+mtIu5nNuYhB1ObjEmMDv5FZ3pvcdxaKptrsTJrtw4H+iF
-         /bJrWvmIxgSFyljvh8PGNItyFH/6GKw6rDZgBNDFbgNWTv9617fv+ewFxMK+9z91WkYT
-         dO3WkR75GUSTLhUsdniGSLVKbpJlKVc30urousDQpBIDnu1w96XQ5Nzu4PGJ8eA3qpJc
-         mOFA==
-X-Forwarded-Encrypted: i=1; AKwUvBxXMbi4tagjTj8lzZubv3ts/TbKjH0LYXRUI7YRsh9uKiWsRCgyssrvK6LstEizcvUgUDCzTtJMUPIKqQ==@vger.kernel.org
-X-Gm-Message-State: AFuF++lYNysysu/2Ik7yr0Sdq3YxzkaMDs8CkjWoCvvHe9Qn4MBYbH9u
-	zxirfJREaJJ91/qFXYAbWABEi+09d9LUIkyRvLpdHAr9Hc6oSCpOizUR
-X-Gm-Gg: AYBFou2rNWJAkb6Q8oJZ21kvOEC8JB2kVemy99pVOgwyhP/8pCGudO4V4MrzjOjGeRc
-	xXd1ZiMfw7WnM6yZQ7bFm0ct3auzztFE1CNVhUWe3BCpmnogqHy9KpRlb9sw7QfezMp9oPP/Rxl
-	dfD9LdHrlu1nTMZp7JqJ0VPaVTlVZIgQorwcGdesKvZzLcPVIm+RtE5nZbIMZbfwGpbnh0Im71j
-	S1zA1d2VRQTkY7F51A48FLpusrCgA/MAp8H5/vs5RDW4WtfqlhN2YewxE6uLgCzn2lQRym96QFp
-	zMCGSleuxVQd5YB33MK5fJLb2sxLDbykYAPGD5fTcgft+LD87zE3tSCnD7sOI5uxZKq7GOnQvba
-	VLv4tE4iKyl9n/lb5SnLSU5vTIxKzb8mNwaWF99eJWVIrkXDZNyUV8TpE3OIv01MGoeu5cMBoX7
-	s6eq7EDILU48pnXSuU53YKN9MFBSkK7LiRF6rAZ7WN9xmRsQM0rnp9+5R0rQ1b+prKntDI1vZUv
-	sAeBuSEk5Ce
-X-Received: by 2002:a17:90b:2686:b0:39e:6c69:7772 with SMTP id 98e67ed59e1d1-39e6c69791bmr5107806a91.27.1789817783850;
-        Sat, 19 Sep 2026 04:36:23 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33c3313d96esm5532111eec.12.2026.09.19.04.36.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Sep 2026 04:36:23 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 19 Sep 2026 04:36:22 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Colin Huang <u8813345@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	colin.huang2@amd.com, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] hwmon: (pmbus/tda38740) Add driver for Infineon
- TDA38740/TDA38725
-Message-ID: <a31a41b7-10e6-443c-8386-71d6a4cc953a@roeck-us.net>
-References: <20260918-add-tda38740-and-tda38725-v6-0-a8b11018d850@gmail.com>
- <20260918-add-tda38740-and-tda38725-v6-2-a8b11018d850@gmail.com>
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="OMJMcldY"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=2212171451; d=bytedance.com; t=1789873216; h=from:subject:
+ mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
+ mime-version:in-reply-to:message-id;
+ bh=a9zWynn0wGlYLsRFsMf3McHS/3/E2zODMA+SXVN94ZE=;
+ b=OMJMcldYT2cdoeZ85LUUHRwEIFdTN1uCjZ/9R8ZuzxBcuclHTEqv/B+wr2NFmhDx3H3vf8
+ cUOl8V/PUSr1yKiXAPdTkRkhzJzRWEKYfAp6xsBcePVXtqlAZ8l+RzinAaR6GzoQCcWXFM
+ NGXLIjjxx1bAt84SwG4PDXqzGaCXp3g5Ut4GNcu0fHCkN4TCdMIF83kvDqkN5JRNTU02x2
+ MwqZVM4NFXaCA11MS1wGZTRrt8c6tPwpl18bG/Nt3kRS72OOoBXE+voqfIsdqEgUCk/2jX
+ uRyEFON4vWMUvxWcj4W1MInai0uD3+vTU61SPEhCaZsbdwt2DuxKrlVR6UAexA==
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <26000aa9-86b0-4fd8-8bda-67f38372cdb7@roeck-us.net>
+References: <20260918031831.1937973-1-zhangjian.3032@bytedance.com> <26000aa9-86b0-4fd8-8bda-67f38372cdb7@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 20 Sep 2026 10:59:53 +0800
+X-Lms-Return-Path: <lba+26aaf4c3e+823a02+vger.kernel.org+zhangjian.3032@bytedance.com>
+X-Mailer: Apple Mail (2.3864.600.51.1.1)
+From: "Jian Zhang" <zhangjian.3032@bytedance.com>
+Subject: Re: [PATCH] hwmon: peci: dimmtemp: Retry unstable DIMM mask detection
+Message-Id: <90D71779-52F1-4456-BD8C-5E5D40A2FF99@bytedance.com>
+X-Original-From: Jian Zhang <zhangjian.3032@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260918-add-tda38740-and-tda38725-v6-2-a8b11018d850@gmail.com>
+Mime-Version: 1.0
+To: "Guenter Roeck" <linux@roeck-us.net>
+Cc: "Iwona Winiarska" <iwona.winiarska@intel.com>, 
+	<linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 
-On Fri, Sep 18, 2026 at 06:23:55PM +0800, Colin Huang wrote:
-> Add a PMBus driver for Infineon TDA38740 and TDA38725
-> single-voltage synchronous buck regulators.
-> 
-> Signed-off-by: Colin Huang <u8813345@gmail.com>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> 2026=E5=B9=B49=E6=9C=8819=E6=97=A5 00:59=EF=BC=8CGuenter Roeck <linux@roe=
+ck-us.net> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Fri, Sep 18, 2026 at 11:18:31AM +0800, Jian Zhang wrote:
+>> Add a stable DIMM mask check around PECI DIMM discovery.
+>>=20
+>> During host DIMM initialization, PECI can answer the DIMM temperature
+>> configuration reads before every DIMM has reached a stable ready state.
+>> There is no separate all-DIMM-ready signal for this driver to wait on,
+>> so a single early read can capture only part of the populated DIMM mask.
+>> Retrying the mask check avoids locking that transient state into the
+>> hwmon device layout.
+>>=20
+>> The first successful scan is saved, and the driver immediately scans
+>> again before registering hwmon channels. If the two masks differ, the
+>> driver returns -EAGAIN so the existing delayed detection work can retry
+>> instead of exposing a partial channel set.
+>>=20
+>> Signed-off-by: Jian Zhang <zhangjian.3032@bytedance.com>
+>> ---
+>>=20
+>> This was tested on an affected platform where probing during
+>> host DIMM initialization could expose an incomplete DIMM mask. With the
+>> extra read, the driver observed the completed DIMM mask and exported the
+>> expected hwmon channels.
+>>=20
+>> This is intentionally a conservative retry of the existing detection
+>> path. It does not add a sleep or force another delayed-work interval
+>> between the two reads, so it avoids adding an unconditional probe delay.
+>> However, this also means it is not a full proof that the host DIMM
+>> initialization has completed.
+>>=20
+>> I am not aware of an Intel-provided all-DIMM-ready indication for this
+>> path. Feedback would be appreciated if there is a better way to decide
+>> that the PECI DIMM mask is stable before registering the hwmon device.
+>>=20
+>> drivers/hwmon/peci/dimmtemp.c | 28 +++++++++++++++++++++++++++-
+>> 1 file changed, 27 insertions(+), 1 deletion(-)
+>>=20
+>> diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp=
+.c
+>> index bd3e8715dfec..983e1e415ec2 100644
+>> --- a/drivers/hwmon/peci/dimmtemp.c
+>> +++ b/drivers/hwmon/peci/dimmtemp.c
+>> @@ -285,6 +285,32 @@ static int check_populated_dimms(struct peci_dimmte=
+mp *priv)
+>> return 0;
+>> }
+>>=20
+>> +static int check_populated_dimms_stable(struct peci_dimmtemp *priv)
+>> +{
+>> + DECLARE_BITMAP(dimm_mask, DIMM_NUMS_MAX);
+>> + int ret;
+>> +
+>> + ret =3D check_populated_dimms(priv);
+>> + if (ret)
+>> + return ret;
+>> +
+>> + bitmap_copy(dimm_mask, priv->dimm_mask, DIMM_NUMS_MAX);
+>> +
+>> + ret =3D check_populated_dimms(priv);
+>> + if (ret)
+>> + return ret;
+>> +
+>> + if (!bitmap_equal(dimm_mask, priv->dimm_mask, DIMM_NUMS_MAX)) {
+>> + dev_dbg(priv->dev,
+>> + "Deferred unstable DIMM mask: %*pbl -> %*pbl\n",
+>> + DIMM_NUMS_MAX, dimm_mask, DIMM_NUMS_MAX,
+>> + priv->dimm_mask);
+>> + return -EAGAIN;
+>> + }
+>> +
+>> + return 0;
+>> +}
+>=20
+> I agree with the idea, but check_populated_dimms() already has retry
+> support. I don't see why it would make sense to add retry detection
+> (because additional DIMMs were detected) on top of retry detection
+> (because no DIMMs were detected).
 
-Applied.
+Right, the existing retry in check_populated_dimms() does not cover this
+case.
 
-Thanks,
-Guenter
+It only retries when no usable DIMM mask is available, for example when
+all channel/rank reads return -EINVAL or when the resulting mask is
+empty.
+
+The failure I observed is a partial-success case: the PECI reads succeed
+and produce a non-empty mask, so check_populated_dimms() returns 0, but
+the mask may still miss DIMMs while host DIMM initialization is still in
+progress. Once hwmon is registered with that partial mask, the missing
+channels are not added later.
+
+
+>=20
+> Thanks,
+> Guenter
+>=20
+>> +
+>> static int create_dimm_temp_label(struct peci_dimmtemp *priv, int chan)
+>> {
+>> int rank =3D chan / priv->gen_info->dimm_idx_max;
+>> @@ -322,7 +348,7 @@ static int create_dimm_temp_info(struct peci_dimmtem=
+p *priv)
+>> * All other states mean that the platform never reached the state that
+>> * allows to check DIMM state - causing us to retry later on.
+>> */
+>> - ret =3D check_populated_dimms(priv);
+>> + ret =3D check_populated_dimms_stable(priv);
+>> if (ret =3D=3D -ENODEV) {
+>> dev_dbg(priv->dev, "No DIMMs found\n");
+>> return 0;
