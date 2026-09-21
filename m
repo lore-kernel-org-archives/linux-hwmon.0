@@ -1,136 +1,189 @@
-Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
+Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8635A4AAC4C
-	for <linux-hwmon@vger.kernel.org>; Mon, 21 Sep 2026 14:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 919BC4AA1D3
+	for <linux-hwmon@vger.kernel.org>; Mon, 21 Sep 2026 14:50:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790000166; cv=none; b=rvacjEZDlleNVEsw0JKltNnHRK43SJWzi7wG8rQcJWlwTUkKn2wVyxj6qKA+YOZzPPMVA3X7wW50MffiWtOeAwHZp1HV9N05+utop201sWp8rIIa3joQZFRz/vj0xN607Bv/PXWBhIzD+M1M7puUhbTSdhPXSbE7ehh6zlY9w3g=
+	t=1790002207; cv=none; b=buANOVySlFedZeqErmArAduv2u+XJ67D1Z/d1iBGS13yy/oYjAIPnKLvjqu0oq7Cqd2VMPeu+Foqo2EZND/ilx421n00dZhOVUVOyMFftsFKejVCBCzgLucX4sS730/9yoMFVdvtwskrWWYBUjGmRcPy4AOVJT9k/NHAKA3k9dQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790000166; c=relaxed/simple;
-	bh=T9zxxSsw5iEbEUBAyeZAA2CKlzMZwcsqLDpDdJ0+Ya8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GnNnKKWKnaB2/CygvM0vVjzy9tmcRhPEoNoNvAo8ldZ6bOl1dyqt8KjnJzMSe+zJnXJQll5zjWDLuRM+MZBnMHDESvZ/hgZXNbtVg0fbLioVL/1NLDI8IlV8MrwVJIuJDPh7YZPTzD+XI5jcjB/T3eV9rzHWikQIgQOZqP/buxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M9TyhaWP; arc=none smtp.client-ip=74.125.228.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1790002207; c=relaxed/simple;
+	bh=aid97Yjimc76nz+M6o0QWk1KtiDp95Qtk/akmNNnZ3Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=i7WO5/PYVX8LHdtM4oQS+dr9FwWCV5fKeeN9/fpsOkMFol2hrYUjK3EPgmzpYpza0CpI72uVRH2DxckO6Qnvg1+ojVxCB0o4iojXhBDLnVb09ODxemCbZW7EivvJvjGFC/5gFlIgELWEyU3pXCMGOPWi6jeo9IhENnwy886BuHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H8PBul1g; arc=none smtp.client-ip=74.125.225.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M9TyhaWP"
-Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc1cebad4adso2182104a12.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 21 Sep 2026 07:16:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H8PBul1g"
+Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49d1ca5b0d6so23041735e9.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 21 Sep 2026 07:50:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790000162; x=1790604962; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=V/tkXdnY7RKXLTVajOjjU/kNAmpz6uVaBIo5SF3Fby8=;
-        b=M9TyhaWPtlHF5kuSz0dy2Sra06tkkSBD9ewa/RaxrYWyJWV3pDDaX9V42IjWL7QWB3
-         h3HyX/Cy0h87rdVWkRxLYHw1Lb+tVm3wHid912JAD1EaY+qf7jb/YWRkE7c4K+hpm1I4
-         VApXScMV/PQ1VZR8pRNto2TOEPYc5yyvCsw5cHoq3FFiltfteEM7PvSe9WpixHwey8Nk
-         Ou1Rz/oWboQ/s2vfapSo9qRsI/H1sqMnZC68JTC2P0fDytMJqtgnKzewXT5Tgqg0HTFw
-         jKR3DA1eAM0ccXq2oD2j0GCutz01nt0EaRngScyQywiv18hnTUG04D395miO/Z/Fk/TD
-         cm5Q==
+        d=gmail.com; s=20251104; t=1790002204; x=1790607004; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Qdwj3z7uTqgFd/9Tfs5y2p+1zT+FzwY0f8o+/81CJMs=;
+        b=H8PBul1gog+1gzpTDxIrNVKB5K54pqG6vF5ZOD7G7ooAU5DeSJEP0a4k46YMZ5t6e0
+         qroWpraGfT9X8CSnGRrxRpEXsZ6ITnA0ylYlaplVZG+zgsQ40tygeef7IiZXriPm34dY
+         wfpAVnIcDy2TdqqDgVDpphaTbQH3ttQHrYegpsgusyyEygzR2/sTlJChWkvvmX8Yuc5p
+         t/Tx4S69pKxk+4EhhMdE0camoxwmDAsfA5j9ppMaMIg9h4JRtIcr+DD3rLnJ67dvMk0W
+         s07j0OZ1TFsfJ1emK2NCQBveJGnyQJq9H04+oVtGRiLeADAXqp+Z6f4NOtPj1XmqPRUp
+         KPlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790000162; x=1790604962;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=V/tkXdnY7RKXLTVajOjjU/kNAmpz6uVaBIo5SF3Fby8=;
-        b=soeC1cRMAcCzIqPy+5DFBZ1Jw72cK7xI9Fpm3gcX7hY2YBNUhzaHFrHcUaU8zbiw5v
-         iLbIvAquTiKckJ+n1E73OZuVo1L0vQkbjq44ho8oVbMa+9niirn5pdKdxoqJmdkYTy8U
-         LOuNGAObgIysWph0hf6FE5bTB9ia3x+FdJpJwKLJt7pcuGMlPdofxn0F7v/WIfffDjUJ
-         ffp3I4p0NuoD1cs2XMDFUpC0MGfEf2WCboLETt8OnWQ+2SDDKo6FfKnhYE80ZXhTtyOi
-         utLFyhOhFp+m78OQfqRQMOYouH5coETACdvDEaZfoa0/H+h83pHbske96qycteeywodj
-         Rjvg==
-X-Forwarded-Encrypted: i=1; AKwUvBxau6bYDjyrzUCAIDFqcV/c0MPOA0OLjB7WpHWMQK8EPpfLCEAzc0e2GwUZK+j7/dl2NAkckT0fCQpwpA==@vger.kernel.org
-X-Gm-Message-State: AFuF++keCGzmI1HbLW0YQisZQ2zMlcIQyeg+qpoYnas8Ctss3y1hu0Tj
-	mjtJyElUjsgZ/1cy4nigWGWt4n9VaB3TE6IXPcWxHBZijBgayRKoCEdW
-X-Gm-Gg: AYBFou0ut1AX7BuXNUxRuq0d+HUuPoDwDFLkQcmTBkeSmjx4Ev4k357jYVLPy7x1Xbw
-	f6aq/U2CvRFdgTUPfHhRN5nXyLwr/vIm3hTuCRbngXVpw5kzhApmkrZfry9oLHEB9QADC83yR3V
-	zpj2KxOFzV1/Y8dmET4m3shbKcbQr+BvyLK54ZIDTl9+Y1xT+wE3WkarCBECUgb+v0RNTgH2Heb
-	32cotSSxunJl9cmh0hIwSRI9jDdaoHrPHvvVk4QuSIxWYqXAUT950m5uLETwfwv7F8hYh6WwGJH
-	ZkqG1JO2gH76JpMKQ44f33QisSm2dDmueRV8p0HvAJD349bh+AEevDGaKdtakfX7mmKKFb4UCPE
-	kE7nxJ4KWy3Ky94dN4Jo9cTa9qPrfh8Auc4rqhQ2suSqotVtqEbGXF2Qi6EDj6zXZMdkoYSI/nX
-	m8xcI7vTANpzd0bZddfVVVL9iqPjpJ3XCi+6/fWnrtdSh4tLfrP1V4lpkNH3K+6JTKpNiINx5tI
-	8Qrdc9xQB0m
-X-Received: by 2002:a17:903:1b4e:b0:2d8:d4cc:be68 with SMTP id d9443c01a7336-2ddb1c15709mr147356975ad.21.1790000162187;
-        Mon, 21 Sep 2026 07:16:02 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ddc178900esm35337475ad.17.2026.09.21.07.16.01
+        d=1e100.net; s=20260707; t=1790002204; x=1790607004;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Qdwj3z7uTqgFd/9Tfs5y2p+1zT+FzwY0f8o+/81CJMs=;
+        b=GmHe19ovZCB8QBvdQbaUSF34AOw/rI+lclJTwvVSQ28KVYtuybqMYQpaVokLNUprbr
+         jEGw8ExumhqQ139hJCFe7Ek3y1XvL+TxsNYXR/Y3V/ricUTw4+QMUDtBCDWb8NGyJzGz
+         np3W77JbUGlFlBErKzp+MyIXXy9JO4OuOgx71+MWLnhFXh7U7qmRDPDWt01mA9TkybTR
+         lGdD4cnVs16tdVPSiz3A9QJ4xcMuN+phs1sFoeVQzvbAIyDP/pjn76CKNtYfRnFLlV1k
+         Sheqyb0LmSuJ12reqhqTawovxeGSIffk/CZV05mQPSdEysTFVaHvZPGrez7gJzDPBoMd
+         pfsg==
+X-Forwarded-Encrypted: i=1; AKwUvBwyhkv7UX5J6a6a5zTxnhQHN5Q0ei51gForj/PrT8Ydloby8qcF1ne2zufLOVEo0BPLDx7nRAVR4TDm0g==@vger.kernel.org
+X-Gm-Message-State: AFuF++m98UMGwBUx1SdDpSuXycu6cRpqgc+FQRPVD6VBMHbA7tR9rS+Q
+	SgjVtJ0QWkYb6CTd0dmRQFDcHsZMOvvMGHoKuGL+gj/D7cZXOFuF7bvg
+X-Gm-Gg: AYBFou28N2Lmm4qFoYnRLAKTIfXu7n19C2q3DUHQbm8hKyTfA32ce7rv5d5lBZ712rD
+	evsYhFeQScR5AQN4hrL40Wp+E+QEkE045kp+msO4tXb88In3G3a5wu7jKIPsQVQzMsXrTBzy8SG
+	9ONYTLsBprlCsYbPv1p0hx5ViSmyRIoez0lgbi2XyN8hu2V9Aq7gPjE2i8XFBhLp7VTMkcAmi1i
+	BFpdpEJ+wC/ZLi9OpEUqD+m+X2atQ2w/1I26e8OlLsiWInkN+R1vU8p7GqEDvbWmOmKp/v/2yjT
+	m81jHERktaOxlx8f72DcTyXvHLKk1AiBNoFhfEIuFh3pdmFsUYC+gYN3nSUJOFqTRzjoAohpLzl
+	VtsOWcK8pgswhOWFqbya5dPi19zAklloah/rB29XoGCIeHoZgWzkkaPpVMfUR660LtzWRGq/qDI
+	3LGsmscuC66hrTaTAf7w6+ZIa1LmkXBj/UweD1gXQUsup/XbIpCD/kzGoUkf0BL3VT+bU6UQQvS
+	HbCpD1F0Q==
+X-Received: by 2002:a05:600c:3ba0:b0:49e:73d3:78ab with SMTP id 5b1f17b1804b1-49fc55adc12mr192320725e9.0.1790002203622;
+        Mon, 21 Sep 2026 07:50:03 -0700 (PDT)
+Received: from localhost.localdomain ([194.154.195.114])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-49fcd8bc15esm191595725e9.1.2026.09.21.07.50.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2026 07:16:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 21 Sep 2026 07:16:00 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Kean Ren <rh_king@163.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] hwmon: (spd5118) support write protected devices
-Message-ID: <1274727e-b41a-443b-9955-ac8119417edc@roeck-us.net>
-References: <20260920062230.2437291-1-rh_king@163.com>
+        Mon, 21 Sep 2026 07:50:03 -0700 (PDT)
+From: Oleg Keri <okerixx@gmail.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Hans de Goede <hansg@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Abel Vesa <abelvesa@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v3 1/3] dt-bindings: embedded-controller: add Lenovo Yoga Slim 7x Gen 11 EC
+Date: Mon, 21 Sep 2026 16:49:51 +0200
+Message-ID: <20260921144953.15113-2-okerixx@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260921144953.15113-1-okerixx@gmail.com>
+References: <20260921144953.15113-1-okerixx@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260920062230.2437291-1-rh_king@163.com>
+Content-Transfer-Encoding: 8bit
 
-On Sun, Sep 20, 2026 at 02:22:24PM +0800, Kean Ren wrote:
-> Some systems do not allow writes to SPD devices. On the i801 SMBus
-> controller family this happens when the BIOS sets SPD Write Disable, in
-> which case the controller refuses writes to addresses 0x50-0x57; other
-> platforms may enforce the same in firmware. There is no way for the driver
-> to query this.
-> 
-> spd5118 assumes that it can write to the device, which does not hold on
-> such systems:
-> 
->   - writes to the hwmon attributes always fail with -ENXIO
->   - the temperature sensor disable in spd5118_suspend() fails silently
->   - spd5118_resume() fails in regcache_sync(), and the system reports
-> 
->   spd5118 0-0050: Failed to write b = 0: -6
->   spd5118 0-0050: PM: failed to resume async: error -6
-> 
-> Register 0xb in that message is the page selector register, which regmap
-> writes back from its cache at the end of regcache_sync(). The write of the
-> saved configuration register before that fails as well, but the cache code
-> does not report that error.
-> 
-> Detect write protection once at probe time by writing the page selector
-> register back with the value just read from it. This is a no-op on a device
-> which accepts writes, and it fails if writes are blocked.
-> 
-> If writes are not possible, run the device read-only: drop the register
-> cache so that regcache_sync() cannot attempt any write, skip the writes in
-> the suspend and resume callbacks, and make the writable attributes read
-> only. Alarm attributes are read only already; stop clearing a latched
-> status from them, since that requires a write, and report the condition as
-> the device presents it.
-> 
-> Reading the SPD NVRAM beyond the first page requires switching pages, which
-> is itself a write. Restrict the 'eeprom' attribute to the page which can be
-> read in that case, instead of returning errors for the accessible part.
-> 
+Document the Compal embedded controller found on the Lenovo Yoga Slim 7x
+Gen 11, a Qualcomm Snapdragon X2 Elite (glymur) laptop. It sits on I2C at
+address 0x70 and is distinct from the Qualcomm reference EC that the
+reference designs place at 0x76.
 
-It doesn't add value to only return page 0 of NVMEM.
+Signed-off-by: Oleg Keri <okerixx@gmail.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ .../lenovo,yoga-slim7x-gen11-ec.yaml          | 56 +++++++++++++++++++
+ MAINTAINERS                                   |  8 +++
+ 2 files changed, 64 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/embedded-controller/lenovo,yoga-slim7x-gen11-ec.yaml
 
-> The temperature sensor remains fully usable; only its configuration
-> becomes read-only. Document that, and leave the shared regmap
-> configuration alone by selecting a separate one without a register
-> cache.
-> 
+diff --git a/Documentation/devicetree/bindings/embedded-controller/lenovo,yoga-slim7x-gen11-ec.yaml b/Documentation/devicetree/bindings/embedded-controller/lenovo,yoga-slim7x-gen11-ec.yaml
+new file mode 100644
+index 000000000000..37337de86b0b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/embedded-controller/lenovo,yoga-slim7x-gen11-ec.yaml
+@@ -0,0 +1,56 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/embedded-controller/lenovo,yoga-slim7x-gen11-ec.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Lenovo Yoga Slim 7x Gen 11 Embedded Controller
++
++maintainers:
++  - Oleg Keri <okerixx@gmail.com>
++
++description:
++  The Lenovo Yoga Slim 7x Gen 11, a Qualcomm Snapdragon X2 Elite (glymur)
++  laptop, has a Compal embedded controller on I2C. It reports board
++  thermistors, battery cell voltages and CPU fan speed, and drives the
++  keyboard backlight.
++
++  This controller is not the Qualcomm reference EC that the Snapdragon
++  reference designs place at address 0x76; it speaks a different command
++  set and answers at 0x70.
++
++properties:
++  compatible:
++    const: lenovo,yoga-slim7x-gen11-ec
++
++  reg:
++    const: 0x70
++
++  interrupts:
++    maxItems: 1
++    description:
++      The controller pulses this line while it has events queued.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        embedded-controller@70 {
++            compatible = "lenovo,yoga-slim7x-gen11-ec";
++            reg = <0x70>;
++
++            interrupts-extended = <&tlmm 66 IRQ_TYPE_EDGE_FALLING>;
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index be096be5fff6..11d459c17caf 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14966,6 +14966,14 @@ S:	Maintained
+ F:	Documentation/ABI/testing/sysfs-driver-lenovo-yb9-kbdock
+ F:	drivers/platform/x86/lenovo/yb9-kbdock.c
+ 
++LENOVO YOGA SLIM 7X GEN 11 EMBEDDED CONTROLLER DRIVER
++M:	Oleg Keri <okerixx@gmail.com>
++L:	linux-arm-msm@vger.kernel.org
++S:	Maintained
++F:	Documentation/ABI/testing/sysfs-driver-lenovo-yoga-slim7x-gen11-ec
++F:	Documentation/devicetree/bindings/embedded-controller/lenovo,yoga-slim7x-gen11-ec.yaml
++F:	drivers/platform/arm64/lenovo-yoga-slim7x-gen11-ec.c
++
+ LETSKETCH HID TABLET DRIVER
+ M:	Hans de Goede <hansg@kernel.org>
+ L:	linux-input@vger.kernel.org
+-- 
+2.55.0
 
-I had thought about implementing read-only mode, but there is no guarantee
-that the BIOS doesn't select a different page during a suspend/resume
-cycle.  For that reason, the read-only mode can not be supported.
-Sorry, I am not going to apply this patch.
-
-Thanks,
-Guenter
