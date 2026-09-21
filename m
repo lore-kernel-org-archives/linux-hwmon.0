@@ -1,124 +1,76 @@
-Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F0C34A99D6
-	for <linux-hwmon@vger.kernel.org>; Mon, 21 Sep 2026 15:53:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0108441D100;
+	Mon, 21 Sep 2026 21:13:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790005982; cv=none; b=fHVPkLMb4aAWaUyrJc5+Yp7eQQ68LRMognodpvsDrmxowZpGTQHgar8D0pIhfyd/YOjkNFrg6aOafnbxva+elNyGMqCtqgjzw1JkLB4IIeJ6KN8yqbI2EU3cqkSwdFSiwxyqj7XYVzpK9YEjHnuHe9koomYutayn4sLA4UuCWCI=
+	t=1790025200; cv=none; b=MDDycKiiux2aZswRZsOMDDshZJZyTxcZ7Cqi+R/RY/G3CHj9ModblkCYk2JgeZH0DgNNWnsH0SVCrkHK+uqE1v+dSgt8rM0q71z/Ty5n+KQNQTyCf3dHpVa8zkGJM+7fQUU6bgojckwUmnhT16TpSokd7Je8W+LJCTaOOpLjCpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790005982; c=relaxed/simple;
-	bh=uxSodr+5g5LhPeuMJLPaJWB2Wbyi9PA19/nxsZvoglk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W3axWNjwrdc7YwXZyOMGFE69brRCIp994u4ovC2uC+c7lQsgfzpM71b86I0VWIHyMwbP9ab9dwmmeD3IWLQzkSUIdA2VzEMGF/Egq0ss8CmPmuT2GHL3zTebJ+z3sTTUVQWqQGRGLoPKLSgBX1NEfIwTXTBeSVTQUB19ws3mnyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CCwdd/EI; arc=none smtp.client-ip=74.125.225.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790025200; c=relaxed/simple;
+	bh=vuxF0tT/4H/YrgJAF9NXDN2bm0i+QS0Nr4RNaPKvF6c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ia2DCvs/yiCNvQaEgeJ88LbNbWlrzKIaw4v7HYvGI3wV3iS80cj3Ho1YusQ+zR+/NZmkofakYhSesVcKPnVh94OUI22LejqMphRmJRzZ2cX/8w5EU/8+iv2juliuIp7kV5m3eKM5JmPaMrQ1NjpUbaZQXmzRuJaUnHZP6HmmD74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bojanowski.me; spf=pass smtp.mailfrom=bojanowski.me; dkim=pass (2048-bit key) header.d=bojanowski.me header.i=@bojanowski.me header.b=x4O8Gvt0; arc=none smtp.client-ip=80.241.56.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bojanowski.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bojanowski.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CCwdd/EI"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-4843cedd129so1930117f8f.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 21 Sep 2026 08:53:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790005978; x=1790610778; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=G0ME8UIp0+YWwCcJhu2EyuXifWZmH76ARjccb3bgJVA=;
-        b=CCwdd/EI0Gnxf3ehSmpAf+WKHqxJuT/SEdiQz6nfa1BSrXAr3lvGDCbqI4Q+aq7M4M
-         gkNeeewB+SQZM7xPtR1rbcWaP5BJzlA5eK/VNnVLgCqodKO6f40egdqKtB1716YN7W6I
-         ao17i0zNBWaGwe7TehZfRSvJCwSlqz5izCRrMpuxe2IlypAV1yGJ20Xj3QQf50T9c4Qn
-         9mH8UXQXMJl6gBNJ88qk1zwg8TRfqCfosA68LFVZ7eQVhlkg2HhfoD8dQmf2KTx1ydCX
-         dmBNAifocPTsZDUGwvK/mddW2jOVubu2DUB+ri6LZStUSCBA7/Hvmd6zxBU2YidTrIdS
-         LeUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790005978; x=1790610778;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=G0ME8UIp0+YWwCcJhu2EyuXifWZmH76ARjccb3bgJVA=;
-        b=09AUpZPQ5LDJivbs5BIkVZnA+Ro2rZxwky2t/I+syrG1We+CXlfpKFWgbqX4AsYy74
-         y9S4igLC1lJmnVK+6X2k52CQAPVGZePZbZPZqo5fzRRTCM7CAfGchv04psR743NrAEaw
-         lKzCZmBSshYuMhklRI2tPMw0FrV/GzYjQRRSALqqssFgjM2uvpw3adAUBbybo4c03G3P
-         TkA6bu1hJ9CBdBYTa5JHK2ocAwaFCoZrMzskRVzEgdBUgmqPEsC+AJ/psYPzJpz3v2bO
-         AUAT3m3LoNimGVL1EQfp9SF1QXx5Sg5gCQq3hzIyuONG181DV/EpaRC2rTwJecsdi3GN
-         x51A==
-X-Forwarded-Encrypted: i=1; AKwUvBwaPQKr40ZVf8uTZyXFyWEmhb3gP5rUhSD9xHQZ5iqC+emBbJfxrB9pludsD3WlHtpv67dZbj0yDabyKg==@vger.kernel.org
-X-Gm-Message-State: AFuF++lb6XhWAWOSHGY+T1zVueZRkqVakffKgdjTljpIMi3ALMXr3OQC
-	GdrRdVSd5nV2tVGTXO0///KQKQ4V29SavMW3iCxen2521ngshDZC9nZo
-X-Gm-Gg: AYBFou3Vdc/FWKDD6m70l7xkhghtP+yXGMmQ6SYeHHLeeI3JPD5FYrz9OURBBSSlqpc
-	JVX0CbrNLLWpX+y+kc2HJGDyx1c84yEdsaUUjVxJIdSzg4JRh0+W+aUNOMUZgGJ7+0zCPtgpdPG
-	ZSJc5io+ajXclizyb9FhDiqhu1bn7+DVyPSgdMUkXGtaNtg9Ii35pQ+We/LOSQVgBmsc2E8+Sdc
-	w+iEiD81vSFsp59oINryOVq/yMMQlnuwi6xUT/f/SgrzebQdQqeNZyJPaJmmXkDbR7AFnpy4vyx
-	M8AoGkKVuUvvXZYpNiRKuNkNg0h2b66h6wVcpUs5YVOLll6UtfGcF1qE2Jk841CSa6mDkf3QTAI
-	YFPJYS9Dr2OHmUDBbxPgf8eN68xc4xmH085k0xp4c/oZAElYzXKMip2FQcrKxacGcpn2BNwDcG0
-	UK56Vzgj1lRLrGWkbH0G11cihsrQOVp7cU/MBtgtFLwRc0UNvpJkH9SxBdqmPUhS44cozeI7ERo
-	H1kk7+Ul5FQ+HRYBhELRA==
-X-Received: by 2002:a05:6000:430d:b0:487:27f6:a4d7 with SMTP id ffacd0b85a97d-48727f6a748mr10341971f8f.39.1790005978215;
-        Mon, 21 Sep 2026 08:52:58 -0700 (PDT)
-Received: from localhost.localdomain ([194.154.195.114])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-4885a0549c3sm11159401f8f.25.2026.09.21.08.52.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2026 08:52:57 -0700 (PDT)
-From: Oleg Keri <okerixx@gmail.com>
-To: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Hans de Goede <hansg@kernel.org>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Abel Vesa <abelvesa@kernel.org>,
-	linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	platform-driver-x86@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] platform/arm64: add Lenovo Yoga Slim 7x Gen 11 EC driver
-Date: Mon, 21 Sep 2026 17:52:49 +0200
-Message-ID: <179000596924.25968.9295838488330037392@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <55181989-11d7-ce0d-f9c3-e9dceaaf1fb4@linux.intel.com>
-References: <55181989-11d7-ce0d-f9c3-e9dceaaf1fb4@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=bojanowski.me header.i=@bojanowski.me header.b="x4O8Gvt0"
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4hpbYR5WcdzMlK6;
+	Mon, 21 Sep 2026 23:13:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bojanowski.me;
+	s=MBO0001; t=1790025195;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=a45yGg271L92VcG3Hi31wCGLy3re1FRWuPnSJk8yCtA=;
+	b=x4O8Gvt0thau175s0vOQZcqAqpk+3EJxEgK09+aWVNp64wbkFP1w8hg0H3DbUk+fykXKFW
+	DizMNyZoyVO7Dr28VQ+KMNhFGHY9kvXu3TLElpN+jCumtRWCb2DNTXpIbRTm9QiBO5u4rg
+	1pK3jr1UiG0pbGqOuoZKkrFc0u+LZ+FEwCvlrbRomiMewJI9QzXM78WkRyUpxBaTlPLocP
+	zJwEK+pDYXczQnzR55GT5oQTDtk8VuS9aluliK9y9TQzstR9+YmI811Kqcm1yQ1Pc2Zk2s
+	VmiHuNuqqcfmKKdanKdiKwQbi2Yts3GArR51H82ScJ887ZTwrpSo1pug4+YrpA==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of tomasz@bojanowski.me designates 2001:67c:2050:b231:465::202 as permitted sender) smtp.mailfrom=tomasz@bojanowski.me
+From: Tomasz Bojanowski <tomasz@bojanowski.me>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (nct6683) Add MSI B850M to list of tested boards
+Date: Mon, 21 Sep 2026 23:13:04 +0200
+Message-ID: <20260921211304.74729-1-tomasz@bojanowski.me>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4hpbYR5WcdzMlK6
 
-Hi Ilpo,
+Tested on MSI MAG B850M MORTAR WIFI with NCT6687D EC firmware version
+0.0 build 03/10/25. The driver loads without force=1 and reports
+voltages, fan speeds and temperatures.
 
-On Mon, Sep 21, 2026, Ilpo Järvinen wrote:
-> > +Date:		August 2026
->
-> ??
->
-> > +KernelVersion:	7.3
->
-> This ship has already sailed.
+Signed-off-by: Tomasz Bojanowski <tomasz@bojanowski.me>
+---
+ Documentation/hwmon/nct6683.rst | 1 +
+ 1 file changed, 1 insertion(+)
 
-Will be September 2026 and 7.4.
+diff --git a/Documentation/hwmon/nct6683.rst b/Documentation/hwmon/nct6683.rst
+index 45eec9dd3..1af148b92 100644
+--- a/Documentation/hwmon/nct6683.rst
++++ b/Documentation/hwmon/nct6683.rst
+@@ -69,4 +69,5 @@ ASRock Z590 Taichi		NCT6686D EC firmware version 1.0 build 01/25/21
+ MSI B550			NCT6687D EC firmware version 1.0 build 05/07/20
+ MSI X670-P			NCT6687D EC firmware version 0.0 build 09/27/22
+ MSI X870E			NCT6687D EC firmware version 0.0 build 11/13/24
++MSI B850M			NCT6687D EC firmware version 0.0 build 03/10/25
+ ===============================	===============================================
+-- 
+2.55.0
 
-All the other points will be in v4 as well:
-
-- the missing includes added where the symbols are used
-- the cache and stale periods defined in milliseconds, with the unit in
-  the name, and converted to jiffies at the call
-- lockdep_assert_held() in the command path every EC access goes through
-- each EC read checked right after the call
-- ARRAY_SIZE() for the cell loop
-- MILLIDEGREE_PER_DEGREE from units.h instead of the literal
-- braces on the multi-line returns
-
-Plus two things not from your review: a shorter i2c id that fits
-I2C_NAME_SIZE (the bot's finding), and the symbol prefix renamed to
-slim7x_ec to match the driver name, which makes the v4 diff larger
-than the changes are.
-
-Thanks,
-Oleg
