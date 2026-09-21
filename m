@@ -1,23 +1,23 @@
-Received: from out28-52.mail.aliyun.com (out28-52.mail.aliyun.com [115.124.28.52])
+Received: from out28-4.mail.aliyun.com (out28-4.mail.aliyun.com [115.124.28.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 069C7366075;
-	Mon, 21 Sep 2026 05:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909BB367F36;
+	Mon, 21 Sep 2026 05:56:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789970194; cv=none; b=MBjXEZpPEySUM8oVhbqG0JBfsYZgvdCbYNpzx6uniGlNEgiCeF7MQWG8IIukEeKwnSp/qw0dPEmHZV6YViXkMO+IHuZMPkH6RmXPPnvU6POGwHdgY5ZuI2/2BpgqfE74es39IUi3DuHmuny//Y4lAs5dRTQ5INmM4PCma37EZiI=
+	t=1789970196; cv=none; b=tqFeGOmlm/mAyBC7ZjmyF0XlxuTkq9VzuY/Y3TWuAu/7qJ12/4D5hIM1uufiIyJ+NRi9mW09acZQz1sYCNedzieKx/HPqTd8hF0EOGQYu/AxZNI6ELZSic/Ojcmb4sYyR1l4+Yrfqn07Y3xLQSzb0donAf1/4qpS3YhOaxIyAk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789970194; c=relaxed/simple;
-	bh=NGDaMpWiNltodxcimxCk88oo3QIUlS8Ijo6xmvmMCaI=;
+	s=arc-20240116; t=1789970196; c=relaxed/simple;
+	bh=bkvlccMVkNJNgMPa5KZtN0Rj9B2vVWUR+4ZVGEMptx0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dk3imHfn9nPR8JGGrExgO1EFRVHg1amljcEUdB7dzK+Wvb1+FusUhLLr2j0N0YgbC2tTrd5S9POnmBHRmh4Jk1S/hyC445Zy6CGHZ0jB2d4gb6O29tzplbStghxXZedFCIyR+hLFDXw1cpvzczQVhUOw9a7YxYEStQk5SIhyDBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.52
+	 MIME-Version; b=MscxUk5c6j9SQksbQTDRo+hOBHTbr3xGw9V7LjHN8mAvu7uAzhQ2l9li3JPFTQ+pXv1u9ktZf02VuTmDA3ZJt9+NnADKHaLQFkYD7FL9O1ek4YoOx5OiLCP76GNR9uPbKVg7/vZVKPGxfPqQpXBx+LcmpVoeVHx3vHDm+fZIYz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.07442075|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.0281794-0.00185859-0.969962;FP=11946942792445002263|1|1|1|0|-1|-1|-1;HT=maildocker-contentspam033037028158;MF=wanglin@open-hieco.net;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.jIkm1sn_1789970179;
-Received: from localhost.localdomain(mailfrom:wanglin@open-hieco.net fp:SMTPD_---.jIkm1sn_1789970179 cluster:ay29)
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.08401445|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.00227817-0.00107444-0.996647;FP=6920001056461840522|1|1|1|0|-1|-1|-1;HT=maildocker-contentspam033037071049;MF=wanglin@open-hieco.net;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.jIkm1vY_1789970182;
+Received: from localhost.localdomain(mailfrom:wanglin@open-hieco.net fp:SMTPD_---.jIkm1vY_1789970182 cluster:ay29)
           by smtp.aliyun-inc.com;
-          Mon, 21 Sep 2026 13:56:20 +0800
+          Mon, 21 Sep 2026 13:56:23 +0800
 From: Lin Wang <wanglin@open-hieco.net>
 To: Borislav Petkov <bp@alien8.de>,
 	Yazen Ghannam <yazen.ghannam@amd.com>,
@@ -34,9 +34,9 @@ Cc: Pu Wen <puwen@hygon.cn>,
 	linux-edac@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v6 5/8] hwmon: (k10temp) Stop matching Hygon devices
-Date: Mon, 21 Sep 2026 13:56:00 +0800
-Message-ID: <20260921055603.25112-6-wanglin@open-hieco.net>
+Subject: [PATCH v6 7/8] x86/amd_node: Restrict SMN setup to AMD CPUs
+Date: Mon, 21 Sep 2026 13:56:02 +0800
+Message-ID: <20260921055603.25112-8-wanglin@open-hieco.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260921055603.25112-1-wanglin@open-hieco.net>
 References: <20260921055603.25112-1-wanglin@open-hieco.net>
@@ -48,79 +48,43 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-k10temp matches the Hygon F3 device, but derives the node passed to
-amd_smn_read() from the F3 PCI slot using the AMD fixed-slot mapping
-(slot - 0x18). Hygon PCI slots do not encode DF node identity, and
-their SMN roots are grouped by socket.
+amd_smn_init() divides host bridge roots among amd_num_nodes() entries
+in PCI enumeration order. Hygon DF nodes instead share one SMN ingress
+per socket, so the AMD root map cannot provide Hygon SMN access.
 
-The derived node number therefore cannot identify a valid Hygon SMN
-target or provide usable temperature monitoring. Removing the match
-does not disable a working monitoring path.
-
-Remove the Hygon PCI match and Family 0x18 branch. Hygon temperature
-monitoring will use the Hygon node and SMN interfaces in a separate
-series.
+amd64_edac, ATL and k10temp no longer depend on AMD northbridge or SMN
+state on Hygon. Restrict AMD SMN setup and root discovery to AMD CPUs,
+leaving the Hygon roots available for the Hygon node layer.
 
 Signed-off-by: Lin Wang <wanglin@open-hieco.net>
 ---
- Documentation/hwmon/k10temp.rst | 8 +++-----
- drivers/hwmon/k10temp.c         | 5 ++---
- 2 files changed, 5 insertions(+), 8 deletions(-)
+ arch/x86/kernel/amd_node.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/hwmon/k10temp.rst b/Documentation/hwmon/k10temp.rst
-index 91b99adc6c48..9680c4f3383c 100644
---- a/Documentation/hwmon/k10temp.rst
-+++ b/Documentation/hwmon/k10temp.rst
-@@ -28,8 +28,6 @@ Supported chips:
+diff --git a/arch/x86/kernel/amd_node.c b/arch/x86/kernel/amd_node.c
+index b7926ba3610a..c36b410d04a4 100644
+--- a/arch/x86/kernel/amd_node.c
++++ b/arch/x86/kernel/amd_node.c
+@@ -229,8 +229,7 @@ static struct pci_dev *get_next_root(struct pci_dev *root)
+ 		if (root->devfn)
+ 			continue;
  
- * AMD Family 17h processors: "Zen", "Zen 2"
+-		if (root->vendor != PCI_VENDOR_ID_AMD &&
+-		    root->vendor != PCI_VENDOR_ID_HYGON)
++		if (root->vendor != PCI_VENDOR_ID_AMD)
+ 			continue;
  
--* AMD Family 18h processors: "Hygon Dhyana"
--
- * AMD Family 19h processors: "Zen 3"
+ 		break;
+@@ -253,6 +252,9 @@ static int __init amd_smn_init(void)
+ 	u16 count, num_roots, roots_per_node, node, num_nodes;
+ 	struct pci_dev *root __free(pci_dev_put) = NULL;
  
-   Prefix: 'k10temp'
-@@ -128,7 +126,7 @@ it.
- Models from 17h family report relative temperature, the driver aims to
- compensate and report the real temperature.
++	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
++		return 0;
++
+ 	if (!cpu_feature_enabled(X86_FEATURE_ZEN))
+ 		return 0;
  
--On Family 17h and Family 18h CPUs, additional temperature sensors may report
--Core Complex Die (CCD) temperatures. Up to 8 such temperatures are reported
--as temp{3..10}_input, labeled Tccd{1..8}. Actual support depends on the CPU
-+On Family 17h CPUs, additional temperature sensors may report Core Complex
-+Die (CCD) temperatures. Up to 8 such temperatures are reported as
-+temp{3..10}_input, labeled Tccd{1..8}. Actual support depends on the CPU
- variant.
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 3e7e63edc6a3..e0a7211a513c 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -64,7 +64,7 @@ MODULE_PARM_DESC(force, "force loading on processors with erratum 319");
- #define F15H_M60H_HARDWARE_TEMP_CTRL_OFFSET	0xd8200c64
- #define F15H_M60H_REPORTED_TEMP_CTRL_OFFSET	0xd8200ca4
- 
--/* Common for Zen CPU families (Family 17h and 18h and 19h and 1Ah) */
-+/* Common for Zen CPU families (Family 17h, 19h and 1Ah) */
- #define ZEN_REPORTED_TEMP_CTRL_BASE		0x00059800
- 
- #define ZEN_CCD_TEMP(offset, x)			(ZEN_REPORTED_TEMP_CTRL_BASE + \
-@@ -475,7 +475,7 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		data->read_tempreg = read_tempreg_pci;
- 	}
- 
--	if (boot_cpu_data.x86 == 0x17 || boot_cpu_data.x86 == 0x18) {
-+	if (boot_cpu_data.x86 == 0x17) {
- 		switch (boot_cpu_data.x86_model) {
- 		case 0x1:	/* Zen */
- 		case 0x8:	/* Zen+ */
-@@ -583,7 +583,6 @@ static const struct pci_device_id k10temp_id_table[] = {
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M60H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M70H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M90H_DF_F3) },
--	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
- 	{}
- };
- MODULE_DEVICE_TABLE(pci, k10temp_id_table);
 -- 
 2.43.0
 
