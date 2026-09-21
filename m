@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC4F8175A62;
-	Mon, 21 Sep 2026 07:01:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07C772D9EDB;
+	Mon, 21 Sep 2026 07:01:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789974098; cv=none; b=fiJZNaOTjBRU6n1EIYOzZvLFnZIgXVGC77GuEdhXwn0f5/Mz8UogzaNhM2FszTmbf+An037XcGAmRu7J++j7g3Fl0rX3lIy5ZIrM5VZjWN+zhYRBYg1RX0N88KHKJ7M/yDXuvWWntahJbV3J5rUirjtVwor1waIV+M2Tgn+9ZPQ=
+	t=1789974115; cv=none; b=iksNjZAWjWBmwz3wke6R9VEwmevyIUciBScZdym720ZHnd3j3faE1kJgi+dGzYgVu0ItanwlYEo7gRODsVra1kzd86fIErW6NroaTPxYIij4hFMiXYbWfuWVBgroqIw3mS0vcpHbEUpbqGg9AHEwIsozd9gVKyrack8oeyde1Ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789974098; c=relaxed/simple;
-	bh=rTWPAtkRsxVBgj+BCia0c+kuPWjDOUxiAog1iSM/cbA=;
+	s=arc-20240116; t=1789974115; c=relaxed/simple;
+	bh=rWRbD3z55xGDflNUoeLTi+MYega6zWHvLBRkRHYNq0Y=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=JsjQ95jk5JeYyepx56UUQzg5ZBEj2fhKHMF1Ev9tX5HXL8YiD1cthlLdRpFQ3U1RPmIMgGW9bvnX6MZ0GDtWHoRwVcvASq7/0meAqWxPyEFnT48j2GvvEMkzKhGQUCwXZNSTLCwEZAB5sxozdfZmlGyt7so0u2AU0BBs/eRNaDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oBmy/thb; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=aTE1jtwjb85ra6X6CuyG5CeC30H9itWgZ4KKjJ4Esoty3dJgvQEdxPc4YHK0IKj06FJ3MG8fO1L/q8fASL11HC89P2B7aJHths0tV7+T1HgT7Yz1af4rnqYmnNgwAgZ04cVtYKIGGE7JoC/7b8Xv19JAwVsxnVVpwsWluWVex0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OU5F+kQS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oBmy/thb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 743931F000FF;
-	Mon, 21 Sep 2026 07:01:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OU5F+kQS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 574AE1F000FF;
+	Mon, 21 Sep 2026 07:01:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789974097;
-	bh=rTWPAtkRsxVBgj+BCia0c+kuPWjDOUxiAog1iSM/cbA=;
+	s=k20260515; t=1789974113;
+	bh=rWRbD3z55xGDflNUoeLTi+MYega6zWHvLBRkRHYNq0Y=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=oBmy/thbeBQUTaDkuJleku7IdzSElWwW0Mt89spabjvMrr2Kbw64MhJbJbh6LmJtD
-	 5HRCbZNGRmLG1H6c4UEMcTpOUqiqT2+Nn1fepcIknZfJFg19xUGsyAT4a5kAtR+38L
-	 GIESwuOCM0yHC8aHwNvU4DcT268cx9dFsibkeLH5rRimjryvNqBMRGam6HVFq+f+77
-	 I/Y6gsQ7Y1BKCeVPeYLQUYirJwYcRpxkkTzN8BKnNZNan1oG7LcLCn9nVYVofXnF11
-	 rQeWlf2EGoycQOW89MiKTT6PgqqOc+uc7/TKoZ+U1MQi597NmIH5FQBT95AWyyPnNM
-	 vJda7yON/ECcQ==
+	b=OU5F+kQStRsJK0BjCVhq+6eo/dCytP8iCjthgLpKWmreM9Y9U8zyx+Y3AykSTReFe
+	 yso9rhySva6DO9kZ9scMlxdbn4HsxaMdumAL+lPm7DrGeTUvxOSDimb9Z1YEbFdNU/
+	 KBKw3gdF3887TM+v+Vvrh4f/zJWhgRzzrpMDIAI6aQtvZCZgKkwd4sBP9YMGf/sQgE
+	 fNHUOsNWkBo6mutssY6rNzxOFf/eT5JRrFhWqhhS438a2NdBU6IVk3p8By74lQD7yj
+	 smbM6nbMUKw9nCm5nEOPpglO91HuhyIfuRzYLKuUldiVLYIvkAitDGlOk7EehQdltt
+	 f3J6A5SgLnrrQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: trivial-devices: Add support for
- XDPE1A2G7C
+Subject: Re: [PATCH 2/2] hwmon:(pmbus/xdpe1a2g7b) Add support for xdpe1a2g7c
+ controller
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "ASHISH YADAV" <ashishyadav78@gmail.com>
-Cc: robh@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20260921065702.93196-2-Ashish.Yadav@infineon.com>
+Cc: devicetree@vger.kernel.org, conor+dt@kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org
+In-Reply-To: <20260921065702.93196-3-Ashish.Yadav@infineon.com>
 References: <20260921065702.93196-1-Ashish.Yadav@infineon.com>
- <20260921065702.93196-2-Ashish.Yadav@infineon.com>
+ <20260921065702.93196-3-Ashish.Yadav@infineon.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 21 Sep 2026 07:01:37 +0000
-Message-Id: <20260921070137.743931F000FF@smtp.kernel.org>
+Date: Mon, 21 Sep 2026 07:01:52 +0000
+Message-Id: <20260921070153.574AE1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -47,7 +47,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 > From: Ashish Yadav <ashish.yadav@infineon.com>
 >=20
-> Add Infineon Digital Multi-phase XDPE1A2G7C Controller to trivial devices.
+> Extend xdpe1a2g7b driver to support xdpe1a2g7c model.
 >=20
 > Signed-off-by: Ashish Yadav <ashish.yadav@infineon.com>
 
@@ -55,5 +55,5 @@ Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260921065702.9319=
-6-1-Ashish.Yadav@infineon.com?part=3D1
+6-1-Ashish.Yadav@infineon.com?part=3D2
 
