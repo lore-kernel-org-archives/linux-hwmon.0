@@ -1,902 +1,557 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D338D4A205A;
-	Mon, 21 Sep 2026 15:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B174AEBF5;
+	Mon, 21 Sep 2026 15:23:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790004045; cv=none; b=PjvgX6XBMwS89nl2p/rIDBK9DHSH9bMvS7rKU7TFVb5PfvH50wZTGJjlX2crV6zettASfKZi3Lig8Go36T3eGCPwVy2bGF4/Krn8kTFPnXgl9mW6lxqKWDtwyWoHZc5f8/6DPe8X+alseImMvxbB+GtNkQjcUeLH5aW6UH3jNIY=
+	t=1790004238; cv=none; b=nerQUl/dkQpgKIZQAAZLdRifBiFuLhH5AC3NCTqeDMOAl5V46DAAhENUjDxLgpSahYqWcp+bvPZGwOtfceSovYT1LtRFZDDG0eJHU3ipyxsq8aTIbgxSRTMQ+e0yJU0nWFDNowDvIMHIRz+VV1URISzd2ucZ+CMAX0Rm1DsmHBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790004045; c=relaxed/simple;
-	bh=BxYTW0aXHiempGxXaHoz+R5sudZ9m1AYjueAIVsuV64=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=YBsWbanImVlwPadsykPPnm2a98Dq6nk0on2koJfSlGCFNSHdV4CQDZWQhut1euMMWAdw93ubB9Wb5NVeVyb/jp1SW7MQNrcPDniamv48qvqtdKJ/dEPqsYbyh4OlJC1SjAHh3HtgG4K6GcFFyDnzXhE6siZYZo1+j48ayfGGBhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eU51/hD5; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1790004238; c=relaxed/simple;
+	bh=/VkC67msFQZzDCHeLIME8y32FTfMzKWh+3d2Bu15lIs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G6f/vDp6xMm1fQEgLYiMrpo5ZjiNLr0RwY0PfMmkkextADUgyE42YhlqTlzOK3VK53ihgqYBfJhehwKFuWOtPuS3yacAunrKoKE4tkRVMAQwFfXwN+eFa7Hq60wTkYvSOb/OgDui35ZLwghlite9r3vlSHviouuGoVVrjXh9MpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=eGWxoMWW; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=MG0RJ5NW; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eU51/hD5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790004043; x=1821540043;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=BxYTW0aXHiempGxXaHoz+R5sudZ9m1AYjueAIVsuV64=;
-  b=eU51/hD53NDATXU48BPbu+CxfQvELh/D+gjyxjHOtlWe1Rv1e8rhiKd0
-   jcuUUdCL+ecx/GO/g9Q3JBgRuyzDahf6/upiC9nV4QmOlicTF5jsfWwlx
-   63M1KBwALLIryLbG/ScF9On7w3ycJ1QBRFAaWuBbmhNBNPc4uWgvn/m2F
-   2DhaWS9zlorxwe4VPewR1WShwuIt71zxd3CFV8h64HNa/tyzaCWqWUmi+
-   T47s8X2SXTjd7mKthGUVfEEyDtLUbMq/SwOJZHl6LTQXUTsu55AnUKwkB
-   oSh1RIZ6J545ESfXWndO4U24/Ft5J/48aTLY26oJ4EotBTs1Lzlha0c4/
-   g==;
-X-CSE-ConnectionGUID: HduYtLufRlO/SFPqVgyubQ==
-X-CSE-MsgGUID: dRbvTwcrR72MXl3djTwWNA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11912"; a="90549492"
-X-IronPort-AV: E=Sophos;i="6.27,114,1787036400"; 
-   d="scan'208";a="90549492"
-Received: from fmviesa013.fm.intel.com ([10.60.135.153])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2026 08:20:42 -0700
-X-CSE-ConnectionGUID: zS4hVFq6RGah7ip7B/ixCg==
-X-CSE-MsgGUID: nCQxSuLZQpC+okiTa2i/BQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,114,1787036400"; 
-   d="scan'208";a="3992224"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.215])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2026 08:20:37 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 21 Sep 2026 18:20:26 +0300 (EEST)
-To: Oleg Keri <okerixx@gmail.com>
-cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-    Conor Dooley <conor+dt@kernel.org>, Hans de Goede <hansg@kernel.org>, 
-    Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
-    Guenter Roeck <linux@roeck-us.net>, Bjorn Andersson <andersson@kernel.org>, 
-    Konrad Dybcio <konradybcio@kernel.org>, Abel Vesa <abelvesa@kernel.org>, 
-    linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>, platform-driver-x86@vger.kernel.org, 
-    linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] platform/arm64: add Lenovo Yoga Slim 7x Gen 11
- EC driver
-In-Reply-To: <20260921144953.15113-3-okerixx@gmail.com>
-Message-ID: <55181989-11d7-ce0d-f9c3-e9dceaaf1fb4@linux.intel.com>
-References: <20260921144953.15113-1-okerixx@gmail.com> <20260921144953.15113-3-okerixx@gmail.com>
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="eGWxoMWW";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="MG0RJ5NW"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 89916219B3;
+	Mon, 21 Sep 2026 15:23:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1790004228; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=/VkC67msFQZzDCHeLIME8y32FTfMzKWh+3d2Bu15lIs=;
+	b=eGWxoMWWjb3KQyPwLxRQ56DQpkuu47zbkNyrbyWWCoS86qr+Oo5WwgNwIoR0fSB2C5Id4S
+	Rwc7fbuSbUSuE0sy2ZvFIkDOceABsXXvFuIGhXCczV73CZDRRcwQcWDgbhGir3pWjGnFjO
+	Mp3WgCJJlNn7gTxAM0lkAwsHcuGvqdk=
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=MG0RJ5NW
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1790004224; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=/VkC67msFQZzDCHeLIME8y32FTfMzKWh+3d2Bu15lIs=;
+	b=MG0RJ5NWcjT0bvQlmoPyqzoMfwSY52OvREe84/xPqggmc9Jh3O2yB0v8OIg0cMAMHs7eJ7
+	S9R9zcd/RpnTqTQgUSOAEWXIk56GZ40SwbQQWFMzQesRCvvJyzU/8CcCF4qABST5JrxOGQ
+	cqwdlWChCyZ+ZgdWGE0m3wWY9ArV0WQ=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 33B9E13793;
+	Mon, 21 Sep 2026 15:23:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id UKI5A/5LsWrMfAAAD6G6ig
+	(envelope-from <jgross@suse.com>); Mon, 21 Sep 2026 15:23:42 +0000
+Message-ID: <6df2617a-5bee-4bac-822d-a4ca09c47e76@suse.com>
+Date: Mon, 21 Sep 2026 17:23:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 00/13] x86/msr: Drop 32-bit MSR interfaces
+To: linux-kernel@vger.kernel.org, x86@kernel.org,
+ virtualization@lists.linux.dev, linux-ide@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+ linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ kvm@vger.kernel.org, linux-edac@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-coco@lists.linux.dev,
+ linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-mtd@lists.infradead.org, platform-driver-x86@vger.kernel.org,
+ Ingo Molnar <mingo@redhat.com>
+Cc: Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Ajay Kaher <ajay.kaher@broadcom.com>,
+ Alexey Makhalov <alexey.makhalov@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Damien Le Moal
+ <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
+ David Airlie <airlied@redhat.com>, Helge Deller <deller@gmx.de>,
+ linux-geode@lists.infradead.org, Olivia Mackall <olivia@selenic.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, Linus Walleij <linusw@kernel.org>,
+ Bartosz Golaszewski <brgl@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, James Clark
+ <james.clark@linaro.org>, "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, Pu Wen <puwen@hygon.cn>,
+ Tony Luck <tony.luck@intel.com>, Reinette Chatre
+ <reinette.chatre@intel.com>, Dave Martin <Dave.Martin@arm.com>,
+ James Morse <james.morse@arm.com>, Babu Moger <babu.moger@amd.com>,
+ Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+ Vitaly Kuznetsov <vkuznets@redhat.com>, Andy Lutomirski <luto@kernel.org>,
+ Bjorn Helgaas <bhelgaas@google.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>,
+ Kiryl Shutsemau <kas@kernel.org>, Rick Edgecombe
+ <rick.p.edgecombe@intel.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+ Len Brown <lenb@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Huang Rui <ray.huang@amd.com>, Mario Limonciello
+ <mario.limonciello@amd.com>, Perry Yuan <perry.yuan@amd.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Yazen Ghannam <yazen.ghannam@amd.com>, Guenter Roeck <linux@roeck-us.net>,
+ Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+ Artem Bityutskiy <dedekind1@gmail.com>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Ashok Raj <ashok.raj.linux@gmail.com>, Hans de Goede <hansg@kernel.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+ Xi Pardee <xi.pardee@linux.intel.com>,
+ Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, xen-devel@lists.xenproject.org
+References: <20260911074530.3140830-1-jgross@suse.com>
+Content-Language: en-US
+From: Juergen Gross <jgross@suse.com>
+Autocrypt: addr=jgross@suse.com; keydata=
+ xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOB
+ ycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJve
+ dYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJ
+ NwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvx
+ XP3FAp2pkW0xqG7/377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEB
+ AAHNH0p1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT7CwHkEEwECACMFAlOMcK8CGwMH
+ CwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAKCRCw3p3WKL8TL8eZB/9G0juS/kDY9LhEXseh
+ mE9U+iA1VsLhgDqVbsOtZ/S14LRFHczNd/Lqkn7souCSoyWsBs3/wO+OjPvxf7m+Ef+sMtr0
+ G5lCWEWa9wa0IXx5HRPW/ScL+e4AVUbL7rurYMfwCzco+7TfjhMEOkC+va5gzi1KrErgNRHH
+ kg3PhlnRY0Udyqx++UYkAsN4TQuEhNN32MvN0Np3WlBJOgKcuXpIElmMM5f1BBzJSKBkW0Jc
+ Wy3h2Wy912vHKpPV/Xv7ZwVJ27v7KcuZcErtptDevAljxJtE7aJG6WiBzm+v9EswyWxwMCIO
+ RoVBYuiocc51872tRGywc03xaQydB+9R7BHPzsBNBFOMcBYBCADLMfoA44MwGOB9YT1V4KCy
+ vAfd7E0BTfaAurbG+Olacciz3yd09QOmejFZC6AnoykydyvTFLAWYcSCdISMr88COmmCbJzn
+ sHAogjexXiif6ANUUlHpjxlHCCcELmZUzomNDnEOTxZFeWMTFF9Rf2k2F0Tl4E5kmsNGgtSa
+ aMO0rNZoOEiD/7UfPP3dfh8JCQ1VtUUsQtT1sxos8Eb/HmriJhnaTZ7Hp3jtgTVkV0ybpgFg
+ w6WMaRkrBh17mV0z2ajjmabB7SJxcouSkR0hcpNl4oM74d2/VqoW4BxxxOD1FcNCObCELfIS
+ auZx+XT6s+CE7Qi/c44ibBMR7hyjdzWbABEBAAHCwF8EGAECAAkFAlOMcBYCGwwACgkQsN6d
+ 1ii/Ey9D+Af/WFr3q+bg/8v5tCknCtn92d5lyYTBNt7xgWzDZX8G6/pngzKyWfedArllp0Pn
+ fgIXtMNV+3t8Li1Tg843EXkP7+2+CQ98MB8XvvPLYAfW8nNDV85TyVgWlldNcgdv7nn1Sq8g
+ HwB2BHdIAkYce3hEoDQXt/mKlgEGsLpzJcnLKimtPXQQy9TxUaLBe9PInPd+Ohix0XOlY+Uk
+ QFEx50Ki3rSDl2Zt2tnkNYKUCvTJq7jvOlaPd6d/W0tZqpyy7KVay+K4aMobDsodB3dvEAs6
+ ScCnh03dDAFgIq5nsB11j3KPKdVoPlfucX2c7kGNH+LUMbzqV6beIENfNexkOfxHfw==
+In-Reply-To: <20260911074530.3140830-1-jgross@suse.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------axxK79NgUHTDoQRwnbgWpSYy"
+X-Spam-Level: 
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: 89916219B3
+X-Spamd-Result: default: False [-3.91 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SIGNED_PGP(-2.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MIME_BASE64_TEXT_BOGUS(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	MIME_GOOD(-0.20)[multipart/signed,multipart/mixed,text/plain];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_BASE64_TEXT(0.10)[];
+	MIME_UNKNOWN(0.10)[application/pgp-keys];
+	MX_GOOD(-0.01)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	MIME_TRACE(0.00)[0:+,1:+,2:+,3:+,4:~,5:~];
+	RCVD_TLS_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FREEMAIL_CC(0.00)[kernel.org,alien8.de,linux.intel.com,zytor.com,broadcom.com,redhat.com,gmx.de,lists.infradead.org,selenic.com,gondor.apana.org.au,arndb.de,linuxfoundation.org,infradead.org,arm.com,google.com,intel.com,linaro.org,microsoft.com,hygon.cn,amd.com,zhaoxin.com,oracle.com,roeck-us.net,gmail.com,bootlin.com,nod.at,ti.com,lists.xenproject.org];
+	R_RATELIMIT(0.00)[to_ip_from(RLd6eq7w9gpcedu6aekum1umqh)];
+	DKIM_TRACE(0.00)[suse.com:+];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	HAS_ATTACHMENT(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[94];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.com:dkim,suse.com:mid]
+X-Spam-Flag: NO
+X-Spam-Score: -3.91
 
-On Mon, 21 Sep 2026, Oleg Keri wrote:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------axxK79NgUHTDoQRwnbgWpSYy
+Content-Type: multipart/mixed; boundary="------------T4ZJp6Lhzy2IBIrjLpBsTTw0";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: linux-kernel@vger.kernel.org, x86@kernel.org,
+ virtualization@lists.linux.dev, linux-ide@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+ linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ kvm@vger.kernel.org, linux-edac@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-coco@lists.linux.dev,
+ linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-mtd@lists.infradead.org, platform-driver-x86@vger.kernel.org,
+ Ingo Molnar <mingo@redhat.com>
+Cc: Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Ajay Kaher <ajay.kaher@broadcom.com>,
+ Alexey Makhalov <alexey.makhalov@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Damien Le Moal
+ <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
+ David Airlie <airlied@redhat.com>, Helge Deller <deller@gmx.de>,
+ linux-geode@lists.infradead.org, Olivia Mackall <olivia@selenic.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, Linus Walleij <linusw@kernel.org>,
+ Bartosz Golaszewski <brgl@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, James Clark
+ <james.clark@linaro.org>, "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, Pu Wen <puwen@hygon.cn>,
+ Tony Luck <tony.luck@intel.com>, Reinette Chatre
+ <reinette.chatre@intel.com>, Dave Martin <Dave.Martin@arm.com>,
+ James Morse <james.morse@arm.com>, Babu Moger <babu.moger@amd.com>,
+ Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+ Vitaly Kuznetsov <vkuznets@redhat.com>, Andy Lutomirski <luto@kernel.org>,
+ Bjorn Helgaas <bhelgaas@google.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>,
+ Kiryl Shutsemau <kas@kernel.org>, Rick Edgecombe
+ <rick.p.edgecombe@intel.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+ Len Brown <lenb@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Huang Rui <ray.huang@amd.com>, Mario Limonciello
+ <mario.limonciello@amd.com>, Perry Yuan <perry.yuan@amd.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Yazen Ghannam <yazen.ghannam@amd.com>, Guenter Roeck <linux@roeck-us.net>,
+ Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+ Artem Bityutskiy <dedekind1@gmail.com>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Ashok Raj <ashok.raj.linux@gmail.com>, Hans de Goede <hansg@kernel.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+ Xi Pardee <xi.pardee@linux.intel.com>,
+ Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, xen-devel@lists.xenproject.org
+Message-ID: <6df2617a-5bee-4bac-822d-a4ca09c47e76@suse.com>
+Subject: Re: [PATCH v3 00/13] x86/msr: Drop 32-bit MSR interfaces
+References: <20260911074530.3140830-1-jgross@suse.com>
+In-Reply-To: <20260911074530.3140830-1-jgross@suse.com>
 
-> The Lenovo Yoga Slim 7x Gen 11 (Qualcomm glymur / Snapdragon X2 Elite)
-> carries a Compal EF06 embedded controller on I2C at address 0x70. The
-> platform firmware describes it as an ACPI GenericSerialBus region, but the
-> machine boots from device tree, so nothing otherwise talks to it.
-> 
-> Commands are exchanged with two raw I2C block transfers: a 7 byte write to
-> register 0x02 carrying the command and up to six arguments, then a 6 byte
-> read of register 0x01 for the result, with a short delay in between before
-> the result register is valid. The EC offers no way to match a result to
-> its command; the delay is the one the vendor ACPI code uses, and the one
-> value that lives in a mailbox shared with other EC activity, the cell
-> voltages, is validated against a signature and retried.
-> 
-> Expose what the EC offers that the rest of the kernel does not already
-> provide:
-> 
->   - five board thermistors as hwmon temperature channels. These are
->     charger, CPU voltage regulator, 5 V rail and ambient sensors, not die
->     sensors, and read considerably cooler than tsens
->   - the four battery cell voltages, which live in a banked mailbox shared
->     with other EC activity; readings are validated against a signature and
->     retried, and cached briefly so that all four channels come from one
->     coherent sample
->   - CPU fan speed in RPM
->   - the keyboard backlight as an LED, off/low/high
->   - Fn-lock as a read/write sysfs attribute, matching the ideapad-laptop
->     interface. The EC reports Fn+Esc as an event but keeps no state of its
->     own, so the driver owns the bit and toggles it on the key
->   - the mic-mute and airplane-mode keys as KEY_MICMUTE and KEY_RFKILL.
->     These reach the host only as EC events; they are not on the keyboard's
->     HID interface and have no GPIO of their own
-> 
-> The EC signals pending events on a dedicated line, and keeps pulsing it
-> until they are read - so the queue must be drained completely on every
-> interrupt, including codes this driver ignores. Leaving one behind makes
-> the controller pulse indefinitely.
-> 
-> Fan speed is reported but not controlled. The EC accepts a manual setpoint,
-> however it enforces no thermal floor over it: with the fan pinned at
-> roughly 2000 RPM under full load the SoC rose from 69 to 91 degrees in 30
-> seconds without the EC ever overriding. Exposing pwm1_enable or fan1_target
-> would therefore let userspace overheat the machine, so neither is
-> implemented.
-> 
-> Note this is the Gen 11 machine specifically. Its EC differs from the
-> Qualcomm reference EC that the reference designs place at address 0x76,
-> which is not populated here, and so EC_QCOM_HAMOA does not drive it.
-> 
-> Signed-off-by: Oleg Keri <okerixx@gmail.com>
-> ---
->  .../sysfs-driver-lenovo-yoga-slim7x-gen11-ec  |  21 +
->  drivers/platform/arm64/Kconfig                |  23 +
->  drivers/platform/arm64/Makefile               |   1 +
->  .../arm64/lenovo-yoga-slim7x-gen11-ec.c       | 653 ++++++++++++++++++
->  4 files changed, 698 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-driver-lenovo-yoga-slim7x-gen11-ec
->  create mode 100644 drivers/platform/arm64/lenovo-yoga-slim7x-gen11-ec.c
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-lenovo-yoga-slim7x-gen11-ec b/Documentation/ABI/testing/sysfs-driver-lenovo-yoga-slim7x-gen11-ec
-> new file mode 100644
-> index 000000000000..c8ab554ad452
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-driver-lenovo-yoga-slim7x-gen11-ec
-> @@ -0,0 +1,21 @@
-> +What:		/sys/bus/i2c/devices/*/fn_lock
-> +Date:		August 2026
+--------------T4ZJp6Lhzy2IBIrjLpBsTTw0
+Content-Type: multipart/mixed; boundary="------------dtnWD0jmGt0coRzSWi6oU7rk"
 
-??
+--------------dtnWD0jmGt0coRzSWi6oU7rk
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> +KernelVersion:	7.3
+SW5nbywNCg0KT24gMTEuMDkuMjYgMDk6NDUsIEp1ZXJnZW4gR3Jvc3Mgd3JvdGU6DQo+IEZv
+ciBhY2Nlc3NpbmcgdGhlIE1TUiByZWdpc3RlcnMgb24gdGhlIGxvY2FsIENQVSwgdGhlcmUg
+YXJlIDIgdHlwZXMgb2YNCj4gaW50ZXJmYWNlczogdGhlICJtb2Rlcm4iIDY0LWJpdCBvbmVz
+IChyZG1zcnEoKSBldGMuKSBhbmQgdGhlIDMyLWJpdA0KPiBvbmVzIChyZG1zcigpIGV0Yy4p
+IHdoaWNoIGFyZSB1c2luZyB0aGUgdXBwZXIgYW5kIGxvd2VyIDMyLWJpdCBoYWx2ZXMNCj4g
+b2YgdGhlIDY0LWJpdCB3aWRlIE1TUiByZWdpc3RlciB2YWx1ZXMuDQo+IA0KPiBUaGUgMzIt
+Yml0IGludGVyZmFjZXMgYXJlIG5vdCBvcHRpbWFsIGZvciAzIHJlYXNvbnM6DQo+IA0KPiAt
+IFRoZXkgYXJlIGJhc2VkIG9uIHByaW1pdGl2ZXMgdXNpbmcgNjQtYml0IHNpemVkIHZhbHVl
+cyBhbnl3YXkuDQo+IA0KPiAtIE1vZGVybiB4ODYgQ1BVcyBoYXZlIGFkZGVkIHN1cHBvcnQg
+Zm9yIE1TUiBhY2Nlc3MgaW5zdHJ1Y3Rpb25zIHVzaW5nDQo+ICAgIGFuIGltbWVkaWF0ZSB2
+YWx1ZSBpbnN0ZWFkIG9mIGEgcmVnaXN0ZXIgZm9yIGFkZHJlc3NpbmcgdGhlIE1TUiwNCj4g
+ICAgd2hpbGUgdGhlIHZhbHVlIGlzIGluIGEgNjQtYml0IHJlZ2lzdGVyLg0KPiANCj4gLSBy
+ZG1zcigpIGlzIGEgbWFjcm8gc3RvcmluZyB0aGUgdXBwZXIgYW5kIGxvd2VyIDMyLWJpdCBo
+YWx2ZXMgaW4NCj4gICAgdmFyaWFibGVzIHNwZWNpZmllZCBhcyBtYWNybyBwYXJhbWV0ZXJz
+LiBUaGlzIGlzIG9ic2N1cmluZyB2YXJpYWJsZQ0KPiAgICBhc3NpZ25tZW50IHRocm91Z2gg
+YSBtYWNyby4gQWRkaXRpb25hbGx5IHJkbXNycSgpIGlzIG1pbWlja2luZyB0aGlzDQo+ICAg
+IHBhdHRlcm4gYnkgYmVpbmcgYSBtYWNybywgdG9vLCB3aXRoIHRoZSB0YXJnZXQgdmFyaWFi
+bGUgc3BlY2lmaWVkIGFzDQo+ICAgIGEgcGFyYW1ldGVyIGFzIHdlbGwuDQo+IA0KPiBGb3Ig
+dGhvc2UgcmVhc29ucyBkcm9wIHRoZSAzMi1iaXQgaW50ZXJmYWNlcyBmb3IgYWNjZXNzaW5n
+IHRoZSB4ODYgTVNSDQo+IHJlZ2lzdGVycyBjb21wbGV0ZWx5IGFuZCBvbmx5IHVzZSB0aGUg
+NjQtYml0IHZhcmlhbnRzLg0KPiANCj4gVGhpcyBhbGxvd3MgdG8gc3dpdGNoIGFsbCAiaGln
+aC1sZXZlbCIgTVNSIGFjY2VzcyBtYWNyb3MgdG8gaW5saW5lDQo+IGZ1bmN0aW9ucyBpbiB0
+aGUgZW5kLg0KPiANCj4gVGhpcyBzZXJpZXMgd2lsbCBiZSB1c2VkIGFzIHRoZSBiYXNlIGZv
+ciBmdXJ0aGVyIHJlb3JnYW5pc2F0aW9uIG9mIHRoZQ0KPiBNU1IgYWNjZXNzIGZ1bmN0aW9u
+cywgZXNwZWNpYWxseSBmb3IgY29tcGxldGVseSBpbmxpbmluZyB0aGUgTVNSDQo+IGFjY2Vz
+cyBpbnN0cnVjdGlvbnMgZXZlbiB3aXRoIHBhcmF2aXJ0dWFsaXphdGlvbiBiZWluZyBhY3Rp
+dmUuDQo+IA0KPiBCYXNlZCBvbiBrZXJuZWwgNy4zIGFzIG9mIDIwMjYtMDktMTEuDQo+IA0K
+PiBDaGFuZ2VzIGluIFYyOg0KPiAtIGRyb3BwZWQgYWxyZWFkeSBhcHBsaWVkIHBhdGNoZXMN
+Cj4gLSBhZGRlZCBwYXRjaCAxDQo+IC0gcmViYXNlZA0KPiANCj4gQ2hhbmdlcyBpbiBWMzoN
+Cj4gLSBzbWFsbCBmaXhlcyBpbiBwYXRjaGVzIDQgYW5kIDEzDQo+IC0gcmViYXNlZA0KPiAN
+Cj4gSnVlcmdlbiBHcm9zcyAoMTMpOg0KPiAgICB4ODYvY3B1OiBGaXggY29kaW5nIHN0eWxl
+IHZpb2xhdGlvbg0KPiAgICB4ODYvbXNyOiBSZW1vdmUgd3Jtc3Jfc2FmZSgpDQo+ICAgIHg4
+Ni9tc3I6IFJlbW92ZSByZG1zcl9zYWZlKCkNCj4gICAgZHJpdmVycy9hdGE6IFN0b3AgdXNp
+bmcgMzItYml0IE1TUiBpbnRlcmZhY2VzDQo+ICAgIGFncC9udmlkaWE6IFN0b3AgdXNpbmcg
+MzItYml0IE1TUiBpbnRlcmZhY2VzDQo+ICAgIGZiZGV2L2dlb2RlOiBTdG9wIHVzaW5nIDMy
+LWJpdCBNU1IgaW50ZXJmYWNlcw0KPiAgICBod19yYW5kb20vdmlhLXJuZzogU3RvcCB1c2lu
+ZyAzMi1iaXQgTVNSIGludGVyZmFjZXMNCj4gICAgZHJpdmVycy9ncGlvOiBTdG9wIHVzaW5n
+IDMyLWJpdCBNU1IgaW50ZXJmYWNlcw0KPiAgICBkcml2ZXJzL21pc2M6IFN0b3AgdXNpbmcg
+MzItYml0IE1TUiBpbnRlcmZhY2VzDQo+ICAgIHg4Ni9tc3I6IFJlbW92ZSB3cm1zcigpDQo+
+ICAgIHg4Ni9tc3I6IFJlbW92ZSByZG1zcigpDQo+ICAgIHRyZWV3aWRlOiBjb252ZXJ0IHJk
+bXNycSgpIGZyb20gYSBtYWNybyB0byBhbiBpbmxpbmUgZnVuY3Rpb24NCj4gICAgeDg2L21z
+cjogU2ltcGxpZnkgc29tZSByZG1zcnEoKSB1c2UgY2FzZXMNCj4gDQo+ICAgYXJjaC94ODYv
+Y29jby9zZXYvY29yZS5jICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0NCj4gICBhcmNo
+L3g4Ni9ldmVudHMvYW1kL2Jycy5jICAgICAgICAgICAgICAgICAgICAgfCAgNCArLQ0KPiAg
+IGFyY2gveDg2L2V2ZW50cy9hbWQvY29yZS5jICAgICAgICAgICAgICAgICAgICB8ICA4ICst
+LQ0KPiAgIGFyY2gveDg2L2V2ZW50cy9hbWQvaWJzLmMgICAgICAgICAgICAgICAgICAgICB8
+IDE4ICsrKy0tLS0NCj4gICBhcmNoL3g4Ni9ldmVudHMvYW1kL2xici5jICAgICAgICAgICAg
+ICAgICAgICAgfCAxNiArKy0tLS0NCj4gICBhcmNoL3g4Ni9ldmVudHMvYW1kL3Bvd2VyLmMg
+ICAgICAgICAgICAgICAgICAgfCAgOCArLS0NCj4gICBhcmNoL3g4Ni9ldmVudHMvYW1kL3Vu
+Y29yZS5jICAgICAgICAgICAgICAgICAgfCAgNCArLQ0KPiAgIGFyY2gveDg2L2V2ZW50cy9j
+b3JlLmMgICAgICAgICAgICAgICAgICAgICAgICB8IDIwICsrKystLS0tDQo+ICAgYXJjaC94
+ODYvZXZlbnRzL2ludGVsL2NvcmUuYyAgICAgICAgICAgICAgICAgIHwgMTUgKystLS0tDQo+
+ICAgYXJjaC94ODYvZXZlbnRzL2ludGVsL2NzdGF0ZS5jICAgICAgICAgICAgICAgIHwgIDUg
+Ky0NCj4gICBhcmNoL3g4Ni9ldmVudHMvaW50ZWwvZHMuYyAgICAgICAgICAgICAgICAgICAg
+fCAgMiArLQ0KPiAgIGFyY2gveDg2L2V2ZW50cy9pbnRlbC9rbmMuYyAgICAgICAgICAgICAg
+ICAgICB8IDEwICsrLS0NCj4gICBhcmNoL3g4Ni9ldmVudHMvaW50ZWwvbGJyLmMgICAgICAg
+ICAgICAgICAgICAgfCAyNSArKystLS0tLS0tDQo+ICAgYXJjaC94ODYvZXZlbnRzL2ludGVs
+L3A0LmMgICAgICAgICAgICAgICAgICAgIHwgIDYgKy0tDQo+ICAgYXJjaC94ODYvZXZlbnRz
+L2ludGVsL3A2LmMgICAgICAgICAgICAgICAgICAgIHwgIDQgKy0NCj4gICBhcmNoL3g4Ni9l
+dmVudHMvaW50ZWwvcHQuYyAgICAgICAgICAgICAgICAgICAgfCAxMiArKy0tLQ0KPiAgIGFy
+Y2gveDg2L2V2ZW50cy9pbnRlbC91bmNvcmUuYyAgICAgICAgICAgICAgICB8ICA2ICstLQ0K
+PiAgIGFyY2gveDg2L2V2ZW50cy9pbnRlbC91bmNvcmVfbmhtZXguYyAgICAgICAgICB8ICA0
+ICstDQo+ICAgYXJjaC94ODYvZXZlbnRzL2ludGVsL3VuY29yZV9zbmIuYyAgICAgICAgICAg
+IHwgIDIgKy0NCj4gICBhcmNoL3g4Ni9ldmVudHMvaW50ZWwvdW5jb3JlX3NuYmVwLmMgICAg
+ICAgICAgfCAgNiArLS0NCj4gICBhcmNoL3g4Ni9ldmVudHMvbXNyLmMgICAgICAgICAgICAg
+ICAgICAgICAgICAgfCAgMiArLQ0KPiAgIGFyY2gveDg2L2V2ZW50cy9wZXJmX2V2ZW50Lmgg
+ICAgICAgICAgICAgICAgICB8ICA2ICstLQ0KPiAgIGFyY2gveDg2L2V2ZW50cy9yYXBsLmMg
+ICAgICAgICAgICAgICAgICAgICAgICB8ICA2ICstLQ0KPiAgIGFyY2gveDg2L2V2ZW50cy96
+aGFveGluL2NvcmUuYyAgICAgICAgICAgICAgICB8IDEwICsrLS0NCj4gICBhcmNoL3g4Ni9o
+eXBlcnYvaHZfYXBpYy5jICAgICAgICAgICAgICAgICAgICAgfCAgOSArKy0tDQo+ICAgYXJj
+aC94ODYvaHlwZXJ2L2h2X2luaXQuYyAgICAgICAgICAgICAgICAgICAgIHwgMjYgKysrKyst
+LS0tLQ0KPiAgIGFyY2gveDg2L2h5cGVydi9odl9zcGlubG9jay5jICAgICAgICAgICAgICAg
+ICB8ICAyICstDQo+ICAgYXJjaC94ODYvaW5jbHVkZS9hc20vYXBpYy5oICAgICAgICAgICAg
+ICAgICAgIHwgIDcgKy0tDQo+ICAgYXJjaC94ODYvaW5jbHVkZS9hc20vZGVidWdyZWcuaCAg
+ICAgICAgICAgICAgIHwgIDYgKy0tDQo+ICAgYXJjaC94ODYvaW5jbHVkZS9hc20vZnNnc2Jh
+c2UuaCAgICAgICAgICAgICAgIHwgIDIgKy0NCj4gICBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9r
+dm1faG9zdC5oICAgICAgICAgICAgICAgfCAxMCAtLS0tDQo+ICAgYXJjaC94ODYvaW5jbHVk
+ZS9hc20vbXNyLmggICAgICAgICAgICAgICAgICAgIHwgMzkgKystLS0tLS0tLS0tLS0tDQo+
+ICAgYXJjaC94ODYvaW5jbHVkZS9hc20vcGFyYXZpcnQuaCAgICAgICAgICAgICAgIHwgMjYg
+Ky0tLS0tLS0tLQ0KPiAgIGFyY2gveDg2L2tlcm5lbC9hcGljL2FwaWMuYyAgICAgICAgICAg
+ICAgICAgICB8IDE0ICsrKy0tLQ0KPiAgIGFyY2gveDg2L2tlcm5lbC9hcGljL2FwaWNfbnVt
+YWNoaXAuYyAgICAgICAgICB8ICA2ICstLQ0KPiAgIGFyY2gveDg2L2tlcm5lbC9jZXQuYyAg
+ICAgICAgICAgICAgICAgICAgICAgICB8ICAyICstDQo+ICAgYXJjaC94ODYva2VybmVsL2Nw
+dS9hbWQuYyAgICAgICAgICAgICAgICAgICAgIHwgMTQgKysrLS0tDQo+ICAgYXJjaC94ODYv
+a2VybmVsL2NwdS9hcGVyZm1wZXJmLmMgICAgICAgICAgICAgIHwgIDggKy0tDQo+ICAgYXJj
+aC94ODYva2VybmVsL2NwdS9idWdzLmMgICAgICAgICAgICAgICAgICAgIHwgMTIgKystLS0N
+Cj4gICBhcmNoL3g4Ni9rZXJuZWwvY3B1L2J1c19sb2NrLmMgICAgICAgICAgICAgICAgfCAg
+OCArLS0NCj4gICBhcmNoL3g4Ni9rZXJuZWwvY3B1L2NlbnRhdXIuYyAgICAgICAgICAgICAg
+ICAgfCAgOCArLS0NCj4gICBhcmNoL3g4Ni9rZXJuZWwvY3B1L2NvbW1vbi5jICAgICAgICAg
+ICAgICAgICAgfCAxMiArKy0tLQ0KPiAgIGFyY2gveDg2L2tlcm5lbC9jcHUvZmVhdF9jdGwu
+YyAgICAgICAgICAgICAgICB8ICA0ICstDQo+ICAgYXJjaC94ODYva2VybmVsL2NwdS9oeWdv
+bi5jICAgICAgICAgICAgICAgICAgIHwgIDQgKy0NCj4gICBhcmNoL3g4Ni9rZXJuZWwvY3B1
+L2ludGVsLmMgICAgICAgICAgICAgICAgICAgfCAgNiArLS0NCj4gICBhcmNoL3g4Ni9rZXJu
+ZWwvY3B1L2ludGVsX2VwYi5jICAgICAgICAgICAgICAgfCAgNCArLQ0KPiAgIGFyY2gveDg2
+L2tlcm5lbC9jcHUvbWNlL2FtZC5jICAgICAgICAgICAgICAgICB8ICA0ICstDQo+ICAgYXJj
+aC94ODYva2VybmVsL2NwdS9tY2UvY29yZS5jICAgICAgICAgICAgICAgIHwgIDggKy0tDQo+
+ICAgYXJjaC94ODYva2VybmVsL2NwdS9tY2UvaW5qZWN0LmMgICAgICAgICAgICAgIHwgIDIg
+Ky0NCj4gICBhcmNoL3g4Ni9rZXJuZWwvY3B1L21jZS9pbnRlbC5jICAgICAgICAgICAgICAg
+fCAxOCArKystLS0tDQo+ICAgYXJjaC94ODYva2VybmVsL2NwdS9tY2UvcDUuYyAgICAgICAg
+ICAgICAgICAgIHwgIDggKy0tDQo+ICAgYXJjaC94ODYva2VybmVsL2NwdS9tY2Uvd2luY2hp
+cC5jICAgICAgICAgICAgIHwgIDIgKy0NCj4gICBhcmNoL3g4Ni9rZXJuZWwvY3B1L21pY3Jv
+Y29kZS9pbnRlbC5jICAgICAgICAgfCAgMiArLQ0KPiAgIGFyY2gveDg2L2tlcm5lbC9jcHUv
+bXNoeXBlcnYuYyAgICAgICAgICAgICAgICB8ICA2ICstLQ0KPiAgIGFyY2gveDg2L2tlcm5l
+bC9jcHUvbXRyci9hbWQuYyAgICAgICAgICAgICAgICB8ICA0ICstDQo+ICAgYXJjaC94ODYv
+a2VybmVsL2NwdS9tdHJyL2NsZWFudXAuYyAgICAgICAgICAgIHwgIDQgKy0NCj4gICBhcmNo
+L3g4Ni9rZXJuZWwvY3B1L210cnIvZ2VuZXJpYy5jICAgICAgICAgICAgfCAzMiArKysrKyst
+LS0tLS0NCj4gICBhcmNoL3g4Ni9rZXJuZWwvY3B1L210cnIvbXRyci5jICAgICAgICAgICAg
+ICAgfCAgMiArLQ0KPiAgIGFyY2gveDg2L2tlcm5lbC9jcHUvcmVzY3RybC9jb3JlLmMgICAg
+ICAgICAgICB8ICAyICstDQo+ICAgYXJjaC94ODYva2VybmVsL2NwdS9yZXNjdHJsL21vbml0
+b3IuYyAgICAgICAgIHwgIDQgKy0NCj4gICBhcmNoL3g4Ni9rZXJuZWwvY3B1L3Jlc2N0cmwv
+cHNldWRvX2xvY2suYyAgICAgfCAgNCArLQ0KPiAgIGFyY2gveDg2L2tlcm5lbC9jcHUvcmVz
+Y3RybC9yZHRncm91cC5jICAgICAgICB8ICAyICstDQo+ICAgYXJjaC94ODYva2VybmVsL2Nw
+dS90b3BvbG9neS5jICAgICAgICAgICAgICAgIHwgIDIgKy0NCj4gICBhcmNoL3g4Ni9rZXJu
+ZWwvY3B1L3RvcG9sb2d5X2FtZC5jICAgICAgICAgICAgfCAgNCArLQ0KPiAgIGFyY2gveDg2
+L2tlcm5lbC9jcHUvdHJhbnNtZXRhLmMgICAgICAgICAgICAgICB8ICA4ICstLQ0KPiAgIGFy
+Y2gveDg2L2tlcm5lbC9jcHUvdHN4LmMgICAgICAgICAgICAgICAgICAgICB8IDEwICsrLS0N
+Cj4gICBhcmNoL3g4Ni9rZXJuZWwvY3B1L3Vtd2FpdC5jICAgICAgICAgICAgICAgICAgfCAg
+MiArLQ0KPiAgIGFyY2gveDg2L2tlcm5lbC9jcHUvemhhb3hpbi5jICAgICAgICAgICAgICAg
+ICB8ICA0ICstDQo+ICAgYXJjaC94ODYva2VybmVsL2ZwdS9jb3JlLmMgICAgICAgICAgICAg
+ICAgICAgIHwgIDIgKy0NCj4gICBhcmNoL3g4Ni9rZXJuZWwvaHBldC5jICAgICAgICAgICAg
+ICAgICAgICAgICAgfCAgMiArLQ0KPiAgIGFyY2gveDg2L2tlcm5lbC9rdm0uYyAgICAgICAg
+ICAgICAgICAgICAgICAgICB8ICAyICstDQo+ICAgYXJjaC94ODYva2VybmVsL21tY29uZi1m
+YW0xMGhfNjQuYyAgICAgICAgICAgIHwgIDYgKy0tDQo+ICAgYXJjaC94ODYva2VybmVsL3By
+b2Nlc3MuYyAgICAgICAgICAgICAgICAgICAgIHwgIDQgKy0NCj4gICBhcmNoL3g4Ni9rZXJu
+ZWwvcHJvY2Vzc182NC5jICAgICAgICAgICAgICAgICAgfCAxNCArKystLS0NCj4gICBhcmNo
+L3g4Ni9rZXJuZWwvc2hzdGsuYyAgICAgICAgICAgICAgICAgICAgICAgfCAgOCArLS0NCj4g
+ICBhcmNoL3g4Ni9rZXJuZWwvdHJhcHMuYyAgICAgICAgICAgICAgICAgICAgICAgfCAgNCAr
+LQ0KPiAgIGFyY2gveDg2L2tlcm5lbC90c2MuYyAgICAgICAgICAgICAgICAgICAgICAgICB8
+ICAyICstDQo+ICAgYXJjaC94ODYva2VybmVsL3RzY19tc3IuYyAgICAgICAgICAgICAgICAg
+ICAgIHwgIDYgKy0tDQo+ICAgYXJjaC94ODYva2VybmVsL3RzY19zeW5jLmMgICAgICAgICAg
+ICAgICAgICAgIHwgIDYgKy0tDQo+ICAgYXJjaC94ODYva3ZtL21zcnMuYyAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIHwgIDIgKy0NCj4gICBhcmNoL3g4Ni9rdm0vc3ZtL3BtdS5jICAg
+ICAgICAgICAgICAgICAgICAgICAgfCAgNCArLQ0KPiAgIGFyY2gveDg2L2t2bS9zdm0vc3Zt
+LmMgICAgICAgICAgICAgICAgICAgICAgICB8ICA0ICstDQo+ICAgYXJjaC94ODYva3ZtL3Zt
+eC9uZXN0ZWQuYyAgICAgICAgICAgICAgICAgICAgIHwgIDQgKy0NCj4gICBhcmNoL3g4Ni9r
+dm0vdm14L3BtdV9pbnRlbC5jICAgICAgICAgICAgICAgICAgfCAgOCArLS0NCj4gICBhcmNo
+L3g4Ni9rdm0vdm14L3NneC5jICAgICAgICAgICAgICAgICAgICAgICAgfCAgNiArLS0NCj4g
+ICBhcmNoL3g4Ni9rdm0vdm14L3RkeC5jICAgICAgICAgICAgICAgICAgICAgICAgfCAgMiAr
+LQ0KPiAgIGFyY2gveDg2L2t2bS92bXgvdm14LmMgICAgICAgICAgICAgICAgICAgICAgICB8
+IDQyICsrKysrKysrLS0tLS0tLS0NCj4gICBhcmNoL3g4Ni9rdm0veDg2LmMgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgfCAgNiArLS0NCj4gICBhcmNoL3g4Ni9saWIvaW5zbi1ldmFs
+LmMgICAgICAgICAgICAgICAgICAgICAgfCAgNiArLS0NCj4gICBhcmNoL3g4Ni9saWIvbXNy
+LXNtcC5jICAgICAgICAgICAgICAgICAgICAgICAgfCAgMiArLQ0KPiAgIGFyY2gveDg2L21t
+L3BhdC9tZW10eXBlLmMgICAgICAgICAgICAgICAgICAgICB8ICAyICstDQo+ICAgYXJjaC94
+ODYvcGNpL2FtZF9idXMuYyAgICAgICAgICAgICAgICAgICAgICAgIHwgIDggKy0tDQo+ICAg
+YXJjaC94ODYvcGxhdGZvcm0vb2xwYy9vbHBjLXhvMS1ydGMuYyAgICAgICAgIHwgIDYgKy0t
+DQo+ICAgYXJjaC94ODYvcGxhdGZvcm0vb2xwYy9vbHBjLXhvMS1zY2kuYyAgICAgICAgIHwg
+IDIgKy0NCj4gICBhcmNoL3g4Ni9wb3dlci9jcHUuYyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgfCAxMCArKy0tDQo+ICAgYXJjaC94ODYvcmVhbG1vZGUvaW5pdC5jICAgICAgICAgICAg
+ICAgICAgICAgIHwgIDIgKy0NCj4gICBhcmNoL3g4Ni92aXJ0L2h3LmMgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgfCAgOCArLS0NCj4gICBhcmNoL3g4Ni92aXJ0L3N2bS9zZXYuYyAg
+ICAgICAgICAgICAgICAgICAgICAgfCAxOCArKystLS0tDQo+ICAgYXJjaC94ODYvdmlydC92
+bXgvdGR4L3RkeC5jICAgICAgICAgICAgICAgICAgIHwgIDIgKy0NCj4gICBhcmNoL3g4Ni94
+ZW4vc3VzcGVuZC5jICAgICAgICAgICAgICAgICAgICAgICAgfCAgMiArLQ0KPiAgIGRyaXZl
+cnMvYWNwaS9wcm9jZXNzb3JfcGVyZmxpYi5jICAgICAgICAgICAgICB8ICAyICstDQo+ICAg
+ZHJpdmVycy9hdGEvcGF0YV9jczU1MzUuYyAgICAgICAgICAgICAgICAgICAgIHwgMjQgKysr
+Ky0tLS0tDQo+ICAgZHJpdmVycy9hdGEvcGF0YV9jczU1MzYuYyAgICAgICAgICAgICAgICAg
+ICAgIHwgMTcgKysrLS0tLQ0KPiAgIGRyaXZlcnMvY2hhci9hZ3AvbnZpZGlhLWFncC5jICAg
+ICAgICAgICAgICAgICB8IDMyICsrKysrKy0tLS0tLQ0KPiAgIGRyaXZlcnMvY2hhci9od19y
+YW5kb20vdmlhLXJuZy5jICAgICAgICAgICAgICB8IDI5ICsrKysrLS0tLS0tDQo+ICAgZHJp
+dmVycy9jcHVmcmVxL2FjcGktY3B1ZnJlcS5jICAgICAgICAgICAgICAgIHwgIDggKy0tDQo+
+ICAgZHJpdmVycy9jcHVmcmVxL2FtZC1wc3RhdGUuYyAgICAgICAgICAgICAgICAgIHwgIDQg
+Ky0NCj4gICBkcml2ZXJzL2NwdWZyZXEvZV9wb3dlcnNhdmVyLmMgICAgICAgICAgICAgICAg
+fCAyMCArKysrLS0tLQ0KPiAgIGRyaXZlcnMvY3B1ZnJlcS9pbnRlbF9wc3RhdGUuYyAgICAg
+ICAgICAgICAgICB8IDI4ICsrKysrLS0tLS0tDQo+ICAgZHJpdmVycy9jcHVmcmVxL2xvbmdo
+YXVsLmMgICAgICAgICAgICAgICAgICAgIHwgMTIgKystLS0NCj4gICBkcml2ZXJzL2NwdWZy
+ZXEvbG9uZ3J1bi5jICAgICAgICAgICAgICAgICAgICAgfCAxNiArKystLS0NCj4gICBkcml2
+ZXJzL2NwdWZyZXEvcG93ZXJub3ctazcuYyAgICAgICAgICAgICAgICAgfCAxMCArKy0tDQo+
+ICAgZHJpdmVycy9jcHVmcmVxL3Bvd2Vybm93LWs4LmMgICAgICAgICAgICAgICAgIHwgIDgg
+Ky0tDQo+ICAgZHJpdmVycy9jcHVmcmVxL3NwZWVkc3RlcC1jZW50cmluby5jICAgICAgICAg
+IHwgIDQgKy0NCj4gICBkcml2ZXJzL2NwdWZyZXEvc3BlZWRzdGVwLWxpYi5jICAgICAgICAg
+ICAgICAgfCAxNCArKystLS0NCj4gICBkcml2ZXJzL2VkYWMvYW1kNjRfZWRhYy5jICAgICAg
+ICAgICAgICAgICAgICAgfCAgNiArLS0NCj4gICBkcml2ZXJzL2dwaW8vZ3Bpby1jczU1MzUu
+YyAgICAgICAgICAgICAgICAgICAgfCAxMCArKy0tDQo+ICAgZHJpdmVycy9odi9tc2h2X3Z0
+bF9tYWluLmMgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0NCj4gICBkcml2ZXJzL2h3bW9u
+L2h3bW9uLXZpZC5jICAgICAgICAgICAgICAgICAgICAgfCAgNCArLQ0KPiAgIGRyaXZlcnMv
+aWRsZS9pbnRlbF9pZGxlLmMgICAgICAgICAgICAgICAgICAgICB8IDI2ICsrKysrLS0tLS0N
+Cj4gICBkcml2ZXJzL21pc2MvY3M1NTM1LW1mZ3B0LmMgICAgICAgICAgICAgICAgICAgfCAz
+MyArKysrKystLS0tLS0NCj4gICBkcml2ZXJzL210ZC9uYW5kL3Jhdy9jczU1M3hfbmFuZC5j
+ICAgICAgICAgICAgfCAgNiArLS0NCj4gICBkcml2ZXJzL3BsYXRmb3JtL3g4Ni9pbnRlbC9p
+ZnMvbG9hZC5jICAgICAgICAgfCAxMCArKy0tDQo+ICAgZHJpdmVycy9wbGF0Zm9ybS94ODYv
+aW50ZWwvaWZzL3J1bnRlc3QuYyAgICAgIHwgIDggKy0tDQo+ICAgZHJpdmVycy9wbGF0Zm9y
+bS94ODYvaW50ZWwvcG1jL2NucC5jICAgICAgICAgIHwgIDIgKy0NCj4gICAuLi4vaW50ZWwv
+c3BlZWRfc2VsZWN0X2lmL2lzc3RfaWZfbWJveF9tc3IuYyAgfCAgNiArLS0NCj4gICAuLi4v
+aW50ZWwvc3BlZWRfc2VsZWN0X2lmL2lzc3RfdHBtaV9jb3JlLmMgICAgfCAgMiArLQ0KPiAg
+IGRyaXZlcnMvcGxhdGZvcm0veDg2L2ludGVsX2lwcy5jICAgICAgICAgICAgICB8IDIwICsr
+KystLS0tDQo+ICAgZHJpdmVycy9wb3dlcmNhcC9pbnRlbF9yYXBsX21zci5jICAgICAgICAg
+ICAgIHwgIDIgKy0NCj4gICBkcml2ZXJzL3RoZXJtYWwvaW50ZWwvaW50ZWxfaGZpLmMgICAg
+ICAgICAgICAgfCAgOCArLS0NCj4gICBkcml2ZXJzL3RoZXJtYWwvaW50ZWwvdGhlcm1fdGhy
+b3QuYyAgICAgICAgICAgfCAyMiArKysrLS0tLQ0KPiAgIGRyaXZlcnMvdGhlcm1hbC9pbnRl
+bC94ODZfcGtnX3RlbXBfdGhlcm1hbC5jICB8ICA2ICstLQ0KPiAgIGRyaXZlcnMvdmlkZW8v
+ZmJkZXYvZ2VvZGUvZGlzcGxheV9neC5jICAgICAgICB8ICA4ICstLQ0KPiAgIGRyaXZlcnMv
+dmlkZW8vZmJkZXYvZ2VvZGUvZ3hmYl9jb3JlLmMgICAgICAgICB8ICAyICstDQo+ICAgZHJp
+dmVycy92aWRlby9mYmRldi9nZW9kZS9seGZiX29wcy5jICAgICAgICAgIHwgNTAgKysrKysr
+KysrLS0tLS0tLS0tLQ0KPiAgIGRyaXZlcnMvdmlkZW8vZmJkZXYvZ2VvZGUvc3VzcGVuZF9n
+eC5jICAgICAgICB8IDI0ICsrKysrLS0tLQ0KPiAgIGRyaXZlcnMvdmlkZW8vZmJkZXYvZ2Vv
+ZGUvdmlkZW9fZ3guYyAgICAgICAgICB8ICA4ICstLQ0KPiAgIGluY2x1ZGUvbGludXgvY3M1
+NTM1LmggICAgICAgICAgICAgICAgICAgICAgICB8IDEwICsrLS0NCj4gICAxMzggZmlsZXMg
+Y2hhbmdlZCwgNTc1IGluc2VydGlvbnMoKyksIDY5NCBkZWxldGlvbnMoLSkNCj4gDQoNCmFu
+eXRoaW5nIHlvdSBuZWVkIGZyb20gbWUgdG8gZ2V0IHRoaXMgc2VyaWVzIGludG8gNy40Pw0K
+DQoNCkp1ZXJnZW4NCg==
+--------------dtnWD0jmGt0coRzSWi6oU7rk
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-This ship has already sailed.
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-> +Contact:	Oleg Keri <okerixx@gmail.com>
-> +Description:
-> +		Control fn-lock mode.
-> +
-> +			* 1 -> Switched On
-> +			* 0 -> Switched Off
-> +
-> +		When switched on, the function keys act as F1..F12 and the
-> +		multimedia functions require the Fn modifier.
-> +
-> +		The embedded controller reports the Fn+Esc key as an event but
-> +		keeps no state of its own, so this attribute is the state: the
-> +		driver toggles it when the key is pressed, and writing it takes
-> +		effect immediately.
-> +
-> +		For example::
-> +
-> +		  # echo "0" > /sys/bus/i2c/devices/9-0070/fn_lock
-> diff --git a/drivers/platform/arm64/Kconfig b/drivers/platform/arm64/Kconfig
-> index e32e01b2a9bd..7581432e69b0 100644
-> --- a/drivers/platform/arm64/Kconfig
-> +++ b/drivers/platform/arm64/Kconfig
-> @@ -90,6 +90,29 @@ config EC_LENOVO_THINKPAD_T14S
->  
->  	  Say M or Y here to include this support.
->  
-> +config EC_LENOVO_YOGA_SLIM7X_GEN11
-> +	tristate "Lenovo Yoga Slim 7x Gen 11 Embedded Controller driver"
-> +	depends on ARCH_QCOM || COMPILE_TEST
-> +	depends on I2C
-> +	depends on INPUT
-> +	depends on HWMON
-> +	select NEW_LEDS
-> +	select LEDS_CLASS
-> +	help
-> +	  Say Y here to enable the EC driver for the (Snapdragon X2 Elite,
-> +	  glymur-based) Lenovo Yoga Slim 7x Gen 11 laptop. The EC provides
-> +	  thermistors, battery cell voltages and CPU fan speed as hwmon
-> +	  channels, and the keyboard backlight as an LED.
-> +
-> +	  This is the Gen 11 (glymur) machine specifically. Its EC is a Compal
-> +	  design at i2c address 0x70 and speaks a different protocol from the
-> +	  Qualcomm reference EC that the reference designs place at 0x76, so
-> +	  EC_QCOM_HAMOA does not drive it - and conversely this driver does not
-> +	  cover the X1E-based Yoga Slim 7x Gen 9.
-> +
-> +	  To compile this driver as a module, choose M here: the module will
-> +	  be called lenovo-yoga-slim7x-gen11-ec.
-> +
->  config EC_QCOM_HAMOA
->  	tristate "Embedded Controller driver for Qualcomm Hamoa/Glymur reference devices"
->  	depends on ARCH_QCOM || COMPILE_TEST
-> diff --git a/drivers/platform/arm64/Makefile b/drivers/platform/arm64/Makefile
-> index 7681be4a46e9..605cca4d42a9 100644
-> --- a/drivers/platform/arm64/Makefile
-> +++ b/drivers/platform/arm64/Makefile
-> @@ -9,4 +9,5 @@ obj-$(CONFIG_EC_ACER_ASPIRE1)	+= acer-aspire1-ec.o
->  obj-$(CONFIG_EC_HUAWEI_GAOKUN)	+= huawei-gaokun-ec.o
->  obj-$(CONFIG_EC_LENOVO_YOGA_C630) += lenovo-yoga-c630.o
->  obj-$(CONFIG_EC_LENOVO_THINKPAD_T14S) += lenovo-thinkpad-t14s.o
-> +obj-$(CONFIG_EC_LENOVO_YOGA_SLIM7X_GEN11) += lenovo-yoga-slim7x-gen11-ec.o
->  obj-$(CONFIG_EC_QCOM_HAMOA) += qcom-hamoa-ec.o
-> diff --git a/drivers/platform/arm64/lenovo-yoga-slim7x-gen11-ec.c b/drivers/platform/arm64/lenovo-yoga-slim7x-gen11-ec.c
-> new file mode 100644
-> index 000000000000..c8c7928475b7
-> --- /dev/null
-> +++ b/drivers/platform/arm64/lenovo-yoga-slim7x-gen11-ec.c
-> @@ -0,0 +1,653 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/bitops.h>
-> +#include <linux/cleanup.h>
-> +#include <linux/container_of.h>
-> +#include <linux/delay.h>
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/errno.h>
-> +#include <linux/gfp_types.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/i2c.h>
-> +#include <linux/input.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/kstrtox.h>
-> +#include <linux/leds.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/pm.h>
-> +#include <linux/string.h>
-> +#include <linux/sysfs.h>
-> +#include <linux/types.h>
-> +
-> +#define YOGA_EC_BLOCK_READ	0x01
-> +#define YOGA_EC_BLOCK_WRITE	0x02
-> +#define YOGA_EC_RESP_LEN	6
-> +#define YOGA_EC_REQ_LEN		7
-> +
-> +#define YOGA_EC_CMD_RAM_READ	0xb0
-> +#define YOGA_EC_CMD_RAM_WRITE	0xb1
-> +#define YOGA_EC_CMD_BANK_READ	0xb4
-> +#define YOGA_EC_CMD_FAN		0x46
-> +#define YOGA_EC_FAN_GET_SPEED	0x81
-> +
-> +#define YOGA_EC_CMD_EVENT	0x84
-> +#define YOGA_EC_EVT_MAX_DRAIN	64
-> +#define YOGA_EC_EVT_FN_LOCK	0x0f
-> +#define YOGA_EC_EVT_MIC_MUTE	0x18
-> +#define YOGA_EC_EVT_FLIGHT_MODE	0x19
-> +
-> +#define YOGA_EC_SCUK		0x1c
-> +#define YOGA_EC_SCUK_FN_LOCK	BIT(7)
-> +#define YOGA_EC_SCUK_FN_LOCK_IND	BIT(5)
+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
+kt+z4drzFUyEjLM1vVvIMjkUoJs=3D
+=3DeeAB
+-----END PGP PUBLIC KEY BLOCK-----
 
-Add include for BIT()
+--------------dtnWD0jmGt0coRzSWi6oU7rk--
 
-> +#define YOGA_EC_SCUK_FN_LOCK_MASK	(YOGA_EC_SCUK_FN_LOCK | YOGA_EC_SCUK_FN_LOCK_IND)
-> +
-> +#define YOGA_EC_KBLT		0x03
-> +#define YOGA_EC_KBLT_LEVEL	GENMASK(1, 0)
-> +#define YOGA_EC_KBLT_AUTO	3
-> +#define YOGA_EC_KBLT_MAX	2
-> +
-> +#define YOGA_EC_TEMP_FIRST	0x12
-> +#define YOGA_EC_NUM_TEMP	6
-> +#define YOGA_EC_TEMP_MAX	120
-> +
-> +#define YOGA_EC_CELL_BANK	0x0b
-> +#define YOGA_EC_CELL_SIG_LO	0x02
-> +#define YOGA_EC_CELL_SIG_HI	0x0c
-> +#define YOGA_EC_CELL_FIRST	0x04
-> +#define YOGA_EC_NUM_CELL	4
-> +#define YOGA_EC_CELL_MIN_MV	2000
-> +#define YOGA_EC_CELL_MAX_MV	5000
-> +#define YOGA_EC_CELL_TRIES	10
-> +
-> +#define YOGA_EC_CACHE		(2 * HZ)
-> +#define YOGA_EC_STALE		(10 * HZ)
+--------------T4ZJp6Lhzy2IBIrjLpBsTTw0--
 
-It would be better to have time is some time unit + include the unit into 
-name, and only convert to jiffies when a call requires jiffies/timeout 
-input.
+--------------axxK79NgUHTDoQRwnbgWpSYy
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
-> +
-> +struct yoga_ec {
-> +	struct i2c_client *client;
-> +	/* serializes all EC access */
-> +	struct mutex lock;
+-----BEGIN PGP SIGNATURE-----
 
-Consider adding lockdep asserts to the EC access functions below to ensure 
-the locking rules are never violated.
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmqxS/0FAwAAAAAACgkQsN6d1ii/Ey96
+wwf/dV+nbtFwBzRTdTv3Vx2lVN89DL6TR+euiSyGZLTqPjp0pW5wAtoIwgj4xQNNKLWJK+HdGnQA
+uIpKCGhzndQjA5/bYZLYAk0U5OVc1x2RrasQn0vel7msJTFqjW6fl3XNodJ40rFbpqoOYqFxBOIq
+H0xe0vqCJ1u8yj9FZ5+NUOXlGprAqEgyUOFGWWrT237ejyqgKVVw6QS2d/7sDvXFyLeRkG6f/wfH
+eiUguWe063lhXObtP1J1YAkzAMJBkTuG39L6Tde54kqVIQyIbk9voL4wDHeNYvIpyd2Mk2GSZ+ha
+kni709pSh+qTNFkR5kCpypyUAeSKftAkqDpPz3fe1A==
+=q3Lv
+-----END PGP SIGNATURE-----
 
-> +	unsigned long temp_present;
-> +	unsigned long cell_read_at;
-> +	u16 cell[YOGA_EC_NUM_CELL];
-> +	bool cell_cached;
-> +	struct led_classdev kbd_led;
-> +	u8 kblt_level;
-> +	bool kblt_restore;
-> +	struct input_dev *keys;
-> +};
-> +
-> +static int yoga_ec_command(struct yoga_ec *ec, u8 cmd, u8 arg0, u8 arg1,
-> +			   u8 resp[YOGA_EC_RESP_LEN])
-> +{
-> +	u8 req[YOGA_EC_REQ_LEN] = { cmd, arg0, arg1 };
-> +	int ret;
-> +
-> +	ret = i2c_smbus_write_i2c_block_data(ec->client, YOGA_EC_BLOCK_WRITE,
-> +					     sizeof(req), req);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	usleep_range(2000, 3000);
-> +
-> +	ret = i2c_smbus_read_i2c_block_data(ec->client, YOGA_EC_BLOCK_READ,
-> +					    YOGA_EC_RESP_LEN, resp);
-> +	if (ret < 0)
-> +		return ret;
-> +	if (ret != YOGA_EC_RESP_LEN)
-> +		return -EIO;
-> +
-> +	return 0;
-> +}
-> +
-> +static int yoga_ec_ram_read(struct yoga_ec *ec, u8 addr, u8 *val)
-> +{
-> +	u8 resp[YOGA_EC_RESP_LEN];
-> +	int ret;
-> +
-> +	ret = yoga_ec_command(ec, YOGA_EC_CMD_RAM_READ, addr, 0, resp);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*val = resp[0];
-> +	return 0;
-> +}
-> +
-> +static int yoga_ec_bank_read(struct yoga_ec *ec, u8 bank, u8 addr, u8 *val)
-> +{
-> +	u8 resp[YOGA_EC_RESP_LEN];
-> +	int ret;
-> +
-> +	ret = yoga_ec_command(ec, YOGA_EC_CMD_BANK_READ, bank, addr, resp);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*val = resp[0];
-> +	return 0;
-> +}
-> +
-> +static int yoga_ec_ram_write(struct yoga_ec *ec, u8 addr, u8 val)
-> +{
-> +	u8 resp[YOGA_EC_RESP_LEN];
-> +
-> +	return yoga_ec_command(ec, YOGA_EC_CMD_RAM_WRITE, addr, val, resp);
-> +}
-> +
-> +static int yoga_ec_fan_read(struct yoga_ec *ec, long *rpm)
-> +{
-> +	u8 resp[YOGA_EC_RESP_LEN];
-> +	int ret;
-> +
-> +	ret = yoga_ec_command(ec, YOGA_EC_CMD_FAN, YOGA_EC_FAN_GET_SPEED, 0,
-> +			      resp);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*rpm = resp[0] * 100;
-> +	return 0;
-> +}
-> +
-> +static int yoga_ec_refresh_cells(struct yoga_ec *ec)
-> +{
-> +	unsigned int try;
-> +	int ret;
-> +
-> +	if (ec->cell_cached &&
-> +	    time_before(jiffies, ec->cell_read_at + YOGA_EC_CACHE))
-> +		return 0;
-> +
-> +	for (try = 0; try < YOGA_EC_CELL_TRIES; try++) {
-> +		u16 cell[YOGA_EC_NUM_CELL];
-> +		u8 sig[3];
-> +		unsigned int i;
-> +		bool ok = true;
-> +
-> +		ret = yoga_ec_bank_read(ec, YOGA_EC_CELL_BANK,
-> +					YOGA_EC_CELL_SIG_LO, &sig[0]);
-> +		if (!ret)
-> +			ret = yoga_ec_bank_read(ec, YOGA_EC_CELL_BANK,
-> +						YOGA_EC_CELL_SIG_LO + 1, &sig[1]);
-> +		if (!ret)
-> +			ret = yoga_ec_bank_read(ec, YOGA_EC_CELL_BANK,
-> +						YOGA_EC_CELL_SIG_HI, &sig[2]);
-> +		if (ret)
-> +			return ret;
-
-Please don't complicate error handling flow but handle each error right 
-after the first call.
-
-> +
-> +		if (sig[0] != 0x01 || sig[1] != 0x01 || sig[2] != 0x03)
-> +			continue;
-> +
-> +		for (i = 0; i < YOGA_EC_NUM_CELL; i++) {
-
-ARRAY_SIZE() + don't forget the include.
-
-> +			u8 lsb, msb;
-> +
-> +			ret = yoga_ec_bank_read(ec, YOGA_EC_CELL_BANK,
-> +						YOGA_EC_CELL_FIRST + i * 2, &lsb);
-> +			if (!ret)
-> +				ret = yoga_ec_bank_read(ec, YOGA_EC_CELL_BANK,
-> +							YOGA_EC_CELL_FIRST + i * 2 + 1,
-> +							&msb);
-> +			if (ret)
-> +				return ret;
-
-Simplify error handling similar to above.
-
-> +
-> +			cell[i] = lsb | (msb << 8);
-> +			if (cell[i] < YOGA_EC_CELL_MIN_MV ||
-> +			    cell[i] > YOGA_EC_CELL_MAX_MV)
-> +				ok = false;
-> +		}
-> +
-> +		if (!ok)
-> +			continue;
-> +
-> +		memcpy(ec->cell, cell, sizeof(cell));
-> +		ec->cell_cached = true;
-> +		ec->cell_read_at = jiffies;
-> +
-> +		return 0;
-> +	}
-> +
-> +	if (ec->cell_cached &&
-> +	    time_before(jiffies, ec->cell_read_at + YOGA_EC_STALE))
-> +		return 0;
-> +
-> +	return -EAGAIN;
-> +}
-> +
-> +static umode_t yoga_ec_is_visible(const void *drvdata,
-> +				  enum hwmon_sensor_types type,
-> +				  u32 attr, int channel)
-> +{
-> +	const struct yoga_ec *ec = drvdata;
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		if (!(ec->temp_present & BIT(channel)))
-> +			return 0;
-> +		return 0444;
-> +	case hwmon_in:
-> +		return 0444;
-> +	case hwmon_fan:
-> +		return 0444;
-> +	default:
-> +		return 0;
-> +	}
-> +}
-> +
-> +static int yoga_ec_read(struct device *dev, enum hwmon_sensor_types type,
-> +			u32 attr, int channel, long *val)
-> +{
-> +	struct yoga_ec *ec = dev_get_drvdata(dev);
-> +	int ret;
-> +	u8 raw;
-> +
-> +	guard(mutex)(&ec->lock);
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		ret = yoga_ec_ram_read(ec, YOGA_EC_TEMP_FIRST + channel, &raw);
-> +		if (ret)
-> +			return ret;
-> +		if (!raw)
-> +			return -ENODATA;
-> +		if (raw > YOGA_EC_TEMP_MAX)
-> +			return -EIO;
-> +		*val = raw * 1000;
-
-Can something from units.h replace this literal? Don't forget to add the 
-include if you start to use a define from there.
-
-> +		return 0;
-> +	case hwmon_in:
-> +		ret = yoga_ec_refresh_cells(ec);
-> +		if (ret)
-> +			return ret;
-> +		*val = ec->cell[channel];
-> +		return 0;
-> +	case hwmon_fan:
-> +		return yoga_ec_fan_read(ec, val);
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static const char * const yoga_ec_temp_labels[YOGA_EC_NUM_TEMP] = {
-> +	"Charger A",
-> +	"CPU VR",
-> +	"5V rail",
-> +	"Ambient",
-> +	"Charger B",
-> +	"Thermistor 6",
-> +};
-> +
-> +static const char * const yoga_ec_cell_labels[YOGA_EC_NUM_CELL] = {
-> +	"Cell 1", "Cell 2", "Cell 3", "Cell 4",
-> +};
-> +
-> +static int yoga_ec_read_string(struct device *dev, enum hwmon_sensor_types type,
-> +			       u32 attr, int channel, const char **str)
-> +{
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		*str = yoga_ec_temp_labels[channel];
-> +		return 0;
-> +	case hwmon_in:
-> +		*str = yoga_ec_cell_labels[channel];
-> +		return 0;
-> +	case hwmon_fan:
-> +		*str = "CPU fan";
-> +		return 0;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static enum led_brightness yoga_ec_kbd_led_get(struct led_classdev *led)
-> +{
-> +	struct yoga_ec *ec = container_of(led, struct yoga_ec, kbd_led);
-> +	u8 raw;
-> +
-> +	guard(mutex)(&ec->lock);
-> +
-> +	if (yoga_ec_ram_read(ec, YOGA_EC_KBLT, &raw))
-> +		return 0;
-> +
-> +	raw = FIELD_GET(YOGA_EC_KBLT_LEVEL, raw);
-> +
-> +	if (raw == YOGA_EC_KBLT_AUTO)
-> +		return YOGA_EC_KBLT_MAX;
-> +
-> +	return raw;
-> +}
-> +
-> +static int yoga_ec_kbd_led_level(struct yoga_ec *ec, u8 level, u8 *old)
-> +{
-> +	u8 raw;
-> +	int ret;
-> +
-> +	ret = yoga_ec_ram_read(ec, YOGA_EC_KBLT, &raw);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (old)
-> +		*old = FIELD_GET(YOGA_EC_KBLT_LEVEL, raw);
-> +
-> +	raw &= ~YOGA_EC_KBLT_LEVEL;
-> +	raw |= FIELD_PREP(YOGA_EC_KBLT_LEVEL, level);
-> +
-> +	return yoga_ec_ram_write(ec, YOGA_EC_KBLT, raw);
-> +}
-> +
-> +static int yoga_ec_kbd_led_set(struct led_classdev *led,
-> +			       enum led_brightness brightness)
-> +{
-> +	struct yoga_ec *ec = container_of(led, struct yoga_ec, kbd_led);
-> +
-> +	guard(mutex)(&ec->lock);
-> +
-> +	return yoga_ec_kbd_led_level(ec, brightness, NULL);
-> +}
-> +
-> +static const struct hwmon_ops yoga_ec_hwmon_ops = {
-> +	.is_visible = yoga_ec_is_visible,
-> +	.read = yoga_ec_read,
-> +	.read_string = yoga_ec_read_string,
-> +};
-> +
-> +static const struct hwmon_channel_info * const yoga_ec_hwmon_info[] = {
-> +	HWMON_CHANNEL_INFO(in,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL),
-> +	HWMON_CHANNEL_INFO(temp,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL),
-> +	HWMON_CHANNEL_INFO(fan,
-> +			   HWMON_F_INPUT | HWMON_F_LABEL),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_chip_info yoga_ec_chip_info = {
-> +	.ops = &yoga_ec_hwmon_ops,
-> +	.info = yoga_ec_hwmon_info,
-> +};
-> +
-> +static int yoga_ec_fn_lock_toggle(struct yoga_ec *ec)
-> +{
-> +	u8 raw;
-> +	int ret;
-> +
-> +	ret = yoga_ec_ram_read(ec, YOGA_EC_SCUK, &raw);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (raw & YOGA_EC_SCUK_FN_LOCK)
-> +		raw &= ~YOGA_EC_SCUK_FN_LOCK_MASK;
-> +	else
-> +		raw |= YOGA_EC_SCUK_FN_LOCK_MASK;
-> +
-> +	return yoga_ec_ram_write(ec, YOGA_EC_SCUK, raw);
-> +}
-> +
-> +static void yoga_ec_report_key(struct yoga_ec *ec, unsigned int code)
-> +{
-> +	if (!ec->keys)
-> +		return;
-> +
-> +	input_report_key(ec->keys, code, 1);
-> +	input_sync(ec->keys);
-> +	input_report_key(ec->keys, code, 0);
-> +	input_sync(ec->keys);
-> +}
-> +
-> +static irqreturn_t yoga_ec_irq(int irq, void *data)
-> +{
-> +	struct yoga_ec *ec = data;
-> +	unsigned int i;
-> +
-> +	guard(mutex)(&ec->lock);
-> +
-> +	for (i = 0; i < YOGA_EC_EVT_MAX_DRAIN; i++) {
-> +		u8 resp[YOGA_EC_RESP_LEN];
-> +
-> +		if (yoga_ec_command(ec, YOGA_EC_CMD_EVENT, 0, 0, resp))
-> +			break;
-> +		if (!resp[0])
-> +			break;
-> +
-> +		switch (resp[0]) {
-> +		case YOGA_EC_EVT_FN_LOCK:
-> +			yoga_ec_fn_lock_toggle(ec);
-> +			break;
-> +		case YOGA_EC_EVT_MIC_MUTE:
-> +			yoga_ec_report_key(ec, KEY_MICMUTE);
-> +			break;
-> +		case YOGA_EC_EVT_FLIGHT_MODE:
-> +			yoga_ec_report_key(ec, KEY_RFKILL);
-> +			break;
-> +		default:
-> +			break;
-> +		}
-> +	}
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static void yoga_ec_register_keys(struct yoga_ec *ec)
-> +{
-> +	struct device *dev = &ec->client->dev;
-> +	struct input_dev *input;
-> +	int ret;
-> +
-> +	input = devm_input_allocate_device(dev);
-> +	if (!input) {
-> +		dev_warn(dev, "no memory for the hotkey device\n");
-
-Add include.
-
-> +		return;
-> +	}
-> +
-> +	input->name = "Lenovo Yoga Slim 7x hotkeys";
-> +	input->phys = "lenovo-yoga-slim7x-gen11-ec/input0";
-> +	input->id.bustype = BUS_I2C;
-> +	input_set_capability(input, EV_KEY, KEY_MICMUTE);
-> +	input_set_capability(input, EV_KEY, KEY_RFKILL);
-> +
-> +	ret = input_register_device(input);
-> +	if (ret) {
-> +		dev_warn(dev, "cannot register the hotkey device: %d\n", ret);
-> +		return;
-> +	}
-> +
-> +	ec->keys = input;
-> +}
-> +
-> +static ssize_t fn_lock_show(struct device *dev, struct device_attribute *attr,
-> +			    char *buf)
-> +{
-> +	struct yoga_ec *ec = dev_get_drvdata(dev);
-> +	u8 raw;
-> +	int ret;
-> +
-> +	scoped_guard(mutex, &ec->lock)
-> +		ret = yoga_ec_ram_read(ec, YOGA_EC_SCUK, &raw);
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	return sysfs_emit(buf, "%u\n", !!(raw & YOGA_EC_SCUK_FN_LOCK));
-> +}
-> +
-> +static ssize_t fn_lock_store(struct device *dev, struct device_attribute *attr,
-> +			     const char *buf, size_t count)
-> +{
-> +	struct yoga_ec *ec = dev_get_drvdata(dev);
-> +	bool enable;
-> +	u8 raw;
-> +	int ret;
-> +
-> +	ret = kstrtobool(buf, &enable);
-> +	if (ret)
-> +		return ret;
-> +
-> +	guard(mutex)(&ec->lock);
-> +
-> +	ret = yoga_ec_ram_read(ec, YOGA_EC_SCUK, &raw);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (enable)
-> +		raw |= YOGA_EC_SCUK_FN_LOCK_MASK;
-> +	else
-> +		raw &= ~YOGA_EC_SCUK_FN_LOCK_MASK;
-> +
-> +	ret = yoga_ec_ram_write(ec, YOGA_EC_SCUK, raw);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return count;
-> +}
-> +static DEVICE_ATTR_RW(fn_lock);
-> +
-> +static struct attribute *yoga_ec_attrs[] = {
-> +	&dev_attr_fn_lock.attr,
-> +	NULL
-> +};
-> +ATTRIBUTE_GROUPS(yoga_ec);
-> +
-> +static int yoga_ec_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct device *hwmon;
-> +	struct yoga_ec *ec;
-> +	unsigned int i;
-> +	int ret;
-> +
-> +	if (!i2c_check_functionality(client->adapter,
-> +				     I2C_FUNC_SMBUS_I2C_BLOCK))
-> +		return dev_err_probe(dev, -ENODEV,
-> +				     "adapter does not support SMBus block transfers\n");
-> +
-> +	ec = devm_kzalloc(dev, sizeof(*ec), GFP_KERNEL);
-> +	if (!ec)
-> +		return -ENOMEM;
-> +
-> +	ec->client = client;
-> +	i2c_set_clientdata(client, ec);
-> +
-> +	ret = devm_mutex_init(dev, &ec->lock);
-> +	if (ret)
-> +		return ret;
-> +
-> +	for (i = 0; i < YOGA_EC_NUM_TEMP; i++) {
-> +		u8 raw;
-> +
-> +		ret = yoga_ec_ram_read(ec, YOGA_EC_TEMP_FIRST + i, &raw);
-> +		if (ret)
-> +			return dev_err_probe(dev, ret,
-> +					     "failed to read thermistor %u\n", i);
-> +
-> +		if (raw > 0 && raw <= YOGA_EC_TEMP_MAX)
-> +			ec->temp_present |= BIT(i);
-> +	}
-> +
-> +	if (!ec->temp_present)
-> +		return dev_err_probe(dev, -ENODEV,
-> +				     "no thermistor reported a usable value\n");
-
-Please use braces in multi-line constructs.
-
-> +
-> +	dev_dbg(dev, "thermistors present: %#lx\n", ec->temp_present);
-> +
-> +	hwmon = devm_hwmon_device_register_with_info(dev, "yoga_slim7x_ec", ec,
-> +						     &yoga_ec_chip_info, NULL);
-> +	if (IS_ERR(hwmon))
-> +		return PTR_ERR(hwmon);
-> +
-> +	ec->kbd_led.name = "platform::kbd_backlight";
-> +	ec->kbd_led.max_brightness = YOGA_EC_KBLT_MAX;
-> +	ec->kbd_led.brightness_get = yoga_ec_kbd_led_get;
-> +	ec->kbd_led.brightness_set_blocking = yoga_ec_kbd_led_set;
-> +
-> +	ret = devm_led_classdev_register(dev, &ec->kbd_led);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret,
-> +				     "failed to register keyboard backlight\n");
-> +
-> +	if (client->irq) {
-> +		yoga_ec_register_keys(ec);
-> +
-> +		ret = devm_request_threaded_irq(dev, client->irq, NULL,
-> +						yoga_ec_irq, IRQF_ONESHOT,
-> +						"lenovo-yoga-slim7x-gen11-ec", ec);
-> +		if (ret)
-> +			return dev_err_probe(dev, ret, "cannot request the EC interrupt\n");
-> +
-> +		scoped_guard(mutex, &ec->lock) {
-> +			unsigned int i;
-> +
-> +			for (i = 0; i < YOGA_EC_EVT_MAX_DRAIN; i++) {
-> +				u8 resp[YOGA_EC_RESP_LEN];
-> +
-> +				if (yoga_ec_command(ec, YOGA_EC_CMD_EVENT, 0, 0, resp))
-> +					break;
-> +				if (!resp[0])
-> +					break;
-> +			}
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int yoga_ec_suspend(struct device *dev)
-> +{
-> +	struct yoga_ec *ec = dev_get_drvdata(dev);
-> +
-> +	guard(mutex)(&ec->lock);
-> +	ec->kblt_restore = !yoga_ec_kbd_led_level(ec, 0, &ec->kblt_level);
-> +
-> +	return 0;
-> +}
-> +
-> +static int yoga_ec_resume(struct device *dev)
-> +{
-> +	struct yoga_ec *ec = dev_get_drvdata(dev);
-> +
-> +	guard(mutex)(&ec->lock);
-> +	ec->cell_cached = false;
-> +
-> +	if (ec->kblt_restore) {
-> +		ec->kblt_restore = false;
-> +		yoga_ec_kbd_led_level(ec, ec->kblt_level, NULL);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static DEFINE_SIMPLE_DEV_PM_OPS(yoga_ec_pm_ops, yoga_ec_suspend, yoga_ec_resume);
-> +
-> +static const struct of_device_id yoga_ec_of_match[] = {
-> +	{ .compatible = "lenovo,yoga-slim7x-gen11-ec" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, yoga_ec_of_match);
-> +
-> +static const struct i2c_device_id yoga_ec_i2c_id[] = {
-> +	{ "yoga-slim7x-gen11-ec" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, yoga_ec_i2c_id);
-> +
-> +static struct i2c_driver yoga_ec_driver = {
-> +	.driver = {
-> +		.name = "lenovo-yoga-slim7x-gen11-ec",
-> +		.of_match_table = yoga_ec_of_match,
-> +		.dev_groups = yoga_ec_groups,
-> +		.pm = pm_sleep_ptr(&yoga_ec_pm_ops),
-> +	},
-> +	.probe = yoga_ec_probe,
-> +	.id_table = yoga_ec_i2c_id,
-> +};
-> +module_i2c_driver(yoga_ec_driver);
-> +
-> +MODULE_AUTHOR("Oleg Keri <okerixx@gmail.com>");
-> +MODULE_DESCRIPTION("Lenovo Yoga Slim 7x Gen 11 embedded controller");
-> +MODULE_LICENSE("GPL");
-> 
-
--- 
- i.
-
+--------------axxK79NgUHTDoQRwnbgWpSYy--
