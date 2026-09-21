@@ -1,62 +1,64 @@
 Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF654A9D65
-	for <linux-hwmon@vger.kernel.org>; Mon, 21 Sep 2026 14:50:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792244AAC50
+	for <linux-hwmon@vger.kernel.org>; Mon, 21 Sep 2026 14:50:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790002208; cv=none; b=CnLD4VtwHuqBDArluBvLP/mnM4xhDSXNw2XtuA0+hhv9KySFTAx4Mi04NdjZK6rJXS2Hj6tVpiC8b+PxKYKxvQ6s2FabBHZf/PbxKPd7ZOe+GK/OyFRf14zj0FvtjWKgs/EmDT2Z/OLXkiDuYRGgPXenrtsq7SB9ZDPXlHmTmkI=
+	t=1790002210; cv=none; b=NZoGewypRgNt4NNPdoUyOOPgxH8A/hE3XsewD/9O8bRImgRo9Er7YWJd5zPD9qa9r2l2tbAS4i+lvX97FmDRa9ScQ/JZk/JXiurP3gmSgbR/L2RruZfezsze2xdyMgVM2fL7jYQDl2DWSD0irKJG8X5Ad7wsxZAcg7fNqUH7dqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790002208; c=relaxed/simple;
-	bh=MvGGZL4IS4MjWjWviaHP6B+xBpIms7EWjzyjzTLCRMM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D/sDfIOgRqJIz9exfNBkNt3/2Ww9m4TPR9dQ3Bq0QIfkEXOSrQih1YK0DvN5RCqAqR8Bpc5WMuU6JKGNHekQA2Om05kEjB2br1F1Th44L3oN2twL++kjga+0hxH6b5mGUd0qsMtOTi0W41piHRJKNVX6w0Ligv+w+uAYYICy/xY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ibFJkjo3; arc=none smtp.client-ip=74.125.225.140
+	s=arc-20240116; t=1790002210; c=relaxed/simple;
+	bh=gQp5P6A4HKZPmr2RXt5nnsqu1turFNqjNRfQGzceh+w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=D9xwUdekDyCIbE47QfCJ7BbGGPSGXbcm0YXtDdUMHoHTozl55iFbi2uFoW1fmao0Fb4WZPXaarWtgUbf/eLmm7K6WI8B7AGFTRTtkamPV3HWLBAzSt+ayRty9te7Jay/ZZV/Id7y5jydhzQvMRLb+DVrHKvlvas16SM1xoxRpIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M1l6QMZl; arc=none smtp.client-ip=74.125.225.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ibFJkjo3"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49ccf3ca626so15384425e9.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 21 Sep 2026 07:50:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M1l6QMZl"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912e64ccso22632685e9.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 21 Sep 2026 07:50:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790002203; x=1790607003; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8M61Qqjvm/dE/aUDfnFagoCXYMpIF6uiqbbGLV3Yg4M=;
-        b=ibFJkjo3rloeFPr/uQSGRzTdb2rtT3XvdwBejgVrMVEFTSiQGps+NMJ5k7Zon/iFbS
-         d/rWKBmD89UZ01QNl8I9qANU4bdCFHmRJzKV6Xjy0ZRKRgFTdwvY8IHXj3OP0DkpBnfY
-         Tner00BDrTu+acah+vzm2mkvTkaFfAOiUH04wbnKznoiZT0GEFuWhuWhNUTTFxPHdDm4
-         duHF4De1gF4H2w6iTG0U92fS4dizHTZXAKyROVpSKQUNLxlNq4JeuPObP3TvIoSDwJ3B
-         8R0PqNZk1ZaaP4lJeYj0SSIv0LFHC2b6mm919ut1cg59Yrv+cuq4hAgK+25sST20VF6x
-         Aojw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790002203; x=1790607003;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1790002206; x=1790607006; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=8M61Qqjvm/dE/aUDfnFagoCXYMpIF6uiqbbGLV3Yg4M=;
-        b=Uaarfc5gGZrCUxYpeTaiJm99nSVuWUKoaQufgB9YQD9WghNaC9J9GvKAgzIQv5j5FK
-         SoCuMxknlZFc3UUT9RtNj7/GNlRXCFSCJwhl257s7Wc/ukqCMyNvMOwQf7fDRTX5UBTl
-         ktPKmZeBK662j14L6zH2xDsAwA1Lsja5d4i9Ek3k+i5gW1JgIK1fd/5s0lhkS+r7TugY
-         T7rBUstUmC45+aFgV2C/dvVlEvR5+HGI1NLl6zyRJ6gwP3pMlTWdGS4qCX4WDUYdPHNM
-         pKcp76oBajAnDVw83Onk6Lk39wCG0hzslCkO7zK3c/FBWIdxUbrkPjwiPo85MS7wDMQU
-         XxOQ==
-X-Forwarded-Encrypted: i=1; AKwUvByxG9bSnFcsZsyOSHol0Qx1p4OMa4SDchk6S9x658usUQBu3M8lXs5Tth51uMb1stWtMNYU6aGLZ58Log==@vger.kernel.org
-X-Gm-Message-State: AFuF++kGUI+zNTRCeOGHNh9bQZ6zTnTEjS8RXLriCjSEWaPIh+EI1nVj
-	XUoKmDTnYttjgGg00ixLwvAOPgOssHIGHvepWTWwfYp7NRQzvonV/HIj
-X-Gm-Gg: AYBFou2gBqpc6tvVI1erwN6/P7vOurP1XZpbbOGUw1pxz7uCdvusWpBQBbBrrUqrE9l
-	KxhuPPM/7oWIn8S1y5aIk6JY7GWOsgRZ98FSulv0Ho/FLW+ackjSYCdJ4xVaa1ToM1ykNh6vr5P
-	yE5x1kZA7Tc6K5j178T2x2VmQm/YsldMjWe3Vcp2FZqa1mSxVklXEuKfj0DaIAw6gwHqNOQkITv
-	SV1jFUCqmC6O1F7CTeOjY8SlAoHxYzBEy9YV+kgLWroVWLfW4iQoJx7l3Oroq8dKw9wy2Qm06KG
-	7rqZFwFTa6xKhJZVm3pFbzpMM2rz3THY2hcF+uUxifuWfvVwsOGvKsGavn30sYQVNn6XLAPqLas
-	bapA04iRhIIf0257Hv1ZuffxENozaT2CjgzKh4Uez7uUqplEyPuFROPwWSG589kshxCKptd8Ok2
-	oxmr2TkZgO2jPLP/3hgIf4bSYnh34kX4/wxUz8hrGUUMsxidTzuVK/O7ab6+SkZ5WU0iOl9t++n
-	tFMjWP1ScCH3iaTgp/9
-X-Received: by 2002:a05:600c:3107:b0:49c:ff9f:f6b6 with SMTP id 5b1f17b1804b1-49fc5669346mr157236555e9.6.1790002202748;
-        Mon, 21 Sep 2026 07:50:02 -0700 (PDT)
+        bh=/eycLZYI0OnWON4y4DQc42djuKTXBLKJTdaLEQ0NYzI=;
+        b=M1l6QMZlJJ5OBCcXf03tRRdMPH1cHn9uWdZSCVQnYfrqzEOgMctZqG7bT9gpR3rnh/
+         jWKVXR+egPc4mmsrnoDVGIEbdW62poaSZAijxmgZqqtNeKwsIZC70UcO9vJraAonk3up
+         3SRQbPINez22DWc+3ooNL9bZvUpr7kchGr595QhalcUa8uuCCuTETJXypbksWa+2rY0j
+         t5QIooTPHYEgAYxseUhv4+Nzs6T4eJ5rzizXJ8tniK6odNhzqTNjead5ZaGFoG4B+Y4w
+         Dr+PC0kbnn4OT0NXTConNFNP5foW3E3Z1meDHyToimIFzejow5CItn6zqNzTTzEN6rzw
+         8yHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790002206; x=1790607006;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=/eycLZYI0OnWON4y4DQc42djuKTXBLKJTdaLEQ0NYzI=;
+        b=J+03LP2DI1s0lX7jp8trrIJuuKeMaiCmPua4it1XSZfKCV3JiFiLKEuyMTtvaMlvuJ
+         tRU2MdNAh7sIOMT+WCVtAJvE8keJGwgv/l/Ek0g/K/AV3R0QGWZV5L0VM++t60L0cRqO
+         tuN5FrjqGAgTGwnmodWTfrCSh01N2qLu6+V4MrNU5L0glVXoTaWc9dAIRQMC3ukVtr0/
+         Kf8oY3nJCp/5xkj3KHY4TNHt4Q64xF5tObNrI7u9YBbj0mCieRdExUgD3dv1C/HaOPEx
+         0k8XKKygDrqJuHxwzu6SUjjaTM8Y9umVa7qklZ1biqG7pdoChgGIgEWiMJcpLEqz/IsV
+         jdlA==
+X-Forwarded-Encrypted: i=1; AKwUvBygEvEH6eGtm/QwHogwYcRSk7vXV42Jk13XLjTmA5UHYTyNc0PVmAB6x6Pbtxopazl1aGL7cnLtMvT/8g==@vger.kernel.org
+X-Gm-Message-State: AFuF++lVlFyWjNPqNPa2Amud2Ul8JHRz1DtCH0DmceDP5SXYH6VJYGQD
+	FjSzmX2uSSR5KUp8Km2lcm4D0OV+ERZ+9JZ4F5f23wovMqyQtLih0iIA
+X-Gm-Gg: AYBFou3fKXCIt+9kNFJL0MEYqDEPzQTdZbwSr+doC0f+HZbc+wP1qM8M4txlyhJOuY0
+	CyqVMkeLWPi5IO3JPqouIcEQiMjXXi6vWhTXBGWBy8IQos3f4HtPyokIgD7zm+AC3YM77yoCvrq
+	OAAqN94TMvPOntHUfJa8xEIVXSnhMsQIJIcZqyAfI4t1I4qNYZ2wO27F1Q0vIhZLoGBsYaBp/wn
+	gK2obAPsVlJPm084cLmsSd/sykJGni94C9dVSEWukDM6vA1AO7v3z40knPVKnp/vHuZN6PgM+U0
+	BXTSNskzaj9JxIfOJ2Mc7Ag9/WLGSC4wpZitjrPtIgPsw3B8Ii6zwY3XA3DQaJzSTS7PqfhSTCn
+	ouhjZN/jcAo1BXq+NdeK4Vg6IMlgsCJdDP7o1J4WQDKZqpi0CMULD28pKoZAkvSOZ/aYTaP+qo/
+	/fMQU4Wlze0EM7TohbgMgGgNN6kjup73ZzaHdKU9w7nZ+c0JOAfmvIE6IVPTCkrvHOCBIAPFFcJ
+	HTBHw3rQ80=
+X-Received: by 2002:a05:600c:3e19:b0:49f:bd3c:bc1a with SMTP id 5b1f17b1804b1-49fc572f27fmr153111575e9.21.1790002205475;
+        Mon, 21 Sep 2026 07:50:05 -0700 (PDT)
 Received: from localhost.localdomain ([194.154.195.114])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-49fcd8bc15esm191595725e9.1.2026.09.21.07.50.01
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-49fcd8bc15esm191595725e9.1.2026.09.21.07.50.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2026 07:50:02 -0700 (PDT)
+        Mon, 21 Sep 2026 07:50:05 -0700 (PDT)
 From: Oleg Keri <okerixx@gmail.com>
 To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -73,10 +75,12 @@ Cc: linux-arm-msm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	platform-driver-x86@vger.kernel.org,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH v3 0/3] platform/arm64: Lenovo Yoga Slim 7x Gen 11 embedded controller
-Date: Mon, 21 Sep 2026 16:49:50 +0200
-Message-ID: <20260921144953.15113-1-okerixx@gmail.com>
+Subject: [PATCH v3 3/3] arm64: dts: qcom: glymur-lenovo-yoga-slim7x: add the embedded controller
+Date: Mon, 21 Sep 2026 16:49:53 +0200
+Message-ID: <20260921144953.15113-4-okerixx@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260921144953.15113-1-okerixx@gmail.com>
+References: <20260921144953.15113-1-okerixx@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -85,78 +89,52 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Lenovo Yoga Slim 7x Gen 11 is a Qualcomm Snapdragon X2 Elite (glymur)
-laptop. It carries a Compal EF06 embedded controller on I2C at address
-0x70, which is the only source on this machine for the board thermistors,
-the battery cell voltages, the fan tachometer, the keyboard backlight, and
-the mic-mute and airplane-mode keys.
+Describe the Compal embedded controller on I2C at address 0x70. It
+provides the board thermistors, the battery cell voltages and the CPU fan
+speed, and drives the keyboard backlight. Its interrupt line is TLMM
+gpio66, falling edge, for which the file already carries a pin state.
 
-Patch 1 documents the binding, patch 2 adds the driver, patch 3 adds the
-node to the board.
+That state leaves the pin without a bias. gpio66 has no external pull
+and floats when the EC is not driving it, which shows up as a steady
+stream of spurious edges; the vendor ACPI tables describe the same pin
+as GpioInt(Edge, ActiveLow, Exclusive, PullUp). Enable the pull-up.
 
-Why one driver
---------------
+Signed-off-by: Oleg Keri <okerixx@gmail.com>
+---
+ .../boot/dts/qcom/glymur-lenovo-yoga-slim7x.dts      | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-The automated review of v2 asked for the hwmon part to become an
-auxiliary driver under drivers/hwmon/. The hwmon channels, the LED and
-the input device all sit behind one command mailbox and one interrupt,
-so the driver stays in one file, like huawei-gaokun-ec,
-lenovo-thinkpad-t14s and qcom-hamoa-ec next to it. It is documented
-under Documentation/ABI only.
-
-Notes
------
-
-Fan speed is reported but not controlled, deliberately - the EC enforces no
-thermal floor over a manual setpoint. Patch 2 has the measurement.
-
-Tested on a Lenovo Yoga Slim 7x Gen 11 (DMI 83QR, "Yoga Slim 7 14Q8Y11").
-
-Changes in v3:
-- Add the board DT node as patch 3. It was posted on its own [1], and a
-  node cannot be merged before its binding (Konrad).
-- Add the "Why one driver" section above.
-- Patch 2: name the driver after the module, and the i2c id after the
-  compatible.
-- Patch 2: spell out both SCUK bits the Fn-lock toggle moves instead of
-  the 0xa0/0x5f masks.
-- Patch 2: return -ENODATA for a thermistor reading of 0, as probe already
-  treats 0 as "not fitted".
-- Patch 2: ten tries for a cell-voltage sample instead of thirty.
-- Patch 2: include what is used directly, devm_mutex_init(), comment the
-  mutex, fix the address in MODULE_AUTHOR, say in the commit message that
-  results cannot be matched to commands.
-- Link to v2: https://lore.kernel.org/all/20260908183403.2107-1-okerixx@gmail.com/
-
-Changes in v2:
-- Patch 2: drop #include <linux/mod_devicetable.h>; <linux/i2c.h> already
-  provides both of_device_id (via linux/of.h) and i2c_device_id (via
-  linux/device-id/i2c.h), and the header is on its way out.
-  Reported-by: Uwe Kleine-Koenig <u.kleine-koenig@baylibre.com>
-- Patch 2: add "depends on INPUT" to EC_LENOVO_YOGA_SLIM7X_GEN11; the driver
-  registers an input device unconditionally, so a config with INPUT=n did
-  not link.
-- Patch 1: pick up Conor Dooley's Acked-by.
-- Link to v1: https://lore.kernel.org/all/20260908091752.5508-1-okerixx@gmail.com/
-
-[1] https://lore.kernel.org/all/20260914082950.9393-1-okerixx@gmail.com/
-
-Oleg Keri (3):
-  dt-bindings: embedded-controller: add Lenovo Yoga Slim 7x Gen 11 EC
-  platform/arm64: add Lenovo Yoga Slim 7x Gen 11 EC driver
-  arm64: dts: qcom: glymur-lenovo-yoga-slim7x: add the embedded controller
-
- .../sysfs-driver-lenovo-yoga-slim7x-gen11-ec       |  21 +
- .../lenovo,yoga-slim7x-gen11-ec.yaml               |  56 ++
- MAINTAINERS                                        |   8 +
- .../boot/dts/qcom/glymur-lenovo-yoga-slim7x.dts    |  12 +-
- drivers/platform/arm64/Kconfig                     |  23 +
- drivers/platform/arm64/Makefile                    |   1 +
- .../platform/arm64/lenovo-yoga-slim7x-gen11-ec.c   | 653 +++++++++++++++++++++
- 7 files changed, 772 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-driver-lenovo-yoga-slim7x-gen11-ec
- create mode 100644 Documentation/devicetree/bindings/embedded-controller/lenovo,yoga-slim7x-gen11-ec.yaml
- create mode 100644 drivers/platform/arm64/lenovo-yoga-slim7x-gen11-ec.c
-
+diff --git a/arch/arm64/boot/dts/qcom/glymur-lenovo-yoga-slim7x.dts b/arch/arm64/boot/dts/qcom/glymur-lenovo-yoga-slim7x.dts
+index 769f195c99d9..bc840fd8e458 100644
+--- a/arch/arm64/boot/dts/qcom/glymur-lenovo-yoga-slim7x.dts
++++ b/arch/arm64/boot/dts/qcom/glymur-lenovo-yoga-slim7x.dts
+@@ -659,7 +659,15 @@ &i2c9 {
+ 
+ 	status = "okay";
+ 
+-	/* EC @ 0x70, irq = TLMM 66 */
++	embedded-controller@70 {
++		compatible = "lenovo,yoga-slim7x-gen11-ec";
++		reg = <0x70>;
++
++		interrupts-extended = <&tlmm 66 IRQ_TYPE_EDGE_FALLING>;
++
++		pinctrl-0 = <&ec_int_n_default>;
++		pinctrl-names = "default";
++	};
+ };
+ 
+ &lpass_vamacro {
+@@ -990,7 +998,7 @@ reset-n-pins {
+ 	ec_int_n_default: ec-int-n-state {
+ 		pins = "gpio66";
+ 		function = "gpio";
+-		bias-disable;
++		bias-pull-up;
+ 	};
+ 
+ 	kybd_default: kybd-default-state {
+base-commit: 5c4d4169604b335c38bbc79bc1fc03042981fc6f
 -- 
 2.55.0
+
