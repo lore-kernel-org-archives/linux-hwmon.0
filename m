@@ -1,59 +1,56 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AE1517BB21
-	for <linux-hwmon@vger.kernel.org>; Mon, 21 Sep 2026 06:04:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEFC63164BA
+	for <linux-hwmon@vger.kernel.org>; Mon, 21 Sep 2026 06:04:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789970651; cv=none; b=T+FLI1jQQJw1uif7YwLCVhBxZl0qDRHMobtOih9SH47q2S9WCw7GeBqVy/60lrFupqnRXT5nam6WMlhI6XmhAeqjIGxZflbx+mPQnIMBJ3Byv0iAUpVb8XV2l6lcxURxtmMLCf6UlwAJ94EN8nqzlHzjRx5H87LcDN34qAdOi+4=
+	t=1789970657; cv=none; b=Xi8YnuLG/fVSmd0bJskIqnLkmMoczEnAZtnUL8uz9HbzdkN6ytiThU2pQ+Yffq2XyH0ZCwIgmhpT4cyZMXxLxwYU7sYZZQ3+0ILyhPnXwq6rO6quqEPd9kN7jvKmbJT9isXiFG6eSvzYt16Go7gU+44r/6wr6xXf/J2FEOWiv3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789970651; c=relaxed/simple;
-	bh=SiW8VYbRdslhkZd1aoPQ04ehRjQUzpE9XcCMDwR/6z0=;
+	s=arc-20240116; t=1789970657; c=relaxed/simple;
+	bh=7zm9SxEhZnjCd7RN7LvPJ2d31IyaN/mPeV60nPTaMyA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ULyNhAPUvIMCzUKQlpGPUkQ6yWdbnHZaaMQlze8nIij8qjhzt0/iccTJbJJYRl+9+BjUrZ4Q1YBAZ9KwST42730pUCLX9GfsoISazL+GikNbwRh07jJFtZfEx361JmFIydkrozmJBS5AnsJ0gc/sUxoY4E6DKd7dKeG4j5NM8Go=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FQsrgGOY; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=ZRQK+6Lixr4QKGO6HnuQcplZ9gJajKiR1g75ljJyoE5taOqKsEeWZeDzyVq0XR2C9Yqm1R1CW7aCCap26m8656n23LrnvskAcpQyntFIWlWMQWp966tQYsW3zFahIu7Yyzuo+Hjoz7KQXlO1IXPjuBZQvv9NUAdw7B0XEiNfXgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SCsuQrxW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FQsrgGOY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B05CE1F000FF;
-	Mon, 21 Sep 2026 06:04:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SCsuQrxW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 667D21F000FF;
+	Mon, 21 Sep 2026 06:04:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789970649;
-	bh=SiW8VYbRdslhkZd1aoPQ04ehRjQUzpE9XcCMDwR/6z0=;
+	s=k20260515; t=1789970655;
+	bh=7zm9SxEhZnjCd7RN7LvPJ2d31IyaN/mPeV60nPTaMyA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FQsrgGOYeIGdd9P4ydsGMVhLyznqP9Y67HAk8R0ZIc0N7oBWH2Toabn//FbzGj2uh
-	 HZEwYDN8OBzkaIWdwciq9O5o4MOqhDB6vPlLonmImi9pnfp6bkyr7Yk3NEM5RaLuef
-	 CUi/PMMR5V+k6lsuoU2SWaxFjL+2cberliCJ86nVNm907UQJEuR7omiFYRC1YOcu9o
-	 XB8Bnu7LEReK6maxVcsAP5F2xhIEM13J2D3DvnGQjU2gy/59rcWo+pNh+E3GHC0ipl
-	 ZO0yPw0WPCwptCelweIuDCvXzkldimFxAE90aHxsRhMU7nCoUuVUQ7Vn09DDso2sR0
-	 5N5irzyoul91A==
+	b=SCsuQrxW46xHhs2PpPfWmMqjwDabEX5FznyCqOJBTxUUwk20IpNyOdLF8RjbiiiOo
+	 OcTA2FzSgkEI314fO+ZKk+5gx9dlTg+ZL4lEEWyIpUjCzCKAwGYn+9HdW7IStHDOwr
+	 hLyujaxBuhrIhEV3r91pAetBpBbnnP6mg3AhmLbRGhve08LTXkm9GWRYx+Is0XFKt+
+	 dCAbokfWjBN23L8rXLwoDG7nRI38SMt6qY8Xcr6vFVbvJKfmgWOcDhgbkXbxRpF9SI
+	 SxrbMbx2cDr0/8x7riH7+6pFBpZCr4CUE6m6QyTVBkULqpqKZxXE7/zXbWyReBkMHt
+	 iEooqsSaWfsDA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 6/8] x86/amd_nb: Restrict the northbridge framework
- to AMD CPUs
+Subject: Re: [PATCH v6 7/8] x86/amd_node: Restrict SMN setup to AMD CPUs
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Lin Wang" <wanglin@open-hieco.net>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260921055603.25112-7-wanglin@open-hieco.net>
+In-Reply-To: <20260921055603.25112-8-wanglin@open-hieco.net>
 References: <20260921055603.25112-1-wanglin@open-hieco.net>
- <20260921055603.25112-7-wanglin@open-hieco.net>
+ <20260921055603.25112-8-wanglin@open-hieco.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 21 Sep 2026 06:04:09 +0000
-Message-Id: <20260921060409.B05CE1F000FF@smtp.kernel.org>
+Date: Mon, 21 Sep 2026 06:04:15 +0000
+Message-Id: <20260921060415.667D21F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-> The AMD northbridge cache previously discovered Hygon F3 devices by PCI
-> ID. It now derives the node count from CPU topology and locates node
-> functions at fixed PCI slots. Hygon DF devices do not follow that
-> layout, so the Hygon branch no longer builds a usable cache.
+> amd_smn_init() divides host bridge roots among amd_num_nodes() entries
+> in PCI enumeration order. Hygon DF nodes instead share one SMN ingress
+> per socket, so the AMD root map cannot provide Hygon SMN access.
 >=20
-> amd64_edac and ATL no longer use this cache on Hygon. Restrict
-> northbridge initialization and the early northbridge check to AMD CPUs.
-> Keep amd_get_mmconfig_range() available on Hygon because it reads the
-> MMCONFIG MSR without using the northbridge cache.
+> amd64_edac, ATL and k10temp no longer depend on AMD northbridge or SMN
+> state on Hygon. Restrict AMD SMN setup and root discovery to AMD CPUs,
+> leaving the Hygon roots available for the Hygon node layer.
 >=20
 > Signed-off-by: Lin Wang <wanglin@open-hieco.net>
 
@@ -61,5 +58,5 @@ Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260921055603.2511=
-2-1-wanglin@open-hieco.net?part=3D6
+2-1-wanglin@open-hieco.net?part=3D7
 
