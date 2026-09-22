@@ -1,590 +1,291 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DED9A545DAB
-	for <linux-hwmon@vger.kernel.org>; Tue, 22 Sep 2026 13:08:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D9B953F6BC
+	for <linux-hwmon@vger.kernel.org>; Tue, 22 Sep 2026 13:33:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790082517; cv=none; b=NRTxQCudKSJ11SgTQvSo2qf5B61P0hgjqQUGl3wS8zhOTbe+t9n4cfkaxD49CLlvKCxTinnlk3PJHEJxujPX0LPVlI67lfRYtLTxSPrAIzk9yFdKSeaP5DT9/H7izkQ7Y7OMTYob1KKfVD0Ng51Epm7niOHVAEEbtq3DCCBW0bY=
+	t=1790084023; cv=none; b=tzjgC72yuyS4t2OPijs0+Kw+wv0gAt3H//kOo9DrAmfzm61AAyV1r+gsRnrb2WrAXYbLr1LNcba9XbdtunpUlZKe8OTdQzXUmfkNu+EipY/we1Abl9aEYu5BmnBUhE1UWi3/XgP8BbKVZx6YDMUV2wvyRuq31afFqBqfePBfXqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790082517; c=relaxed/simple;
-	bh=XDvs73JEy4YKJ3xI09CFbH0vjnY23kj5NZqhBSZ0vDA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SyH9HextFr/n28oskmRwYT6VCdPXr/mR4+m4gp006X3SRnIhb6CmLPzwlFN0ToElVSIPhnzKtInIf/eDV5mzOCzuhasT+fu4wKitthyipUqpKFmILP8+7ZeTgd7lM2jEc8UjCAJ++OJA/DA/HQ9FMgxrjMMyIaRS8f/e7p0cnWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kN4kCY56; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790084023; c=relaxed/simple;
+	bh=Ql6MI6/k6ufAB79dkpGcNbDfwC1zD5p7MkWUMqW4dV4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KcaIkpfU0nw5IXctgMcU8+/MqsloaK0knGcV2ORIbjqntgfe/T28gnQVHXs0LXPYxHOn6DMnMKcIBJPF+0EYxUwWhhKhErVvHg26UQKir/AhGzQ/AfBw3MgA9ILPBjFS8rRh+Z3wg4kkZ/Af356QXc4RDrpWIpe1CRaf9zChvL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Rv4mdAPE; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kN4kCY56"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73CEC1F00898
-	for <linux-hwmon@vger.kernel.org>; Tue, 22 Sep 2026 13:08:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790082515;
-	bh=dtKSaYNybbuVIWzvAwOFjsM6oYgukInOsGXNCqfyEwo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=kN4kCY56s49v2NlFU4LDqSGpSfKSf6LJFFZL5L7Deid/4zMgRrRO61l976QcAZr/3
-	 TyBt3OVJ5wZkCtbOfgBzEx5HafPdEtE1yt1sdv+uXd5C8V7tN4kLb6NS605asp8vUm
-	 wd10fGMqC4m2StXSjsVjQWe/IsPLlrjGp98CjAiNxaSckcLaguYfz/nAHsBRcA4gCU
-	 ExqFT6FEXLqpICZ3EDSDEDoD27mgqecd0/V/YKIIsSDLVMrpnd8VGihStdKTsaD5am
-	 EmG3XI+VY6uFAqGuZPxREX3J9NmWHPZ6ugyuX6uj94JRSmtD3x7fhgzu0qxpwyG4dS
-	 DAJxKIcYgxzSA==
-Received: by mail-lr2-f12.google.com with SMTP id 38308e7fff4ca-3a318299b93so35939711fa.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 22 Sep 2026 06:08:35 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBzybzXhBUh7FwWbbreYHOUibs1995RX8gnMUTV2kANBZoJmG94m67RejP2/BlbaALFtNkK3cyUWKFYJRw==@vger.kernel.org
-X-Gm-Message-State: AFuF++kfwkdtNoILtOIetQt/ZfasWtHILnug3Zebhid1COOpXfWr0+JP
-	DIUOY08aGauXM9H4LAegjkpTPjnh12+A8TfFRVpo4ShGXYZcQLvKuMYjjEXQGtrIEyJtS4Q/FBh
-	+MwoSUztaC/R6Hown9eaMxpMiFv2JZ4g=
-X-Received: by 2002:a05:651c:1503:b0:3a2:fda9:34fd with SMTP id
- 38308e7fff4ca-3a5fbec15ecmr31018991fa.9.1790082513680; Tue, 22 Sep 2026
- 06:08:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Rv4mdAPE"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912d8239so29697215e9.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 22 Sep 2026 06:33:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1790084018; x=1790688818; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=C2Z6J0Xb+XGgk1d/nTkGyflldNnpf7sHk7JSW+3DTk4=;
+        b=Rv4mdAPEO5fg2ZdjGtP0PRYwVoxOc0kpCvXOJOdO6EPSN6IyE/d4o1B6o4qzslE+fS
+         /suZDMGT4yD1u3Co0ADkQyXK56wmcqCJpxNjGOFF6qGiY1ruo3jrEbRN8VXtGViQsu8u
+         AN44BzE0Jn4YzfR9jYawqS6EkwQUkuuBsLwl6XUk1oNf2IKlk2KtXR/JrTtEOmN/x7Iz
+         M84ps9UwBNc5dzxa+/gTa4lTps+GIhRLdpKhuuflm1ACdo5n0zG0/lSbJT+moIJTO4Jf
+         CgZ5w03MjknxS1biJoOFcxlsisvHNwG3HX9nvlBxszTs8/EMxvnRb9s4EmXhfpvu0TPR
+         HGgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790084018; x=1790688818;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=C2Z6J0Xb+XGgk1d/nTkGyflldNnpf7sHk7JSW+3DTk4=;
+        b=KiGZtiTucfti5PJmWDm6Lx/BVNMjlQO4F06nvnD5uaVizo+cRrn9DFRJ38jVG0TYAq
+         SoOpTj6L4m8ITEtt3txUT8oZJPVaDlEJdV31Kg286TBcADiErniLiuWvEnuAh9FBnodh
+         ErYNkpjFJ8MZYwuFcPlvjWtqtxFJALYVuTzMA24nPyZTRPM/5vJakDwsMFsp4HTgXjFD
+         0tk7ky3Rc5Xi+C9856a8i/AX1vxS5NJ+54WNqkBzaGBCaOpcdz8f9CrdcI6TsJHYHuSC
+         YmypKpy6dMgy2xkgWFUQpcON+Zg2SFKlVjAHmwU1iMRwwU11XUlrdKjK4gay4D167g0W
+         v7lA==
+X-Forwarded-Encrypted: i=1; AKwUvBzNNNiOghJbcP6VKRY9ocZzqEsjyYFFo7SBEPXAF2pXaPvFlEZ2pBna0q/DUIvjb8qmSvAN2fz9QDOwSA==@vger.kernel.org
+X-Gm-Message-State: AFuF++kF82t6qqp/XT17rbP6TYEPdQYywtrllL9i0Y39DsiUFKTbpQgO
+	2AYQ8TpPb/+Tcho1vDlet77nUmD76OC3zK+mjlJZp6e7Y0X7eKxOzzdwP4m6nzepYpk=
+X-Gm-Gg: AYBFou0JKdd4naL67m37nK9BsUTvzoAsw2hBqFTnekjXCJFrnlDDTAz8BiLXUGWmgBH
+	DEJrt5gaGbQc8+dLPmbWRjgCNjpxukunZkO8xe2Qb9rM/zO3GSTsFcPcwIB7RKaqMdtKe8cmRGO
+	u3/Yyd4j/iiYVx3OUgBO3LJ/C+FflTMrNbtTRBSFIXPoFnzxpAeYys9cR+A0lyAQ9mvle6q1N6T
+	WKPaSWQ2CrFlw2tqKDkUsalf5fPYDPwevK6qG3GPB5PQiaOxnQZ0WmGm2IMTQGEyRnpRXOKBhQP
+	9VZLw5nm4a0Wl+di3zc6e9Me4Mhzr7t1PUzU4h1CafKfqFisorNNR7BOYTaIQVJdsvPdRIo8e0Q
+	HIsZx8f1rT2HZxVifxualOe8A2b+jiKvy+D5zzPLjsHBvOvx2/bx2ojc/1hg/2ItRQOUF/U9ajr
+	qofsEyWU1IgkVSNUReZxFl/qKhiGllt0m6z+mvSWTlvTO1jG1KZuIWI/hEXzcZEDRG765/DD8sO
+	FFaKE6EcpQwpYQzdBEQ8/xo3NYP5YvjjtLL0+ULOtYVq+C2qvsy7izF59CNBi+BuF/BRTE=
+X-Received: by 2002:a05:600c:a085:b0:49d:25b0:cc60 with SMTP id 5b1f17b1804b1-49fc5747f7bmr216383615e9.29.1790084018052;
+        Tue, 22 Sep 2026 06:33:38 -0700 (PDT)
+Received: from zovi.suse.cz (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fdace76e8sm70243845e9.1.2026.09.22.06.33.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2026 06:33:37 -0700 (PDT)
+From: Petr Pavlu <petr.pavlu@suse.com>
+To: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Ian Abbott <abbotti@mev.co.uk>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Rudolf Marek <r.marek@assembler.cz>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Chris Snook <chris.snook@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Duncan Sands <duncan.sands@free.fr>,
+	Chas Williams <3chas3@gmail.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>
+Cc: linux-watchdog@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	netdev@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org,
+	linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-atm-general@lists.sourceforge.net,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] Remove obsolete __MODULE_STRING()
+Date: Tue, 22 Sep 2026 15:32:20 +0200
+Message-ID: <20260922-module-string-v1-0-c18766690185@suse.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260918175052.85461-1-jordan@brough.org> <20260918175052.85461-2-jordan@brough.org>
-In-Reply-To: <20260918175052.85461-2-jordan@brough.org>
-From: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
-Date: Tue, 22 Sep 2026 15:07:01 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gM8YUJZa=FR1=kr=cfe51zt6TJk60ibjZSnJ+tnpTGcQ@mail.gmail.com>
-X-Gm-Features: AcwNN1WOr_tMZwh9YG_OEze1vmkQnJ7QsHvEZpUx9Fku7T4MiH7ZogSUlPuAwKs
-Message-ID: <CAJZ5v0gM8YUJZa=FR1=kr=cfe51zt6TJk60ibjZSnJ+tnpTGcQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] ACPI: battery: add unified battery hook mechanism
- for ACPI and SBS batteries
-To: Jordan Brough <jordan@brough.org>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Henrik Rydberg <rydberg@bitmath.se>, linux-hwmon@vger.kernel.org, 
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Change-ID: 20260919-module-string-d64816f203d9
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 18, 2026 at 7:51=E2=80=AFPM Jordan Brough <jordan@brough.org> w=
-rote:
->
-> drivers/acpi/battery.c provides a battery_hook_register()/unregister()
-> mechanism that lets other drivers (e.g. platform and hwmon drivers
-> exposing vendor-specific charge control) attach extra power_supply
-> properties to an ACPI Control Method Battery (HID PNP0C0A).
->
-> Some machines instead expose their battery through the ACPI Smart
-> Battery System (HID ACPI0002, "SBS") driver in drivers/acpi/sbs.c,
-> which has had no equivalent hook point.
->
-> Extract the battery hooking implementation out of drivers/acpi/battery.c
-> into a shared helper in drivers/acpi/battery_hook.c, built directly into
-> the ACPI core (acpi.o). Both drivers/acpi/battery.c and drivers/acpi/sbs.=
-c
-> now register their power_supply devices with this shared hook
-> infrastructure via battery_hook_add_battery() and
-> battery_hook_remove_battery().
->
-> This unifies the hooking interface across both battery drivers so
-> callers only need to register a single struct acpi_battery_hook without
-> needing to know or care whether the underlying hardware exposes a Control
-> Method Battery or an SBS battery.
->
-> Suggested-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-> Signed-off-by: Jordan Brough <jordan@brough.org>
-> ---
->  drivers/acpi/Makefile       |   1 +
->  drivers/acpi/battery.c      | 165 +-----------------------------------
->  drivers/acpi/battery_hook.c | 112 ++++++++++++++++++++++++
->  drivers/acpi/sbs.c          |   8 +-
->  include/acpi/battery.h      |  10 +++
->  5 files changed, 133 insertions(+), 163 deletions(-)
->  create mode 100644 drivers/acpi/battery_hook.c
->
-> diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-> index d1b0affb844..57413f2a09e 100644
-> --- a/drivers/acpi/Makefile
-> +++ b/drivers/acpi/Makefile
-> @@ -28,6 +28,7 @@ obj-$(CONFIG_ACPI)            +=3D acpi.o \
->  # All the builtin files are in the "acpi." module_param namespace.
->  acpi-y                         +=3D osi.o osl.o utils.o reboot.o
->  acpi-y                         +=3D nvs.o
-> +acpi-y                         +=3D battery_hook.o
+__MODULE_STRING() has been an alias for __stringify() since "[PATCH]
+MODULE_PARM support for older modules" [1] in 2002-12. That change also
+moved it to the graveyard section at the end of linux/module.h
 
-s/battery_hook/battery_hooks/
+Replace the remaining uses of __MODULE_STRING() with __stringify() and
+remove the macro.
 
-And surely it need not be compiled in without any users built at least
-as modules.
+Apologies for the wide distribution. Acked-bys are appreciated.
 
->
->  # Power management related files
->  acpi-y                         +=3D wakeup.o
-> diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
-> index 670853ec3a4..9b6af528bfe 100644
-> --- a/drivers/acpi/battery.c
-> +++ b/drivers/acpi/battery.c
-> @@ -105,7 +105,7 @@ struct acpi_battery {
->         struct kfifo acpi_notif_fifo;
->         struct delayed_work acpi_notif_dwork;
->         struct notifier_block pm_nb;
-> -       struct list_head list;
-> +       struct acpi_battery_hook_device hook_dev;
+[1] https://git.kernel.org/tglx/history/c/136839a1b4
 
-struct acpi_battery_hooks_list_entry hooks_list_entry;
+---
+Petr Pavlu (3):
+      watchdog: Replace __MODULE_STRING() with __stringify()
+      drivers: Replace __MODULE_STRING() with __stringify()
+      module: Remove obsolete __MODULE_STRING()
 
->         unsigned long flags;
->
->         struct mutex property_lock; /* Protects properties below. */
-> @@ -744,164 +744,6 @@ static struct attribute *acpi_battery_attrs[] =3D {
->  };
->  ATTRIBUTE_GROUPS(acpi_battery);
->
-> -/*
-> - * The Battery Hooking API
-> - *
-> - * This API is used inside other drivers that need to expose
-> - * platform-specific behaviour within the generic driver in a
-> - * generic way.
-> - *
-> - */
-> -
-> -static LIST_HEAD(acpi_battery_list);
-> -static LIST_HEAD(battery_hook_list);
-> -static DEFINE_MUTEX(hook_mutex);
-> -
-> -static void battery_hook_unregister_unlocked(struct acpi_battery_hook *h=
-ook)
-> -{
-> -       struct acpi_battery *battery;
-> -
-> -       /*
-> -        * In order to remove a hook, we first need to
-> -        * de-register all the batteries that are registered.
-> -        */
-> -       list_for_each_entry(battery, &acpi_battery_list, list) {
-> -               if (!hook->remove_battery(battery->bat, hook))
-> -                       power_supply_changed(battery->bat);
-> -       }
-> -       list_del_init(&hook->list);
-> -
-> -       pr_info("hook unregistered: %s\n", hook->name);
-> -}
-> -
-> -void battery_hook_unregister(struct acpi_battery_hook *hook)
-> -{
-> -       mutex_lock(&hook_mutex);
-> -       /*
-> -        * Ignore already unregistered battery hooks. This might happen
-> -        * if a battery hook was previously unloaded due to an error when
-> -        * adding a new battery.
-> -        */
-> -       if (!list_empty(&hook->list))
-> -               battery_hook_unregister_unlocked(hook);
-> -
-> -       mutex_unlock(&hook_mutex);
-> -}
-> -EXPORT_SYMBOL_GPL(battery_hook_unregister);
-> -
-> -void battery_hook_register(struct acpi_battery_hook *hook)
-> -{
-> -       struct acpi_battery *battery;
-> -
-> -       mutex_lock(&hook_mutex);
-> -       list_add(&hook->list, &battery_hook_list);
-> -       /*
-> -        * Now that the driver is registered, we need
-> -        * to notify the hook that a battery is available
-> -        * for each battery, so that the driver may add
-> -        * its attributes.
-> -        */
-> -       list_for_each_entry(battery, &acpi_battery_list, list) {
-> -               if (hook->add_battery(battery->bat, hook)) {
-> -                       /*
-> -                        * If a add-battery returns non-zero,
-> -                        * the registration of the hook has failed,
-> -                        * and we will not add it to the list of loaded
-> -                        * hooks.
-> -                        */
-> -                       pr_err("hook failed to load: %s", hook->name);
-> -                       battery_hook_unregister_unlocked(hook);
-> -                       goto end;
-> -               }
-> -
-> -               power_supply_changed(battery->bat);
-> -       }
-> -       pr_info("new hook: %s\n", hook->name);
-> -end:
-> -       mutex_unlock(&hook_mutex);
-> -}
-> -EXPORT_SYMBOL_GPL(battery_hook_register);
-> -
-> -static void devm_battery_hook_unregister(void *data)
-> -{
-> -       struct acpi_battery_hook *hook =3D data;
-> -
-> -       battery_hook_unregister(hook);
-> -}
-> -
-> -int devm_battery_hook_register(struct device *dev, struct acpi_battery_h=
-ook *hook)
-> -{
-> -       battery_hook_register(hook);
-> -
-> -       return devm_add_action_or_reset(dev, devm_battery_hook_unregister=
-, hook);
-> -}
-> -EXPORT_SYMBOL_GPL(devm_battery_hook_register);
-> -
-> -/*
-> - * This function gets called right after the battery sysfs
-> - * attributes have been added, so that the drivers that
-> - * define custom sysfs attributes can add their own.
-> - */
-> -static void battery_hook_add_battery(struct acpi_battery *battery)
-> -{
-> -       struct acpi_battery_hook *hook_node, *tmp;
-> -
-> -       mutex_lock(&hook_mutex);
-> -       INIT_LIST_HEAD(&battery->list);
-> -       list_add(&battery->list, &acpi_battery_list);
-> -       /*
-> -        * Since we added a new battery to the list, we need to
-> -        * iterate over the hooks and call add_battery for each
-> -        * hook that was registered. This usually happens
-> -        * when a battery gets hotplugged or initialized
-> -        * during the battery module initialization.
-> -        */
-> -       list_for_each_entry_safe(hook_node, tmp, &battery_hook_list, list=
-) {
-> -               if (hook_node->add_battery(battery->bat, hook_node)) {
-> -                       /*
-> -                        * The notification of the hook has failed, to
-> -                        * prevent further errors we will unload the hook=
-.
-> -                        */
-> -                       pr_err("error in hook, unloading: %s",
-> -                                       hook_node->name);
-> -                       battery_hook_unregister_unlocked(hook_node);
-> -               }
-> -       }
-> -       mutex_unlock(&hook_mutex);
-> -}
-> -
-> -static void battery_hook_remove_battery(struct acpi_battery *battery)
-> -{
-> -       struct acpi_battery_hook *hook;
-> -
-> -       mutex_lock(&hook_mutex);
-> -       /*
-> -        * Before removing the hook, we need to remove all
-> -        * custom attributes from the battery.
-> -        */
-> -       list_for_each_entry(hook, &battery_hook_list, list) {
-> -               hook->remove_battery(battery->bat, hook);
-> -       }
-> -       /* Then, just remove the battery from the list */
-> -       list_del(&battery->list);
-> -       mutex_unlock(&hook_mutex);
-> -}
-> -
-> -static void __exit battery_hook_exit(void)
-> -{
-> -       struct acpi_battery_hook *hook;
-> -       struct acpi_battery_hook *ptr;
-> -       /*
-> -        * At this point, the acpi_bus_unregister_driver()
-> -        * has called remove for all batteries. We just
-> -        * need to remove the hooks.
-> -        */
-> -       list_for_each_entry_safe(hook, ptr, &battery_hook_list, list) {
-> -               battery_hook_unregister(hook);
-> -       }
-> -       mutex_destroy(&hook_mutex);
-> -}
-> -
->  static int sysfs_add_battery(struct acpi_battery *battery)
->  {
->         struct power_supply_config psy_cfg =3D {
-> @@ -957,7 +799,7 @@ static int sysfs_add_battery(struct acpi_battery *bat=
-tery)
->                 battery->bat =3D NULL;
->                 return result;
->         }
-> -       battery_hook_add_battery(battery);
-> +       battery_hook_add_battery(&battery->hook_dev, battery->bat);
-
-acpi_battery_add_hooks(&battery->hooks_list_entry, battery->bat);
-
->         return 0;
->  }
->
-> @@ -966,7 +808,7 @@ static void sysfs_remove_battery(struct acpi_battery =
-*battery)
->         if (!battery->bat)
->                 return;
->
-> -       battery_hook_remove_battery(battery);
-> +       battery_hook_remove_battery(&battery->hook_dev);
-
-acpi_battery_remove_hooks(...)
-
->         power_supply_unregister(battery->bat);
->         battery->bat =3D NULL;
->  }
-> @@ -1476,7 +1318,6 @@ static int __init acpi_battery_init(void)
->  static void __exit acpi_battery_exit(void)
->  {
->         platform_driver_unregister(&acpi_battery_driver);
-> -       battery_hook_exit();
->  }
->
->  module_init(acpi_battery_init);
-> diff --git a/drivers/acpi/battery_hook.c b/drivers/acpi/battery_hook.c
-> new file mode 100644
-> index 00000000000..308d10c940e
-> --- /dev/null
-> +++ b/drivers/acpi/battery_hook.c
-> @@ -0,0 +1,112 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * ACPI Battery Hooking API
-
-s/Hooking/Hooks/
-
-> + *
-> + * Provides a common registration and notification framework for drivers
-> + * that attach platform-specific properties or extensions to ACPI-regist=
-ered
-> + * batteries (both ACPI Control Method batteries and Smart Battery Syste=
-ms).
-
-"Provides helpers for registering and unregistering battery hooks for
-drivers that use platform-specific extensions to ACPI-enumerated
-batteries (both ACPI Control Method batteries and Smart Battery System
-batteries)."
-
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/export.h>
-> +#include <linux/list.h>
-> +#include <linux/mutex.h>
-> +#include <linux/power_supply.h>
-> +#include <acpi/battery.h>
-> +
-> +static LIST_HEAD(acpi_battery_list);
-> +static LIST_HEAD(battery_hook_list);
-> +static DEFINE_MUTEX(hook_mutex);
-> +
-> +static void battery_hook_unregister_unlocked(struct acpi_battery_hook *h=
-ook)
-
-Please add acpi_ prefix to all function names here and below.
-
-> +{
-> +       struct acpi_battery_hook_device *hook_dev;
-
-struct acpi_battery_hooks_list_entry *entry;
-
-and analogously below.
-
-> +
-> +       list_for_each_entry(hook_dev, &acpi_battery_list, list) {
-> +               if (!hook->remove_battery(hook_dev->battery, hook))
-> +                       power_supply_changed(hook_dev->battery);
-> +       }
-> +       list_del_init(&hook->list);
-> +
-> +       pr_info("hook unregistered: %s\n", hook->name);
-> +}
-> +
-> +void battery_hook_unregister(struct acpi_battery_hook *hook)
-> +{
-> +       mutex_lock(&hook_mutex);
-
-This code is different from the code removed from battery.c, so please
-use mutex locking guards in it.
-
-> +       if (!list_empty(&hook->list))
-> +               battery_hook_unregister_unlocked(hook);
-> +       mutex_unlock(&hook_mutex);
-> +}
-> +EXPORT_SYMBOL_GPL(battery_hook_unregister);
-> +
-> +void battery_hook_register(struct acpi_battery_hook *hook)
-> +{
-> +       struct acpi_battery_hook_device *hook_dev;
-> +
-> +       mutex_lock(&hook_mutex);
-> +       list_add(&hook->list, &battery_hook_list);
-> +
-> +       list_for_each_entry(hook_dev, &acpi_battery_list, list) {
-> +               if (hook->add_battery(hook_dev->battery, hook)) {
-> +                       pr_err("hook failed to load: %s\n", hook->name);
-> +                       battery_hook_unregister_unlocked(hook);
-> +                       goto end;
-> +               }
-> +
-> +               power_supply_changed(hook_dev->battery);
-> +       }
-> +       pr_info("new hook: %s\n", hook->name);
-> +end:
-> +       mutex_unlock(&hook_mutex);
-> +}
-> +EXPORT_SYMBOL_GPL(battery_hook_register);
-> +
-> +static void devm_battery_hook_unregister(void *data)
-> +{
-> +       struct acpi_battery_hook *hook =3D data;
-> +
-> +       battery_hook_unregister(hook);
-> +}
-> +
-> +int devm_battery_hook_register(struct device *dev, struct acpi_battery_h=
-ook *hook)
-
-devm_acpi_battery_hook_register(...)
-
-> +{
-> +       battery_hook_register(hook);
-> +
-> +       return devm_add_action_or_reset(dev, devm_battery_hook_unregister=
-, hook);
-> +}
-> +EXPORT_SYMBOL_GPL(devm_battery_hook_register);
-> +
-> +void battery_hook_add_battery(struct acpi_battery_hook_device *hook_dev,
-> +                             struct power_supply *battery)
-
-void acpi_battery_add_hooks(struct acpi_battery_hooks_list_entry *entry,
-
-and analogously for the removal function below.
-
-> +{
-> +       struct acpi_battery_hook *hook_node, *tmp;
-> +
-> +       hook_dev->battery =3D battery;
-> +       mutex_lock(&hook_mutex);
-> +       INIT_LIST_HEAD(&hook_dev->list);
-> +       list_add(&hook_dev->list, &acpi_battery_list);
-> +
-> +       list_for_each_entry_safe(hook_node, tmp, &battery_hook_list, list=
-) {
-> +               if (hook_node->add_battery(hook_dev->battery, hook_node))=
- {
-> +                       pr_err("error in hook, unloading: %s\n", hook_nod=
-e->name);
-> +                       battery_hook_unregister_unlocked(hook_node);
-> +               }
-> +       }
-> +       mutex_unlock(&hook_mutex);
-> +}
-> +EXPORT_SYMBOL_GPL(battery_hook_add_battery);
-
-Use a symbol export namespace for this.
-
-> +
-> +void battery_hook_remove_battery(struct acpi_battery_hook_device *hook_d=
-ev)
-> +{
-> +       struct acpi_battery_hook *hook;
-> +
-> +       mutex_lock(&hook_mutex);
-> +       list_for_each_entry(hook, &battery_hook_list, list)
-> +               hook->remove_battery(hook_dev->battery, hook);
-> +
-> +       list_del(&hook_dev->list);
-> +       hook_dev->battery =3D NULL;
-> +       mutex_unlock(&hook_mutex);
-> +}
-> +EXPORT_SYMBOL_GPL(battery_hook_remove_battery);
-
-And for this too.
-
-> diff --git a/drivers/acpi/sbs.c b/drivers/acpi/sbs.c
-> index 86b7c797585..a2f27c0d233 100644
-> --- a/drivers/acpi/sbs.c
-> +++ b/drivers/acpi/sbs.c
-> @@ -10,6 +10,7 @@
->  #define pr_fmt(fmt) "ACPI: " fmt
->
->  #include <linux/init.h>
-> +#include <linux/list.h>
->  #include <linux/slab.h>
->  #include <linux/module.h>
->  #include <linux/moduleparam.h>
-> @@ -54,6 +55,7 @@ struct acpi_battery {
->         struct power_supply *bat;
->         struct power_supply_desc bat_desc;
->         struct acpi_sbs *sbs;
-> +       struct acpi_battery_hook_device hook_dev;
-
-struct acpi_battery_hooks_list_entry hooks_list_entry;
-
->         unsigned long update_time;
->         char name[8];
->         char manufacturer_name[ACPI_SBS_BLOCK_MAX];
-> @@ -555,6 +557,8 @@ static int acpi_battery_add(struct acpi_sbs *sbs, int=
- id)
->                 goto end;
->         }
->
-> +       battery_hook_add_battery(&battery->hook_dev, battery->bat);
-
-acpi_battery_add_hooks(&battery->hook_list_entry, battery->bat);
-
-> +
->        end:
->         pr_info("%s [%s]: Battery Slot [%s] (battery %s)\n",
->                ACPI_SBS_DEVICE_NAME, acpi_device_bid(sbs->device),
-> @@ -566,8 +570,10 @@ static void acpi_battery_remove(struct acpi_sbs *sbs=
-, int id)
->  {
->         struct acpi_battery *battery =3D &sbs->battery[id];
->
-> -       if (battery->bat)
-> +       if (battery->bat) {
-> +               battery_hook_remove_battery(&battery->hook_dev);
-
-acpi_battery_remove_hooks(...);
-
->                 power_supply_unregister(battery->bat);
-> +       }
->  }
->
->  static int acpi_charger_add(struct acpi_sbs *sbs)
-> diff --git a/include/acpi/battery.h b/include/acpi/battery.h
-> index c93f16dfb94..df5087c0529 100644
-> --- a/include/acpi/battery.h
-> +++ b/include/acpi/battery.h
-> @@ -3,6 +3,7 @@
->  #define __ACPI_BATTERY_H
->
->  #include <linux/device.h>
-> +#include <linux/list.h>
->  #include <linux/power_supply.h>
->
->  #define ACPI_BATTERY_CLASS "battery"
-> @@ -18,8 +19,17 @@ struct acpi_battery_hook {
->         struct list_head list;
->  };
->
-> +struct acpi_battery_hook_device {
-
-struct acpi_battery_hooks_list_entry {
-
-> +       struct power_supply *battery;
-> +       struct list_head list;
-
-struct list_head list_entry;
-struct power_supply *battery;
-
-> +};
-> +
->  void battery_hook_register(struct acpi_battery_hook *hook);
->  void battery_hook_unregister(struct acpi_battery_hook *hook);
->  int devm_battery_hook_register(struct device *dev, struct acpi_battery_h=
-ook *hook);
->
-> +void battery_hook_add_battery(struct acpi_battery_hook_device *hook_dev,
-> +                             struct power_supply *battery);
-> +void battery_hook_remove_battery(struct acpi_battery_hook_device *hook_d=
-ev);
-> +
->  #endif
-> --
-
-HTH
+ drivers/comedi/comedi_fops.c                          |  5 +++--
+ drivers/gpu/drm/drm_fb_helper.c                       |  3 ++-
+ drivers/hwmon/fschmd.c                                |  3 ++-
+ drivers/hwmon/nct7904.c                               |  5 +++--
+ drivers/hwmon/sch56xx-common.c                        |  3 ++-
+ drivers/hwmon/w83793.c                                |  5 +++--
+ drivers/i2c/busses/i2c-kempld.c                       |  3 ++-
+ drivers/net/ethernet/atheros/atl1e/atl1e_param.c      |  9 +++++----
+ drivers/net/ethernet/atheros/atlx/atl1.c              |  3 ++-
+ drivers/net/ethernet/atheros/atlx/atl2.c              | 11 ++++++-----
+ drivers/net/ethernet/intel/e1000/e1000_param.c        | 15 ++++++++-------
+ drivers/net/ethernet/intel/e1000e/param.c             | 16 ++++++----------
+ drivers/net/ethernet/oki-semi/pch_gbe/pch_gbe_param.c |  7 ++++---
+ drivers/platform/cznic/turris-omnia-mcu-watchdog.c    |  3 ++-
+ drivers/rtc/rtc-ds1374.c                              |  3 ++-
+ drivers/thunderbolt/tb.c                              |  3 ++-
+ drivers/thunderbolt/tunnel.c                          |  5 +++--
+ drivers/tty/serial/8250/8250_platform.c               |  3 ++-
+ drivers/usb/atm/speedtch.c                            | 15 ++++++++-------
+ drivers/usb/atm/usbatm.c                              | 17 +++++++++--------
+ drivers/watchdog/acquirewdt.c                         |  3 ++-
+ drivers/watchdog/advantech_ec_wdt.c                   |  3 ++-
+ drivers/watchdog/advantechwdt.c                       |  5 +++--
+ drivers/watchdog/airoha_wdt.c                         |  5 +++--
+ drivers/watchdog/alim1535_wdt.c                       |  5 +++--
+ drivers/watchdog/alim7101_wdt.c                       |  5 +++--
+ drivers/watchdog/arm_smc_wdt.c                        |  3 ++-
+ drivers/watchdog/armada_37xx_wdt.c                    |  3 ++-
+ drivers/watchdog/aspeed_wdt.c                         |  3 ++-
+ drivers/watchdog/at91rm9200_wdt.c                     |  5 +++--
+ drivers/watchdog/at91sam9_wdt.c                       |  5 +++--
+ drivers/watchdog/atcwdt200_wdt.c                      |  5 +++--
+ drivers/watchdog/ath79_wdt.c                          |  5 +++--
+ drivers/watchdog/bcm2835_wdt.c                        |  3 ++-
+ drivers/watchdog/bcm47xx_wdt.c                        |  5 +++--
+ drivers/watchdog/bcm7038_wdt.c                        |  3 ++-
+ drivers/watchdog/booke_wdt.c                          |  3 ++-
+ drivers/watchdog/cadence_wdt.c                        |  5 +++--
+ drivers/watchdog/cgbc_wdt.c                           |  7 ++++---
+ drivers/watchdog/da9052_wdt.c                         |  5 +++--
+ drivers/watchdog/da9055_wdt.c                         |  3 ++-
+ drivers/watchdog/davinci_wdt.c                        |  5 +++--
+ drivers/watchdog/db8500_wdt.c                         |  5 +++--
+ drivers/watchdog/dw_wdt.c                             |  3 ++-
+ drivers/watchdog/ebc-c384_wdt.c                       |  5 +++--
+ drivers/watchdog/eurotechwdt.c                        |  3 ++-
+ drivers/watchdog/exar_wdt.c                           |  5 +++--
+ drivers/watchdog/f71808e_wdt.c                        |  9 +++++----
+ drivers/watchdog/gef_wdt.c                            |  3 ++-
+ drivers/watchdog/geodewdt.c                           |  5 +++--
+ drivers/watchdog/gpio_wdt.c                           |  3 ++-
+ drivers/watchdog/hpwdt.c                              |  3 ++-
+ drivers/watchdog/i6300esb.c                           |  9 +++++----
+ drivers/watchdog/iTCO_wdt.c                           |  5 +++--
+ drivers/watchdog/ib700wdt.c                           |  5 +++--
+ drivers/watchdog/ibmasr.c                             |  3 ++-
+ drivers/watchdog/ie6xx_wdt.c                          |  5 +++--
+ drivers/watchdog/imgpdc_wdt.c                         |  5 +++--
+ drivers/watchdog/imx2_wdt.c                           |  5 +++--
+ drivers/watchdog/imx7ulp_wdt.c                        |  3 ++-
+ drivers/watchdog/imx_sc_wdt.c                         |  3 ++-
+ drivers/watchdog/indydog.c                            |  3 ++-
+ drivers/watchdog/intel_oc_wdt.c                       |  5 +++--
+ drivers/watchdog/it87_wdt.c                           |  7 ++++---
+ drivers/watchdog/jz4740_wdt.c                         |  7 ++++---
+ drivers/watchdog/keembay_wdt.c                        |  5 +++--
+ drivers/watchdog/kempld_wdt.c                         |  7 ++++---
+ drivers/watchdog/lenovo_se10_wdt.c                    |  5 +++--
+ drivers/watchdog/lenovo_se30_wdt.c                    |  5 +++--
+ drivers/watchdog/lenovo_se30g2_se60_wdt.c             |  5 +++--
+ drivers/watchdog/loongson1_wdt.c                      |  5 +++--
+ drivers/watchdog/lpc18xx_wdt.c                        |  5 +++--
+ drivers/watchdog/ma35d1_wdt.c                         |  3 ++-
+ drivers/watchdog/max63xx_wdt.c                        |  7 ++++---
+ drivers/watchdog/max77620_wdt.c                       |  3 ++-
+ drivers/watchdog/mena21_wdt.c                         |  3 ++-
+ drivers/watchdog/menf21bmc_wdt.c                      |  3 ++-
+ drivers/watchdog/menz69_wdt.c                         |  3 ++-
+ drivers/watchdog/meson_gxbb_wdt.c                     |  5 +++--
+ drivers/watchdog/meson_wdt.c                          |  3 ++-
+ drivers/watchdog/mixcomwd.c                           |  3 ++-
+ drivers/watchdog/mpc8xxx_wdt.c                        |  5 +++--
+ drivers/watchdog/mt7621_wdt.c                         |  3 ++-
+ drivers/watchdog/mtk_wdt.c                            |  3 ++-
+ drivers/watchdog/nct6694_wdt.c                        |  3 ++-
+ drivers/watchdog/ni903x_wdt.c                         |  5 +++--
+ drivers/watchdog/nic7018_wdt.c                        |  5 +++--
+ drivers/watchdog/nv_tco.c                             |  5 +++--
+ drivers/watchdog/octeon-wdt-main.c                    |  5 +++--
+ drivers/watchdog/omap_wdt.c                           |  3 ++-
+ drivers/watchdog/orion_wdt.c                          |  3 ++-
+ drivers/watchdog/pc87413_wdt.c                        |  7 ++++---
+ drivers/watchdog/pcwd.c                               |  5 +++--
+ drivers/watchdog/pcwd_pci.c                           |  5 +++--
+ drivers/watchdog/pcwd_usb.c                           |  5 +++--
+ drivers/watchdog/pika_wdt.c                           |  5 +++--
+ drivers/watchdog/pnx4008_wdt.c                        |  5 +++--
+ drivers/watchdog/pseries-wdt.c                        |  7 ++++---
+ drivers/watchdog/rc32434_wdt.c                        |  5 +++--
+ drivers/watchdog/renesas_wdt.c                        |  3 ++-
+ drivers/watchdog/rn5t618_wdt.c                        |  3 ++-
+ drivers/watchdog/rt2880_wdt.c                         |  3 ++-
+ drivers/watchdog/rti_wdt.c                            |  5 +++--
+ drivers/watchdog/rzg2l_wdt.c                          |  3 ++-
+ drivers/watchdog/rzv2h_wdt.c                          |  3 ++-
+ drivers/watchdog/s32g_wdt.c                           |  5 +++--
+ drivers/watchdog/s3c2410_wdt.c                        |  7 ++++---
+ drivers/watchdog/sama5d4_wdt.c                        |  5 +++--
+ drivers/watchdog/sbc60xxwdt.c                         |  5 +++--
+ drivers/watchdog/sbc7240_wdt.c                        |  5 +++--
+ drivers/watchdog/sbc8360.c                            |  3 ++-
+ drivers/watchdog/sbc_epx_c3.c                         |  3 ++-
+ drivers/watchdog/sbsa_gwdt.c                          |  5 +++--
+ drivers/watchdog/sc1200wdt.c                          |  3 ++-
+ drivers/watchdog/sch311x_wdt.c                        |  5 +++--
+ drivers/watchdog/shwdt.c                              |  7 ++++---
+ drivers/watchdog/simatic-ipc-wdt.c                    |  3 ++-
+ drivers/watchdog/sl28cpld_wdt.c                       |  3 ++-
+ drivers/watchdog/smsc37b787_wdt.c                     |  3 ++-
+ drivers/watchdog/softdog.c                            |  5 +++--
+ drivers/watchdog/sp5100_tco.c                         |  7 ++++---
+ drivers/watchdog/starfive-wdt.c                       |  7 ++++---
+ drivers/watchdog/stmp3xxx_rtc_wdt.c                   |  5 +++--
+ drivers/watchdog/stpmic1_wdt.c                        |  3 ++-
+ drivers/watchdog/sun4v_wdt.c                          |  5 +++--
+ drivers/watchdog/sunplus_wdt.c                        |  3 ++-
+ drivers/watchdog/sunxi_wdt.c                          |  3 ++-
+ drivers/watchdog/tegra_wdt.c                          |  5 +++--
+ drivers/watchdog/tqmx86_wdt.c                         |  3 ++-
+ drivers/watchdog/ts4800_wdt.c                         |  3 ++-
+ drivers/watchdog/twl4030_wdt.c                        |  3 ++-
+ drivers/watchdog/txx9wdt.c                            |  7 ++++---
+ drivers/watchdog/uniphier_wdt.c                       |  5 +++--
+ drivers/watchdog/via_wdt.c                            |  5 +++--
+ drivers/watchdog/visconti_wdt.c                       |  3 ++-
+ drivers/watchdog/w83627hf_wdt.c                       |  5 +++--
+ drivers/watchdog/w83877f_wdt.c                        |  5 +++--
+ drivers/watchdog/w83977f_wdt.c                        |  5 +++--
+ drivers/watchdog/wafer5823wdt.c                       |  5 +++--
+ drivers/watchdog/watchdog_dev.c                       |  5 +++--
+ drivers/watchdog/wdat_wdt.c                           |  5 +++--
+ drivers/watchdog/wdt.c                                |  5 +++--
+ drivers/watchdog/wdt977.c                             |  5 +++--
+ drivers/watchdog/wdt_pci.c                            |  5 +++--
+ drivers/watchdog/wm831x_wdt.c                         |  3 ++-
+ drivers/watchdog/wm8350_wdt.c                         |  3 ++-
+ drivers/watchdog/xen_wdt.c                            |  5 +++--
+ drivers/watchdog/xilinx_wwdt.c                        |  5 +++--
+ drivers/watchdog/ziirave_wdt.c                        |  3 ++-
+ include/linux/module.h                                |  4 ----
+ 150 files changed, 428 insertions(+), 288 deletions(-)
+---
+base-commit: 93f51579e7df248780214094418f205253383cc5
+change-id: 20260919-module-string-d64816f203d9
