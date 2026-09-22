@@ -1,129 +1,768 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4080D4BEE41;
-	Tue, 22 Sep 2026 09:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5301048B37D;
+	Tue, 22 Sep 2026 09:49:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790070227; cv=none; b=GCjBX/ib1jXOv18b0UxvlRFHm2JrDfptK8xHD0ogTBNmwZsm6eklRtGqrYlKq7+7JSrjaDUBuzlGjwnx2vNSaZDb3aJXabU8N7N2p/BmKgWM9P/pFdwRdIqDFQ0i6jPuCd/eCHsCei0VTuu23Wh9EhdJ9upSbICSZ+IcVvxaQn0=
+	t=1790070575; cv=none; b=s7Bberz9AASf2lI/jmEcMWHjvt6pPMwSga1Jj/bjv7bWtR4kzJynxpC/WbEf7+rQDSrVLO+EaGoVRrUPdTfCZ6Nzs94tQKsKkZ8tfmmyAz7H1uxiVusnwLOL49yvy33NGxf1scePRUuWjEdtNW0L+NCHopw3qgewmtzQnJQheIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790070227; c=relaxed/simple;
-	bh=H/vzhqXD6UArM3yreFwvNJ/cq5I0xodjrTIu/JPy+EE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hG3yz5WHstCa2ZaPQFAzTA4u17x+C2RxPfcE96ouSac25m8VApKe/ss9f3wiCxDQyi9YI8RoYlr0etfdzfg+Asnpiq0VrWJ2gqoQuCC6IJySQyym2+bNY18c75eJWWwtRlxTHqwtEzD1+jNCYVs6XrIM+ibfLYv5a8GCmu7sMXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UXjcF6em; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790070575; c=relaxed/simple;
+	bh=HoG7AAJLdDLcNpdqkYRRbFZc1Lr/cnklcFVu5TOiME4=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=cKYg5zwYbbYi3bVxtAavQYyZo99PKEqHUmBwZmsqiaKMLHuonaUvJVrSHGm63chbgGgrh//SZF+S62AZ5U+K0D+s9nzK77AjBKZZFIJMNjGTnzntj83aTzufJLi9UMT6H0XS8JXhoCeVeOipylYccE6egto5XK8eYwDAopnoh9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e4MmGnMk; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UXjcF6em"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AC0E1F0089C;
-	Tue, 22 Sep 2026 09:43:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790070224;
-	bh=fqhuMQzi9widyoh6tf3trEiul7S2/iHANV8X+8jaHa4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=UXjcF6em6h/liBQZI8XmH1mBSR7bEhPFaPTbYYdupUbCKKLAA9YHhzEkTf/t0y6Xe
-	 GNk4odn6VdHXbj/Eal21mStSubR4TBs0/UDi4HXVvrEZsgBZ9iXGDOoRKcGX2wByjd
-	 VLeKTVwyqhVFRBqC+LMLMp3P6rK1l1q40fR0ty6XH3dUvTwaACos3XQDTy20vsu+he
-	 WQxPLw3ZWN+sW+FrXoMPlMSeLFINJrWmD6idKmRNRqWu5zHMPAeDObLK0rsaQuN1G6
-	 MjHORyKEE6vguu6LUoCd+Z/0Bqbc6Wg6fK0PvjdxSdcXfiMRz5EXsgkgRb9Yxa06oL
-	 1ntfkXbgfQpvQ==
-From: sashiko-bot@kernel.org
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e4MmGnMk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790070572; x=1821606572;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=HoG7AAJLdDLcNpdqkYRRbFZc1Lr/cnklcFVu5TOiME4=;
+  b=e4MmGnMkmqAAiJdQMRSR3rliOkkcJivE9m0WV++VRgQrfWloKxIS7xla
+   mkgk5ab2Nc06JHQr9VGVyjWxELi1wKuJjBQ/Bf7C9jwWGQ/lrrtxRVcQV
+   PMvqa9sn6aFzdkjEmSx+ZWhBRdF9GV18BUz3XhN5K2Q71CFIru+iphGWs
+   MTOO6cuGT9+i8O7DyemqdoCJ75Opsdm1fAV9HvKRYevTp+1mAjh018uEw
+   R6Yx9LgMK65+0VPV515Hj+ApgZq2ATzJxxhyDoY8SFY2fjYwB/GpLZmUY
+   /xwXpBDArN4JRLfrlg6RV9YMwFxXA8+KlVzVck/V0QM9CeLyhGSwr/AP6
+   g==;
+X-CSE-ConnectionGUID: aeUMVZ9qQnSAe0l9LnIqvQ==
+X-CSE-MsgGUID: rldqFaJ4QlGKn/Zb2JByhg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11912"; a="89792890"
+X-IronPort-AV: E=Sophos;i="6.27,116,1787036400"; 
+   d="scan'208";a="89792890"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2026 02:49:31 -0700
+X-CSE-ConnectionGUID: LC1STt7XSLK+blQJWmoVOg==
+X-CSE-MsgGUID: dSPxxmYERUyM2ewaASDVJg==
+X-ExtLoop1: 1
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.80])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2026 02:49:26 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Tue, 22 Sep 2026 12:49:23 +0300 (EEST)
+To: Konrad Dybcio <konradybcio@kernel.org>
+cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+    Conor Dooley <conor+dt@kernel.org>, Hans de Goede <hansg@kernel.org>, 
+    Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+    Guenter Roeck <linux@roeck-us.net>, Bjorn Andersson <andersson@kernel.org>, 
+    Abel Vesa <abelvesa@kernel.org>, devicetree@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, platform-driver-x86@vger.kernel.org, 
+    linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+    Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 Subject: Re: [PATCH v2 2/3] platform: arm64: Add a driver for the EC found
  on ASUS Glymur machines
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Konrad Dybcio" <konradybcio@kernel.org>
-Cc: conor+dt@kernel.org, devicetree@vger.kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org
 In-Reply-To: <20260922-topic-asus_ec-v2-2-0bd923d1b853@oss.qualcomm.com>
-References: <20260922-topic-asus_ec-v2-0-0bd923d1b853@oss.qualcomm.com>
- <20260922-topic-asus_ec-v2-2-0bd923d1b853@oss.qualcomm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 22 Sep 2026 09:43:43 +0000
-Message-Id: <20260922094344.4AC0E1F0089C@smtp.kernel.org>
+Message-ID: <f1197190-347b-c0b3-1d4d-c19cb365a082@linux.intel.com>
+References: <20260922-topic-asus_ec-v2-0-0bd923d1b853@oss.qualcomm.com> <20260922-topic-asus_ec-v2-2-0bd923d1b853@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] hwmon: registering hwmon device directly from platform driver vi=
-olates layering
-- [Low] pm: incorrect wrapper pm_sleep_ptr() used for dev_pm_ops structure =
-pointer
---
+On Tue, 22 Sep 2026, Konrad Dybcio wrote:
 
-commit 44a5c0660bb0cff2ea5d3dea9865fa4467ddcef3
-Author: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-
-platform: arm64: Add a driver for the EC found on ASUS Glymur machines
-
-This commit adds a driver for the embedded controller found on ASUS
-Zenbook A14 and A16 laptops. It exposes fan monitoring, temperature
-sensor readouts, keyboard backlight controls, and event reporting over I2C.
-
-> diff --git a/drivers/platform/arm64/asus-glymur-ec.c b/drivers/platform/a=
-rm64/asus-glymur-ec.c
+> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> 
+> Some Qualcomm Snapdragon X2 Elite (Extreme)-based ASUS laptops (at
+> least the Zenbook A14 and A16) expose a custom, somewhat
+> Qualcomm reference-derived EC interface. Introduce a driver to
+> communicate with said EC, allowing for fan speed reporting, keyboard
+> backlight setting and receiving of a number of miscellaneous sideband
+> events.
+> 
+> Assisted-by: LLM
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> ---
+>  drivers/platform/arm64/Kconfig          |  16 +
+>  drivers/platform/arm64/Makefile         |   1 +
+>  drivers/platform/arm64/asus-glymur-ec.c | 592 ++++++++++++++++++++++++++++++++
+>  3 files changed, 609 insertions(+)
+> 
+> diff --git a/drivers/platform/arm64/Kconfig b/drivers/platform/arm64/Kconfig
+> index e32e01b2a9bd..84c475c62990 100644
+> --- a/drivers/platform/arm64/Kconfig
+> +++ b/drivers/platform/arm64/Kconfig
+> @@ -33,6 +33,22 @@ config EC_ACER_ASPIRE1
+>  	  laptop where this information is not properly exposed via the
+>  	  standard ACPI devices.
+>  
+> +config EC_ASUS_GLYMUR
+> +	tristate "ASUS Zenbook A16 (Qualcomm) Embedded Controller driver"
+> +	depends on ARCH_QCOM || COMPILE_TEST
+> +	depends on I2C
+> +	depends on HWMON
+> +	depends on INPUT
+> +	depends on PM
+> +	depends on THERMAL || THERMAL=n
+> +	select NEW_LEDS
+> +	select LEDS_CLASS
+> +	help
+> +	  Say M or Y here to enable the EC driver for the Qualcomm Snapdragon-
+> +	  based ASUS Zenbook A16 (UX3607OA) and similar machines. It provides
+> +	  temperature sensors readout, fan monitoring, keyboard and EC event
+> +	  reporting.
+> +
+>  config EC_HUAWEI_GAOKUN
+>  	tristate "Huawei Matebook E Go Embedded Controller driver"
+>  	depends on ARCH_QCOM || COMPILE_TEST
+> diff --git a/drivers/platform/arm64/Makefile b/drivers/platform/arm64/Makefile
+> index 7681be4a46e9..7122e8ea325f 100644
+> --- a/drivers/platform/arm64/Makefile
+> +++ b/drivers/platform/arm64/Makefile
+> @@ -6,6 +6,7 @@
+>  #
+>  
+>  obj-$(CONFIG_EC_ACER_ASPIRE1)	+= acer-aspire1-ec.o
+> +obj-$(CONFIG_EC_ASUS_GLYMUR) += asus-glymur-ec.o
+>  obj-$(CONFIG_EC_HUAWEI_GAOKUN)	+= huawei-gaokun-ec.o
+>  obj-$(CONFIG_EC_LENOVO_YOGA_C630) += lenovo-yoga-c630.o
+>  obj-$(CONFIG_EC_LENOVO_THINKPAD_T14S) += lenovo-thinkpad-t14s.o
+> diff --git a/drivers/platform/arm64/asus-glymur-ec.c b/drivers/platform/arm64/asus-glymur-ec.c
 > new file mode 100644
-> index 0000000000000..dec9b137b820d
+> index 000000000000..dec9b137b820
 > --- /dev/null
 > +++ b/drivers/platform/arm64/asus-glymur-ec.c
-[ ... ]
-> @@ -546,12 +546,12 @@ static int asus_glymur_ec_probe(struct i2c_client *=
-client)
->  	ret =3D devm_request_threaded_irq(dev, client->irq, NULL, asus_ec_irq,
->  					IRQF_ONESHOT, dev_name(dev), ec);
->  	if (ret)
->  		return dev_err_probe(dev, ret, "Failed to request IRQ\n");
-> =20
->  	ec->hwmon_dev =3D devm_hwmon_device_register_with_info(dev,
->  							     "asus_glymur_ec",
->  							     ec,
->  							     &asus_ec_hwmon_chip_info,
->  							     NULL);
+> @@ -0,0 +1,592 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * The EC firmware on the ASUS Zenbook A16 looks to be derived from the
+> + * 'Qualcomm Hamoa EC' reference base with many major modifications. Some of
+> + * the original interface is reused, albeit many of its core invariants (such
+> + * as the capabilities bitmap) are absent.
+> + *
+> + * It presents itself as two I2C devices:
+> + *  [0x5b] is the custom ASUS interface
+> + *  [0x76] is the Hamoa EC-derived interface
+> + */
+> +
+> +#include <linux/cleanup.h>
+> +#include <linux/delay.h>
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/i2c.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/leds.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/pm.h>
+> +#include <linux/types.h>
+> +#include <linux/unaligned.h>
+> +#include <linux/units.h>
+> +
+> +/* Qualcomm-derived registers (main device @ 0x76) */
+> +#define ASUS_QCOM_EC_EVENT_CMD		0x05
+> +
+> +#define ASUS_QCOM_EC_SUBCMD_FULL_VER	0x0f
+> +#define ASUS_QCOM_EC_FULL_VER_LEN	7
+> +
+> +/* This "read RAM" command isn't actually part of the Qualcomm standard */
+> +#define ASUS_QCOM_EC_RECM_OFFS		0x52
+> +#define ASUS_QCOM_EC_RECM_FRAME_LEN	5
+> +
+> +#define ASUS_QCOM_EC_RAM_FAN_CPU	0x0602
+> +#define ASUS_QCOM_EC_RAM_AC_STATUS	0x0609
+> +#define ASUS_QCOM_EC_RAM_FAN_GPU	0x0624
+> +
+> +#define ASUS_QCOM_EC_MODERN_STANDBY_CMD		0x23
+> +#define ASUS_QCOM_EC_MODERN_STANDBY_ENTER	0x07
+> +#define ASUS_QCOM_EC_MODERN_STANDBY_EXIT	0x08
+> +
+> +/* ASUS-specific registers (secondary device @ 0x5b) */
+> +#define ASUS_EC_SUBDEV_ADDR		0x5b
+> +
+> +#define ASUS_EC_REQ_REG			0x10
+> +#define ASUS_EC_RESP_REG		0x11
+> +
+> +#define ASUS_EC_PAGE_MAILBOX		0xc4
+> + #define ASUS_EC_MBOX_REG_CMD		0x30
+> + #define ASUS_EC_MBOX_REG_SUBCMD	0x31
+> + #define ASUS_EC_MBOX_REG_DATA		0x32
+> +
+> +#define ASUS_EC_MBOX_CMD_KBD		0x01
+> + #define ASUS_EC_MBOX_SUBCMD_KBD_EN	0x81
+> +  #define ASUS_EC_MBOX_DATA_KBD_EN	0x04
+> + #define ASUS_EC_MBOX_SUBCMD_KBD_LVL	0x87
+> +
+> +#define ASUS_EC_MBOX_CMD_MISC		0x02
+> + #define ASUS_EC_MBOX_SUBCMD_MISC_ENABLE	0x83
+> +
+> +#define ASUS_EC_PAGE_TEMPERATURE	0xc6
+> + #define ASUS_EC_TEMP_REG_CPU		0xa6
+> + #define ASUS_EC_TEMP_REG_SOC		0x2a
+> + #define ASUS_EC_TEMP_MAX		0x7f
+> +
+> +#define ASUS_EC_KBD_MAX_BRIGHTNESS	3
+> +
+> +static const u8 asus_ec_kbd_levels[] = {
+> +	[0] = 0x00,
+> +	[1] = 0x55,
+> +	[2] = 0xaa,
+> +	[3] = 0xff,
+> +};
+> +
+> +enum asus_ec_event {
+> +	ASUS_EC_EVT_CHARGE_STATE = 0x1c,
+> +	ASUS_EC_EVT_AC_STATE = 0x1d,
+> +	ASUS_EC_EVT_CRIT_TRIP = 0x1e,
+> +	ASUS_EC_EVT_THERMISTOR = 0x4f,
+> +	ASUS_EC_EVT_HOTKEY = 0xda,
+> +	ASUS_EC_EVT_FAN_STATUS = 0xdb,
+> +	ASUS_EC_EVT_THERMAL_TRIP = 0xe0,
+> +	ASUS_EC_EVT_CHARGE_COMMIT = 0xe4,
+> +};
+> +
+> +struct asus_ec {
+> +	struct i2c_client *client;
+> +	struct i2c_client *subdev_client;
+> +	/* Serializes all EC access across both I2C devices */
+> +	struct mutex lock;
+> +	struct device *hwmon_dev;
+> +	struct led_classdev kbd_led;
+> +};
+> +
+> +static int asus_qcom_ec_write(struct asus_ec *ec, u8 offset,
+> +			      const u8 *buf, u8 len)
+> +{
+> +	int ret;
+> +
+> +	lockdep_assert_held(&ec->lock);
 
-[Severity: Medium]
-Does registering the hwmon device directly from this platform driver violate
-the hwmon subsystem layering rules? The hardware monitoring subsystem guide=
-lines
-state that if the main functionality of a chip is not hardware monitoring, =
-its
-hardware monitoring functionality should be implemented as an auxiliary dev=
-ice
-driver, and the hardware monitoring driver should reside in drivers/hwmon/.
+Add include.
 
->  	if (IS_ERR(ec->hwmon_dev))
->  		return dev_err_probe(dev, PTR_ERR(ec->hwmon_dev),
->  				     "Failed to register hwmon\n");
-> =20
->  	return 0;
->  }
-[ ... ]
-> @@ -578,11 +578,11 @@ static const struct i2c_device_id asus_glymur_ec_id=
-[] =3D {
->  	{ "asus-glymur-ec" },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(i2c, asus_glymur_ec_id);
-> =20
->  static struct i2c_driver asus_glymur_ec_driver =3D {
->  	.driver =3D {
->  		.name		=3D "asus-glymur-ec",
->  		.of_match_table	=3D asus_glymur_ec_of_match,
->  		.pm		=3D pm_sleep_ptr(&asus_glymur_ec_pm_ops),
+> +
+> +	ret = i2c_smbus_write_i2c_block_data(ec->client, offset, len, buf);
+> +	if (ret < 0)
+> +		dev_dbg(&ec->client->dev,
+> +			"Main device write off %#x len %u failed: %d\n",
+> +			offset, len, ret);
 
-[Severity: Low]
-Is pm_sleep_ptr() the correct wrapper for the dev_pm_ops structure pointer?
-The PM subsystem guide indicates that pm_ptr() should be used for wrapping
-dev_pm_ops structure pointers, while pm_sleep_ptr() is meant for wrapping
-individual sleep callbacks. This may result in dead code or warnings when PM
-support configurations vary.
+Add include for dev_dbg().
 
->  	},
->  	.probe		=3D asus_glymur_ec_probe,
->  	.id_table	=3D asus_glymur_ec_id,
->  };
+Please add braces to any multiline construct even if they're just a 
+single statement in the block.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260922-topic-asus=
-_ec-v2-0-0bd923d1b853@oss.qualcomm.com?part=3D2
+> +
+> +	return ret;
+> +}
+> +
+> +static int asus_qcom_ec_read(struct asus_ec *ec, u8 offset, u8 *buf, u8 len)
+> +{
+> +	int ret;
+> +
+> +	lockdep_assert_held(&ec->lock);
+> +
+> +	ret = i2c_smbus_read_i2c_block_data(ec->client, offset, len, buf);
+> +	if (ret < 0)
+> +		return ret;
+> +	if (ret < len) {
+> +		dev_err(&ec->client->dev,
+> +			"Short read off %#x: got %d of %u bytes\n",
+> +			offset, ret, len);
+> +		return -EIO;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int asus_qcom_ec_read_ram(struct asus_ec *ec, u16 addr, u8 count, u16 *out)
+> +{
+> +	u8 frame[ASUS_QCOM_EC_RECM_FRAME_LEN] = { 0, 0, count, 0, 0 };
+> +	u8 resp[ASUS_QCOM_EC_RECM_FRAME_LEN] = { };
+> +	int ret;
+> +
+> +	lockdep_assert_held(&ec->lock);
+> +
+> +	if (count != 1 && count != 2)
+> +		return -EINVAL;
+> +
+> +	put_unaligned_be16(addr, frame);
+> +
+> +	ret = asus_qcom_ec_write(ec, ASUS_QCOM_EC_RECM_OFFS, frame,
+> +				 ASUS_QCOM_EC_RECM_FRAME_LEN);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = asus_qcom_ec_read(ec, ASUS_QCOM_EC_RECM_OFFS, resp,
+> +				ASUS_QCOM_EC_RECM_FRAME_LEN);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*out = (count == 2) ? get_unaligned_le16(resp) : resp[0];
+> +
+> +	return 0;
+> +}
+> +
+> +static int asus_ec_readb(struct asus_ec *ec, u8 page, u8 reg, u8 *out)
+> +{
+> +	u8 sel[2] = { page, reg };
+> +	int ret;
+> +
+> +	lockdep_assert_held(&ec->lock);
+> +
+> +	ret = i2c_smbus_write_i2c_block_data(ec->subdev_client,
+> +					     ASUS_EC_REQ_REG,
+> +					     sizeof(sel), sel);
+
+Fits to two lines.
+
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = i2c_smbus_read_byte_data(ec->subdev_client, ASUS_EC_RESP_REG);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*out = ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int asus_ec_writeb(struct asus_ec *ec, u8 page, u8 reg, u8 data)
+> +{
+> +	u8 sel[2] = { page, reg };
+> +	int ret;
+> +
+> +	lockdep_assert_held(&ec->lock);
+> +
+> +	ret = i2c_smbus_write_i2c_block_data(ec->subdev_client,
+> +					     ASUS_EC_REQ_REG,
+> +					     sizeof(sel), sel);
+
+Fits to two lines.
+
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return i2c_smbus_write_byte_data(ec->subdev_client,
+> +					 ASUS_EC_RESP_REG, data);
+> +}
+> +
+> +static int asus_ec_mailbox_cmd(struct asus_ec *ec, u8 cmd, u8 sub, u8 data)
+> +{
+> +	int ret, tries;
+> +	u8 status;
+> +
+> +	lockdep_assert_held(&ec->lock);
+> +
+> +	for (tries = 5; tries > 0; tries--) {
+> +		ret = asus_ec_readb(ec, ASUS_EC_PAGE_MAILBOX,
+> +				    ASUS_EC_MBOX_REG_CMD, &status);
+> +		if (ret < 0)
+> +			return ret;
+> +		if (status == 0)
+> +			break;
+> +		usleep_range(5000, 6000);
+> +	}
+> +	if (tries == 0)
+> +		return -EBUSY;
+> +
+> +	ret = asus_ec_writeb(ec, ASUS_EC_PAGE_MAILBOX, ASUS_EC_MBOX_REG_SUBCMD, sub);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = asus_ec_writeb(ec, ASUS_EC_PAGE_MAILBOX, ASUS_EC_MBOX_REG_DATA, data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = asus_ec_writeb(ec, ASUS_EC_PAGE_MAILBOX, ASUS_EC_MBOX_REG_CMD, cmd);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	for (tries = 5; tries > 0; tries--) {
+> +		ret = asus_ec_readb(ec, ASUS_EC_PAGE_MAILBOX,
+> +				    ASUS_EC_MBOX_REG_CMD, &status);
+> +		if (ret < 0)
+> +			return ret;
+> +		if (status == 0)
+> +			return 0;
+> +
+> +		usleep_range(5000, 6000);
+> +	}
+
+This waiting code seems to be duplicated so it should be moved into own 
+function.
+
+> +
+> +	return -ETIMEDOUT;
+> +}
+> +
+> +static int asus_ec_enable_writes(struct asus_ec *ec)
+> +{
+> +	guard(mutex)(&ec->lock);
+> +
+> +	return asus_ec_mailbox_cmd(ec, ASUS_EC_MBOX_CMD_MISC,
+> +				   ASUS_EC_MBOX_SUBCMD_MISC_ENABLE, 1);
+> +}
+> +
+> +static int asus_ec_read_version(struct asus_ec *ec, u8 *major, u8 *minor, u8 *patch)
+> +{
+> +	u8 resp[ASUS_QCOM_EC_FULL_VER_LEN + 1];
+> +	int ret;
+> +
+> +	guard(mutex)(&ec->lock);
+> +
+> +	ret = asus_qcom_ec_read(ec, ASUS_QCOM_EC_SUBCMD_FULL_VER,
+> +				resp, sizeof(resp));
+> +	if (ret < 0)
+> +		return ret;
+> +	if (resp[0] < ASUS_QCOM_EC_FULL_VER_LEN)
+> +		return -EIO;
+> +
+> +	*major = resp[3];
+> +	*minor = resp[2];
+> +	*patch = resp[1];
+> +
+> +	return 0;
+> +}
+> +
+> +static int asus_ec_get_temp(struct asus_ec *ec, u8 reg, long *millideg)
+> +{
+> +	u8 raw;
+> +	int ret;
+> +
+> +	guard(mutex)(&ec->lock);
+> +
+> +	ret = asus_ec_readb(ec, ASUS_EC_PAGE_TEMPERATURE, reg, &raw);
+> +	if (ret < 0)
+> +		return ret;
+> +	if (raw > ASUS_EC_TEMP_MAX)
+> +		return -ENODATA;
+> +
+> +	*millideg = raw * MILLIDEGREE_PER_DEGREE;
+> +
+> +	return 0;
+> +}
+> +
+> +static int asus_ec_get_fan_rpm(struct asus_ec *ec, u16 base, long *rpm)
+> +{
+> +	u16 val;
+> +	int ret;
+> +
+> +	guard(mutex)(&ec->lock);
+> +
+> +	ret = asus_qcom_ec_read_ram(ec, base, 2, &val);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*rpm = val;
+> +
+> +	return 0;
+> +}
+> +
+> +static irqreturn_t asus_ec_irq(int irq, void *data)
+> +{
+> +	struct asus_ec *ec = data;
+> +	struct device *dev = &ec->client->dev;
+> +	int code;
+> +
+> +	scoped_guard(mutex, &ec->lock)
+> +		code = i2c_smbus_read_byte_data(ec->client, ASUS_QCOM_EC_EVENT_CMD);
+> +
+> +	if (code < 0) {
+> +		dev_err_ratelimited(dev, "Failed to read EC event: %d\n", code);
+> +		return IRQ_HANDLED;
+> +	}
+> +	if (code == 0 || code == 0xff)
+
+Could these literals be named with defines?
+
+> +		return IRQ_HANDLED;
+> +
+> +	switch (code) {
+> +	case ASUS_EC_EVT_HOTKEY:
+> +		/* Present in DSDT, don't know what triggers it */
+> +		dev_dbg_ratelimited(dev, "EC hotkey event\n");
+> +		break;
+> +
+> +	case ASUS_EC_EVT_FAN_STATUS:
+> +		dev_dbg_ratelimited(dev, "Fan status changed\n");
+> +		break;
+> +
+> +	/* Maybe the temperature of the EC itself? */
+> +	case ASUS_EC_EVT_THERMAL_TRIP:
+> +	case ASUS_EC_EVT_CRIT_TRIP:
+> +	/* ASUS_EC_TEMP_SOC climbing above 91 *C or falling below 92 *C */
+> +	case ASUS_EC_EVT_THERMISTOR:
+> +		dev_dbg_ratelimited(dev, "Thermal event %#x\n", code);
+> +		break;
+> +
+> +	case ASUS_EC_EVT_AC_STATE: {
+> +		u16 ac = 0;
+> +		int ret;
+> +
+> +		/* TODO: ping SoCCP over the pmic_glink OEM-specific interface */
+> +		scoped_guard(mutex, &ec->lock)
+> +			ret = asus_qcom_ec_read_ram(ec, ASUS_QCOM_EC_RAM_AC_STATUS, 1, &ac);
+> +		if (ret < 0)
+> +			dev_warn_ratelimited(dev,
+> +					     "Failed to read AC status: %d\n",
+> +					     ret);
+
+Add braces to if/else.
+
+Usually, the error handling is done on the same level as the call, even if 
+it wouldn't strictly need to hold the mutex.
+
+> +		else
+> +			dev_info_ratelimited(dev, "AC event: 0x%x\n", ac);
+
+How is this print useful for a normal user?
+
+> +		break;
+> +	}
+> +	case ASUS_EC_EVT_CHARGE_STATE:
+> +	case ASUS_EC_EVT_CHARGE_COMMIT:
+> +		break;
+> +
+> +	default:
+> +		dev_info_ratelimited(dev, "unknown EC event: %#x\n", code);
+> +		break;
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int asus_ec_kbd_led_set(struct led_classdev *led,
+> +			       enum led_brightness brightness)
+> +{
+> +	struct asus_ec *ec = container_of(led, struct asus_ec, kbd_led);
+
+Please add include for container_of().
+
+> +	int ret;
+> +
+> +	if (brightness > ASUS_EC_KBD_MAX_BRIGHTNESS)
+> +		brightness = ASUS_EC_KBD_MAX_BRIGHTNESS;
+> +
+> +	guard(mutex)(&ec->lock);
+> +
+> +	ret = asus_ec_mailbox_cmd(ec, ASUS_EC_MBOX_CMD_KBD, ASUS_EC_MBOX_SUBCMD_KBD_EN,
+> +				  ASUS_EC_MBOX_DATA_KBD_EN);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return asus_ec_mailbox_cmd(ec, ASUS_EC_MBOX_CMD_KBD, ASUS_EC_MBOX_SUBCMD_KBD_LVL,
+> +				   asus_ec_kbd_levels[brightness]);
+> +}
+> +
+> +enum asus_ec_temp_channel {
+> +	/* External sensor? */
+> +	ASUS_EC_TEMP_CPU,
+> +	/* Likely SoC-internal temp data communicated over a side channel */
+> +	ASUS_EC_TEMP_SOC,
+> +	ASUS_EC_TEMP_COUNT,
+> +};
+> +
+> +static umode_t asus_ec_hwmon_is_visible(const void *data,
+> +					enum hwmon_sensor_types type,
+> +					u32 attr, int channel)
+> +{
+> +	switch (type) {
+> +	case hwmon_fan:
+> +	case hwmon_temp:
+> +		return 0444;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static int asus_ec_hwmon_read(struct device *dev,
+> +			      enum hwmon_sensor_types type,
+> +			      u32 attr, int channel, long *val)
+> +{
+> +	struct asus_ec *ec = dev_get_drvdata(dev);
+> +
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		switch (channel) {
+> +		case ASUS_EC_TEMP_CPU:
+> +			return asus_ec_get_temp(ec, ASUS_EC_TEMP_REG_CPU, val);
+> +		case ASUS_EC_TEMP_SOC:
+> +			return asus_ec_get_temp(ec, ASUS_EC_TEMP_REG_SOC, val);
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +	case hwmon_fan:
+> +		switch (channel) {
+> +		case 0:
+> +			return asus_ec_get_fan_rpm(ec, ASUS_QCOM_EC_RAM_FAN_CPU, val);
+> +		case 1:
+> +			return asus_ec_get_fan_rpm(ec, ASUS_QCOM_EC_RAM_FAN_GPU, val);
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static int asus_ec_hwmon_read_string(struct device *dev,
+> +				     enum hwmon_sensor_types type,
+> +				     u32 attr, int channel, const char **str)
+> +{
+> +	if (type != hwmon_temp || channel >= ASUS_EC_TEMP_COUNT)
+> +		return -EINVAL;
+> +
+> +	switch (channel) {
+> +	case ASUS_EC_TEMP_CPU:
+> +		*str = "CPU";
+> +		break;
+> +	case ASUS_EC_TEMP_SOC:
+> +		*str = "SoC";
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct hwmon_channel_info * const asus_ec_hwmon_info[] = {
+> +	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
+> +	HWMON_CHANNEL_INFO(temp,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL),
+> +	HWMON_CHANNEL_INFO(fan,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_ops asus_ec_hwmon_ops = {
+> +	.is_visible	= asus_ec_hwmon_is_visible,
+> +	.read		= asus_ec_hwmon_read,
+> +	.read_string	= asus_ec_hwmon_read_string,
+> +};
+> +
+> +static const struct hwmon_chip_info asus_ec_hwmon_chip_info = {
+> +	.ops	= &asus_ec_hwmon_ops,
+> +	.info	= asus_ec_hwmon_info,
+> +};
+> +
+> +static int asus_glymur_ec_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev;
+> +	u8 major, minor, patch;
+> +	struct asus_ec *ec;
+> +	int ret;
+> +
+> +	ec = devm_kzalloc(dev, sizeof(*ec), GFP_KERNEL);
+> +	if (!ec)
+> +		return -ENOMEM;
+> +
+> +	ec->client = client;
+> +	i2c_set_clientdata(client, ec);
+> +
+> +	ret = devm_mutex_init(dev, &ec->lock);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ec->subdev_client = devm_i2c_new_dummy_device(dev, client->adapter,
+> +						      ASUS_EC_SUBDEV_ADDR);
+> +	if (IS_ERR(ec->subdev_client))
+> +		return dev_err_probe(dev, PTR_ERR(ec->subdev_client),
+> +				     "Failed to register 0x5b EC device\n");
+
+Add braces to multiline statements.
+
+> +	ret = asus_ec_enable_writes(ec);
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "Failed to enable EC direct access: %d\n", ret);
+> +
+> +	ret = asus_ec_read_version(ec, &major, &minor, &patch);
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "Failed to read EC version: %d\n", ret);
+> +
+> +	dev_dbg(dev, "ASUS Zenbook EC version %u.%u.%u\n", major, minor, patch);
+> +
+> +	ec->kbd_led.name = "asus::kbd_backlight";
+> +	ec->kbd_led.max_brightness = ASUS_EC_KBD_MAX_BRIGHTNESS;
+> +	ec->kbd_led.brightness_set_blocking = asus_ec_kbd_led_set;
+> +	ec->kbd_led.flags = LED_CORE_SUSPENDRESUME;
+> +
+> +	ret = devm_led_classdev_register(dev, &ec->kbd_led);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to register keyboard LED\n");
+> +
+> +	ret = devm_request_threaded_irq(dev, client->irq, NULL, asus_ec_irq,
+> +					IRQF_ONESHOT, dev_name(dev), ec);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to request IRQ\n");
+> +
+> +	ec->hwmon_dev = devm_hwmon_device_register_with_info(dev,
+> +							     "asus_glymur_ec",
+> +							     ec,
+> +							     &asus_ec_hwmon_chip_info,
+> +							     NULL);
+> +	if (IS_ERR(ec->hwmon_dev))
+> +		return dev_err_probe(dev, PTR_ERR(ec->hwmon_dev),
+> +				     "Failed to register hwmon\n");
+
+Ditto.
+
+> +
+> +	return 0;
+> +}
+> +
+> +static int asus_glymur_ec_modern_standby(struct asus_ec *ec, u8 val)
+> +{
+> +	guard(mutex)(&ec->lock);
+> +
+> +	return i2c_smbus_write_byte_data(ec->client,
+> +					 ASUS_QCOM_EC_MODERN_STANDBY_CMD, val);
+> +}
+> +
+> +static int asus_glymur_ec_suspend(struct device *dev)
+> +{
+> +	return asus_glymur_ec_modern_standby(dev_get_drvdata(dev),
+> +					     ASUS_QCOM_EC_MODERN_STANDBY_ENTER);
+> +}
+> +
+> +static int asus_glymur_ec_resume(struct device *dev)
+> +{
+> +	return asus_glymur_ec_modern_standby(dev_get_drvdata(dev),
+> +					     ASUS_QCOM_EC_MODERN_STANDBY_EXIT);
+> +}
+> +
+> +static DEFINE_SIMPLE_DEV_PM_OPS(asus_glymur_ec_pm_ops,
+> +				asus_glymur_ec_suspend,
+> +				asus_glymur_ec_resume);
+> +
+> +static const struct of_device_id asus_glymur_ec_of_match[] = {
+> +	{ .compatible = "asus,zenbook-a14-ux3407na-ec" },
+> +	{ .compatible = "asus,zenbook-a16-ux3607oa-ec" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, asus_glymur_ec_of_match);
+> +
+> +static const struct i2c_device_id asus_glymur_ec_id[] = {
+> +	{ "asus-glymur-ec" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, asus_glymur_ec_id);
+> +
+> +static struct i2c_driver asus_glymur_ec_driver = {
+> +	.driver = {
+> +		.name		= "asus-glymur-ec",
+> +		.of_match_table	= asus_glymur_ec_of_match,
+> +		.pm		= pm_sleep_ptr(&asus_glymur_ec_pm_ops),
+> +	},
+> +	.probe		= asus_glymur_ec_probe,
+> +	.id_table	= asus_glymur_ec_id,
+> +};
+> +module_i2c_driver(asus_glymur_ec_driver);
+> +
+> +MODULE_DESCRIPTION("ASUS Zenbook A16 (Qualcomm) Embedded Controller driver");
+> +MODULE_LICENSE("GPL");
+> 
+> 
+
+-- 
+ i.
+
