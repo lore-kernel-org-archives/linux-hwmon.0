@@ -1,176 +1,100 @@
-Received: from LO0P265CU003.outbound.protection.outlook.com (mail-uksouthazon11022084.outbound.protection.outlook.com [52.101.96.84])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9359C49363D;
-	Tue, 22 Sep 2026 17:44:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.96.84
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790099102; cv=fail; b=bUpD/ulVOyVUt7Plw3V7/erGFBQ9rKGKlO8kUz/j9JWR47uaMXgqKY6xyJhk8araJKr0FQovdcCiJy2ogkdNMuu2BZtoFIq4qZNPZpAyxNDiLCx9KrNDjp8LCIMbwGerozHBDTFUn15lqiuvSwd+vWsdW8fA43F4+W7bfbxlJ8s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790099102; c=relaxed/simple;
-	bh=WkvfNvcrjsTryvqy5EkQRlxW0wMMDclZQDbFdKRlIgk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=q14Gp40Jw4ZGKlYBoulwDZFGn9XasSa6+MEuxXIt4ired4YNLtbgTWJNcms98ad6HST+N2MCqD/Im60LWAEXfsgzSLb1AO4Pi9IEqaQvj1eNXG3chhbeOxOlalJ2k7I51VjGOmqsOmDZmzAWPrMU6od5Fcfwixr5KCpL67qdKWU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.96.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=uYZEh80yfKjNs9yBQFwPmX13rvMUBTKdzt9mf74W3sD71BwAeb6ChlevJfTDKFYZhUQ7GSDR1ZyEYAuYGKVdu4+3R3opK1KfEsQGMsdqP379rurPPVUkRFYiZ31W+u4a+WPTKV3mDyVl1HRzg+D1KtP9D9nJ6I7UTDzDmwCubvOa1eSESx+kJVi7iMkS62f6UD6RVUVysSChrR+l1VTVnAQI/JFtnpMqylY/DW7pWxWop+AwOiKdGernT4CfeOIkr6BKqhSsV5QyLDNuqdciQ6HggaKj/XRLJA2FvGIk02XdV2QWW5Fs7WpeVXevxUBARZoWEKO8LX2MKxvUMY4IXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=1xQEpzKfFhKlK0PSvghR1djW9oWwxrZU6zM4PATfwAk=;
- b=sNlBG/AZSAEfNe2AHJ3NnhmnhPKgC0Z+NYZOhSVeHSVnFH+sXlUKkvQ9f0k86sMA9vgpReDziONPZRRjz1oAkejPaNdZPkuevX1d48fDOB6FwJEsveprl8qFyAt6ZcS3K4X4H2gWTKrVACDScJc2fv1gXiilXDq78QPlfyvq1d/l1AmHc0EL04Zers2rosMqK+h8h6cCy/FSOoQy8+XfFhwGqNLhv0SSPWvtpiyntpvTrk4q9L7fCXvJeQPUdRFW0XjPjH6WvsMkW9YKYGUscDYW9Xzoqu7D9jNyppufNgUw8bpJ+UwBewDMQPpG1c8/Kxbldjq5emKLnhdt17up7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
- dkim=pass header.d=atomlin.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=atomlin.com;
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
- by CWLP123MB3937.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:a0::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.13; Tue, 22 Sep
- 2026 17:44:55 +0000
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230]) by CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230%4]) with mapi id 15.21.0428.011; Tue, 22 Sep 2026
- 17:44:55 +0000
-Date: Tue, 22 Sep 2026 13:44:47 -0400
-From: Aaron Tomlin <atomlin@atomlin.com>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Guenter Roeck <linux@roeck-us.net>, Ian Abbott <abbotti@mev.co.uk>, 
-	H Hartley Sweeten <hsweeten@visionengravers.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Rudolf Marek <r.marek@assembler.cz>, Andi Shyti <andi.shyti@kernel.org>, 
-	Chris Snook <chris.snook@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
-	Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Andreas Noever <andreas.noever@gmail.com>, Mika Westerberg <westeri@kernel.org>, 
-	Yehezkel Bernat <YehezkelShB@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Duncan Sands <duncan.sands@free.fr>, 
-	Chas Williams <3chas3@gmail.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	linux-watchdog@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-atm-general@lists.sourceforge.net, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] module: Remove obsolete __MODULE_STRING()
-Message-ID: <gzyxlqx3u2a6rrzu752k3i7mepicb27y6ifblzutzvkogaquuh@uqk3fo5azozd>
-References: <20260922-module-string-v1-0-c18766690185@suse.com>
- <20260922-module-string-v1-3-c18766690185@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260922-module-string-v1-3-c18766690185@suse.com>
-X-ClientProxiedBy: SCWP298CA0013.CHLP298.PROD.OUTLOOK.COM
- (2603:10d6:300:14f::18) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:400:183::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F1FE4756BB
+	for <linux-hwmon@vger.kernel.org>; Tue, 22 Sep 2026 17:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790099509; cv=none; b=bGmV5oF03iqc9GAvorCJecdmGcoe2WSA+2QyiW273RDUrda6YMES692SHhQWm1qmD435thn7THtd6hX94TCx1RYQ/sD8mkllJN9d8zGIDviJU3NJq25Rwwe/4yA99IwhqiRuiPQb2Takr2J+YWwPPrgju02kX2UkcBoEgei8jO4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790099509; c=relaxed/simple;
+	bh=EbP1v3Oa6Pp3U3S6vdLzzYTTcSx5iO6uWXxoR5VqFYM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kJDFuqMUzKtl7kE0LTnGg049RWd9s0tDX61Z+sPrCoFr5OdcVg4yNnGsMLmtePjYBHmFWi1omYqld/T6MwyOi25BHgsHCP3x++nWy+VlnIx2hsvxVx/zYqrmMd1+1ueSfZFUWIldbVqmDWTq6s61nznkyW+AZCe3QQ9twW0jRY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T4ur/msL; arc=none smtp.client-ip=74.125.225.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T4ur/msL"
+Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49e69b9e16aso580075e9.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 22 Sep 2026 10:51:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790099505; x=1790704305; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=EbP1v3Oa6Pp3U3S6vdLzzYTTcSx5iO6uWXxoR5VqFYM=;
+        b=T4ur/msLvaIvLk1TDYJtusmbXGtVSgX+6zHarAzlEKJzmwcgkHjf5tt0izYJqx/G87
+         iR5LLMMPup68k08zxxYu+R2EQTMiseF9Gt3P0F6HvWja0A69sXpwzKMIouOLG1YFrbM1
+         RXBkFq+u349ag8qGr2ADCUjXK50cKnpCgXi35AEdNMGxrGsWmaGk2R4Ib3dUEE5yOu1n
+         X/Mq6XVCrV75EVPZUBZPUJgn8NLgow1aiMluLhbxOTCh+yws4GflGI+GLUZwzV1EtCMO
+         4Rc+ny2RHizoi8ORV6zweprezCyFGxsA6KGdSuT49HitXDzVKNF9ZRzy2Uswjr/U8/Au
+         k+hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790099505; x=1790704305;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=EbP1v3Oa6Pp3U3S6vdLzzYTTcSx5iO6uWXxoR5VqFYM=;
+        b=Ppr2nchRfBWvOwJ/EeVh47u0T1Z7GGg4cjvD5OPyRED1+Up2UXXR/khw8rZmo8M7B+
+         cihAA5QhKQ+Zdjf58rbZuaTiO8jznaIQmscOq/wN0WSN/n1T+b8VlSjU9bnhuuHnMJxO
+         nmXd1QSUSkqp/tq9+jx3pAmi9MRGBTwDk3uwEREENPwdCB3/x8RcqvEL8KPl+wSAIp83
+         R2ZBxyvpCBmbY9TWgPqu5uuQdgbGZXwpJzAILPJ5gysiIz9PCy8I0ObzO65H8QE7xE6p
+         Iivlza3i+FyKW8O1AfuM9UVkvmEb89xvAf6ZKB8zDGAHUvz034MocLeU39a/j3IbWUPl
+         nPSg==
+X-Forwarded-Encrypted: i=1; AKwUvBz3Dtti38oIHXnKbDrUOd4C2K6jhCbvPj0eLOBoX1E0n4I/mxhTQTMLuA9SgLMPhcw27PJ1ViNjxhpeeA==@vger.kernel.org
+X-Gm-Message-State: AFuF++mIyCJXsEVC8jsZFwsg8Yq229Qb0dwOqaqQn8KDJqu0uWVexJqu
+	KdooTDLFyXbIoj2b70ZGAENVyed/w9w+1jLJbrqq7xc51cA1iMoefbln
+X-Gm-Gg: AYBFou1B6cly8PEwEXGLRK1tiiBuQwB4TYOR1MkOMqjHdVsMsx7qC4nTt1Mzl30GBM4
+	ty0a2oo3vKwQcrMm/XPkzLzzdhq/jbgLRb4DPH7qP+p2Q+AjM5eJuogyS1or5DPUEZO5pWHZtAz
+	SGkcNIvGj3fxHlgdJq9mFomvm8C0wzG8+gEAD/wbY5Zyt2/DTUqAikPNS3Vxk4xx3gYtlNMPiLq
+	k8+4JYtoTQjgD+WjvlpP79TmUGpJdqjqslv6UNm0uyIsaB5u3Qr8qzg6gi3bpzbkLO2mzHAsBqn
+	vxf1y+suH0xkGJgZddhNrXLdvX3Z2/szZLz3ZcG3jQe2pefecZ48s2n7ToA+InA9ezYIM+f8PBx
+	LJugPxwXdDsDZm4/gyzRz8GNTcVJQKO4W9rSruhrfShGE/D3dNE6rsiWGO0fIcCYqIh4FfFgXt4
+	LR4zQEsRln3NFvj1a6Tmss3NJjNBwnMoTk0yvcTHU3ap5cq225iXnKomusxfncyWFQApcz7WBkU
+	neoPpU=
+X-Received: by 2002:a05:600c:83cd:b0:49c:fa21:1c86 with SMTP id 5b1f17b1804b1-49fc573fa97mr180249605e9.27.1790099504457;
+        Tue, 22 Sep 2026 10:51:44 -0700 (PDT)
+Received: from localhost.localdomain ([94.252.75.113])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-49fde18555bsm8294835e9.2.2026.09.22.10.51.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2026 10:51:44 -0700 (PDT)
+From: Oleg Keri <okerixx@gmail.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Hans de Goede <hansg@kernel.org>,
+	=?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Abel Vesa <abelvesa@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH v4 3/3] arm64: dts: qcom: glymur-lenovo-yoga-slim7x: add the embedded controller
+Date: Tue, 22 Sep 2026 19:51:34 +0200
+Message-ID: <179009949426.334909.8218450300346111724@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260922165737.260443-4-okerixx@gmail.com>
+References: <20260922165737.260443-4-okerixx@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|CWLP123MB3937:EE_
-X-MS-Office365-Filtering-Correlation-Id: 124c6736-0887-4a67-ae1c-08df18d13655
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|23010399003|18002099003|22082099003|10067099003|4143699003|56012099006|41080700001;
-X-Microsoft-Antispam-Message-Info:
-	iCCjdPyxhzEDHHVyVvy+ZLDFomfLJAye1vax3W6QVf9aooO/UWLzegaSnGJBhUNZucGWPjLII0u/HsBo0qoTIn8XPUbGgplH/hbEdk/pZ7O3kbSBR7flkh5LDCEVKBng4fD1L5Y9qgROxWii1Isgtxik2jZIxD3Vy8pX2kjmtVx9ZksqAZcz5ewrXjsvDGzMCv6HvqE5nQLazjVcdLrC50/glQ0I9rQUI1j3Nq8kAvUkR7vLDGrrj+k61SPtHSt8pINLDAf3JDb+dEJsRiDlqRqFsoCfCTx8caSSjPPOrFYnPXA2DgEe2livC397Z8sPC8NbD97GTBbgUq7bPIAsX6l1KpEpboLCOG69OsjbOz7/R/GgWl2+hzvkBmbfB4lW35y2qsHVMqBuwIRd2H34L4Ih+ZmyHNaiJ5qBEIPjqA7fx4I5S/i8gnbFKRYwAMSkh6x+90pTXefcdCp/ERLvVzaSsBfZPrJMvhPWmzy6L8UNSfxZBtMtDo7A+GdHCAljmYsyxnRb9TcYGHUjoIi7zs2VNO8RIDjCypW7nXWUm5W9jPgkDOXkzNdVPPm2x5bzneQaEgi0Gk72PUGqFdPD3vyo9ayUr0ICUoD8EFTO+cRPq0yLs9fLiwg0nB+TFbMS+K+FcEEehldtq/wzTQLazpp74B/0N2OsXYO6PKKYD6/RBbBM1N+6hUJAf/aU6A73sq8Xu8zyJCiGy0l76iOONxOnaOrk7ZMzqElPPrRNOVo=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(23010399003)(18002099003)(22082099003)(10067099003)(4143699003)(56012099006)(41080700001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?R2p6VkxTb29ucnMrUDh4akU1NTVaanptTFVqUzJTVFNOSDhPVzJsU0V3MlBE?=
- =?utf-8?B?YkVHSFM2TnZYSm5IWU5ISGN5MUVldHFiNFgvNytrVndFSXcwc2F1V1lFR1Zh?=
- =?utf-8?B?SzVhRzFGalFacUdDRWE1TFgzUHhmOUtsUVpQMXRlTFJYUFdkRGJEcktlSVMz?=
- =?utf-8?B?WGpxeEpnUUZRbGd6cUJqMXpzYXB2L0dKbDVMblFGTXhxRTVYTDh5blBhRkFv?=
- =?utf-8?B?N29vaHQ3Y0hkbDhGRXF0NVRHRTRQR29Bb001UjdRV2dXNUpCSVMyd25Ia3By?=
- =?utf-8?B?VGxiRkthSkxJcmdUQ0tNWTZrdW1SOXFNaGtPcE5leFFZMkthcHFXZkdTUWg5?=
- =?utf-8?B?aldWR3lPVndJK25MU0hzZXBYcTZRZXJVK2tTNGcyb09wZ3lmTWhLbnlDRWlW?=
- =?utf-8?B?ZUgrYWkvYTdlSzVhTzBMSytRZ2pOT0VoNW9DYWRldnhZREYvVmlKVi9BcEtp?=
- =?utf-8?B?U2xKRWd1UzZ6Z0RpTllxdXU0Q0lXYUxXTkdmbEYwNlAyLzRKM050eklMV0Mw?=
- =?utf-8?B?dkVHclVUancxY3Uvbm9ZYzQ2WmJqR3c0ZHQvTGVvcEhZaEZnSkQrUHV5b3d6?=
- =?utf-8?B?UVplM3VhN1ZmQnJKenBTR1RiZk94cGhXMDd0SWl3VDVUMElpRVVxTWplMlhP?=
- =?utf-8?B?enN0cXpzc2g2OUJoZkxjZGtOcm9PZ1hCeXpjaGJIRitjR0FhU1l4Yzg5b3A0?=
- =?utf-8?B?ZTU1eVRZcUhWaVlORkZPTWMzTFlLVU1tT0R5ckN1TFpoU1dnMHVCZkpNK1By?=
- =?utf-8?B?SVB6aXpEWitZL0toTW1GSk1yTFZveWt5VzlYbUdjSm43T0ZnQXJWZllZR0F3?=
- =?utf-8?B?U0J3Rit3SWpvTHE1N29wUGl4cTFMbmtkeWlpT0x3azVyaVE1dFlQZHlxOElL?=
- =?utf-8?B?YkVTQ3ZxRForL2ZnSHBPb0R3MVFab1FWTDJpaUFYUHRpT2xtTUI2RTlmdUt6?=
- =?utf-8?B?Q2tVeEhrWm9rVkFyWHl4d3dKUjFyTm9hN3c0WWs4blZ4VERTRXFVbFJlNXJX?=
- =?utf-8?B?SWdPc0FkbCtkNTAwQ0wyN29yaEpiRGs0M3N2clZEUnhsSnl3RkxCLzFzQ0dZ?=
- =?utf-8?B?U2ExUkw4TG5rNnVldU4xZ29WcElRdlpJU3hnc0xWbUp6QVZFOVZvYUJvV2kx?=
- =?utf-8?B?a3pwRjBRTUtMa0swTk8rZWQ3djJrOXdzc2Z4UUhNcm5ia1dSQlR5YWJ3OUtD?=
- =?utf-8?B?OFVKN3lHeUdIMktoSUp5eUdQNGpGRFhST3Jrc1BidjFlL2U0d1MrVEpldEpS?=
- =?utf-8?B?Tm9RL3NnZGtqNisvYW85bmN4UWcxSWF2cUFaUTVCcU00YUlYUm1MYlVMM0JT?=
- =?utf-8?B?eCtaMW1qUTRxUjN6YW5Eam5qMHh3UEtaZGFXWGs3aUlEMDlNUmV1Uko2UGFt?=
- =?utf-8?B?ZUtyZUlUUTNZbEwyS0lJMU9jZnVrajVRTkIyb2N5MDAybjRwU2pGaS8wSmlM?=
- =?utf-8?B?eU9oQ3ZGWW5HZytBcEJFcTlqMkEwTjh1T2NSR2hPdnd1ZEt0WVFCczhFMzVN?=
- =?utf-8?B?REJjdlQ3dVRMNmNmR0hXOWRHREVIWWNYTTFBN3dnMG5VdVRkVm5PTUMzUXBM?=
- =?utf-8?B?bHBHaXlzRmFUNzkxRkUvTkZ6ZVVQYmpzT2JLVzVRUnNiUnBkRkEvNUZacFV6?=
- =?utf-8?B?ZnZzOERaZ255dWhPYVUyYUpndjF5ZjNENU9iRGFmYjNGV1RBeFZlcEgrekQv?=
- =?utf-8?B?VEFIcjEyR3NFM01zWTl6MHQxZ1kzaVdDcVFoRStxY0QvVlMxTSszR2cxUEhy?=
- =?utf-8?B?U2VTVHpyVmNOSWZncFZYNythK0lUZ0xHTVB4TEtNeEtkU2Q0NDFhSkxXZld1?=
- =?utf-8?B?YUEyeVVUUTAwYmg3Z2E3b1V2bWVEQUJPTjVaek9wNUpkVW4yRlFXdWN2MjVM?=
- =?utf-8?B?UXFXRVNkMjhWSHpDQ2VzK2w4eE5VR2Y3ekQzV0tyUm9tUlR4Z0dQWERHUUQz?=
- =?utf-8?B?S1dyV3lLblY1RThrb2xkMDZoejY4c1dKS0lwWDl2ckhoSW11T2E0WnZRd2NQ?=
- =?utf-8?B?cmdBMWFWSkVEWElDZi9aWjV2U1U5TmtoSjZ6Nlo2alA2TXFqSFl2WTJISlpE?=
- =?utf-8?B?WDlGbHZGT0ZCNDVPU2tyUHJKTCt2YmwxSlVGaVh4QmY2NUt1RGtmZjBGSnkv?=
- =?utf-8?B?OGdycnQzTlczNWNydXdRN3V2UnNrUk16N3orTENpd0RYV2pZVlNwVGFUN001?=
- =?utf-8?B?TXFydU9ucGlmTzJRc0h2UkphRTB1U0I3VDF4Z29RVzRKRWtlUlZzT1hsRHl6?=
- =?utf-8?B?L2VBUklkamhwQ0NlSWJzSEE5NHNnUC9neUxnN3c5TVEwMHdGNGN5a252Yk1Q?=
- =?utf-8?B?TzF0SE5ZVHNmc09KbGh1d0d5ajQyckEyL1ZXYkRaQ1hlQ2VxcUNQdz09?=
-X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 124c6736-0887-4a67-ae1c-08df18d13655
-X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2026 17:44:54.9610
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /aKK8JcXrvnEfdwy7GEoiMZaZdylio9/vRuD4xZQKfM8ycaRTtdV6m/WckyJMyJ3YH9JXk6ZOlfMrGFEt1zr4g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP123MB3937
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 22, 2026 at 03:32:23PM +0200, Petr Pavlu wrote:
-> __MODULE_STRING() has been an alias for __stringify() since "[PATCH]
-> MODULE_PARM support for older modules" [1] in 2002-12. That change also
-> moved it to the graveyard section at the end of linux/module.h
-> 
-> Remove __MODULE_STRING() now that all remaining uses have been replaced
-> directly with __stringify().
-> 
-> Link: https://git.kernel.org/tglx/history/c/136839a1b4 [1]
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> ---
->  include/linux/module.h | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 96cc98568eea..0d9157a2d487 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -886,10 +886,6 @@ extern const struct kobj_type module_ktype;
->  
->  #define symbol_request(x) try_then_request_module(symbol_get(x), "symbol:" #x)
->  
-> -/* BELOW HERE ALL THESE ARE OBSOLETE AND WILL VANISH */
-> -
-> -#define __MODULE_STRING(x) __stringify(x)
-> -
->  #ifdef CONFIG_GENERIC_BUG
->  void module_bug_finalize(const Elf_Ehdr *, const Elf_Shdr *,
->  			 struct module *);
-> 
-> -- 
-> 2.55.0
+Konrad reviewed this patch on v3 [1], a few hours before v4 went out;
+the patch is unchanged since, so the tag applies here:
 
-Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
--- 
-Aaron Tomlin
+[1] https://lore.kernel.org/all/69636cb8-5867-42db-a8fb-aa8b2d9301e2@oss.qualcomm.com/
