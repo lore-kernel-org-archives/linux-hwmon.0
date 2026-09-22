@@ -1,102 +1,132 @@
-Received: from mail-pj2-f42.google.com (mail-pj2-f42.google.com [74.125.227.170])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48CC21FC0
-	for <linux-hwmon@vger.kernel.org>; Tue, 22 Sep 2026 17:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D348577E22
+	for <linux-hwmon@vger.kernel.org>; Tue, 22 Sep 2026 17:19:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790097383; cv=none; b=c/Uys16m0eUnwwMyq3Q2FfpGkFjW22V41wW3g5ey8oAqp65dnGWPX9CFWc3yrUm7JG8UJuppeZyW1QHpuT1MowYpSNTBeqSWbxI/R8aOGHzI28ng5RsSzyjaQLJIX8ZOuRfLOkMDlF9TXqZX8x4ley1eIXgTYartGIWKR2Rm8gw=
+	t=1790097596; cv=none; b=dEJtFXDp4keVG/yKKRlF1bv4/YdTRrB3u6TqPQ2lFsXecskxx4Jb+kGFAxmaWP8Lq6r8ihw0yoilOpyDG/Ch23a/ulK8Vv9z50iVRDX2WpeBqRPDOPbW+RhsmLUq+HToKt0ScNGdB+a1ZNnkBxUtpz7PYsTm8JmhiDCKwUDBBwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790097383; c=relaxed/simple;
-	bh=fUOxJQRg1fHiXsAod5AYZ2/X4FAwzkBrLYwHjynWgM8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oIP9GlU1MEafzPPawhvLIUAskdue323p53BR0b382kAmhIrrjLzX+6dIxYurH6NUsvniH19thr45x9gSAalhBn97fdx+H9WT5g9OUV8B+LnXkKPlsv2fEJE9i15o3+FvLGw1eM7wgR3mY1T3ddjicw4kh5brV0iRxe/uVSMCLeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NyxZsAdt; arc=none smtp.client-ip=74.125.227.170
+	s=arc-20240116; t=1790097596; c=relaxed/simple;
+	bh=6wTYl3fPn9nlTqWjvYm7Nq+9tWOEygh9IVzIKdiR2oA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bkueuY3hnDq2bJFZA2O9Ls/CEE07LVnYptGiXpFQIivAl0hFuJDmudQQzDEyad+yQwAFN4XNJserhvyhyBDatp8jtpQwfGtJGGb6WYrAxLMPjkagg/T/Ng4ordydURt5S7nWHuf7xPlZonRAihtWOJXC+A1ktgO0M7RBVSj+qSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R3fpi2YG; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NyxZsAdt"
-Received: by mail-pj2-f42.google.com with SMTP id 98e67ed59e1d1-396ccda24afso107335a91.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 22 Sep 2026 10:16:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R3fpi2YG"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccb652d7so143894a91.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 22 Sep 2026 10:19:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790097381; x=1790702181; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=CIpfujCfE9HakCdM2BgRr8mBK7kf1cHfVwOrrBjiCuY=;
-        b=NyxZsAdtffLW+2NGzlRwHj8F1CCS2wMnVgZ55RLIjF1oqoFzh26pXiytX5FfvyXYbj
-         d1upQM6KzGNNazPq4kBtkQ4hcMROpqVZEaTg4x4zbRhH31RoxnftdFfLqWhBLW7Ozy5a
-         eYWXbAaD6Ts83jTpUq6qQmv2qXL3Mr6xM4JRPkcSbNbZZ+BIXLGXqh13dXv+K00zj2w0
-         tY3yzbSuuF5gKPPiQgCECqsGnjRhxUy8g5Uy7wv0K7y7bx4lIkbUXvLNx2OrtdbTLu7o
-         vXCPBSXkhMEko835aSwz4TpPqVgkci7qF7125fS4yJDPsHSQGc7NJm+qPXWSiNI4WTFs
-         pBJQ==
+        d=gmail.com; s=20251104; t=1790097594; x=1790702394; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=zCRq4hnTSVTOASY3u8FUiAUCCMw+X4n90vfRzUKE6C0=;
+        b=R3fpi2YGR1iw8Px21lKPuJxQa3xYXCv9Mpn2pp7nvZTr5cx5S8aK5HbtF3oqZWIFQM
+         RMZ3C0IacF5arX5aUdVWDSlMSotuYQA4Op5VFEMGn055iG+3zTrz5B/Kf8iog9lSXhZZ
+         B157y2CkT0mf/XtYGvnhueJQMfUPdVjeLDGegSgXKkejeOexHV8Jc5oDbrKf3Z2qa4mD
+         hts7qgawAiOZuCKQsdQAw5yKxpocn841NQ5Hu1VNYbKlO1f/HGPcNH19kCYQ/UPmaqF9
+         OYKbnmqRDwKR6tzbt0XUMzLli1e6tFFAlATxO9QSteifnJPhfcdMvKQ7lvc6fqOdrGg/
+         xkkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790097381; x=1790702181;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=CIpfujCfE9HakCdM2BgRr8mBK7kf1cHfVwOrrBjiCuY=;
-        b=cWDOibOqheLyHmfKHlXuBCE4qVjUJjfB0vcDXattVfVt99sjV5Ut25HKLQa79LKQjw
-         oeChgzWyKNO4ffmFWGYf2nvOnQMnALfGTwrelE1bXcmPUwNtzUiSu9uTemUPcPDWnack
-         ET4lFFgh8EwnzMviV6Iw83ZcmNgSoQW24pj8avlSEcvxvNZxk1baYu5XInBMb5N1TWkg
-         5rEivGZOdeLkWwCDCQvRfZk9wnUyP5WrwvGTD1gMK3iMNo9KaVGB4p86ZBGyvN4kVdFV
-         GqqkOFXIpkNDiwiloeV4fUIrJLrMqmozfG5kyqG+D80tBUn/9ayEyZSS/D2yLM7DaI5z
-         cVYg==
-X-Gm-Message-State: AFuF++ny0z3y6IdAmNWR2x0vqDSjcAS/JgLBNkXY7Crdg+mtE8Gniuvy
-	nElBodsdObX52BUaMNpetPqjEwOO4x/KBscn1JRAAhzOnz25WorT+QV8MK4/pD5a
-X-Gm-Gg: AYBFou14JhfpiE1D8mDy0/fGVaos2gVZWfOIjeE/LM62+5OlNERM7DvGFl1SLiMUEpB
-	wMvsy1mlFrT7r8fMDfILqEJWm8zL1lszIDfp7A9Aoj8ZGO7k6HMwCZROsvBHIIvOArFTxOZiG82
-	vIZmt/I2quh6FTPoLatO7rtNUXskzuMTi2cSbnqKgBe/kkJaNrZLJvlhIUzLOlOFGOOhyxoACAr
-	+JzfZFGscqKTQVqO0NrrvSUhKR5RoAgcTiM1ww7M2tYYs9z6NGp2++xmubBrjM2x3zH3lGq46jw
-	44jxzOE2IcuHoBOv1+SxnuF3MuWDjM7tx3ZKTqx+MczooWkWYDCRCo9mcITFuWEFdMWAsM+veKt
-	ZGNUQiw0HCBA6RibBwPLTkqu539yuk/cDCtCsHTSJOm1aGrgPEzBUpApJrTifFDtaOVT858RZ1h
-	EHhhrPGX6NIkDo/DBL4Ec99Tf/5IKB7gLoGZPlkZ9hwe2R0ocGgdF1/Hc/2BUzteKWn88IiUTlm
-	LbmV1LCBacu
-X-Received: by 2002:a17:90b:5646:b0:398:a486:81ec with SMTP id 98e67ed59e1d1-3a07e54a847mr123079a91.11.1790097381251;
-        Tue, 22 Sep 2026 10:16:21 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1790097594; x=1790702394;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=zCRq4hnTSVTOASY3u8FUiAUCCMw+X4n90vfRzUKE6C0=;
+        b=2i7eX+66wHElQ4CHBOwjcy0PyBIOYyyrAzCgiEguPgkk989gkdIQcfRbSY0a7wl9Q1
+         DxDXJ7K/I7Rm0Zv+C1BU364quho5xAA/0wxle7KlL0CZgaLAYHvZSNK9HuIVDAZgIIFn
+         PpKSqwNOVIWNi9yM+TmFoNLhoV34qbB9Hv1/9PtGDwAZcU6tyhS5onO5uay76cX4bri8
+         UGWKGAWzWsObgNkXWVaqfEeIFl7xBBjnMdaf5wIvsl765LE2PVDg4AQPkRFaVAm+Yri9
+         K9JFKyYZ1/Zxbh6fBQyHnWWt7mSSsFhdn/aFTpdXwMuUIjv3Ki8XodtEsw7YWEpBPfeI
+         9Qdw==
+X-Forwarded-Encrypted: i=1; AKwUvBzi4E97hDpkuBUJ1/bfay2QeCORFmljPrg8b7UcxVB4HbXVlbdQp387yLlzS4SkAATMvaswQ80XzwXXwg==@vger.kernel.org
+X-Gm-Message-State: AFuF++lR0CDnqKcU3dEepsW2BfXXOt1Gt9iS/gkrSsVdRRbprf/M1LzI
+	3KZU+TA5ipxkl7QtaJko1x93Qs9TiAdGVgXfgMRYE9shAPaoZGagkZ5h
+X-Gm-Gg: AYBFou1zVEtDs2f5SHjO63xJDSwZjFU4f74STxw3EMLQPBkzuqRXaHFjEnkC+Wfnvm6
+	X+zI+uMYCz5CtvHCVIJS5i/a/1/fjVlVdTb2M1a8ZMZozPN12WIW2v/TXFQDVWFj/vBjtz8ejDv
+	QrD/pE3emS4lnsdsQe/pxzqCZaKGJ8okm0LsIuhfJMDQyNyUmQ3Jk6i7XqudKIuE4yk7WcivRGX
+	XhWJ8OJenhyJbTiFQ2w2/eLSW8soG3vy5wimV9wBxTkMEof3yGilj26rVUF/xhkZ+cza3BMeX8I
+	PntqUlO5cAfz1PL7SwIA1GzSrW1hhp+m4hHw/3fDUZV6rXUmvZPsSxW7ryg+MQjvjd8V8u2qmrH
+	0FeybCDBJ+JuJQ1J2sApwc/tT9MZvc308YQtjutc6JspSfI4cJKFlX+5ey7JDMahsQbG0hJ0w0D
+	NzJ7gx7zB8m29Pu39Djo9Q+S5kqbkldTuKKjJcFtYLiQhL4J4Sa7Ipwpj1AEzXafouEj5JehYC+
+	J9M1rtLeVy+Yg==
+X-Received: by 2002:a17:90b:2b4c:b0:39e:1ff0:331b with SMTP id 98e67ed59e1d1-3a07e4f7b61mr128059a91.2.1790097593735;
+        Tue, 22 Sep 2026 10:19:53 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a07ddaf4easm329359a91.6.2026.09.22.10.16.20
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a07ddaf4f5sm336767a91.4.2026.09.22.10.19.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2026 10:16:20 -0700 (PDT)
+        Tue, 22 Sep 2026 10:19:53 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 22 Sep 2026 10:19:52 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: (nct6683) Add more MSI boards to list of tested boards
-Date: Tue, 22 Sep 2026 10:16:18 -0700
-Message-ID: <20260922171618.620877-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Ian Abbott <abbotti@mev.co.uk>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Rudolf Marek <r.marek@assembler.cz>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Chris Snook <chris.snook@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Duncan Sands <duncan.sands@free.fr>,
+	Chas Williams <3chas3@gmail.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>, linux-watchdog@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
+	linux-atm-general@lists.sourceforge.net,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] watchdog: Replace __MODULE_STRING() with
+ __stringify()
+Message-ID: <940e0763-9de3-4d55-90cc-8289d5525b17@roeck-us.net>
+References: <20260922-module-string-v1-0-c18766690185@suse.com>
+ <20260922-module-string-v1-1-c18766690185@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260922-module-string-v1-1-c18766690185@suse.com>
 
-Tested with the following boards:
-- MSI MAG B550M MORTAR MAX WIFI (MS-7C94)
-- MSI MAG B650 TOMAHAWK WIFI (MS-7D75)
-- MSI MAG B650M MORTAR WIFI (MS-7D76)
+On Tue, Sep 22, 2026 at 03:32:21PM +0200, Petr Pavlu wrote:
+> __MODULE_STRING() has been an alias for __stringify() since "[PATCH]
+> MODULE_PARM support for older modules" [1] in 2002-12. That change also
+> moved it to the graveyard section at the end of linux/module.h
+> 
+> Replace the remaining uses of __MODULE_STRING() with __stringify() in
+> preparation for its removal.
+> 
+> Link: https://git.kernel.org/tglx/history/c/136839a1b4 [1]
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- Documentation/hwmon/nct6683.rst | 3 +++
- 1 file changed, 3 insertions(+)
+Applied to watchdog-next.
 
-diff --git a/Documentation/hwmon/nct6683.rst b/Documentation/hwmon/nct6683.rst
-index 9f415b740aec..c47b0709c5e7 100644
---- a/Documentation/hwmon/nct6683.rst
-+++ b/Documentation/hwmon/nct6683.rst
-@@ -67,6 +67,9 @@ ASRock X670E			NCT6686D EC firmware version 1.0 build 05/19/22
- ASRock B650 Steel Legend WiFi	NCT6686D EC firmware version 1.0 build 11/09/23
- ASRock Z590 Taichi		NCT6686D EC firmware version 1.0 build 01/25/21
- MSI B550			NCT6687D EC firmware version 1.0 build 05/07/20
-+MSI B550M			NCT6687D EC firmware version 1.0 build 05/07/20
-+MSI B650			NCT6687D EC firmware version 0.0 build 09/27/22
-+MSI B650M			NCT6687D EC firmware version 0.0 build 09/27/22
- MSI B850M			NCT6687D EC firmware version 0.0 build 03/10/25
- MSI X670-P			NCT6687D EC firmware version 0.0 build 09/27/22
- MSI X870E			NCT6687D EC firmware version 0.0 build 11/13/24
--- 
-2.45.2
-
+Thanks,
+Guenter
