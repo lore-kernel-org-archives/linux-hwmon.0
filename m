@@ -1,191 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067714AC17D;
-	Wed, 23 Sep 2026 16:37:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACFA73EC81B
+	for <linux-hwmon@vger.kernel.org>; Wed, 23 Sep 2026 17:26:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790181464; cv=none; b=JBv7FAS82xq3ER44KMIFAVmd0tqOuKRoMuE08K3LKA7dHKfL4LOInoFmqbJ75muboG6DcN9NeurxgNdAssN5FRQ9AYI9Xbq93NeHcDKUSRueC0WkFYA0nzVIj+nzx/r1sCjbyvGNAAfa+iDdgqrFCgr9REhEN2q26KhNoBA8RKY=
+	t=1790184363; cv=none; b=UhwI67bPaZWfknpAr6xUNrxobfHIlBvPDdkAqd2kusU5oIDBDVbIVMLlLhsU1w7DCsB9CkK3q8iaevuEcF/A/8V51NEeIYl5/2KnPawj3OF4qjv4A+pvnAVlwFGTp/c/TzDOMs9ol9twNBof7kN7IxOhegMyNy2ikLE/IZ1gjFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790181464; c=relaxed/simple;
-	bh=DfX58RjKbY3+QWH4JypoUVAjAvCmIzBd8+qdQIqUedI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dt8yw6GOGSZj0n8yuwaBOzHSmP+Vh9MWSXOOSeMlkEVrTQw0505S2NBhBT1mI0PlC2WG7l6iU2btRtJwF0i1S3iH/a6pg1so6YGhQMIbkvznHw2bkYF1x5uUbmY7OOGEdukzIw1yj7Y8EVT17jgQmSSHIWoVKKvuSV04AiKX0+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nwCZcYKT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790184363; c=relaxed/simple;
+	bh=3KsAEjFLqBZmEEPAhvTPCECnRvZP15T6L/+sh2LbO88=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kJKlTdsmzZFUHbjz+97CApdf6OY6sg+eUTlC3fXMQcCbLPWpKz8hw4MPDXPTxgVYBb+aDh3AO63U3HCyLAsXTHJY44qieTRm9TcZ7N8RYds6uuaF9Ph0RFiV7FWWBI5tuWtvezwCqIgYL0fQpC7aOUXIYLYWgu5oj0gRMtmEPn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FHNuEN/a; arc=none smtp.client-ip=74.125.228.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nwCZcYKT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66C361F00893;
-	Wed, 23 Sep 2026 16:37:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790181453;
-	bh=TECMxX4kgDyzPpjvbd6cL8RihEt1rmrbBVZxTQOHxdw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=nwCZcYKT8Kro1GD8l8rFRT0HjmZrw6cmKJXXRws8Wm2XZ8rsOhDxvb6lNO+X/QHQy
-	 tLgCO63wJ5+STY8g2GHPHt6SW/E0tkkpLWOYhe55A3nRhqfYErwsoo5P0EpUP2XsgE
-	 j8EUE75MdR8Hj6BivjseyesRwtJHQLWaQK/Gq2PdkuIhoyYrPNSVfH3Au8/F0Vb3vz
-	 fiBqyyaz7e0CssTUSPu9xtmFpHXuvVjOOswor5dxDOJW6Xz2ZMFUb9F/3WMAmsE3P5
-	 Kl1wYhiPnc7+vmwDHVYw4gf+W5IJi3cRMHuE29Y8JhzaYGDvHB+upTqqkK41yFaDbU
-	 njSENt1RP4bDA==
-Date: Wed, 23 Sep 2026 17:37:29 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Changhuang Liang <changhuang.liang@starfivetech.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: Add starfive,jhb100-pwm-fan
-Message-ID: <20260923-feline-tattle-ecc37a0a9c56@spud>
-References: <20260923130624.239499-1-changhuang.liang@starfivetech.com>
- <20260923130624.239499-2-changhuang.liang@starfivetech.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FHNuEN/a"
+Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-85469b2e1d5so720311b3a.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 23 Sep 2026 10:26:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790184361; x=1790789161; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=O22RbiDeWdUAyKALr8GFPofw9Urxk2fBLIPun4++/1o=;
+        b=FHNuEN/aiRd9eoMRjYQqA9kN55PjuUYx2Brp/HnLItOyvSlvzZaG24K9S0wp/t7crO
+         hgmmjWBA0uYJ+8DhMAm5gHQMEUV34HIUev9MrVZC1MMii7h28Ak7+u1JF/0fFsOg9MxU
+         Y5WT8H6tmIXMIVcDSlBGl7mUL8GHmwVcFj1qYpdjf9SiHhY9nZ89dOrY9fsa2sbXaS8d
+         JMRK4WdFgIWkIDLkaS+1ua3gTtxlSS/7w3cSdKWTM6UoS3N8XyR0cOyfkvkWXsMUlsWI
+         bphs3M/dYCZul6ASGQ/Z81kc4BDG++PhAVY6GB/189bWfnr5MMPpzwiAdT1T8f/kUGRI
+         L2UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790184361; x=1790789161;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=O22RbiDeWdUAyKALr8GFPofw9Urxk2fBLIPun4++/1o=;
+        b=zbp0QLUOHi1XmmSe/6XqEg9NhxRuai+ppCPXV+iuFFZwUEQzvTcYg1+sk02eSIY0vI
+         4ek3OsOgLd1RyT8IPSlmJ2eO88nTRNhgIA+tmTA+l26vpBOOUaOXC00EC4U3dB9Shwf7
+         HBelZvaKgySNnwqSGo3xysB8OjbtD+CUuPOLUhnz5aguoxe2IPwuKvVaqJ6lrj8eAGhT
+         JsfrR1n2k4DCQavHrO1hOa/ofb4ytugf0hmU9iKqtUzRajA/a4/9iM49TMDTWuvvdOwd
+         NfRIOutEzc+a8uSgVfguPavddUZymawuAAV/p6PuLJdoFpgj88/qox2FE7qm4r03K6nO
+         bp/Q==
+X-Gm-Message-State: AFuF++nP8mzM0Nnyw5zEAl65qsDJ7ZHw9/ykrjHmuRycvMhzWi+11JKs
+	KjIIA0Ly2k+4Fg8piXoW+ikBLM2bHM4qBwCoJqTbxW5a8csm3v/eCMm8
+X-Gm-Gg: AYBFou3visewXrcM54AJtSq0GAkbo088t2nbrg/Z7tMgjlfzueVeO+ih6cozpxCVxbP
+	BTFhBP0uDh6V+2vqeM5sxNSnbGf36Y7XuJQO15tkQhRVWPTDGVdU/ZXwTOpAg9AavmXqKKGqZZU
+	Z5uuSfALiaG6za8KMImrq+vU3kB8Kh4aKCCoA7aA2/Edr+hlb9rdUJWjYFV/NmfBXOLiBGT4Szh
+	bwTahkgvD3XVqFMhySBQqP2rCAi2lcHMVmyELBEmwS0c190KmInoUzfmFm9aYw4i6ARDnBzqDuU
+	abU764kJOtSyx+l9t/x4gPP7G2gAoFTx41K+DfSFf80E76YxMgPcMA0+2F0WsfSO1678Pn6JXux
+	YriyA725WtpjzjYLG96fgh0l6KDC03vQtnMB86Xojy/by6BvC7vCONH8rwCPa3MzFzcTcBML9TH
+	EGxZEIz0bwszlg3/hgDNllRXEZrkNor5SYYqCs0bIm3jCyfPV8hJellAVuPLI3kYPkyozRUZ87q
+	u+/wG6iobvb1XSs7T/rhYNDUEW4fj4=
+X-Received: by 2002:a05:6a00:14d6:b0:86b:4138:4084 with SMTP id d2e1a72fcca58-87d19376b36mr3446218b3a.15.1790184360521;
+        Wed, 23 Sep 2026 10:26:00 -0700 (PDT)
+Received: from cfarm424.jing.rocks (cfarm424.jing.rocks. [2600:3c18:e002:2e11::c424])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87d1e601b5dsm1685893b3a.61.2026.09.23.10.25.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Sep 2026 10:25:59 -0700 (PDT)
+From: Ridham Khurana <khurana.ridham222@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>,
+	Jori Koolstra <jkoolstra@xs4all.nl>,
+	Brigham Campbell <me@brighamcampbell.com>,
+	linux-kernel-mentees@lists.linux.dev,
+	Ridham Khurana <khurana.ridham222@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] hwmon: (lm95245) Fix negative temperature conversion
+Date: Wed, 23 Sep 2026 17:25:48 +0000
+Message-ID: <20260923172551.1593798-1-khurana.ridham222@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3XsPMAk746vFPwZe"
-Content-Disposition: inline
-In-Reply-To: <20260923130624.239499-2-changhuang.liang@starfivetech.com>
+Content-Transfer-Encoding: 8bit
 
---3XsPMAk746vFPwZe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+temp_from_reg_signed() uses only the high byte when the sign bit is set
+and drops the fractional bits in the low byte. Writing -500 to
+temp2_offset stores 0xff80 (-0.5 degrees C) in the offset registers,
+but reading temp2_offset back returns -1000.
 
-On Wed, Sep 23, 2026 at 06:06:23AM -0700, Changhuang Liang wrote:
-> Add a binding for the StarFive JHB100 PWM fan controller. The controller
-> has a hardware tachometer block with 16 tachometer inputs, while fan
-> speed is controlled through 8 PWM channels supplied by an external PWM
-> controller.
->=20
-> One PWM channel can drive up to two fans, so each fan-N child node
-> references one PWM channel and lists the tachometer inputs wired to the
-> fans it drives.
->=20
-> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+Negative temp1_input and temp2_input values are rounded down to the
+next whole degree the same way. The chip reports -0.125 degrees C as
+0xffe0, which the driver returns as -1000.
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-pw-bot: not-applicable
+Treat the register pair as a single 16-bit two's complement value.
+lm95241 had the same conversion fixed in commit 0c2a40e2fe4f
+("hwmon: (lm95241) Fix negative temperature results").
 
-> ---
->  .../hwmon/starfive,jhb100-pwm-fan.yaml        | 87 +++++++++++++++++++
->  1 file changed, 87 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/starfive,jhb1=
-00-pwm-fan.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/starfive,jhb100-pwm-=
-fan.yaml b/Documentation/devicetree/bindings/hwmon/starfive,jhb100-pwm-fan.=
-yaml
-> new file mode 100644
-> index 000000000000..b05789867c0e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/starfive,jhb100-pwm-fan.yaml
-> @@ -0,0 +1,87 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/starfive,jhb100-pwm-fan.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: StarFive JHB100 PWM Fan Controller
-> +
-> +maintainers:
-> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
-> +
-> +description:
-> +  The StarFive JHB100 fan controller uses a hardware tachometer block wi=
-th
-> +  16 tachometer inputs to measure fan speed. Fan speed is controlled thr=
-ough
-> +  8 PWM channels supplied by an external PWM controller, and one PWM cha=
-nnel
-> +  can drive up to two fans. Each fan child node references the PWM chann=
-el
-> +  driving the fan(s) and lists the tachometer inputs wired to them.
-> +
-> +properties:
-> +  compatible:
-> +    const: starfive,jhb100-pwm-fan
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +patternProperties:
-> +  "^fan-[0-7]$":
-> +    $ref: fan-common.yaml#
-> +    unevaluatedProperties: false
-> +
-> +    properties:
-> +      pulses-per-revolution:
-> +        minimum: 1
-> +        default: 2
-> +
-> +      tach-ch:
-> +        description:
-> +          The tachometer input(s) wired to the fan(s) driven by the PWM
-> +          channel. One PWM channel can drive up to two fans.
-> +        minItems: 1
-> +        maxItems: 2
-> +        items:
-> +          maximum: 15
-> +
-> +    required:
-> +      - pwms
-> +      - tach-ch
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - resets
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    fan-controller@11be0000 {
-> +        compatible =3D "starfive,jhb100-pwm-fan";
-> +        reg =3D <0x11be0000 0x400>;
-> +        interrupts =3D <128>;
-> +        clocks =3D <&per2crg 33>;
-> +        resets =3D <&per2crg 5>;
-> +
-> +        fan-0 {
-> +            pwms =3D <&pwm0 0 40000 0>;
-> +            tach-ch =3D /bits/ 8 <0x0 0x8>;
-> +            pulses-per-revolution =3D <2>;
-> +        };
-> +
-> +        fan-1 {
-> +            pwms =3D <&pwm1 0 40000 0>;
-> +            tach-ch =3D /bits/ 8 <0x1 0x9>;
-> +        };
-> +    };
-> +...
-> --=20
-> 2.25.1
->=20
+Fixes: fffd80ccc1e6 ("hwmon: LM95245 driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Ridham Khurana <khurana.ridham222@gmail.com>
+---
+Build-tested on arm64 with CONFIG_SENSORS_LM95245=m, tested with i2c-stub in QEMU. Not tested on hardware.
 
---3XsPMAk746vFPwZe
-Content-Type: application/pgp-signature; name=signature.asc
+ drivers/hwmon/lm95245.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/drivers/hwmon/lm95245.c b/drivers/hwmon/lm95245.c
+index 11553391f54b..925574b8b0ca 100644
+--- a/drivers/hwmon/lm95245.c
++++ b/drivers/hwmon/lm95245.c
+@@ -96,9 +96,9 @@ static int temp_from_reg_unsigned(u8 val_h, u8 val_l)
+ 
+ static int temp_from_reg_signed(u8 val_h, u8 val_l)
+ {
+-	if (val_h & 0x80)
+-		return (val_h - 0x100) * 1000;
+-	return temp_from_reg_unsigned(val_h, val_l);
++	s16 val_hl = (val_h << 8) | val_l;
++
++	return val_hl * 1000 / 256;
+ }
+ 
+ static int lm95245_read_conversion_rate(struct lm95245_data *data)
+-- 
+2.47.3
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCarQASQAKCRB4tDGHoIJi
-0uWkAQCVbRgZiz8EdoB3thWoFVtHbH1/2HqRXHrITN0AcIfDMgEAq5zyTCYSolIi
-nXd3sujXn3XPr0CGKKRvjQdN6Pz/QQg=
-=IHKj
------END PGP SIGNATURE-----
-
---3XsPMAk746vFPwZe--
