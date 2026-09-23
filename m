@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB9FF480DC7;
-	Wed, 23 Sep 2026 10:14:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFED547F783;
+	Wed, 23 Sep 2026 10:14:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790158488; cv=none; b=l1RityUr/VP2GEq8Akb85VY7xxB744lBI9ezTfuBr+UEZZacdg4vPhwkZyuCONm50c8tnF0Lus9TcxPQcnu00YBFBn/rbrHRsWswvg63HWpxPOQGNcDxEcmU2+YYPN4Z5Sqwoc7AC9dNByqPSw8kWgLxyPsmfV6RPCH5QB7p10U=
+	t=1790158493; cv=none; b=Ebn6bmIvX33QugBmNYnJHBaoawECJ2jYKVAjtOXFBICTsGSYVXMESfeGN936rohdYAn9TFEPzkB2GfIuVMIIqbcGqrJoEUVixUPzldhypdH+jhOWLcMMwfFWD5PYmUXQ/WbQH50f1YveQm5cWYCagt2GiFs/T5VUvZSU8iJ+Cwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790158488; c=relaxed/simple;
-	bh=fukG1Ui5PBkqvvdH3tW976cRJ8fnu/oq1u8P+G/BURM=;
+	s=arc-20240116; t=1790158493; c=relaxed/simple;
+	bh=OQs67cdVg2c1m+XU1/vr6nXu2CSt7D/HdSsrachOq+o=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VIpfneeGvpkhdID1KmYwgqGRQf3ANhhhpzPDJ+yzAxPBNRatsMu2JDoGmUp1ea4OSTYucGb4Z5YgvKXUDBBoeQ2fyz+mMS0cTQpVMYktuSLybqIFXaL/qIijloFSDekOw0uaOpiAf7GEh8f2rciBSHPwKhL/mRl3aJwWMZ9Zsx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K/r+KiHT; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=O87Qt7Q4zdWsfsBlV56ftWrU+9xn/ey0p7pN4yyoMzihMjK6OYlnaAl9saeA1h1sRSFmlf02usmE7qKdu5rBn/IdcKYf4FXlpn4fpOKmgxJKiDng/mjhxViXquHGxRXOtsEJecZG/nJgBSKT7yc/ATng8X7wuWnbb4sxKvTgbOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R5Trspfu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K/r+KiHT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEF281F00893;
-	Wed, 23 Sep 2026 10:14:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R5Trspfu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E8971F00899;
+	Wed, 23 Sep 2026 10:14:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790158467;
-	bh=8i0cUFu0jRgK6xqFeljPYVRrStYw7lvWDEu8F1xhoQg=;
+	s=k20260515; t=1790158477;
+	bh=S+/NkK/2JKzL6JPHeEE9Dg80nXCZn6rhh0cERna0HR8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=K/r+KiHTls0RJbe+C09qxsFPL+Nou/NCFkxhl9sK3yHB9JqlJ5qqAXxHLWR1cOPDJ
-	 JVWPr+5U1cCWXH7JZLNLuw6LIniNLJjBlOsWGFoUuX509LXcHS171JvOq3OI0XZdzl
-	 LunG0qv1BvmJdwX0CwHelZ1AyX7OIbfWP7MPmcGx3QCjMk5muuVGDmGwacbwln9nKf
-	 jy0VDq+x3luNCGjTTmSN9sAawrM2i6m8WD20wNmYNdayjbh8BOX06WKDsNEVhjaSLy
-	 dkR24AyQEreCpih1E7EgXWwlv7Br+pCzec75In/g6HDtSTpDdCexQ2rD9f+vXC1RxL
-	 EMstIGmLe0Sww==
+	b=R5TrspfuZHpohCAvzctDW3zJMwVhe45RuelDh4lcUCeY8Y8SpQbP30jxQgoijkGkv
+	 PQSoqATWOhcFog5V0AakmnUVsxDFjTHKlzKwVJoDwrn0GkGlOVRNd+l7q2F1oRQEV3
+	 xTlasXYyi7Gqku1LLdbPkr/Quv6XHx5fVaIh+EmCjHbN60RUFBgn34nSgg/Ny9dZyr
+	 FAY2LlFCEad15prhKxsWNXEWq6FnZqozvG87df8qWugYfYJmJhJ/uPJpodupUkTYmo
+	 rZNwSAq/LwyDt0unWXhanbgD0w3H5yP+2WCZGiDkv398GVOwNC7b6zC8Yyqlxs+O+i
+	 B9pZ/kjuCVv6Q==
 From: Konrad Dybcio <konradybcio@kernel.org>
-Date: Wed, 23 Sep 2026 12:14:13 +0200
-Subject: [PATCH v3 1/3] dt-bindings: embedded-controller: Add ASUS Zenbook
- A16 EC
+Date: Wed, 23 Sep 2026 12:14:15 +0200
+Subject: [PATCH v3 3/3] arm64: dts: qcom: glymur-zenbook-a16: Add Embedded
+ Controller
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -38,7 +38,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260923-topic-asus_ec-v3-1-2bf3bb9da879@oss.qualcomm.com>
+Message-Id: <20260923-topic-asus_ec-v3-3-2bf3bb9da879@oss.qualcomm.com>
 References: <20260923-topic-asus_ec-v3-0-2bf3bb9da879@oss.qualcomm.com>
 In-Reply-To: <20260923-topic-asus_ec-v3-0-2bf3bb9da879@oss.qualcomm.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -51,105 +51,59 @@ To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
  linux-arm-msm@vger.kernel.org, 
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
+ Abel Vesa <abel.vesa@oss.qualcomm.com>
 X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1790158456; l=2660;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790158456; l=1353;
  i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
- bh=L+8Ieu/vm8qRqfna3o9GyZSa+EbA82FtLSEHNV5okJ8=;
- b=g3ayYY323U9kcTRltDVs/m1J3f7e5G99j2GiqoOaoFL99+kNwpXRJPBLUJTEcj5mQMln5SAmL
- JU7nYH+Ixw8CGMDhAp+eK7Kuv1iIUCuiDaSAOjcyNOaSTy5XdFOsU/b
+ bh=nLdf2OOt7FPP8Nr17CHbfj2mxUwBBufE3w9vuYqYo80=;
+ b=AMVYQxbqKElaBrEzri+din2Lz0e8pTAWLl9k0LNnlsJqL0SUp1jUFQqubszdc+a8Oz/MnRoEg
+ S1G7Wqvc9iuBBsbdgW16B+PoFvqqqa7xIzwqt5dUVpUu1MVWdB49IeG
 X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
 From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-Some Qualcomm Snapdragon X2 Elite (Extreme)-based ASUS laptops (at
-least the Zenbook A14 and A16) expose a custom, somewhat
-Qualcomm reference-derived EC interface. It allows for fan speed
-reporting, keyboard backlight setting and receiving of a number of
-miscellaneous sideband events.
+The Glymur-based Zenbook A16 features an Embedded Controller running
+custom ASUS firmware (which is loosely based on the reference Qualcomm
+Hamoa EC one with a lot of modifications). It provides keyboard
+backlight control, additional temperature sensor readouts, fan speed
+monitoring and a number of miscellaneous functions.
 
-Introduce a binding for that class of devices.
+Describe it.
 
-Two separate compatibles are maintained since the two laptops' ECs seem
-to be generally alike, however assuming full compatibility with the
-limited available information does not spark confidence.
-
+Reviewed-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 ---
- .../asus,zenbook-a16-ux3607oa-ec.yaml              | 64 ++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
+ .../boot/dts/qcom/glymur-asus-zenbook-a16-ux3607oa.dts    | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/embedded-controller/asus,zenbook-a16-ux3607oa-ec.yaml b/Documentation/devicetree/bindings/embedded-controller/asus,zenbook-a16-ux3607oa-ec.yaml
-new file mode 100644
-index 000000000000..c0bfad5d21c0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/embedded-controller/asus,zenbook-a16-ux3607oa-ec.yaml
-@@ -0,0 +1,64 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/embedded-controller/asus,zenbook-a16-ux3607oa-ec.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/arm64/boot/dts/qcom/glymur-asus-zenbook-a16-ux3607oa.dts b/arch/arm64/boot/dts/qcom/glymur-asus-zenbook-a16-ux3607oa.dts
+index 40433dc2d6cf..d3356fcd25f0 100644
+--- a/arch/arm64/boot/dts/qcom/glymur-asus-zenbook-a16-ux3607oa.dts
++++ b/arch/arm64/boot/dts/qcom/glymur-asus-zenbook-a16-ux3607oa.dts
+@@ -670,8 +670,19 @@ &i2c9 {
+ 
+ 	status = "okay";
+ 
+-	/* EC subdevice @ 0x5b */
+-	/* EC @ 0x76 */
++	embedded-controller@76 {
++		compatible = "asus,zenbook-a16-ux3607oa-ec";
++		reg = <0x76>;
 +
-+title: ASUS Zenbook A16 (UX3607OA)-class Embedded Controller
++		interrupts-extended = <&tlmm 66 IRQ_TYPE_EDGE_FALLING>;
 +
-+maintainers:
-+  - Konrad Dybcio <konradybcio@kernel.org>
++		pinctrl-0 = <&ec_int_n_default>;
++		pinctrl-names = "default";
 +
-+description:
-+  The Qualcomm Snapdragon X2 series-based ASUS Zenbook A16 (and similar
-+  machines) come with a custom EC firmware, loosely based on the
-+  Qualcomm reference ("Hamoa CRD EC") implementation, with a lot of
-+  customization.
++		#thermal-sensor-cells = <1>;
 +
-+properties:
-+  compatible:
-+    enum:
-+      - asus,zenbook-a14-ux3407na-ec
-+      - asus,zenbook-a16-ux3607oa-ec
-+
-+  reg:
-+    const: 0x76
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  "#thermal-sensor-cells":
-+    const: 1
-+
-+  wakeup-source: true
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - '#thermal-sensor-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        embedded-controller@76 {
-+            compatible = "asus,zenbook-a16-ux3607oa-ec";
-+            reg = <0x76>;
-+
-+            interrupts-extended = <&tlmm 66 IRQ_TYPE_EDGE_FALLING>;
-+
-+            pinctrl-0 = <&ec_int_n_default>;
-+            pinctrl-names = "default";
-+
-+            #thermal-sensor-cells = <1>;
-+
-+            wakeup-source;
-+        };
-+    };
-+...
++		wakeup-source;
++	};
+ };
+ 
+ &i2c10 {
 
 -- 
 2.55.0
