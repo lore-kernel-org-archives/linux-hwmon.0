@@ -1,122 +1,68 @@
-Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACFA73EC81B
-	for <linux-hwmon@vger.kernel.org>; Wed, 23 Sep 2026 17:26:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF7503EC83E
+	for <linux-hwmon@vger.kernel.org>; Wed, 23 Sep 2026 17:31:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790184363; cv=none; b=UhwI67bPaZWfknpAr6xUNrxobfHIlBvPDdkAqd2kusU5oIDBDVbIVMLlLhsU1w7DCsB9CkK3q8iaevuEcF/A/8V51NEeIYl5/2KnPawj3OF4qjv4A+pvnAVlwFGTp/c/TzDOMs9ol9twNBof7kN7IxOhegMyNy2ikLE/IZ1gjFo=
+	t=1790184712; cv=none; b=m964YUzMEUeZuaHgklD4YHHvSOJgryVq8np2h1nTiQMuGNTNmbHvdDZev6TTu03fnDm2NF57Go0ClhZQ/3A10Ka8IqHHOfkSWgSvDV2WyQfpsKCThfKbPm0MTWVB6dnDi5oCtWLlS/d/FTnRpy0+MeEirQUUaf2FFcMjixVTOUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790184363; c=relaxed/simple;
-	bh=3KsAEjFLqBZmEEPAhvTPCECnRvZP15T6L/+sh2LbO88=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kJKlTdsmzZFUHbjz+97CApdf6OY6sg+eUTlC3fXMQcCbLPWpKz8hw4MPDXPTxgVYBb+aDh3AO63U3HCyLAsXTHJY44qieTRm9TcZ7N8RYds6uuaF9Ph0RFiV7FWWBI5tuWtvezwCqIgYL0fQpC7aOUXIYLYWgu5oj0gRMtmEPn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FHNuEN/a; arc=none smtp.client-ip=74.125.228.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790184712; c=relaxed/simple;
+	bh=QrYvaBkclCaBb22MsRHrV+Rrtk/cJgYRHBUgfxSsYQI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=pOI201/+KI2bt3j099WtbdpMJRtdbIO+FbLenYkAetStVStarytssAHwQvjf90VKBC57S1Bp5+fhJA3MVbwTmO8jo12dIj0AZWANv4feiJCzbgk9WK6v19G1BTxLIL6aen01KyQnMnBJaWmn83JyELlp5HsqvxL85sQmYhIuxQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X0edgz0J; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FHNuEN/a"
-Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-85469b2e1d5so720311b3a.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 23 Sep 2026 10:26:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790184361; x=1790789161; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=O22RbiDeWdUAyKALr8GFPofw9Urxk2fBLIPun4++/1o=;
-        b=FHNuEN/aiRd9eoMRjYQqA9kN55PjuUYx2Brp/HnLItOyvSlvzZaG24K9S0wp/t7crO
-         hgmmjWBA0uYJ+8DhMAm5gHQMEUV34HIUev9MrVZC1MMii7h28Ak7+u1JF/0fFsOg9MxU
-         Y5WT8H6tmIXMIVcDSlBGl7mUL8GHmwVcFj1qYpdjf9SiHhY9nZ89dOrY9fsa2sbXaS8d
-         JMRK4WdFgIWkIDLkaS+1ua3gTtxlSS/7w3cSdKWTM6UoS3N8XyR0cOyfkvkWXsMUlsWI
-         bphs3M/dYCZul6ASGQ/Z81kc4BDG++PhAVY6GB/189bWfnr5MMPpzwiAdT1T8f/kUGRI
-         L2UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790184361; x=1790789161;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=O22RbiDeWdUAyKALr8GFPofw9Urxk2fBLIPun4++/1o=;
-        b=zbp0QLUOHi1XmmSe/6XqEg9NhxRuai+ppCPXV+iuFFZwUEQzvTcYg1+sk02eSIY0vI
-         4ek3OsOgLd1RyT8IPSlmJ2eO88nTRNhgIA+tmTA+l26vpBOOUaOXC00EC4U3dB9Shwf7
-         HBelZvaKgySNnwqSGo3xysB8OjbtD+CUuPOLUhnz5aguoxe2IPwuKvVaqJ6lrj8eAGhT
-         JsfrR1n2k4DCQavHrO1hOa/ofb4ytugf0hmU9iKqtUzRajA/a4/9iM49TMDTWuvvdOwd
-         NfRIOutEzc+a8uSgVfguPavddUZymawuAAV/p6PuLJdoFpgj88/qox2FE7qm4r03K6nO
-         bp/Q==
-X-Gm-Message-State: AFuF++nP8mzM0Nnyw5zEAl65qsDJ7ZHw9/ykrjHmuRycvMhzWi+11JKs
-	KjIIA0Ly2k+4Fg8piXoW+ikBLM2bHM4qBwCoJqTbxW5a8csm3v/eCMm8
-X-Gm-Gg: AYBFou3visewXrcM54AJtSq0GAkbo088t2nbrg/Z7tMgjlfzueVeO+ih6cozpxCVxbP
-	BTFhBP0uDh6V+2vqeM5sxNSnbGf36Y7XuJQO15tkQhRVWPTDGVdU/ZXwTOpAg9AavmXqKKGqZZU
-	Z5uuSfALiaG6za8KMImrq+vU3kB8Kh4aKCCoA7aA2/Edr+hlb9rdUJWjYFV/NmfBXOLiBGT4Szh
-	bwTahkgvD3XVqFMhySBQqP2rCAi2lcHMVmyELBEmwS0c190KmInoUzfmFm9aYw4i6ARDnBzqDuU
-	abU764kJOtSyx+l9t/x4gPP7G2gAoFTx41K+DfSFf80E76YxMgPcMA0+2F0WsfSO1678Pn6JXux
-	YriyA725WtpjzjYLG96fgh0l6KDC03vQtnMB86Xojy/by6BvC7vCONH8rwCPa3MzFzcTcBML9TH
-	EGxZEIz0bwszlg3/hgDNllRXEZrkNor5SYYqCs0bIm3jCyfPV8hJellAVuPLI3kYPkyozRUZ87q
-	u+/wG6iobvb1XSs7T/rhYNDUEW4fj4=
-X-Received: by 2002:a05:6a00:14d6:b0:86b:4138:4084 with SMTP id d2e1a72fcca58-87d19376b36mr3446218b3a.15.1790184360521;
-        Wed, 23 Sep 2026 10:26:00 -0700 (PDT)
-Received: from cfarm424.jing.rocks (cfarm424.jing.rocks. [2600:3c18:e002:2e11::c424])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87d1e601b5dsm1685893b3a.61.2026.09.23.10.25.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 10:25:59 -0700 (PDT)
-From: Ridham Khurana <khurana.ridham222@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	Jori Koolstra <jkoolstra@xs4all.nl>,
-	Brigham Campbell <me@brighamcampbell.com>,
-	linux-kernel-mentees@lists.linux.dev,
-	Ridham Khurana <khurana.ridham222@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] hwmon: (lm95245) Fix negative temperature conversion
-Date: Wed, 23 Sep 2026 17:25:48 +0000
-Message-ID: <20260923172551.1593798-1-khurana.ridham222@gmail.com>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X0edgz0J"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12E7E1F00893;
+	Wed, 23 Sep 2026 17:31:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790184710;
+	bh=QrYvaBkclCaBb22MsRHrV+Rrtk/cJgYRHBUgfxSsYQI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=X0edgz0JrbFPz/eTBT1lufcWL/cRybAoh6OGaaEqhLIoo6PLtvpECYNOeEDyTkpaz
+	 JxMB8Lb6gVHKNw2UwVtE/LT7S7oJPNAsWMCj1OSWGI0IU0fsK2rdgV3Y4Dtb6/oRKZ
+	 R9nIW2Fivxl/Nu+qMdMwMnth0+fo3w4MeN/oKTAG02q4aoNIhZQCCpd6QGDZCS3D2I
+	 qI+iG+6Bt2oV1TxThJ/pWG1nUpoXR3y5IG0etxP8cEQ+U5CrwnNz8L2ovrJ2/D7/n0
+	 QRZsf0JWJyfp8CkJDZeorlKgnkmz/y5u00U3JsvcU2pEBY4dC19pymmCShhrEuwmep
+	 f1bvIphTPKVcg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (lm95245) Fix negative temperature conversion
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ridham Khurana" <khurana.ridham222@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260923172551.1593798-1-khurana.ridham222@gmail.com>
+References: <20260923172551.1593798-1-khurana.ridham222@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 23 Sep 2026 17:31:49 +0000
+Message-Id: <20260923173150.12E7E1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-temp_from_reg_signed() uses only the high byte when the sign bit is set
-and drops the fractional bits in the low byte. Writing -500 to
-temp2_offset stores 0xff80 (-0.5 degrees C) in the offset registers,
-but reading temp2_offset back returns -1000.
+> temp_from_reg_signed() uses only the high byte when the sign bit is set
+> and drops the fractional bits in the low byte. Writing -500 to
+> temp2_offset stores 0xff80 (-0.5 degrees C) in the offset registers,
+> but reading temp2_offset back returns -1000.
+>=20
+> Negative temp1_input and temp2_input values are rounded down to the
+> next whole degree the same way. The chip reports -0.125 degrees C as
+> 0xffe0, which the driver returns as -1000.
+>=20
+> Treat the register pair as a single 16-bit two's complement value.
+> lm95241 had the same conversion fixed in commit 0c2a40e2fe4f
+> ("hwmon: (lm95241) Fix negative temperature results").
+>=20
+> Fixes: fffd80ccc1e6 ("hwmon: LM95245 driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Ridham Khurana <khurana.ridham222@gmail.com>
 
-Negative temp1_input and temp2_input values are rounded down to the
-next whole degree the same way. The chip reports -0.125 degrees C as
-0xffe0, which the driver returns as -1000.
+Sashiko has reviewed this patch and found no issues. It looks great!
 
-Treat the register pair as a single 16-bit two's complement value.
-lm95241 had the same conversion fixed in commit 0c2a40e2fe4f
-("hwmon: (lm95241) Fix negative temperature results").
-
-Fixes: fffd80ccc1e6 ("hwmon: LM95245 driver")
-Cc: stable@vger.kernel.org
-Signed-off-by: Ridham Khurana <khurana.ridham222@gmail.com>
----
-Build-tested on arm64 with CONFIG_SENSORS_LM95245=m, tested with i2c-stub in QEMU. Not tested on hardware.
-
- drivers/hwmon/lm95245.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/hwmon/lm95245.c b/drivers/hwmon/lm95245.c
-index 11553391f54b..925574b8b0ca 100644
---- a/drivers/hwmon/lm95245.c
-+++ b/drivers/hwmon/lm95245.c
-@@ -96,9 +96,9 @@ static int temp_from_reg_unsigned(u8 val_h, u8 val_l)
- 
- static int temp_from_reg_signed(u8 val_h, u8 val_l)
- {
--	if (val_h & 0x80)
--		return (val_h - 0x100) * 1000;
--	return temp_from_reg_unsigned(val_h, val_l);
-+	s16 val_hl = (val_h << 8) | val_l;
-+
-+	return val_hl * 1000 / 256;
- }
- 
- static int lm95245_read_conversion_rate(struct lm95245_data *data)
--- 
-2.47.3
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260923172551.1593=
+798-1-khurana.ridham222@gmail.com?part=3D1
 
