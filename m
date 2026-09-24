@@ -1,154 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D988A3E3D92;
-	Thu, 24 Sep 2026 08:54:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C0040A926
+	for <linux-hwmon@vger.kernel.org>; Thu, 24 Sep 2026 09:46:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790240051; cv=none; b=UgUCgn30SsuL5fDg9bcWzN6/3eS8alxBAjBVcHe7qDCopeDM17d1NR6grZb6VS4TXI1RPPEdUT4JY37IzX+AeX/kRj3lwMYUdG/tuBOfv+s43aGkH+3fBEVUZq1OE1t4558wGNWiQn7w3XLcZEGmWT6c96CqmDa+ZEs4mmA74rE=
+	t=1790243180; cv=none; b=jJjuogUmhYcE2ehmJR/Pm6ZCSMxSHDuF459ZaoIp29CxqD5yZFiRi46e8GjQieQ+ZrirBl6whJpjEHm15zNxYTMsyeJILhcSWlmadlJEiRy3cnvJvx+oFw1mVQTe/clNIhwXa83Lex4PxMSRsy1uCeYOVsxNYKGuHnu0nq3swOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790240051; c=relaxed/simple;
-	bh=Cx1crZg02Bxn5Uwa0Ku/dIN3DwHrqo6qGUKSE4jIjt0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gW/qaOBOaYxAxPHN4xYyYHVummlnYEmW8HjEfGivQpt16RGqYHVYlHXDcCZNnzuaW26V9sEammhx7Qb220cpVztEXehuydSxEe6+N4+IXhWRP2TrITAcXwG+fvMn8wedngfuj4MK0X9tV01gCZx9ZCr9f5XWk9mcUjSMQ9N3D7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZErrGoMK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790243180; c=relaxed/simple;
+	bh=Lgdov1EQlo0fPsheuchJYvzfLXqpNsd19w5kuF3sCGk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=CYufe3leSkx+zxaWO7vw90iGB3IC6qaFpmHJ7RoJLtv8iSz3xIvT0bQ6hEoEm5Z9xVDqulFRxHCZuxRhDuvbkj4cIW+OpHYL20mgpelfsTQ/nMTQHrM44iA6AVJmoHA3XLKv3y12+HhxIW9xmpNeoElsDt5pbEeIwogVN5u/QWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KjCHOzk7; arc=none smtp.client-ip=74.125.225.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZErrGoMK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 141B71F00893;
-	Thu, 24 Sep 2026 08:54:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790240049;
-	bh=krr2x0udYkPFmKkFm24MumfKmR0EC0aV0NUPyy6RiiE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZErrGoMK4gjJtUpHXYQ8VjfztrLp/wmbwFH9Z16vABjVklbffIzGt5HVtriBCSalP
-	 InmEiywRqHIPYVtouVNl7rWQk6C6p57ZDspZ+hUp8JypSdVpjSEjWH5NfMzyocfEzZ
-	 bsRNZrhHZju7iVRKW7+6xo3PyN4KpJfDMUkxoS6N4jwiKCLDFhjEFcLp18PZPsNqRb
-	 cOG2t7bQbVu/liWrJWQrgtYff98lEzBtxj/aBYPH8x+AuM57gwff0QuyE5zq+WB490
-	 4VrHPkapYj0xvFI08kqtbfbS/HywkjxKoMrHuWXAbcQqOK9PmTWiOuPoTn909Zkw8/
-	 k3La74MKoFJxQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 3/3] hwmon: (lm75) add MAX31875 support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "John Erasmus Mari Geronimo" <johnerasmusmari.geronimo@analog.com>
-Cc: robh@kernel.org, devicetree@vger.kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20260924084121.82-4-johnerasmusmari.geronimo@analog.com>
-References: <20260924084121.82-1-johnerasmusmari.geronimo@analog.com>
- <20260924084121.82-4-johnerasmusmari.geronimo@analog.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 24 Sep 2026 08:54:08 +0000
-Message-Id: <20260924085409.141B71F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KjCHOzk7"
+Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49cd38e0f79so10254395e9.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 24 Sep 2026 02:46:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790243159; x=1790847959; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=fQw0LiOPF1WW9oddWAzXJ82cJDcoK6v63Klwt0PVxSU=;
+        b=KjCHOzk7puFfCZeijXVGM4aYpHLyWB41ldo15TXu6Rmzam08nOhFM60pxNhrqG6X+n
+         UdLY+xu94h0rEdjww1Hj4lKiHXddLnb3c3MY3JWAYPu2HxYq2/sJEtfbD90DRzUc26B+
+         FDO7Bvvp19tX3oKiEr8yvzQU65a0U8P7IDMTV6u98yukAxkIk/8JErzGAmNyZ6Oh54TA
+         AmLdDLntiz6qdE9KNZQ+04jaq+cxuK94TOCHSHnAVSn1m9e1kuzIBFDFKp3fIMIWY/wN
+         C0ZaqTLr2iag7WmXeP0sieJjiFHRgUdbToB+A7XGGyr4TREyidc5MUdRyYrTK6Ps+twH
+         h3Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790243159; x=1790847959;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=fQw0LiOPF1WW9oddWAzXJ82cJDcoK6v63Klwt0PVxSU=;
+        b=1Gh6YYTNFV+ZcnVMe2zKQ/rPVzd0QHZTxvInTuSECtCaZKdUQujU3b968W93TtI4rT
+         RcVRUb17gZlAlXusQTIMeUzjipIIBwUvyHLsfCG/QqtcbeDyG8RH2iESVIWBmkIKcTfJ
+         5tMRRDk5DGYf2VttPAaC+aG3OADgzgGgo3l0nHjmmW+C8bV+9JjnijwC9CHZ5Mdiwfaz
+         qq/IgtacGfxNqNBpSitWaygGUOEcQdzgQTpLXUA2uxB6cUbPEL157EhZZBoehp3Uz7Fm
+         ffARrjIjGn2I3X2zeukooTxSC5GNVA82fWs/JNKeIMG6U1sNmDT95odeuCROSu78ev7t
+         kPIQ==
+X-Gm-Message-State: AFuF++kzjlLwU9p3N5Du4olkit+Joeb1gC+jMV4yyMhySt+pA2lgY3b8
+	8ahbkzlPoP9y9I6pwh9rjE2SHSp2sPik31fHhHcgBsn9kfkBmsp9FyRW
+X-Gm-Gg: AYBFou26ir1JOgSSAUjaAPxPJbJCMmIYg4hxr92dU5lOsiyp9HhzGDDHQ5rE8DkNLOW
+	iAKY8biHZVzOb9u5QH5Q9eB9XOjSmQIBUYqYHkj+Mudsre7B1l91NUqJInqUIo4sWgvM5a3Dbk/
+	rSzSj9puWMKfL0zoMjavgVfySNmLHXXfOAZdTdC3SMzC/fgnlqVgxnXqcROp8dXXZvTcOFr+a9C
+	2pdDp+ipn5DQFut7sSJHJVbom+R4f/Hpy1CHVD92EmzRbZHa1GSmCA4+81lgW8YOW+w3Q9fGYvv
+	hld5qEAkcXCCcEK+VcUg2I3HhenSxZpEk/WX5wQM/dLbI5Z4OsNQXJpsQgjF5zDl0WG0I4ohy2b
+	9eOzQhyi++muTHZ8nU6EJnSMgJOCnK/tVH7rVf78eSEapNWIreBop4AymZbeanJyw9TKcors8BY
+	Oez+rN3S5Cbd8SpCSNRODv7+PjXJr/9d7ioUjgsCYtFs7HXtKZE0n0hRWivMPhfvP3ptT2HpdO
+X-Received: by 2002:a05:600c:3b01:b0:49f:ce78:3570 with SMTP id 5b1f17b1804b1-49fe670bb82mr28973465e9.33.1790243159120;
+        Thu, 24 Sep 2026 02:45:59 -0700 (PDT)
+Received: from fedora ([213.55.237.122])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4886876c500sm13947104f8f.19.2026.09.24.02.45.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Sep 2026 02:45:58 -0700 (PDT)
+From: Michal Szpakowski <michi.szpakowski@gmail.com>
+To: Lukas Wunner <lukas@wunner.de>,
+	Jordan Brough <jordan@brough.org>
+Cc: linux-hwmon@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>,
+	Henrik Rydberg <rydberg@bitmath.org>,
+	linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (applesmc) Expose the SMC battery charge limit
+Date: Thu, 24 Sep 2026 11:45:44 +0200
+Message-ID: <20260924094544.324119-1-michi.szpakowski@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <arTYEAnYYyDFsmc4@wunner.de>
+References: <arTYEAnYYyDFsmc4@wunner.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] hwmon: lm75: incorrect bitmasks due to 16-bit byte-swap for MAX318=
-75
-- [High] hwmon: lm75: missing resolution state and hardware update for MAX3=
-1875
---
+On Thu, Sep 24, 2026 at 09:58:10AM +0200, Lukas Wunner wrote:
+> Jordan Brough is working on similar patches, perhaps you two can
+> work together to make sure there's no breakage on either of your
+> laptops an no conflict between your patches:
+>
+> https://lore.kernel.org/r/20260918175052.85461-1-jordan@brough.org
 
-commit db9c8895125f3a1241021e25bc19bc84126cb9c6
-Author: John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>
+Thanks, I had missed that series. Jordan's approach is the better one:
+extending the battery hooks to SBS batteries is the proper fix for the
+problem I worked around by walking the supplies, and the BFCL/LED
+handling covers hardware I do not have. Please consider my patch
+withdrawn in favour of his; I am happy to test v3 and add a Tested-by.
 
-hwmon: (lm75) add MAX31875 support
+Two things from a MacBookPro13,1 (2016, 13", USB-C, no MagSafe) that
+may be useful for it, Jordan:
 
-Add support for the Maxim MAX31875 I2C temperature sensor by extending
-the lm75 driver. The MAX31875 features a 16-bit configuration register,
-configurable resolution (8, 9, 10, or 12 bits), and selectable conversion
-rates (125ms, 250ms, 1s, 4s).
+1. This SMC has no BFCL key at all. A dump of all 798 keys has BCLM
+   but no BFCL (the BF* keys here are BFCT, BFLO and BFWC), and asking
+   the driver directly, through a debug attribute that calls
+   applesmc_get_entry_by_key():
 
-> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-> index 104149a03bad0..886f83c8b0420 100644
-> --- a/drivers/hwmon/lm75.c
-> +++ b/drivers/hwmon/lm75.c
+     BFCL (no such key)
+     BCLM type=ui8  len=1 flags=0xd0 R W
 
-[ ... ]
+   With v2's set_property, the unconditional applesmc_write_key(BFCL)
+   after the BCLM write therefore fails with -EINVAL, so userspace gets
+   an error although the limit was in fact applied. Gating the LED
+   write on applesmc_has_key(BFCL) at init, like the BCLM check, would
+   fix that.
 
-> @@ -223,6 +224,15 @@ static const struct lm75_params device_params[] =3D {
->  		.default_resolution =3D 16,
->  		.default_sample_time =3D MSEC_PER_SEC / 20,
->  	},
-> +	[max31875] =3D {
-> +		.config_reg_16bits =3D true,
-> +		.default_resolution =3D 10,
-> +		.resolutions =3D (u8 []) {8, 9, 10, 12 },
+2. The SMC silently drops writes it does not like: applesmc_write_key()
+   returns 0 and the key keeps its old value (seen on this machine with
+   the CLWK key; BCLM accepted everything I tried between 50 and 100).
+   Reading BCLM back after the write and returning -EINVAL on a
+   mismatch costs one read and makes the failure visible.
 
-[Severity: High]
-Does the custom switch block for max31875 in lm75_update_interval() bypass
-updating data->resolution, rendering this .resolutions mapping dead code?
+For what it is worth, BCLM=80 on this machine stops charging at 79% of
+charge_full with status "Full", the value survives reboots, and UPower
+1.91 picks the property up as charge-end-threshold once it re-reads the
+battery.
 
-Without updating data->resolution or the hardware resolution bits, the soft=
-ware
-would truncate or misinterpret temperature data (since it remains stuck at =
-10
-bits), and the hardware would be prevented from achieving higher sample rat=
-es.
-
-> +		.default_sample_time =3D 4000,
-> +		.num_sample_times =3D 4,
-> +		.sample_times =3D (unsigned int []){ 125, 250, 1000, 4000 },
-> +		.alarm =3D true,
-> +	},
-
-[ ... ]
-
-> @@ -421,6 +431,9 @@ static int lm75_read(struct device *dev, enum hwmon_s=
-ensor_types type,
->  			case tmp112:
->  				*val =3D !!(regval & BIT(13)) =3D=3D !!(regval & BIT(2));
->  				break;
-> +			case max31875:
-> +				*val =3D (regval >> 7) & 0x1;
-
-[Severity: High]
-Does this correctly extract the alarm bit? The SMBus word read returns
-byte-swapped data (MSB in the lower byte, LSB in the upper byte).
-
-Because of the swap, hardware bit D7 (alarm) maps to val bit 15. Shifting
-regval by 7 incorrectly extracts D15 of the hardware register instead of D7,
-returning garbage state when reading temp1_alarm via sysfs.
-
-> +				break;
->  			default:
->  				return -EINVAL;
->  			}
-
-[ ... ]
-
-> @@ -495,6 +508,13 @@ static int lm75_update_interval(struct device *dev, =
-long val)
->  			return err;
->  		data->sample_time =3D data->params->sample_times[index];
->  		break;
-> +	case max31875:
-> +		err =3D regmap_update_bits(data->regmap, LM75_REG_CONF,
-> +					 0x0600, (3 - index) << 9);
-
-[Severity: High]
-Does the conversion rate mask 0x0600 apply directly to the byte-swapped reg=
-val?
-
-With the swapped value, hardware bits D10/D9 map to bits 2/1 (mask 0x0006).
-Using 0x0600 mistakenly clobbers the alarm polarity bit (D2) and fails to s=
-et
-the conversion rate.
-
-Also, as mentioned above, this block bypasses the default resolution update
-logic (data->resolution =3D data->params->resolutions[index]) and never upd=
-ates
-the hardware resolution bits, silently breaking the configured resolution
-mapping.
-
-> +		if (err < 0)
-> +			return err;
-> +		data->sample_time =3D data->params->sample_times[index];
-> +		break;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260924084121.82-1=
--johnerasmusmari.geronimo@analog.com?part=3D3
+Michal
