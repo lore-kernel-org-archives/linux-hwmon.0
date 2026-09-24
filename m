@@ -1,115 +1,228 @@
-Received: from mail-pj2-f41.google.com (mail-pj2-f41.google.com [74.125.227.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24D941F37F
-	for <linux-hwmon@vger.kernel.org>; Thu, 24 Sep 2026 23:24:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.169
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFEE8473C8C;
+	Thu, 24 Sep 2026 23:27:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790292261; cv=none; b=VJLUgE/BRbk/cxQSVHvf7mcd/6aiP2MbDm5KDbKBAQZgdfCuxzkGgGMIDIIq/7Xgb0xdhUNzAvaJKvfbyUq1mafESXJr3LDHPZdbQt8WcVzAH1nU1Lc74HiOXp3uGQ352uaJq0ccGs9fnQMOwj+a6bCqCF0TXiabI/dUlO5K6DY=
+	t=1790292459; cv=none; b=OPPWeUk25KjsMkD+QHBFrIde+bzifYXxQhvDSMGThHxJMKt0CkQ/jvvp0MfIXvUYJEWKrrEnE5tw3Uu/n+W6R7/BimpTm3iA1pz/YlrjH9dc7Fr0fhNurWUno52MdryfhfZ5gQojCze2uHbvL3uaIHo2waK+puXjGnpbLKY8dBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790292261; c=relaxed/simple;
-	bh=ANWbgstbKgAnuoPyayvM9wa2364fXfZxo85nyhIjrUk=;
+	s=arc-20240116; t=1790292459; c=relaxed/simple;
+	bh=b3diYIyUxGsc2Fn2erUGeQZjsoSz+2Xj1Vx0ni3W6DY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jdQWFuOuZ2519M0eTNJtjluJndvHeE9nFI9O21uhcGiib8G6ITozR/Np0EruJGhcJFzT1R3mg7ym3/iwvAwAPxGwhpDSlEnSzCNOb64ai60p0SupUwrpJIv/7dedZ+0FBVtbP5IdGnEjZcV4NRTUqqjnUEhvzmEz9rQoCbEVkRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nSYkqYc0; arc=none smtp.client-ip=74.125.227.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=oN1bY9Y1bFGM5Z/ImOvOWVUorhtAqw34y8gFU2vSB/INgd1A4Pa4y1iWAEPJ/WF0+3EepTPQxzVn7Uk9HVGT32EO1C//0zfsHfcYHWY/MmnJ8k7cdWzQC6cvbTVxlbMLtROsXi8OPlMXf3yf+leuzM0XacIw6epgtRCQBocIiD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=sKbbtKfJ; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nSYkqYc0"
-Received: by mail-pj2-f41.google.com with SMTP id 98e67ed59e1d1-3a0b6200eb0so194811a91.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 24 Sep 2026 16:24:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790292259; x=1790897059; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=gLPcQvE2dfwkDZEgsOlXfyVstlU3w3zVvbEySQw3EHk=;
-        b=nSYkqYc0mM990bxq/cixK0rAoB5xPPgPRavZoNjMnxCRi+PI3auOs3sSuIqGX6m1pr
-         8zMwyILbxRkibS3csuHIE1JrvSy2AGovkNiVd4QIMuJkdh8HW+A9UIUAv0RMovSJWsx1
-         ouA0wj0LblSkBa/8s7NxuiIkKFCW2QsQ1NabKqoFYcb2iMQ4kFbJhHPw1Bz9TuYozAeN
-         b5kGdXEfs2RW7JlClqEAI7SSppU5dURhFDRvHuEHbppry2QOEvu0xWuQoajvcoeDg7PC
-         AHCaqfZj/X+yMY0Q7NmYTH91vW0Qp2iW08b+zgCsceQ32LJxkCRySxZpi22jkUWzSv6j
-         i3hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790292259; x=1790897059;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gLPcQvE2dfwkDZEgsOlXfyVstlU3w3zVvbEySQw3EHk=;
-        b=0I+IVwHnfgOnFumxPAWbO3nsmPw870RN0oOK92OeiLp1OkYjcn2Hm93HpB9yIzDfCt
-         ZiRK0rrSQuuhtceGBiXE2QMMWw3IYYVyn4xNnWKUVI5b8WaLXwqOXHRqhYhUPdWM2XGV
-         m09b2LmbZlfriQJVeBaGDvfCWTJcPAPDomTfGYgzJx6Xrn/E8pO/Q6iYTsPPjg2ulyGY
-         brR2wqAAIZBHEGI+N2N4KHYJ7t1LPwEhIgApSt2+V94FPKRxGtVirw7BKwc1RWtP/HRB
-         AFIry8EL5ay1ljSOkBeVjyKVHYJVTdXBFKAxaofHgQudJGNEK3MHOvRg58zfDhyTnOnG
-         sZcQ==
-X-Gm-Message-State: AFuF++n4nxWOsQB5DrG+5fppVU9QpM2X/jXTSPUVNtx/wbxyQBrv2xDi
-	nCeMJGrlzz5XPH/Dc7zJX2JJRdVyMkjrjhdWuUTpfJ4bSrqsUEaHgUHZ
-X-Gm-Gg: AYBFou1BzQuQwqKOcCqq0JHynI3kCADBpL7Yb0ix+AF+08cM7F5s42lQ4MmaXY0mxsJ
-	hhXn1Nz5aFqsuYlGtZ7hDBuzwKiWNYGVE+fZBwZqOGt5wY+EdGRVRdYITCW6C9JUCm4z2W0isdp
-	7Ga+SyuMZRItJ4ueSE0CEJiiCRcOmQdbVr1pg8fN60r3SauScDs1RoN0QtT5lYESGgY30dKoS/7
-	/HvnCtSTU0LtAFk8ttSErMX5NBmmAAlAMf+RrFOgpEIrFNnEtjg2gDQL79fkW5Sc82dcVPlg+vb
-	wDgC0mrOwxbP6b4HZ6Zt5PGVn3UOgTmt9z9e43LgP7mFqmGlPOWh0ngWmlwFDvZtfGIK3VNZ4NN
-	vskJLKLG0XHuqRmfd/WdV7QTtuCo41O6+V68Z5J3lSJwdmiOX20aYBFfiSkuimJaM6yu57/orAy
-	h5+lD6DgwgG8ZhiNPFEdqkba+W8Ohr+ELOCR92BVcyb+kzwzXLph3U9LgpQjjaKNJuB+187mIIQ
-	wTohQZU7vMDQYGDsDxyL9Y=
-X-Received: by 2002:a17:90b:4a01:b0:396:65dd:4093 with SMTP id 98e67ed59e1d1-3a0bb552fdemr350944a91.14.1790292258956;
-        Thu, 24 Sep 2026 16:24:18 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0b2235811sm1694959a91.7.2026.09.24.16.24.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 16:24:18 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 24 Sep 2026 16:24:17 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Ridham Khurana <khurana.ridham222@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Christian Lamparter <chunkeey@googlemail.com>,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Nikita Shubin <nikita.shubin@maquefel.me>,
-	Shuah Khan <shuah@kernel.org>, Jori Koolstra <jkoolstra@xs4all.nl>,
-	Brigham Campbell <me@brighamcampbell.com>,
-	linux-kernel-mentees@lists.linux.dev
-Subject: Re: [PATCH] hwmon: (lm70) Fix rounding of negative temperatures
-Message-ID: <0f077b82-5e81-4c43-8008-8baa3f6df9ed@roeck-us.net>
-References: <20260924205326.1739229-1-khurana.ridham222@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="sKbbtKfJ"
+Received: by linux.microsoft.com (Postfix, from userid 1223)
+	id 379CC20B7167; Thu, 24 Sep 2026 16:26:47 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 379CC20B7167
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1790292407;
+	bh=Ol4Gw21epj/8o0vv4nhFU7uulVUuXLQX34MJO4d++BM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sKbbtKfJp0xwhazY6dZN1s6FSAhmDbLW451ldNLBpYkgVf4iN1FJt+VM8Y6mMelVu
+	 fvsVMsJolobwtOFvPAGnLafipE1deJZKFkIlT8Pnl6GDUUFSll4oiWvq3lRm/4wTMv
+	 NoJXAb4LeOHKFCTcZYfWKfAVmO54Y26EjTOYvHgs=
+Date: Thu, 24 Sep 2026 16:26:47 -0700
+From: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Meagan Lloyd <meaganlloyd@linux.microsoft.com>,
+	linux-i3c@lists.infradead.org, alexandre.belloni@bootlin.com,
+	vitor.soares@toradex.com, samagazaryan@google.com,
+	gregkh@linuxfoundation.org, arnd@arndb.de,
+	boris.brezillon@collabora.com,
+	oleksandr.shulzhenko.viktorovych@intel.com,
+	tgopinath@linux.microsoft.com, corbet@lwn.net,
+	skhan@linuxfoundation.org, linux@roeck-us.net, Frank.Li@nxp.com,
+	jorge.marques@analog.com, pgaj@cadence.com,
+	wsa+renesas@sang-engineering.com, tommaso.merciai.xr@bp.renesas.com,
+	nuno.sa@analog.com, Michael.Hennerich@analog.com, jic23@kernel.org,
+	dlechner@baylibre.com, andy@kernel.org, lorenzo@kernel.org,
+	enelsonmoore@gmail.com, rppt@kernel.org, pratyush@kernel.org,
+	giovanni.cabiddu@intel.com, gabewhigham@gmail.com,
+	haren@linux.ibm.com, pasha.tatashin@soleen.com,
+	jirislaby@kernel.org, adrian.ho.yin.ng@altera.com,
+	ustc.gu@gmail.com, jszhang@kernel.org, adrian.hunter@intel.com,
+	akhilrajeev@nvidia.com, tze.yee.ng@altera.com,
+	manikanta.guntupalli@amd.com, shubhrajyoti.datta@amd.com,
+	jarkko.nikula@linux.intel.com, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux@analog.com, linux-iio@vger.kernel.org, andi.shyti@kernel.org
+Subject: Re: [PATCH 3/3] i3c: add i3cdev character device module for
+ user-space access
+Message-ID: <20260924-86692413bdae0e78a12c1425@linux.microsoft.com>
+References: <20260911210935.1353126-1-meaganlloyd@linux.microsoft.com>
+ <20260911210935.1353126-4-meaganlloyd@linux.microsoft.com>
+ <aqVUyYkpKT8iX4Jz@ashevche-desk.local>
+ <20260916-454d66ca84cc91479b195aa5@linux.microsoft.com>
+ <aqt_dCazxTDR4cpk@ashevche-desk.local>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260924205326.1739229-1-khurana.ridham222@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aqt_dCazxTDR4cpk@ashevche-desk.local>
 
-On Thu, Sep 24, 2026 at 08:53:23PM +0000, Ridham Khurana wrote:
-> temp1_input_show() drops the low bits of the temperature register by
-> dividing the raw value (raw / 32 on the LM70). These bits are not part
-> of the temperature: the LM70, LM71, LM74 and TMP122/TMP124 always
-> return some of them as 1, and the TMP125 fills them with copies of the
-> temperature LSB. Division rounds toward zero, so a negative temperature
-> with any of these bits set is reported one LSB too high.
+On Thu, Sep 17, 2026 at 08:49:40AM +0300, Andy Shevchenko wrote:
+> On Wed, Sep 16, 2026 at 03:57:10PM -0700, Meagan Lloyd wrote:
+> > On Sat, Sep 12, 2026 at 04:34:01PM +0300, Andy Shevchenko wrote:
+> > > On Fri, Sep 11, 2026 at 02:09:35PM -0700, Meagan Lloyd wrote:
+> > > > The i3cdev driver is a character device driver that allows user-space
+> > > > to control and interact with I3C devices.
+> > > 
+> > > > Currently, it has the ability to perform Single Data Rate (SDR)
+> > > > transfers - basic reads/writes.
+> > > > 
+> > > > With the addition of sysfs driver_override, there is now a
+> > > > straightforward and direct way to match the i3cdev driver to any i3c
+> > > > device without stepping on the toes of more specialized drivers that are
+> > > > loaded automatically.
+> > > 
+> > > Is it safe? Why on the earth do we need this? The commit message has not enough
+> > > information.
+> > 
+> > I can't see a reason that it'd be unsafe. To give additional confidence,
+> > it's already in-use in many bus_types:
 > 
-> For example, the TMP122 returns 0xffff for -0.0625 degrees C, which the
-> driver reports as 0. The LM70 returns 0xf39f for -25 degrees C, which
-> the driver reports as -24750.
+> This argument has nothing to do with i³c. Each bus is different on a physical
+> layer, electrical protocols and programming flow. Each of them has own
+> constraints.
 > 
-> Use an arithmetic right shift instead, which drops the low bits and
-> rounds down. tmp421 had a similar problem with negative values, fixed
-> by commit 724e8af85854 ("hwmon: (tmp421) fix rounding for negative
-> values").
 
-Please stop providing those "had a similar problem" messages (or tell your
-AI to do it). This is irrelevant for this fix.
+(resending as my previous reply hit a snag and is probably marked as
+spam for most people)
 
+My take is that if you're using the i3cdev module, it's up to the
+programmer to review schematics/datasheets to know how to program
+the hardware devices and bus (in the case of hubs) correctly.
+
+Note, this thread's driver_override approach was not favored by the i3c
+subsystem reviewers, so please continue any further discussion in the
+prevailing approach's thread:
+https://lore.kernel.org/linux-i3c/20260921230603.2518652-1-samagazaryan@google.com/T/#mb42d9b2785f8508d39eaf782b3d29189226b8029
+
+> > To answer why we need it:
+> > If we want to write i3cdev as a standard device driver, it can't
+> > actually match anything by default. This is because, some devices on the
+> > system may need specific drivers and i3cdev is generic and should
+> > technically match every device.
 > 
-> Fixes: e1a8e913f97e ("[PATCH] lm70: New hardware monitoring driver")
-> Fixes: a86e94dc946d ("hwmon: (lm70) Add support for LM71 and LM74")
-> Fixes: cd929672a9ef ("hwmon: (lm70) Add ti,tmp125 support")
-> Signed-off-by: Ridham Khurana <khurana.ridham222@gmail.com>
+> Yes, but I have seen no reason why we should expose i³c bus to the user
+> space. With i²c we already know very well that it was (and still is)
+> a bad idea. Why i³c is better (especially taking into account i²c
+> compatible mode and more complex programming flow)?
+> 
 
-Applied.
+cc'ing Andi Shyti from I2C subsystem for context.
 
-Thanks,
-Guenter
+Andi, we're considering an I3C character device driver interface.
+If you have any feedback from your experience with I2C, can you
+please share it in:
+https://lore.kernel.org/linux-i3c/20260921230603.2518652-1-samagazaryan@google.com/T/#mb42d9b2785f8508d39eaf782b3d29189226b8029
+
+> > Since the driver_override is default NULL and is set via sysfs, this
+> > allows any specific drivers on boot to be loaded up and would allow
+> > explicit control on what device i3cdev gets bound to.
+> > 
+> > This was my rational. I will refine the commit message with more details.
+> 
+> Put a real life example why the exposing i³c devices into user space is
+> absolutely necessary.
+> 
+
+I'm supporting a kernel running on accelerator cards that plug into
+various server SKUs where hubs/devices along the bus are not physically
+on the card & may differ across SKUs. So, I'm looking to program hubs
+flexibly and dynamically from userspace to setup bus hardware paths.
+
+The hub drivers being posted to i3c subsystem require hard-coding in the
+devicetree to setup the ports physically according to intended
+bus/hardware design. As mentioned, these cards will not know what SKU it
+will be plugged into, so the devicetree hard-coding cannot reasonably be
+determined ahead of time. Theoretically, you may be able to add some
+bootloader support to go query SKU information from other server
+components and then populate the devicetree for the kernel, but that
+will require heavy lifting and plumbing between other server firmware
+components and the bootloader.
+
+Further replies and discussion can be routed here:
+https://lore.kernel.org/linux-i3c/20260921230603.2518652-1-samagazaryan@google.com/T/#mb42d9b2785f8508d39eaf782b3d29189226b8029
+
+Thank you,
+Meagan
+
+> > > > This is accomplished by the i3cdev driver not having any entries in
+> > > > the i3c_device_id table. After boot, simply set the driver_override
+> > > > to "i3cdev" and bind the device manually via the sysfs bind knob.
+> > > > This can also be automated with udev rules as well.
+> > > > 
+> > > > The character device interface will be exposed at: /dev/bus/i3c/<bus
+> > > > id>-<Provisional ID>
+> 
+> ...
+> 
+> > > > +	for (int i = 0; i < metadata->nxfers; i++) {
+> > > 
+> > > Why is 'i' signed?
+> 
+> > Mostly for readability and to make sure the line length on loop headers
+> > is kept below 80 chars. As a precaution, to make sure that 'i' can
+> > represent any metadata->nxfers value without overflow during loops, I
+> > check that metadata->nxfers is less than/equal to INT_MAX in
+> > get_metadata().
+> 
+> No need to add useless checks.
+> 
+> ...
+> 
+> > > > +/** + * print_i3c_err() - Prints the I3C error encountered during
+> > > > the prior + * call to the core's transfer function.  + * @i3cdev:
+> > > > i3cdev_data object + * @metadata: Kernel's copy of i3cdev_xfers
+> > > > (ioctl I3CDEV_XFER input) + * @i3c_xfers: i3c_xfer array that was
+> > > > sent to the I3C core
+> > > 
+> > > > + * Returns: void
+> > > 
+> > > Huh?! Where is this coming from?
+> > 
+> > In i3cdev_ioctl_do_xfers, if i3c_device_do_xfers failed, I wanted to
+> > print out the first I3C controller error encountered. The controller
+> > drivers can set this in the i3c_xfer.err field. Hence this function.
+> > 
+> > It's to aid debugging and provide useful error information.
+> > I can certainly refine the wording on the print_i3c_err documentation
+> > header to make this more clear.
+> 
+> My point is about kernel-doc. Why do we need the return section for void?
+> Where it comes from?
+> 
+> > > > + */
+> 
+> ...
+> 
+> > > Please, rely less on AI and more on the common sense and
+> > > proof-reading.
+> 
+> > I think I gave you the wrong impression. The new contributions in this
+> > series were written and developed by me. I used AI for quality assurance
+> > and cross-referencing. Since I incorporated some AI-flagged suggestions,
+> > I tried to acknowledge that with the Assisted-by tag.
+> 
+> I see, then there is a room to improve the code. But the main question is
+> why do we even need this whole interface to begin with?
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
+> 
+> -- 
+> linux-i3c mailing list
+> linux-i3c@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-i3c
