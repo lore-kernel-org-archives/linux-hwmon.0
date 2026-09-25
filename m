@@ -1,107 +1,113 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4387D3D1AB5
-	for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 14:04:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E64344C7532;
+	Fri, 25 Sep 2026 15:11:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790345089; cv=none; b=PuVF1ay/yMee6NTd7p0BRF48HkmJtAkFDxww3A0x8/cSZeofm9eTz7bpU6/L3oaGKV58SXzKk5j+dF/H2Wv3CIVHTYiRnx66qaQZ5qBWE7Topb+dQJG5G5CdXZYjzEDuhjnqRkBDXPgnAdxlo/uRaJG/qwB/IlZ23xwFtuk1Tjc=
+	t=1790349121; cv=none; b=DjdF9LBj6LYktbtUFTc/JfksvJdiZQB8uUVfTfJ9ikZ/FYliut1VKYipyEoyMWdspz2uCPSChwx7BxkFwG+r2Jg3dl2CVvHt65EP4vcAF0waWQgOVH7upkYk2SVH1nAGRgAmOF1nHPEbSEPNd6AAdJI2J5/HIUcarczFMCgXFEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790345089; c=relaxed/simple;
-	bh=bbmOrdULgI/qG6m5ZYiQCPi7tLPM/ObVmBPDGixfQGU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KRK4pwAs2zZ4nFceWUj2WiESxY9p03FJOTC3v6uBzvFFsFYqM+q9OlFXPQ7AxoHHdMtxq4XcfNzfbOH4HQbo9t+d2Osb0CPOGOE3bcsl0KRRQJutLs1BHjiTcM/ERPDaTdK5MnyT0z0ZtD/BtjLZkbTjJr4ZSDyCvRCX+X/zyno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bse5lbuq; arc=none smtp.client-ip=74.125.227.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790349121; c=relaxed/simple;
+	bh=+0PSy4PHtUncQewfig+q5/PG8j/ig7upJPjO/VluALk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Px9h1KeFNOMwz2jnAlcrrqlQYJ7XL+B/5OPd9nPkj8XGCYaSy8w9NzUMQWnNmM6EEf3/YYjqaYE16Vi/vYutjzBTaW7bQc5+8rIc5dpQxmWBNj8CuyVViFSAiYt6uX1X4oR9L5d8/MPOS5Dcas4XTue+zTbLovUKyowhVwddvmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NX9ti3nJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bse5lbuq"
-Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccd5cf02so518907a91.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 07:04:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790345087; x=1790949887; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=ovT80gQ2vK9hf0kYJwc2d02kOlcxj5fWOcjSmSVAXmQ=;
-        b=bse5lbuq0gvMgc7TpvEmOoh8qKL22WNqcNpNIb+9sweumah+jqJod2zjEtJZjsMM3o
-         huuG9V4aMgpuHXYYymjk0BdPWhfQShJ70wGOmsoSrSvp4D5hsZwsA/IQhkPe2w0jYUbH
-         3Zc4oXF8o6/9K2av+z5o5pg9d9wxnPbXrX1yt2EFxTTsHtqWW2W3sn+2+v4ZkpfPWetQ
-         o6QJKR4LNC4vVsIqz6UEn02+KhgQEdMAcSLdXM7drHM4lg0JY7VbMH2OMmNqxzM5Ezy8
-         T904O4v6kL2Sb9z5kAxhynxfnYoS0eOvCrNomIRPDXMxqRan45P7EWx01DC0nVzlcu4L
-         es/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790345088; x=1790949888;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ovT80gQ2vK9hf0kYJwc2d02kOlcxj5fWOcjSmSVAXmQ=;
-        b=mNLYyKNmiFC7h0vNyEYmPYmpm077+Oc8CWavuAaQw7zWH7n6Q1haGJPcaVxaDDgJsN
-         qrvqVSC74lVdRY0gw1SFn0hg6INfwB/5/GJZFydenFCZZAfFmMDqr7F8nND/MEwqiGbM
-         yFjkCDxhYCcZ0IeMcczUT0c1jax/2JmrkBuvoKabE2IxKoSnotbR100nSujYBs1hDcvu
-         ECVLdSXQAPbdQ3JyOglV1+BODh29SAUQkCLtIySJ3gsn/jodung7NCjCLiPMh60ryAQT
-         8I4Z+SDgLvhBWqhF6zORwGhBBngxqa5hBKo2iZ3da8RwTtoe8rlagp+YbB/FONzIPJgh
-         cG1w==
-X-Forwarded-Encrypted: i=1; AKwUvBwpYWxDMW+kVWsnwBW4GQ5HFlbYAS0NuUXm3NMmbL+twaozd2s3c0T9kJy0xidRJ22D3r+YC37/GakAtg==@vger.kernel.org
-X-Gm-Message-State: AFuF++lB+bTiX96oG3vDctMWXhD74dTb2l62FyqAVRc8196GAvYHqVWy
-	1Q1n42CA9SqSg92mMi9CDZzGok3Nv7vpFS3DmvzmQViF8uGN9U5vB8by
-X-Gm-Gg: AYBFou0Po4KUDDvyxHd6F+3GqIeY/JHtEc7pLG7S909eq1bhmNnrxMlzS8a5qudEql8
-	iPsbQ6DwZxX0aim3FKnwjMmvp0+Inuc1MG0ZbVD2gF5vCNSit4YF71BqO/YDKczo9FkO4/9JfQF
-	RXxjR9ec+ZEoeZy4BhmzzAQvab++Ujjy0fL2wp7v1cuHNKYm6fpWS4jwINuJgsQUbdSoxnhIjq1
-	frtMYXa1pk4AHzgtw6LkTvjjmDIZm5uIgONpmXHBpGB2u/l60klKEoi/55VhnymcZmcYOs6KRoo
-	xewd72oHp8u78T5wR6nWp5Vtn74kKPBcFQtdfqJ831lkItBBa7hZeyGya4+kRTFKa/SSMsm79Mo
-	IBXtErWNd6OxSZaNHfu9QXuQhxCt3FysgJdjaSZ6Uunz7nr36Nfsb3bET4CAFKManF1RsSz1Z9U
-	Gyudrrz2HL58Fv09dDMbwN+c5FMbsuVlcDEvzToPVgfnP/7qw9BBjd96rULu9zoqGpv44iHv/Av
-	zfDHoWCHzVCl8ckgdvAGFc=
-X-Received: by 2002:a17:90b:3908:b0:3a0:c276:1ecb with SMTP id 98e67ed59e1d1-3a0c276224amr1313125a91.15.1790345087406;
-        Fri, 25 Sep 2026 07:04:47 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a09773e7c3sm10983338a91.17.2026.09.25.07.04.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 07:04:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 25 Sep 2026 07:04:46 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc: david.nystrom@est.tech, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	ricardo.neri@intel.com
-Subject: Re: [PATCH 2/3] hwmon: (coretemp) Read TjMax only when refreshing
- the temperature
-Message-ID: <94dc8122-d6d7-40b0-adde-5e0cd7b645e9@roeck-us.net>
-References: <20260924-coretemp-temp-fault-v1-0-1884f0ff97d5@linux.intel.com>
- <20260924-coretemp-temp-fault-v1-2-1884f0ff97d5@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NX9ti3nJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 984081F00893;
+	Fri, 25 Sep 2026 15:11:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790349113;
+	bh=9oyV3/opgKnk0vsSmQNyazfvKZeLqsNLIo/1NmZ4njw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=NX9ti3nJBsQtENiL9OeDqza0q/MOGqRZXNkF3sQQdbEGnukG2eUMEQxJAGRpc288N
+	 KhDFpkR+TiRlRWQAe0G498XS5e94K0kqPhn0oZynB//eACzQhj/7Cr2ot2uAeBMxBx
+	 fPKVUTvVbW+1R5q7LcqYf4QPpTzOjdCE2Tg46a+W034JCFyLCNYt5PU43oVsPyzSZZ
+	 NKBy94VwZdf5SPXSAEp71CKkuaWDvn6ViwXDWPiQTViUzd51OCN7YJJ+IZJzzxmau0
+	 QAfwTN1xoFvqH7xgHuObhCYtZEOhNL/FC8y/viKCQqhq49Kv1vZW8OFUgLlV5LUVBi
+	 D+/w8B/RszbMg==
+Message-ID: <b2b6810c-597b-47ac-b73a-73c120d2a4c3@kernel.org>
+Date: Fri, 25 Sep 2026 17:11:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260924-coretemp-temp-fault-v1-2-1884f0ff97d5@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: pmbus: isl68137: Add Renesas
+ RAA229639 and RAA229640
+To: Colin Huang <u8813345@gmail.com>, Guenter Roeck <linux@roeck-us.net>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Magnus Damm <magnus.damm@gmail.com>,
+ Grant Peltier <grant.peltier.jg@renesas.com>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ colin.huang2@amd.com
+References: <20260921-add-raa229639-and-raa229640-v3-0-b104ee8a70b2@gmail.com>
+ <20260921-add-raa229639-and-raa229640-v3-1-b104ee8a70b2@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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
+In-Reply-To: <20260921-add-raa229639-and-raa229640-v3-1-b104ee8a70b2@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 24, 2026 at 07:33:21PM -0700, Ricardo Neri wrote:
-> show_temp() reads TjMax before checking whether the cached temperature is
-> still fresh, but consumes it only when recomputing that temperature. On a
-> cache hit the value is discarded.
+On 21/09/2026 09:16, Colin Huang wrote:
+> Add Device Tree compatible strings for Renesas RAA229639 and
+> RAA229640 PMBus devices.
 > 
-> Discarding it is not free. On CPUs that report TjMax in
-> MSR_IA32_TEMPERATURE_TARGET, get_tjmax() returns the value it just read
-> without storing it in tdata->tjmax, so every call reads the MSR again.
-> That is a cross-CPU call whenever the CPU owning the sensor is not the
-> current one, and it is made while holding tdata->update_lock.
+> They are compatible with existing 2-rail non-TC controllers
+> and use renesas,raa228244 as fallback compatible
 > 
-> Read TjMax where it is used. The value cannot go stale in the meantime:
-> bits 23:16 of MSR_IA32_TEMPERATURE_TARGET are read-only, and the register
-> is package-scoped, so every CPU of the package reads the same value.
-> 
-> The temperature reported to userspace does not change.
-> 
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> Signed-off-by: Colin Huang <u8813345@gmail.com>
 
-Applied. No need to resend this or the previous patch.
 
-Thanks,
-Guenter
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+
+Best regards,
+Krzysztof
