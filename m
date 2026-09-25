@@ -1,78 +1,77 @@
-Received: from mail-pz2-f43.google.com (mail-pz2-f43.google.com [74.125.228.43])
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2613515D5
-	for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 14:00:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B0C368D62
+	for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 14:03:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790344831; cv=none; b=ehIoXjQcQmGLLypLy8BtVM8gWFCfLdqkcS+cPBhhoztPKJRE3Uxb0cyczttTTvEqinJ95h2Ayljuf9b30XGxLMmYriLsah/pqlspbsQkqzTFDel5Y77TA+2n5MD7caOjYiNUHCMWLklCKCO81Om5yj45WZ41k+zd3Kgy+oLqRWg=
+	t=1790344984; cv=none; b=NcQ1R9U1EuNPX+eGugbBXSqRTol3m4QOS+5knp+2cwzMXoDPgrPSznfcE7oUbiEy4i0WyyDqZgLF6mJXlG18vx4seLK2dKZrU5F5TDaUWGF52DXmcNkb6NonoRnECJb787RyYQc/OUZmBNEtTHMwtOpbxl0SKJsnQU6K/eYyLoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790344831; c=relaxed/simple;
-	bh=2H8He1fIaWEIMN/Us026LinmPPPSEuu9arhpUonNLWM=;
+	s=arc-20240116; t=1790344984; c=relaxed/simple;
+	bh=VUC4l/F1r1/YFXEL1xQc8lU297sWblxuhQWuv6JfZsg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q2Xdu5OebifGfms1pCiYQL+TYCViXVVRZIH1bHDOsMVB/bvkjjYMkqeTAT+nCgQhdjkAnK9oOImiirvj76bxoa9Ih2OF1tlT27EnYkQwtsCGdE9w4t06ZOraCottIhRaAKpLMT/ogj6dmW6RUrPLulSSvhVJ2Hm58bJ0PKxBy4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OsHGSbSE; arc=none smtp.client-ip=74.125.228.43
+	 Content-Type:Content-Disposition:In-Reply-To; b=oPjb//QhCZhoXYw4g9l+Si7SRapCpNQGJhU5zbMQPUB+srMR8B1fugvczMxX3qEIDXJPf1J3vK4lljPGIY0INYZds58HAwu7HMG7yVYjjBMge8Q4oHcjsIWSPDFBlNvoIN4qT/6upLZCz5rZugZ7My9wVMvSBe8Zp06jQVS+BC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FC/3K7+H; arc=none smtp.client-ip=74.125.228.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OsHGSbSE"
-Received: by mail-pz2-f43.google.com with SMTP id 41be03b00d2f7-cc433d52421so343133a12.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 07:00:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FC/3K7+H"
+Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc4bdf8abaaso571978a12.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 07:03:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790344829; x=1790949629; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790344983; x=1790949783; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=UIT8Wz/kXm8JbJjsdHOy8KnROa55AifnObjuh2CsK/E=;
-        b=OsHGSbSE/Dou2eSCRNoobq56lEr11LbsgaP9FoCGLna+XbV2fW4izGkhG3xCZTLgq+
-         2zSnPq3TFs30vLyvpLxCSRWRYXYzr94TKF0c/7tW30Q304wiQixBI8jVx6qTUw1YBIYK
-         +HVVqeDYcagxtgYkCvhn/rQnt9+PQ1hYj5iBu+O2woZq9pVqDrnaU+TaRqzya4/FKAZB
-         F4kBIQp3/ucRWYotdfy4xfvcgnb2DZ0Jj8EYIiVEm6YrxNus1YAfNoOb/O6gK0sqxRJd
-         YUVGIsHJ/I34Ldc4Ssr5/YKh+1Ew28UCz+zZ2pEKbqKYg4lrmTl+VdeSJ0h5GK+oH/Tr
-         kAjw==
+        bh=N69Zh7bBqUcbkkYmaE3n3pY4onWHGYP614jgtDR5fU8=;
+        b=FC/3K7+HDVAKxtYKO+IDw5puanf3pRgXRags9DMJmmQ5ZS/nK+9bde5EVuamXfVyK/
+         m4rLstN1GUWm+VvGv3WcCN0wcsKf3da/jKHfxTmjTCTCjpgGqk80/PZR5b4xwxWkAVEN
+         BWtepbraY2Shv9kV3C4k6a4BFTFYlJ4QK/wvZ58UZNEIfspnmPcvWxKo4uxNVVZPOX1Y
+         iZLUMp5PoSpZF9h5ANDkRLu3lVE7FUMCaUNn4/dQsRKYH5ohAzsbdT9HR5NDaT5HKxkd
+         D1TFVSvYet4XRUEUD+JYd2BA/9VG2fKYeQtJsimslNZ12EOaWpXoWzpEaa1k9mxxDJCQ
+         K5tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790344829; x=1790949629;
+        d=1e100.net; s=20260707; t=1790344983; x=1790949783;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=UIT8Wz/kXm8JbJjsdHOy8KnROa55AifnObjuh2CsK/E=;
-        b=sSe8jycHHloD0Eeq5r57gysfFVnuOoRuyQXyLn2bRVSts4lVsermjQCpkR2C8OIs6r
-         brwAE0pxRDNJJvoNYakkM2RqN19lnYAaaWWkBLFoKyHWVN870kgEUmZH+vxPaPbkecIi
-         3km0CxDZU2/AQt5tvxZDFZP04mxtZBSmKbeWoF0isfTXURdINmvyxhmAOXloy5hlrU3k
-         xSr9sOUawLd7CraKAvYN5TzQWPlUixiWhDatiHuZ6q7fmf1Nk9MSLuzFI4iG1b7IpTma
-         GMMIF05bXhMyZn2Q5AKWwbYn/BFfhfRpo+8sSRtiXo/gOlS/gtZpp+J2FClr2gYlcjMe
-         lJLQ==
-X-Gm-Message-State: AFuF++nCx2UfHAHf2sS525ohdPY4oCrUKcQBLvAZ2Eszb5nKcUwK5S4I
-	ockgrZBFU/yVBtmNZTucYweq3b7WkSZwqknbbbMGM6cPB6YqGF8Vt3Ct
-X-Gm-Gg: AYBFou1f0mQyHvObI1cV+CEyc5xk9pYGzNt94Jy9jr7tDRveozxUFMc1KjftrTBpBv3
-	IdTsLspKv+tacEr0pW9vJIHXM2BSxU30qbLAjuV2imjZt9Rx2nxZ+H6P+mS/KGTonxNWu1bG0wD
-	3HsdHFVAD94w7pH7XjMfWwQZFJsW8ohyeGfAKXHhgSDy+m5G+XVQGvDdkbjZpxYz94ZBwUqm+6f
-	FU2cM2de3Um/Od3ugiWiPYHJOaNws373A4Ld4zgJbjKEzGjw4ZMF0XykpVpEGjGjq9mttYEwdNx
-	/btb9/nuOwJnYHWwX1J1/KZg1rDFdFVRGILJjeACIb4sqpn8ZQTvTCw56m5MDLzJurgk8NLBQsI
-	zZlhvG/P1opPVjDl1sGWnKFm8mjS5QFvdmF2ag1dbGPbvaaDtr8aNUzLG+Fqs/X/tWTppvo2sjz
-	DvnTaKloeMdICYUN+t3CfU619rAPwPcfyylaxwPC+4r9Nmjzg9ZI8SkHitmdwzWljcVmE1vHqBg
-	p2k6qUfXTnKjF0LnbaZesE=
-X-Received: by 2002:a05:6a21:6e86:b0:3d1:39e9:b269 with SMTP id adf61e73a8af0-3de0e713a13mr5286119637.4.1790344828912;
-        Fri, 25 Sep 2026 07:00:28 -0700 (PDT)
+        bh=N69Zh7bBqUcbkkYmaE3n3pY4onWHGYP614jgtDR5fU8=;
+        b=H8FLFAtvrmd7BKi25N3OlxwQ7LgDdokurTiLgusxp3RZEe+rrD4xp7ySZxUdnPitxn
+         +Xz4Q09f47yE/DnWYtlnsP/QKRE6nILKgofs/MTv6q8HoAjE2tvTZ569Dqo6+ioYleYs
+         lvmgUsSc5G3e6n6ERaHZJoxY9z+DdJhSxzg/8JrxlSt3eztm8VlBdHhut5uBjuTb1Ugq
+         bXf/XRg84n7Y5X2eF8ioYES7a5eRbe59AkFYTuhPaJJpLLerqwM/LarFWUG9fNGY5h28
+         k57pPWfJM0jJNNrGN0dOhGGPDIe8higOQhC1ml7MceTHNPZyDP3HPraq9RFXEHqy533A
+         /1Xg==
+X-Forwarded-Encrypted: i=1; AKwUvBzXjHKHyl5QYDG2lJX1b7OlttA6Fb7rn/QUFg24OtrGilW3ukf4YzqR+1uL6ANePYT+kc9CnuZnFDacRQ==@vger.kernel.org
+X-Gm-Message-State: AFuF++mLcA38bmOQVtW7TMe3UZn/l+r0RLntrj/SIU+UMKndFV82846s
+	JZtBgxEmCB1Cz0bLp1HEMx75OMnCTT7Wp9RSBCa1m4xr8q8bQLKYIOtm
+X-Gm-Gg: AYBFou3RFUu0HjElVcddubOuRJMZCsG++veDrAbUXEYsknMTQen0OgbLk+Hxc8rlUiZ
+	Whet4+oRtNqcI6E2FSSKOnaMUHQ8fILxC7Hfl+mOhehpvMJBTSusTLQaCk6DpjKsWp+7AC1PHhD
+	Far1N8WoQGfdWi/pQ+uI8Tzdae9PFfH2WXlzXas5XC7yVffWml2fiufh7nj4AybSt0cWAGlI3VP
+	92UxbhSYV5zquOr+fIGnfUzDS4vX/dMw3NDUaA2+wxRnyixnGnr5WRjYU/VDWZ1Y3b7w4G2AtYi
+	bQlyj5BbCfQk+VTTjivDlT740YC5UtLpo+SY3cLWH1rvTFnXNf1pDmyh1NO1OLg4LqLKPVNHZFX
+	avdnxKpTnzf1WT4ysdFpCD0n5+f2kSY57Mt3mROK3YuZJJv7GilG3f9f3qN6h2CzvvjQYnTpGHF
+	4VsMgQ15Fp2GTpc51mZgGx+0E9TY3g1PySyfEhZ8ZbaC2HbcrOe4FxryvtOJN1cHjsCNfAECpzh
+	xJsDN2Lu7T24Q==
+X-Received: by 2002:a17:902:e751:b0:2dd:ad73:c936 with SMTP id d9443c01a7336-2df7da9e288mr44860965ad.23.1790344982378;
+        Fri, 25 Sep 2026 07:03:02 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87feb57e56csm1193045b3a.48.2026.09.25.07.00.28
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df913ff226sm11074415ad.34.2026.09.25.07.03.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 07:00:28 -0700 (PDT)
+        Fri, 25 Sep 2026 07:03:01 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 25 Sep 2026 07:00:27 -0700
+Date: Fri, 25 Sep 2026 07:03:00 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: ashish yadav <ashishyadav78@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ashish Yadav <ashish.yadav@infineon.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH 0/2] Add support for Infineon Digital Multi-phase
-Message-ID: <6d6d168d-acad-4ba0-b0e4-214dd07822d3@roeck-us.net>
-References: <20260921065702.93196-1-Ashish.Yadav@infineon.com>
- <CAJKbuCZ1733m5UKXNwOV-3WBYNOFbgUA7QUfhAY51yskv6z-Aw@mail.gmail.com>
+To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc: david.nystrom@est.tech, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	ricardo.neri@intel.com
+Subject: Re: [PATCH 1/3] hwmon: (coretemp) Refresh the temperature on the
+ first read
+Message-ID: <486339f3-8516-4c88-b823-25f567c14f3c@roeck-us.net>
+References: <20260924-coretemp-temp-fault-v1-0-1884f0ff97d5@linux.intel.com>
+ <20260924-coretemp-temp-fault-v1-1-1884f0ff97d5@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -81,24 +80,29 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJKbuCZ1733m5UKXNwOV-3WBYNOFbgUA7QUfhAY51yskv6z-Aw@mail.gmail.com>
+In-Reply-To: <20260924-coretemp-temp-fault-v1-1-1884f0ff97d5@linux.intel.com>
 
-On Fri, Sep 25, 2026 at 12:01:28PM +0530, ashish yadav wrote:
-> Hi Guenter,
+On Thu, Sep 24, 2026 at 07:33:20PM -0700, Ricardo Neri wrote:
+> show_temp() reads the status MSR only when the cached temperature is
+> older than one second. Commit 5c0e64dde80f ("hwmon: (coretemp) Remove
+> obsolete temp_data->valid") dropped the tdata->valid check that used to
+> force the very first read, leaving that comparison as the only trigger.
 > 
-> I hope you are doing well.
-> When you have a moment, could you please look into the patch to add
-> support for the XDPE1A2G7C voltage regulator?
-> I would highly appreciate your review, feedback, or any guidance on
-> next steps when your schedule allows.
-> Thank you very much for your time and continued support.
+> A never-updated temp_data carries a zero timestamp, which does not look
+> stale on 32-bit kernels: jiffies starts 300 seconds short of wrapping,
+> so the comparison stays false until jiffies wraps and passes HZ. For the
+> first 301 seconds of uptime temp%d_input reports the zero left by the
+> allocator rather than the CPU temperature. 64-bit kernels are
+> unaffected: jiffies starts at a positive value there and does not wrap.
 > 
+> Backdate the timestamp when the temperature data is allocated. One jiffy
+> older than the caching interval is stale under either word size, and the
+> first refresh overwrites it.
+> 
+> Fixes: 5c0e64dde80f ("hwmon: (coretemp) Remove obsolete temp_data->valid")
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 
-Please do not top post. Also, I was waiting for DT patch approval.
-Besides that, I do have a paid day job, unlike this one that isn't paid.
-If you had bothered, you could have checked the status of this series at
-https://patchwork.kernel.org/project/linux-hwmon/list/. This e-mail is just
-noise adding more to my work load without any benefit for anyone, including
-you.
+Applied.
 
+Thanks,
 Guenter
