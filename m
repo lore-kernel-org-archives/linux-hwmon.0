@@ -1,135 +1,199 @@
-Received: from mail-dy2-f43.google.com (mail-dy2-f43.google.com [74.125.229.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 568E237B3F2
-	for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 06:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.229.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790317907; cv=pass; b=BA09sozdi/INiFVJHhU9oU+kaAbJxMdC8S14MLVsxpWWQfSgtMJNtrWbXJlkMMxaxFkq/W1zhrRaB0ixHsv6C1u4GTQeCsAhaywDhUIj33lbWadiXZPdN+ipXwN9vKf+A0Hj9ILleB+jt2hErgvj5iWELkVv3tcbSS5Xe584ZwI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790317907; c=relaxed/simple;
-	bh=hFhKrEvSZBpW410acqJJcTqqpIltVfjmIiS3oeslrDo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FP8AxTgT60u5faxOiW4XQVWfYJmio/OLBsqRr8mPun9a9vNWsKElwq1Af8ti6s/FGseGg2fvvO5ozGIsh4na9YwKliwN7zGHrHNh5akiO85uFW0liD5szx7vuQ4umkho2zIjSNU3NkaFwPE95pI7HURUJWvHtx2wzQYsYmflID0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O3UorOf1; arc=pass smtp.client-ip=74.125.229.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5070477E4D;
+	Fri, 25 Sep 2026 09:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790327460; cv=none; b=NLVtCivs4Y9olEXc7fHaAcpnytwUU4DIxqjqYOapAVE1gl81qjh+1MbP/We0C4iq7qAsuqbeot6gdbS8D1FnQvfc5S1gdnICf5QK4D+lozD9ucE0C5bJjpkoq78BECX9pJq4bb+WjgiSJBCOFw/aulSTw/FVkIeEJ5sOBtOUprQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790327460; c=relaxed/simple;
+	bh=g+73qLoYaz6+pvyfvA5np/DdngHoGLgjI1wJ9+pR5P4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=boi3eXHoL5Y/D25ujDY8ZPU27UmBDHcdRaow95seL+mK4HzMYS+J4fGB0508/vaIItu0/mfpTlyu8gsdQid5z/Ai+O1AheXVjT4uM+4ppO6Q9/Jkmg5W4QeQfm/YDY8iUCZKrcxb0mmUq48sD6ByQOtAWOlqX4SM7+abGfMQMHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UNsMafiw; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O3UorOf1"
-Received: by mail-dy2-f43.google.com with SMTP id 5a478bee46e88-33e62211987so591761eec.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 24 Sep 2026 23:31:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790317899; cv=none;
-        d=google.com; s=arc-20260327;
-        b=XhceXkvJPk9KGI7ac/vk28xOFUsAuUIkn01p6h0DjaLC6J6JyN1DlR8TKPdkkLxLzi
-         Ub1EV84zjNjPJehhTXCA+Rtw2i1vxglrzxBF1zOc8Ipt3KNdhSlcNnzFvHxgS5Dmb180
-         uCZAgUq3vOb06Eq1xX4epu2X+2wbsVJIgFv5QBSgQalWS8neh6Klf8YoRvDo0ps4ahQS
-         73pnKkglOyeKWJvYficsStv20PM/ygbv7/tKrGywadwijl9aI604942V3YTo/KcCbymP
-         Xt3TboOnEd2XnIIkLIUWM6XhOeRzbSbml3G1S1a6f9iDvp7EEYOJtQnyodUPodGct0nm
-         9j0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5w5yxx9oXlIPFCQHU1ihbBkwH62nsll6yBXPYXhhP5Q=;
-        fh=qYetX5wLV7pV72kgRll1rkWfqqGzWY6CoEliCrKRR/w=;
-        b=c5hUI2VAj+OoqbdRO4PXIYmuUaKj+ecco6iR9Aqz0EipncSCaqDvscLj683uI+4C8a
-         i8KviI00aoaQ2wYvw5ecQWEwSCvk4MEYbp+ZRWn+eawWw1074TPxa2CJ3gxumyUZVHKV
-         HSU3BwG2i4eY59oM5XUpYfVCRKt67vf7Q7V2QrGVFiErDRm9etPgjWIfnVHJ3XsTFlhC
-         P1dBIJRIx5P8H8W7VUW9j9XeGg2zGEdBzbTZOiyp9Tc2HN310+BapY9rDDMlyrSNq1Zw
-         iq/M0qAZxrRFsy/3JlBgWfXa54htADVEil44LXgasv9Jon81hdASEL/qbqj+ecWetIZr
-         Z1ww==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790317899; x=1790922699; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=5w5yxx9oXlIPFCQHU1ihbBkwH62nsll6yBXPYXhhP5Q=;
-        b=O3UorOf1qV5JIsqsIqmitfKsyx84ASkf1290p06d2IASL8ooh/gp9ytTZRi7eBojlB
-         hUdMfuRfNMsuSlTMU4ekxduvpje/WFQ6uXygRVEz6nF5dp1S+B5sQSfHeSQIMbMJ797R
-         +V3C+PGyufpBLMdmhuTO1NPm38ukbFqyog57snL/J2q7+v2Ye7UyFdfJPPnaSE0ENePa
-         8VydY8L/xNvtQ2GUZwieMlqtNgLy5N737t/xV8IvaBJ9AtVTDHAa9dBVL7iSX1cRemJZ
-         Em46WIeCMNi5L7ft9vaYvzkzp1/1eWWdYJ264lPkb/RsZdZL3DrEzD1HeL9rbmnLshJc
-         HSTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790317899; x=1790922699;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5w5yxx9oXlIPFCQHU1ihbBkwH62nsll6yBXPYXhhP5Q=;
-        b=NuuXE4WQrKkiGId/9UtkY3nKR+ew7qxnIyYWC5jCxvgmssL97pSQsZv9ZY/HaJppom
-         4a6mkfHPxvwflT8QTWPATtE3AiHSv5seDmUReUWANvQqSTnBJDSbu8NhA3iZqUZgX+JX
-         MTIMQDnz2gN55goPJ3nhajJ3Rpv2NZVW2ZEF+vJ4Pr4uwyi4NOhlwSqYt8jsvQN81YDV
-         91K2CgxrVVvywLq9zLdl69r4I1oWSqWBXP/qloNOVT7StBNH6FNnPNM8SDedM3OMLwdA
-         jKFDf7+ubh7uAwHGvH6gPnSxV3iGlrmd97DMXKRfJ+SbMW+/e1sLWcO38RmX8IYApBK1
-         MVdw==
-X-Gm-Message-State: AFuF++mAgqjx1AilmLVO+f63TpmGH1SKBHDq+6qW4wAgeb43VuejruyV
-	DoVSXsqiwXxpJA0A/Z4LmhhEbjeTB1KGAi5MPhPhCyYcP5AobmtfF8IdIRyMrZySxCNnNIcr1W+
-	aoq1zcrfi+WSutaYjZGnNJV468UDE1Ds=
-X-Gm-Gg: AYBFou0tf7REYELM9LauMBrw314zfFp8J9UAscMyrIHCqveVgKmTf2x+z9CJNZ9dmpl
-	tC82kUZGoRZio/bxjLjW3gASUCAC41JCUWaevjDMKpsxEP8Y+n6I2XBtHflY9MsfTvkQmitYZus
-	5myWwKFNrBvXuR19ie5RAi8iHI78qpc/GrU168x8eMZ+FEO195p6n+OWXXnYEKPPzLXdZu8fTo3
-	Nzc40xFBmmTmuHmigzvusIRC4yfifCO8RIfvoQTBtEy+iXLT2PwTP8nnTumhc2DMAWYdJfwlgaz
-	WedHDSK91sxq05mcmidKjEdaM7EfUJDJssWfGraSkbCSYWt+2+ZFAXeO
-X-Received: by 2002:a05:7300:169b:b0:340:dca6:f34e with SMTP id
- 5a478bee46e88-340dca6f75fmr2420984eec.40.1790317899352; Thu, 24 Sep 2026
- 23:31:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UNsMafiw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790327458; x=1821863458;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=g+73qLoYaz6+pvyfvA5np/DdngHoGLgjI1wJ9+pR5P4=;
+  b=UNsMafiwm0lfFTaZwqLtf31zos91Ghfq9z4e4ZWHXwvWT+MlOxldN4WK
+   vBlYhLZ3UJ/9177XkI/n0BVQY5oeNaHShba5vCxFyFmD4MgCWouR3n4yv
+   VV7Mm4fhp/XBYd9T+eh/3eAEQ9Zcv/44W0KB2hTc+Ib4nnXf3OHZ+t7Vl
+   o92OuAcKPdh2iLKic5KRFx9b4M7dWU/dlSIoqwQ7gNukPU4UgrxD59W2H
+   PW0ax7NdfZ5T6tdDKHZidKulJrWB+fuuzr4tnBQ+E8176vnsxXcB/ZFAb
+   G5Wl+u9jlWpLp0YqxWZTLaIy53VX2xGPC6etfwnJ9/k40uVRTqR7IJgHe
+   g==;
+X-CSE-ConnectionGUID: hbCWX9CLQKumgaQBX/J9Zg==
+X-CSE-MsgGUID: 9eoOIXofSYmgbqtvlrtKDw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11915"; a="116639363"
+X-IronPort-AV: E=Sophos;i="6.27,122,1787036400"; 
+   d="scan'208";a="116639363"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2026 02:10:57 -0700
+X-CSE-ConnectionGUID: QFpkLrKQSBSUj4oVroqcRQ==
+X-CSE-MsgGUID: kGT9NfHbQ7qsBksGc/ByfA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,122,1787036400"; 
+   d="scan'208";a="274373884"
+Received: from mkosciow-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.27])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2026 02:10:47 -0700
+Date: Fri, 25 Sep 2026 12:10:45 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: Meagan Lloyd <meaganlloyd@linux.microsoft.com>,
+	linux-i3c@lists.infradead.org, alexandre.belloni@bootlin.com,
+	vitor.soares@toradex.com, samagazaryan@google.com,
+	gregkh@linuxfoundation.org, arnd@arndb.de,
+	boris.brezillon@collabora.com,
+	oleksandr.shulzhenko.viktorovych@intel.com,
+	tgopinath@linux.microsoft.com, corbet@lwn.net,
+	skhan@linuxfoundation.org, linux@roeck-us.net, Frank.Li@nxp.com,
+	jorge.marques@analog.com, pgaj@cadence.com,
+	wsa+renesas@sang-engineering.com, tommaso.merciai.xr@bp.renesas.com,
+	nuno.sa@analog.com, Michael.Hennerich@analog.com, jic23@kernel.org,
+	dlechner@baylibre.com, andy@kernel.org, lorenzo@kernel.org,
+	enelsonmoore@gmail.com, rppt@kernel.org, pratyush@kernel.org,
+	giovanni.cabiddu@intel.com, gabewhigham@gmail.com,
+	haren@linux.ibm.com, pasha.tatashin@soleen.com,
+	jirislaby@kernel.org, adrian.ho.yin.ng@altera.com,
+	ustc.gu@gmail.com, jszhang@kernel.org, adrian.hunter@intel.com,
+	akhilrajeev@nvidia.com, tze.yee.ng@altera.com,
+	manikanta.guntupalli@amd.com, shubhrajyoti.datta@amd.com,
+	jarkko.nikula@linux.intel.com, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux@analog.com, linux-iio@vger.kernel.org
+Subject: Re: [PATCH 3/3] i3c: add i3cdev character device module for
+ user-space access
+Message-ID: <arY6lReqi-UDuorI@ashevche-desk.local>
+References: <20260911210935.1353126-1-meaganlloyd@linux.microsoft.com>
+ <20260911210935.1353126-4-meaganlloyd@linux.microsoft.com>
+ <aqVUyYkpKT8iX4Jz@ashevche-desk.local>
+ <20260916-454d66ca84cc91479b195aa5@linux.microsoft.com>
+ <aqt_dCazxTDR4cpk@ashevche-desk.local>
+ <f6eb60e0-e318-4846-a906-31cb965ccb15@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260921065702.93196-1-Ashish.Yadav@infineon.com>
-In-Reply-To: <20260921065702.93196-1-Ashish.Yadav@infineon.com>
-From: ashish yadav <ashishyadav78@gmail.com>
-Date: Fri, 25 Sep 2026 12:01:28 +0530
-X-Gm-Features: AclHuK-KyM2-sTWnkjehqT7295KW9AXgH1dDi83R9qL68ibmWBqVLHdfx79TEc0
-Message-ID: <CAJKbuCZ1733m5UKXNwOV-3WBYNOFbgUA7QUfhAY51yskv6z-Aw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Add support for Infineon Digital Multi-phase
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Ashish Yadav <ashish.yadav@infineon.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f6eb60e0-e318-4846-a906-31cb965ccb15@gmx.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Hi Guenter,
+On Tue, Sep 22, 2026 at 10:53:09PM +0200, Armin Wolf wrote:
+> Am 17.09.26 um 07:49 schrieb Andy Shevchenko:
+> > > On Sat, Sep 12, 2026 at 04:34:01PM +0300, Andy Shevchenko wrote:
+> > > > On Fri, Sep 11, 2026 at 02:09:35PM -0700, Meagan Lloyd wrote:
+> > > > > The i3cdev driver is a character device driver that allows user-space
+> > > > > to control and interact with I3C devices.
+> > > > > Currently, it has the ability to perform Single Data Rate (SDR)
+> > > > > transfers - basic reads/writes.
+> > > > > 
+> > > > > With the addition of sysfs driver_override, there is now a
+> > > > > straightforward and direct way to match the i3cdev driver to any i3c
+> > > > > device without stepping on the toes of more specialized drivers that are
+> > > > > loaded automatically.
+> > > > Is it safe? Why on the earth do we need this? The commit message has not enough
+> > > > information.
+> > > I can't see a reason that it'd be unsafe. To give additional confidence,
+> > > it's already in-use in many bus_types:
+> > This argument has nothing to do with i³c. Each bus is different on a physical
+> > layer, electrical protocols and programming flow. Each of them has own
+> > constraints.
+> > 
+> > > To answer why we need it:
+> > > If we want to write i3cdev as a standard device driver, it can't
+> > > actually match anything by default. This is because, some devices on the
+> > > system may need specific drivers and i3cdev is generic and should
+> > > technically match every device.
+> > Yes, but I have seen no reason why we should expose i³c bus to the user
+> > space. With i²c we already know very well that it was (and still is)
+> > a bad idea. Why i³c is better (especially taking into account i²c
+> > compatible mode and more complex programming flow)?
+> 
+> in my experience sometimes during driver development you want to access the device
+> directly to test things, but of course this is incredibly unsafe.
 
-I hope you are doing well.
-When you have a moment, could you please look into the patch to add
-support for the XDPE1A2G7C voltage regulator?
-I would highly appreciate your review, feedback, or any guidance on
-next steps when your schedule allows.
-Thank you very much for your time and continued support.
+Exactly, and not only unsafe, it's also quite dangerous to the HW. The users must
+*not* see or have this feature.
 
-Best Regards,
-Ashish Yadav
+> I think we should taint the kernel as soon as userspace applications perform raw
+> i3c accesses, but the idea itself is fine from my point of view.
+
+Not only this, but guard it in the first place.
+However my personal opinion is an bsolute NAK to this idea. If you want do
+something, do the proper driver in the kernel.
+
+> > > Since the driver_override is default NULL and is set via sysfs, this
+> > > allows any specific drivers on boot to be loaded up and would allow
+> > > explicit control on what device i3cdev gets bound to.
+> > > 
+> > > This was my rational. I will refine the commit message with more details.
+> > Put a real life example why the exposing i³c devices into user space is
+> > absolutely necessary.
+> > 
+> > > > > This is accomplished by the i3cdev driver not having any entries in
+> > > > > the i3c_device_id table. After boot, simply set the driver_override
+> > > > > to "i3cdev" and bind the device manually via the sysfs bind knob.
+> > > > > This can also be automated with udev rules as well.
+> > > > > 
+> > > > > The character device interface will be exposed at: /dev/bus/i3c/<bus
+> > > > > id>-<Provisional ID>
+> > ...
+> > 
+> > > > > +	for (int i = 0; i < metadata->nxfers; i++) {
+> > > > Why is 'i' signed?
+> > > Mostly for readability and to make sure the line length on loop headers
+> > > is kept below 80 chars. As a precaution, to make sure that 'i' can
+> > > represent any metadata->nxfers value without overflow during loops, I
+> > > check that metadata->nxfers is less than/equal to INT_MAX in
+> > > get_metadata().
+> > No need to add useless checks.
+> > 
+> > ...
+> > 
+> > > > > +/** + * print_i3c_err() - Prints the I3C error encountered during
+> > > > > the prior + * call to the core's transfer function.  + * @i3cdev:
+> > > > > i3cdev_data object + * @metadata: Kernel's copy of i3cdev_xfers
+> > > > > (ioctl I3CDEV_XFER input) + * @i3c_xfers: i3c_xfer array that was
+> > > > > sent to the I3C core
+> > > > > + * Returns: void
+> > > > Huh?! Where is this coming from?
+> > > In i3cdev_ioctl_do_xfers, if i3c_device_do_xfers failed, I wanted to
+> > > print out the first I3C controller error encountered. The controller
+> > > drivers can set this in the i3c_xfer.err field. Hence this function.
+> > > 
+> > > It's to aid debugging and provide useful error information.
+> > > I can certainly refine the wording on the print_i3c_err documentation
+> > > header to make this more clear.
+> > My point is about kernel-doc. Why do we need the return section for void?
+> > Where it comes from?
+> > 
+> > > > > + */
+> > ...
+> > 
+> > > > Please, rely less on AI and more on the common sense and
+> > > > proof-reading.
+> > > I think I gave you the wrong impression. The new contributions in this
+> > > series were written and developed by me. I used AI for quality assurance
+> > > and cross-referencing. Since I incorporated some AI-flagged suggestions,
+> > > I tried to acknowledge that with the Assisted-by tag.
+> > I see, then there is a room to improve the code. But the main question is
+> > why do we even need this whole interface to begin with?
+> > 
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-On Mon, Sep 21, 2026 at 12:27=E2=80=AFPM ASHISH YADAV <ashishyadav78@gmail.=
-com> wrote:
->
-> From: Ashish Yadav <ashish.yadav@infineon.com>
->
-> Hi,
->
-> These patches extend the existing driver xdpe1a2g7b with support
-> of xdpe1a2g7c model.
->
-> With Best Regards,
->  Ashish Yadav
->
-> Ashish Yadav (2):
->   dt-bindings: trivial-devices: Add support for XDPE1A2G7C
->   hwmon:(pmbus/xdpe1a2g7b) Add support for xdpe1a2g7c controller
->
->  Documentation/devicetree/bindings/trivial-devices.yaml |  1 +
->  drivers/hwmon/pmbus/Kconfig                            |  4 ++--
->  drivers/hwmon/pmbus/xdpe1a2g7b.c                       | 10 ++++++----
->  3 files changed, 9 insertions(+), 6 deletions(-)
->
-> --
-> 2.39.5
->
