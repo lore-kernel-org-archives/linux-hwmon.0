@@ -1,52 +1,51 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D53C29B79B;
-	Fri, 25 Sep 2026 02:23:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8206F3655FA;
+	Fri, 25 Sep 2026 02:23:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790303009; cv=none; b=hc7Jrw++Cso0QfZrE6hSQz//DuO4MY6WMIHo/GLELcvkuZ4GfF4ChDQ4kdKTzYsghL+JuQpkUiBrfcFLvynu0dB0L7I2shJCabZEv+pNqxz+sXSd4oN1THgVnzNQOC52xLF2ofC5MGJGHbL4Wf22HpjBxUvfO241z3tKozM2PKI=
+	t=1790303018; cv=none; b=uPsFXSO6zr1SA434vvFExb8p7GEKdLJ9jOICMLIbocaGiHSVH0EEGZaCsWZBRcIqlFZg5btcbP3DmiExWW7vRjdGfKxkbLPbSb5plSmVkFuEnL6jeDNoYRMk4JXeiOSEIu3isfSYpDm/7tlTCbSD0ysarBVc3wiAe9n1hFicJiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790303009; c=relaxed/simple;
-	bh=ad0hOBWsAYhOfV9sxRvE2/stI1Ceb6dt6S8BhRvls80=;
+	s=arc-20240116; t=1790303018; c=relaxed/simple;
+	bh=4vRNppN3FLumiUhSCw+3UtKUBCkiE/1MEBId+otF5Y0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=lyqOZnn7JVvZn9Wd8RmARlNuy0qXO4tWDLtMrSkKlMpuQL69lUWt+ocvjwuP37ve6G9aBkZ5MbAib5XXz3Tk4tDlZjA0GFY22ByIgHaR6913+/nSsrct1UwmCloB3NCBGL622LdXl0n/F7rbjMXRd/+9r054eByIGEMriHiuP5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LxMKZs83; arc=none smtp.client-ip=198.175.65.17
+	 In-Reply-To:To:Cc; b=s7foXsmvZ4vJ/CPQ0PEf9q7CYOuigUXLc4KWGVBtq+1hJhDw7f3pvftzBtgUPWNImqn7DV2MwefW53G13Ymz6hEjWas0TkU6CrNzxjDVGyVNvTKqezhXUr4mZB1GyV0jXZ6UpQB4fq84QbQLcMTc/vjNIP8ab19hsrcNJc+Y6r8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lhkV36Zv; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LxMKZs83"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lhkV36Zv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790303007; x=1821839007;
+  t=1790303015; x=1821839015;
   h=from:date:subject:mime-version:content-transfer-encoding:
    message-id:references:in-reply-to:to:cc;
-  bh=ad0hOBWsAYhOfV9sxRvE2/stI1Ceb6dt6S8BhRvls80=;
-  b=LxMKZs83yyhJnKoAgWtwS5fxv7O2b3+A8MTq9ojJSL/zwJfG4ih56Gjy
-   V6r4bMPuMAN8m2qyM1ZkaQ1PIR0cyg98g7HeBsoMoTkoMggp6RoNvhy/L
-   xiuahEzl7HAPzj5fFSBoJ7dkCzIbnsi+5U2hNQA42Vwk0086QMm32lICj
-   Gn0BE+EWkDdXmtHsuTXBSak7Z4ygCwdADGnQXP0l0yGrRWfD8RGDtzDlP
-   zvJ5J1N5a+/8K0fyEwYp96EJ5O3vLU6ChVrdPOkzUKqH8AyWRPL/cGcAa
-   LoFD8jXsik3V3aeO6yr7RpNGj+CILb08YDcTV3K93SpUYMlUYbSymwFnw
+  bh=4vRNppN3FLumiUhSCw+3UtKUBCkiE/1MEBId+otF5Y0=;
+  b=lhkV36ZvHmZf50jaEuiC59Gr6kTQ1MHwUSVlA1J7Uga+/8sOYsyMDofk
+   QH0RpR13nmKHeqVGYQEPdQPgPKumQbHtjbu8X64ZG0+6e1timp9PZzlr5
+   1EZQ4xRXpr5FxDdQmzerhPsmvG6w1YeU+TROrbGskrv+UwZLSyFdnT17w
+   4zZQiOd5YOs7Ojj9FqzKcY++3a+vjsFDDouWQpQWR+xnFDI8r1wUBBsyh
+   Vp9vSXoE7xqnPfITq8vbzM/NxaTKiCQOhhtNs0JbnWRygxvXH5KZPn+cb
+   6S3AJp500IW5UuiGXKPOjpL42CTzWhaK6YoacmdrcUnga2k2GIIruiPxj
    A==;
-X-CSE-ConnectionGUID: YioCec2PQY6+mqX/Fl1BYQ==
-X-CSE-MsgGUID: KkJWiPs3TKqFklOEEUNDKQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11915"; a="90129824"
+X-CSE-ConnectionGUID: FwlG4xMLRTav3Q6yqTSCvw==
+X-CSE-MsgGUID: dBrMrvnQS4aeR7/MtRcOvg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11915"; a="91107238"
 X-IronPort-AV: E=Sophos;i="6.27,121,1787036400"; 
-   d="scan'208";a="90129824"
+   d="scan'208";a="91107238"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2026 19:22:59 -0700
-X-CSE-ConnectionGUID: 7WY3Gf1yT/mnTjhi5/rD0g==
-X-CSE-MsgGUID: GSruS8P5TRu6LpqUR41cfQ==
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2026 19:22:59 -0700
+X-CSE-ConnectionGUID: VOqYqExYQmCP6QL4dXlDPA==
+X-CSE-MsgGUID: Z06w/pnQQMuAWMmJAWQRag==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,121,1787036400"; 
-   d="scan'208";a="278920521"
+   d="scan'208";a="278920527"
 Received: from unknown (HELO [172.25.112.21]) ([172.25.112.21])
   by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2026 19:22:58 -0700
 From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Date: Thu, 24 Sep 2026 19:33:20 -0700
-Subject: [PATCH 1/3] hwmon: (coretemp) Refresh the temperature on the first
- read
+Date: Thu, 24 Sep 2026 19:33:22 -0700
+Subject: [PATCH 3/3] hwmon: (coretemp) Add temp%d_fault sysfs attribute
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -55,7 +54,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260924-coretemp-temp-fault-v1-1-1884f0ff97d5@linux.intel.com>
+Message-Id: <20260924-coretemp-temp-fault-v1-3-1884f0ff97d5@linux.intel.com>
 References: <20260924-coretemp-temp-fault-v1-0-1884f0ff97d5@linux.intel.com>
 In-Reply-To: <20260924-coretemp-temp-fault-v1-0-1884f0ff97d5@linux.intel.com>
 To: Guenter Roeck <linux@roeck-us.net>
@@ -64,52 +63,170 @@ Cc: david.nystrom@est.tech, linux-hwmon@vger.kernel.org,
  ricardo.neri@intel.com, 
  Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1790303618; l=1749;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790303618; l=6261;
  i=ricardo.neri-calderon@linux.intel.com; s=20250602;
- h=from:subject:message-id; bh=ad0hOBWsAYhOfV9sxRvE2/stI1Ceb6dt6S8BhRvls80=;
- b=v9zMmEFY2/29MWLc1z0EzTWmyJ71gMWxGziV4JUZaUAzohK9TFcy0Ut08KIgPnEoORNZmCdqp
- +rDMlGc3ru/BwhIpD04BnRk9qtvngMVHunXiU6v6PaUYkF9NuEDjoZz
+ h=from:subject:message-id; bh=4vRNppN3FLumiUhSCw+3UtKUBCkiE/1MEBId+otF5Y0=;
+ b=RJFcrYQvldkg009hpAnvxLFqQ0ETrNTFFNCl34JelbKNaL11bxMJmvxPLcCMCCiajMsVhirPB
+ fEpgaPxy94mDlUFRuKGuKdJTpHn/0ZpaPaR9v4i9MTUw7dgAeKo2nzw
 X-Developer-Key: i=ricardo.neri-calderon@linux.intel.com; a=ed25519;
  pk=NfZw5SyQ2lxVfmNMaMR6KUj3+0OhcwDPyRzFDH9gY2w=
 
-show_temp() reads the status MSR only when the cached temperature is
-older than one second. Commit 5c0e64dde80f ("hwmon: (coretemp) Remove
-obsolete temp_data->valid") dropped the tdata->valid check that used to
-force the very first read, leaving that comparison as the only trigger.
+The temp%d_input sysfs attribute reports the CPU core temperature
+regardless of the valid bit (bit 31) in IA32_[PACKAGE]_THERM_STATUS.
+Commit bf6ea084ebb5 ("hwmon: (coretemp) Do not return -EAGAIN for low
+temperatures") established this behavior after observing that some Intel
+CPUs do not set the valid bit while the temperature is too low to be
+measured. The value reported is of more use than an error. Changing this is
+not an option: the interface is long-established and userspace relies on
+it never failing.
 
-A never-updated temp_data carries a zero timestamp, which does not look
-stale on 32-bit kernels: jiffies starts 300 seconds short of wrapping,
-so the comparison stays false until jiffies wraps and passes HZ. For the
-first 301 seconds of uptime temp%d_input reports the zero left by the
-allocator rather than the CPU temperature. 64-bit kernels are
-unaffected: jiffies starts at a positive value there and does not wrap.
+Userspace, however, cannot distinguish a genuinely low temperature from
+one the CPU could not measure. Until that commit it could: reading
+temp%d_input returned -EAGAIN. That signal was removed and nothing
+replaced it. Report the inverse of the valid bit through the standard hwmon
+temp%d_fault attribute. Its documented meaning is that the measurement
+for that channel should not be trusted. Tools built on libsensors consume
+the standard attribute.
 
-Backdate the timestamp when the temperature data is allocated. One jiffy
-older than the caching interval is stale under either word size, and the
-first refresh overwrites it.
+temp%d_input continues to ignore the valid bit. A new update_temp() helper
+refreshes the cached temperature and its fault state together, so both
+attributes are served from the same reading of the status register.
 
-Fixes: 5c0e64dde80f ("hwmon: (coretemp) Remove obsolete temp_data->valid")
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
- drivers/hwmon/coretemp.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ Documentation/hwmon/coretemp.rst |  4 +++
+ drivers/hwmon/coretemp.c         | 68 +++++++++++++++++++++++++++-------------
+ 2 files changed, 51 insertions(+), 21 deletions(-)
 
+diff --git a/Documentation/hwmon/coretemp.rst b/Documentation/hwmon/coretemp.rst
+index 349301683381..e3e3205b5155 100644
+--- a/Documentation/hwmon/coretemp.rst
++++ b/Documentation/hwmon/coretemp.rst
+@@ -50,6 +50,10 @@ All sysfs entries are named with their core_id (represented here by 'X').
+ 
+ ================= ========================================================
+ tempX_input	  Core temperature (in millidegrees Celsius).
++tempX_fault	  Set when the CPU reports the reading in tempX_input as
++		  invalid. Some CPUs do this while the temperature is too
++		  low to be measured. tempX_input still reports a value in
++		  this state; it is low or zero.
+ tempX_max	  Maximum recommended operating temperature (Tcontrol).
+ 		  All cooling devices should be turned on.
+ tempX_crit	  Maximum junction temperature (in millidegrees Celsius).
 diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index 5095eb057680..ace51e08e72d 100644
+index 0ab6bbff5637..e0fb7c0ef4d0 100644
 --- a/drivers/hwmon/coretemp.c
 +++ b/drivers/hwmon/coretemp.c
-@@ -511,6 +511,11 @@ init_temp_data(struct platform_data *pdata, unsigned int cpu, int pkg_flag)
- 	tdata->cpu = cpu;
- 	tdata->cpu_core_id = topology_core_id(cpu);
- 	tdata->attr_size = MAX_CORE_ATTRS;
-+	/*
-+	 * A zero timestamp does not look stale on 32-bit, where jiffies
-+	 * starts just short of wrapping. Backdate it instead.
-+	 */
-+	tdata->last_updated = jiffies - HZ - 1;
- 	mutex_init(&tdata->update_lock);
- 	return tdata;
+@@ -45,6 +45,7 @@ enum coretemp_attr_index {
+ 	ATTR_LABEL,
+ 	ATTR_CRIT_ALARM,
+ 	ATTR_TEMP,
++	ATTR_TEMP_FAULT,
+ 	ATTR_TJMAX,
+ 	ATTR_TTARGET,
+ 	MAX_CORE_ATTRS = ATTR_TJMAX + 1,	/* Maximum no of basic attrs */
+@@ -60,6 +61,9 @@ enum coretemp_attr_index {
+ 
+ /*
+  * Per-Core Temperature Data
++ * @temp_fault: The temperature in @temp is not to be trusted. Mirrors the
++ *		meaning of the tempX_fault attribute, and is therefore the
++ *		inverse of the valid bit the CPU reports in @status_reg.
+  * @tjmax: The static tjmax value when tjmax cannot be retrieved from
+  *		IA32_TEMPERATURE_TARGET MSR.
+  * @last_updated: The time when the current temperature value was updated
+@@ -72,6 +76,7 @@ enum coretemp_attr_index {
+  */
+ struct temp_data {
+ 	int temp;
++	bool temp_fault;
+ 	int tjmax;
+ 	unsigned long last_updated;
+ 	unsigned int cpu;
+@@ -393,41 +398,62 @@ static ssize_t show_ttarget(struct device *dev,
+ 	return sprintf(buf, "%d\n", ttarget);
  }
+ 
+-static ssize_t show_temp(struct device *dev,
+-			 struct device_attribute *devattr, char *buf)
++/* Requires tdata->update_lock to be held. */
++static void update_temp(struct temp_data *tdata, struct device *dev)
+ {
+ 	struct msr val;
+-	struct temp_data *tdata = container_of(devattr, struct temp_data, sd_attrs[ATTR_TEMP]);
+ 	int tjmax;
+ 
+-	mutex_lock(&tdata->update_lock);
+-
+ 	/* Check whether the time interval has elapsed */
+-	if (time_after(jiffies, tdata->last_updated + HZ)) {
+-		tjmax = get_tjmax(tdata, dev);
+-		rdmsrq_on_cpu(tdata->cpu, tdata->status_reg, &val.q);
+-		/*
+-		 * Ignore the valid bit. In all observed cases the register
+-		 * value is either low or zero if the valid bit is 0.
+-		 * Return it instead of reporting an error which doesn't
+-		 * really help at all.
+-		 */
+-		tdata->temp = tjmax - ((val.l >> 16) & 0xff) * 1000;
+-		tdata->last_updated = jiffies;
+-	}
++	if (!time_after(jiffies, tdata->last_updated + HZ))
++		return;
++
++	tjmax = get_tjmax(tdata, dev);
++
++	rdmsrq_on_cpu(tdata->cpu, tdata->status_reg, &val.q);
++
++	/*
++	 * Cache the temperature even when the CPU reports it as invalid. In
++	 * all observed cases the register value is either low or zero if the
++	 * valid bit is 0, which is of more use than reporting an error.
++	 * tempX_fault tells userspace when the temperature is unreliable.
++	 */
++	tdata->temp_fault = !((val.l >> 31) & 1);
++	tdata->temp = tjmax - ((val.l >> 16) & 0xff) * 1000;
++	tdata->last_updated = jiffies;
++}
++
++static ssize_t show_temp(struct device *dev,
++			 struct device_attribute *devattr, char *buf)
++{
++	struct temp_data *tdata = container_of(devattr, struct temp_data, sd_attrs[ATTR_TEMP]);
++
++	guard(mutex)(&tdata->update_lock);
++	update_temp(tdata, dev);
+ 
+-	mutex_unlock(&tdata->update_lock);
+ 	return sprintf(buf, "%d\n", tdata->temp);
+ }
+ 
++static ssize_t show_temp_fault(struct device *dev,
++			       struct device_attribute *devattr, char *buf)
++{
++	struct temp_data *tdata = container_of(devattr, struct temp_data,
++					       sd_attrs[ATTR_TEMP_FAULT]);
++
++	guard(mutex)(&tdata->update_lock);
++	update_temp(tdata, dev);
++
++	return sprintf(buf, "%d\n", tdata->temp_fault);
++}
++
+ static int create_core_attrs(struct temp_data *tdata, struct device *dev)
+ {
+ 	static ssize_t (*const rd_ptr[TOTAL_ATTRS]) (struct device *dev,
+ 			struct device_attribute *devattr, char *buf) = {
+-			show_label, show_crit_alarm, show_temp, show_tjmax,
+-			show_ttarget };
++			show_label, show_crit_alarm, show_temp, show_temp_fault,
++			show_tjmax, show_ttarget };
+ 	static const char *const suffixes[TOTAL_ATTRS] = {
+-		"label", "crit_alarm", "input", "crit", "max"
++		"label", "crit_alarm", "input", "fault", "crit", "max"
+ 	};
+ 	int i;
+ 
 
 -- 
 2.43.0
