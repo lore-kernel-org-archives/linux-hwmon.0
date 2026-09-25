@@ -1,103 +1,197 @@
-Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
+Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC2874DD3CE
-	for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 16:28:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E707408602
+	for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 18:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790353717; cv=none; b=Tscz19QrAn1CELraknpJoaxfw1fHDdTbSdKGr1y45wQsTwCuazHyrE4YzZ4u+ZAyTOVfgoknk1P42TBbe9V5DrelxGatjKrYapoo3Sc896rRmqLOkLjuq79J8Sh2q1c83y1ya/zv9AFy4o/wzmK/aqvLXvL1po90phNlYEbuzNE=
+	t=1790359391; cv=none; b=prNfabgW6iEUndVPUSh7EFmUJSgoUvucKUhd4gfobvv7qIjfgqpuSrprMiFUKd4x0RgOB9CIkbyBu3wBsIFufk9c4Iv9qHY5hNrSNMfqOD+lWyvGSHCY1hE6YT30eiUTvNEvDSB5NgxZg8IMArkxVB3mxjMMP7KuD/zdVwbKT/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790353717; c=relaxed/simple;
-	bh=l+2wzoIOJ5TacTdwjQJG0rDHJINOx2GRB1xkArKzQmQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sCbyr8e8szUG6UFS4TGvvuskl3pwBOOBS3b07K6d0QYYfRY2bcSECkxz9y+zcu9GRmA2hnYxRd+q6zZSOlPkRvbOiGC/L8SaG+NtMGqmrTWlHsz2Qih5FJfRwDpNGcJWoAJln6pYQLRy82g5aa5jLWywDgjbVrRKHuXHU5WarBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NmglRRCt; arc=none smtp.client-ip=74.125.227.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1790359391; c=relaxed/simple;
+	bh=Ju7zhvTIV+QCh40+nZMxiWd5uKzk+g1KU9BhArseauI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nTRBeysuHGil4J1Lw1wgwYcEaocYnHhKWL0OH5nU8Y93jSZzBNHKx2ECYoWsJuN94tttu8ed7vp8nvLoGRa4+vruXNfGHIjPnFzyVJAdhCIBJhvaArglzfx3ne8vs1SvqiWD12ZnbE5pY3fcLtoIGxlAlyoyloKaEpt0/02siUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pw2hW6Kk; arc=none smtp.client-ip=74.125.225.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NmglRRCt"
-Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-396ccb1a98dso705663a91.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 09:28:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pw2hW6Kk"
+Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-4843f22dcb8so932408f8f.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 11:03:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790353713; x=1790958513; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=GwpFfXPotsrRNWGW8QfW7lFLTfBJDFVvrgvILRfxIY0=;
-        b=NmglRRCtysELuQ+WhQ0EK8Zcvj6wIkxsZ7XLPhTxeY/C5+gnw9eds089MTLvdhZSFu
-         iS1VSS37awT5pOsLretvGGyqAkcol8c1hsA3HufkGDLF3MXl+9PjXbNfl9t8859LOEgB
-         sh5SEZ2a6gn5YQewnKhx86J8PsIywk5Je6do4HVJ+XLdEE7JASGdq6uW7L4CxikW5mWZ
-         ufE40xJKc7ybYh7ka5gGXuo2WCqXkbxkEvjQ9NYLDkrYfAo/xOjRfKkzu23rPt+VgyR9
-         ixnuy0iQsZ8xwQi5KJUROV+hK32yg891V8swgVFkUPUb+TCng9a6feaMsJ2qAObtNHRn
-         JEKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790353713; x=1790958513;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1790359388; x=1790964188; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=GwpFfXPotsrRNWGW8QfW7lFLTfBJDFVvrgvILRfxIY0=;
-        b=c9xVhYxE4nKJmVtVje4z4Gney6Upk884eKnFFZc9fzRKpigrFVOLo2dh8cT2CHHhi5
-         CK7m/Nx+LSggkjaAZpsd3ACPlOWp51xltGxf2TV+5DFR+B3Gs3JIKEuc9wGFMISK9iyE
-         MxJfqBEwK5VZxemyGMSCIXRKiKS+E1YORpiXt0y17SFU5S4EFLGwGIOR43mTAsCuEQY0
-         wBLcfStwoZuVNQvLMK5MvfZWGuH6YiKEi3QSIlGyn29LM/2Uy+ON+JrGHTD/xlk3ERi0
-         w4k0PGvcaC4KTMmXSPfuETAd6cHL2HyGzhM0NyHUNkH1NkuMyAAvhzfEDS55cUmU7n65
-         v7VQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzAJUwuUFHYTd9jcCZw0lrhlc93H7Rvx0cd88yzIDVwHntvckXKjJQsgVo4GQEVl7NfN530zpnAXAzQiA==@vger.kernel.org
-X-Gm-Message-State: AFuF++kEq7bvia8oc8b7hl046bsa+e3xW97VpwzbzKN2/HwRbPoUpVMn
-	BJdA23GPjo4b6/PM6t9I4RMTv9skZT8W0OOU/y/C5SCwO7HLaiR62dZT
-X-Gm-Gg: AYBFou2xRcyhLssipTRC6tqWXluDOjI9MJIK+B3SO7ONebZvThHcURQJ3Pkz9nLpdaG
-	hbwv/l5RU32M74mgoCapmwRyTjXSB1i/hVTrvqVWdwfyxkQJOgbKZiEn6yxP0tb6VnQDzObbk2S
-	vUCBnIi+qntP0ecQw7uaeLzj056jAcbTVaLNbKpV8x03H/K5sVT+f/wP8el/2JRHL4wSgxACjRv
-	3v0P1zhTYC7pTfPkyMRqrWPVTOG8c2iX8k8TwizSyrE2Jf6M9h1ELqQj0QuctJfrj27eXURoetW
-	1HX2m7FrfoGGVERq9TxCRbDEayUl9vNn95aogcPc0DfeSFQE+Whb7eTqxudXXdN3RPyZZC5g5FU
-	iKsIeGpoqMOXI/hTkLXJuCswW7oK9TTB/O7AB0eV+1TgGLEf7E3eMLWQxo4xTO7NEHWgucXLp89
-	c/fW0uPgtXq/vamQ6QrVvJdaEvIDAIstej9hT4vAeFNZfU+wQsyD7bCgxI+z0YUNSAXvcex5H5X
-	iKcRrey+LBNeA==
-X-Received: by 2002:a17:90b:1350:b0:39e:6c6a:656d with SMTP id 98e67ed59e1d1-3a0bb630128mr2176047a91.48.1790353713455;
-        Fri, 25 Sep 2026 09:28:33 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0976c7435sm12169939a91.11.2026.09.25.09.28.32
+        bh=aL9Wl8C0xRRNjJBTarQpi8R0Mck+qeYOMPSZBKJwmx0=;
+        b=Pw2hW6KkB6Wc459qoJzEC6z4sjiqgfdrCUXqVEOoPvkyww3+uz6v0Xz/PmmdMiMK8O
+         9ezq3WYhyK5yBW+aAi7r0rLWJF1RIJoOgAnFWmwxxOIme4l3lo0awQBo0TNOq58DYuFU
+         2uaM/lwDBVvcVBE+nB1mAGCZa716exkOF5jx2ljsfqmOhDrA6zKwtxCb6SgISRvckIy5
+         GjzC0BAxOT8GKZIOCvWo3LcrN+0zNuYBe/QQVwxzpNFx6dVe38Uah53kmGl0ZcIT/DUL
+         ML9U4kwiVj37G/xkoNdkAyKNjFyLtyKJXwl8a4MOqfunNXSOI+Wi/UPoR6l/qSeEjxqp
+         /g9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790359388; x=1790964188;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=aL9Wl8C0xRRNjJBTarQpi8R0Mck+qeYOMPSZBKJwmx0=;
+        b=eUwmF39nA+UvM3KuK/EyluYnvoY0b4KnpGim+lnx+vIV4D2Gy3FiOfRO5th+4im9Zy
+         d/EsNzFW5Y9DQqbN9WyRYeq9oLqaaPEFShG/eI/EqFuXt366BKwnrdt17D1ARoUzc89q
+         pKnyv7S2LpQpEDL+IYqqKickwWmronQjGvk9s7/oFP9WiGXNPkj25gDcf6aFzCNRw4Zr
+         /aqD0yka0gIX5L/Ez4zoCvdjtkotpFs5RhIvtRStHPIeisXz9ZHXj8kTMLcHyc8ZDW2K
+         oZRAeOdfqaXJQHmDSdoSRf4DNKZ8+Ub2VlII/z4lXy//4KNeghoe5uUv2SJT8CbJzpwM
+         g6kg==
+X-Gm-Message-State: AFuF++mrz6fIo3ypAsvi/IVRnoQxeiI+cdl5AGbUbaMk1UEp0+ajGGGG
+	gc/Yvx1QG8pBXeCSqwEsONBsJ7EwIygzHMZd2yuZxWio3bqjAP3175S2
+X-Gm-Gg: AYBFou0WzmG6aXEOJCSzow0w3OYTEAiA46MvYGKWLo8Gd37GOFqVy8Uk8fYIB0ViTsJ
+	8QASsc7xWoaixRz1FSbd+th975f3lhbGhsfZy9Uy48oP7LgC8IREVFIbIxT97iHaEeIiIFRfJ21
+	PaLsxCz0cJjhQ8ME9Y1MWatcRYOvkvh6JhWs5k/MfBsejeLcB2B2zOw7/xI/FegJS/0JRptpX89
+	dv9Cuhr1uw4nTW2eRjsR1m78kq2I1IZom78A1FpUSwoSgWpl9QiFf9D/UeU9ZpPaVDeQUI9FLnn
+	33lhsSgIDPKcU8j8P6JwvwJ8orGdDCnmZBDUpuUiTULyT0PLxXFJ09czUDFk2JmZjG28+B2iGS7
+	yjoeB76KP36XRZmf6+aSSsb+QXtFicj3LYlEzdRHLTJ3LqRx1rTE8KXsgiHu93zWfwNB5QMlOXG
+	ZN8x1eZJWjV7W6CrvKklIvc9uta+6VSqudtJABwt8QVyyyKeucNtwu9LE0Lx/FjbFwJypyPkqfi
+	kXNAbx07p6nlJ7kkNU9ErLGWgm+UqZNMXPpSqFMwCmw5cFXf9dYsaexC9d76m5U+W3eYJEghreh
+	yJjCwFCf4b5keQ==
+X-Received: by 2002:a05:6000:41d9:b0:488:834a:cbb with SMTP id ffacd0b85a97d-488834a1dd1mr3121424f8f.2.1790359387972;
+        Fri, 25 Sep 2026 11:03:07 -0700 (PDT)
+Received: from shift.daheim (p200300d5ff3cee0050f496fffe46beef.dip0.t-ipconnect.de. [2003:d5:ff3c:ee00:50f4:96ff:fe46:beef])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a6450a3sm7929304f8f.25.2026.09.25.11.03.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 09:28:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 25 Sep 2026 09:28:32 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Colin Huang <u8813345@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Grant Peltier <grant.peltier.jg@renesas.com>,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	colin.huang2@amd.com
-Subject: Re: [PATCH v3 2/2] hwmon: (pmbus/isl68137): Add Renesas RAA229639
- and RAA229640
-Message-ID: <2301d0ca-9cfa-40e9-8250-4438d30a0059@roeck-us.net>
-References: <20260921-add-raa229639-and-raa229640-v3-0-b104ee8a70b2@gmail.com>
- <20260921-add-raa229639-and-raa229640-v3-2-b104ee8a70b2@gmail.com>
+        Fri, 25 Sep 2026 11:03:07 -0700 (PDT)
+Received: from localhost ([127.0.0.1])
+	by shift with esmtp (Exim 4.100.1)
+	(envelope-from <chunkeey@gmail.com>)
+	id 1xAAGI-00000000LZj-2fxl;
+	Fri, 25 Sep 2026 20:03:06 +0200
+Message-ID: <f28a5470-0d9e-4045-9c64-5614e0e88de2@gmail.com>
+Date: Fri, 25 Sep 2026 20:03:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260921-add-raa229639-and-raa229640-v3-2-b104ee8a70b2@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (lm70) Fix rounding of negative temperatures
+To: Ridham Khurana <khurana.ridham222@gmail.com>,
+ Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Christian Lamparter <chunkeey@googlemail.com>,
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+ Nikita Shubin <nikita.shubin@maquefel.me>, Shuah Khan <shuah@kernel.org>,
+ Jori Koolstra <jkoolstra@xs4all.nl>,
+ Brigham Campbell <me@brighamcampbell.com>,
+ linux-kernel-mentees@lists.linux.dev
+References: <20260924205326.1739229-1-khurana.ridham222@gmail.com>
+Content-Language: de-DE
+From: Christian Lamparter <chunkeey@gmail.com>
+In-Reply-To: <20260924205326.1739229-1-khurana.ridham222@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Sep 21, 2026 at 03:16:36PM +0800, Colin Huang wrote:
-> Add support for the Renesas RAA229639 and RAA229640 PMBus
-> voltage regulator devices.
+Hi,
+
+On 9/24/26 10:53 PM, Ridham Khurana wrote:
+> temp1_input_show() drops the low bits of the temperature register by
+> dividing the raw value (raw / 32 on the LM70). These bits are not part
+> of the temperature: the LM70, LM71, LM74 and TMP122/TMP124 always
+> return some of them as 1, and the TMP125 fills them with copies of the
+> temperature LSB. Division rounds toward zero, so a negative temperature
+> with any of these bits set is reported one LSB too high.
 > 
-> Both devices are supported by the existing raa_dmpvr2_2rail_nontc
-> driver variant, so no functional changes are required beyond
-> adding the corresponding device IDs and OF match entries.
+> For example, the TMP122 returns 0xffff for -0.0625 degrees C, which the
+> driver reports as 0. The LM70 returns 0xf39f for -25 degrees C, which
+> the driver reports as -24750.
 > 
-> Signed-off-by: Colin Huang <u8813345@gmail.com>
+> Use an arithmetic right shift instead, which drops the low bits and
+> rounds down. tmp421 had a similar problem with negative values, fixed
+> by commit 724e8af85854 ("hwmon: (tmp421) fix rounding for negative
+> values").
 
-Applied.
+For the TMP125 yes:
 
-Thanks,
-Guenter
+Reviewed-by: Christian Lamparter <chunkeey@gmail.com>
+
+
+> Fixes: e1a8e913f97e ("[PATCH] lm70: New hardware monitoring driver")
+> Fixes: a86e94dc946d ("hwmon: (lm70) Add support for LM71 and LM74")
+> Fixes: cd929672a9ef ("hwmon: (lm70) Add ti,tmp125 support")
+> Signed-off-by: Ridham Khurana <khurana.ridham222@gmail.com>
+> ----
+I wrote a little test program by hand (see below) and ran it on x64.
+No idea if different archs behave differently or if
+a clever unsafe math optimizing compiler flag will
+convert the  "/ 32" to a " >> 5" but I doubt that...
+
+---
+tmp125: raw:7ec0 tmp125_proposed: -2500 tmp125_now: -2500
+tmp125: raw:7eff tmp125_proposed: -2250 tmp125_now: -2000  <--- loss of percision
+tmp125: raw:7f00 tmp125_proposed: -2000 tmp125_now: -2000
+tmp125: raw:7f3f tmp125_proposed: -1750 tmp125_now: -1500  <--- more
+tmp125: raw:7f40 tmp125_proposed: -1500 tmp125_now: -1500
+tmp125: raw:7f7f tmp125_proposed: -1250 tmp125_now: -1000  <--- and this
+tmp125: raw:7f80 tmp125_proposed: -1000 tmp125_now: -1000
+tmp125: raw:7fbf tmp125_proposed:  -750 tmp125_now:  -500  <--- also bad
+tmp125: raw:7fc0 tmp125_proposed:  -500 tmp125_now:  -500
+tmp125: raw:7fff tmp125_proposed:  -250 tmp125_now:     0  <--- ouch
+tmp125: raw:   0 tmp125_proposed:     0 tmp125_now:     0
+tmp125: raw:  3f tmp125_proposed:   250 tmp125_now:   250
+tmp125: raw:  40 tmp125_proposed:   500 tmp125_now:   500
+tmp125: raw:  7f tmp125_proposed:   750 tmp125_now:   750
+tmp125: raw:  80 tmp125_proposed:  1000 tmp125_now:  1000
+tmp125: raw:  bf tmp125_proposed:  1250 tmp125_now:  1250
+tmp125: raw:  c0 tmp125_proposed:  1500 tmp125_now:  1500
+tmp125: raw:  ff tmp125_proposed:  1750 tmp125_now:  1750
+tmp125: raw: 100 tmp125_proposed:  2000 tmp125_now:  2000
+tmp125: raw: 13f tmp125_proposed:  2250 tmp125_now:  2250
+tmp125: raw: 140 tmp125_proposed:  2500 tmp125_now:  2500
+
+(the positive values all look good.)
+
+--- SNIP test.c program
+
+#just name the file test.c and run make test (in a directory without any other makefile)
+#include <stdio.h>
+#include <asm-generic/int-l64.h>
+
+static __s32 sign_extend32(__u32 value, int index)
+{
+         __u8 shift = 31 - index;
+         return (__s32)(value << shift) >> shift;
+}
+
+static int tmp125_now(__s16 raw)
+{
+         return (sign_extend32(raw, 14) / 32) * 250;
+
+}
+
+static int tmp125_proposed(__s16 raw)
+{
+         return (sign_extend32(raw, 14) >> 5) * 250;
+
+}
+
+int main(int argc, char **args)
+{
+         for (__s16 raw = -320; raw <= 320; raw+=32) {
+                 __s16 tmp=raw & 0x7fe0 | ((raw & 32) >> 1) | ((raw & 32) >> 2) | ((raw & 32) >> 3) | ((raw & 32) >> 4) | ((raw & 32) >> 5);
+                 printf("tmp125: raw:%4x tmp125_proposed:%6d tmp125_now:%6d\n", tmp, tmp125_proposed(tmp), tmp125_now(tmp));
+         }
+
+         return 0;
+}
+
+--- SNAP
+
+FYI: TMP125 datasheet says:
+"The  Temperature  Register  of  the  TMP125  is  a  16-bit, read-only register that stores
+the output of the most recentconversion. However, temperature is represented by only10-bits,
+which are in signed two’s complement format. Thefirst bit of the Temperature Register, D15,
+is a leading zero. Bits D14 and [sic] D5 are used to indicate temperature. Bits D4 to D0
+are the same as D5 (see Table 1)."
+
+(They probably meant Bits D14 >>to<< D5 are used to indicate temperature).
