@@ -1,84 +1,78 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+Received: from mail-pz2-f43.google.com (mail-pz2-f43.google.com [74.125.228.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D7264499A4
-	for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 13:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2613515D5
+	for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 14:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790344435; cv=none; b=aKIM30IXG65xqyGv9uHXKU406BC193AdOiKAt+aas6dnf7S67VNMNHmHmgytcU6qzGw3ORUj5KHcGcuz8AIbwdHPEL0ttS3BrLNZczyKhAb5dDjJQGhN4YEbQznCg0f8k4Gs4Rl11uqGTxLALCowpQpbeBAVqjiE2Jc8QEF8WeM=
+	t=1790344831; cv=none; b=ehIoXjQcQmGLLypLy8BtVM8gWFCfLdqkcS+cPBhhoztPKJRE3Uxb0cyczttTTvEqinJ95h2Ayljuf9b30XGxLMmYriLsah/pqlspbsQkqzTFDel5Y77TA+2n5MD7caOjYiNUHCMWLklCKCO81Om5yj45WZ41k+zd3Kgy+oLqRWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790344435; c=relaxed/simple;
-	bh=hNw6vrHbhx2PblfWwARxPslf5MioPjYbwh4EEsJ1w7Y=;
+	s=arc-20240116; t=1790344831; c=relaxed/simple;
+	bh=2H8He1fIaWEIMN/Us026LinmPPPSEuu9arhpUonNLWM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s+1RvTgz1h1H0UJf07WR+oqhfLIEOqMolr7jmBChycM69+88vCKyQUG85XN3YQ6w/LbQWbKPncA3C3SL+EWhPcqi97v+JePQb4Cn0Kv0ml4pAN7WeSY4Ijee+tYX0eNrOmpEBSJlbXCMJH3+MIjkJcyJHu68Sq6JeF40lc6SE6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eU+WFRJp; arc=none smtp.client-ip=74.125.228.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q2Xdu5OebifGfms1pCiYQL+TYCViXVVRZIH1bHDOsMVB/bvkjjYMkqeTAT+nCgQhdjkAnK9oOImiirvj76bxoa9Ih2OF1tlT27EnYkQwtsCGdE9w4t06ZOraCottIhRaAKpLMT/ogj6dmW6RUrPLulSSvhVJ2Hm58bJ0PKxBy4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OsHGSbSE; arc=none smtp.client-ip=74.125.228.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eU+WFRJp"
-Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-85469f20513so489171b3a.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 06:53:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OsHGSbSE"
+Received: by mail-pz2-f43.google.com with SMTP id 41be03b00d2f7-cc433d52421so343133a12.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 07:00:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790344431; x=1790949231; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790344829; x=1790949629; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=XdrXdgsFzarfUhjEFq1mXLUok84uZ5SW2Q9gL7YwPb4=;
-        b=eU+WFRJpuY9fo5vRDPjd+sC/yw9JCX73Z4+d+zMXat9PT6j3Ch9bUh2lguBc0a1k92
-         DWyrzdqd88xU8Nf0Vg7036p3VNjaHdu8jmp6b0lT3mMWg3yNnEon0JB1Fz4Dbg5Jjxjq
-         1CpeFqyqMZDsTgf+yigRKxUJH7fo7smaJMdlrEpP5sGh+GJpgakdZv5/QwxIFYiWBfu5
-         Klw6oeHKOU+ted8K8JYlDqAdgWL+EULZKtIvl2g80LBavOfBBYFaS6yeCsmDe6LaXCyX
-         BFwtwcwj2SUopk5f9t19tcgLGCix0a8t5Lxlt/GKuooUJogSFFwCOlhervC7DdzfdAtW
-         +WIw==
+        bh=UIT8Wz/kXm8JbJjsdHOy8KnROa55AifnObjuh2CsK/E=;
+        b=OsHGSbSE/Dou2eSCRNoobq56lEr11LbsgaP9FoCGLna+XbV2fW4izGkhG3xCZTLgq+
+         2zSnPq3TFs30vLyvpLxCSRWRYXYzr94TKF0c/7tW30Q304wiQixBI8jVx6qTUw1YBIYK
+         +HVVqeDYcagxtgYkCvhn/rQnt9+PQ1hYj5iBu+O2woZq9pVqDrnaU+TaRqzya4/FKAZB
+         F4kBIQp3/ucRWYotdfy4xfvcgnb2DZ0Jj8EYIiVEm6YrxNus1YAfNoOb/O6gK0sqxRJd
+         YUVGIsHJ/I34Ldc4Ssr5/YKh+1Ew28UCz+zZ2pEKbqKYg4lrmTl+VdeSJ0h5GK+oH/Tr
+         kAjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790344431; x=1790949231;
+        d=1e100.net; s=20260707; t=1790344829; x=1790949629;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=XdrXdgsFzarfUhjEFq1mXLUok84uZ5SW2Q9gL7YwPb4=;
-        b=z38A93rc1WkvgsY2Zy6hg1JFIQBpMcsrmYX7VyEhfddraIViOa0wMBdidYPWdsb2GJ
-         YUsDITOwCwUp1JpJKwt5D1wSCeH+yfYLH+G+b99QxUqiZuZPOFLJXhXKgMiysubQqkN4
-         TBPm3bB6oJd/wu3jfIuQEO/n1RJ1E/0Mi2dokcYTcwBXdZhgYdBlnFlbmuJJG/VYNtWM
-         WYwYDZaz8MkI8PW6Wnn4jFuMmXcgWEhu+uBg2tNVInAND4r8zOe5FryH+TwXXtQFjEjA
-         OMNTsBs+nOd6OZ0I38TmML+q6oNwba3MOO+tnJk2uJBha2NFaVlRoGNYCi2+ulK+dg0n
-         dAaw==
-X-Forwarded-Encrypted: i=1; AKwUvBxMlADstoHLWEcLvb2v0Jriv4nUBFTLN2t/Vmclnmq7bAs3Q65Mr3f4I1NOXFJFNeXP/lnys8gltu1oqQ==@vger.kernel.org
-X-Gm-Message-State: AFuF++miMQU+UI5CDaBAO8cF93KXEs060QaiYhVS/8bz5hKig7aYbACB
-	ZCTj41QZozAoe27nmCkuW9HHemkkjmcuEdRVWbLBjsNJ2BfUv5P1Cam7
-X-Gm-Gg: AYBFou3N08uhEEZQLsKLzzxIEYkpmlX7wt5trc02soiuOPMC6znEjeNl49xaV2fcISM
-	nyYBd2Fmw1/kxtUvt/+p6F2ICN3kU5xD7YhhTAjfMb6HpHtg2OJp9pmLm7yOK7CvdrP9bprgvW6
-	BWs/ktmCI0g3x4JxInOQlBaOT54K3r8LXR07m1FWjgvmxuoG/WoaseH9T4YML3vFWhvkB/ZI9xQ
-	KILyL+sW6Dgnir9riytvB/qwlZNHvK23QQKFr89QxpHtIDOAc96uXrk0JPFPhBZ0H74r8wVa2yq
-	LF6yS7p272ojxcdI6QOEdweh/FC9JQpTfYu4XtTt4dGGwBQbyfKk/retFUPLoyleEPE7Exkx14R
-	QfEKlpDOR41abfsICZkO2vgKs7hbZv+xSWpTIa4vM0Ozgk1i5egdGi8sNqiO1lziJKOW2lYk+PT
-	+3cELlCQKiq2MoGjxKon4jKlSmc9rOdAGRHyD7s8iaHjQ2I+5EF1ufh78k3FpRhPk9aM+xPeYen
-	yRRuAcD8EZw
-X-Received: by 2002:a05:6a00:6c88:b0:868:f29f:67c9 with SMTP id d2e1a72fcca58-87e9899515bmr4754627b3a.9.1790344426713;
-        Fri, 25 Sep 2026 06:53:46 -0700 (PDT)
+        bh=UIT8Wz/kXm8JbJjsdHOy8KnROa55AifnObjuh2CsK/E=;
+        b=sSe8jycHHloD0Eeq5r57gysfFVnuOoRuyQXyLn2bRVSts4lVsermjQCpkR2C8OIs6r
+         brwAE0pxRDNJJvoNYakkM2RqN19lnYAaaWWkBLFoKyHWVN870kgEUmZH+vxPaPbkecIi
+         3km0CxDZU2/AQt5tvxZDFZP04mxtZBSmKbeWoF0isfTXURdINmvyxhmAOXloy5hlrU3k
+         xSr9sOUawLd7CraKAvYN5TzQWPlUixiWhDatiHuZ6q7fmf1Nk9MSLuzFI4iG1b7IpTma
+         GMMIF05bXhMyZn2Q5AKWwbYn/BFfhfRpo+8sSRtiXo/gOlS/gtZpp+J2FClr2gYlcjMe
+         lJLQ==
+X-Gm-Message-State: AFuF++nCx2UfHAHf2sS525ohdPY4oCrUKcQBLvAZ2Eszb5nKcUwK5S4I
+	ockgrZBFU/yVBtmNZTucYweq3b7WkSZwqknbbbMGM6cPB6YqGF8Vt3Ct
+X-Gm-Gg: AYBFou1f0mQyHvObI1cV+CEyc5xk9pYGzNt94Jy9jr7tDRveozxUFMc1KjftrTBpBv3
+	IdTsLspKv+tacEr0pW9vJIHXM2BSxU30qbLAjuV2imjZt9Rx2nxZ+H6P+mS/KGTonxNWu1bG0wD
+	3HsdHFVAD94w7pH7XjMfWwQZFJsW8ohyeGfAKXHhgSDy+m5G+XVQGvDdkbjZpxYz94ZBwUqm+6f
+	FU2cM2de3Um/Od3ugiWiPYHJOaNws373A4Ld4zgJbjKEzGjw4ZMF0XykpVpEGjGjq9mttYEwdNx
+	/btb9/nuOwJnYHWwX1J1/KZg1rDFdFVRGILJjeACIb4sqpn8ZQTvTCw56m5MDLzJurgk8NLBQsI
+	zZlhvG/P1opPVjDl1sGWnKFm8mjS5QFvdmF2ag1dbGPbvaaDtr8aNUzLG+Fqs/X/tWTppvo2sjz
+	DvnTaKloeMdICYUN+t3CfU619rAPwPcfyylaxwPC+4r9Nmjzg9ZI8SkHitmdwzWljcVmE1vHqBg
+	p2k6qUfXTnKjF0LnbaZesE=
+X-Received: by 2002:a05:6a21:6e86:b0:3d1:39e9:b269 with SMTP id adf61e73a8af0-3de0e713a13mr5286119637.4.1790344828912;
+        Fri, 25 Sep 2026 07:00:28 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87fea888b10sm1160362b3a.29.2026.09.25.06.53.46
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87feb57e56csm1193045b3a.48.2026.09.25.07.00.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 06:53:46 -0700 (PDT)
+        Fri, 25 Sep 2026 07:00:28 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 25 Sep 2026 06:53:45 -0700
+Date: Fri, 25 Sep 2026 07:00:27 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Colin Huang <u8813345@gmail.com>, Rob Herring <robh@kernel.org>,
+To: ashish yadav <ashishyadav78@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ashish Yadav <ashish.yadav@infineon.com>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Grant Peltier <grant.peltier.jg@renesas.com>,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	colin.huang2@amd.com
-Subject: Re: [PATCH v3 2/2] hwmon: (pmbus/isl68137): Add Renesas RAA229639
- and RAA229640
-Message-ID: <6c0a8e93-9fe3-4389-8d59-08df49cc54e4@roeck-us.net>
-References: <20260921-add-raa229639-and-raa229640-v3-0-b104ee8a70b2@gmail.com>
- <20260921-add-raa229639-and-raa229640-v3-2-b104ee8a70b2@gmail.com>
- <20260925-hysterical-otter-of-courage-bc6ab0@quoll>
+	Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH 0/2] Add support for Infineon Digital Multi-phase
+Message-ID: <6d6d168d-acad-4ba0-b0e4-214dd07822d3@roeck-us.net>
+References: <20260921065702.93196-1-Ashish.Yadav@infineon.com>
+ <CAJKbuCZ1733m5UKXNwOV-3WBYNOFbgUA7QUfhAY51yskv6z-Aw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -87,39 +81,24 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260925-hysterical-otter-of-courage-bc6ab0@quoll>
+In-Reply-To: <CAJKbuCZ1733m5UKXNwOV-3WBYNOFbgUA7QUfhAY51yskv6z-Aw@mail.gmail.com>
 
-On Fri, Sep 25, 2026 at 03:06:51PM +0200, Krzysztof Kozlowski wrote:
-> On Mon, Sep 21, 2026 at 03:16:36PM +0800, Colin Huang wrote:
-> > Add support for the Renesas RAA229639 and RAA229640 PMBus
-> > voltage regulator devices.
-> > 
-> > Both devices are supported by the existing raa_dmpvr2_2rail_nontc
-> > driver variant, so no functional changes are required beyond
-> > adding the corresponding device IDs and OF match entries.
-> > 
-> > Signed-off-by: Colin Huang <u8813345@gmail.com>
-> > ---
-> >  drivers/hwmon/pmbus/isl68137.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
-> > index 2f7f825bfb69..15b4e3f15f11 100644
-> > --- a/drivers/hwmon/pmbus/isl68137.c
-> > +++ b/drivers/hwmon/pmbus/isl68137.c
-> > @@ -456,6 +456,8 @@ static const struct i2c_device_id raa_dmpvr_id[] = {
-> >  	{ .name = "raa229004", .driver_data = raa_dmpvr2_2rail },
-> >  	{ .name = "raa229141", .driver_data = raa_dmpvr2_2rail_pmbus },
-> >  	{ .name = "raa229621", .driver_data = raa_dmpvr2_2rail },
-> > +	{ .name = "raa229639", .driver_data = raa_dmpvr2_2rail_nontc },
-> > +	{ .name = "raa229640", .driver_data = raa_dmpvr2_2rail_nontc },
+On Fri, Sep 25, 2026 at 12:01:28PM +0530, ashish yadav wrote:
+> Hi Guenter,
 > 
-> The entire point of fallback is to avoid this change. Why do you need
-> this?
+> I hope you are doing well.
+> When you have a moment, could you please look into the patch to add
+> support for the XDPE1A2G7C voltage regulator?
+> I would highly appreciate your review, feedback, or any guidance on
+> next steps when your schedule allows.
+> Thank you very much for your time and continued support.
 > 
 
-I personally like to have it for this driver because it makes it easy to
-track which device require which configuration without having to track down
-devicetree fallbacks.
+Please do not top post. Also, I was waiting for DT patch approval.
+Besides that, I do have a paid day job, unlike this one that isn't paid.
+If you had bothered, you could have checked the status of this series at
+https://patchwork.kernel.org/project/linux-hwmon/list/. This e-mail is just
+noise adding more to my work load without any benefit for anyone, including
+you.
 
 Guenter
