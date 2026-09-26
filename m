@@ -1,76 +1,75 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pz2-f14.google.com (mail-pz2-f14.google.com [74.125.228.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987B1215F42
-	for <linux-hwmon@vger.kernel.org>; Sat, 26 Sep 2026 01:46:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 164523090E8
+	for <linux-hwmon@vger.kernel.org>; Sat, 26 Sep 2026 03:26:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790387202; cv=none; b=VcXM3NKv0/0wobWNV8fPxpAfq/hY1un/sjUTxfWEclo3AxvzMXvJrEhUJmp9Zr76MuJmI2er0OvziTboqwX/DJrl5eDjJu800FwD5WhI2niTY3vEGd86QpGdxbDhxJkgKRVMxjcsIXpUFiCkmIQ+3sCOzF8oyyChopvD+7v6VCU=
+	t=1790393163; cv=none; b=mJyPj0S7Nar2Ac+MC0uGtv+wsPvxmi7p6yU2lwk4mQ7U8weI2Q6AWBn3JASpS6lDmSVDA+NkTadd5Vll+FqIatqrzzegC7/1MP/vfqTNdrHgmKxlheCxv8+Wcq504zNm2Xu0nfRSVHyt19uSyb4TOmW96UKr92wwag1B7mE3cLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790387202; c=relaxed/simple;
-	bh=vwkqmE/L1SbBbgG7jkKKCIufo+UrUWTVHRbxZ9VQ6cw=;
+	s=arc-20240116; t=1790393163; c=relaxed/simple;
+	bh=GBcORWffZ7qQhvpMu408WBMZ3ZAf50Ak4kkEpdiYuG8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PkAuyDAA29knY7YD1M4FpshMwforBMbITrjVxawW2jzOi8FSbgRc9x+V3cI861TS1RQ4A/lqtBzQGtRWJXjIhuaIa9yIB5BhQASXWkjWTniCPzUAO3f9yh118fBDQLWVASDF1ESY5khWNAqwrCjPHc6HINTc5mXXDgzjlzj24VY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=of053agu; arc=none smtp.client-ip=74.125.227.140
+	 Content-Type:Content-Disposition:In-Reply-To; b=C6XfCbqiFoEUJFVdEkHMByFTYx9iC4AS/Ilu5noV/OGCea/kj/eLrbln8zgs94LO3vJwtYKpG1b6ILHZhVKJEdVVymJDqsYTh7TCjn3r7hssuQQK8YfxA3Ob4qghCyaJYR+NI8C2Cndel+6+kdfiTC9s+vzHxjwpZaoC31SGJXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fhcYV0cB; arc=none smtp.client-ip=74.125.228.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="of053agu"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d91ede8035so13143255ad.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 18:46:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fhcYV0cB"
+Received: by mail-pz2-f14.google.com with SMTP id 41be03b00d2f7-cc78e1a94b8so715852a12.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 20:26:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790387200; x=1790992000; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790393161; x=1790997961; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=NI/57maa8yM41Ln8iNyKbscX6tBjZSqd1TFGGzH5ius=;
-        b=of053aguhFI71MJxd8gWFiK7K5/WJ4h88aBU++86+I/9JIy3dWFLWPNhcp2NTnmCbw
-         WLCgiraNVLkRfzidgnH+OP3cBFR9FOphKFK+7N7NKNRx2h3owaT9YyK1320O+W40ra9d
-         h7z5Nnn/CXA/zaSm+D8om85/Wt6z8fuO5m8V5U39e92ERT6vI41N+ElUTdy8wiMVHGex
-         lQ1/LQ8bHlfZvSbiZyxmstyAu8EZOKRz0ZbrMkh3dneNFIlCUGXuwaF4/DFM/dxRE++F
-         jMhDiQsvXKp9BcFu4OjDKYGAKibDrE3Vbdf1/uSE945mHfKsBYV5WKINz/xlGAoISDsq
-         SuMw==
+        bh=1vjySsVVmbKiFInGwDGm2D0Hk00yL7CXO9MMmjGNncI=;
+        b=fhcYV0cBVsA3XvzbwVPS5O7Pe506FeW/DEi/zIlEmVw7Ukc4wLpMu+ZgwaxJN6jFJZ
+         mlPepZNb35+XDALbJj2cCP58g0ngbIybaOsiJuMmCzxdi8ebb5uYarJfMWYny+b+NkIZ
+         dSBuqRkxjpZSZOuxGfYcapD0IHiajhzwSs3F6vMzgZthOUTTb8CJKMpoi/I6Fo+GZBNk
+         G5Aa0nAQVCligdcblaejw7x3Q35wx5cFKFQNut9SJROkyB7mKgtYhMjpz+2xJbS50Acm
+         mvOobv5tvKuD3KqEH2WW13mLBhNMzbww++7UbpuGBxVY8v0zzZfspr+6gjBuaU/6CvEK
+         Cc6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790387200; x=1790992000;
+        d=1e100.net; s=20260707; t=1790393161; x=1790997961;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NI/57maa8yM41Ln8iNyKbscX6tBjZSqd1TFGGzH5ius=;
-        b=gRIfgaN5fKVTWX5JdwA8j0Go0NH7+pcE0+gGXFOmzU1sehQ8HLqG/HZdU0F7CFUxi+
-         NI6gM2R1RWGIz/wMdnfgc83tpUeBk7naTndJ1HaJCG4OKpWzXDQgjktEgGUObVFTptBl
-         jJKYRmYQmDy4Pt3SU3GmaV/jvwLw4TWX94sxZwtMcFaUqwd2rYc/Q/5TKdA9mjKWnoue
-         jFZnITE15CM1gYN2+M6DChtXuSFZ2vlsFjTh7paNldiPXvdF1mo+dGmjSno/3gee45rL
-         Dz2bzoS/x8sjhQMg8OR8+M5hb3eZsgaV7lwwHRKgpYbPfP6SVIMfd17oQI/xCtue0leg
-         TMdw==
-X-Forwarded-Encrypted: i=1; AKwUvBwvK/H1CGP6YAb6moVYdQ86SB9w/VksFImlhVuvto1+6UKZCOZBiF/sTlkK07r07sT0ZKbLzmQmEOqArg==@vger.kernel.org
-X-Gm-Message-State: AFuF++m7wv+0ASI36U2zekCDgXEZxd8W4Kdt5LqMji//MlnS6eE1n7L3
-	YgDaNo+pYs03D858m9LCTQjrbS8t12LU+mkK6Ve7bq1IvepmYLESQz2Y
-X-Gm-Gg: AYBFou20MEPP0Cr1qivvzZrKeliupBpZgS28vfZ4tEbDCNLnzQPw1ZEodgA2gY3Axwv
-	6Lcwfdy73E0oxuisq7malMisz6bn2yqtEOWYdowvnBnL3ZKr85TuiglWh7lsR5EMYjmWSgCUu+Y
-	ZUE5n+gZ5tsvli1QE4juDA1D9pgEFCDnLPMJvujdqYezCF5/CQG4clbCwRxTGi2m3FpIBUwaVo1
-	1pYgxZXczCULf5N9Jievz1+eEi7g1YJucSs5FlkqdSsRts4D8EcjHu9v5Naife5RNjgAgyM9KRM
-	1O/b13KXA5VaeQFUBDahU8SJfrcLSl+Dowd0tgUR8R6d7dGiIWFule+uHP2l/+J5tW7wkKHktQ7
-	k++UxYAvLcUL+fGrtJdlCzyAZ8xgVsdmKI+IIxC08uS/KBOa+PKj2M+4avgWw1qG4owlzjoQguC
-	RiC5+I3ZpTCGUWlC6TEgMXIGLlyCSuwAIsvs4zCV08d+l6yKRLopVdKXxxbun0eli4iuU2VGWpq
-	WrrmG8zL9aOSo2hu//MdXA=
-X-Received: by 2002:a17:902:ebd1:b0:2dd:c100:9434 with SMTP id d9443c01a7336-2df94c1bc03mr31488365ad.50.1790387199777;
-        Fri, 25 Sep 2026 18:46:39 -0700 (PDT)
+        bh=1vjySsVVmbKiFInGwDGm2D0Hk00yL7CXO9MMmjGNncI=;
+        b=vrlZ6HV1YY9Nj2+XSZ36o1UO10Ju3TuK3vrg1uXhoP6lua7ydy7uq8L6jXETRlrEMn
+         +1m0TYrlPYcclU9F4F/ga0dKmH13q46ZjGY7ymVPWZlbGOx4a66cOspKBo+eQPdZoEpF
+         wnykY6TAUCDNCTr37KCLWXb6AxaHInIx4EcOyltbI0o705iaoGqRH6mHBtr5s2yWggGl
+         1ZWvWTTcXz6PJBhxwp4vZx8LwbdA2LWuuvelmOe6u/Qvjc2vHONXk9kNPZ4fZG78Jykd
+         KXQYhMmqICydctu7+1HtXWpHKhv1YapMtXBRoyNDzNMXngya66J4apXiYZfEievua9/m
+         j1bw==
+X-Gm-Message-State: AFuF++lls4wYCNqcTap6m+tmn3m371ejFyGdp7IIyAOKapXRmVPwLh4s
+	Hh6BJjA6tdTkP6kkr+N+j7fBctQcmtbE8eZwEH/lBcsXn2cuap7blMCe
+X-Gm-Gg: AYBFou3KT7fXIOTWYhYiJz6keVABOpa5ueudvrNfHdNMGnAJxB8bes9rd01ARowADzG
+	Ro7VVIM9gwNTPG9GDLE4pRKxBi0xPFQJd45hT9sM5FCTyk7IiETIY2hUJFeKREQg1dmVQdiZmat
+	pNavjVh5y34XTkEg9ochm6XyHhk5NlmauHOOAxwDWCRw3kKtCGw5sKf+mb2dzhBMUpQ5aDswi9/
+	LpT9RSswb4afEJYykJpftPtevgK9GBG7MzOfHurqNp3P+U/xZJ589ZZhS5MCobiXV64A4/YQaqK
+	9l3sI0bGHj9mSDfyBRSABn/lALHSTESNfwo1LdhKMLH8S6Dq6Fx9gckOz41gjPr6GU54LWv5skN
+	cnQxOYYYAUkYbVS4n5GcchEM18IinF+yJNh8CENSaDD9VDhatAHhA2T+8N3NltLkhv80pxKIxMt
+	6pS01Qxl7gEVUpFKjPFbl4wOFBN2mHZ9/H7eJZcPL7OyXLZEAG0ynUsTX00GPtBDor2I4vIKq6K
+	o2s4Wxw83hNZw==
+X-Received: by 2002:a17:90b:2245:b0:39d:84af:a0b3 with SMTP id 98e67ed59e1d1-3a098b46f17mr6499116a91.18.1790393161354;
+        Fri, 25 Sep 2026 20:26:01 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df913e030dsm17439105ad.16.2026.09.25.18.46.38
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0c3f74e5bsm5653572a91.5.2026.09.25.20.26.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 18:46:39 -0700 (PDT)
+        Fri, 25 Sep 2026 20:26:00 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 25 Sep 2026 18:46:38 -0700
+Date: Fri, 25 Sep 2026 20:25:59 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: alexei.solcanu@pm.me
-Cc: Cryolitia PukNgae <cryolitia@uniontech.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: Re: [PATCH] hwmon: (gpd-fan) Reset both fans to automatic on duo
- boards
-Message-ID: <78883f5d-e9b7-4fc4-a15a-d5ece6c9c8c3@roeck-us.net>
-References: <20260925-gpd-fan-duo-auto-v1-1-29bb670b3331@pm.me>
+To: Tom Verdonck <tom.verdonck@inspiral.be>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org, Nishanth Menon <nm@ti.com>
+Subject: Re: [PATCH 1/3] hwmon: (tmp102) Fix jiffies wraparound in
+ conversion-ready check
+Message-ID: <7194c93e-9c9c-4b3a-b0de-28fb7a5a00eb@roeck-us.net>
+References: <cover.1790358356.git.tom.verdonck@inspiral.be>
+ <2952f070f82913aea96eec25d28008d3b9058656.1790358356.git.tom.verdonck@inspiral.be>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -79,65 +78,32 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260925-gpd-fan-duo-auto-v1-1-29bb670b3331@pm.me>
+In-Reply-To: <2952f070f82913aea96eec25d28008d3b9058656.1790358356.git.tom.verdonck@inspiral.be>
 
-On Fri, Sep 25, 2026 at 08:13:26PM -0400, Alexei Solcanu via B4 Relay wrote:
-> From: Alexei Solcanu <alexei.solcanu@pm.me>
+On Fri, Sep 25, 2026 at 08:23:22PM +0200, Tom Verdonck wrote:
+> tmp102 records a one-shot deadline in ->ready_time at probe (and resume)
+> and, on every temperature read, refuses the read with -EAGAIN while
+> time_before(jiffies, ready_time) is true, in order to skip the first
+> ~35 ms conversion.
 > 
-> On boards using gpd_duo_drvdata (GPD Duo, GPD Win 5), writing
-> pwm1_enable=2 only returns the first fan to EC control. The second fan
-> keeps its last manual duty cycle, e.g. full speed after pwm1=255, so a
-> fan control tool that exits leaves it running at that speed.
+> ->ready_time is an unsigned long compared with time_before(), whose
+> signed difference is only meaningful while the two values are within
+> LONG_MAX jiffies of each other. Because ->ready_time is set once and
+> never refreshed, jiffies keeps advancing away from it, and after 2^31
+> jiffies the difference flips sign. On a 32-bit HZ=100 kernel that
+> happens ~248.5 days after boot: time_before() then permanently reports
+> "not ready" and the driver returns -EAGAIN on every read, without ever
+> touching the sensor, until the next reboot.
 > 
-> gpd_duo_write_pwm() writes both fan registers (pwm_write and
-> pwm_write + 1), but switching to automatic only clears pwm_write.
-> Also clear pwm_write + 1, so both fans return to EC control.
+> Store the deadline as a 64-bit jiffies value and compare it with
+> get_jiffies_64()/time_before64(), which does not wrap in any practical
+> uptime.
 > 
-> Tested on a GPD Win 5 (G1618-05). Not tested on the GPD Duo.
-> 
-> Fixes: 0ab88e239439 ("hwmon: add GPD devices sensor driver")
-> Assisted-by: LLM
-> Signed-off-by: Alexei Solcanu <alexei.solcanu@pm.me>
-> ---
-> Both fans were set to full speed (pwm1_enable=1, pwm1=255), then
-> switched to automatic (pwm1_enable=2). Values read from the EC 15
-> seconds later:
-> 
->                  0x047A  0x047B  fan 1     fan 2
->   without patch  0x00    0xf4    2542 rpm  6379 rpm
->   with patch     0x00    0x00    2545 rpm  2560 rpm
-> 
-> Fan 2's RPM, found by probing, is at EC 0x0476/0x0477.
+> Fixes: 3d8f7a89a197 ("hwmon: (tmp102) Improve handling of initial read delay")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Tom Verdonck <tom.verdonck@inspiral.be>
 
-If this system has two fans, why does it register only one 
-fan and pwm channel ? This seems conceptually wrong.
+Applied.
 
+Thanks,
 Guenter
-
-> ---
->  drivers/hwmon/gpd-fan.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
-> index ed212615b2f..b3b75f99f58 100644
-> --- a/drivers/hwmon/gpd-fan.c
-> +++ b/drivers/hwmon/gpd-fan.c
-> @@ -444,6 +444,7 @@ static void gpd_duo_set_pwm_enable(struct gpd_fan_data *data, enum FAN_PWM_ENABL
->  		break;
->  	case AUTOMATIC:
->  		gpd_ecram_write(data->drvdata, data->drvdata->pwm_write, 0);
-> +		gpd_ecram_write(data->drvdata, data->drvdata->pwm_write + 1, 0);
->  		break;
->  	}
->  }
-> 
-> ---
-> base-commit: 3cbb5f15e464583e59c8501a7085ec12b53e23ac
-> change-id: 20260925-gpd-fan-duo-auto-871de9e006dc
-> 
-> Best regards,
-> --  
-> Alexei Solcanu <alexei.solcanu@pm.me>
-> 
-> 
-> 
