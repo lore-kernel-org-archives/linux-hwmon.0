@@ -1,75 +1,75 @@
-Received: from mail-pz2-f14.google.com (mail-pz2-f14.google.com [74.125.228.14])
+Received: from mail-pz2-f39.google.com (mail-pz2-f39.google.com [74.125.228.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 164523090E8
-	for <linux-hwmon@vger.kernel.org>; Sat, 26 Sep 2026 03:26:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1E435C6A9
+	for <linux-hwmon@vger.kernel.org>; Sat, 26 Sep 2026 03:26:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790393163; cv=none; b=mJyPj0S7Nar2Ac+MC0uGtv+wsPvxmi7p6yU2lwk4mQ7U8weI2Q6AWBn3JASpS6lDmSVDA+NkTadd5Vll+FqIatqrzzegC7/1MP/vfqTNdrHgmKxlheCxv8+Wcq504zNm2Xu0nfRSVHyt19uSyb4TOmW96UKr92wwag1B7mE3cLo=
+	t=1790393205; cv=none; b=Vmjs4AjojSks8vLa6mZoH5UQL0osElPzS/yxQpnWKcRyq+D2ytcUyov1TUQLW+1kLHjR9BFmlrULlUf30eW+UePjRhGr0xU8e5ucaf5FmIG/Yvth1ZkkndW0yxh+kS2flG6Ym7UxMu3uDGPicaCj0NMa2JVdrh9gkFNshwN/19E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790393163; c=relaxed/simple;
-	bh=GBcORWffZ7qQhvpMu408WBMZ3ZAf50Ak4kkEpdiYuG8=;
+	s=arc-20240116; t=1790393205; c=relaxed/simple;
+	bh=EMq+CT5k7M/Cu8J/DMy0Hw6p7g2pRBF7OkWnLRHY0Dg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C6XfCbqiFoEUJFVdEkHMByFTYx9iC4AS/Ilu5noV/OGCea/kj/eLrbln8zgs94LO3vJwtYKpG1b6ILHZhVKJEdVVymJDqsYTh7TCjn3r7hssuQQK8YfxA3Ob4qghCyaJYR+NI8C2Cndel+6+kdfiTC9s+vzHxjwpZaoC31SGJXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fhcYV0cB; arc=none smtp.client-ip=74.125.228.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=qnLttA6YVMO80+lAu9P59ofO9zSukCxyYZA0JZoCPGEY6KChiSSJ8wsRZ50kRXd17OUcXpaK6wmn0Gv23+hrkSfA6RJN7tXZMQWt0V6T0gBK/dJl/e0N8s/s/+PDuEUwAWBGa6ItyICK2/PCYSirbm/HwmVcwzLeOu/yavFDKOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eK5lG8g9; arc=none smtp.client-ip=74.125.228.39
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fhcYV0cB"
-Received: by mail-pz2-f14.google.com with SMTP id 41be03b00d2f7-cc78e1a94b8so715852a12.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 20:26:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eK5lG8g9"
+Received: by mail-pz2-f39.google.com with SMTP id 41be03b00d2f7-cc79223bcfbso709041a12.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 20:26:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790393161; x=1790997961; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790393203; x=1790998003; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=1vjySsVVmbKiFInGwDGm2D0Hk00yL7CXO9MMmjGNncI=;
-        b=fhcYV0cBVsA3XvzbwVPS5O7Pe506FeW/DEi/zIlEmVw7Ukc4wLpMu+ZgwaxJN6jFJZ
-         mlPepZNb35+XDALbJj2cCP58g0ngbIybaOsiJuMmCzxdi8ebb5uYarJfMWYny+b+NkIZ
-         dSBuqRkxjpZSZOuxGfYcapD0IHiajhzwSs3F6vMzgZthOUTTb8CJKMpoi/I6Fo+GZBNk
-         G5Aa0nAQVCligdcblaejw7x3Q35wx5cFKFQNut9SJROkyB7mKgtYhMjpz+2xJbS50Acm
-         mvOobv5tvKuD3KqEH2WW13mLBhNMzbww++7UbpuGBxVY8v0zzZfspr+6gjBuaU/6CvEK
-         Cc6w==
+        bh=AUTbzwoy7+m0eppodGhDizq5Z+d7wwUlGieKv0/AF08=;
+        b=eK5lG8g9qAAsoDEXz/ICcJ9Ws0d6lFKZjFwE3B+kKy+1KwcQAYQLPUjhlp3Aut/DoA
+         KTk5B87U0lxbK8Hbw4hSQymy+5CJ4fyn8UlkTexcibCB1eH2XsGx0uucOqWcunZOqVN0
+         /VFg9NTP83oTvjA+agT/P5opVt+oSmhbaF4pOfPO8QGfKnk5i2MJI4bYflWIHn3924ug
+         JGSL7re8+OTa9fdRg/aAqGnWLm19WD5UJRXAH7LyuhFqDlpU1qNe/P8gkme7IvSyuZ4H
+         rYeToZzt8K44c5/bkCH4HiUmq2BYfuxPFyKToubc7gp+SPOJL01Ij6D+p+EhgtSgbiVl
+         rD8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790393161; x=1790997961;
+        d=1e100.net; s=20260707; t=1790393203; x=1790998003;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=1vjySsVVmbKiFInGwDGm2D0Hk00yL7CXO9MMmjGNncI=;
-        b=vrlZ6HV1YY9Nj2+XSZ36o1UO10Ju3TuK3vrg1uXhoP6lua7ydy7uq8L6jXETRlrEMn
-         +1m0TYrlPYcclU9F4F/ga0dKmH13q46ZjGY7ymVPWZlbGOx4a66cOspKBo+eQPdZoEpF
-         wnykY6TAUCDNCTr37KCLWXb6AxaHInIx4EcOyltbI0o705iaoGqRH6mHBtr5s2yWggGl
-         1ZWvWTTcXz6PJBhxwp4vZx8LwbdA2LWuuvelmOe6u/Qvjc2vHONXk9kNPZ4fZG78Jykd
-         KXQYhMmqICydctu7+1HtXWpHKhv1YapMtXBRoyNDzNMXngya66J4apXiYZfEievua9/m
-         j1bw==
-X-Gm-Message-State: AFuF++lls4wYCNqcTap6m+tmn3m371ejFyGdp7IIyAOKapXRmVPwLh4s
-	Hh6BJjA6tdTkP6kkr+N+j7fBctQcmtbE8eZwEH/lBcsXn2cuap7blMCe
-X-Gm-Gg: AYBFou3KT7fXIOTWYhYiJz6keVABOpa5ueudvrNfHdNMGnAJxB8bes9rd01ARowADzG
-	Ro7VVIM9gwNTPG9GDLE4pRKxBi0xPFQJd45hT9sM5FCTyk7IiETIY2hUJFeKREQg1dmVQdiZmat
-	pNavjVh5y34XTkEg9ochm6XyHhk5NlmauHOOAxwDWCRw3kKtCGw5sKf+mb2dzhBMUpQ5aDswi9/
-	LpT9RSswb4afEJYykJpftPtevgK9GBG7MzOfHurqNp3P+U/xZJ589ZZhS5MCobiXV64A4/YQaqK
-	9l3sI0bGHj9mSDfyBRSABn/lALHSTESNfwo1LdhKMLH8S6Dq6Fx9gckOz41gjPr6GU54LWv5skN
-	cnQxOYYYAUkYbVS4n5GcchEM18IinF+yJNh8CENSaDD9VDhatAHhA2T+8N3NltLkhv80pxKIxMt
-	6pS01Qxl7gEVUpFKjPFbl4wOFBN2mHZ9/H7eJZcPL7OyXLZEAG0ynUsTX00GPtBDor2I4vIKq6K
-	o2s4Wxw83hNZw==
-X-Received: by 2002:a17:90b:2245:b0:39d:84af:a0b3 with SMTP id 98e67ed59e1d1-3a098b46f17mr6499116a91.18.1790393161354;
-        Fri, 25 Sep 2026 20:26:01 -0700 (PDT)
+        bh=AUTbzwoy7+m0eppodGhDizq5Z+d7wwUlGieKv0/AF08=;
+        b=0Hsj9Ed8yeQ0ZEMA8bAuQ/uvRO69pUeDD8O+T2DlyZ/8ksiZPWRpvNn4ETU3NrCZ+I
+         c0h8MSxAGVzdTjag8Q7Rs6gqE1wqkqVYGbyvVUt1hf5zsECz7huD9MMwNhVDi5w0ZLj2
+         gcIda0dtM2sq1W5Q5zJpUZ+8bYf0YCB7fCBnkxy+XvE+vhGIsBqWVTGnRrYSzC7eqyWu
+         Hd8TlFuMlJzXMg3JuV/KZB0y2WbDKNCVVQKIyCM9jNG6z8jyeiZ4h6UB2yD12zbSbiRw
+         VVJhSNa0775jNTFy0pD6nzroruidVtU6YIZHgl0sFEeLH4TYbVkFproh3E+APNhBbP82
+         VGoQ==
+X-Gm-Message-State: AFuF++k8fbi7RA6k9ZEpr9J8tcQ4xel8HThDgmEQ6K7KHPvH7RivNdJp
+	GmcxM6OuWhxI5zTgNJzwT4pSj2ebo4bJ56zVFcxQRSf2KqzdJF1HKa64
+X-Gm-Gg: AYBFou3onQGCfbNXQZuxRQGYicY8rimyyWwCK1MGyur5L9wcYoJdH2FnXQ1mimhVc51
+	1wpvspDofILdpFEmu5RZ1Pp99RhNNUjB8276SKBeQ3JLVwJRse3HlEDawDBcU5G+O3DphLzyMY5
+	d6GBiuhyktMhu+SEhesFHzFQ0roidmlXswhoVVHaqG69Jt33WDmjzFcYyjQ6Y+ooTKe1rlcrnwJ
+	x5xRXwfRy5FXT4UDhpsByhydAZ6nENb1+mCFJZemkZ2VyaI4bcjuAA99p1YCoA3Yt46NBmdoztg
+	O1VEkXlr93aS0uyujSw5Uy/6T4CFnC1nL6i7I4jNMy+chhMglUfAKzr06FMlQXInwq3Eo/SolJm
+	2KB40KDkBz4D7n8JsWEBotzvGvJyw8rncu+CzsoH+A8hB/p+xIL3n0xnbzJvK5PbUbuMV6fnCvj
+	xWpIkJ2Kzzsf9Fji0eH4uiS+nPRjMreKzoKUeJJFKJvhGElP9yisuWz2Y8jVN+ch4dzYQ+ty78y
+	vFPcgZmNfyJMxdmCAeN+cU=
+X-Received: by 2002:a17:90a:e7ce:b0:3a0:2662:815a with SMTP id 98e67ed59e1d1-3a098db8c10mr7151512a91.43.1790393203358;
+        Fri, 25 Sep 2026 20:26:43 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0c3f74e5bsm5653572a91.5.2026.09.25.20.26.00
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a09773e7c3sm13617688a91.17.2026.09.25.20.26.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 20:26:00 -0700 (PDT)
+        Fri, 25 Sep 2026 20:26:42 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 25 Sep 2026 20:25:59 -0700
+Date: Fri, 25 Sep 2026 20:26:42 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Tom Verdonck <tom.verdonck@inspiral.be>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org, Nishanth Menon <nm@ti.com>
-Subject: Re: [PATCH 1/3] hwmon: (tmp102) Fix jiffies wraparound in
+	stable@vger.kernel.org, John Muir <john@jmuir.com>
+Subject: Re: [PATCH 2/3] hwmon: (tmp108) Fix jiffies wraparound in
  conversion-ready check
-Message-ID: <7194c93e-9c9c-4b3a-b0de-28fb7a5a00eb@roeck-us.net>
+Message-ID: <1771fa8b-7b5b-4bf3-a7f9-ef1db4e080c1@roeck-us.net>
 References: <cover.1790358356.git.tom.verdonck@inspiral.be>
- <2952f070f82913aea96eec25d28008d3b9058656.1790358356.git.tom.verdonck@inspiral.be>
+ <525fa49d8c50922344fa53e22be5e6133c9bbb62.1790358356.git.tom.verdonck@inspiral.be>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -78,13 +78,13 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2952f070f82913aea96eec25d28008d3b9058656.1790358356.git.tom.verdonck@inspiral.be>
+In-Reply-To: <525fa49d8c50922344fa53e22be5e6133c9bbb62.1790358356.git.tom.verdonck@inspiral.be>
 
-On Fri, Sep 25, 2026 at 08:23:22PM +0200, Tom Verdonck wrote:
-> tmp102 records a one-shot deadline in ->ready_time at probe (and resume)
+On Fri, Sep 25, 2026 at 08:23:23PM +0200, Tom Verdonck wrote:
+> tmp108 records a one-shot deadline in ->ready_time at probe (and resume)
 > and, on every temperature read, refuses the read with -EAGAIN while
-> time_before(jiffies, ready_time) is true, in order to skip the first
-> ~35 ms conversion.
+> time_before(jiffies, ready_time) is true, in order to skip the initial
+> conversion.
 > 
 > ->ready_time is an unsigned long compared with time_before(), whose
 > signed difference is only meaningful while the two values are within
@@ -93,13 +93,15 @@ On Fri, Sep 25, 2026 at 08:23:22PM +0200, Tom Verdonck wrote:
 > jiffies the difference flips sign. On a 32-bit HZ=100 kernel that
 > happens ~248.5 days after boot: time_before() then permanently reports
 > "not ready" and the driver returns -EAGAIN on every read, without ever
-> touching the sensor, until the next reboot.
+> touching the sensor, until the next reboot. The continuous-mode path,
+> which sets ->ready_time to jiffies with no added conversion delay, wraps
+> the same way.
 > 
 > Store the deadline as a 64-bit jiffies value and compare it with
 > get_jiffies_64()/time_before64(), which does not wrap in any practical
 > uptime.
 > 
-> Fixes: 3d8f7a89a197 ("hwmon: (tmp102) Improve handling of initial read delay")
+> Fixes: 66e1c9171339 ("hwmon: Add Texas Instruments TMP108 temperature sensor driver.")
 > Cc: stable@vger.kernel.org
 > Signed-off-by: Tom Verdonck <tom.verdonck@inspiral.be>
 
