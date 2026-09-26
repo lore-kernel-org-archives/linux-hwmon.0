@@ -1,96 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from relay12.grserver.gr (relay12.grserver.gr [88.99.38.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC436370D7C
-	for <linux-hwmon@vger.kernel.org>; Sat, 26 Sep 2026 20:20:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88755472071
+	for <linux-hwmon@vger.kernel.org>; Sat, 26 Sep 2026 20:22:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.99.38.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790454045; cv=none; b=Hp3PoftP1CJCc/+leqedrD+lGrqomdmKPQ6lr637wRaDLiXUOea5L03Mik4vdQad6EIScTptgCOHstaeEnd+vFrRNpS7RGrXagxJmd0bdvohR7BdstdU0001Lt530Zj+/39pJhGrJR7MRo7oq45I663yXiPiyQwqBHfjHZd1ams=
+	t=1790454156; cv=none; b=RlUqQDLQLHa6ouc5hjvC4Un0s8OiJzJhEIcnnfk+FGpuIyyZlcyGCS/DPDPaYCNKr6CfcnZzES86nQg0r73whn1ER4C/B3R6tOG3hjvR07VLaSc2roet4w3GPHeY3GWN6d7gzEeazSFbBzuAAMxGXYTxKTmfuCdE5Pp4GwAJkGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790454045; c=relaxed/simple;
-	bh=iwsMjUKjI0FHnjZ/rfB/le2ZPTfY7ZrphdfdJ4ycOOI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=IAdkRxRajJxefI6+kTE1+yfv38dRkn2xDD5Wh/9Bq9QQ4RO5qg9H53mCY6tKABQUUE7HawbxvbHLSLIV1+oS7itFCSBVgb2BhyTBm6qCmSoi+FKUYHs7whVoz6eexJNmd1/f4rpTf4JYnnGyni/ozRZEhdxug2ZYcAGgZnefL1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UrT5rsqf; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790454156; c=relaxed/simple;
+	bh=z9jMUG55HtxWkLl+HhAWppHqiNUvDp2n8qmnfb3C/VE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=efaeaJPalELqpKRio1b94lorsTNWOCapPkiTop2YFeaIQD617+1qbrWzi66Al0Z905vW3fxViaMahfA7jX5ywlZcILPz5jzkD3wRl+lIJMaTy4ZRFKcX16zHx3r81N6cSFesTqcWg2E1xAh6XzyqFGQsaiujJpENQYuan0nqBRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (2048-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=j8hPZPZB; arc=none smtp.client-ip=88.99.38.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UrT5rsqf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46CDE1F000FF;
-	Sat, 26 Sep 2026 20:20:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790454044;
-	bh=VH1HUNeULkZmRi4BePywi16txL5koTfGKYxX32EYrFQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=UrT5rsqfC69vXQbZULR/wpoZ+Aepv92xBezE4+4zeVz4jnLigr2HS2ABklpGnSIOZ
-	 4dtwsu4b7wAMUxul9OTnCFWdKzboqPAKRzVDcBJ7nV1kXZRbTlDAh5AxLfzX8ZttnP
-	 c9oqUqlt76hKwWlmwid43jSccEuXHB+yRhFpU+5oRHut+HreUY4rAIJFLRzO3WpnSy
-	 VXAyqJe2lh/43xaVlWwWKZ/7ma20IMXcRGWBNoevETXu9uAIELU+gtXkK0j1sNooiG
-	 HT9NZlQEN0ZAQ/6FnkYNoejQcLuDpIAQIY3A5QoHqdirI1tYYkt6kXUeSUxMHauFbb
-	 oV+0RddJuCcpQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: (gpd-fan) Register both fans on the GPD
- Win 5
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Solcanu" <alexei.solcanu@pm.me>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260926-gpd-fan-duo-auto-v2-2-0a2ea41ee3b5@pm.me>
-References: <20260926-gpd-fan-duo-auto-v2-0-0a2ea41ee3b5@pm.me>
- <20260926-gpd-fan-duo-auto-v2-2-0a2ea41ee3b5@pm.me>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 26 Sep 2026 20:20:43 +0000
-Message-Id: <20260926202044.46CDE1F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="j8hPZPZB"
+Received: from relay12 (localhost [127.0.0.1])
+	by relay12.grserver.gr (Proxmox) with ESMTP id C41B9BD8D2
+	for <linux-hwmon@vger.kernel.org>; Sat, 26 Sep 2026 23:22:31 +0300 (EEST)
+Received: from linux3247.grserver.gr (linux3247.grserver.gr [213.158.90.240])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by relay12.grserver.gr (Proxmox) with ESMTPS id 40EB0BD8CA
+	for <linux-hwmon@vger.kernel.org>; Sat, 26 Sep 2026 23:22:31 +0300 (EEST)
+Received: from mail-pj2-f41.google.com (mail-pj2-f41.google.com [74.125.227.169])
+	by linux3247.grserver.gr (Postfix) with ESMTPSA id 9A2271FF304
+	for <linux-hwmon@vger.kernel.org>; Sat, 26 Sep 2026 23:22:30 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
+	s=default; t=1790454150;
+	bh=7UncYzXhWq4TBr27aqXftzhgIR88dvJWApzZd7nrD5s=;
+	h=Received:From:Subject:To;
+	b=j8hPZPZBVrz9BIAGXPtG8pAi79qEXO6zQ3Q74Pxd3epR6kj2BlRSfU4TmsxhcO+KM
+	 3ivKFupG0bAgt0q1ASBNFJg+AQARw2IUoXql3iD3rAXlopC+RnI8FSj0+uBpBD/0Pg
+	 W4rn/gZdiJSQYcGaxCM+RPeSNMBc5f3ZxYk19PoXJNo6oE8yrBevRDvpjvLF/chqm9
+	 XaECwMrzNgOJgxgiE0D5N+vRmca2C79OVVtQkwCmvbzb+P/RwoG5rKH5vdHHKuY2y8
+	 dsaOcCERsJSVl2j6qMAfrRGDIh3zeG783qZX+/4yUBIIwY1Kpd1hnI6isWll39WPtn
+	 5slGrIubR1Ncg==
+Authentication-Results: linux3247.grserver.gr;
+        spf=pass (sender IP is 74.125.227.169) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-pj2-f41.google.com
+Received-SPF: pass (linux3247.grserver.gr: connection is authenticated)
+Received: by mail-pj2-f41.google.com with SMTP id
+ 98e67ed59e1d1-3a0abca97c0so998510a91.1
+        for <linux-hwmon@vger.kernel.org>;
+ Sat, 26 Sep 2026 13:22:30 -0700 (PDT)
+X-Forwarded-Encrypted: i=1;
+ AKwUvByggnCLahC8T5F4pJk1U1SbMQELKLF0Pbd9qObSrUHrFtCoCMZmaIlpidiul2sL5ezyRaVNgajZ4Nb2lQ==@vger.kernel.org
+X-Gm-Message-State: AFq9FYJlkWy2Ei68mf2jEqmaR941hwdMF+xn86ELLYsQ5Ti9tUqU9Gzu
+	pgxy2DPiO+fREyyULNK4RhvM4NerqwPoVOEM22ZnGDT2NSEIniPOS4V7VyaikJT3+X7chQLlcwp
+	hvAnMi9LfNWODU01yK8ez07/3FqbYkBw=
+X-Received: by 2002:a17:90b:5847:b0:3a0:b40d:827 with SMTP id
+ 98e67ed59e1d1-3a0b40d1ebamr5438590a91.0.1790454148933; Sat, 26 Sep 2026
+ 13:22:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260926-gpd-fan-duo-auto-v2-0-0a2ea41ee3b5@pm.me>
+ <20260926-gpd-fan-duo-auto-v2-1-0a2ea41ee3b5@pm.me>
+In-Reply-To: <20260926-gpd-fan-duo-auto-v2-1-0a2ea41ee3b5@pm.me>
+From: Antheas Kapenekakis <lkml@antheas.dev>
+Date: Sat, 26 Sep 2026 22:22:17 +0200
+X-Gmail-Original-Message-ID: 
+ <CAGwozwGiM=OGp9T=4B0VouHYU4ZZVAFTN0u8ThE82xzO-_V1aA@mail.gmail.com>
+X-Gm-Features: AclHuK-2w66LiASkiFvCoMQDD08ofVnCMYU_6argHvoEzG0TF-dHbuwt5hJDS2w
+Message-ID: 
+ <CAGwozwGiM=OGp9T=4B0VouHYU4ZZVAFTN0u8ThE82xzO-_V1aA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] hwmon: (gpd-fan) Reset both fans to automatic on
+ duo boards
+To: alexei.solcanu@pm.me
+Cc: Guenter Roeck <linux@roeck-us.net>,
+ Cryolitia PukNgae <cryolitia@uniontech.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-PPP-Message-ID: 
+ <179045415089.517415.8904675070083342750@linux3247.grserver.gr>
+X-PPP-Vhost: antheas.dev
+X-Virus-Scanned: clamav-milter 1.4.6 at linux3247.grserver.gr
+X-Virus-Status: Clean
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] hwmon: gpd-fan: missing gpd_win5_drvdata in gpd_module_drvdata
---
+On Sat, 26 Sept 2026 at 22:12, Alexei Solcanu via B4 Relay
+<devnull+alexei.solcanu.pm.me@kernel.org> wrote:
+>
+> From: Alexei Solcanu <alexei.solcanu@pm.me>
+>
+> On boards using gpd_duo_drvdata (GPD Duo, GPD Win 5), writing
+> pwm1_enable=2 only returns the first fan to EC control. The second fan
+> keeps its last manual duty cycle, e.g. full speed after pwm1=255, so a
+> fan control tool that exits leaves it running at that speed.
+>
+> gpd_duo_write_pwm() writes both fan registers (pwm_write and
+> pwm_write + 1), but switching to automatic only clears pwm_write.
+> Also clear pwm_write + 1, so both fans return to EC control.
+>
+> Tested on a GPD Win 5 (G1618-05). Not tested on the GPD Duo.
 
-commit 288529d887048f9c76f06b48689bb509162e7569
-Author: Alexei Solcanu <alexei.solcanu@pm.me>
+We expect the Win Max 3 to release with the same register layout. Can
+you verify it has two fans? If yes this is good to go.
 
-hwmon: (gpd-fan) Register both fans on the GPD Win 5
+I will try to pull this patch for testing. Second one will take a bit
+longer because it needs (my) userspace changes.
 
-The GPD Win 5 uses gpd_duo_drvdata, which exposes a single fan and pwm
-channel. This patch adds separate board data for the Win 5 and registers
-one channel per fan.
+Thanks,
+Antheas
 
+Reviewed-by: Antheas Kapenekakis <lkml@antheas.dev>
+
+> Fixes: 0ab88e239439 ("hwmon: add GPD devices sensor driver")
+> Assisted-by: LLM
+> Signed-off-by: Alexei Solcanu <alexei.solcanu@pm.me>
+> ---
+>  drivers/hwmon/gpd-fan.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
 > diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
-> index b3b75f99f5883..e03b0dde66f94 100644
+> index ed212615b2f..b3b75f99f58 100644
 > --- a/drivers/hwmon/gpd-fan.c
 > +++ b/drivers/hwmon/gpd-fan.c
-[ ... ]
-> @@ -214,7 +233,7 @@ static const struct dmi_system_id dmi_table[] =3D {
->  			DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
->  			DMI_MATCH(DMI_PRODUCT_NAME, "G1618-05"),
->  		},
-> -		.driver_data =3D &gpd_duo_drvdata,
-> +		.driver_data =3D &gpd_win5_drvdata,
->  	},
->  	{
->  		// GPD Pocket 4
+> @@ -444,6 +444,7 @@ static void gpd_duo_set_pwm_enable(struct gpd_fan_data *data, enum FAN_PWM_ENABL
+>                 break;
+>         case AUTOMATIC:
+>                 gpd_ecram_write(data->drvdata, data->drvdata->pwm_write, 0);
+> +               gpd_ecram_write(data->drvdata, data->drvdata->pwm_write + 1, 0);
+>                 break;
+>         }
+>  }
+>
+> --
+> 2.55.0
+>
+>
+>
 
-[Severity: Low]
-Is the new gpd_win5_drvdata also supposed to be added to gpd_module_drvdata?
-
-Looking at the module parameter implementation in gpd-fan.c,
-gpd_module_drvdata is iterated to match the module parameter when overriding
-DMI detection:
-
-static const struct gpd_fan_drvdata *gpd_module_drvdata[] =3D {
-	&gpd_win_mini_drvdata, &gpd_win4_drvdata, &gpd_wm2_drvdata, &gpd_mpc2_drvd=
-ata, NULL
-};
-
-Since gpd_win5_drvdata is missing from this array, does this mean users can=
-not
-force the GPD Win 5 configuration using the gpd_fan_board=3D"win5" module
-parameter?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260926-gpd-fan-du=
-o-auto-v2-0-0a2ea41ee3b5@pm.me?part=3D2
