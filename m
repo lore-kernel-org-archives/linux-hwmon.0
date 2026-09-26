@@ -1,136 +1,117 @@
-Received: from mail-pz2-f40.google.com (mail-pz2-f40.google.com [74.125.228.40])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E149D49CF45
-	for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 21:23:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E95DB1A9F91;
+	Sat, 26 Sep 2026 00:15:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790371433; cv=none; b=necZ3F/aJ8PzdwKkLyCROf59m4s9KI+uDVzNF2M2YtLasAiy7vPLle4Xbjd276AiBKgrbkiGVJevTPGPSjoUpLx9idq54HrH3gFuiLI7aqiHFJvfYKpWj0NB2PMGAowuxRrTFgrTuijRw3cmzCRM0t1HPiMpZmiT8pqhrNgCDmQ=
+	t=1790381702; cv=none; b=jE0zcFmzMWCf24TxzIzuq9qUHjyhOEyCkl6Mq2YiOG4BBUIGggRo5OBIuuKaIaXaZmnpitnIbp44zI0M9+JVh1qsgFhtPkowCn62WzmfKcejSPm2B6xIM3n7ZQFv1KO9ce3mWfHECQlzC5KRViowslo67k0QyqLcBPCfXqZiYXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790371433; c=relaxed/simple;
-	bh=mq3RWoA/hcd32dCL//3OXdHccnRftC6Ctz2XilEVcCo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D9o8AJ4lS0Lpf8r+DGsjL3Ilrr4RFC8VHS3sVU2gIvAFQ7nmn4IMQthc/cBNxKORnfwLMKk5TIOcoF6sw6s8zfU3KDHjniV60rKpDG7K3yDvkSZLYCObn6kOjF06Dl4DpZUjbGkKML7bxmbFZtKDJZSqhL7joz9x0ABbiWU7i8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EIR7bkoT; arc=none smtp.client-ip=74.125.228.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790381702; c=relaxed/simple;
+	bh=Ysf3hXdapRgJKjXRQBvcacrX48OYb5yYpwnETBQnhs4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=hOq19aGu61npWZHTeqwnOFoDRXF5LjuHdwqBx+D2wfeicOOEHRrixs90mM8sRy34pD1cou4oMLWXBY8pCrVNh3vBUaxaGJDAC2h+bqh4aGEQisaNiPQOor+hBVUTV/GHHgDsloavDNbIxqsfNmCXmB2rP5i1LT4V8+6FbIm0ImE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RpbwFj5/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EIR7bkoT"
-Received: by mail-pz2-f40.google.com with SMTP id 41be03b00d2f7-cc750a1482fso739494a12.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 25 Sep 2026 14:23:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790371431; x=1790976231; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=5oelsYzBnav4hrJavpxK0ZTVgzSWbj7lSOhSINx8zCc=;
-        b=EIR7bkoTQzM99n4jBSXUx6EWBeqX8kEMqLh3baDLwI3gmyv6Soy7T+zvQjAurh4Q80
-         5FqjDDTFQeBWGuy+lHfikc9Cr2PzJaL1E3BPZcC5577GJCLBjKdgNvYTxis7G8/+ZA8U
-         2z4M3yVRI1ZlnNydDA6u1dtLRfY2JPJtdu6204Rsb3gwKNus6MTRM+8e5GSDYu2cxaMN
-         KvsGjDLUztnBmlZdI0rB/v/QpLcqSVVDoZeOIUH2qleqjNNxNuwawgJdopkXX1g4eZB4
-         6zowUfD5SUePoOU6Vd9JsheWPL06G41WuoxoL9A42Tm2JruNCazUEAGgz2IX4FMsgLG8
-         zpCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790371431; x=1790976231;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5oelsYzBnav4hrJavpxK0ZTVgzSWbj7lSOhSINx8zCc=;
-        b=k6ohPqb7blKi4DtYbA3ASWCo71Se52wDYx+YQhDTNefx7GW0wKXC5dO3scNwHHydcM
-         35Sssii21TgHVDXH79YFfkWN0dd00U3n0Til0TbGKDbi1V0c6H7/c6NuK3vLSKMP69o2
-         xABngM1wLi4hks/exxd9b2lGGzW7zoKMA2LwaJdihypFV7t3EVyjqkI0YkFq8TQrkxk8
-         t7DQDakF9hgKed3NlNfwQUa8Dm8NXPZZcWAM3jTZAADT8NcLRkLf9jkm9CUE/mTXJKHp
-         Vi5Fbd61fV5jOrsIo9FAnpPwXUf2u7METv6rGEXZJJWzhrcmuAEbfmmA6DJ/czJXkn+r
-         Teog==
-X-Forwarded-Encrypted: i=1; AKwUvBwxvn3kOBXl2fve3g2MfplvFPnLr7oSwlPIQaiOCz0gzkW5jwNZJZmXfWJYctRM+lmUj4kxFbhzz8lTow==@vger.kernel.org
-X-Gm-Message-State: AFuF++kjeo4uh+MygfTf7RyIiHMhj/NTC1jlMnRY9FWzG7qiuAGj/rPS
-	8j2/KbbS1LQ6hz2IaZ4XnH9H77fFWk0IaHKlwOjA5AyC7A1sxerNvg4skx7O75ar
-X-Gm-Gg: AYBFou251bwlHqwiUDCSDq3ltjUxs4SEhyp8/Ed6qDqLa9oMHCfIAHYPc8+to6ioeJr
-	nhGfW0b9M1eoAwjyLOLOqfL/wtPOYkZO1T+FLeM2SlbzphS6WikOuln8YJYzInC0KyFbaKxm92C
-	7gYVR8pvVrJtjLXIxFbWdysX7bC1Iz7iqQSP7G7OAkqjaNefA+e0CSkpSc4bjpn6bmqlKmG1yPV
-	WzMCK+zNB5gtcBGoS2tjj8jOp+iDzrG+KL+VJfYFG00T+ASwSs3+kRcOJouwK+HHLZ5kYU72xLE
-	Xo+FXlsSA38Y8j3+/AYbRcsblgiAft8hLDpej81aRNh2FNptuMSCUh42zRudIcHoldsKcrN3llt
-	YIU7x7w4JvCvvWw2vB0Zjpu48EkpyBU2SAzveeqq48vfQak9PH0SYQDVj8DbzKF8Z/oTmKatABh
-	mcL6mfd1xq4GbTnEel3lDGKRs4rMJYp7Y8K0QZk3AFiN7wILyLnPcjT2wHcnvJXt6MyC1MxpMdQ
-	paN3PUrPtMG
-X-Received: by 2002:a05:6a20:d70b:b0:3dd:a196:69e2 with SMTP id adf61e73a8af0-3de26f2927emr3172381637.61.1790371430957;
-        Fri, 25 Sep 2026 14:23:50 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc78796c314sm1850422a12.29.2026.09.25.14.23.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 14:23:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 25 Sep 2026 14:23:49 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc: david.nystrom@est.tech, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	ricardo.neri@intel.com
-Subject: Re: [PATCH 0/3] hwmon: (coretemp) Report unreliable temperature
- readings
-Message-ID: <254a2bdb-c759-469d-a1bb-c10f476cebe0@roeck-us.net>
-References: <20260924-coretemp-temp-fault-v1-0-1884f0ff97d5@linux.intel.com>
- <46f9f319-de71-412f-a424-6cb801478456@roeck-us.net>
- <20260925182158.GA27122@ranerica-svr.sc.intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RpbwFj5/"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 66EB6C2BCF4;
+	Sat, 26 Sep 2026 00:15:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1790381701;
+	bh=Ysf3hXdapRgJKjXRQBvcacrX48OYb5yYpwnETBQnhs4=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=RpbwFj5/sRdN5cnKZFaY7S+8h8LngOkXWZqUn+sd2f2bPuejYwu1cqCKwoAttl0iI
+	 jPPjgAT31HGF5yomwMEPs/LziC9PUBp7VJ+QHsVo51v4Lz+Y3Lvn6WC2AsYk318k2t
+	 KyPFCn/fhTaZhcUmJCBRmClgHczigF1Dt28F9oZ4Kqi9C1OtpGSI/Id4Vlq2fnkw7f
+	 4m9XHP9cLLVQQPIbnW1F9hiouEzf8395ShY/cMx5tBEb7XhlZ24gRuQdbT91SCU16c
+	 oW6BRL3tHWxq+k80oKnl7m2xuaAOpHoKPpeBCm5eMgLe+UNXVLJgJvyrN740whPd5r
+	 UdM8wOxcmAiAg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4388EC98326;
+	Sat, 26 Sep 2026 00:15:01 +0000 (UTC)
+From: Alexei Solcanu via B4 Relay <devnull+alexei.solcanu.pm.me@kernel.org>
+Date: Fri, 25 Sep 2026 20:13:26 -0400
+Subject: [PATCH] hwmon: (gpd-fan) Reset both fans to automatic on duo
+ boards
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260925182158.GA27122@ranerica-svr.sc.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260925-gpd-fan-duo-auto-v1-1-29bb670b3331@pm.me>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQqEMAxA0atI1gZqQUe9irioTdS4aKW1Ioh3n
+ 46zfIv/b4gchCP0xQ2BT4niXUZVFmBX4xZGoWzQSjeq0zUuO+FsHFLyaNLhsf1UxB0r1ZCFnO2
+ BZ7ne5TD+HdO0sT1+H3ieL+BMUxV0AAAA
+X-Change-ID: 20260925-gpd-fan-duo-auto-871de9e006dc
+To: Guenter Roeck <linux@roeck-us.net>, 
+ Cryolitia PukNgae <cryolitia@uniontech.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Antheas Kapenekakis <lkml@antheas.dev>, 
+ Alexei Solcanu <alexei.solcanu@pm.me>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790381700; l=1730;
+ i=alexei.solcanu@pm.me; s=20260925; h=from:subject:message-id;
+ bh=51VJvSwDQla9NOxqOKK4VxeGGVC99wAKjXjwdGLu0nY=;
+ b=thvE8DAPsnC+GtKVFFkyEKs3q+UviEB0Q5G5Hs9qNhaXgBPQPJRPeUgAs4jomqp4K8qAv1vnQ
+ tKUqDY/QZX9Bo8LqXDij1Rzq9UtugXoIdm7qu1w6ZIo/Xri3oyFTiwQ
+X-Developer-Key: i=alexei.solcanu@pm.me; a=ed25519;
+ pk=iK6ervbccknflfirBb6E4x7TaOyCpnoGd33gzfiNEeo=
+X-Endpoint-Received: by B4 Relay for alexei.solcanu@pm.me/20260925 with
+ auth_id=1064
+X-Original-From: Alexei Solcanu <alexei.solcanu@pm.me>
+Reply-To: alexei.solcanu@pm.me
 
-On Fri, Sep 25, 2026 at 11:21:58AM -0700, Ricardo Neri wrote:
-> On Thu, Sep 24, 2026 at 07:37:18PM -0700, Guenter Roeck wrote:
-> > On Thu, Sep 24, 2026 at 07:33:19PM -0700, Ricardo Neri wrote:
-> > > Hi,
-> > > 
-> > > Intel CPUs indicate in IA32_[PACKAGE]_THERM_STATUS whether the digital
-> > > thermal readout they expose is valid. coretemp deliberately ignores that
-> > > indication, for the reason given in commit bf6ea084ebb5 ("hwmon:
-> > > (coretemp) Do not return -EAGAIN for low temperatures"): some CPUs clear
-> > > it while the temperature is too low to be measured, and the value reported
-> > > in that state is more useful to userspace than an error would be.
-> > > 
-> > > The consequence is that userspace cannot distinguish a genuinely low
-> > > temperature from one the CPU could not measure. This series exposes the
-> > > indication through the standard hwmon temp%d_fault attribute, leaving
-> > > temp%d_input exactly as it is.
-> > > 
-> > > One user-visible effect is worth mentioning: sensors(1) prints FAULT in
-> > > place of the temperature when temp%d_fault reads 1. On a CPU that clears
-> > > the valid bit at low temperature, that core stops showing a number in the
-> > > default output, although sensors -u and -j still report it, as does
-> > > anything that reads temp%d_input from sysfs directly. A driver-custom
-> > > attribute name would avoid this, but would be invisible to generic tools.
-> > > Reporting the condition through the documented attribute looks like a
-> > > better option, but please say if you prefer otherwise.
-> > 
-> > I think it would be _much_ better to return -ENODATA for invalid readings.
-> > This isn't really a fault, after all. The sensor is not defective,
-> > it just can not provide valid data.
-> > 
-> > With -ENODATA the sensors command reports N/A for the temperature
-> > measurement, which I also think would be better than reporting FAULT.
-> 
-> Thank you for your feedback and for applying the other two patches!
-> 
-> Thank you for your feedback anf for applying the first two patches!
-> 
-> Userspace has seen a number in temp%d_input for over 12 years, and with
-> this change it would get an error on CPUs that clear the valid bit. I can
-> certainly implement returning -ENODATA; I just want to confirm you don't
-> see this as an issue for userspace.
-> 
+From: Alexei Solcanu <alexei.solcanu@pm.me>
 
-Userspace should be able to handle error returns. That is not an ABI change.
-Even if the fault attribute was implemented, trying to read the temperature
-should still return an error.
+On boards using gpd_duo_drvdata (GPD Duo, GPD Win 5), writing
+pwm1_enable=2 only returns the first fan to EC control. The second fan
+keeps its last manual duty cycle, e.g. full speed after pwm1=255, so a
+fan control tool that exits leaves it running at that speed.
 
-On the other side, claiming that the sensor is faulty is, in my opinion,
-just wrong. It is not faulty, it just does not return valid data.
+gpd_duo_write_pwm() writes both fan registers (pwm_write and
+pwm_write + 1), but switching to automatic only clears pwm_write.
+Also clear pwm_write + 1, so both fans return to EC control.
 
-Guenter
+Tested on a GPD Win 5 (G1618-05). Not tested on the GPD Duo.
+
+Fixes: 0ab88e239439 ("hwmon: add GPD devices sensor driver")
+Assisted-by: LLM
+Signed-off-by: Alexei Solcanu <alexei.solcanu@pm.me>
+---
+Both fans were set to full speed (pwm1_enable=1, pwm1=255), then
+switched to automatic (pwm1_enable=2). Values read from the EC 15
+seconds later:
+
+                 0x047A  0x047B  fan 1     fan 2
+  without patch  0x00    0xf4    2542 rpm  6379 rpm
+  with patch     0x00    0x00    2545 rpm  2560 rpm
+
+Fan 2's RPM, found by probing, is at EC 0x0476/0x0477.
+---
+ drivers/hwmon/gpd-fan.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
+index ed212615b2f..b3b75f99f58 100644
+--- a/drivers/hwmon/gpd-fan.c
++++ b/drivers/hwmon/gpd-fan.c
+@@ -444,6 +444,7 @@ static void gpd_duo_set_pwm_enable(struct gpd_fan_data *data, enum FAN_PWM_ENABL
+ 		break;
+ 	case AUTOMATIC:
+ 		gpd_ecram_write(data->drvdata, data->drvdata->pwm_write, 0);
++		gpd_ecram_write(data->drvdata, data->drvdata->pwm_write + 1, 0);
+ 		break;
+ 	}
+ }
+
+---
+base-commit: 3cbb5f15e464583e59c8501a7085ec12b53e23ac
+change-id: 20260925-gpd-fan-duo-auto-871de9e006dc
+
+Best regards,
+--  
+Alexei Solcanu <alexei.solcanu@pm.me>
+
+
