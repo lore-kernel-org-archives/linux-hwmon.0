@@ -1,314 +1,99 @@
-Received: from mail-06.mail-europe.com (mail-06.mail-europe.com [85.9.210.45])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B723B43551D
-	for <linux-hwmon@vger.kernel.org>; Sun, 27 Sep 2026 18:37:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.9.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85881421223
+	for <linux-hwmon@vger.kernel.org>; Sun, 27 Sep 2026 18:46:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790534272; cv=none; b=IQz+WFG0AuzSwnh6aHpjfAAFXKD1CQQQ77lxZ4SSKBtiCgKATJr3l6JbfRIA57xt/pnwe7nXfBY2r0D1qVpt6IEGFgWEU0fWmVX5RfIOHoyV6zdGMWipuUl7y24tFEDyC1EyOLznWg1YX6rFuXjDDweAIBaazELw1lAsfY97458=
+	t=1790534793; cv=none; b=SSTrS+n3oKxROS4kY/oQrEhK2KiNkFrI9auvLkdtYLmkk5nohCZO0LU5keWF29gpeXgy/V2qUqYndwIbnKO8uwpHmKdRjm5MG0UPMyzj+Pd0Kj5TVTcuS6VfkJ9bUn8ph+YK7sp+jvvoUZglHAbGkb8UfxD+PCYJZ58EzzM0OwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790534272; c=relaxed/simple;
-	bh=Hqmin+fyBdTdLKLV2EQRYKDYS8XNpAfAwGmsjSULmjw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iakX0GcKRmSaLa5gs1RKccOhUQBWq0nfh44k7LpFhoDbYIXwo5ATvA/xuaao9ko5IgOIPmplBlFjMcitWi8kUGgi3/hDQCXbh5UMDCi0MzigzXiU4bqfVDGB5ufg0RRCSS5lfHC7ZHjw3fA00itY/1l9PXyV6sgTd3G/rgs9KuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc; spf=pass smtp.mailfrom=vasily.cc; dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b=jWk42sPA; arc=none smtp.client-ip=85.9.210.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vasily.cc
+	s=arc-20240116; t=1790534793; c=relaxed/simple;
+	bh=JUm14VCuUt6Ne2t5D1XhwQXzwIMqjbSciMgbYzjAUOo=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=mxV6j8cVxNF2cXBJy53hUbPkaQ4PqmceshYJd7XRguz9JbDpvMXYEDvmzpaCdxVjEOsu2MgFhHhBXXZoeANBs166CIx2JCholZE/kWyyLl8WTdzBaqYxdrFD62ZG7s7hJ5yAD1XJ4d5RcGfpGMDf2Xl+bN0Hy3fWW/q48RS3F0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NTnVmQQq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b="jWk42sPA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vasily.cc;
-	s=protonmail2; t=1790534259; x=1790793459;
-	bh=js3W7WaPwD6z6vquDkGdSQ29ll4MavT++SMeqzSF8QU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:From:To:
-	 Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=jWk42sPA+P72FnM0GlGPuSpc9IcTP0bVO92fe79Nyu01NLP/g9r3RGmJeEvHOCQBO
-	 BY8w6WhRAekVAXZJ2ZaSD/HY1RjIRpUUlrw5vVDmIIrbC+M5EhpBiOrOY6d0D+UzdU
-	 h/WWHLnClTZLSSbOlEEbKAeApJExW3R2dg/Fs0j4wv1et8dWkDgW+vtuv656pDwwCE
-	 4TjDU1NyBJ/gmVc/jfEoVNRbinraRGgQKYdNNXllMxBtRURCVwby+QXHYfRCDYXzHM
-	 2VH3a9jv9AFl6WnP8VqHKRkCpJCdk25uFg40iqkpqCkZ1f3iz+dxWC0xbQvQXb+Ybh
-	 uHG3F/XSphkyQ==
-X-Pm-Submission-Id: 4htCq417KWz1DF4X
-From: Vas Zayarskiy <contact@vasily.cc>
-To: linux@roeck-us.net,
-	Aleksa Savic <savicaleksa83@gmail.com>,
-	Jack Doan <me@jackdoan.com>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v4 5/5] hwmon: (aquacomputer_d5next) Add AMPINEL telemetry support
-Date: Sun, 27 Sep 2026 21:37:23 +0300
-Message-ID: <20260927183723.4078226-6-contact@vasily.cc>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260927183723.4078226-1-contact@vasily.cc>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NTnVmQQq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBB7D1F000FF;
+	Sun, 27 Sep 2026 18:46:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790534792;
+	bh=QaYuwzen6tlDX9e0kzwwPTUOzCM6YSirM1cyDiFNsfo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=NTnVmQQqo/RCcAdjR0qJTJh7OLewO0dj6C0DEw+w8LBN/X4cxbUgcfL/sO3vFECaB
+	 oeQyw/3zVeBKHTLtaH0oAHFWY50aOWqqmUSrtY8WBRIC7mwONLMvQVWG3fpG/oZgxg
+	 9VOsEepF9SRW44a8gCsSlMfUiuvF2zQWTd6rRxn0iuQNHM+2j6Glr/tyTkhcmwLBv8
+	 tZlIUgO1IF3uEErhK8/yvg8ph+blSn/1mvw3SnNyMjNYkeCM6L69KGCRm6PKo41sOI
+	 9tsTbZnsKuak/YGlpQpG7YZapaXHMpdzzBpnBUeNbLmlbeTNJv3JT39gx63SoJ/ndR
+	 6QpE5rPtxrkgw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v4 1/5] hwmon: (aquacomputer_d5next) Avoid truncating
+ scaled sensor readings
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Vas Zayarskiy" <contact@vasily.cc>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260927183723.4078226-2-contact@vasily.cc>
 References: <20260927183723.4078226-1-contact@vasily.cc>
+ <20260927183723.4078226-2-contact@vasily.cc>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 27 Sep 2026 18:46:31 +0000
+Message-Id: <20260927184631.DBB7D1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add read-only total power, total current, input voltage, hotspot
-temperature and six channel currents for the Aquacomputer AMPINEL.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] hwmon: TOCTOU race in aqc_read() exposes -ENODATA to userspace
+--
 
-Decode its 544-byte input report through the existing serial-number,
-temperature and update path, with power, current and voltage handled in
-the device-specific switch. Store all readings in hwmon units.
+commit 33794227f1f473259c7900f38a511561b017b28c
+Author: Vas Zayarskiy <contact@vasily.cc>
 
-Select the telemetry interface in probe by its vendor collection and
-input report layout, following the existing Aquaero and Leakshield
-probe filtering. No match callback or HID core change is required.
+    hwmon: (aquacomputer_d5next) Avoid truncating scaled sensor readings
 
-The separate keyboard interface is not supported. The driver rejects
-it in probe, and stock hid-generic yields to this driver's product ID
-entry, leaving it unbound. This intentionally limits support to telemetry;
-keyboard support can be addressed separately. Channel labels follow
-report order; configuration and alarms are not supported.
+    High Flow Next power is reported in watts. Multiplying the 16-bit value
+    by one million can overflow both the signed intermediate and the u32
+    cache. Store power in long, perform the conversion in u64, and clamp to
+    LONG_MAX. The other existing power conversions fit in a signed 32-bit
+    value. Return -ENODATA for unavailable power instead of exposing the
+    stored error as a reading.
 
-Assisted-by: LLM sparse
-Signed-off-by: Vas Zayarskiy <contact@vasily.cc>
----
- Documentation/hwmon/aquacomputer_d5next.rst | 13 ++++
- drivers/hwmon/Kconfig                       |  4 +-
- drivers/hwmon/aquacomputer_d5next.c         | 81 ++++++++++++++++++++-
- 3 files changed, 93 insertions(+), 5 deletions(-)
+> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomp=
+uter_d5next.c
+> index 1ca70e7262988..9178ac4cbdd75 100644
+> --- a/drivers/hwmon/aquacomputer_d5next.c
+> +++ b/drivers/hwmon/aquacomputer_d5next.c
+[ ... ]
+> @@ -1070,6 +1071,8 @@ static int aqc_read(struct device *dev, enum hwmon_=
+sensor_types type, u32 attr,
+>  		}
+>  		break;
+>  	case hwmon_power:
+> +		if (priv->power_input[channel] =3D=3D -ENODATA)
+> +			return -ENODATA;
+>  		*val =3D priv->power_input[channel];
 
-diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
-index 49163f387..ad8f85b1c 100644
---- a/Documentation/hwmon/aquacomputer_d5next.rst
-+++ b/Documentation/hwmon/aquacomputer_d5next.rst
-@@ -13,6 +13,7 @@ Supported devices:
- * Aquacomputer Quadro fan controller
- * Aquacomputer High Flow Next sensor
- * Aquacomputer Leakshield leak prevention system
-+* Aquacomputer AMPINEL power monitor
- * Aquacomputer Aquastream XT watercooling pump
- * Aquacomputer Aquastream Ultimate watercooling pump
- * Aquacomputer Poweradjust 3 fan controller
-@@ -69,6 +70,18 @@ The Aquastream XT pump exposes temperature readings for the coolant, external se
- and fan IC. It also exposes pump and fan speeds (in RPM), voltages, as well as pump
- current.
- 
-+The AMPINEL exposes total power, total current, input voltage, hotspot
-+temperature and six channel currents. Channel numbers follow report order;
-+their mapping to physical connector pins has not been verified. The readings
-+are received approximately twice per second. Only sensor reads are supported;
-+the driver does not configure protection settings or report alarms.
-+The separate keyboard interface is not supported and remains unbound while
-+this driver is registered.
-+
-+For AMPINEL, ``power1_input`` is total power, ``in0_input`` is input voltage,
-+``temp1_input`` is hotspot temperature, ``curr1_input`` is total current, and
-+``curr[2-7]_input`` are the six channel currents.
-+
- The Aquastream Ultimate pump exposes coolant temp and an external temp sensor, along
- with speed, power, voltage and current of both the pump and optionally connected fan.
- It also exposes pressure and flow speed readings.
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 18c682e1a..ae90f4894 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -257,14 +257,14 @@ config SENSORS_AHT10
- 	  will be called aht10.
- 
- config SENSORS_AQUACOMPUTER_D5NEXT
--	tristate "Aquacomputer D5 Next, Octo, Quadro, Farbwerk, Farbwerk 360, High Flow Next"
-+	tristate "Aquacomputer D5 Next and other USB devices"
- 	depends on USB_HID
- 	select CRC16
- 	help
- 	  If you say yes here you get support for sensors and fans of
- 	  the Aquacomputer D5 Next watercooling pump, Octo and Quadro fan
- 	  controllers, Farbwerk and Farbwerk 360 RGB controllers, High Flow
--	  Next sensor, where available.
-+	  Next sensor and AMPINEL power monitor, where available.
- 
- 	  This driver can also be built as a module. If so, the module
- 	  will be called aquacomputer_d5next.
-diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-index 5c0c47eb0..7604e7636 100644
---- a/drivers/hwmon/aquacomputer_d5next.c
-+++ b/drivers/hwmon/aquacomputer_d5next.c
-@@ -2,7 +2,7 @@
- /*
-  * hwmon driver for Aquacomputer devices (D5 Next, Farbwerk, Farbwerk 360, Octo,
-  * Quadro, High Flow Next, Aquaero, Aquastream Ultimate, Leakshield,
-- * High Flow USB/MPS Flow family)
-+ * High Flow USB/MPS Flow family, AMPINEL)
-  *
-  * Aquacomputer devices send HID reports (with ID 0x01) every second to report
-  * sensor values, except for devices that communicate through the
-@@ -33,6 +33,7 @@
- #define USB_PRODUCT_ID_OCTO		0xf011
- #define USB_PRODUCT_ID_HIGHFLOWNEXT	0xf012
- #define USB_PRODUCT_ID_LEAKSHIELD	0xf014
-+#define USB_PRODUCT_ID_AMPINEL		0xf015
- #define USB_PRODUCT_ID_AQUASTREAMXT	0xf0b6
- #define USB_PRODUCT_ID_AQUASTREAMULT	0xf00b
- #define USB_PRODUCT_ID_POWERADJUST3	0xf0bd
-@@ -41,7 +42,7 @@
- enum kinds {
- 	d5next, farbwerk, farbwerk360, octo, quadro,
- 	highflownext, aquaero, poweradjust3, aquastreamult,
--	aquastreamxt, leakshield, highflow
-+	aquastreamxt, leakshield, highflow, ampinel
- };
- 
- static const char *const aqc_device_names[] = {
-@@ -56,7 +57,8 @@ static const char *const aqc_device_names[] = {
- 	[aquaero] = "aquaero",
- 	[aquastreamult] = "aquastreamultimate",
- 	[poweradjust3] = "poweradjust3",
--	[highflow] = "highflow" /* Covers MPS Flow devices */
-+	[highflow] = "highflow", /* Covers MPS Flow devices */
-+	[ampinel] = "ampinel",
- };
- 
- #define DRIVER_NAME			"aquacomputer_d5next"
-@@ -111,6 +113,15 @@ static u8 aquaero_secondary_ctrl_report[] = {
- #define AQC_FAN_POWER_OFFSET		0x06
- #define AQC_FAN_SPEED_OFFSET		0x08
- 
-+/* AMPINEL offsets include the report ID byte. */
-+#define AMPINEL_STATUS_REPORT_SIZE	544
-+#define AMPINEL_NUM_CHANNELS		6
-+#define AMPINEL_CHANNEL_CURRENT_START	0x6f
-+#define AMPINEL_POWER			0xc7
-+#define AMPINEL_CURRENT			0xc9
-+#define AMPINEL_VOLTAGE			0xcf
-+#define AMPINEL_HOTSPOT			0xe1
-+
- /* Specs of the Aquaero fan controllers */
- #define AQUAERO_SERIAL_START			0x07
- #define AQUAERO_FIRMWARE_VERSION		0x0B
-@@ -516,6 +527,24 @@ static const char *const label_highflow_speeds[] = {
- 	"Flow speed [dL/h]"
- };
- 
-+static const char *const label_ampinel_temp[] = {
-+	"Hotspot"
-+};
-+
-+static const char *const label_ampinel_power[] = {
-+	"Total power"
-+};
-+
-+static const char *const label_ampinel_voltage[] = {
-+	"VCC In"
-+};
-+
-+static const char *const label_ampinel_current[] = {
-+	"Total current",
-+	"Channel 1", "Channel 2", "Channel 3",
-+	"Channel 4", "Channel 5", "Channel 6"
-+};
-+
- struct aqc_fan_structure_offsets {
- 	u8 voltage;
- 	u8 curr;
-@@ -869,6 +898,10 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
- 		break;
- 	case hwmon_power:
- 		switch (priv->kind) {
-+		case ampinel:
-+			if (channel == 0)
-+				return 0444;
-+			break;
- 		case aquastreamult:
- 			/* Special case to support pump and fan power */
- 			if (channel < 2)
-@@ -889,6 +922,10 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
- 		break;
- 	case hwmon_curr:
- 		switch (priv->kind) {
-+		case ampinel:
-+			if (channel < AMPINEL_NUM_CHANNELS + 1)
-+				return 0444;
-+			break;
- 		case aquastreamult:
- 			/* Special case to support pump and fan current */
- 			if (channel < 2)
-@@ -907,6 +944,10 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
- 		break;
- 	case hwmon_in:
- 		switch (priv->kind) {
-+		case ampinel:
-+			if (channel == 0)
-+				return 0444;
-+			break;
- 		case d5next:
- 			/* Special case to support +5V and +12V voltage sensors */
- 			if (channel < priv->num_fans + 2)
-@@ -1396,6 +1437,17 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
- 
- 	/* Special-case sensor readings */
- 	switch (priv->kind) {
-+	case ampinel:
-+		priv->power_input[0] =
-+			min_t(u64, get_unaligned_be16(data + AMPINEL_POWER) * 100000ULL,
-+			      LONG_MAX);
-+		priv->current_input[0] = get_unaligned_be16(data + AMPINEL_CURRENT) * 10;
-+		for (i = 0; i < AMPINEL_NUM_CHANNELS; i++)
-+			priv->current_input[i + 1] =
-+				get_unaligned_be16(data + AMPINEL_CHANNEL_CURRENT_START +
-+						   i * AQC_SENSOR_SIZE);
-+		priv->voltage_input[0] = get_unaligned_be16(data + AMPINEL_VOLTAGE);
-+		break;
- 	case aquaero:
- 		/* Read calculated virtual temp sensors */
- 		i = priv->num_temp_sensors + priv->num_virtual_temp_sensors;
-@@ -1523,6 +1575,7 @@ static void aqc_debugfs_init(struct aqc_data *priv)
- 
- static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- {
-+	struct hid_report *report;
- 	struct aqc_data *priv;
- 	int ret;
- 
-@@ -1548,6 +1601,24 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		goto fail_and_stop;
- 
- 	switch (hdev->product) {
-+	case USB_PRODUCT_ID_AMPINEL:
-+		/* The other AMPINEL HID interface is a keyboard. */
-+		report = hdev->report_enum[HID_INPUT_REPORT].report_id_hash[STATUS_REPORT_ID];
-+		if (hdev->maxcollection != 1 ||
-+		    hdev->collection[0].usage != (HID_UP_MSVENDOR | 1) ||
-+		    !report || report->size != (AMPINEL_STATUS_REPORT_SIZE - 1) * 8) {
-+			ret = -ENODEV;
-+			goto fail_and_close;
-+		}
-+
-+		priv->kind = ampinel;
-+		priv->num_temp_sensors = 1;
-+		priv->temp_sensor_start_offset = AMPINEL_HOTSPOT;
-+		priv->temp_label = label_ampinel_temp;
-+		priv->power_label = label_ampinel_power;
-+		priv->voltage_label = label_ampinel_voltage;
-+		priv->current_label = label_ampinel_current;
-+		break;
- 	case USB_PRODUCT_ID_AQUAERO:
- 		/*
- 		 * Aquaero presents itself as three HID devices under the same product ID:
-@@ -1797,6 +1868,9 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 	}
- 
- 	switch (priv->kind) {
-+	case ampinel:
-+		priv->serial_number_start_offset = AQC_SERIAL_START;
-+		break;
- 	case aquaero:
- 		priv->serial_number_start_offset = AQUAERO_SERIAL_START;
- 		priv->firmware_version_offset = AQUAERO_FIRMWARE_VERSION;
-@@ -1892,6 +1966,7 @@ static const struct hid_device_id aqc_table[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_QUADRO) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_HIGHFLOWNEXT) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_LEAKSHIELD) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_AMPINEL) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_AQUASTREAMXT) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_AQUASTREAMULT) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_POWERADJUST3) },
+[Severity: Medium]
+Could a concurrent HID raw event interrupt update priv->power_input[channel]
+to -ENODATA right after the validation check but before the assignment?
+
+If aqc_raw_event() updates the shared state concurrently, it seems this TOC=
+TOU
+race in aqc_read() could cause the internal -ENODATA error code to be retur=
+ned
+to userspace as a valid power reading (because aqc_read returns 0 on succes=
+s).
+
+Should this read be protected with READ_ONCE() or a lock to prevent exposing
+transient incorrect statistics when userspace polls the sysfs file?
+
+>  		break;
+>  	case hwmon_pwm:
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260927183723.4078=
+226-1-contact@vasily.cc?part=3D1
