@@ -1,33 +1,32 @@
-Received: from mail-43170.protonmail.ch (mail-43170.protonmail.ch [185.70.43.170])
+Received: from mail-43171.protonmail.ch (mail-43171.protonmail.ch [185.70.43.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3022F6920
-	for <linux-hwmon@vger.kernel.org>; Sun, 27 Sep 2026 18:37:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 204C543078B;
+	Sun, 27 Sep 2026 18:37:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790534264; cv=none; b=ta9V/Lyiz1hudPGDgiPxHElMYshm62dJbTFMo43MWwPknUouM6EkHUZbUpRSXwytnJh6uQ1v0RxbKPO0es6Ek3zMkwAwNWx7ihYNWLILZ8S8p8+uxK+GTQkXecXFXlPmGfdhP2x/ocGdmynpL51QPw54eOiKR1ULYhsKrWtVijI=
+	t=1790534265; cv=none; b=cgGR/uVsMiSJ7musNUSARfs6Z8Zta7c0qyVfeB7LOcKjA9pqQ8EWgv2bF3H4XrjHnfo+t9/hD09HyoEL6PZ9ZsR+wwAxKEfdW4Xdd5BOILlwTM+wyS+MU1xnWk1g8wU1EGzoOSvubPSKi+0qGsccVm7fvp8Br9XlusiofAM0FxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790534264; c=relaxed/simple;
-	bh=str+IzB7+ZV9AWNEOK0MZK1cCyqHDNn2MtqBWJMAGy0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=R5KkQve+4M7xxMCKsDKHpqtadU7XN9V10z9IwU8KQo0AfxvyRe2Bad10O4K9c8XNYe660BA3gzc5Eh1JTZgN8TU9WQjbW6NTLT3Te3AaaVr/rBALYNkYaTALddmg3TdXVZdKfjQgcXiyz/GZZFlKLihy3ll5R2fvibz3yq4/58g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc; spf=pass smtp.mailfrom=vasily.cc; dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b=Dwj96AU4; arc=none smtp.client-ip=185.70.43.170
+	s=arc-20240116; t=1790534265; c=relaxed/simple;
+	bh=+SzNif70qE9WRlzB0/sLIUts33w6w9XQ0QdBUjA5N+I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SSJB5CE6y/ED66qYAS9nTF6ALeoCeoVvETwN7wE+RD7C59iWqqLYR071GN66iLLCkMeIBbSmX+S9P0b+/F2LvegidsqNhvd/rLkN6sCmcQmK5ZkW5TD3KujFG9oMi10voKmVg5oioyhKU2zcDDrW7GknB/pMNafgTvWW8dvGdlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc; spf=pass smtp.mailfrom=vasily.cc; dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b=lZ6JiTH1; arc=none smtp.client-ip=185.70.43.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vasily.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vasily.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b="Dwj96AU4"
+	dkim=pass (2048-bit key) header.d=vasily.cc header.i=@vasily.cc header.b="lZ6JiTH1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vasily.cc;
 	s=protonmail2; t=1790534253; x=1790793453;
-	bh=UX0Az93aOiMiSsg5rJGPHILoif/98iDiUx46W2+0Dr0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:From:To:
-	 Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=Dwj96AU4na+E7EGZqnC4MdAHXI6+C3WKw9AmUu0PWC7JbFVxNMxNssaTu27QD5Q+R
-	 ceRANzMXeMzWjbxs3XEIaaLYA5PeJDZORNPGVd4TTkj6bF839iCcOm52AsSaekPfa1
-	 zYd308idXmV/u15jGU/zV1ToO+iYWXhvZECVr20jRIipwmtXpAjAUyJXJ6DQGbyRON
-	 hZFpjRKBgZWcHUFlyV9yVqmDWf7YLihBwxOFk1FpEJIhrJ8ViqfSNF26Jq+dLN9RHm
-	 AgTLSUqqc9FwttFmvmeDX1rIGAEowax3kvPvI9UF8X2Pe+otbnh7cXBLQkuhS0Ff01
-	 MoLvtTyrUv/SQ==
-X-Pm-Submission-Id: 4htCpz02SRz1DF4w
+	bh=/JZjuA7Gay/H6k9tLxvbNGqDH2HHf+NplZp9w1gF9Y8=;
+	h=From:To:Cc:Subject:Date:Message-ID:From:To:Cc:Date:Subject:
+	 Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=lZ6JiTH1Jm8FR0lXZRYJJ2/kZkB1usgkSM9AQLU9sMKS4r2ztVHi5OUcZ9vQLCZAq
+	 cP44/e0erz+X3vgv/uXYZgqHOxyOO2+6RVEHNSNKiro9dzXqxs+lYJkOGV+hDzguCd
+	 Ur0DK8ma8SLSoETtAgOV6afKTjQX+PAooqvVifTlw48PiCHh87o0H3qU9z5uJt/HZ4
+	 hNd4/qx34LH6fiRcrIQklxkaQIapkgAuKfgbgrGS0wgjN4YPrf223ddSYRUGfETTuM
+	 aFoFUoclpUTIT1OkaV+KHjngBa+HP4S6HDmLtPyGLGUtBG3Zb+CcX2NxIxgacUgKKh
+	 +WpTdyieSnIBQ==
+X-Pm-Submission-Id: 4htCpw74spz1DF4X
 From: Vas Zayarskiy <contact@vasily.cc>
 To: linux@roeck-us.net,
 	Aleksa Savic <savicaleksa83@gmail.com>,
@@ -38,12 +37,10 @@ Cc: linux-hwmon@vger.kernel.org,
 	Jonathan Corbet <corbet@lwn.net>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v4 1/5] hwmon: (aquacomputer_d5next) Avoid truncating scaled sensor readings
-Date: Sun, 27 Sep 2026 21:37:19 +0300
-Message-ID: <20260927183723.4078226-2-contact@vasily.cc>
+Subject: [PATCH v4 0/5] hwmon: AMPINEL telemetry support and shared fixes
+Date: Sun, 27 Sep 2026 21:37:18 +0300
+Message-ID: <20260927183723.4078226-1-contact@vasily.cc>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260927183723.4078226-1-contact@vasily.cc>
-References: <20260927183723.4078226-1-contact@vasily.cc>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -52,73 +49,64 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-High Flow Next power is reported in watts. Multiplying the 16-bit value
-by one million can overflow both the signed intermediate and the u32
-cache. Store power in long, perform the conversion in u64, and clamp to
-LONG_MAX. The other existing power conversions fit in a signed 32-bit
-value. Return -ENODATA for unavailable power instead of exposing the
-stored error as a reading.
+This revision limits AMPINEL support to read-only telemetry. It drops the
+hid-generic change and the hwmon match callback, so the series no longer
+needs a HID change. The separate keyboard interface is deliberately
+unsupported and remains unbound with the default driver selection.
 
-Widen the shared current cache to u32. The Aquastream XT conversion to
-milliamperes can exceed 65535 mA; clamp its negative conversion results
-to zero before assigning to the unsigned cache. This also permits devices
-with scaled aggregate currents to store milliamperes directly.
+Changes since v3:
+- Select the telemetry interface in the existing probe switch using its
+  vendor collection and input report layout. Reject the keyboard there,
+  following the Aquaero and Leakshield approach. Remove the USB parent
+  cast, USB header dependency and interface-number check.
+- Split shared report type/length validation and unknown firmware-version
+  handling into their own patches. Check received status reports against
+  the HID descriptor length for all devices using the raw-event path.
+- Add the missing trailing comma and correct the -ENODATA and unit
+  conversion wording in the numeric-fix commit message.
+- Rebase onto hwmon-next 9edd5ab2656f (7.3-rc4). The relevant driver and
+  HID matching code are unchanged from the previous base.
 
-Assisted-by: LLM sparse
-Signed-off-by: Vas Zayarskiy <contact@vasily.cc>
----
- drivers/hwmon/aquacomputer_d5next.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+The earlier probe-time callback concern was resolved in review: HID core
+blocks callbacks throughout probe unless hid_device_io_start() is called.
+This driver does not call it, so no initialization-race fix is included.
 
-diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-index 1ca70e726..9178ac4cb 100644
---- a/drivers/hwmon/aquacomputer_d5next.c
-+++ b/drivers/hwmon/aquacomputer_d5next.c
-@@ -19,6 +19,7 @@
- #include <linux/hwmon.h>
- #include <linux/jiffies.h>
- #include <linux/ktime.h>
-+#include <linux/limits.h>
- #include <linux/module.h>
- #include <linux/seq_file.h>
- #include <linux/unaligned.h>
-@@ -599,9 +600,9 @@ struct aqc_data {
- 	u32 speed_input_min[1];
- 	u32 speed_input_target[1];
- 	u32 speed_input_max[1];
--	u32 power_input[8];
-+	long power_input[8];
- 	u16 voltage_input[8];
--	u16 current_input[8];
-+	u32 current_input[8];
- 
- 	/* Label values */
- 	const char *const *temp_label;
-@@ -976,7 +977,7 @@ static int aqc_legacy_read(struct aqc_data *priv)
- 
- 		/* Calculation derived from linear regression */
- 		sensor_value = get_unaligned_le16(priv->buffer + AQUASTREAMXT_PUMP_CURR_OFFSET);
--		priv->current_input[0] = DIV_ROUND_CLOSEST(sensor_value * 176, 100) - 52;
-+		priv->current_input[0] = max(DIV_ROUND_CLOSEST(sensor_value * 176, 100) - 52, 0);
- 
- 		sensor_value = get_unaligned_le16(priv->buffer + AQUASTREAMXT_PUMP_VOLTAGE_OFFSET);
- 		priv->voltage_input[0] = DIV_ROUND_CLOSEST(sensor_value * 1000, 61);
-@@ -1070,6 +1071,8 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 		}
- 		break;
- 	case hwmon_power:
-+		if (priv->power_input[channel] == -ENODATA)
-+			return -ENODATA;
- 		*val = priv->power_input[channel];
- 		break;
- 	case hwmon_pwm:
-@@ -1426,7 +1429,8 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
- 			priv->power_input[0] = -ENODATA;
- 		else
- 			priv->power_input[0] =
--			    get_unaligned_be16(data + HIGHFLOWNEXT_POWER) * 1000000;
-+			    min_t(u64, get_unaligned_be16(data + HIGHFLOWNEXT_POWER) * 1000000ULL,
-+				  LONG_MAX);
- 
- 		priv->voltage_input[0] = get_unaligned_be16(data + HIGHFLOWNEXT_5V_VOLTAGE) * 10;
- 		priv->voltage_input[1] =
+Validation of this revision:
+- The changed hwmon object builds on x86_64 and i386 with W=1 and Sparse.
+- All 995 previously captured reports pass the actual C parser/read replay
+  with ASan/UBSan, including simulated 32-bit long clamping.
+- Shared regression cases cover invalid report types and lengths, power
+  and current conversion, unavailable readings, startup expiry and unknown
+  firmware offsets. Removing the new shared validation fails the tests.
+- A userspace harness exercises the actual stock HID matching and probe
+  selection/error unwind: telemetry is accepted and the keyboard rejected.
+  This is not a live kernel binding test.
+- All seven Python tests pass; the updated RST renders without warnings.
+
+V3 was tested on physical AMPINEL hardware across loading, reload,
+suspend/resume and reboot. The telemetry decoding is unchanged here, but
+this exact revision has not been loaded on hardware. Validation of the
+other Aquacomputer models remains synthetic. Channel labels follow report
+order; alarm reporting and protection configuration are not supported.
+
+AI assistance: Codex assisted with implementation, tests and submission
+text; Sparse was used for static analysis.
+
+V3: https://lore.kernel.org/linux-hwmon/20260914233728.22725-1-contact@vasily.cc/
+Review: https://lore.kernel.org/linux-hwmon/a968a02f-c513-42f0-993f-ede4f785025c@roeck-us.net/
+Probe clarification: https://lore.kernel.org/linux-hwmon/d45d4de8-6925-40ad-a5b7-b8cef6356175@roeck-us.net/
+
+Vas Zayarskiy (5):
+  hwmon: (aquacomputer_d5next) Avoid truncating scaled sensor readings
+  hwmon: (aquacomputer_d5next) Expire the initial sensor cache
+  hwmon: (aquacomputer_d5next) Validate incoming status reports
+  hwmon: (aquacomputer_d5next) Skip unknown firmware version offsets
+  hwmon: (aquacomputer_d5next) Add AMPINEL telemetry support
+
+ Documentation/hwmon/aquacomputer_d5next.rst |  13 +++
+ drivers/hwmon/Kconfig                       |   4 +-
+ drivers/hwmon/aquacomputer_d5next.c         | 101 ++++++++++++++++++--
+ 3 files changed, 106 insertions(+), 12 deletions(-)
+
+
+base-commit: 9edd5ab2656f040d726b5388f49ceac10bb2944f
