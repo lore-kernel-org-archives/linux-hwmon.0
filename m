@@ -1,68 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F005A20D4FC
-	for <linux-hwmon@vger.kernel.org>; Sun, 27 Sep 2026 08:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A2A3BB125;
+	Sun, 27 Sep 2026 09:07:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790499446; cv=none; b=Z9BSEp+61ofyqFt3BkFwh0OxS80a8JK7UMseFC0SjlVSAwcJIFiYGwGP7/H+9Ri2oYq/cIMU0TAoqs+p/j8mzm1/8GEe0k9i2jlaU4TGu1/g8G9wb2iJr6IgZrQhW7cQmkSstJf7vKGWB36fmwIhZLdfKi85LonIHGME25m7RGA=
+	t=1790500028; cv=none; b=FXyQ2mwsotzbkae8T59C6mb1fBQvwfFod3FVlmyesfxSx2opMSyGfKzrLsOBDqKv5n6jB7bv/ow5s5Ye/mDhBzVXKy+9yqwCV/5fWYjDm5a8/iVwGcNNQNz3rs/QpRmzL1T+ES3oybFhHLO0yvy1MqvYzrHThYaJio9NTQ4S1oA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790499446; c=relaxed/simple;
-	bh=gLm0QaOa8eqD16OZEwsNErP/wVlNCzTU7MKTYJRGzvY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ZFNDEec5HIfEYl+bAcwZmnk5X3rNvoFDgcQYDN7F81IFZ6tDVLhZjQ3YT6bFBd6yDoTAWogauw6KCEGDbrwDvQrhCo6B720SxQ4Slz4YHkDfITIn4/N0LnMT2n2eXcoO23ecmAfIADSGMxmNd7UIKmCvcUluY6ECGNO3Edsocx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jiRiuyED; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790500028; c=relaxed/simple;
+	bh=NWGvL/lXMPh0PceKlE1xP1i1u+INZhX/XA1FYQZebsw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=uzWet10G02otw8vxBCTKH4zCGdUFRXds4P2GPdD3MWreWflgoZsTDtln7SDsLKGgMG+ovJdvDbETEha+1ulojDLzdBer8VWCqbyrNGJxB0UTOvD934epzrYnTbVENkqvIydZhLnqJO0NvfBowD6FAkDGleMocb63nFdkwXg4KK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=HC6KpbBb; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jiRiuyED"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EED71F000FF;
-	Sun, 27 Sep 2026 08:57:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790499444;
-	bh=gLm0QaOa8eqD16OZEwsNErP/wVlNCzTU7MKTYJRGzvY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jiRiuyEDggQjCGnY0Qel8shJSKwKSE+3j82H1S6zAe5edrbuq9ofHPtMKYadaTnmf
-	 /zdWWt34Xti54XVpcI8bIxFJc+3mzyVU4LHKw2bi5KZNL606LWjk7VR0j3cuCcjDN5
-	 ybFb6wZh2PqNqtUW/KGP5bOrm62LyP/zJRe8Mln7dHR/uQbwCC+6Bo+b6B4fDDcJ9h
-	 /6remq0YR/yoiTMp1SYfPz2MjwIjAqqc3nNCRXQvlAnNB5SE82KvWkBm+LzzWa0UzL
-	 vF5rKtiLB23FTR71XosyT4utI7Mitiv/rp5dxAKC0sD95BSlWQmhj+IIgT4imlOD4P
-	 MkyN/X/C2+QMg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] hwmon: (gigabyte_waterforce) reject short input
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="HC6KpbBb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=NWGvL/lXMPh0PceKlE1xP1i1u+INZhX/XA1FYQZebsw=; b=H
+	C6KpbBbih+W68yAmTg/X0x9XDXlmP4T6Lb9fyGRMX7Uci1k6VFiWzbkM28Uc+A31
+	MOD3fMXohaImCi0czP29AztgFf5CxoNkfF2eKXGHKk//EOKJN+1INtJeyidREglM
+	uQIVoADbIKsimjLmUFzrLLVo23FJ4Lizm31QH7bIcg=
+Date: Sun, 27 Sep 2026 17:06:38 +0800 (CST)
+From: "jiale yao" <19888972804@163.com>
+To: "Guenter Roeck" <linux@roeck-us.net>
+Cc: "Aleksa Savic" <savicaleksa83@gmail.com>, "Jack Doan" <me@jackdoan.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re:Re: [PATCH] hwmon: (aquacomputer_d5next) reject short status
  reports
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiale Yao" <yaojiale02@163.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260927084959.893708-1-yaojiale02@163.com>
-References: <20260927084959.893708-1-yaojiale02@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 27 Sep 2026 08:57:23 +0000
-Message-Id: <20260927085724.3EED71F000FF@smtp.kernel.org>
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
+ 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
+In-Reply-To: <7b40ae2e-57d8-44f7-9791-ac65a3e97290@roeck-us.net>
+References: <20260924151121.1233666-1-yaojiale02@163.com>
+ <7b40ae2e-57d8-44f7-9791-ac65a3e97290@roeck-us.net>
+X-NTES-SC: AL_Qu2SAviStkEi7iWQZukcn08ShO49XMOyvfoi2YFTc+sEvBLV6y4KRnFjOn7G1NC9FgmWtRGvdzV/wflkUIdS9rVxXV0M5bguUmuO27mBdw==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-ID: <7bdec27c.1969.1a0e21dcb7f.Coremail.19888972804@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:ZCgvCgD3HySe3Lhq+kJPAA--.25W
+X-CM-SenderInfo: x1dryxhdohiji6rwjhhfrp/xtbC7x4nYWq43J58ZAAA3-
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-> The HID raw_event callback runs before HID core validates the received
-> report length. waterforce_raw_event() reads command bytes and then access=
-es
-> fixed offsets for firmware or status data without any length checks. A
-> truncated report can therefore cause out-of-bounds reads and update hwmon
-> state with unrelated data.
->=20
-> Require every report to contain the firmware response fields, which also
-> covers both command bytes. After identifying a status response, require
-> the byte at the highest status offset before accessing its payload.
->=20
-> Fixes: 42ac68e3d4ba ("hwmon: Add driver for Gigabyte AORUS Waterforce AIO=
- coolers")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jiale Yao <yaojiale02@163.com>
-
-Sashiko has reviewed this patch and found no issues. It looks great!
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260927084959.8937=
-08-1-yaojiale02@163.com?part=3D1
-
+QXQgMjAyNi0wOS0yNSAwMDowNToxOSwgIkd1ZW50ZXIgUm9lY2siIDxsaW51eEByb2Vjay11cy5u
+ZXQ+IHdyb3RlOgo+T24gVGh1LCBTZXAgMjQsIDIwMjYgYXQgMTE6MTE6MjFQTSArMDgwMCwgSmlh
+bGUgWWFvIHdyb3RlOgo+PiBUaGUgSElEIGRyaXZlciByYXdfZXZlbnQgY2FsbGJhY2sgcnVucyBi
+ZWZvcmUgSElEIGNvcmUgdmFsaWRhdGVzIHRoZQo+PiByZWNlaXZlZCByZXBvcnQgbGVuZ3RoLiAg
+YXFjX3Jhd19ldmVudCgpIHJlYWRzIGRldmljZS1zcGVjaWZpYyBzdGF0dXMKPj4gZmllbGRzIGF0
+IGZpeGVkIG9mZnNldHMsIGluY2x1ZGluZyBtdWx0aS1ieXRlIHZhbHVlcywgd2l0aG91dCBjaGVj
+a2luZwo+PiB0aGF0IHRoZSByZWNlaXZlZCBidWZmZXIgY29udGFpbnMgdGhlIGNvbXBsZXRlIHJl
+cG9ydC4gIEEgdHJ1bmNhdGVkIHN0YXR1cwo+PiByZXBvcnQgY2FuIHRoZXJlZm9yZSBjYXVzZSBv
+dXQtb2YtYm91bmRzIHJlYWRzIGFuZCB1cGRhdGUgaHdtb24gc3RhdGUgd2l0aAo+PiBkYXRhIGJl
+eW9uZCB0aGUgcmVjZWl2ZWQgcmVwb3J0Lgo+PiAKPj4gUmVqZWN0IHN0YXR1cyByZXBvcnRzIHNo
+b3J0ZXIgdGhhbiB0aGUgbGVuZ3RoIGRlcml2ZWQgZnJvbSB0aGVpciByZXBvcnQKPj4gZGVzY3Jp
+cHRvciBiZWZvcmUgYWNjZXNzaW5nIGFueSBmaWVsZHMuICBDb21taXQgNDc2NjliZWM0NGZlICgi
+SElEOiBhc3VzOgo+PiByZWZhY3RvciB0aGUgdHdvIHdvcmtxdWV1ZXMgYW5kIGluaXQgc2VxdWVu
+Y2UiKSBhZGRlZCBlcXVpdmFsZW50IHJhdy1ldmVudAo+PiBsZW5ndGggdmFsaWRhdGlvbiB0byBo
+aWQtYXN1cy4KPj4gCj4+IEZpeGVzOiAwZTM1ZjYzZjdmNGUgKCJod21vbjogYWRkIGRyaXZlciBm
+b3IgQXF1YWNvbXB1dGVyIEQ1IE5leHQiKQo+PiBDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZwo+
+PiBTaWduZWQtb2ZmLWJ5OiBKaWFsZSBZYW8gPHlhb2ppYWxlMDJAMTYzLmNvbT4KPj4gLS0tCj4+
+ICBkcml2ZXJzL2h3bW9uL2FxdWFjb21wdXRlcl9kNW5leHQuYyB8IDIgKysKPj4gIDEgZmlsZSBj
+aGFuZ2VkLCAyIGluc2VydGlvbnMoKykKPj4gCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9u
+L2FxdWFjb21wdXRlcl9kNW5leHQuYyBiL2RyaXZlcnMvaHdtb24vYXF1YWNvbXB1dGVyX2Q1bmV4
+dC5jCj4+IGluZGV4IDFjYTcwZTcyNjI5OC4uMWViYzhiYzRjMDkwIDEwMDY0NAo+PiAtLS0gYS9k
+cml2ZXJzL2h3bW9uL2FxdWFjb21wdXRlcl9kNW5leHQuYwo+PiArKysgYi9kcml2ZXJzL2h3bW9u
+L2FxdWFjb21wdXRlcl9kNW5leHQuYwo+PiBAQCAtMTMzMSw2ICsxMzMxLDggQEAgc3RhdGljIGlu
+dCBhcWNfcmF3X2V2ZW50KHN0cnVjdCBoaWRfZGV2aWNlICpoZGV2LCBzdHJ1Y3QgaGlkX3JlcG9y
+dCAqcmVwb3J0LCB1OAo+PiAgCj4+ICAJaWYgKHJlcG9ydC0+aWQgIT0gU1RBVFVTX1JFUE9SVF9J
+RCkKPj4gIAkJcmV0dXJuIDA7Cj4+ICsJaWYgKHNpemUgPCBoaWRfcmVwb3J0X2xlbihyZXBvcnQp
+KQo+PiArCQlyZXR1cm4gMDsKPgo+VGhhdCBkb2Vzbid0IGVuc3VyZSB0aGF0IHRoZSByZXBvcnQg
+aXMgbm90IGF0IGxlYXN0IGFzIGxvbmcgYXMgYWNjZXNzZWQKPmxhdGVyIGluIHRoZSBmdW5jdGlv
+biwgYW5kIHRodXMgZG9lcyBub3QgZml4IGFueXRoaW5nLiBUaGUgc2FtZSBhcHBsaWVzCj50byB0
+aGUgb3RoZXIgcGF0Y2guCj4KPkEgcHJvcGVyIGZpeCB3b3VsZCBiZSB0byBlbnN1cmUgdGhhdCBz
+aXplIGlzIGF0IGxlYXN0IGFzIGxvbmcgYXMgYWNjZXNzZWQKPmluIHRoZSBmdW5jdGlvbi4gaGlk
+X3JlcG9ydF9sZW4oKSBkb2VzIG5vdCBhbmQgY2FuIG5vdCBrbm93IHRoYXQgdmFsdWUuCj5JdCBp
+cyBwdXJlbHkgZHJpdmVyIHNwZWNpZmljLgoKSSB0cmllZCB0byBmaW5kIGEgY2xlYW5lciB3YXkg
+dG8gZGVyaXZlIHRoZSBhY3R1YWwgcmVxdWlyZWQgbGVuZ3RoLCBidXQgaXQgc2VlbXMKdGhpcyBp
+cyBlbnRpcmVseSBkcml2ZXItc3BlY2lmaWMuIEknbGwgcmVwbGFjZSB0aGlzIHdpdGggYW4gZXhw
+bGljaXQgbWluaW11bS1sZW5ndGgKdGFibGUgZm9yIHRoZSBzdXBwb3J0ZWQgbGF5b3V0cywganVz
+dCBsaWtlOgotLS0KKy8qIE1pbmltdW0gc2l6ZSByZXF1aXJlZCBmb3IgYWxsIGZpZWxkcyByZWFk
+IGJ5IGFxY19yYXdfZXZlbnQoKS4gKi8KK3N0YXRpYyBjb25zdCB1MTYgYXFjX21pbl9zdGF0dXNf
+cmVwb3J0X3NpemVbXSA9IHsKKwlbZDVuZXh0XSA9IEQ1TkVYVF9QVU1QX09GRlNFVCArIEFRQ19G
+QU5fU1BFRURfT0ZGU0VUICsgc2l6ZW9mKHUxNiksCisJW2ZhcmJ3ZXJrXSA9IEZBUkJXRVJLX1NF
+TlNPUl9TVEFSVCArIEZBUkJXRVJLX05VTV9TRU5TT1JTICogQVFDX1NFTlNPUl9TSVpFLAorCVtm
+YXJid2VyazM2MF0gPSBGQVJCV0VSSzM2MF9WSVJUVUFMX1NFTlNPUlNfU1RBUlQgKworCQkJRkFS
+QldFUkszNjBfTlVNX1ZJUlRVQUxfU0VOU09SUyAqIEFRQ19TRU5TT1JfU0laRSwKKwlbb2N0b10g
+PSAweGQ4ICsgQVFDX0ZBTl9TUEVFRF9PRkZTRVQgKyBzaXplb2YodTE2KSwKKwlbcXVhZHJvXSA9
+IDB4OTcgKyBBUUNfRkFOX1NQRUVEX09GRlNFVCArIHNpemVvZih1MTYpLAorCVtoaWdoZmxvd25l
+eHRdID0gSElHSEZMT1dORVhUXzVWX1ZPTFRBR0VfVVNCICsgc2l6ZW9mKHUxNiksCisJW2FxdWFl
+cm9dID0gMHgxOGIgKyBBUVVBRVJPX0ZBTl9QT1dFUl9PRkZTRVQgKyBzaXplb2YodTE2KSwKKwlb
+YXF1YXN0cmVhbXVsdF0gPSBBUVVBU1RSRUFNVUxUX1BSRVNTVVJFX09GRlNFVCArIHNpemVvZih1
+MTYpLAorCVtsZWFrc2hpZWxkXSA9IExFQUtTSElFTERfUkVTRVJWT0lSX1ZPTFVNRSArIHNpemVv
+Zih1MTYpLAorCVtoaWdoZmxvd10gPSAwLAorfTsKKwotLS0KQnV0IGl0J3Mgc28gdWxneSwgdGhh
+dCdzIG9rPyBvciBhbnkgb3RoZXIgc3VnZ2VzdGlvbi4KCj4KPkFsc28sIHRoZSBjb2RlIGFkZGVk
+IGluIGNvbW1pdCA0NzY2OWJlYzQ0ZmUgaXM6Cj4KPiAgICAgICAgaWYgKHNpemUgPCAyKSB7Cj4g
+ICAgICAgICAgICAgICAgaGlkX2RiZyhoZGV2LCAiVW5leHBlY3RlZCBrZXlib2FyZCByZXBvcnQg
+c2l6ZSAlZFxuIiwgc2l6ZSk7Cj4gICAgICAgICAgICAgICAgcmV0dXJuIDA7Cj4gICAgICAgIH0K
+Pgo+d2hpY2ggbWFrZXMgc2Vuc2UgYmVjYXVzZSBhc3VzX3Jhd19ldmVudCgpIG5ldmVyIGFjY2Vz
+c2VzIG1vcmUgdGhhbiB0d28gYnl0ZXMKPmluIHRoZSByZXBvcnQuIFRoZSBzdGF0ZW1lbnQgIkNv
+bW1pdCA0NzY2OWJlYzQ0ZmUgKCJISUQ6IGFzdXM6IHJlZmFjdG9yIHRoZSB0d28KPndvcmtxdWV1
+ZXMgYW5kIGluaXQgc2VxdWVuY2UiKSBhZGRlZCBlcXVpdmFsZW50IHJhdy1ldmVudCBsZW5ndGgg
+dmFsaWRhdGlvbgo+dG8gaGlkLWFzdXMiIGlzIGVpdGhlciBoYWxsdWNpbmF0ZWQgb3IgaW50ZW50
+aW9uYWxseSBtaXNsZWFkaW5nLgo+Cj5HdWVudGVyCg==
