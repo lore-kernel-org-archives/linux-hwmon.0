@@ -1,113 +1,157 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f35.google.com (mail-wr2-f35.google.com [74.125.225.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A2A3BB125;
-	Sun, 27 Sep 2026 09:07:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00AB43C09FB
+	for <linux-hwmon@vger.kernel.org>; Sun, 27 Sep 2026 11:10:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790500028; cv=none; b=FXyQ2mwsotzbkae8T59C6mb1fBQvwfFod3FVlmyesfxSx2opMSyGfKzrLsOBDqKv5n6jB7bv/ow5s5Ye/mDhBzVXKy+9yqwCV/5fWYjDm5a8/iVwGcNNQNz3rs/QpRmzL1T+ES3oybFhHLO0yvy1MqvYzrHThYaJio9NTQ4S1oA=
+	t=1790507438; cv=none; b=EBPzFUQ44IrCUPXJoboYWub6jeTLOa1S961Knts89ZNx4opaDT/M+j3U7uTIbSjutg/69sCwZqxeby4vIMD6l7mWluztL460PBuTLwSh0Xkl5EJ8gcLtuVBL4kk+e5wfAyqDFU7VFBW8U4o5PvzxFLbQjkNaz/cfwcWx/JL+vJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790500028; c=relaxed/simple;
-	bh=NWGvL/lXMPh0PceKlE1xP1i1u+INZhX/XA1FYQZebsw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=uzWet10G02otw8vxBCTKH4zCGdUFRXds4P2GPdD3MWreWflgoZsTDtln7SDsLKGgMG+ovJdvDbETEha+1ulojDLzdBer8VWCqbyrNGJxB0UTOvD934epzrYnTbVENkqvIydZhLnqJO0NvfBowD6FAkDGleMocb63nFdkwXg4KK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=HC6KpbBb; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1790507438; c=relaxed/simple;
+	bh=Lyez7JVaJYxHxW1ImgrKFGnQCl31RuCVPGHH2ZZXIH4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NkRCPYqf05n/9JtdnBISOoWbV3OS7UzFcs9Y6a6P/0kFB/g2hnCwXbsp5bt9ovslu3nsSGpZfWzqrkINz9GzJH9ZSnV1whnozpH/y0SeeJbjNK/Lpi0OVSEHDfbsqFe2uPkxdTwH6gu42p1ZXOUzvTIM2EouipiSJ22UN1GE2mQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=InfzIBGf; arc=none smtp.client-ip=74.125.225.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="HC6KpbBb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=NWGvL/lXMPh0PceKlE1xP1i1u+INZhX/XA1FYQZebsw=; b=H
-	C6KpbBbih+W68yAmTg/X0x9XDXlmP4T6Lb9fyGRMX7Uci1k6VFiWzbkM28Uc+A31
-	MOD3fMXohaImCi0czP29AztgFf5CxoNkfF2eKXGHKk//EOKJN+1INtJeyidREglM
-	uQIVoADbIKsimjLmUFzrLLVo23FJ4Lizm31QH7bIcg=
-Date: Sun, 27 Sep 2026 17:06:38 +0800 (CST)
-From: "jiale yao" <19888972804@163.com>
-To: "Guenter Roeck" <linux@roeck-us.net>
-Cc: "Aleksa Savic" <savicaleksa83@gmail.com>, "Jack Doan" <me@jackdoan.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re:Re: [PATCH] hwmon: (aquacomputer_d5next) reject short status
- reports
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
- 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
-In-Reply-To: <7b40ae2e-57d8-44f7-9791-ac65a3e97290@roeck-us.net>
-References: <20260924151121.1233666-1-yaojiale02@163.com>
- <7b40ae2e-57d8-44f7-9791-ac65a3e97290@roeck-us.net>
-X-NTES-SC: AL_Qu2SAviStkEi7iWQZukcn08ShO49XMOyvfoi2YFTc+sEvBLV6y4KRnFjOn7G1NC9FgmWtRGvdzV/wflkUIdS9rVxXV0M5bguUmuO27mBdw==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="InfzIBGf"
+Received: by mail-wr2-f35.google.com with SMTP id ffacd0b85a97d-4885a1480a2so1162037f8f.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 27 Sep 2026 04:10:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790507434; x=1791112234; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=m7AJ2hwe4+6QFOm6zh96W6e3NiB9GKNgjSqcd1c3qxc=;
+        b=InfzIBGfwLLOf45tsOqk+KKRgO1hbcUBNl85RIquxs31/ao0Us64HRDiML1Mnwkx75
+         YzsCELkBwzNcKJwRPDMIbl4a5vaGVd20UKgl0CzSV/VwH1UkjvIhUi+RRbnJLWdh9yRX
+         qfnl15XBnJb2VBWrN+eCJjOPLNF+vcw5vj7MEROZiOu9dxGpjyHhU1UX3hZe69n9+aFS
+         /ovnZXgpO42sivFJ2rxjgtrL9hbiHeuCLSKe6d0XwnxxlEJbP2FEDlvp6IdKZBtCLaIT
+         6DwDGegOOR4nu5SzF1yjndKsO4vmTChgTP8jsYK231/e5WYdflqGRP6sX5EyC71KtFGk
+         Kfeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790507434; x=1791112234;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=m7AJ2hwe4+6QFOm6zh96W6e3NiB9GKNgjSqcd1c3qxc=;
+        b=tXD2bhZktS3QqYHI0UWmk8/MG7krQ+sfEdCf51ot0t3DkT26/VcB2PLiaLCtkzY4IV
+         ToHfIpcfHsRrbpUTOKzJQyXAxkzNTZ0N2olTr4/0Zwj/PfdgLs5zNatVtIu+wLoS1MDn
+         dsq9IUVbSYWpkAhC4At7C35iRuBGxsMPyJ6cc5lUAwSnbHf9xJAQGZmNFMoTRqbcgK3D
+         0Ba7IELRGt8Jh8mI4z30BEB9NZbjv1v2elbYid9Y5lKxYbm+XVBvdNDh5sLSL5XTI05M
+         WcHW5Ojp/4vY/FvQI5BAv+3KjP6XIvPB7gSk5D7mcNgFFIzmHrMXNAyzsBijzZj1NbsW
+         BGpg==
+X-Forwarded-Encrypted: i=1; AKwUvByyRm1s/H0uJhTh0MqhglWG5nWyx6mEyXtZC3gzppvQWlfRzcRRbBavkWFYTrw31Dyw+Ks1Kexs96BhKg==@vger.kernel.org
+X-Gm-Message-State: AFuF++nNwuN7Xyv1ZayuX5dLTA5Xw4S4620j6XhGbbI9ghQcsuAaF7JC
+	FMLGDUaBvd59Kzsw1QualAJlgVwYa+pk0vwfeDmU0f+weaE/Lah2CzU/
+X-Gm-Gg: AYBFou38lqF52yqCPAa7WOa5t1ndOBP3k32cv+0KNNVW0wXe6EnefU+Mj0/3NeLePmB
+	LGSTMbCqaBiKw7wa88KQR3OGu1ognoqIONtItxPV0zEYcVXvsaNNMFaOwJ1dzS2V3+V1C2FAr5M
+	cwDr6q+bzRZ9kpmIds/3O8qZuthSxjeEC/UJkMw681A0NTvkOASvwtduLXF6MkjWx+NMVlT5CN6
+	m6OclDrgi5XqtFc0O4780N77XzMSIZIhLHgEn7otXEV5yrpZGsmZCyKPH8BNgTjMfvuTHjsfPi0
+	Bwt9oxUPA+8AM7ncWNNffwhlO/XDtb6HYs7RMBf/Ik74tpfGpfhqk9y1rW2r1yLcUSOvEdf2Jtg
+	TOHe4MJ/p2s9UzNLy2Jv5RbH+u/7hHHjuobBxM7T950Zt8gqNq1OEH+69bTJZ+vtdzEgSz3CZYu
+	3m6TcskAJjJLoYyV7D7HjsdSKEvSb4d1AJ8tyv9wQRT+LxRb5F7fJ5ad0f/R4oC9h0iwNxe8dXB
+	KCF6UK40c331bwAOdKdpGgq45lD/kukWcRCbkNb5JoDrmuQyJlzhihj7jY0A3480u58
+X-Received: by 2002:a05:600c:4ec8:b0:49f:dd10:3c71 with SMTP id 5b1f17b1804b1-49fe66c61c4mr189586755e9.11.1790507433948;
+        Sun, 27 Sep 2026 04:10:33 -0700 (PDT)
+Received: from shift (p200300d5ff3cee0050f496fffe46beef.dip0.t-ipconnect.de. [2003:d5:ff3c:ee00:50f4:96ff:fe46:beef])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a0016fd85fsm52932255e9.1.2026.09.27.04.10.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Sep 2026 04:10:32 -0700 (PDT)
+Received: from localhost ([127.0.0.1])
+	by shift.daheim with esmtp (Exim 4.100.1)
+	(envelope-from <chunkeey@gmail.com>)
+	id 1xAmkJ-000000006Ml-11Hm;
+	Sun, 27 Sep 2026 13:10:30 +0200
+Message-ID: <63e6e9f0-04c3-485d-8fdb-5e96a1ebd1f5@gmail.com>
+Date: Sun, 27 Sep 2026 13:10:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <7bdec27c.1969.1a0e21dcb7f.Coremail.19888972804@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:ZCgvCgD3HySe3Lhq+kJPAA--.25W
-X-CM-SenderInfo: x1dryxhdohiji6rwjhhfrp/xtbC7x4nYWq43J58ZAAA3-
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (lm70) Fix rounding of negative temperatures
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Ridham Khurana <khurana.ridham222@gmail.com>,
+ Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Christian Lamparter <chunkeey@googlemail.com>,
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+ Nikita Shubin <nikita.shubin@maquefel.me>, Shuah Khan <shuah@kernel.org>,
+ Jori Koolstra <jkoolstra@xs4all.nl>,
+ Brigham Campbell <me@brighamcampbell.com>,
+ linux-kernel-mentees@lists.linux.dev
+References: <20260924205326.1739229-1-khurana.ridham222@gmail.com>
+ <f28a5470-0d9e-4045-9c64-5614e0e88de2@gmail.com>
+ <20260927073115.15110623@pumpkin>
+Content-Language: de-DE
+From: Christian Lamparter <chunkeey@gmail.com>
+In-Reply-To: <20260927073115.15110623@pumpkin>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-QXQgMjAyNi0wOS0yNSAwMDowNToxOSwgIkd1ZW50ZXIgUm9lY2siIDxsaW51eEByb2Vjay11cy5u
-ZXQ+IHdyb3RlOgo+T24gVGh1LCBTZXAgMjQsIDIwMjYgYXQgMTE6MTE6MjFQTSArMDgwMCwgSmlh
-bGUgWWFvIHdyb3RlOgo+PiBUaGUgSElEIGRyaXZlciByYXdfZXZlbnQgY2FsbGJhY2sgcnVucyBi
-ZWZvcmUgSElEIGNvcmUgdmFsaWRhdGVzIHRoZQo+PiByZWNlaXZlZCByZXBvcnQgbGVuZ3RoLiAg
-YXFjX3Jhd19ldmVudCgpIHJlYWRzIGRldmljZS1zcGVjaWZpYyBzdGF0dXMKPj4gZmllbGRzIGF0
-IGZpeGVkIG9mZnNldHMsIGluY2x1ZGluZyBtdWx0aS1ieXRlIHZhbHVlcywgd2l0aG91dCBjaGVj
-a2luZwo+PiB0aGF0IHRoZSByZWNlaXZlZCBidWZmZXIgY29udGFpbnMgdGhlIGNvbXBsZXRlIHJl
-cG9ydC4gIEEgdHJ1bmNhdGVkIHN0YXR1cwo+PiByZXBvcnQgY2FuIHRoZXJlZm9yZSBjYXVzZSBv
-dXQtb2YtYm91bmRzIHJlYWRzIGFuZCB1cGRhdGUgaHdtb24gc3RhdGUgd2l0aAo+PiBkYXRhIGJl
-eW9uZCB0aGUgcmVjZWl2ZWQgcmVwb3J0Lgo+PiAKPj4gUmVqZWN0IHN0YXR1cyByZXBvcnRzIHNo
-b3J0ZXIgdGhhbiB0aGUgbGVuZ3RoIGRlcml2ZWQgZnJvbSB0aGVpciByZXBvcnQKPj4gZGVzY3Jp
-cHRvciBiZWZvcmUgYWNjZXNzaW5nIGFueSBmaWVsZHMuICBDb21taXQgNDc2NjliZWM0NGZlICgi
-SElEOiBhc3VzOgo+PiByZWZhY3RvciB0aGUgdHdvIHdvcmtxdWV1ZXMgYW5kIGluaXQgc2VxdWVu
-Y2UiKSBhZGRlZCBlcXVpdmFsZW50IHJhdy1ldmVudAo+PiBsZW5ndGggdmFsaWRhdGlvbiB0byBo
-aWQtYXN1cy4KPj4gCj4+IEZpeGVzOiAwZTM1ZjYzZjdmNGUgKCJod21vbjogYWRkIGRyaXZlciBm
-b3IgQXF1YWNvbXB1dGVyIEQ1IE5leHQiKQo+PiBDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZwo+
-PiBTaWduZWQtb2ZmLWJ5OiBKaWFsZSBZYW8gPHlhb2ppYWxlMDJAMTYzLmNvbT4KPj4gLS0tCj4+
-ICBkcml2ZXJzL2h3bW9uL2FxdWFjb21wdXRlcl9kNW5leHQuYyB8IDIgKysKPj4gIDEgZmlsZSBj
-aGFuZ2VkLCAyIGluc2VydGlvbnMoKykKPj4gCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9u
-L2FxdWFjb21wdXRlcl9kNW5leHQuYyBiL2RyaXZlcnMvaHdtb24vYXF1YWNvbXB1dGVyX2Q1bmV4
-dC5jCj4+IGluZGV4IDFjYTcwZTcyNjI5OC4uMWViYzhiYzRjMDkwIDEwMDY0NAo+PiAtLS0gYS9k
-cml2ZXJzL2h3bW9uL2FxdWFjb21wdXRlcl9kNW5leHQuYwo+PiArKysgYi9kcml2ZXJzL2h3bW9u
-L2FxdWFjb21wdXRlcl9kNW5leHQuYwo+PiBAQCAtMTMzMSw2ICsxMzMxLDggQEAgc3RhdGljIGlu
-dCBhcWNfcmF3X2V2ZW50KHN0cnVjdCBoaWRfZGV2aWNlICpoZGV2LCBzdHJ1Y3QgaGlkX3JlcG9y
-dCAqcmVwb3J0LCB1OAo+PiAgCj4+ICAJaWYgKHJlcG9ydC0+aWQgIT0gU1RBVFVTX1JFUE9SVF9J
-RCkKPj4gIAkJcmV0dXJuIDA7Cj4+ICsJaWYgKHNpemUgPCBoaWRfcmVwb3J0X2xlbihyZXBvcnQp
-KQo+PiArCQlyZXR1cm4gMDsKPgo+VGhhdCBkb2Vzbid0IGVuc3VyZSB0aGF0IHRoZSByZXBvcnQg
-aXMgbm90IGF0IGxlYXN0IGFzIGxvbmcgYXMgYWNjZXNzZWQKPmxhdGVyIGluIHRoZSBmdW5jdGlv
-biwgYW5kIHRodXMgZG9lcyBub3QgZml4IGFueXRoaW5nLiBUaGUgc2FtZSBhcHBsaWVzCj50byB0
-aGUgb3RoZXIgcGF0Y2guCj4KPkEgcHJvcGVyIGZpeCB3b3VsZCBiZSB0byBlbnN1cmUgdGhhdCBz
-aXplIGlzIGF0IGxlYXN0IGFzIGxvbmcgYXMgYWNjZXNzZWQKPmluIHRoZSBmdW5jdGlvbi4gaGlk
-X3JlcG9ydF9sZW4oKSBkb2VzIG5vdCBhbmQgY2FuIG5vdCBrbm93IHRoYXQgdmFsdWUuCj5JdCBp
-cyBwdXJlbHkgZHJpdmVyIHNwZWNpZmljLgoKSSB0cmllZCB0byBmaW5kIGEgY2xlYW5lciB3YXkg
-dG8gZGVyaXZlIHRoZSBhY3R1YWwgcmVxdWlyZWQgbGVuZ3RoLCBidXQgaXQgc2VlbXMKdGhpcyBp
-cyBlbnRpcmVseSBkcml2ZXItc3BlY2lmaWMuIEknbGwgcmVwbGFjZSB0aGlzIHdpdGggYW4gZXhw
-bGljaXQgbWluaW11bS1sZW5ndGgKdGFibGUgZm9yIHRoZSBzdXBwb3J0ZWQgbGF5b3V0cywganVz
-dCBsaWtlOgotLS0KKy8qIE1pbmltdW0gc2l6ZSByZXF1aXJlZCBmb3IgYWxsIGZpZWxkcyByZWFk
-IGJ5IGFxY19yYXdfZXZlbnQoKS4gKi8KK3N0YXRpYyBjb25zdCB1MTYgYXFjX21pbl9zdGF0dXNf
-cmVwb3J0X3NpemVbXSA9IHsKKwlbZDVuZXh0XSA9IEQ1TkVYVF9QVU1QX09GRlNFVCArIEFRQ19G
-QU5fU1BFRURfT0ZGU0VUICsgc2l6ZW9mKHUxNiksCisJW2ZhcmJ3ZXJrXSA9IEZBUkJXRVJLX1NF
-TlNPUl9TVEFSVCArIEZBUkJXRVJLX05VTV9TRU5TT1JTICogQVFDX1NFTlNPUl9TSVpFLAorCVtm
-YXJid2VyazM2MF0gPSBGQVJCV0VSSzM2MF9WSVJUVUFMX1NFTlNPUlNfU1RBUlQgKworCQkJRkFS
-QldFUkszNjBfTlVNX1ZJUlRVQUxfU0VOU09SUyAqIEFRQ19TRU5TT1JfU0laRSwKKwlbb2N0b10g
-PSAweGQ4ICsgQVFDX0ZBTl9TUEVFRF9PRkZTRVQgKyBzaXplb2YodTE2KSwKKwlbcXVhZHJvXSA9
-IDB4OTcgKyBBUUNfRkFOX1NQRUVEX09GRlNFVCArIHNpemVvZih1MTYpLAorCVtoaWdoZmxvd25l
-eHRdID0gSElHSEZMT1dORVhUXzVWX1ZPTFRBR0VfVVNCICsgc2l6ZW9mKHUxNiksCisJW2FxdWFl
-cm9dID0gMHgxOGIgKyBBUVVBRVJPX0ZBTl9QT1dFUl9PRkZTRVQgKyBzaXplb2YodTE2KSwKKwlb
-YXF1YXN0cmVhbXVsdF0gPSBBUVVBU1RSRUFNVUxUX1BSRVNTVVJFX09GRlNFVCArIHNpemVvZih1
-MTYpLAorCVtsZWFrc2hpZWxkXSA9IExFQUtTSElFTERfUkVTRVJWT0lSX1ZPTFVNRSArIHNpemVv
-Zih1MTYpLAorCVtoaWdoZmxvd10gPSAwLAorfTsKKwotLS0KQnV0IGl0J3Mgc28gdWxneSwgdGhh
-dCdzIG9rPyBvciBhbnkgb3RoZXIgc3VnZ2VzdGlvbi4KCj4KPkFsc28sIHRoZSBjb2RlIGFkZGVk
-IGluIGNvbW1pdCA0NzY2OWJlYzQ0ZmUgaXM6Cj4KPiAgICAgICAgaWYgKHNpemUgPCAyKSB7Cj4g
-ICAgICAgICAgICAgICAgaGlkX2RiZyhoZGV2LCAiVW5leHBlY3RlZCBrZXlib2FyZCByZXBvcnQg
-c2l6ZSAlZFxuIiwgc2l6ZSk7Cj4gICAgICAgICAgICAgICAgcmV0dXJuIDA7Cj4gICAgICAgIH0K
-Pgo+d2hpY2ggbWFrZXMgc2Vuc2UgYmVjYXVzZSBhc3VzX3Jhd19ldmVudCgpIG5ldmVyIGFjY2Vz
-c2VzIG1vcmUgdGhhbiB0d28gYnl0ZXMKPmluIHRoZSByZXBvcnQuIFRoZSBzdGF0ZW1lbnQgIkNv
-bW1pdCA0NzY2OWJlYzQ0ZmUgKCJISUQ6IGFzdXM6IHJlZmFjdG9yIHRoZSB0d28KPndvcmtxdWV1
-ZXMgYW5kIGluaXQgc2VxdWVuY2UiKSBhZGRlZCBlcXVpdmFsZW50IHJhdy1ldmVudCBsZW5ndGgg
-dmFsaWRhdGlvbgo+dG8gaGlkLWFzdXMiIGlzIGVpdGhlciBoYWxsdWNpbmF0ZWQgb3IgaW50ZW50
-aW9uYWxseSBtaXNsZWFkaW5nLgo+Cj5HdWVudGVyCg==
+On 9/27/26 8:31 AM, David Laight wrote:
+>>
+>> On 9/24/26 10:53 PM, Ridham Khurana wrote:
+>>> temp1_input_show() drops the low bits of the temperature register by
+>>> dividing the raw value (raw / 32 on the LM70). These bits are not part
+>>> of the temperature: the LM70, LM71, LM74 and TMP122/TMP124 always
+>>> return some of them as 1, and the TMP125 fills them with copies of the
+>>> temperature LSB. Division rounds toward zero, so a negative temperature
+>>> with any of these bits set is reported one LSB too high.
+>>>
+>>> For example, the TMP122 returns 0xffff for -0.0625 degrees C, which the
+>>> driver reports as 0. The LM70 returns 0xf39f for -25 degrees C, which
+>>> the driver reports as -24750.
+>>>
+>>> Use an arithmetic right shift instead, which drops the low bits and
+>>> rounds down. tmp421 had a similar problem with negative values, fixed
+>>> by commit 724e8af85854 ("hwmon: (tmp421) fix rounding for negative
+>>> values").
+>>
+>> For the TMP125 yes:
+>>
+>> Reviewed-by: Christian Lamparter <chunkeey@gmail.com>
+>>
+>>
+>>> Fixes: e1a8e913f97e ("[PATCH] lm70: New hardware monitoring driver")
+>>> Fixes: a86e94dc946d ("hwmon: (lm70) Add support for LM71 and LM74")
+>>> Fixes: cd929672a9ef ("hwmon: (lm70) Add ti,tmp125 support")
+>>> Signed-off-by: Ridham Khurana <khurana.ridham222@gmail.com>
+>>> ----
+>> I wrote a little test program by hand (see below) and ran it on x64.
+>> No idea if different archs behave differently or if
+>> a clever unsafe math optimizing compiler flag will
+>> convert the  "/ 32" to a " >> 5" but I doubt that...
+> 
+> A compiler will convert an unsigned divide to a shift, but can't
+> do so for signed divides.
+ > > But you'll also get flagged because C doesn't define right shifts
+> for negative values.
+
+Hmm... For at least x86, any compiler should see that the is an integer type
+and use the Shift Arithmetic Right (SAR) instead of the SHR instruction. From
+what I know that SAR instructions is very old, like 8086 with improvements
+some major improvements on the 286... And linux started with the 386 so, this
+should work even into the past. (But please correct if this is wrong).
+
+I can't tell what clang would do, but GCC says this (second last bullet point):
+<https://gcc.gnu.org/onlinedocs/gcc/Integers-implementation.html>
+
+|Bitwise operators act on the representation of the value including both
+|the sign and value bits, where the sign bit is considered immediately above
+|the highest-value value bit. Signed ‘>>’ acts on negative numbers by sign extension.
+|
+|As an extension to the C language, GCC does not use the latitude given in C99 and
+|later to treat certain aspects of signed ‘<<’ as undefined.
+|However, -fsanitize=shift (and -fsanitize=undefined) will diagnose such cases.
+|They are also diagnosed where constant expressions are required.
+
+So, the << (shift left) could indeed be a problem/undefined.
+
+Cheers,
+Christian
