@@ -1,101 +1,71 @@
-Received: from smtp70.iad3a.emailsrvr.com (smtp70.iad3a.emailsrvr.com [173.203.187.70])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0974EF144
-	for <linux-hwmon@vger.kernel.org>; Mon, 28 Sep 2026 16:36:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.203.187.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB3C2397321;
+	Mon, 28 Sep 2026 18:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790613406; cv=none; b=DqtChKQ8xeMEes7Qzd8CH+4VyO0xA3Rfih6QAXXtJCBGeWGtTiQd3HL0ZWDs0FQhdJ0Gb7FF5guDRkSup7QH/Z2sl98Zeo97icws8vpnnreovCkTVE+K/8HBeRCByK2t6Ao1NGgHAQHtZwRakVhoilar+218y4Sqs/ZdISoAHqQ=
+	t=1790620969; cv=none; b=KTNCkW+vwAXqxWSvSyMBTdE6bpf/IWCPEbQYMTdfxU8omPeV0MyKWGWScSOE5DqbgSPL3cuO9saLHWGx/KyQbWQYL7D/L4JEdQOXcyeO4Atca84F3NG5Cecx3Ty7IcM82hOS9KiMqUAEzyY89SIm8ikOC6ks8TolYtYKcu4bGL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790613406; c=relaxed/simple;
-	bh=dcfqKy8RuwJf19ZxcNaKgTpq2Zkz6O8a3A4laJuSYfM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m1F4ArKEtZk4rYrM2pPNO/FUU5XlbocSDbvmfXLGFr0jL6H5nS4z1cilj1RvoycFNnr6r4ybWpNKbIx52C6+XnY4mWgsPqBs3fwwwSr/Q1/YEbKioejgqs5mlCD8vGmKqj+LBq+eNSGfMYjeFRPL0mNfBB1cEnB+Jn1pHnZHkxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mev.co.uk; spf=pass smtp.mailfrom=mev.co.uk; dkim=pass (1024-bit key) header.d=g001.emailsrvr.com header.i=@g001.emailsrvr.com header.b=knMpqU6M; dkim=pass (1024-bit key) header.d=mev.co.uk header.i=@mev.co.uk header.b=dAAx1Q/7; arc=none smtp.client-ip=173.203.187.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mev.co.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mev.co.uk
+	s=arc-20240116; t=1790620969; c=relaxed/simple;
+	bh=+U32bjokpxRL2kGUVS/EoRic9+wGfrWuuww9mmSzoic=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W+miGXfQhVzDA/uIlfqiH0/vLvg6wAeV9Bb2+9sPCmgPOUqK7MjYaTNBroQOEijT6luMIdSgbENePRjzm7f8cGY6tr7hw54YQNIrIwUellJVSCE+C/cdw/Rnrr4ZIx+QvM05MwT61qIgVtMRTvfqwowzPNR/h4qQevQSjdSwEpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=krKe7huT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=g001.emailsrvr.com header.i=@g001.emailsrvr.com header.b="knMpqU6M";
-	dkim=pass (1024-bit key) header.d=mev.co.uk header.i=@mev.co.uk header.b="dAAx1Q/7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=g001.emailsrvr.com;
-	s=feedback; t=1790612291;
-	bh=dcfqKy8RuwJf19ZxcNaKgTpq2Zkz6O8a3A4laJuSYfM=;
-	h=Date:Subject:To:From:From;
-	b=knMpqU6Mk0kmP+ISs7Cok7X4ebagiVtXT1NiP8qiqgH159TGzqgxajWFaZpSo70uz
-	 X4JvLjhst970T9CuQ/B1UK7DDj94fUZ9D0EuIcMXbSMkMJeSP20XqvG8xys/G508W2
-	 FOaJU8N23FUYtqhMknHHcQaVfBr5pD0xTp3BApkM=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
-	s=20221208-6x11dpa4; t=1790612291;
-	bh=dcfqKy8RuwJf19ZxcNaKgTpq2Zkz6O8a3A4laJuSYfM=;
-	h=Date:Subject:To:From:From;
-	b=dAAx1Q/7P23kXEJJmdf1NGwU5hwBxkB9RRRgCV8DxfO9tKEKn3op87rBbKCtMQxor
-	 A7xRjYnmS2/wTvYLr7pPA1i+MhM1dZVN9lyPAynl4YEL0TQoXXoZQxmf7SdxwFhpQQ
-	 4DXajLwgB0+U+CoG1uD67D8LZvzt6Rhe9+Cdueqc=
-X-Auth-ID: abbotti@mev.co.uk
-Received: by smtp17.relay.iad3a.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id 02B6C23DAD;
-	Mon, 28 Sep 2026 12:18:06 -0400 (EDT)
-Message-ID: <efbb4382-45eb-41a5-afe3-6c359714aa89@mev.co.uk>
-Date: Mon, 28 Sep 2026 17:18:06 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="krKe7huT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A23751F000FF;
+	Mon, 28 Sep 2026 18:42:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790620967;
+	bh=qlvWigsuFgA7fdqY9q8Q09QQZyy2YPxWQ+avuqJJx3Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=krKe7huTl4LPd/WZSJlndGH0Kbb/apHnQfb/a8ocPs7clqRY/eoOPZw12WBI6y610
+	 PSh0QltJVXWcPixWZUQ5rPvzEbXlcAzgj/IBk+OJgopNPLtFqfWnY9AVPLYomEuceF
+	 yBSRTcAuBVde5b0zngXvd7JgbsQ2WgMZOIlR2h2owYgzDSRvMcW6ELQ4RFl1gutQc5
+	 ZjuVX5e/4nr3gPq7EPW9o6K0Ywh1sUpsSYxNmjTZt6VRamnRArMiamwrCTuvky1WT/
+	 OJzu+1J1tGZ1c3Usz6fmksgGmO+QfJlIQRK4Jd5IX2wHF0WIh838tZHuMzc5tU9xr2
+	 vUKDpCboCamPA==
+Date: Mon, 28 Sep 2026 13:42:46 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: hsyemail2@gmail.com
+Cc: Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, Sheng-Yuan Huang <syhuang3@nuvoton.com>,
+	linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: lm75: Add Nuvoton NCT7715
+Message-ID: <179062096550.254495.12819136930608378423.robh@kernel.org>
+References: <20260918084042.19541-1-syhuang3@nuvoton.com>
+ <20260918084042.19541-2-syhuang3@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] drivers: Replace __MODULE_STRING() with __stringify()
-To: Petr Pavlu <petr.pavlu@suse.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, H Hartley Sweeten <hsweeten@visionengravers.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Rudolf Marek <r.marek@assembler.cz>, Andi Shyti <andi.shyti@kernel.org>,
- Chris Snook <chris.snook@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Andreas Noever <andreas.noever@gmail.com>,
- Mika Westerberg <westeri@kernel.org>, Yehezkel Bernat
- <YehezkelShB@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, Duncan Sands <duncan.sands@free.fr>,
- Chas Williams <3chas3@gmail.com>, Luis Chamberlain <mcgrof@kernel.org>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>
-Cc: linux-watchdog@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
- netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
- linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260922-module-string-v1-0-c18766690185@suse.com>
- <20260922-module-string-v1-2-c18766690185@suse.com>
-Content-Language: en-US
-From: Ian Abbott <abbotti@mev.co.uk>
-Organization: MEV Ltd.
-In-Reply-To: <20260922-module-string-v1-2-c18766690185@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Classification-ID: 15bec65d-5b3a-44b5-8eff-f2a711d4e1ec-1-1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260918084042.19541-2-syhuang3@nuvoton.com>
 
-On 2026-09-22 14:32, Petr Pavlu wrote:
-> __MODULE_STRING() has been an alias for __stringify() since "[PATCH]
-> MODULE_PARM support for older modules" [1] in 2002-12. That change also
-> moved it to the graveyard section at the end of linux/module.h
-> 
-> Replace the remaining uses of __MODULE_STRING() with __stringify() in
-> preparation for its removal.
-> 
-> Link: https://git.kernel.org/tglx/history/c/136839a1b4 [1]
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-Acked-by: Ian Abbott <abbotti@mev.co.uk>
 
--- 
--=( Ian Abbott <abbotti@mev.co.uk> || MEV Ltd. is a company  )=-
--=( registered in England & Wales.  Regd. number: 02862268.  )=-
--=( Regd. addr.: S11 & 12 Building 67, Europa Business Park, )=-
--=( Bird Hall Lane, STOCKPORT, SK3 0XA, UK. || www.mev.co.uk )=-
+On Fri, 18 Sep 2026 16:40:40 +0800, hsyemail2@gmail.com wrote:
+> From: Sheng-Yuan Huang <syhuang3@nuvoton.com>
+> 
+> Add the Nuvoton NCT7715 compatible to the LM75 hwmon binding.
+> 
+> The NCT7715 supports an ALERT output, so permit the optional
+> interrupts property for this compatible.
+> 
+> Signed-off-by: Sheng-Yuan Huang <syhuang3@nuvoton.com>
+> ---
+> v4:
+> - Split the devicetree binding changes into a separate patch.
+> - Allow interrupts for the Nuvoton NCT7715 compatible.
+> 
+>  Documentation/devicetree/bindings/hwmon/lm75.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
