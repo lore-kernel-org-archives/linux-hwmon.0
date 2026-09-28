@@ -1,181 +1,328 @@
-Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2138.outbound.protection.partner.outlook.cn [139.219.17.138])
+Received: from mx0b-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F81F54705E;
-	Mon, 28 Sep 2026 02:43:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.138
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790563421; cv=fail; b=IuYm0SdcwmmXFyZeQwBlPGYtgVcNPOWgLwbZmaA7ZjojEVLKVx0Sng4guSCgOkuQV53U8KdOchK+1GBBW1uQpuXKHJXISKgtnZkzI3GmzvsZyixuAml1TnYCPUfcwicjxGvpWVTFhP2Fj1Nsa6kP6se7gt2FeocjjCZwisaiESM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790563421; c=relaxed/simple;
-	bh=vKXsK0NQ7JvbdeLy037ecTYkmWGOFCXakHsyj/8Re+E=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=h39/VUF0IAcakYvuA0Dz1r5wGfcXo0ifjoGH5aeM9t9BpfIUEjau6+sST+0HmqXa4hvFiztrMZJK7RK0ZKusNpUVcmvii51FfjBtSEGpiFAMQkLnhApl/KnYnz+weC5dhGLkRoN1J3HoSTWNtqaOgV7TljUgCSrnBsusmu2vABw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Uj9zidyJbRER0kTYcwqNiIqHUFzF0KcK13pV5O8xuhmh/sxcYuCFiq3xKpiMuO/2EkQZ3XOWJse80TbedugbNYJP7M31S09/vmi9lpiIE5JEtpYDiyxQ0K0uwdoL8UkhXG4HeQTUDPwtBJhFrYz6WpyioVTLVubG44CYPhWJizsFKjlhlHLu1FWh5N4G+irZpa22rbPufvYv28fdVZyHubmwfh7HNLBJ3vhNSBanG4yKBPeQcN0V1dYtFIgxIqU3WqXeniZoKyaY4NmCRyIh/v98dYF2orbjxan+yVDarjXPR05EGPX/rq8ky8BeVKBf1O9YS0zv71LEI6HGnfYfdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vKXsK0NQ7JvbdeLy037ecTYkmWGOFCXakHsyj/8Re+E=;
- b=STLiBtN1KEzwLwoR2Ev2hw0gZjTSjwR/VEUu5kwlKvuXy5UbMP6A5+fBuubLkpZ7ifL4F6QU8zGVn3OOVgmDJJ8fSgwjDJECz00Z9VNX0jJmrnhEHtKmJfl7SK5Z4NbajqUG9twfODk72C9r8WymoMCnbp0NIr4mekO/wjKf+cjkUG4xEuwbZhJMERKEWZFjNPu9qV8tODoR3TLP1ogi1nyzW2wiXjeQmRSx3pD3HBwBsPqI7uexSRv/EJT+AtK4fFdc7vmHcmRgL6L6BnjegDmFIiYeG6bmgjEYV3aAfR02G4mDU3bBHP/htCHjaMzWKZhcFQ6bt52CrE4kdofWkA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Received: from ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:17::6) by ZQ4PR01MB1234.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:17::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.23; Mon, 28 Sep
- 2026 01:08:26 +0000
-Received: from ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn
- ([fe80::e7d4:256c:b066:850d]) by
- ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn ([fe80::e7d4:256c:b066:850d%4])
- with mapi id 15.21.0451.022; Mon, 28 Sep 2026 01:08:26 +0000
-From: Changhuang Liang <changhuang.liang@starfivetech.com>
-To: "Winiarska, Iwona" <iwona.winiarska@intel.com>, "robh@kernel.org"
-	<robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>, "linux@roeck-us.net"
-	<linux@roeck-us.net>
-CC: "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 2/6] peci: controller: Add StarFive JHB100 PECI driver
-Thread-Topic: [PATCH v1 2/6] peci: controller: Add StarFive JHB100 PECI driver
-Thread-Index: AQHdO6kQ7y3JU7Gi0Ei5+A+m0SbCDbbTVCAAgABgBlCADCjzAIADd00w
-Date: Mon, 28 Sep 2026 01:08:25 +0000
-Message-ID:
- <ZQ4PR01MB1202E2DF171E5166EFDC289FF28D2@ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn>
-References: <20260903133408.110847-1-changhuang.liang@starfivetech.com>
-		 <20260903133408.110847-3-changhuang.liang@starfivetech.com>
-	 <284b44b5962d7043dddce038aca678c8c2f8051d.camel@intel.com>
-	 <ZQ4PR01MB120247B14F68233454DEF4F3F2872@ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn>
- <e618efb43668c41796547b352e6908d84c414d2a.camel@intel.com>
-In-Reply-To: <e618efb43668c41796547b352e6908d84c414d2a.camel@intel.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: ZQ4PR01MB1202:EE_|ZQ4PR01MB1234:EE_
-x-ms-office365-filtering-correlation-id: 216f6d9f-7ea2-4bac-fb49-08df1cfcffe6
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|1800799024|23010399003|7416014|376014|38070700021|3023799007|6133799003|4143699003|56012099006|10067099003|18002099003|22082099003;
-x-microsoft-antispam-message-info:
- AE2KwPn8HA4siJyN6HlS/gawSAuvstoV/4cDv/RitF0tZ91pWfnlNWY7MPR7bafaUjpF+uiHFuIBfnomKlqbQoAUIQIa9taPjkSGljI9i+7GmOjyW4sU3SdfxG7WnsePRxf0CIduXsY1kIATXsczfdMhioF9C83fMcp+rLd6nMic8coKU4coB4WbWQRFRa1HH6gAXdXBC5XE+blgAiY6UxQVtL6tH50VnTcUCsA5TCmO63uSvuAL5i31GIrfiYYqn5JY367sIinbtTFE0cMHxdBVGG2qEgZ3y19fyH8oMcYOX4+a14ah+saXijMrjm4mdwz/djJm+jCA9ychc6+FDhT4JEDWvhXae0M1KLcd4WB3RqVqgwjJ22VFGk6QOIsnH6zEXYhFeu20+jfqpmylftadJdOUpCkuIJ0vRHhvYGT4ixs89TnUICC4ZmNea7/upccD/ZN8RL4t9U0zn1r7dC20PGRZU3TN3HOdWYkpiHdumCvlgDlYdvuqj2K0aP3SKs2IYUm7Lh7zOXR+mHyFUYxwjJeZqmbBrnZcMUXinxhbJJUtE4jPgt7fRf2wtjo8
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:zh-cn;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(23010399003)(7416014)(376014)(38070700021)(3023799007)(6133799003)(4143699003)(56012099006)(10067099003)(18002099003)(22082099003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?UGlvaG5xUy9mblUrM3R6ZGNxZ1lKRkhnOVVxaVpqK01mdkJHTWVWejBSZHdM?=
- =?utf-8?B?K2F1bDYrNjBkSHh4VHdHZjlNcmxBaituTWw2UkZNa2FaZDJ1TkV0eGoxWnpa?=
- =?utf-8?B?SE8zYmFzSm1pRUNSM0h1clNOd0JPcjZWRUU1dW5JajlCV2M4Q1FTUmg4QjNy?=
- =?utf-8?B?WGprNHJvVVRZbWlRU0tKbUR3UzVPWjFIRU16bGI1R2NRZ1lwRWc1SnNLandq?=
- =?utf-8?B?N01Ma2lrZEVWZ3ArcnEydDYyK3NMNVhYanJSQUN1ZEtYY3BacGI3dHdNYVl1?=
- =?utf-8?B?SzZaZy9PN3B2T3ZCOEZQWGgvbldCRmVHM0pKSUw2VjhENzkzZ0JUUElDTmdn?=
- =?utf-8?B?eEQ4UzlMMWVCWE1FNzNNZkhmZDllQ0w5bnlwMWJVM2VRR1JubXpDcUp3aTVT?=
- =?utf-8?B?eWJvM0drbGhBSjdWcUlCR2RPcS9qc05NTE45SmlWSnQ3WGhoSEtPL0liSWlU?=
- =?utf-8?B?b2lvWHVxZ09qelI5Qk9XK0szQzBIbG1QT1NOZFp3MDR1cVdsejdqUVNXRWdM?=
- =?utf-8?B?aVMvem0xczlETkRvS0pKZklxMlF3ZEtwWEZrNEdaWWRUb2dFVmhoNm5lWXUz?=
- =?utf-8?B?d1FLcjR2d3I2OWxLcVM1R3ZkcDF5ZlF6RHBrNU9mT3ZUVkRwUDV6Z3M3Q2hs?=
- =?utf-8?B?dHFDQzZVcmxld2VZZjdxRTh4T05hSFc4NVVTRFZsNXBacEwwcGg3MjY1UGhq?=
- =?utf-8?B?WGhSTUd2YjBDOTk3cDlROWM2MXZqWDhrcW1KVzZ4ZzhvK2xGQVlraFRNRUV5?=
- =?utf-8?B?Mys0Tzk5dzNIYjRCNUFXV3FSWEVOcDgxYVV0YWFGWnpwQXdMUVEwSEtjSmkr?=
- =?utf-8?B?eWVLU3gvc2RWZWJ4WHo5VzZwNTNWR01jVXRLSUhKVnZZNG9SS3RKRXBYbGRs?=
- =?utf-8?B?bzc5MmxIWnkrSzM4R1BuSWQrcUoxVGVjLzN3RlMyOFljcjhQdElTbUtKSEFP?=
- =?utf-8?B?VTFIMWNQYjR6bjgxMVQ0cXM3ZzBJV04xSVNUb3dDSUU3VVlrSlJKWDZVdXR1?=
- =?utf-8?B?dFBaT01KdGI1dFJLVyswdlBMUHRESkdTcGtUYlh1TFc5OFNmN1JuWGNwYkh6?=
- =?utf-8?B?N3BoU2ovL08rTlh1MDdGZklpKzZUdGltdWltbzF6cUlscTNqczZiQ0R4cE1u?=
- =?utf-8?B?Mm9lU1M3OXZVV3JoNGZBdE9acXlWcW9NQmx1cGE1WlhiYnBDa1NEWm9xOVE4?=
- =?utf-8?B?bkZ4V3BQaUZOZnlLbS9YU1MxUjRrTDhEWEpJM1lkUmFwbSthY1lWWWlCU0tE?=
- =?utf-8?B?Z05Fc1BIWGxvZlUxb2R5SG1DZFJ4clhFUFpsRktVaFlHZTFHMFRuSVk3cFlS?=
- =?utf-8?B?dkJIN2FCVG5rMFlMbm1WZDVHQUY4YVJRT0I2YkMwTTh2bFU1SlgrSjBMMGpK?=
- =?utf-8?B?OFR4K01CU2tsQ3E0T2tPZ1FhT2dMblh4ZzF0SzJITndwUmlGNng0bmNaZzYw?=
- =?utf-8?B?djRUMDh1cmM5QklQdFQvMHdSYnFTUTdhbWtqVlNlVnA4ZjVTWThoellqb1lj?=
- =?utf-8?B?a05SREJla2pHU0ZFOHlXbDdNejViNXlrUjRvb2U4WXJZdDFHaUVGY09JOG9p?=
- =?utf-8?B?WEp0UnpvQm5FUTg4enV1d0RBVDI1TytPaG1GVU1qb2NTMHNzck5ad2dvWTd3?=
- =?utf-8?B?dlJ6aU5nOW84eTVsYzUxYzBXWUtFeGNWZGRvNVFjVEhvbjgzVmdwd2NxbVN0?=
- =?utf-8?B?YUY3ZkZ1L1d3R2paUkRzem9SSTV5TkxhNG9LSkJEa0dvc29lc1N2ZGpxS3I5?=
- =?utf-8?B?QnMwS3VLbDZXVHY5U014L3dHY1Y4UzZZUktmeGd4NVl6dHc1Q0FaRHlpa1lu?=
- =?utf-8?B?d2gvQmZvN2QyNGg0ZHhNUkx2ZitHMVRnRnl4NURNR2wvOEpVcC84cWJoNml2?=
- =?utf-8?B?RnNlR1ViUCsrajRBcEpDZm5DQ2V5NitaM093M3J1OHhRYjhxT085NTdTYzB0?=
- =?utf-8?B?bTM2aWpYQWwzVlJZSXI0TXE1UnNybXBjK1ZjeFZkcEVmWnFwajIxeE1rTmw4?=
- =?utf-8?B?cERuVG5OVDVvN0ltL01SVzFlTVlFcDA0VkNhbE1XUExqYThaRmxzTFB0dmoy?=
- =?utf-8?B?aTRXajVlN1VxYVAwdGlHM2x5anNCeUV6MzVlS05ZcWpONU5pZ05Zdkw2ZDBt?=
- =?utf-8?B?SlpBRHliUkJmcE9JN09YKzNlaXBqOGZadUFPV0M3RjMxRTlkaGtjcWpLMCtz?=
- =?utf-8?B?VktPSkRyZCt3dmI1cWkvS2VuS0ltOUZJdGVaNGVpaTIrN1RYOEhqT2tnRkhu?=
- =?utf-8?B?S0U4YXRBdndIY0FkZlRWV0drektuc0Y0SDBwSmZJRFZYS2xEcDJnZ1U1SFFB?=
- =?utf-8?B?QytsQ0QrTVpEamFkUHUxQk9hdUdSK21lc1RyUzhkaXR4RzJHM2NqRUp1ZWFj?=
- =?utf-8?Q?jYOW/aJpu6Y8Q7RU=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D195F547046;
+	Mon, 28 Sep 2026 04:28:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790569735; cv=none; b=aLgdYr090hKiAsXaTKZk7bNXXSmUNyuku3pLtSQ1MQ5UILMNVdxYkixpc+tCIjXrjL6LfOI5txoqbZH9FJaceyRmeas7pUE+pd6pNDQaWbMItNF33UWJV29d8QDYYeEzizk0pcBxq5HG57n8+kKQ3YH5i5/CTsbi1Ph1wpmVTr8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790569735; c=relaxed/simple;
+	bh=bFUDqbHgP5tW4uYKllzkQHtceObCCGfda+eEUEEvTwY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=kMPM8YCIaJ9L/FbUDhp20KcecgoGqyoxpUmANov1yp/lAHeMtMF2ApdgsK1Mmlb+d6LbU2vl6v/0bBTjXnkCLFzgzanLvSRfQO3p8ETRgGydGGxgtPHYsWdq/wvtcixiLi4aBR1ke2SqYMNJ9uGpNP/fwHrdzUGaZo6+6ci5vuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=gZ/3H7PF; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="gZ/3H7PF"
+Received: from pps.filterd (m0375855.ppops.net [127.0.0.1])
+	by mx0b-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68S2wCjX3196052;
+	Mon, 28 Sep 2026 00:28:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=wC54wJTyq8V1np/yMtp60xllVTO
+	aCMPAaqK+jeRA5qA=; b=gZ/3H7PF5+r/LPAfczZ7cC2lM2YhqoIlsFESefwe/sb
+	ZL4sMAdDr349e3+fKhlkKpFhD9sKHGhmnRugrwU75kXNWQXZBCmuMtau3pddV92L
+	y6GQ7VcldF19kPqMOuU9UniMLUY8cumniT3K1FCbPvfsjFRKeCWt+fheX6z6SKFf
+	xizs4Nz+5cwWNuthphtNlDkDLhBZhh02QrwNfEOZInCy+qB5CrOHAybzk5pqcf2Z
+	dA+0rT3QXwL+3h7W7lVhBl17Y9mtJJktNj9lJJ4Ofw5/TgKyc2Q9uxiVSotVU3u4
+	UPDTSubu9StlMWDunnjrLE8OneJqbn6ZJiitfU88a9A==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 4gxvcdv7kb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 28 Sep 2026 00:28:22 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 68S4SLIS042433
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 28 Sep 2026 00:28:21 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.37; Mon, 28 Sep
+ 2026 00:28:21 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.1748.37 via Frontend
+ Transport; Mon, 28 Sep 2026 00:28:20 -0400
+Received: from ATORRENO-L02.ad.analog.com ([10.66.6.191])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 68S4S51n025704;
+	Mon, 28 Sep 2026 00:28:11 -0400
+From: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Date: Mon, 28 Sep 2026 12:27:55 +0800
+Subject: [PATCH] hwmon: (pmbus/max34440): add support for adpm12886
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-Network-Message-Id: 216f6d9f-7ea2-4bac-fb49-08df1cfcffe6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Sep 2026 01:08:26.0451
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mNcGtinEXMtXXbgQuVVkbkYY1HL6zi795f7JLIYfL1sTVIi7190UtLCkCd8pVq3XKCVWm/fnyDkwPc0fy8lMGkqADHcYBzWCHo0819JOfqcrR5mEnhr3q0N/hIQQe2Ib
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ4PR01MB1234
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20260928-hwmon-next-v1-1-55b6c5cd8e2e@analog.com>
+X-B4-Tracking: v=1; b=H4sIAMrsuWoC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDSyML3Yzy3Pw83bzUihJdoxRzMzMjY4s0A2NDJaCGgqLUtMwKsGHRsbW
+ 1AI5GdPpcAAAA
+X-Change-ID: 20260928-hwmon-next-2d766238f031
+To: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+CC: <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Alexis Czezar Torreno
+	<alexisczezar.torreno@analog.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790569686; l=9367;
+ i=alexisczezar.torreno@analog.com; s=20250213; h=from:subject:message-id;
+ bh=bFUDqbHgP5tW4uYKllzkQHtceObCCGfda+eEUEEvTwY=;
+ b=d7C1SwedEAL54xeRQnf54AbNzwHHMq8sYOmBEaAK2NyFraPKtMDFKrEU4X5xCDXtVvots+uXW
+ KogmvLzklCUBASmrOygIfckMn2KoBfpgKFv58XMrqpmP0NJnUJVTuDr
+X-Developer-Key: i=alexisczezar.torreno@analog.com; a=ed25519;
+ pk=XpXmJnRjnsKdDil6YpOlj9+44S+XYXVFnxvkbmaZ+10=
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: K_3wq2_Yfd6gruXV__wvM05u3xCgtgYp
+X-Proofpoint-GUID: K_3wq2_Yfd6gruXV__wvM05u3xCgtgYp
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI4MDAxNyBTYWx0ZWRfX90rzyyxhkGav
+ kmwve0V5O6rfAm6XaIa6pyPZL8cxOBahSz9ueYEdQUEg+4msLFnMlSi8Xm/40PjZCGOVq7QRRKo
+ dF0fDpU32P/DaHroRZ+0RdKwOjDXX20389ffJmMHcqgHpYPfPlOSJo6kZ0I74SMnkve1d5G0OJH
+ 7goJ7+t/xDIA5orgphwHAq5HgI5DKxKoiFiuKtkyRQd1xCPydCyQnxPFSs4OtguLy6x+hW142if
+ pOO2yX87ZHb7clt+P1HVL//QrpaPl4hwhNTBO3UYfOju61pVPh0s7LS4FGDBr86I7QvwXFbRh2Y
+ w4h8k5vjgQ1rm1ewaa3Q7g4ReJdRTWhsVQKckR3Ewg+ALzZxUTe1EfZh9qdEpnU4Y15yx05nBLq
+ guVfVHMbhvGd/NLnlVRYANy3iZ42ZEm5IunLAFP2mgVq0pJgJ3uNHeH6ceyWQMFjoChNsZf+2M8
+ gsnKvV5MhL5x1Si/Dow==
+X-Authority-Analysis: v=2.4 cv=S7FMU4sP c=1 sm=1 tr=0 ts=6ab9ece6 cx=c_pps
+ a=3WNzaoukacrqR9RwcOSAdA==:117 a=3WNzaoukacrqR9RwcOSAdA==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=0sLvza09kfJOxVLZPwjg:22 a=N--XFCr6TIEc_64PeIT2:22 a=gAnH3GRIAAAA:8
+ a=FmHyTUunZNk7QUr-hdkA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI4MDAxNyBTYWx0ZWRfX05RFbn/B6sBW
+ mNU1jSkMxzMGvomiyB/SFwBX4OwfrZItxuvK8UzCkG0jZh3qMopxHukKgEnFPSRGmFf1IaTKVpa
+ +QR0h9OD+C8n5Nyd97wCnk+m7gDzi1jUTEO92Vb0564PsfJ4ciZ9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-26_05,2026-09-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 clxscore=1015 spamscore=0 suspectscore=0 adultscore=0
+ malwarescore=0 lowpriorityscore=0 priorityscore=1501 impostorscore=0
+ phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2609040000
+ definitions=main-2609280017
 
-SGksIEl3b25hDQoNCj4gT24gRnJpLCAyMDI2LTA5LTE4IGF0IDAyOjMwICswMDAwLCBDaGFuZ2h1
-YW5nIExpYW5nIHdyb3RlOg0KPiA+IEhpLCBJd29uYQ0KPiA+DQo+ID4gVGhhbmtzIGZvciB0aGUg
-cmV2aWV3Lg0KPiA+DQo+ID4gPiBPbiBUaHUsIDIwMjYtMDktMDMgYXQgMDY6MzQgLTA3MDAsIENo
-YW5naHVhbmcgTGlhbmcgd3JvdGU6DQo+ID4gPiA+IEFkZCBQRUNJIGNvbnRyb2xsZXIgZHJpdmVy
-IGZvciBTdGFyRml2ZSBKSEIxMDAgU29DLiBUaGUgZHJpdmVyDQo+ID4gPiA+IHN1cHBvcnRzIFBF
-Q0kgcHJvdG9jb2wgY29tbXVuaWNhdGlvbiBmb3IgQ1BVIHRoZXJtYWwgbWFuYWdlbWVudC4NCj4g
-PiA+ID4NCj4gPiA+ID4gRm9yIHRoaXMgY29udHJvbGxlciwgdGhlIHNwZWNpYWwgY2xvY2sgYW5k
-IHJlc2V0IG9wZXJhdGlvbiBzZXF1ZW5jZSBpczoNCj4gPiA+ID4gwqAgcHJvYmU6IGNsa19wcmVw
-YXJlX2VuYWJsZSgpIHRoZW4gcmVzZXRfY29udHJvbF9kZWFzc2VydCgpDQo+ID4gPiA+IMKgIHJl
-bW92ZTogY2xrX2Rpc2FibGVfdW5wcmVwYXJlKCkgdGhlbiByZXNldF9jb250cm9sX2Fzc2VydCgp
-DQo+ID4gPiA+DQo+ID4gPiA+IENvLWRldmVsb3BlZC1ieTogTWFzb24gSHVvIDxtYXNvbi5odW9A
-c3RhcmZpdmV0ZWNoLmNvbT4NCj4gPiA+ID4gU2lnbmVkLW9mZi1ieTogTWFzb24gSHVvIDxtYXNv
-bi5odW9Ac3RhcmZpdmV0ZWNoLmNvbT4NCj4gPiA+ID4gU2lnbmVkLW9mZi1ieTogQ2hhbmdodWFu
-ZyBMaWFuZw0KPiA+ID4gPiA8Y2hhbmdodWFuZy5saWFuZ0BzdGFyZml2ZXRlY2guY29tPg0KDQpb
-Li4uXQ0KDQo+ID4gPiA+ICsJcGVjaV9oZHIgPQ0KPiBGSUVMRF9QUkVQKFNUQVJGSVZFX1BFQ0lf
-SERSX1RBUkdFVF9BRERSX01BU0ssDQo+ID4gPiBhZGRyKSB8DQo+ID4gPiA+ICsJCcKgwqAgRklF
-TERfUFJFUChTVEFSRklWRV9QRUNJX0hEUl9XUl9MRU5fTUFTSywNCj4gcmVxLT50eC5sZW4pDQo+
-ID4gPiA+DQo+ID4gPiA+ICsJCcKgwqAgRklFTERfUFJFUChTVEFSRklWRV9QRUNJX0hEUl9SRF9M
-RU5fTUFTSywgcmVxLQ0KPiA+ID4gPiA+cngubGVuKTsNCj4gPiA+ID4gKwlyZWdtYXBfd3JpdGUo
-cHJpdi0+cmVnbWFwLCBTVEFSRklWRV9QRUNJX0hEUiwgcGVjaV9oZHIpOw0KPiA+ID4gPiArDQo+
-ID4gPiA+ICsJaWYgKHJlcS0+dHgubGVuKSB7DQo+ID4gPiA+ICsJCS8qDQo+ID4gPiA+ICsJCSAq
-IHJlcS0+dHguYnVmWzBdIGFsd2F5cyBzdG9yZSB0aGUgY29tbWFuZCBjb2RlLg0KPiA+ID4gPiAr
-CQkgKiBVc2UgY29tbWFuZCBjb2RlIHNldCBkaWZmZXJlbnQgY29uZmlndXJhdGlvbi4NCj4gPiA+
-ID4gKwkJICovDQo+ID4gPiA+ICsJCXU4IGNtZF9uaWJibGUgPSBGSUVMRF9HRVQoR0VOTUFTSygz
-LCAwKSwgcmVxLT50eC5idWZbMF0pOw0KPiA+ID4gPiArDQo+ID4gPiA+ICsJCWlmIChjbWRfbmli
-YmxlID09IFNUQVJGSVZFX1BFQ0lfQ01EX1dSSVRFX05JQkJMRSkgew0KPiA+ID4gPiArCQkJLyoN
-Cj4gPiA+ID4gKwkJCSAqIFRoaXMgaW5kaWNhdGVzIGN1cnJlbnQgY29tbWFuZCBjb2RlIGlzIHdy
-aXRlLg0KPiA+ID4gPiArCQkJICogT25seSB3cml0ZSBjb21tYW5kIHNob3VsZCBlbmFibGUgaGFz
-X2F3ZmNzLg0KPiA+ID4gPiArCQkJICovDQo+ID4gPg0KPiA+ID4gVGVjaG5pY2FsbHksIHdlIGRv
-bid0IGhhdmUgc3VwcG9ydCBmb3IgYW55IHdyaXRlIGNvbW1hbmRzIGF0IHRoaXMNCj4gPiA+IHBv
-aW50IGluIHRoZSB0cmVlLiBBcmUgeW91IHBsYW5uaW5nIHRvIGFkZCB0aGUgdXNhZ2UgZm9yIHdy
-aXRlDQo+ID4gPiBjb21tYW5kcyBpbiB0aGUgbmVhciBmdXR1cmU/DQo+ID4NCj4gPiBJJ20gbm90
-IHF1aXRlIHN1cmUgZWl0aGVyLiBJIHByZXZpb3VzbHkgYWRhcHRlZCBsaWJwZWNpIGJhc2VkIG9u
-IHRoZQ0KPiA+IGN1cnJlbnQgdHJlZSwgYW5kIHRlc3RlZCB0aGUgd3JpdGUgY29tbWFuZHMuIFNv
-IEkga2VwdCB0aGUgd3JpdGUNCj4gPiBjb21tYW5kcyBicmFuY2ggaGVyZS4gSSdtIG5vdCBxdWl0
-ZSBzdXJlIHdoeSBsaWJwZWNpIHdhc24ndCBhZGFwdGVkDQo+ID4gaGVyZeKAlGlzIGl0IGJlY2F1
-c2UgdGhlcmUgd2Fzbid0IHRpbWUgdG8gcHVzaCB0aGlzIHBhcnQgZm9yd2FyZD8NCj4gDQo+IE5v
-LCB3ZSBkb24ndCB3YW50IHRvIGFkZCBhIHVBUEkgdGhhdCBleHBvc2VzIHJhdyBQRUNJIGNvbW1h
-bmQgYWNjZXNzLg0KPiBJZiB3ZSBuZWVkIHNvbWUgZnVuY3Rpb25hbGl0eSB0aGF0IGNvdWxkIGJl
-IGltcGxlbWVudGVkIHVzaW5nIFBFQ0ksIHdlDQo+IHNob3VsZCBjb25zaWRlciBhZGRpbmcgYSBk
-ZWRpY2F0ZWQgZHJpdmVyIGZvciB0aGF0IGFuZCB0aGVuIGRlZmluZSB1QVBJIGZvcg0KPiB0aGF0
-IGNhc2UgKHBsZWFzZSBzZWUgaHdtb24gZHJpdmVycykuDQo+IA0KPiBJIHRoaW5rIGl0IHdvdWxk
-IGJlIGJldHRlciB0byBza2lwIHRoaXMgcGFydCBmb3Igbm93LCBhbmQgcmVpbnRyb2R1Y2UgaXQg
-aW4gYWxsDQo+IGRyaXZlcnMgYWNyb3NzIHRyZWUsIHdoZW4gaXQgaXMgbmVlZGVkIGZvciB3cml0
-ZSBzdXBwb3J0Lg0KDQpPa2F5LCBJJ2xsIHJlbW92ZSB0aGUgd3JpdGUgc3VwcG9ydCBpbiB0aGUg
-bmV4dCB2ZXJzaW9uLg0KDQpCZXN0IFJlZ2FyZHMsDQpDaGFuZ2h1YW5nDQo=
+ADPM12886 is a 1/8 brick DC/DC converter that provides up to 98%
+efficiency at half load. Can sustain output power of 1200W. Uses PMBUS.
+
+Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+---
+Adds ADPM device identification and support for ADPM12886 which is a 1/8 brick
+DC/DC Power Module. It is a high power non-isolated converter capable of delivering
+regulated 12V with continuous power level of 1600W.
+---
+ Documentation/hwmon/max34440.rst | 26 +++++++++++++-------
+ drivers/hwmon/pmbus/Kconfig      |  2 +-
+ drivers/hwmon/pmbus/max34440.c   | 51 +++++++++++++++++++++++++++++++++++-----
+ 3 files changed, 64 insertions(+), 15 deletions(-)
+
+diff --git a/Documentation/hwmon/max34440.rst b/Documentation/hwmon/max34440.rst
+index 8ce10aa425d5db30d13f3868c3466ef32efefdee..a4848da495e6d890ec628c3686001fc7872c551b 100644
+--- a/Documentation/hwmon/max34440.rst
++++ b/Documentation/hwmon/max34440.rst
+@@ -35,6 +35,14 @@ Supported chips:
+ 
+     Datasheet: -
+ 
++  * ADI ADPM12886
++
++    Prefixes: 'adpm12886'
++
++    Addresses scanned: -
++
++    Datasheet: -
++
+   * Maxim MAX34440
+ 
+     Prefixes: 'max34440'
+@@ -113,11 +121,12 @@ This driver supports multiple devices: hardware monitoring for Maxim MAX34440
+ PMBus 6-Channel Power-Supply Manager, MAX34441 PMBus 5-Channel Power-Supply
+ Manager and Intelligent Fan Controller, and MAX34446 PMBus Power-Supply Data
+ Logger; PMBus Voltage Monitor and Sequencers for MAX34451, MAX34452, MAX34460,
+-and MAX34461; PMBus DC/DC Power Module ADPM12160, ADPM12200, ADPM12250 and
+-ADPM12300. The MAX34451 and MAX34452 support monitoring voltage or current of 16
+-channels based on GIN pins. The MAX34460 supports 12 voltage channels, and the
+-MAX34461 supports 16 voltage channels. The ADPM12160, ADPM12200, ADPM12250 and
+-ADPM12300 also monitor both input and output of voltage and current.
++and MAX34461; PMBus DC/DC Power Module ADPM12160, ADPM12200, ADPM12250,
++ADPM12300, and ADPM12886. The MAX34451 and MAX34452 support monitoring voltage
++or current of 16 channels based on GIN pins. The MAX34460 supports 12 voltage
++channels, and the MAX34461 supports 16 voltage channels. The ADPM12160, ADPM12200,
++ADPM12250, ADPM12300, and ADPM12886 also monitor both input and output of voltage
++and current.
+ 
+ The driver is a client driver to the core PMBus driver. Please see
+ Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
+@@ -175,7 +184,7 @@ in[1-6]_reset_history	Write any value to reset history.
+ .. note::
+ 
+     - MAX34446 only supports in[1-4].
+-    - ADPM12160, ADPM12200, ADPM12250, and ADPM12300 only supports in[1-2].
++    - ADPM12160, ADPM12200, ADPM12250, ADPM12300, and ADPM12886 only supports in[1-2].
+       Label is "vin1" and "vout1" respectively.
+ 
+ Curr
+@@ -198,9 +207,10 @@ curr[1-6]_reset_history	Write any value to reset history.
+ 
+     - in6 and curr6 attributes only exist for MAX34440.
+     - MAX34446 only supports curr[1-4].
+-    - For ADPM12160, ADPM12200, ADPM12250, and ADPM12300, curr[1] is "iin1"
++    - For ADPM12160, ADPM12200, ADPM12250, ADPM12300, and ADPM12886, curr[1] is "iin1"
+     - For ADPM12160, and ADPM12200 curr[2-6] are "iout[1-5]".
+     - For ADPM12250, and ADPM12300 curr[2-4] are "iout[1-3]".
++    - For ADPM12886 curr[2-3] are "iout[1-2]".
+ 
+ Power
+ ~~~~~
+@@ -236,7 +246,7 @@ temp[1-8]_reset_history	Write any value to reset history.
+ .. note::
+    - temp7 and temp8 attributes only exist for MAX34440.
+    - MAX34446 only supports temp[1-3].
+-   - ADPM12160, ADPM12200, ADPM12250, and ADPM12300 only supports temp[1].
++   - ADPM12160, ADPM12200, ADPM12250, ADPM12300, and ADPM12886 only supports temp[1].
+ 
+ 
+ .. note::
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index fd6641316454f00eef8d7b7502da9d76c7ed2c4e..1a91702ed6e7551772cb1ac4cba4134719bb086a 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -455,7 +455,7 @@ config SENSORS_MAX34440
+ 	  If you say yes here you get hardware monitoring support for Maxim
+ 	  MAX34440, MAX34441, MAX34446, MAX34451, MAX34452, MAX34460, and
+ 	  MAX34461. Other compatible devices are ADPM12160, ADPM12200,
+-	  ADPM12250, and ADPM12300.
++	  ADPM12250, ADPM12300, and ADPM12886.
+ 
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called max34440.
+diff --git a/drivers/hwmon/pmbus/max34440.c b/drivers/hwmon/pmbus/max34440.c
+index 7f71dfe486438752fbbded6ed9c4172dd8ab8534..c088a57d227f563cc2978ad9a457d5dd31cad3ab 100644
+--- a/drivers/hwmon/pmbus/max34440.c
++++ b/drivers/hwmon/pmbus/max34440.c
+@@ -19,6 +19,7 @@ enum chips {
+ 	adpm12160,
+ 	adpm12200,
+ 	adpm12250,
++	adpm12886,
+ 	max34440,
+ 	max34441,
+ 	max34446,
+@@ -114,7 +115,7 @@ static int max34440_read_word_data(struct i2c_client *client, int page,
+ 		 */
+ 		if (data->id == max34451 || data->id == max34452 ||
+ 		    data->id == adpm12160 || data->id == adpm12200 ||
+-		    data->id == adpm12250)
++		    data->id == adpm12250 || data->id == adpm12886)
+ 			return -ENXIO;
+ 		ret = -ENODATA;
+ 		break;
+@@ -133,7 +134,8 @@ static int max34440_read_word_data(struct i2c_client *client, int page,
+ 	case PMBUS_VIRT_READ_IOUT_AVG:
+ 		if (data->id != max34446 && data->id != max34451 &&
+ 		    data->id != max34452 && data->id != adpm12160 &&
+-		    data->id != adpm12200 && data->id != adpm12250)
++		    data->id != adpm12200 && data->id != adpm12250 &&
++		    data->id != adpm12886)
+ 			return -ENXIO;
+ 		ret = pmbus_read_word_data(client, page, phase,
+ 					   MAX34446_MFR_IOUT_AVG);
+@@ -223,7 +225,8 @@ static int max34440_write_word_data(struct i2c_client *client, int page,
+ 					    MAX34440_MFR_IOUT_PEAK, 0);
+ 		if (!ret && (data->id == max34446 || data->id == max34451 ||
+ 			     data->id == max34452 || data->id == adpm12160 ||
+-			     data->id == adpm12200 || data->id == adpm12250))
++			     data->id == adpm12200 || data->id == adpm12250 ||
++			     data->id == adpm12886))
+ 			ret = pmbus_write_word_data(client, page,
+ 					MAX34446_MFR_IOUT_AVG, 0);
+ 
+@@ -297,7 +300,7 @@ static int max34451_read_byte_data(struct i2c_client *client, int page, int reg)
+ 		 */
+ 		if (data->id == max34451 || data->id == max34452 ||
+ 		    data->id == adpm12160 || data->id == adpm12200 ||
+-		    data->id == adpm12250)
++		    data->id == adpm12250 || data->id == adpm12886)
+ 			return -ENXIO;
+ 		return -ENODATA;
+ 	default:
+@@ -321,7 +324,7 @@ static int max34451_write_byte_data(struct i2c_client *client, int page,
+ 		 */
+ 		if (data->id == max34451 || data->id == max34452 ||
+ 		    data->id == adpm12160 || data->id == adpm12200 ||
+-		    data->id == adpm12250)
++		    data->id == adpm12250 || data->id == adpm12886)
+ 			return -ENXIO;
+ 		return -ENODATA;
+ 	default:
+@@ -539,6 +542,41 @@ static struct pmbus_driver_info max34440_info[] = {
+ 		.write_byte_data = max34451_write_byte_data,
+ 		.write_word_data = max34440_write_word_data,
+ 	},
++	[adpm12886] = {
++		.pages = 19,
++		.format[PSC_VOLTAGE_IN] = direct,
++		.format[PSC_VOLTAGE_OUT] = direct,
++		.format[PSC_CURRENT_IN] = direct,
++		.format[PSC_CURRENT_OUT] = direct,
++		.format[PSC_TEMPERATURE] = direct,
++		.m[PSC_VOLTAGE_IN] = 125,
++		.b[PSC_VOLTAGE_IN] = 0,
++		.R[PSC_VOLTAGE_IN] = 0,
++		.m[PSC_VOLTAGE_OUT] = 125,
++		.b[PSC_VOLTAGE_OUT] = 0,
++		.R[PSC_VOLTAGE_OUT] = 0,
++		.m[PSC_CURRENT_IN] = 250,
++		.b[PSC_CURRENT_IN] = 0,
++		.R[PSC_CURRENT_IN] = -1,
++		.m[PSC_CURRENT_OUT] = 250,
++		.b[PSC_CURRENT_OUT] = 0,
++		.R[PSC_CURRENT_OUT] = -1,
++		.m[PSC_TEMPERATURE] = 1,
++		.b[PSC_TEMPERATURE] = 0,
++		.R[PSC_TEMPERATURE] = 2,
++		/* absent func below [18] are not for monitoring */
++		.func[2] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
++		.func[4] = PMBUS_HAVE_STATUS_IOUT,
++		.func[5] = PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
++		.func[9] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT,
++		.func[10] = PMBUS_HAVE_IIN | PMBUS_HAVE_STATUS_INPUT,
++		.func[14] = PMBUS_HAVE_IOUT,
++		.func[18] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
++		.read_byte_data = max34451_read_byte_data,
++		.read_word_data = max34440_read_word_data,
++		.write_byte_data = max34451_write_byte_data,
++		.write_word_data = max34440_write_word_data,
++	},
+ 	[max34440] = {
+ 		.pages = 14,
+ 		.format[PSC_VOLTAGE_IN] = direct,
+@@ -804,7 +842,7 @@ static int max34440_probe(struct i2c_client *client)
+ 		if (rv)
+ 			return rv;
+ 	} else if (data->id == adpm12160 || data->id == adpm12200 ||
+-		   data->id == adpm12250) {
++		   data->id == adpm12250 || data->id == adpm12886) {
+ 		data->iout_oc_fault_limit = PMBUS_IOUT_OC_FAULT_LIMIT;
+ 		data->iout_oc_warn_limit = PMBUS_IOUT_OC_WARN_LIMIT;
+ 	}
+@@ -818,6 +856,7 @@ static const struct i2c_device_id max34440_id[] = {
+ 	{ .name = "adpm12200", .driver_data = adpm12200 },
+ 	{ .name = "adpm12250", .driver_data = adpm12250 },
+ 	{ .name = "adpm12300", .driver_data = adpm12250 },
++	{ .name = "adpm12886", .driver_data = adpm12886 },
+ 	{ .name = "max34440", .driver_data = max34440 },
+ 	{ .name = "max34441", .driver_data = max34441 },
+ 	{ .name = "max34446", .driver_data = max34446 },
+
+---
+base-commit: 9edd5ab2656f040d726b5388f49ceac10bb2944f
+change-id: 20260928-hwmon-next-2d766238f031
+
+Best regards,
+-- 
+Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+
