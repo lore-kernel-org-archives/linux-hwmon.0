@@ -1,80 +1,78 @@
-Received: from mail-dy2-f12.google.com (mail-dy2-f12.google.com [74.125.229.12])
+Received: from mail-dy2-f33.google.com (mail-dy2-f33.google.com [74.125.229.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B9C7293B75
-	for <linux-hwmon@vger.kernel.org>; Mon, 28 Sep 2026 11:05:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4935E3CCFCC
+	for <linux-hwmon@vger.kernel.org>; Mon, 28 Sep 2026 11:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790593547; cv=none; b=m4iTGk3c0wzPOyQ5CdOhDWtBP6eGWVOBzMSVKiu4qEyZYjfh4f2MNum0dhtoNfiv4kEmbGFLcCWWIGPVmb4XSu76MxE08/siBCiSGmPTqPph0x7NLcW+rX26PeIZ+3Fkbdto0b/oxn/VlCPJ72+vfOceQR5PkrXRfGSFpVruNfE=
+	t=1790594112; cv=none; b=nWS2DfR5zJ6W5H/ZuxKOs8X3DUxYA09VYlQhGMM67paaSfNoE2KqCyFFyCToFNVpXMqa16txBiUno1Zewc8nbatqRbqFRi42jmz6psyJRpETcMxGNnYabHr8D/PuMy85tmVQaVUUpxzWld0+B8BYuKXUoOnuUArs8j/kqRu2MDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790593547; c=relaxed/simple;
-	bh=1XbxKDdXCB0xh56Jj6qRN9S8aTlmP+aUKv+mEwrdbKQ=;
+	s=arc-20240116; t=1790594112; c=relaxed/simple;
+	bh=88OSeq6DLWu4I3oiu44D78I/Lu8IhTrzQi6Vrwi7Ww0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TDSGCzxx8CwaYE4LvWa9IIBO/57Ru8EUKtPc8b0n6F5OtSCXeCP5Jm3yLPjoIm9fULsqpuuR1WWFxOIjfdWgA76g0NbXGbybiQ0cNM1keV1kKGQaJPQK30BGJhqA5eLInMUxsStmXuF4B05bwfzoTb4hiIeyXXj0SHGLiGPlfCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R1Gv7ggU; arc=none smtp.client-ip=74.125.229.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=V+pNMvlF0/w+Ozq+Own2iorm9l8cpolRhKpqxcgIrXkRTr5b7KxIRJnTbXl/0sjeeLd3T8w2ulP1ifoylxqH22O0B0Y4MD01PuRFfdoi8CwuChgGLq873lxRKd6SffDp3w5obLMyOKqSGJJ7b/0pEGCPH+LUwmfK3KfdNpCsAH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SDTzUMff; arc=none smtp.client-ip=74.125.229.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R1Gv7ggU"
-Received: by mail-dy2-f12.google.com with SMTP id 5a478bee46e88-328664dbe2dso1550605eec.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 28 Sep 2026 04:05:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SDTzUMff"
+Received: by mail-dy2-f33.google.com with SMTP id 5a478bee46e88-347866278b6so325527eec.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 28 Sep 2026 04:15:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790593545; x=1791198345; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790594109; x=1791198909; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=2oM1knUDIGNS9SHIcgxqk4g+0rPtoqn3Rt9m8E+9mag=;
-        b=R1Gv7ggUi6czGna3d1A2oqULin9yrUJM6aZO8s/sjpIJ/G8/10p4o9A1gVcMBOQZOc
-         SAWhJaXMCMZS+4lR49kUnt85PtEv0jKVUIXmcQ1lJoo8Acjs37TwIDEgxUYhfUCPEj3t
-         u8PcpzyHOFCbxYvl0p20kgW8ZoajPbiUZ/pBHiPcNKBIuBpV7VA1YceT4kmLu1CusBT9
-         VRFtwhChkP6hiA7JmNMMJIkKDEf11PDuzNXPbRydJ2e5QI4RG3wNog24PtVJaKaIZ2jr
-         loxXdSzksl3/+sFhh6tYjGi3cwBIAlkIPzK2ulk1vmPm7+iN+i2WteQPmK+zsmzdImnL
-         yKxQ==
+        bh=R7a8XVHygSEnKk+FBH3uMQZiAQBtPp/2vxA0emOJFlY=;
+        b=SDTzUMffdIZ3Zl0BPYiNQkZYMuQZhhIXuo0UfRgqb85v0nHWnwZQaLWOjJJxJ4laJJ
+         LI2Vug0og3D1XQboIyNs+Zv5VKtthEhK9slc9PimkN4K1Xzfv2coFwI10x2WwkstL8sE
+         AMr/g2F5HvSW7mTjf5rMQx3sZ2GUwZ5YID59GYLVitqheG4yrx/10pU2QF+ngEjS4BGo
+         /XwTIhYcmlcM87dA5+tkOJEbW75dFqrC7WIN3eq8lI3lyMlcoh82FdpNCs/fcuhdZrXu
+         pX81mcYX6ssHoWUJMcZVi76gDSsRXvGQSa+wjza2pWdxE3alqs02rGBuzdQxslUbYZV+
+         1s2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790593545; x=1791198345;
+        d=1e100.net; s=20260707; t=1790594109; x=1791198909;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=2oM1knUDIGNS9SHIcgxqk4g+0rPtoqn3Rt9m8E+9mag=;
-        b=G3H4iLmFHl0hrKt4pKnFNQV2wLjgE2xQro6TRh6RfapxQBw9KEUST6MstRrLaNUWFs
-         TBpJwmoCIJNbD0snTeuYmjMkq8ASd48Zqb4b35bfE1iOYhgQ1DK/TjeCrvG1DtzgoCC8
-         SrML7ZavbDj9jz04ntQjZx6/MBDy20ZoOG9oahj7SZrHSpiojPPMmNXddkBGIcXRkG/I
-         6d/8XGXjxxFGNsBnIYADE3Jsq0sKimj2Gol39ZmCEFU/4qCnLwSL8UgDASryXMeS8qyr
-         0RSblFqNWssSQ25uKU/t/M6szx0LW05HvMdMwyOFkOPv5fdEN/Bb06PZZR3sEptLGIaE
-         vBfA==
-X-Forwarded-Encrypted: i=1; AKwUvByGhMEalTbzdFnBi6+MwriFryvj5Js4aqdJsum0+bWVYfmJyGo/QWJzqSL8KyW1HmY4STM4dP1Y263ioA==@vger.kernel.org
-X-Gm-Message-State: AFuF++lFls06jifT6r8RTEWO+abS/xwu1UQmVZwxXNECPeDV2qi9OzWu
-	FK9g5g2jDzjkizWVus5BwCIqHeP5w/O4rNGOlWMtiK/mAvPEUv2XZyGc
-X-Gm-Gg: AYBFou0QbyCUz1RU4XCeElszgg1rjoWxF3yPuz4XVrvJ8vRPyL5FXt5kFwpRVxrGKSL
-	M2Hg/WSimnX7X2BdzuDFwLvntcSRvzWuRTkvsaIZ2QFfuMigAkMB0VDf6EcA2YPMBj9ekNz4egu
-	Ml3KA3m/DfF8U81hnZ2x1RgjMAkkTP1LscJSQqxeG7UfE+TmDTg7+5PrzvdByZfsWBvsPlEFnn3
-	Pm2aLf1wFknsl8BN+CFsAoCW7Dc+wWJtlIhnp2MuPO3HngMcCmUMaJykWEwdE60dQv+n7zVbCyZ
-	oh7edKq4Hp1Gbo1RJHMRdKaNZB7szGBzXXTeYotfrDg4M2mY2WU3wUsLmIDomo+39jIV8Fnxmyd
-	LYe51+rpxyGUnDXhjtIBryTUNnoqOzep8mBJ521n+OCIFoHYnLNWhfrXCfvSxKtx/TfquZZI6fK
-	WSID1k7XWjXOp51OoY/uFuIlgmDBlwNW0dk1FOIRCOI5Cuz9Mk2cWZZjlZNQdeFMeFVUk7RTAzd
-	coglaxHSL1O
-X-Received: by 2002:a05:7300:b54b:b0:33b:e586:ba81 with SMTP id 5a478bee46e88-3427265fed0mr11177549eec.8.1790593544833;
-        Mon, 28 Sep 2026 04:05:44 -0700 (PDT)
+        bh=R7a8XVHygSEnKk+FBH3uMQZiAQBtPp/2vxA0emOJFlY=;
+        b=xx9T6h3M2pRIxMXeeNi3ovTvMlzJ1Z5+hMicMYIOof2WiIlr+/odJL+D1o+wjDJCsN
+         xagt1Gjl1GkeDmF3VZ680OsQxehGlR8AgOFRqTuB5tBsjZM5PEItgZ+rPstF0R+CI3T+
+         kHhsz+fwywHLncYraLZQL/TSBvBCs9sUQUoYZk+cqGSUXlKs16HKSEsxgRQ6ob8xX1FO
+         ctv5nhgtXwgG/hjFddf2OKe3+9S2NBvlxm4NGjVNHFj+EL4rgrXtQB4n5ppxcdITZxtr
+         TtR8+QHR/Ty/1A9fEUhH032Kjh1L2tk3gTtxCpd6LMk6KwRqpg3BFAwqK5UwUX5e50H3
+         +FAA==
+X-Forwarded-Encrypted: i=1; AKwUvBxD9i/wLwe9mbtmcka/vFwhAowkzkRSZzH3TP4rnOWUqDP3a2rpgk0Orsrb09mbi/p92Hd8lV+8fNuLyQ==@vger.kernel.org
+X-Gm-Message-State: AFq9FYJHV4qAtNrPvGafUsXiyRZYOvLtdvcj7fBLu0ZA5eJDuJtXU/Hw
+	jmcKfzJCuPV8wwjRreKRrY+KM+Pb4TqFOyCJP6jvVhneGnlbyyQiCr/7
+X-Gm-Gg: AYBFou0ZGcPw2fzkHqsBveYap6kh8TUMAMGB6//2HMVsv1DEneahuCnxt1LwjmZDH4L
+	VQFX2pcxY4qAa9uaKupdfI2VsXyQXfPUgPD/HUbW7Ys3BlmiGTc59N4OwU6IENHFjC6DZ0xWT7g
+	o9eKdNL/OGEhve/Wv9C819DRnjDyo1CIKVjC5h2sLKxZmhS9al7FBexF7tWJ5ibFC0AzE/NG6Bf
+	lwAsj2s68nL14apzBpvzH6fbHLwuR+XJoWRjyoR7l6Cd7Pr/ionWMtIKwvr117fI687FpgO7s/c
+	hikxXkPkDIFEIZUubC3LWvy5TYGRPTNmCMGOvHqw3OpJNY5DQD4XICyS1GRZP5y2meHNNN1j8MG
+	5cG1hMYRF0l8N91VN+4YvSxE9UnqIqG04ZPZMQwnhxE+5IKqHNMI+EXFH/QxKebkIBhtRxlpDQt
+	LMZAzyZl7uLcyh+3xPNW+hYWTDq1JCkxPZhuREXWi2VBPzbeCIvJSzY/fkDH9kBTYSE0RDW4nZ8
+	dOORwUWbsKd
+X-Received: by 2002:a05:7301:a2d:b0:342:9a9:1f68 with SMTP id 5a478bee46e88-34272179374mr8715824eec.23.1790594109191;
+        Mon, 28 Sep 2026 04:15:09 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-34141a4a5ecsm29390123eec.3.2026.09.28.04.05.43
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-34a1f82e33asm4154309eec.20.2026.09.28.04.15.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2026 04:05:44 -0700 (PDT)
+        Mon, 28 Sep 2026 04:15:08 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 28 Sep 2026 04:05:43 -0700
+Date: Mon, 28 Sep 2026 04:15:07 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: alexei.solcanu@pm.me
-Cc: Cryolitia PukNgae <cryolitia@uniontech.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: Re: [PATCH v2 2/2] hwmon: (gpd-fan) Register both fans on the GPD
- Win 5
-Message-ID: <72ea804b-6d62-4f31-985d-4f3f0359b5be@roeck-us.net>
-References: <20260926-gpd-fan-duo-auto-v2-0-0a2ea41ee3b5@pm.me>
- <20260926-gpd-fan-duo-auto-v2-2-0a2ea41ee3b5@pm.me>
+To: jiale yao <19888972804@163.com>
+Cc: Aleksa Savic <savicaleksa83@gmail.com>, Jack Doan <me@jackdoan.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: Re: [PATCH] hwmon: (aquacomputer_d5next) reject short status
+ reports
+Message-ID: <b596a484-caa1-48be-a9f8-56c0e081ee17@roeck-us.net>
+References: <20260924151121.1233666-1-yaojiale02@163.com>
+ <7b40ae2e-57d8-44f7-9791-ac65a3e97290@roeck-us.net>
+ <7bdec27c.1969.1a0e21dcb7f.Coremail.19888972804@163.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -83,39 +81,76 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260926-gpd-fan-duo-auto-v2-2-0a2ea41ee3b5@pm.me>
+In-Reply-To: <7bdec27c.1969.1a0e21dcb7f.Coremail.19888972804@163.com>
 
-On Sat, Sep 26, 2026 at 04:11:21PM -0400, Alexei Solcanu via B4 Relay wrote:
-> From: Alexei Solcanu <alexei.solcanu@pm.me>
+On Sun, Sep 27, 2026 at 05:06:38PM +0800, jiale yao wrote:
+> At 2026-09-25 00:05:19, "Guenter Roeck" <linux@roeck-us.net> wrote:
+> >On Thu, Sep 24, 2026 at 11:11:21PM +0800, Jiale Yao wrote:
+> >> The HID driver raw_event callback runs before HID core validates the
+> >> received report length.  aqc_raw_event() reads device-specific status
+> >> fields at fixed offsets, including multi-byte values, without checking
+> >> that the received buffer contains the complete report.  A truncated status
+> >> report can therefore cause out-of-bounds reads and update hwmon state with
+> >> data beyond the received report.
+> >> 
+> >> Reject status reports shorter than the length derived from their report
+> >> descriptor before accessing any fields.  Commit 47669bec44fe ("HID: asus:
+> >> refactor the two workqueues and init sequence") added equivalent raw-event
+> >> length validation to hid-asus.
+> >> 
+> >> Fixes: 0e35f63f7f4e ("hwmon: add driver for Aquacomputer D5 Next")
+> >> Cc: stable@vger.kernel.org
+> >> Signed-off-by: Jiale Yao <yaojiale02@163.com>
+> >> ---
+> >>  drivers/hwmon/aquacomputer_d5next.c | 2 ++
+> >>  1 file changed, 2 insertions(+)
+> >> 
+> >> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+> >> index 1ca70e726298..1ebc8bc4c090 100644
+> >> --- a/drivers/hwmon/aquacomputer_d5next.c
+> >> +++ b/drivers/hwmon/aquacomputer_d5next.c
+> >> @@ -1331,6 +1331,8 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
+> >>  
+> >>  	if (report->id != STATUS_REPORT_ID)
+> >>  		return 0;
+> >> +	if (size < hid_report_len(report))
+> >> +		return 0;
+> >
+> >That doesn't ensure that the report is not at least as long as accessed
+> >later in the function, and thus does not fix anything. The same applies
+> >to the other patch.
+> >
+> >A proper fix would be to ensure that size is at least as long as accessed
+> >in the function. hid_report_len() does not and can not know that value.
+> >It is purely driver specific.
 > 
-> The GPD Win 5 uses gpd_duo_drvdata, which exposes a single fan and pwm
-> channel: pwm1 writes the same duty cycle to both fans, and fan1_input
-> only reads the first fan's RPM.
-> 
-> The two fans have independent registers. Fan 1 uses duty cycle 0x047A
-> and RPM 0x0478/0x0479, fan 2 uses duty cycle 0x047B and RPM
-> 0x0476/0x0477. A duty cycle of 0 returns that fan to EC control.
-> 
-> Add separate board data for the Win 5 and register fan1/pwm1 and
-> fan2/pwm2, one channel per fan. Boards with a single fan are unchanged.
-> 
-> This changes behaviour on the Win 5: pwm1 and pwm1_enable now control
-> only the first fan. The second fan stays under EC control unless pwm2
-> and pwm2_enable are used.
-> 
-> The GPD Duo keeps a single channel, since it is untested and its
-> second fan's RPM register is unknown.
-> 
-> Tested on a GPD Win 5 (G1618-05).
-> 
-> Suggested-by: Guenter Roeck <linux@roeck-us.net>
-> Assisted-by: LLM
-> Signed-off-by: Alexei Solcanu <alexei.solcanu@pm.me>
+> I tried to find a cleaner way to derive the actual required length, but it seems
+> this is entirely driver-specific. I'll replace this with an explicit minimum-length
+> table for the supported layouts, just like:
+> ---
+> +/* Minimum size required for all fields read by aqc_raw_event(). */
+> +static const u16 aqc_min_status_report_size[] = {
+> +	[d5next] = D5NEXT_PUMP_OFFSET + AQC_FAN_SPEED_OFFSET + sizeof(u16),
+> +	[farbwerk] = FARBWERK_SENSOR_START + FARBWERK_NUM_SENSORS * AQC_SENSOR_SIZE,
+> +	[farbwerk360] = FARBWERK360_VIRTUAL_SENSORS_START +
+> +			FARBWERK360_NUM_VIRTUAL_SENSORS * AQC_SENSOR_SIZE,
+> +	[octo] = 0xd8 + AQC_FAN_SPEED_OFFSET + sizeof(u16),
+> +	[quadro] = 0x97 + AQC_FAN_SPEED_OFFSET + sizeof(u16),
+> +	[highflownext] = HIGHFLOWNEXT_5V_VOLTAGE_USB + sizeof(u16),
+> +	[aquaero] = 0x18b + AQUAERO_FAN_POWER_OFFSET + sizeof(u16),
+> +	[aquastreamult] = AQUASTREAMULT_PRESSURE_OFFSET + sizeof(u16),
+> +	[leakshield] = LEAKSHIELD_RESERVOIR_VOLUME + sizeof(u16),
+> +	[highflow] = 0,
+> +};
+> +
+> ---
+> But it's so ulgy, that's ok? or any other suggestion.
 
-Another patch new revision sent as reply of a previous one.
-
-Where does that idea come from ?  Can _someone_ please let me know ?
-It seems like a contagious disease, but no one is willing to admit
-where they caught it.
+apc_probe already has a switch statement for each supported cooler. The
+per-cooler size can be assigned to struct aqc_data as, say, min_report_size
+variable which can then easily be checked at runtime. The minimum
+report size can be a simple per-cooler define just like all other per-cooler
+defines. That isn't more ugly than the current code. Is made necessary
+by the vendor of the supported coolers, so it can't be helped.
 
 Guenter
