@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D1193B47E3;
-	Tue, 29 Sep 2026 23:14:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F19B329E5D;
+	Tue, 29 Sep 2026 23:17:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790723686; cv=none; b=GxhwZCmofBzTewqpV0BloltZGX+vyyP8vZM91zJvAFbl7SQtwVjTRFsRQbrX2Xet4BZ4bARckLvhMmR6hBGkQ50YNwrrVPdEU9ME2VcotvFQ0wpD+CK4XOHfMnPmtbifHtKQuB6TVfp83L6cI4pib8Fb++zSVZIgn5pfw6ywrB0=
+	t=1790723879; cv=none; b=TYIbgi+XZRWoVN8Y1MxYErAsiJ/T2QmphL7qzxNooJ/I6r3N3iFW450J1q8KUVjy6jYg0QLBmpjw4JPx3/j4LlpcJTEzFe9563LWVjJNNLODVGoUP+Nj1EAKrQEYN0UskEBga3F6Q7eJYwgU3CVszoW8mw8R/AHDoIZ7LK+FWSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790723686; c=relaxed/simple;
-	bh=8LthqSel7JRmm5IkXrA1vWD5v6LyhZJbIEcjMba2I4w=;
+	s=arc-20240116; t=1790723879; c=relaxed/simple;
+	bh=70nE12KTTB13EOl62kfb2HSURgDHW2XhfDqo53FPB+g=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Yag/pTDib+4m7Rq3f3JmqugiBGVcvRpZi9hwH3iDlBQrCPWj6awlervLvp21QTFtQUQxR/NGBKUGKPOhZ03DT/4kgXOanGv5Z8QMg8hEUNKsN++Cz5oA6rxEY2SxGxkzK1JFlUl9Ezqv4e3UaxnICs+eQj9W/Cg0gZCqMh+yAjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hn7Do3M/; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=WYMVUqqZw0OkZ0GLHbaGUNNh9V98asOxCg41CczPwpK+NEeAARicntz50m02C0To5CHsv92yJ/dTaDnnxw9mZid1uMz3RhQ7wVXxbjkdh7P1p/8rM66G3OHf2oYiihvcaSVqdXJW8oSyCfagwl7oPcBAev4QXjxGdmnRuVUC6u4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PzQxOO9M; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hn7Do3M/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB1C91F000FF;
-	Tue, 29 Sep 2026 23:14:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PzQxOO9M"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B97D1F000FF;
+	Tue, 29 Sep 2026 23:17:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790723685;
-	bh=hbTomVIXYjJ0n0N91lWxJ+disRhwak7aGrRsNiSkUQ8=;
+	s=k20260515; t=1790723877;
+	bh=fXPI6Ln6DtYYhxBA2aZaFL0LDEt6dyideuA/6ut0S4s=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hn7Do3M/nifQWl1zlCbZkDwoYLRWs+6sc/8ch2+MvpMqRNQnITZG650itAxXjGTOD
-	 aCyJbqNct0zwZwE3qyqotodPijCoqfWCouQ2sG9Hf3tAMAWBFH2w49MP4ThWiwbQ9A
-	 E+jv/f6YI99ylVMkK1lSIVEAfoa7k9BoMmn3G/1X0G4MHDs846PPgCyEjsSPJ1CG2v
-	 nU2GhPdEb20BiEKd8C3OqkDl1U1DTrBUaUnfgaAXYOhxwETtInmMnOkxt5GI+cDc0V
-	 xtUChTvcGOyH+RIWOfrLjs05ipgmiIZHk+TID48rnQlHnnC2D0CswiwK5m7mnjpDLS
-	 i/UbIARdz2pmw==
+	b=PzQxOO9MzaYWyUQyE57Iu55JlQcw1j0DKtLyfiWXkSjGsWHNb+7wXWLh6Yg3QCC4O
+	 3q8seSq6KgRemuBXEZruTE5NQqsO/RXf4YzfbrlOxmHFbw8rFXEqT1iBWBJudY7C8p
+	 3ftzx+NRPCICMVkaxgTpeK5umf51M0UYtI27tVf0glJ2pdETg2TtxdPBAJXGONp/kL
+	 +mopoqeFiXO5rnNsUZ/2+oWiMQJnQbKP5mLuGSSxaA4DJN9ZLEoGBIicDsoLA14sG9
+	 ywXyO+jBNPktK6vWCmiI2Ovrtj0cE4ItTahvXlNtaM1Y1p9S9yMLCwC++KEPcqrkdK
+	 rtOT4k/n518OQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/2] hwmon: (tps38900x) Add driver for TI
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add TI
  TPS389004/TPS389006/TPS389008
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Luna Hart" <lhart.opensource@witekio.com>
-Cc: conor+dt@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org
-In-Reply-To: <20260929-lhart-dev-tps38900x-v1-2-7045c5894152@witekio.com>
+Cc: robh@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
+In-Reply-To: <20260929-lhart-dev-tps38900x-v1-1-7045c5894152@witekio.com>
 References: <20260929-lhart-dev-tps38900x-v1-0-7045c5894152@witekio.com>
- <20260929-lhart-dev-tps38900x-v1-2-7045c5894152@witekio.com>
+ <20260929-lhart-dev-tps38900x-v1-1-7045c5894152@witekio.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 29 Sep 2026 23:14:44 +0000
-Message-Id: <20260929231444.BB1C91F000FF@smtp.kernel.org>
+Date: Tue, 29 Sep 2026 23:17:56 +0000
+Message-Id: <20260929231757.5B97D1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -47,66 +47,63 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] hwmon: undefined behavior in GENMASK() due to unchecked i2c_get_=
-match_data()
+- [Medium] dt-bindings: silent schema validation bypass due to invalid comp=
+atible match
 --
 
-commit 5632ba367123600a6ee38c612901f594c35ee0df
+commit 6f785a9cad4f5ba27f5d71565ba1ca2b776da113
 Author: Luna Hart <lhart.opensource@witekio.com>
 
-hwmon: (tps38900x) Add driver for TI TPS389004/TPS389006/TPS389008
+dt-bindings: hwmon: Add TI TPS389004/TPS389006/TPS389008
 
-This commit adds support for the TI TPS389004/TPS389006/TPS389008 I2C
-voltage supervisors and monitors. It allows enabling ADC monitoring and
-reading back the measured voltage in millivolts via sysfs.
+Add a binding for the TI TPS389004, TPS389006, and TPS389008 I2C voltage
+supervisors and monitors, which provide 4, 6, and 8 voltage inputs
+respectively. Each input may be described by an optional child node,
+containing additional properties including the label and ADC scaling factor.
 
-> diff --git a/drivers/hwmon/tps38900x.c b/drivers/hwmon/tps38900x.c
-> index 0000000000000..659d61b1cb55c 100644
+> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tps38900x.yaml b/=
+Documentation/devicetree/bindings/hwmon/ti,tps38900x.yaml
+> new file mode 100644
+> index 0000000000000..cdd74ddd03e74
 > --- /dev/null
-> +++ b/drivers/hwmon/tps38900x.c
+> +++ b/Documentation/devicetree/bindings/hwmon/ti,tps38900x.yaml
 [ ... ]
-> +static int tps38900x_parse_dt_channels(struct device *dev,
-> +				       struct tps38900x_data *priv)
-> +{
-[ ... ]
-> +	// When no channels are explicitly described in the DT, expose all of t=
-hem.
-> +	if (!priv->channel_present)
-> +		priv->channel_present =3D GENMASK(priv->num_channels - 1, 0);
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          const: ti,tps389004
 
 [Severity: Medium]
-Could this result in undefined behavior in tps38900x_parse_dt_channels()
-in drivers/hwmon/tps38900x.c? If the driver is bound via sysfs
-driver_override using an I2C device name not present in the driver's ID
-table, num_channels would be 0. This evaluates to GENMASK(-1, 0), which
-performs a bitwise shift by BITS_PER_LONG bits.
+Will this properly evaluate the compatible property?
 
+In device tree bindings, dt-schema evaluates the compatible property as an
+array of strings (for example, ["ti,tps389004"]). The const keyword strictly
+checks for exact equivalence. Since a scalar string is not equivalent to an
+array, this if condition will always evaluate to false.
+
+Because of this, the hardware-specific constraints in the then block
+restricting out-of-bounds voltage channels for the 4-channel variant are ne=
+ver
+applied, allowing invalid configurations to silently pass dt_binding_check.
+
+Should this use contains: const: ti,tps389004 instead?
+
+> +    then:
+> +      patternProperties:
+> +        "^vmon@[4-7]$": false
 > +
-> +	return 0;
-> +}
-> +
-> +static int tps38900x_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev =3D &client->dev;
-> +	struct tps38900x_data *priv;
-> +	struct device *hwmon_dev;
-> +	int ret;
-> +
-> +	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_BYTE_DATA))
-> +		return -ENODEV;
-> +
-> +	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->num_channels =3D (uintptr_t)i2c_get_match_data(client);
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          const: ti,tps389006
 
 [Severity: Medium]
-Does this code in tps38900x_probe() in drivers/hwmon/tps38900x.c allow 0 to
-be stored as the number of channels? If i2c_get_match_data() returns NULL
-when a user binds the driver via sysfs driver_override, num_channels becomes
-0 without being checked.
+Is this block also affected by the same array matching syntax issue?
+
+Just like the 4-channel variant above, this condition will fail to match the
+compatible array, bypassing the channel restrictions for the TPS389006.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260929-lhart-dev-=
-tps38900x-v1-0-7045c5894152@witekio.com?part=3D2
+tps38900x-v1-0-7045c5894152@witekio.com?part=3D1
