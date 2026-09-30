@@ -1,144 +1,171 @@
-Received: from mail-pj2-f35.google.com (mail-pj2-f35.google.com [74.125.227.163])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outbound.st.icloud.com (st-2002f-snip4-11.eps.apple.com [57.103.78.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F8A3F5BE4
-	for <linux-hwmon@vger.kernel.org>; Wed, 30 Sep 2026 22:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8247C399D00
+	for <linux-hwmon@vger.kernel.org>; Wed, 30 Sep 2026 22:26:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.78.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790807087; cv=none; b=tJDhDi+EQJb7rkFcUZe/VcTcJP4e8Plz4q3ZHDFoAvveBImrGbU0IaNgOeEyF+3pxJ5e6DpIc8d2oRe43NFkynluCy+X91CJo7AGB0ADRjgjAVGHC7VxdANtxPZEHLtEFcjAMu5+pdclV/NVCQwlcpJ2nzTCVdu1G8q4wqHZ8Lo=
+	t=1790807220; cv=none; b=M8N+M5m1iqBvEamake04ZWh9c7h/b59tW8zrPPZPq8+Jh5ah6lls4hFCH6xe8JJt8/256Gs2mrsu/jyoxKpze7p+FI5oPlqVIZPpUDx1IX46Cas7L3dZe/y51Aip+0vnE+OPxiVkPGdP62xiaAawaq/UCjJwIph+85zmVxzuAaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790807087; c=relaxed/simple;
-	bh=v4299bNl+lAPOB6/3VYr1Qulsb87AFZNEFsdu+iXIIM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=heOs7KZyDsIOH9oogWlVqc+t0PA7C4MlxKMFQdSWhRFr9H2KE27O5Vq9VvtivS1oDIgpSSenZmzuVtiY4QQV0FdTtIwygmGtF4/ryOejtb/lhDBIbcByyD/9VS3ZthBR/3Tzx+iW0ocuDwSy4DlC1FVs0RoNrQC06SmdQbXglk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rz7JdNCD; arc=none smtp.client-ip=74.125.227.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790807220; c=relaxed/simple;
+	bh=hmEdMg6wTnd34APfEfu5j/0oYZY/XEIo7DobIEh6zug=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cL8MATK6Dh6M1Ej8z2obErVBZjNafi4CIWcs795n532YpOvHBYTelddwOa9lqVzHyONHtXEPyY2DKaUe/4nA+WbXjk+cFbzO4LdwEZzUjPmSAb1EHl0Cv03O+vjiCSrGXwmpeWlKSkE7RX0BTySWSzYT5nNLehaZNNfObBGeU+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brough.org; spf=pass smtp.mailfrom=brough.org; dkim=pass (2048-bit key) header.d=brough.org header.i=@brough.org header.b=CQXqvMK7; arc=none smtp.client-ip=57.103.78.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brough.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=brough.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rz7JdNCD"
-Received: by mail-pj2-f35.google.com with SMTP id d9443c01a7336-2dd77300825so31487895ad.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Sep 2026 15:24:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790807085; x=1791411885; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=UqD2onkoNKbwoz5eLcMSO+ts9RQq0wVH4NJCZCES+ns=;
-        b=rz7JdNCDG8mxKKfOq8WAE4Dy9A5cDzDiIUl0kDifDV8Auca745O1ubZRkh3eEFCt0F
-         5xQtSXwU+oae1fzuq7MjSfqU0a1RIYPWGi7gMv9oN2gCbnjHWKTKSVXeFr719Vh1pJ+o
-         Tul3G4qRhzGFFok7TEuREBSXk5thPF6ZIUoQpcRODKrBDkA48ieC9iEgjUS8Jl5oSI0g
-         c3zykUVwscJFArAiK97PDmhKGRNozh7I5wyXUrgtlzuAYQwRKmcTiJI9JUHSSODHcuRf
-         GidZPmFpNI+CmWym2gPQSUbMXJrJiS9LFyzFtJtVVb71lBhOLeERfx7M+4uTf3Lpc6Gg
-         CnVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790807085; x=1791411885;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UqD2onkoNKbwoz5eLcMSO+ts9RQq0wVH4NJCZCES+ns=;
-        b=0OdvNnbZjdKwSxYKNwnALag2Y08g1Q7AUc8Wfo9HTBQ4/0DGiVzq+BHIvxTkV4X+Wa
-         zF/WJIz2+hLR6SqQ70eQ1iTs+OOYn+y3RRWtwoIOFjbn8TjqrCk2TD+bBdd8Ddrqd1HF
-         faa87SmJvILr64fOKaUm4xWMUVFI+qjq27YDO8RphgwsKy87MUWTCGKsSQCYe3i//z01
-         g+FRZCGYmD/Avbet2RJ1pM0y0DP6AMpIBn41fVfK5OypAcQATrlqDgFBRdaM8PSJfNwa
-         E0subICN+gKSd578OQVwj4dv9nYqKFkV5s65q0BIXtBklQgZvHCYYdrT/JCxsZC2x7zp
-         ErWg==
-X-Forwarded-Encrypted: i=1; AKwUvBxd0yK+JpzMyhCYFgDDr0zqFu213oKy6+unK3onmfCOlcgILH2wmIzMHtWiNkB86GU2mc9DbycOYqPoPg==@vger.kernel.org
-X-Gm-Message-State: AFq9FYJL/+UdG4mTUg1p5WU0tqvuxqSjrF6vS3q+XqtPBisAfPqNb/+r
-	np3mt/Qi3ourLcaQR+FI8f1cOM1pjY2g+hN+4GbqxH1+SN6pXITk6/vX
-X-Gm-Gg: AYBFou3rEo4DPY10Dh6wZ8je2NoOqNSyQDdsCu4R/PKkjyNApUSQyyiiLDq6NyBfZAG
-	ZP3XzpnwW/OFnsA6RYP/kmdoEa5Ab9fVXhlEFhBoHezIjI9bxfCAsFkRu4ZMfPlBkOFMXbcZYH6
-	bMOikJge8FNpkurBohpjdx2UNlciC5xFSW5EjFRupZ03DAUWEaTp23Z8q/LbWx0iN8fRA+2ct58
-	4RLJ7tMIGUpHvxMaRgCFFKDAe8vl/pznKsd8n97o/h0JuzGZxIbBHUtEt1GR8+F7fqwoVmUBoG1
-	iM9BqBmM1dp+JQENE7Nx8PxikdSHecB+FC+QKgStxMEyRR41IEF1FpiZQIWE79p1/0Q65gyRztu
-	oFWuwcUyZOmetuJY+PL0kwiqF7aiIIz01uHVjOgXorOnhEFDe3vyETK3NdT59ahe1nXLEYqmT1n
-	qdCPOlsh0KhKFP4iOOl4fLTkVF0MDwtkF+/P7SnIS59Hw0DaS3kQ8GuMcFDubPClGtNxCtstN1V
-	z7pvTeNCnKenc4wb9775kg=
-X-Received: by 2002:a17:903:1a27:b0:2e2:f1f8:42bb with SMTP id d9443c01a7336-2e2f1f89acfmr13956375ad.54.1790807085027;
-        Wed, 30 Sep 2026 15:24:45 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e300b90719sm2510425ad.84.2026.09.30.15.24.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Sep 2026 15:24:44 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 30 Sep 2026 15:24:42 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Vincent Jardin <vjardin@free.fr>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Charles Hsu <ythsu0511@gmail.com>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: hwmon: pmbus: mps,mpq8785: add
- #thermal-sensor-cells
-Message-ID: <37298c5b-aa6b-473a-8e22-d29ddec12c04@roeck-us.net>
-References: <20260930-for-upstream-dt-mpq8785-thermal-sensor-cells-v1-1-6573c765eef8@free.fr>
- <20260930140721.E066D1F0089D@smtp.kernel.org>
- <ar1Gj2XVOCEjUY0l@L20747.iliad.fr>
+	dkim=pass (2048-bit key) header.d=brough.org header.i=@brough.org header.b="CQXqvMK7"
+Received: from outbound.st.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-east-1a-10-percent-0 (Postfix) with ESMTPS id 7EE541800548;
+	Wed, 30 Sep 2026 22:26:53 +0000 (UTC)
+X-ICL-RepId: 01a0f46d-8573-7e4c-8e3e-9f51fa919291
+X-ICL-Out-Info: HUtFAUMHWwJACUgATUQeDx5WFlZNRAJCTQhLBUMEXRxIDlYCWwdLVxQEElwfUwpcMFsKXBhQAxwfSx8TC1NWUAJWDVQFGQRAFxkKUFAGWhIYXBRcUFgeRhJWDV0JGRhGXlAbXwJCDxwTVhUTHUMZDysISgRDB0UCXgslEwlTVlACVg1UBRkEQBcZFVoJClcAQAtOA1QEWwBCC04GXRlaCkgKQANYGlofGlYKVwxZK1ACVg1UBRkEQBcHWEcURw4PE0wLRwJaNFYfVBlaAw==
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=brough.org; s=sig1; t=1790807215; x=1793399215; bh=Ik3YPnPwNm4KQVJBOqdf88VvdIj/yJ6gOH3tmGf/EYQ=; h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:x-icloud-hme; b=CQXqvMK7UAh37BVDsuuZ82hJAgWSxtkeYhj/CwLbiVDfZ6Lwkp2Zet1ad4tttmYYG+Dnt9UBsH30+J5jpNwBogshKlZDHKHPQhhkfuo/CV4P0EykHOEXTXtNM8zv5hEScN/vTXvuYYctbazuU7nHweguEUZk4+Z80mQjbYMV5KM2f4Ipu6FikX29yVEU8DYeS+U1q8kk/nTO1DKWQFTIzHrnnZ/N9UcuGZTvuR11dX1eAYaLtqpdiDy5SYameA7P/YZuhpz1is4+oMkskWKqZ66kB0WBtVXNX7SPEIsa/5jUKj10DAccMbNqCBfGCXbViWy5iXqx0VsNT8AtnoOg9A==
+mail-alias-created-date: 1646594351620
+Received: from jb-desktop (unknown [17.156.216.30])
+	by p00-icloudmta-asmtp-us-east-1a-10-percent-0 (Postfix) with ESMTPSA id C9D8E180016B;
+	Wed, 30 Sep 2026 22:26:51 +0000 (UTC)
+From: Jordan Brough <jordan@brough.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Henrik Rydberg <rydberg@bitmath.org>
+Cc: Jordan Brough <jordan@brough.org>,
+	chrome-platform@lists.linux.dev,
+	ibm-acpi-devel@lists.sourceforge.net,
+	linux-acpi@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org
+Subject: [PATCH v3 0/3] hwmon: (applesmc) add charge_control_end_threshold support
+Date: Wed, 30 Sep 2026 16:26:32 -0600
+Message-ID: <20260930222650.1883805-1-jordan@brough.org>
+X-Mailer: git-send-email 2.56.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ar1Gj2XVOCEjUY0l@L20747.iliad.fr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Authority-Info-Out: v=2.4 cv=Np/cssdJ c=1 sm=1 tr=0 ts=6abd8cae
+ cx=c_apl:c_pps:t_out a=oyWFxbOnq+dmhQrAPgaJYA==:117
+ a=oyWFxbOnq+dmhQrAPgaJYA==:17 a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=gFGppuTrAAAA:8
+ a=3KJn3nblrUCwOSVLmvsA:9 a=QEXdDO2ut3YA:10 a=_Y0xhhAoguY4gwfEQMhp:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTMwMDA5MSBTYWx0ZWRfX4kTtyWo45inW
+ ZKuMuSqHwF0HMBtKGMuyS0k+gGO3i3p4jcBfyB+m0PS0KDuyd6oR2q3mhWJG0UAthNmXtVTC1dS
+ Bxd1vx4tD1o+kYqg+3Tq3PTFbk79ysOLr2dixehCaosjBtemRQLtiAVDItKGE+KadahBrP+0hnZ
+ u3hKBGrAi2ZFM0te26zh06oFafqYyBCVvLF74HBL6pXYN9oBZpIpkgUGA4CImn6irdww0JkLMlL
+ tIvnJXz9UWCrjCyuGB1WzBBZ3mhGDZP9Y8pX5GyrMDjaENJIz66LKHG//LPafv76ltM1X1GC9gy
+ +wrVgBllZufzmFSUVWqYkBdBfDUSwT/zsmCfTytYwdh/f3SMc4Jbj/dLabFu4s=
+X-Proofpoint-GUID: Ma3gpkMd9Du3364tovKf4jTfmQzGwxXq
+X-Proofpoint-ORIG-GUID: Ma3gpkMd9Du3364tovKf4jTfmQzGwxXq
+X-JNJ: AAAAAAABiS5yuYAq9u12fjzs8oQBYVjKUij4JSpuJom/DzWsqS5bePJkXTwavM57wDHNibPbIcti86nuffyH/zUyXoUpgz+zUsuGkXaZ7qVrLkISF0uNzM8PyzA2Q3L3+uvqA/QPCHIRk0GBRFSchrrIbcwWq26CYFt5aru9TjPMw5cKmMN0Twr4fbLZamK7uX4yEbRSucrJ8uYCvDFI9wrAYepj+Bt0Hcjlz5XhNy/hUrm5FEV+Uq7us129niXyKvshXyov6YV056wBipxhlfxFQnSZHDkpC4ODZTOstj0BupXQOgXd6uncck8mzmjbN9/FlYGWCsLUdlRM2HDCSp8IcH2bwr6VhKRZYw7ikCBPPLsIcN2V+RvcsisvK19MTjU9t/xYB8GUB3/e4TW+tQ4NNh2oAHbngtWZM7gG/5PBHNs5YuGjYnPHF7fHFAFo8wACSLIQzWiR2VeUq21FUHk2m7x68t5/SkNjVMFLcaBdQm8QbwmyJKG2LhSHPWkWr720frM0SdrQskPUR7r1YdMwIeDLVPZOWtEYpBMEiBK52yp4Z5t+FnpLTCK3eGksiro5h66wn/0YX9HoXDhJp7gmb8fQ4vaIuSDyYErGHKIx9PBuiSW3HbcfoEOdxamJbvMffEntUzkXAzriXlTwPOhKn6JOhy3trIfjC4pnJZMfM4dSHZxfO4CCPiOcYBwyQhLFGK6GfkQM8ukQ7Q9J3p533uq1GvTsI2MF3UFtfCk2mPn1XZWN8KgeraxKcr3eETqASRMX4lDp+013vs8zykp4MNtqwTScP0I+hkUKVgCgHEo2gusmyWgvpY71Vdyr3+NGt2Fdmly65wpn0ti1ePG0rZPWrfgw6BWNYAlx4qV1+Q7yEuKw7RhjzHuIzsWs742XGupdtQJbvy3dS0Hz+OJdRi2KI7Qy3DIzSuFbGutsl88l1TAoCMt43gJhfib5Yk21tyLTSLv6lIor3WNM6YLMtwWOH3c
+ vTYhrNjUJLylUp2FOXHed+0aSMeEaJ5l9eVxUkWteXxlAACX8zM1GAxL6KPfo1IAfy4dMgdxX771dsMWrlN3Cxe2yeFyX2ci5yI5BJokyQU4raz5TzTmmUORGcmBhqeCZuHKsF0/ns2fkGxeXN/DieaxN/dugqghPifjFwakdlTm22q3fdXcSCrmYnybLqXJVfb7dBrPIIM1eggfyj0CctD9uBUs/lvHOcLXiEzLC9AJtD3nWjM8zOQ0uYTy0U1kfjjFoo/H5qiULCq6JAPluat92tB+DlBS9UqZBJQ8fFad1/K8TZeQBo+VGsTrGb9cDyIzMT0LopaTiOVSutta77bR51ZuBdnfLbWxYS3oAKMAIUuYHH3eESoI9eOuQB7XdhgmNrA/c8nobnOtyw1P1MNrjK6xyPvOTrZaOELo7hzxpgIYz8cc=
 
-On Wed, Sep 30, 2026 at 07:27:43PM +0200, Vincent Jardin wrote:
-> Hi Guenter,
-> 
-> On Wed, Sep 30, 2026 at 02:07:21PM +0000, sashiko-bot@kernel.org wrote:
-> > [Severity: Medium]
-> > Is it correct to set the cell count constraint to 1 for this hardware?
-> >
-> > The Devicetree specification generally mandates that single-sensor devices
-> > use a cell count of 0, as no index is needed to identify the sensor. By
-> > forcing this to 1, it appears we might be baking a Linux-specific driver
-> > quirk (the PMBus core's internal 1-based index) into the OS-agnostic
-> > hardware description ABI.
-> 
-> M. Bot has a point, and it is a PMBus core question, so I would like
-> your view before a v2 of this binding.
-> 
-> Since the commit
->   3aa74796cfd0 ("hwmon: (pmbus) Register with thermal for PSC_TEMPERATURE")
-> pmbus_core registers each temperature input using its hwmon index as the
-> sensor id, so temp1 is sensor 1.
-> 
-> The hwmon core counts from 0 instead:
-> for example temp1 is sensor 0 for jc42, tmp401, lm90 or adt7470.
-> 
-> With the 1 based id, a single-sensor PMBus device cannot use
-> #thermal-sensor-cells = <0>: thermal_of matches a phandle without
-> cells as id 0, and no PMBus sensor has id 0. That is why this patch
-> uses const 1.
-> 
-> No current DTS references a PMBus device from a thermal zone, and no
-> PMBus binding allows #thermal-sensor-cells yet.
-> 
-> Aligning PMBus on the hwmon core would mean:
-> 
-> drivers/hwmon/pmbus/pmbus_core.c
-> static struct pmbus_sensor *pmbus_add_sensor(struct pmbus_data *data,
->   ...
->  	if (class == PSC_TEMPERATURE && strcmp(type, "input") == 0)
-> -		pmbus_thermal_add_sensor(data, sensor, seq);
-> +		pmbus_thermal_add_sensor(data, sensor, seq - 1);
-> 
->  	return sensor;
->  }
-> 
-> 
-> If you agree, I will send it, with a v2 of this binding using
-> const: 0, since each device of mps,mpq8785.yaml has a
-> single temperature input. Otherwise, we should keep const 1.
-> 
+This series adds charge_control_end_threshold to the applesmc driver for
+Intel MacBooks, using the power_supply extension API.
 
-Yes, that is a bug. Please send a patch. I'd prefer the index
-to be handled in the call to devm_thermal_of_zone_register(),
-though, with an added comment explaining that the temperature sensor
-index in the PMBus core starts with 1 and the thermal core expects
-a 0-based index.
+Some of these machines have an SBS battery (drivers/acpi/sbs.c), which,
+unlike battery.c, has no battery hook mechanism. Patch 2 moves the hook code
+into a helper that both drivers use, and patch 3 adds the applesmc support.
+Patch 1 is the acpi_ prefix rename of the existing hook functions that Rafael
+asked for; it is separate because it touches 18 callers in other subsystems.
 
-Thanks,
-Guenter
+The series is based on linux-pm's bleeding-edge branch (4c18627a1dfb). Patch
+3 depends on patch 2, so the series would need to go in through the ACPI
+tree with an ack from the hwmon side, or I can resend patch 3 once patches 1
+and 2 are in, whichever is easier.
+
+Changes in v3 (thanks to Rafael for the review):
+- Patch 1 is new: acpi_ prefix for the exported hook functions, with their
+  callers updated.
+- Patch 2:
+  - Renamed battery_hook.c to battery_hooks.c, built only when ACPI_BATTERY
+    or ACPI_SBS is, through a hidden ACPI_BATTERY_HOOKS symbol that both
+    select.
+  - Renamed the struct and the new functions as suggested, exported the new
+    functions in the ACPI_BATTERY_HOOKS namespace, used mutex guards and
+    updated the file header.
+  - battery_hook_exit() is gone, so hooks now stay registered across a
+    reload of battery.ko or sbs.ko.
+- Patch 3:
+  - BFCL is only written when the SMC has the key, and the BCLM write is read
+    back, at the suggestion of Michal Szpakowski, whose MacBookPro13,1 has no
+    BFCL.
+  - No BFCL margin at a limit of 100.
+  - The lower limit of 20 is conservative: 20 works and 10 is not accepted
+    on the hardware I tried, but I did not find the exact floor. I am happy
+    to change it.
+  - Dropped the applesmc_hooked_battery tracking and the mutex in
+    applesmc_bat_get_property().
+  - The hook is only registered when CONFIG_ACPI_BATTERY_HOOKS is reachable.
+
+Testing:
+- MacBookAir6,2 (SBS battery), on an earlier revision: limits from 20 to 100
+  match the SMC keys, charging stops at the limit, repeated module reloads
+  caused no errors, and the threshold was unchanged after a suspend/resume.
+- MacBookPro13,1 (SBS battery, no BFCL), by Michal Szpakowski, before the
+  acpi_ rename: valid limits read back exactly, invalid ones are rejected,
+  applesmc reload and an acpi-sbs unbind/rebind re-attach the attribute, and
+  charging stops at the limit.
+- Lenovo ideapad FLEX 4-1480 (Control Method battery, ideapad_laptop), on
+  Fedora's 7.2.7 kernel with the series applied on top (a rebase of the
+  patches, not this exact tree): the ideapad_laptop hook registers and its
+  charge_types attribute appears on BAT1, charge_types can be read and
+  written back unchanged, 25 battery unbind/bind cycles re-attach it each
+  time, and unloading and reloading ideapad_laptop removes and re-adds it.
+  There were no warnings in dmesg. That kernel did not have lockdep
+  enabled.
+- Built and linked with ACPI_BATTERY and ACPI_SBS as y/m/n and applesmc as
+  y/m, and an x86 allmodconfig build of the touched files with W=1 shows no
+  warnings; each patch builds on its own.
+- Applies with git am on linux-pm bleeding-edge, and with git am --3way on
+  hwmon-next.
+
+Link: https://lore.kernel.org/r/20260918175052.85461-1-jordan@brough.org [v2]
+Link: https://lore.kernel.org/r/20260913231410.416922-1-jordan@brough.org [v1]
+
+
+Jordan Brough (3):
+  ACPI: battery: add acpi_ prefix to the battery hook API
+  ACPI: battery: add unified battery hook mechanism for ACPI and SBS
+    batteries
+  hwmon: (applesmc) add charge_control_end_threshold support
+
+ drivers/acpi/Kconfig                         |   5 +
+ drivers/acpi/Makefile                        |   1 +
+ drivers/acpi/battery.c                       | 166 +------------------
+ drivers/acpi/battery_hooks.c                 | 159 ++++++++++++++++++
+ drivers/acpi/sbs.c                           |   8 +-
+ drivers/hwmon/Kconfig                        |   1 +
+ drivers/hwmon/applesmc.c                     | 146 ++++++++++++++++
+ drivers/platform/x86/asus-wmi.c              |   4 +-
+ drivers/platform/x86/ayaneo-ec.c             |   2 +-
+ drivers/platform/x86/dell/dell-laptop.c      |   4 +-
+ drivers/platform/x86/dell/dell-wmi-ddv.c     |   2 +-
+ drivers/platform/x86/fujitsu-laptop.c        |   4 +-
+ drivers/platform/x86/huawei-wmi.c            |   4 +-
+ drivers/platform/x86/lenovo/ideapad-laptop.c |   4 +-
+ drivers/platform/x86/lenovo/thinkpad_acpi.c  |   4 +-
+ drivers/platform/x86/lenovo/wmi-other.c      |   4 +-
+ drivers/platform/x86/lg-laptop.c             |   4 +-
+ drivers/platform/x86/msi-ec.c                |   4 +-
+ drivers/platform/x86/oxpec.c                 |   2 +-
+ drivers/platform/x86/samsung-galaxybook.c    |   3 +-
+ drivers/platform/x86/samsung-laptop.c        |   4 +-
+ drivers/platform/x86/system76_acpi.c         |   4 +-
+ drivers/platform/x86/toshiba_acpi.c          |   4 +-
+ drivers/platform/x86/uniwill/uniwill-acpi.c  |   2 +-
+ drivers/power/supply/cros_charge-control.c   |   2 +-
+ include/acpi/battery.h                       |  16 +-
+ 26 files changed, 367 insertions(+), 196 deletions(-)
+ create mode 100644 drivers/acpi/battery_hooks.c
+
+
+base-commit: 4c18627a1dfbfe537580f831e60218644c94ce12
+-- 
+2.56.0
+
