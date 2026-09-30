@@ -1,171 +1,307 @@
-Received: from outbound.st.icloud.com (st-2002f-snip4-11.eps.apple.com [57.103.78.43])
+Received: from outbound.st.icloud.com (st-2004h-snip4-11.eps.apple.com [57.103.78.251])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8247C399D00
-	for <linux-hwmon@vger.kernel.org>; Wed, 30 Sep 2026 22:26:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.78.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE853E4119
+	for <linux-hwmon@vger.kernel.org>; Wed, 30 Sep 2026 22:27:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.78.251
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790807220; cv=none; b=M8N+M5m1iqBvEamake04ZWh9c7h/b59tW8zrPPZPq8+Jh5ah6lls4hFCH6xe8JJt8/256Gs2mrsu/jyoxKpze7p+FI5oPlqVIZPpUDx1IX46Cas7L3dZe/y51Aip+0vnE+OPxiVkPGdP62xiaAawaq/UCjJwIph+85zmVxzuAaM=
+	t=1790807230; cv=none; b=jtA5dTLKgEIzHmVUvIUOa0V76NF+VDuCoT9EKadEZKucZcKxSP3729KRwZMfDAXkJk80HYMJVosxIexefFFUa699Ug/eJwQJT3uWyHclpQoOlElcxwSYf4vL8iEdIBbcTUOO1UrcLpHwa/PMgJDiL0ynFgRiBB1FbDsWWlttyG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790807220; c=relaxed/simple;
-	bh=hmEdMg6wTnd34APfEfu5j/0oYZY/XEIo7DobIEh6zug=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cL8MATK6Dh6M1Ej8z2obErVBZjNafi4CIWcs795n532YpOvHBYTelddwOa9lqVzHyONHtXEPyY2DKaUe/4nA+WbXjk+cFbzO4LdwEZzUjPmSAb1EHl0Cv03O+vjiCSrGXwmpeWlKSkE7RX0BTySWSzYT5nNLehaZNNfObBGeU+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brough.org; spf=pass smtp.mailfrom=brough.org; dkim=pass (2048-bit key) header.d=brough.org header.i=@brough.org header.b=CQXqvMK7; arc=none smtp.client-ip=57.103.78.43
+	s=arc-20240116; t=1790807230; c=relaxed/simple;
+	bh=sgBHt4gFv144xt0m+0Sq1AarU7FDh7Jo4QCy+dnEHbg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XE94Qbuq4o6bckJwPDLackmo/w04Xz4GEFgqifY/ohs1ljpT7dPBl23cmHN7o9M+u5nuY2QIjATsqoxgeWQd2BexIp2SLtKBCxXGudRYrMsNWWWy55gekAN6oieIEBdlH7jsqWRiojUiYWGKlVaZtmTmoys+o6MTqmOdp05/Vtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brough.org; spf=pass smtp.mailfrom=brough.org; dkim=pass (2048-bit key) header.d=brough.org header.i=@brough.org header.b=jbK26C5b; arc=none smtp.client-ip=57.103.78.251
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brough.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=brough.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brough.org header.i=@brough.org header.b="CQXqvMK7"
+	dkim=pass (2048-bit key) header.d=brough.org header.i=@brough.org header.b="jbK26C5b"
 Received: from outbound.st.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-1a-10-percent-0 (Postfix) with ESMTPS id 7EE541800548;
-	Wed, 30 Sep 2026 22:26:53 +0000 (UTC)
-X-ICL-RepId: 01a0f46d-8573-7e4c-8e3e-9f51fa919291
-X-ICL-Out-Info: HUtFAUMHWwJACUgATUQeDx5WFlZNRAJCTQhLBUMEXRxIDlYCWwdLVxQEElwfUwpcMFsKXBhQAxwfSx8TC1NWUAJWDVQFGQRAFxkKUFAGWhIYXBRcUFgeRhJWDV0JGRhGXlAbXwJCDxwTVhUTHUMZDysISgRDB0UCXgslEwlTVlACVg1UBRkEQBcZFVoJClcAQAtOA1QEWwBCC04GXRlaCkgKQANYGlofGlYKVwxZK1ACVg1UBRkEQBcHWEcURw4PE0wLRwJaNFYfVBlaAw==
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=brough.org; s=sig1; t=1790807215; x=1793399215; bh=Ik3YPnPwNm4KQVJBOqdf88VvdIj/yJ6gOH3tmGf/EYQ=; h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:x-icloud-hme; b=CQXqvMK7UAh37BVDsuuZ82hJAgWSxtkeYhj/CwLbiVDfZ6Lwkp2Zet1ad4tttmYYG+Dnt9UBsH30+J5jpNwBogshKlZDHKHPQhhkfuo/CV4P0EykHOEXTXtNM8zv5hEScN/vTXvuYYctbazuU7nHweguEUZk4+Z80mQjbYMV5KM2f4Ipu6FikX29yVEU8DYeS+U1q8kk/nTO1DKWQFTIzHrnnZ/N9UcuGZTvuR11dX1eAYaLtqpdiDy5SYameA7P/YZuhpz1is4+oMkskWKqZ66kB0WBtVXNX7SPEIsa/5jUKj10DAccMbNqCBfGCXbViWy5iXqx0VsNT8AtnoOg9A==
+	by p00-icloudmta-asmtp-us-east-1a-10-percent-0 (Postfix) with ESMTPS id 105FE180025F;
+	Wed, 30 Sep 2026 22:27:04 +0000 (UTC)
+X-ICL-RepId: 01a0f46d-b2b4-7ac8-9081-b2e52a6d771a
+X-ICL-Out-Info: HUtFAUMHWwJACUgATUQeDx5WFlZNRAJCTQhLBUMEXRxIDlYCWwdLVxQEElwfUwpcMFsKXBhQAxwfSx8TC1NWUAJWDVQFGQRAFxkKUFAAS1oVVRcOAkIfUB9MFldDRB8cGVoUXBhTRVEfVFhDGUVWaUELTx1dGVscQmRYVwkKCUAfTB9bQ1gZVVBUEVdQC1kCQg9ICl4HWQBCD00DQwZTCkMBSAZAA0ZYH0scUgN3CUAfTB9bQ1gZVU4ZDEodUlZRBUoMXABoD10dWBFd
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=brough.org; s=sig1; t=1790807226; x=1793399226; bh=mgVvsq7LzDzSHCCuBhl9XoTil42XNfuG1k/OPmgDwaw=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=jbK26C5b0ohzdM+myAjhTtOneOmCdNUsiQsGggwtP9gDC9dVyLm9RWZlPlkP5FYM6fRC9R6EGPiGTPEjCXBA4PRVRnEQAN/oN6NQrxch8QacorXRQRkL5Ri2yvT2wnxEJPidQqSEa9+ik11wWN+8kXo6l/NmCw4NpVrcqRgL3OsNR5OQmYezFai5yb8neGaE4SPjo8Q+PshS//T7dzxJyZlLRAE4gjQyet6tMbOIbi76LI5FuxSPFl0CujdX6Bk3dxYbjJjZMfR7vf97mrjjKHf8y8yzCV2XdybvGfIJbyXAkXQ/L45K8NQ5WbNZoDStZmQndM9IGWD2SQD/KMVSAg==
 mail-alias-created-date: 1646594351620
 Received: from jb-desktop (unknown [17.156.216.30])
-	by p00-icloudmta-asmtp-us-east-1a-10-percent-0 (Postfix) with ESMTPSA id C9D8E180016B;
-	Wed, 30 Sep 2026 22:26:51 +0000 (UTC)
+	by p00-icloudmta-asmtp-us-east-1a-10-percent-0 (Postfix) with ESMTPSA id F16CF180016B;
+	Wed, 30 Sep 2026 22:27:03 +0000 (UTC)
 From: Jordan Brough <jordan@brough.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
+To: Guenter Roeck <linux@roeck-us.net>,
 	Henrik Rydberg <rydberg@bitmath.org>
 Cc: Jordan Brough <jordan@brough.org>,
-	chrome-platform@lists.linux.dev,
-	ibm-acpi-devel@lists.sourceforge.net,
-	linux-acpi@vger.kernel.org,
+	Michal Szpakowski <michi.szpakowski@gmail.com>,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org
-Subject: [PATCH v3 0/3] hwmon: (applesmc) add charge_control_end_threshold support
-Date: Wed, 30 Sep 2026 16:26:32 -0600
-Message-ID: <20260930222650.1883805-1-jordan@brough.org>
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH v3 3/3] hwmon: (applesmc) add charge_control_end_threshold support
+Date: Wed, 30 Sep 2026 16:26:35 -0600
+Message-ID: <20260930222650.1883805-4-jordan@brough.org>
 X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20260930222650.1883805-1-jordan@brough.org>
+References: <20260930222650.1883805-1-jordan@brough.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Authority-Info-Out: v=2.4 cv=Np/cssdJ c=1 sm=1 tr=0 ts=6abd8cae
+X-Proofpoint-GUID: 1JzW8SxVsrhzLhK2bUEIofA0uZtQmlBa
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTMwMDA5MSBTYWx0ZWRfX+/Y7kgWVjlKx
+ dsXbx/FMs2RJyY84IVWTQ2XC8auR3FMKHcHsO6GQI9ViaW9B/gKG8VllXV33dtkOiEqLJruKcT0
+ 107faTjmrJ/M8Kj1JoEz2pFkf6i/00lIq/y48dSdsS/mQ+8UH0scgFO8HUxzyVllQ0qck+atAxW
+ oCM82X9lUBbAEGXt+C2nbVvZh9Sz3VYJsgQB++djFFi837T+JBmOHvuBxGWlpuOJRYwjJQb+XOP
+ bBTJuLyo+zOXrcITXNzj7Km6zUOXl4lPC0rltNtg1RMvJKtzz1MzXrFDu30vQLJI3IKGk79Gihf
+ FEMTaoG3CG9OLSeoK6suXNII6DxaPReRFVdj9uIgH3A94LNWBbAsPTTzgrsLr8=
+X-Authority-Info-Out: v=2.4 cv=P883RyAu c=1 sm=1 tr=0 ts=6abd8cb9
  cx=c_apl:c_pps:t_out a=oyWFxbOnq+dmhQrAPgaJYA==:117
- a=oyWFxbOnq+dmhQrAPgaJYA==:17 a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=gFGppuTrAAAA:8
- a=3KJn3nblrUCwOSVLmvsA:9 a=QEXdDO2ut3YA:10 a=_Y0xhhAoguY4gwfEQMhp:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTMwMDA5MSBTYWx0ZWRfX4kTtyWo45inW
- ZKuMuSqHwF0HMBtKGMuyS0k+gGO3i3p4jcBfyB+m0PS0KDuyd6oR2q3mhWJG0UAthNmXtVTC1dS
- Bxd1vx4tD1o+kYqg+3Tq3PTFbk79ysOLr2dixehCaosjBtemRQLtiAVDItKGE+KadahBrP+0hnZ
- u3hKBGrAi2ZFM0te26zh06oFafqYyBCVvLF74HBL6pXYN9oBZpIpkgUGA4CImn6irdww0JkLMlL
- tIvnJXz9UWCrjCyuGB1WzBBZ3mhGDZP9Y8pX5GyrMDjaENJIz66LKHG//LPafv76ltM1X1GC9gy
- +wrVgBllZufzmFSUVWqYkBdBfDUSwT/zsmCfTytYwdh/f3SMc4Jbj/dLabFu4s=
-X-Proofpoint-GUID: Ma3gpkMd9Du3364tovKf4jTfmQzGwxXq
-X-Proofpoint-ORIG-GUID: Ma3gpkMd9Du3364tovKf4jTfmQzGwxXq
-X-JNJ: AAAAAAABiS5yuYAq9u12fjzs8oQBYVjKUij4JSpuJom/DzWsqS5bePJkXTwavM57wDHNibPbIcti86nuffyH/zUyXoUpgz+zUsuGkXaZ7qVrLkISF0uNzM8PyzA2Q3L3+uvqA/QPCHIRk0GBRFSchrrIbcwWq26CYFt5aru9TjPMw5cKmMN0Twr4fbLZamK7uX4yEbRSucrJ8uYCvDFI9wrAYepj+Bt0Hcjlz5XhNy/hUrm5FEV+Uq7us129niXyKvshXyov6YV056wBipxhlfxFQnSZHDkpC4ODZTOstj0BupXQOgXd6uncck8mzmjbN9/FlYGWCsLUdlRM2HDCSp8IcH2bwr6VhKRZYw7ikCBPPLsIcN2V+RvcsisvK19MTjU9t/xYB8GUB3/e4TW+tQ4NNh2oAHbngtWZM7gG/5PBHNs5YuGjYnPHF7fHFAFo8wACSLIQzWiR2VeUq21FUHk2m7x68t5/SkNjVMFLcaBdQm8QbwmyJKG2LhSHPWkWr720frM0SdrQskPUR7r1YdMwIeDLVPZOWtEYpBMEiBK52yp4Z5t+FnpLTCK3eGksiro5h66wn/0YX9HoXDhJp7gmb8fQ4vaIuSDyYErGHKIx9PBuiSW3HbcfoEOdxamJbvMffEntUzkXAzriXlTwPOhKn6JOhy3trIfjC4pnJZMfM4dSHZxfO4CCPiOcYBwyQhLFGK6GfkQM8ukQ7Q9J3p533uq1GvTsI2MF3UFtfCk2mPn1XZWN8KgeraxKcr3eETqASRMX4lDp+013vs8zykp4MNtqwTScP0I+hkUKVgCgHEo2gusmyWgvpY71Vdyr3+NGt2Fdmly65wpn0ti1ePG0rZPWrfgw6BWNYAlx4qV1+Q7yEuKw7RhjzHuIzsWs742XGupdtQJbvy3dS0Hz+OJdRi2KI7Qy3DIzSuFbGutsl88l1TAoCMt43gJhfib5Yk21tyLTSLv6lIor3WNM6YLMtwWOH3c
- vTYhrNjUJLylUp2FOXHed+0aSMeEaJ5l9eVxUkWteXxlAACX8zM1GAxL6KPfo1IAfy4dMgdxX771dsMWrlN3Cxe2yeFyX2ci5yI5BJokyQU4raz5TzTmmUORGcmBhqeCZuHKsF0/ns2fkGxeXN/DieaxN/dugqghPifjFwakdlTm22q3fdXcSCrmYnybLqXJVfb7dBrPIIM1eggfyj0CctD9uBUs/lvHOcLXiEzLC9AJtD3nWjM8zOQ0uYTy0U1kfjjFoo/H5qiULCq6JAPluat92tB+DlBS9UqZBJQ8fFad1/K8TZeQBo+VGsTrGb9cDyIzMT0LopaTiOVSutta77bR51ZuBdnfLbWxYS3oAKMAIUuYHH3eESoI9eOuQB7XdhgmNrA/c8nobnOtyw1P1MNrjK6xyPvOTrZaOELo7hzxpgIYz8cc=
+ a=oyWFxbOnq+dmhQrAPgaJYA==:17 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=pGLkceISAAAA:8 a=gFGppuTrAAAA:8 a=2l61nVbx42uKPaCmiS4A:9
+ a=_Y0xhhAoguY4gwfEQMhp:22
+X-Proofpoint-ORIG-GUID: 1JzW8SxVsrhzLhK2bUEIofA0uZtQmlBa
+X-JNJ: AAAAAAABpI6Fj0b9DALEgh72JkHXR+U6I7SAg/myBpzJpPybmdubU8mFnIsS3xHVr+/9MtIxekBkoR5+UcTsboHht746MltXqgfq00E9jRgxTUYnz3099MmzwSbhRt2V/txqrXwHzZR9c6U55rfEqpNav8tWZqxbuQ51gBFBmCOdyuwhhkFn/est6t8tziXB8rCjuCLeMdKumYJa3CkWSjafmBrUI+umy8I0OT3cag6+B0QOgZ1IhlTDyIFSuE/Aq9dOsiFdGwTbMtdZ5VhIOOcmQH/lYJnS44KElCjdMnGTU4ih6b97BxfQL6u4Jakw7SU8DyXwB2DGxD4GKCXNlOvW1A+IDJbnM0JSg9nkrGdq71m5RH2t0tCOYZgI4nFxO7tZzREQQkGmMW2KQWJTPrls1GtQHICa3BArPqcRrE05887kQ+upveWP5TK2emRnlOQpvNRFmW2/TLW1yjYjkeBVBIKkrfXyQgoJHd9/G0WrzhdYOfGr04YTTzI70Mc38LyhrVeyxM/Xs+TZeUbLZjgZSQuezXv6u9NYXVPpZ+WeI5df4gi/iU/sr/zIdh9e1c1fc1c9/xfd5DsNXFIfSXXTh3zCRBXsu96eruzFzae0GN/pGUYbt91RrVScLEB45lOGD+5aP6plBSBAz9JoH6TryL7xMw/jfUJUDqZ7hOW4hU/w2/ske1v4rjBD/3XBO91uUYwSSTCbkk5ho29hRUKP0m8hxU7vVYHXYpGOWDqBNJHiK1JxnAbfy28Xm0gmc38kiV89Ucr0mX9jBhQaCjQPpVYbtBtvaqt0HZNG8sW6R70AOs1JXby8m1zSsJs4eXuAEmYGYmN5/LA7wYAdyb96
 
-This series adds charge_control_end_threshold to the applesmc driver for
-Intel MacBooks, using the power_supply extension API.
+Intel MacBooks keep the battery charge limit in the SMC key BCLM, and
+some also have BFCL, which sets the threshold for the MagSafe LED.
 
-Some of these machines have an SBS battery (drivers/acpi/sbs.c), which,
-unlike battery.c, has no battery hook mechanism. Patch 2 moves the hook code
-into a helper that both drivers use, and patch 3 adds the applesmc support.
-Patch 1 is the acpi_ prefix rename of the existing hook functions that Rafael
-asked for; it is separate because it touches 18 callers in other subsystems.
+Expose BCLM as charge_control_end_threshold through the power_supply
+extension API, attached to the battery with the ACPI battery hooks.
 
-The series is based on linux-pm's bleeding-edge branch (4c18627a1dfb). Patch
-3 depends on patch 2, so the series would need to go in through the ACPI
-tree with an ack from the hwmon side, or I can resend patch 3 once patches 1
-and 2 are in, whichever is easier.
+Below 100%, BFCL is set 3 points below BCLM so that the LED turns green
+before charging stops. On a MacBookAir6,2 the LED turns green about 0.75
+points above BFCL and charging stops about 0.25 points below BCLM, so
+this leaves about 2 points; other models were not measured. BFCL is only
+written if the SMC has the key, and a failure to write it is only logged.
 
-Changes in v3 (thanks to Rafael for the review):
-- Patch 1 is new: acpi_ prefix for the exported hook functions, with their
-  callers updated.
-- Patch 2:
-  - Renamed battery_hook.c to battery_hooks.c, built only when ACPI_BATTERY
-    or ACPI_SBS is, through a hidden ACPI_BATTERY_HOOKS symbol that both
-    select.
-  - Renamed the struct and the new functions as suggested, exported the new
-    functions in the ACPI_BATTERY_HOOKS namespace, used mutex guards and
-    updated the file header.
-  - battery_hook_exit() is gone, so hooks now stay registered across a
-    reload of battery.ko or sbs.ko.
-- Patch 3:
-  - BFCL is only written when the SMC has the key, and the BCLM write is read
-    back, at the suggestion of Michal Szpakowski, whose MacBookPro13,1 has no
-    BFCL.
-  - No BFCL margin at a limit of 100.
-  - The lower limit of 20 is conservative: 20 works and 10 is not accepted
-    on the hardware I tried, but I did not find the exact floor. I am happy
-    to change it.
-  - Dropped the applesmc_hooked_battery tracking and the mutex in
-    applesmc_bat_get_property().
-  - The hook is only registered when CONFIG_ACPI_BATTERY_HOOKS is reachable.
+The SMC ignores BCLM values it does not accept but still reports
+success, so read the value back and return -EINVAL if it was not applied.
 
-Testing:
-- MacBookAir6,2 (SBS battery), on an earlier revision: limits from 20 to 100
-  match the SMC keys, charging stops at the limit, repeated module reloads
-  caused no errors, and the threshold was unchanged after a suspend/resume.
-- MacBookPro13,1 (SBS battery, no BFCL), by Michal Szpakowski, before the
-  acpi_ rename: valid limits read back exactly, invalid ones are rejected,
-  applesmc reload and an acpi-sbs unbind/rebind re-attach the attribute, and
-  charging stops at the limit.
-- Lenovo ideapad FLEX 4-1480 (Control Method battery, ideapad_laptop), on
-  Fedora's 7.2.7 kernel with the series applied on top (a rebase of the
-  patches, not this exact tree): the ideapad_laptop hook registers and its
-  charge_types attribute appears on BAT1, charge_types can be read and
-  written back unchanged, 25 battery unbind/bind cycles re-attach it each
-  time, and unloading and reloading ideapad_laptop removes and re-adds it.
-  There were no warnings in dmesg. That kernel did not have lockdep
-  enabled.
-- Built and linked with ACPI_BATTERY and ACPI_SBS as y/m/n and applesmc as
-  y/m, and an x86 allmodconfig build of the touched files with W=1 shows no
-  warnings; each patch builds on its own.
-- Applies with git am on linux-pm bleeding-edge, and with git am --3way on
-  hwmon-next.
+Limits below 20 are rejected. 20 is known to work and 10 is not accepted
+by the SMC on the hardware tested; the exact floor in between was not
+determined.
 
-Link: https://lore.kernel.org/r/20260918175052.85461-1-jordan@brough.org [v2]
-Link: https://lore.kernel.org/r/20260913231410.416922-1-jordan@brough.org [v1]
+Serialize the writes with applesmc_bat_lock, and notify userspace of
+changes with power_supply_changed().
 
+Tested-by: Michal Szpakowski <michi.szpakowski@gmail.com>
+Signed-off-by: Jordan Brough <jordan@brough.org>
+---
+ drivers/hwmon/Kconfig    |   1 +
+ drivers/hwmon/applesmc.c | 146 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 147 insertions(+)
 
-Jordan Brough (3):
-  ACPI: battery: add acpi_ prefix to the battery hook API
-  ACPI: battery: add unified battery hook mechanism for ACPI and SBS
-    batteries
-  hwmon: (applesmc) add charge_control_end_threshold support
-
- drivers/acpi/Kconfig                         |   5 +
- drivers/acpi/Makefile                        |   1 +
- drivers/acpi/battery.c                       | 166 +------------------
- drivers/acpi/battery_hooks.c                 | 159 ++++++++++++++++++
- drivers/acpi/sbs.c                           |   8 +-
- drivers/hwmon/Kconfig                        |   1 +
- drivers/hwmon/applesmc.c                     | 146 ++++++++++++++++
- drivers/platform/x86/asus-wmi.c              |   4 +-
- drivers/platform/x86/ayaneo-ec.c             |   2 +-
- drivers/platform/x86/dell/dell-laptop.c      |   4 +-
- drivers/platform/x86/dell/dell-wmi-ddv.c     |   2 +-
- drivers/platform/x86/fujitsu-laptop.c        |   4 +-
- drivers/platform/x86/huawei-wmi.c            |   4 +-
- drivers/platform/x86/lenovo/ideapad-laptop.c |   4 +-
- drivers/platform/x86/lenovo/thinkpad_acpi.c  |   4 +-
- drivers/platform/x86/lenovo/wmi-other.c      |   4 +-
- drivers/platform/x86/lg-laptop.c             |   4 +-
- drivers/platform/x86/msi-ec.c                |   4 +-
- drivers/platform/x86/oxpec.c                 |   2 +-
- drivers/platform/x86/samsung-galaxybook.c    |   3 +-
- drivers/platform/x86/samsung-laptop.c        |   4 +-
- drivers/platform/x86/system76_acpi.c         |   4 +-
- drivers/platform/x86/toshiba_acpi.c          |   4 +-
- drivers/platform/x86/uniwill/uniwill-acpi.c  |   2 +-
- drivers/power/supply/cros_charge-control.c   |   2 +-
- include/acpi/battery.h                       |  16 +-
- 26 files changed, 367 insertions(+), 196 deletions(-)
- create mode 100644 drivers/acpi/battery_hooks.c
-
-
-base-commit: 4c18627a1dfbfe537580f831e60218644c94ce12
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index fecff8610ea8..d627b4cf11e5 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -380,6 +380,7 @@ config SENSORS_FAM15H_POWER
+ config SENSORS_APPLESMC
+ 	tristate "Apple SMC (Motion sensor, light sensor, keyboard backlight)"
+ 	depends on INPUT && X86
++	depends on POWER_SUPPLY || POWER_SUPPLY=n
+ 	select NEW_LEDS
+ 	select LEDS_CLASS
+ 	help
+diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+index d0baa10502f7..b6d9ca302730 100644
+--- a/drivers/hwmon/applesmc.c
++++ b/drivers/hwmon/applesmc.c
+@@ -33,6 +33,8 @@
+ #include <linux/workqueue.h>
+ #include <linux/err.h>
+ #include <linux/bits.h>
++#include <linux/power_supply.h>
++#include <acpi/battery.h>
+ #include <asm/barrier.h>
+ 
+ /* data port used by Apple SMC */
+@@ -76,6 +78,20 @@
+ 
+ #define TEMP_SENSOR_TYPE	"sp78"
+ 
++/*
++ * BCLM caps charging at a percentage. BFCL only sets when the charging LED
++ * switches from orange to green.
++ */
++#define BATTERY_CHARGE_LIMIT_KEY	"BCLM" /* r/w ui8 */
++#define BATTERY_CHARGE_LIMIT_LED_KEY	"BFCL" /* r/w ui8 */
++
++/*
++ * Points kept between BCLM and BFCL so the LED turns green before charging
++ * stops. Measured on a MacBookAir6,2, where a margin of 1 only just ties;
++ * 3 leaves headroom for other models.
++ */
++#define APPLESMC_BATTERY_CHARGE_LIMIT_LED_MARGIN 3
++
+ /* List of keys used to read/write fan speeds */
+ static const char *const fan_speed_fmt[] = {
+ 	"F%dAc",		/* actual speed */
+@@ -131,6 +147,8 @@ static struct applesmc_registers {
+ 	int num_light_sensors;		/* number of light sensors */
+ 	bool has_accelerometer;		/* has motion sensor */
+ 	bool has_key_backlight;		/* has keyboard backlight */
++	bool has_battery_charge_limit;	/* has BCLM battery charge limit */
++	bool has_battery_charge_limit_led; /* has BFCL MagSafe LED charge limit */
+ 	bool init_complete;		/* true when fully initialized */
+ 	struct applesmc_entry *cache;	/* cached key entries */
+ 	const char **index;		/* temperature key index */
+@@ -633,6 +651,12 @@ static int applesmc_init_smcreg_try(void)
+ 	if (ret)
+ 		return ret;
+ 	ret = applesmc_has_key(BACKLIGHT_KEY, &s->has_key_backlight);
++	if (ret)
++		return ret;
++	ret = applesmc_has_key(BATTERY_CHARGE_LIMIT_KEY, &s->has_battery_charge_limit);
++	if (ret)
++		return ret;
++	ret = applesmc_has_key(BATTERY_CHARGE_LIMIT_LED_KEY, &s->has_battery_charge_limit_led);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -724,6 +748,120 @@ static struct platform_driver applesmc_driver = {
+ 	},
+ };
+ 
++static DEFINE_MUTEX(applesmc_bat_lock);
++
++static int applesmc_bat_get_property(struct power_supply *psy,
++				     const struct power_supply_ext *ext,
++				     void *data,
++				     enum power_supply_property psp,
++				     union power_supply_propval *val)
++{
++	u8 limit;
++	int ret;
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
++		scoped_guard(mutex, &applesmc_bat_lock)
++			ret = applesmc_read_key(BATTERY_CHARGE_LIMIT_KEY, &limit, 1);
++		if (ret)
++			return ret;
++		val->intval = limit;
++		return 0;
++	default:
++		return -EINVAL;
++	}
++}
++
++static int applesmc_bat_set_property(struct power_supply *psy,
++				     const struct power_supply_ext *ext,
++				     void *data,
++				     enum power_supply_property psp,
++				     const union power_supply_propval *val)
++{
++	u8 limit, led_limit, readback;
++	int ret;
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
++		/* 20 is known to work and 10 is not accepted; the floor is unknown. */
++		if (val->intval < 20 || val->intval > 100)
++			return -EINVAL;
++
++		limit = val->intval;
++		/* At 100% charging is never cut short, so no margin is needed. */
++		led_limit = limit < 100 ?
++			limit - APPLESMC_BATTERY_CHARGE_LIMIT_LED_MARGIN : limit;
++
++		scoped_guard(mutex, &applesmc_bat_lock) {
++			ret = applesmc_write_key(BATTERY_CHARGE_LIMIT_KEY, &limit, 1);
++			if (ret)
++				return ret;
++
++			/*
++			 * The SMC silently ignores values it does not accept and
++			 * still reports success, so read the limit back.
++			 */
++			ret = applesmc_read_key(BATTERY_CHARGE_LIMIT_KEY, &readback, 1);
++			if (ret)
++				return ret;
++			if (readback != limit)
++				return -EINVAL;
++
++			if (smcreg.has_battery_charge_limit_led) {
++				ret = applesmc_write_key(BATTERY_CHARGE_LIMIT_LED_KEY,
++							 &led_limit, 1);
++				/* BCLM is already applied, so this is not an error. */
++				if (ret)
++					pr_warn("failed to update MagSafe LED threshold (BFCL): %d\n",
++						ret);
++			}
++		}
++
++		power_supply_changed(psy);
++		return 0;
++	default:
++		return -EINVAL;
++	}
++}
++
++static int applesmc_bat_property_is_writeable(struct power_supply *psy,
++					      const struct power_supply_ext *ext,
++					      void *data,
++					      enum power_supply_property psp)
++{
++	return psp == POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD;
++}
++
++static const enum power_supply_property applesmc_bat_props[] = {
++	POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD,
++};
++
++static const struct power_supply_ext applesmc_bat_ext = {
++	.name			= "applesmc-charge-control",
++	.properties		= applesmc_bat_props,
++	.num_properties		= ARRAY_SIZE(applesmc_bat_props),
++	.get_property		= applesmc_bat_get_property,
++	.set_property		= applesmc_bat_set_property,
++	.property_is_writeable	= applesmc_bat_property_is_writeable,
++};
++
++static int applesmc_bat_add(struct power_supply *battery, struct acpi_battery_hook *hook)
++{
++	return power_supply_register_extension(battery, &applesmc_bat_ext, &pdev->dev, NULL);
++}
++
++static int applesmc_bat_remove(struct power_supply *battery, struct acpi_battery_hook *hook)
++{
++	power_supply_unregister_extension(battery, &applesmc_bat_ext);
++	return 0;
++}
++
++static struct acpi_battery_hook applesmc_bat_hook = {
++	.name = "Apple SMC Battery Charge Control",
++	.add_battery = applesmc_bat_add,
++	.remove_battery = applesmc_bat_remove,
++};
++
+ /*
+  * applesmc_calibrate - Set our "resting" values.  Callers must
+  * hold applesmc_lock.
+@@ -1563,6 +1701,10 @@ static int __init applesmc_init(void)
+ 		goto out_light_ledclass;
+ 	}
+ 
++	if (smcreg.has_battery_charge_limit &&
++	    IS_REACHABLE(CONFIG_ACPI_BATTERY_HOOKS))
++		acpi_battery_hook_register(&applesmc_bat_hook);
++
+ 	return 0;
+ 
+ out_light_ledclass:
+@@ -1589,6 +1731,10 @@ static int __init applesmc_init(void)
+ 
+ static void __exit applesmc_exit(void)
+ {
++	if (smcreg.has_battery_charge_limit &&
++	    IS_REACHABLE(CONFIG_ACPI_BATTERY_HOOKS))
++		acpi_battery_hook_unregister(&applesmc_bat_hook);
++
+ 	hwmon_device_unregister(hwmon_dev);
+ 	applesmc_release_key_backlight();
+ 	applesmc_release_light_sensor();
 -- 
 2.56.0
 
