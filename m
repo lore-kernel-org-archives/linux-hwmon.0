@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E97363C6C;
-	Thu,  1 Oct 2026 07:32:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA8A830D40D;
+	Thu,  1 Oct 2026 07:34:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790839974; cv=none; b=GM9uTs1ZPMHzzZbm0oO/L/1T6BLMSJlYl/yETNRhfskE8KjoeofIA010kwosLyPWg75aN/H0CGN/8WiCk8gi9URF5dU2QxB4uQWTs0y1fo8Be6n+XCa+t85OmqZ9PANu6frL6t2wVmDyXjz/uT6kJ13cfhp0+Ql7SomhguA+VAk=
+	t=1790840100; cv=none; b=THDo1tjqnV2LqdtpQwANRg1bI5Uvx96NRlMrAtlymxuar+owCle4Q47gTPrghjgOFFPU0yTYk1A5YZvPVqaUdQQF2WHBIPk9uJILaYQB6O3IuXfyv6Koz5qwP/3nxWbaiWEj84YCKx870UDezgwkr+B0szsANQDrnBavzE3Be/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790839974; c=relaxed/simple;
-	bh=TCM++s8DCwUBjlIC4pb1fHch0v1ZYV8nFTo8IIvDXZA=;
+	s=arc-20240116; t=1790840100; c=relaxed/simple;
+	bh=vbQJhBQK5KRmYCV/Xkf2OycTIMPq7PmN/MrAVWrOwng=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=JFfWzFeyDiYoaUy4gF1ciguD7wHOlHKnR4djjPM3itGGFgpnUBCJFb8EIC+wNdgbDIligqqjPdaxem3i1YxJvXuL/fVtMRyDZmsERv+Fr84cEKGeIDwGPjLfOzWPaV449jVIRGsKwbC8XXdDOQWNpflIs6n+bMBKxcPk6rPDMWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KbK2lw9c; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=bV4F8qXsrFV7B4PwwcwMXQbsOYyhS353B09ZROvp+1Hw2f/+O3NKvis9C93MI6hbp/n6OMLhJmBZ2GTGubLlhYMDu5D5n+ywIovc9r1CHWVCw3vhoHdmGt1PWhu+QnT2I/t3HgAb3+yXe/cg6Un9czgUX7idIlL/6obhkINN5q8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CUPdlrep; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KbK2lw9c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 403CF1F000FF;
-	Thu,  1 Oct 2026 07:32:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CUPdlrep"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 065391F000FF;
+	Thu,  1 Oct 2026 07:34:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790839972;
-	bh=2+rb7f30T/hSmCdoiWdzCSDXh0O9v5ikZWEzWhUGJ8U=;
+	s=k20260515; t=1790840099;
+	bh=VCVkmQZTcnlhXIOhqzJ3LC8unNpYlTLj55ncJ4UqF8g=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=KbK2lw9c3iDWm2H6SLC1cJ/Lec/yEVhepysxZi1PlSxJ0uQbY+FUxPQ5Wl9UngSfO
-	 4g+cCjEGxftzWUtnqpZqWqWmTNChmANHK188ZohP+elQlCVVK47icLRn9c2uUyMsPG
-	 1GgnVBD9Ls3WdzMgnnIvT9yGsXax9MDHzVqjwlrHJee7MPXSqnpk8pIOo2O5NsE8rz
-	 9LGjmUqre/Ex5bVanM8HGeoUBltFHDf6eK+BSe+6Elp69SYay+XeRhYRHYHC3eC3HC
-	 Y0YQA1lAiZHLaMsY0a9TAbY2/Fo4mokX+Wfe1An/ZFVVBKtdTxTqvtl3tYoqUz77lc
-	 fTAHcP6hH627g==
+	b=CUPdlreprVk0bQwBxoziDFAbvWxNOG5WiVpaPssIpr1Z/k+0VXi+Vmqo5Wgu23Aac
+	 lHC9G0XsucAKX2wHiTMt1naVzXUQHDeVCghudDa/K71RZTCLAy7vJHYqqBPYo8rbYn
+	 MBXjNbOi+V2/r8PROajY+17Bra0+v9jdnRBCMxUDKF3Ca6e2AdWYEUUa0LnkjmzwSO
+	 1w2kPD8BgqGbmIjC78XeabruVvd0Y681Hp5NhadWJFFLoHJdp+JilRVk1uLrWWs+tk
+	 Bp3suAFE91Zp3SXa2ByKNhQ66o18SkTFGvlsTsYRreUjZrXIsLwEUWwshljmMjA+5B
+	 7tj6D+tFBQU1Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: pmbus: mps,mpq8785: add
- #thermal-sensor-cells
+Subject: Re: [PATCH v2 1/2] hwmon: (pmbus/core) Register the thermal sensors
+ with a 0-based index
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Vincent Jardin" <vjardin@free.fr>
-Cc: devicetree@vger.kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org
-In-Reply-To: <20261001-for-upstream-dt-mpq8785-thermal-sensor-cells-v2-2-07d368dcc662@free.fr>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org
+In-Reply-To: <20261001-for-upstream-dt-mpq8785-thermal-sensor-cells-v2-1-07d368dcc662@free.fr>
 References: <20261001-for-upstream-dt-mpq8785-thermal-sensor-cells-v2-0-07d368dcc662@free.fr>
- <20261001-for-upstream-dt-mpq8785-thermal-sensor-cells-v2-2-07d368dcc662@free.fr>
+ <20261001-for-upstream-dt-mpq8785-thermal-sensor-cells-v2-1-07d368dcc662@free.fr>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 01 Oct 2026 07:32:51 +0000
-Message-Id: <20261001073252.403CF1F000FF@smtp.kernel.org>
+Date: Thu, 01 Oct 2026 07:34:58 +0000
+Message-Id: <20261001073459.065391F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -50,23 +50,25 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 > Since commit
 >   3aa74796cfd0 ("hwmon: (pmbus) Register with thermal for PSC_TEMPERATURE=
 ")
-> the PMBus core calls devm_thermal_of_zone_register() for every
-> temperature input, so the devices of this binding can be referenced as
-> thermal sensors.
+> pmbus_core registers each temperature input with the thermal core using
+> its hwmon index as the sensor id. That index starts at 1, so temp1 is
+> registered as sensor 1.
 >=20
-> By code review, it should work for the MPQ and MPM device bindings.
-> They register a single page with PMBUS_HAVE_TEMP through
-> pmbus_do_probe(), it means that one device has one
-> temperature input, temp1.
+> The thermal core expects a 0-based id, which is what the hwmon core
+> passes for the drivers that set HWMON_C_REGISTER_TZ:
+> thermal_of matches a thermal-sensors phandle without cells as id 0, so a
+> PMBus device with a single temperature input cannot
+> use #thermal-sensor-cells =3D <0>.
 >=20
-> The PMBus core registers the first temperature input as sensor 0, so no
-> cell is needed.
->=20
+> Cc: stable+noautosel@kernel.org # changes the DT-visible sensor id, no in=
+-tree user
+> Fixes: 3aa74796cfd0 ("hwmon: (pmbus) Register with thermal for PSC_TEMPER=
+ATURE")
 > Signed-off-by: Vincent Jardin <vjardin@free.fr>
 
 Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261001-for-upstre=
-am-dt-mpq8785-thermal-sensor-cells-v2-0-07d368dcc662@free.fr?part=3D2
+am-dt-mpq8785-thermal-sensor-cells-v2-0-07d368dcc662@free.fr?part=3D1
 
