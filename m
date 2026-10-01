@@ -1,109 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B83084921B3;
-	Thu,  1 Oct 2026 07:28:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 647AD3C063A
+	for <linux-hwmon@vger.kernel.org>; Thu,  1 Oct 2026 07:29:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790839715; cv=none; b=jzQjh0h/lEcY+Hm39xS5oLV4qr77Yzq8suHAg40We73H8OpNj7b2HwgZyTG8jjlCRa53aG9ScXRg+wXU/sFwo8nuw0RJ7ZEBKQh/mgghDpfVr3rYhPuCN7/h7+iqQYPiIVHoCOrO6WpeM6aYnNZrHFy4bAOvKp9C5Q94orE7ApU=
+	t=1790839797; cv=none; b=NixWKeUBDngVeD/CUftIJ9ex3n8XYWSsARPeC2ScskNxH9Y6TqqRUwAlcTbehzXOf1I2s4tQYuTWRQzM5+HMdk2J9RQYJYz3w5AKL9DSfHaLvKkdH+bVjmZaG50oZAqlr8h1phWcAmX0+xgPXOw8GqZnnu4auJ8hFHnhbNfh6uw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790839715; c=relaxed/simple;
-	bh=fnkw+GF/J35hw3r+1vkzRsr1snb5UGGguV8teybYY48=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ezFvTNnJXqHaWdwBqUhut3wcOjpomPVL0AiS4LnnXnd+BeN3oj3NbECeFLR9UYUYur9oGF91aU6PFSVvoyiiz77Iy9aoiWdEscuo+y3DlfaLCE1yQuqYHujoWzwQxmgxpAQ5M4V1jpedxSipkbFIWidA0IRv+JDuEVs1Y0pl27M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hz62UEvp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1790839797; c=relaxed/simple;
+	bh=lpXg5QtAI4gtqTYddyv2V+COTh6mSwYtWhaPIdw0ZNU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OQqyO9emneCjC0ga4mtwn2dXdx8BOQCUSS2DHBcTiT/puTzAmQf7Lqn0C7d0GfU3Ne7NqWFMYh14NLfpnQahPCRmmADqW4XtaCylMDhkUv9AUfpYUsqglauEKQjpURZFx+n6fBeLnPQMYVHzUfE/++3ubQNHzWERQ7l8fPjdfQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=qTK6rbvN; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hz62UEvp"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 30FFFC2BCF4;
-	Thu,  1 Oct 2026 07:28:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1790839714;
-	bh=fnkw+GF/J35hw3r+1vkzRsr1snb5UGGguV8teybYY48=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=hz62UEvpiCfjpz97stp/2jykdxF7Hv8BS4Rr57tRgbEkube/qjVX1ZYa74b1M9ITc
-	 JwKaOZK9BvhlQ0S2rQOghrkv8Si8TlDSS3eNETEvaowrIVbxR2UKHw6HSeQJSCg0He
-	 OZ5lxMEfCBiqZj/H9uXkYdgFIhCP2IGipyCQQGEAZ8UvkH4fNQK3Z0ZHqMtNoJgXXn
-	 CCJSlmd0Gyl74DUOvdHpDYqQuop1AYfi1cBxIZdWr+nqyVbqwnAYtNaBjUEJaBwYZP
-	 hMpxnnD6G8mV/qWVeXnir8YFZqr3n/SVhM3zEOJP8SEw2m5lxPFzbgcHiEcumCtvhb
-	 AlkBKUSVyQ8eg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09BD7CA5FA5;
-	Thu,  1 Oct 2026 07:28:34 +0000 (UTC)
-From: Vincent Jardin via B4 Relay <devnull+vjardin.free.fr@kernel.org>
-Subject: [PATCH v2 0/2] hwmon: pmbus: 0-based thermal sensor index,
- mps,mpq8785 #thermal-sensor-cells
-Date: Thu, 01 Oct 2026 09:28:21 +0200
-Message-Id: <20261001-for-upstream-dt-mpq8785-thermal-sensor-cells-v2-0-07d368dcc662@free.fr>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="qTK6rbvN"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id C9B584E410EC;
+	Thu,  1 Oct 2026 07:29:50 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 9BFE660341;
+	Thu,  1 Oct 2026 07:29:50 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 264CD1032946E;
+	Thu,  1 Oct 2026 09:29:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1790839790; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=+6SFI7PvjPIbCS2CVlqilXNKDCO3yQ0/tGuHkrFJY6c=;
+	b=qTK6rbvNn5u2KxR8FpnWF8LHdcAfDc6q1kJH5iOPnRVDXirjOamnnGL+W96SW9xdF6FsxC
+	S3lUFQaRfGyoc+fZ9knyLSyeBavyVAyrckBlz+riIPrFUw+xeFNo253kjKz5RZDS0FktDQ
+	wGXZTyzt6K3l50u1BVjyanvi1D0nhprxH41yotf8k88FfckGMKn3jk+LR9VNwAPkSQRKE+
+	aGpQvtA0PD7KCv+nhdH3p9DzYjN6k5Pr87mIYBouEgRiXcbmnE3SeYTGVm78RojcgD6vVF
+	ccGIAzNppP+AxEKqj6TholmLkFYIJYGEJcHZmMhamEeL/n4k/Ez5QfvxmuQKDg==
+Date: Thu, 1 Oct 2026 09:29:48 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: Eric Liu <liuer@nvidia.com>, linux-rtc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] rtc: nct3018y: report chassis intrusion through hwmon
+Message-ID: <20261001072948351dc257@mail.local>
+References: <20261001054108.3346426-1-liuer@nvidia.com>
+ <20261001054821.AEF6E1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJULvmoC/52NTQ6CMBBGr2Jm7ZgCtkVX3sOwaMpUmvDnTCUaw
- t2tHMHl+/LlvRWEOJLA9bAC0xIlTmOG8ngA37nxQRjbzFCq0qhLpTBMjK9ZEpMbsE04zM/a1hp
- TRzy4HoVGyRdPfS/orQ3OtE6flYGsnJlCfO+5e5O5i5Im/uz1pfitf4aWAgs02lbeGk0U6ltgo
- lNgaLZt+wIrI/7N5gAAAA==
-To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Charles Hsu <ythsu0511@gmail.com>, 
- Eduardo Valentin <eduval@amazon.com>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Vincent Jardin <vjardin@free.fr>, 
- stable+noautosel@kernel.org
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1790839710; l=1592;
- i=vjardin@free.fr; s=20260525; h=from:subject:message-id;
- bh=fnkw+GF/J35hw3r+1vkzRsr1snb5UGGguV8teybYY48=;
- b=FmoTpu7IVAFu9zOx+03ETWgBzk239thQMC9+HKq6GWg3wexsOK/Xv89dEIjNaLMZWlvlyNN9v
- OAo4xaOS5m0AK82vN2i9sAckVt4/3t/crwhLSv/HvvNrqydE78+3kES
-X-Developer-Key: i=vjardin@free.fr; a=ed25519;
- pk=hppgLeFpGpKOi7LNwGEZ4jOYofJCoGd4Jf1ltAabiLw=
-X-Endpoint-Received: by B4 Relay for vjardin@free.fr/20260525 with
- auth_id=871
-X-Original-From: Vincent Jardin <vjardin@free.fr>
-Reply-To: vjardin@free.fr
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261001054821.AEF6E1F000FF@smtp.kernel.org>
+X-Last-TLS-Session-Version: TLSv1.3
 
-The PMBus core registers its temperature inputs with the thermal core
-from index 1, while the thermal core expects a 0-based index.
+On 01/10/2026 05:48:21+0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] rtc: nct3018y: hwmon device registration violates layering guidelines
+> --
+> 
+> commit 12bf4b0b27866f7565ebcc7b10db8faf4943fb10
+> Author: Eric Liu <liuer@nvidia.com>
+> 
+> rtc: nct3018y: report chassis intrusion through hwmon
+> 
+> This patch adds an hwmon intrusion alarm for the chip's chassis intrusion
+> latch. Reading it says whether the chassis has been opened since the latch was
+> last cleared; writing 0 clears it and re-arms.
+> 
+> > diff --git a/drivers/rtc/rtc-nct3018y.c b/drivers/rtc/rtc-nct3018y.c
+> > index 2f7ad57057a4b..194ba077363aa 100644
+> > --- a/drivers/rtc/rtc-nct3018y.c
+> > +++ b/drivers/rtc/rtc-nct3018y.c
+> 
+> [ ... ]
+> 
+> > @@ -491,6 +494,95 @@ static const struct rtc_class_ops nct3018y_rtc_ops = {
+> >  	.ioctl		= nct3018y_ioctl,
+> >  };
+> >  
+> > +#if IS_REACHABLE(CONFIG_HWMON)
+> 
+> [ ... ]
+> 
+> > +static void nct3018y_hwmon_register(struct nct3018y *nct3018y)
+> > +{
+> > +	struct device *dev;
+> > +
+> > +	dev = devm_hwmon_device_register_with_info(&nct3018y->client->dev,
+> > +						   "nct3018y", nct3018y,
+> > +						   &nct3018y_hwmon_chip_info,
+> > +						   NULL);
+> [Severity: Medium]
+> Does this violate the hardware monitoring subsystem architecture rules?
+> 
+> Registering a hardware monitoring device directly from within
+> nct3018y_hwmon_register() in drivers/rtc/rtc-nct3018y.c bypasses hwmon
+> maintainer review and pollutes the RTC driver with secondary hardware
+> monitoring code.
+> 
+> Could this hwmon functionality be decoupled via an auxiliary device driver
+> located in the hwmon subsystem directory instead?
 
-Patch 1 fixes it, as Guenter commente on v1 [1].
+While this is not an issue to register the hwmon driver from rtc, this
+still needs a review from the hwmon maintainers.
 
-Patch 2 is the v1 binding change, now with #thermal-sensor-cells = <0>.
+> 
+> > +	if (IS_ERR(dev))
+> > +		dev_warn(&nct3018y->client->dev,
+> > +			 "unable to register hwmon device %ld\n", PTR_ERR(dev));
+> > +}
+> 
+> -- 
+> Sashiko AI review · https://sashiko.dev/#/patchset/20261001054108.3346426-1-liuer@nvidia.com?part=1
 
-[1] https://lore.kernel.org/r/37298c5b-aa6b-473a-8e22-d29ddec12c04@roeck-us.net
-
-To: Guenter Roeck <linux@roeck-us.net>
-To: Rob Herring <robh@kernel.org>
-To: Krzysztof Kozlowski <krzk+dt@kernel.org>
-To: Conor Dooley <conor+dt@kernel.org>
-To: Charles Hsu <ythsu0511@gmail.com>
-To: Eduardo Valentin <eduval@amazon.com>
-Cc: linux-hwmon@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Vincent Jardin <vjardin@free.fr>
-
-Changes in v2:
-- New patch 1: register the PMBus thermal sensors with a 0-based index (Sashiko, Guenter)
-- Patch 2: #thermal-sensor-cells const: 0 instead of 1
-- Link to v1: https://lore.kernel.org/r/20260930-for-upstream-dt-mpq8785-thermal-sensor-cells-v1-1-6573c765eef8@free.fr
-
----
-Vincent Jardin (2):
-      hwmon: (pmbus/core) Register the thermal sensors with a 0-based index
-      dt-bindings: hwmon: pmbus: mps,mpq8785: add #thermal-sensor-cells
-
- Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml | 3 +++
- drivers/hwmon/pmbus/pmbus_core.c                               | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
----
-base-commit: 4781ca52761e666cf18b591e6bb0478396c90320
-change-id: 20260930-for-upstream-dt-mpq8785-thermal-sensor-cells-c77fa6da5406
-
-Best regards,
 -- 
-Vincent Jardin <vjardin@free.fr>
-
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
