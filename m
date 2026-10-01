@@ -1,34 +1,38 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B91628CF4A;
-	Thu,  1 Oct 2026 19:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DA7240927A;
+	Thu,  1 Oct 2026 21:43:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.27.42.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790882380; cv=none; b=R+b0iq8OAUDPvqnvaPAltq8Y9xp682ObpU2btNTMye73bwc5Nk5R3UtCBdSEMktr5jp5Hex7YfrhKtZXyHM3+boqaXRfjNSojbbacwr0BJFjjXrZLKXLrfAHB5ObCBNR8PEOpX/oznasA6kYxhJBBwM9RA1AYQQGTQrkL0H5u9I=
+	t=1790891029; cv=none; b=u6j/me17til5CtPCt+aT3Uy6BW4S5KHqgDcIcKloVHU0qxAylIhY332fQ3n9mzG9oBc/NzH8Exnw+lDFY2RQglxYL6MB8RkUKqGD9CUswwDDTK5U8nqfoirg7e4w29aDh6o5g0Oefic/oWIvtdnhekOtx3xAUaLjC2M11ej1e6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790882380; c=relaxed/simple;
-	bh=NDVKO6z9ae8s39Np4wTUcUClLpjM3RJffgYHo+1t3KM=;
+	s=arc-20240116; t=1790891029; c=relaxed/simple;
+	bh=Zy5DgYfKJ2Jvbz3nfTQhgnKyY+5AE4qgyM0EigO3rm8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qyoyFlUgnnT4mfj7U/rPYCNfE9Vht1epNly+Ka3gXkORQVZVQ9X3wPYN9uMYUdUCAnEJTyx4+B6GDBc3HbFB5SWHL5blw4zzgpNz6YaBMSXVypLCMgRKcJ74WACfjbfFIlEll6m6kMIKSX19dOFpwVmZJUkp5nSBk236c+9/0KU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YBidyppM; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=TKarec3DvXBnoJHpwZyQCnU9Fte/bdBPI3MzjcWhScFPr5u0m3+80d+7jAVBTOwOz3d9YanlwWcXMewem8pRB1ew7wrPZQY8uDN25qdRzknMzNKRdV7g/JaMgXQPmBs0+0/t5CmO4eZCP0mpR4g/1M8skTp6YnRf+Aeofv+l/dA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=free.fr; spf=pass smtp.mailfrom=free.fr; dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b=VRzvYwnB; arc=none smtp.client-ip=212.27.42.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=free.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=free.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YBidyppM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 253F51F000FF;
-	Thu,  1 Oct 2026 19:19:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790882379;
-	bh=CT8yQ3Gq2o7+FTXBC0DvPFaCUnOHHEBD5RX9jtK/6Fk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=YBidyppM5Naw9H2O4p+I1wOaB6wx4ulIhhJLxAVqPFWPCFTQJe2CEOqyBRNJm0Hn9
-	 WoG9Lo79dbQ4bWJ4XGLSSblFFfydY9b+YR9a5Fs9uEjPC2fFz8t1n9fnHV1jqw7FAF
-	 +SgiI4bwBahPwIlRHu8Ux2TNIk84vtflwTtBiDXI9CavMgvw7IQ9hpMCJP7tWdM07O
-	 3v969NtjhiOA+IPDjbui4ZvfVrvwQO2E7ZrezNL7SKvLbL28Wp6KbAMXYKfmKsIKxi
-	 NxduCYn8b4uhNqe5AvevMVBuDpYICWeEruf6QpR8PdRXYXlwWYWGT3h7V0kA/xhlby
-	 q8zTGjCHYXZiA==
-Date: Thu, 1 Oct 2026 20:19:35 +0100
-From: Conor Dooley <conor@kernel.org>
-To: vjardin@free.fr
+	dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b="VRzvYwnB"
+Received: from L30177.local (unknown [IPv6:2a01:e0a:ac2:22b0:4527:74e2:2212:f171])
+	(Authenticated sender: vjardin@free.fr)
+	by smtp6-g21.free.fr (Postfix) with ESMTPSA id 95136780331;
+	Thu,  1 Oct 2026 23:43:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+	s=smtp-20201208; t=1790891017;
+	bh=Zy5DgYfKJ2Jvbz3nfTQhgnKyY+5AE4qgyM0EigO3rm8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VRzvYwnBWyOC8npDt2yJ6xqN3dLliujSUshcwjEhONV5GUb24lV2jZHSXh8RkhIMH
+	 rNDAfwXL620ADzTmEwlEAQJRuU5EvScSxBm46VxfoN40cicS3+ivpP1S+5/c3KpGAk
+	 KH2pSG8wWopMiDI/9fqwXwMHYC+mntd4NIUxtGeXRj6IaYSuJjbb/jkLfAaG4TP6Dh
+	 l4FKqxCp41CLJUfvgZNTJ5KMgyM7YwgftbRIwTrOwq/HXgsDQPbSFT8AMLXUFv6/Zg
+	 WrJhLbQ5aCRR2g4LVe/1dUgga5+AlwKyPAtKBplMSCvgth5NZPkFLaAdESE8sFEBhJ
+	 SKtIr2RpJKHvw==
+Date: Thu, 1 Oct 2026 23:43:26 +0200
+From: Vincent Jardin <vjardin@free.fr>
+To: Conor Dooley <conor@kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
@@ -37,94 +41,34 @@ Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: pmbus: mps,mpq8785: add
  #thermal-sensor-cells
-Message-ID: <20261001-hash-husband-663954aed7b0@spud>
+Message-ID: <ar7T_u5RPVLc_MVh@L30177.local>
 References: <20261001-for-upstream-dt-mpq8785-thermal-sensor-cells-v2-0-07d368dcc662@free.fr>
  <20261001-for-upstream-dt-mpq8785-thermal-sensor-cells-v2-2-07d368dcc662@free.fr>
+ <20261001-hash-husband-663954aed7b0@spud>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="27EFFU1PLM87yezZ"
-Content-Disposition: inline
-In-Reply-To: <20261001-for-upstream-dt-mpq8785-thermal-sensor-cells-v2-2-07d368dcc662@free.fr>
-
---27EFFU1PLM87yezZ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20261001-hash-husband-663954aed7b0@spud>
 
-On Thu, Oct 01, 2026 at 09:28:23AM +0200, Vincent Jardin via B4 Relay wrote:
-> From: Vincent Jardin <vjardin@free.fr>
->=20
-> Since commit
->   3aa74796cfd0 ("hwmon: (pmbus) Register with thermal for PSC_TEMPERATURE=
-")
-> the PMBus core calls devm_thermal_of_zone_register() for every
-> temperature input, so the devices of this binding can be referenced as
-> thermal sensors.
+Hi Conor,
 
-Commit messages for bindings should reference hardware in their
-justification, not what a particular OS has decided to do.
+> I don't understand this, if it has multiple sensors, each could be
+> referenced by something and it would need cells. It only has single
+> input, then that's the justification that needs to be provided here.
+> What software does, especially in generic code, should not be used to
+> justify a binding change.
+> 
+> I checked the devices supported by the mpq8785 driver and none of them
+> actually appear to have temperature inputs at all?
 
-> By code review, it should work for the MPQ and MPM device bindings.
-> They register a single page with PMBUS_HAVE_TEMP through
-> pmbus_do_probe(), it means that one device has one
-> temperature input, temp1.
->=20
-> The PMBus core registers the first temperature input as sensor 0, so no
-> cell is needed.
+Right, none of them has a temperature input pin: the sensor is
+internal, not an input. Each device measures the temperature of its
+own die.
 
-I don't understand this, if it has multiple sensors, each could be
-referenced by something and it would need cells. It only has single
-input, then that's the justification that needs to be provided here.
-What software does, especially in generic code, should not be used to
-justify a binding change.
-
-I checked the devices supported by the mpq8785 driver and none of them
-actually appear to have temperature inputs at all?
-
-Confused,
-Conor.
-
->=20
-> Signed-off-by: Vincent Jardin <vjardin@free.fr>
-> ---
->  Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.ya=
-ml b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
-> index d7a32fb3b7af..6257a8030e53 100644
-> --- a/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
-> @@ -34,6 +34,9 @@ properties:
->      maximum: 4095
->      default: 706
-> =20
-> +  "#thermal-sensor-cells":
-> +    const: 0
-> +
->  required:
->    - compatible
->    - reg
->=20
-> --=20
-> 2.43.0
->=20
->=20
-
---27EFFU1PLM87yezZ
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCar6yRwAKCRB4tDGHoIJi
-0tFWAP9NCfnJfQks8j8h71AR4gvQ3pJaOoPWq1XLe9VWquTr9gEAwFKxEjf5sjMx
-yVJ3ergXkjeiFGuAnh9L4PKWLCzWyQc=
-=nZTq
------END PGP SIGNATURE-----
-
---27EFFU1PLM87yezZ--
+I hope it avoids the confusion, I'll update the commit log,
+  Vincent
