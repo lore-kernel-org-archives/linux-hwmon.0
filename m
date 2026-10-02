@@ -1,37 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F26FF30C147;
-	Thu,  1 Oct 2026 21:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7C245C6FB
+	for <linux-hwmon@vger.kernel.org>; Fri,  2 Oct 2026 08:32:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790891896; cv=none; b=UewQWtSifS72i8TB927V5t2Y2LsipdmtpV+kuGBO0oIz7XvVxqMuuqBw2/qysFM9QJRQYULDcAlUypDPfKXv0SUQguWZKnTGhzNgS4NmUlwdCLQaOq+Nl5a08v/ZU8gDE561aYBaZxzeX1B7uKhyJMLwxRXVnuzNpGT+D8cV80c=
+	t=1790929946; cv=none; b=s9mxAnhIV4NKE04gIz2fFMogoV3lpvE/2TPU43Xnxs4IYdLTJYRmQLuLuKqctx1EvoU+i6QyAJG/GnldkjaB2ntTAzyiIMgSvESWRM6dxC+c9W/cvTbVTqZVwPD1q0o5FVPeD/6qnc+wMRCv8o/N9nTMQJHq/F2nb12YoVSryP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790891896; c=relaxed/simple;
-	bh=ZZfa4SIN+PSF1Rrn3m8d7MZfagkknuPMHuc8cUaAr38=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=go4hSJDUSzrq0sD/QuK8R4CjwQqlNJq8NYllXLcHYgS+iUPz8IhU9LO8dMLYNFkIgecRoOPPhGsaOxd3/AjZ9X1wearS8/b79RfomFvrc/WPkPYekdVp5hlKP922XqsCQdFVZHMa+i7rLdj6FMk3m4DnwcZGpGbcYuStZMkpEJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EUA8tVkm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1790929946; c=relaxed/simple;
+	bh=rm25fPbnkxJO7HK0YmIVPZ5xoj6VizjjzCiLuZ4wrBI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=m56DHqRvtkIJ1fkq9xZ685lKE5Dg3aQuZufTkm3pWYR/EOeNoXx2WXVOy9rnlXYyDLpZeETbQ0hjxyBGS+Z3ERYK1s+JKb92EdF1qOhCYFlpxQBEZGbVnu2Ty4gdWqTjZXw9KFHhAlEzfH3iF5fdY/7pCjOKJCmEaL7+B0NjQgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gOM8/Y/X; arc=none smtp.client-ip=74.125.225.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EUA8tVkm"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 59388C2BCC7;
-	Thu,  1 Oct 2026 21:58:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1790891895;
-	bh=ZZfa4SIN+PSF1Rrn3m8d7MZfagkknuPMHuc8cUaAr38=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=EUA8tVkm9cUG8PYCzTEp81YqGlAvLWlGlLBOOLQoWa+eWHoCfibowOcxhbV09LoEo
-	 a7viTeKjcWzxLWQ8IAjPdVOjyu4+pAD3rBOdnjBExw/kc43b+ORNmt9q2m1jhQDMC9
-	 yQgacdRjHT4Cf52k0Kt+pWQwpl/a+zR7ywUQzK2SeFaOdl8SfynVJSzb0OjqBCYDq0
-	 epXE1N+umF0ipOopvd19T67hgO90stZx10uObsk3d1+uSecegibqBNejs5k25QbHsp
-	 AwqUMc1G39AjOFeMj732FkqSgC7uAEyRG/zOpHyK5XR+2ZFZVEnfGyow/SpAQieWSO
-	 28IiHmj/LDjpw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35460CA5FCE;
-	Thu,  1 Oct 2026 21:58:15 +0000 (UTC)
-From: Vincent Jardin via B4 Relay <devnull+vjardin.free.fr@kernel.org>
-Date: Thu, 01 Oct 2026 23:58:14 +0200
-Subject: [PATCH v2] dt-bindings: hwmon: jedec,jc42: add
- #thermal-sensor-cells
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gOM8/Y/X"
+Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49b912df756so55586485e9.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 02 Oct 2026 01:32:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1790929941; x=1791534741; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/bn76FEyPAPXjCUYSZydeUnbTPozt7o+Jc45Ge3nFyQ=;
+        b=gOM8/Y/X8QSRBJid0XZciWOdROVf+RMhL25AJV8yolknw87gSL5S/vwYMGFwT7H5hA
+         qXGE9lSVooIes0Vc4UgAG3LG/BZ9xd4DNEI8yalLTbWdnK7zo9E3qC4sQh/WZsg4g+ew
+         TG7vz7RjF0PXObU4LdFW+flyGSQAjElyrsiKimXf/Q7jeIyF6NdrWu8uAkgciAuvZWUo
+         OBv+8tLd9uDIxz+IKaeOrk3a4nX0buiJNmpeFmfK40wb3okDczzjrmsX/z5dAlEIMczF
+         Kckecudd1heVZnr6LXfMIgW2ybIFHdyDhajsaW9wnpYlPuRYwPKB9CVqflmDPXEMfUBh
+         lKMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790929941; x=1791534741;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=/bn76FEyPAPXjCUYSZydeUnbTPozt7o+Jc45Ge3nFyQ=;
+        b=v0URWzgcxQ27TiDZXco8eUv7fyQ7O0OcpCHO6CoaBSNXIjJ/qkTh0HSgEjMiR5f2zY
+         zoUUsCouyI+iUTG0sEbAiRC9F3uNVjlVAFlVXDbnPymXCEp7M/i2j40geeh16LW3+YN8
+         Rp853iSPH44UTAPp0sSHOa4IkOKXPNfdpc62cRV3qcTQ0BD+fQJLX7+Svjr/3XwgBErS
+         ++QU69qMIrqpE/Di9OaC/xk2n0sbHsK8Em9TsDDl20UOZYsj0k6WNdUyzDQdzZJyd7Mk
+         uy9oEmeZgOnR7UexYH+rcbpD57X0KuE8sm09NMetd/kLbPQQNyxOIFFm8h1BMbDLjqc8
+         0I7A==
+X-Forwarded-Encrypted: i=1; AKwUvByT60gghqedLzFG7IlfaVQZL+7yFh0vk010z8UflkCMIBeQbPwCEguluXxr8kSlvvusdL+WfXQboER8Eg==@vger.kernel.org
+X-Gm-Message-State: AFuF++nQ1sbh5QAOq9avuQ/LxrSAzs+0tgco93ystf+SL2BbGDXBXeAh
+	MhuOJa31ljY4fpuyHcqyyRhjIyUCIJLHpoPpLvSnmX2iD94pjORpoP8ht1MAd9qd6/0=
+X-Gm-Gg: AYBFou0Oc7rDetpReFDQyn/JqYs59n2cGvameY+z6mzPOoEvrGem/VUZgO/EsNXGHxT
+	Rt0WXrcdxVURKmWIECNAq9vaATFQaCzHlWZFQNaiuQo7suCUy3FlDtyviQyNpGHzlJ35USQDKqU
+	pEePHiWZP12EwEcs0KrHVu7NOjbjW9gcuKQhF1nx5ylaPDXfs0GIva3EQsXgxPl422L6i2qmvjA
+	6DGRaG2B45+IHtd+yr0jnZNxmBVr1b9wmu8wv8NwDVHiv3wKXnPkxalpord/iLWhGPopCXkxN0G
+	zpoS0xw0uBV9lBHKyWW5nfVuaKN74EreR0LlTMYT/pjCVyoQVL+ybykayWP6EgMukyfLEmFeNEd
+	/cuGntV/Qhuhkr32KbUOLF0HsYGlFniLRIUSi/44CktznJGUMs4Q4p5v7ij800B0ZBVjMEjbAQk
+	gxyVZcU4sLMV3CSfQGeyAbRLgYXl29tDYByYLF8BQsoioKkrzxE6wXRcGxADv0y9t+LQ==
+X-Received: by 2002:a05:600c:4e41:b0:49c:e27c:6b10 with SMTP id 5b1f17b1804b1-4a0274f9bfbmr42577955e9.3.1790929940907;
+        Fri, 02 Oct 2026 01:32:20 -0700 (PDT)
+Received: from zovi.suse.cz ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a03feed16bsm42507905e9.4.2026.10.02.01.32.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Oct 2026 01:32:20 -0700 (PDT)
+From: Petr Pavlu <petr.pavlu@suse.com>
+To: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Ian Abbott <abbotti@mev.co.uk>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Rudolf Marek <r.marek@assembler.cz>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Chris Snook <chris.snook@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Duncan Sands <duncan.sands@free.fr>,
+	Chas Williams <3chas3@gmail.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-watchdog@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	netdev@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org,
+	linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-atm-general@lists.sourceforge.net,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] Remove obsolete __MODULE_STRING()
+Date: Fri,  2 Oct 2026 10:31:00 +0200
+Message-ID: <20261002-module-string-v2-0-fc7438acaf4d@suse.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -39,74 +115,56 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261001-for-upstream-dt-jc42-thermal-sensor-cells-v2-1-6edd30b082f3@free.fr>
-X-B4-Tracking: v=1; b=H4sIAHXXvmoC/52NSwrCMBRFt1Iy9kmS2oCO3Id0ENIbG+lH3otFK
- d27sUtweO6Fc1Yl4ARRl2pVjCVJmqcC9lCp0PvpDkpdYWW1dfpca4oz0+spmeFH6jI9wslS7sG
- jH0gwSfkDhkHIdyZAN8Y5E1TxPRkxvffWrS3cJ8kzf/b0Yn7rP5XFkCFEV7smeNga18jAMbJqt
- 237AgxynOHgAAAA
-To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
- Vincent Jardin <vjardin@free.fr>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1790891894; l=1440;
- i=vjardin@free.fr; s=20260525; h=from:subject:message-id;
- bh=8mjDlcGI3Cj4EQONFKljx6GXc0o6W4X1o0EOPy1FmU4=;
- b=tKsE662/gABLgXKroy1YEXHqY5YCQC7VXTP/I3yUuywSdQriE/UBFNhmEBRoVb/pKmW/i2UfI
- orl/JKz0dw/BoIgFBXa8GdxIaJ5qVpRoS27HfBG/mQeH0AWhgOv6S62
-X-Developer-Key: i=vjardin@free.fr; a=ed25519;
- pk=hppgLeFpGpKOi7LNwGEZ4jOYofJCoGd4Jf1ltAabiLw=
-X-Endpoint-Received: by B4 Relay for vjardin@free.fr/20260525 with
- auth_id=871
-X-Original-From: Vincent Jardin <vjardin@free.fr>
-Reply-To: vjardin@free.fr
+X-Change-ID: 20260919-module-string-d64816f203d9
+Content-Transfer-Encoding: 8bit
 
-From: Vincent Jardin <vjardin@free.fr>
+__MODULE_STRING() has been an alias for __stringify() since "[PATCH]
+MODULE_PARM support for older modules" [1] in 2002-12. That change also
+moved it to the graveyard section at the end of linux/module.h
 
-Since commit 032c1623c9de ("hwmon: (jc42) add HWMON_C_TZ_REGISTER") the
-driver sets HWMON_C_REGISTER_TZ, so the hwmon core calls
-devm_thermal_of_zone_register() for its temperature channel and the
-device can be referenced as a thermal sensor.
+Replace the remaining uses of __MODULE_STRING() with __stringify() and
+remove the macro.
 
-The chip has a single temperature channel, registered as sensor 0, so
-no cell is needed.
+Apologies for the wide distribution. Acked-bys are appreciated.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Signed-off-by: Vincent Jardin <vjardin@free.fr>
+[1] https://git.kernel.org/tglx/history/c/136839a1b4
+
 ---
 Changes in v2:
-- fix sentence format (Krzysztof)
-- record Krzysztof's Reviewed-by
-- Link to v1: https://lore.kernel.org/r/20260930-for-upstream-dt-jc42-thermal-sensor-cells-v1-1-ef6365cae23e@free.fr
----
- Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml b/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
-index bf3332153ad8..d835664a926b 100644
---- a/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
-@@ -59,6 +59,9 @@ properties:
-       supported on all chips.
-     type: boolean
- 
-+  "#thermal-sensor-cells":
-+    const: 0
-+
- required:
-   - compatible
-   - reg
+- Rebase on top of next-20260930.
+- Drop 'watchdog: Replace __MODULE_STRING() with __stringify()' since it
+  has already been queued on watchdog-next.
+- Split the hwmon changes into a separate patch.
+- Link to v1: https://patch.msgid.link/20260922-module-string-v1-0-c18766690185@suse.com
 
 ---
-base-commit: 4781ca52761e666cf18b591e6bb0478396c90320
-change-id: 20260930-for-upstream-dt-jc42-thermal-sensor-cells-ad1ce051661c
+Petr Pavlu (3):
+      hwmon: Replace __MODULE_STRING() with __stringify()
+      drivers: Replace __MODULE_STRING() with __stringify()
+      module: Remove obsolete __MODULE_STRING()
 
-Best regards,
--- 
-Vincent Jardin <vjardin@free.fr>
-
-
+ drivers/comedi/comedi_fops.c                          |  5 +++--
+ drivers/gpu/drm/drm_fb_helper.c                       |  3 ++-
+ drivers/hwmon/fschmd.c                                |  3 ++-
+ drivers/hwmon/nct7904.c                               |  5 +++--
+ drivers/hwmon/sch56xx-common.c                        |  3 ++-
+ drivers/hwmon/w83793.c                                |  5 +++--
+ drivers/i2c/busses/i2c-kempld.c                       |  3 ++-
+ drivers/net/ethernet/atheros/atl1e/atl1e_param.c      |  9 +++++----
+ drivers/net/ethernet/atheros/atlx/atl1.c              |  3 ++-
+ drivers/net/ethernet/atheros/atlx/atl2.c              | 11 ++++++-----
+ drivers/net/ethernet/intel/e1000/e1000_param.c        | 15 ++++++++-------
+ drivers/net/ethernet/intel/e1000e/param.c             | 16 ++++++----------
+ drivers/net/ethernet/oki-semi/pch_gbe/pch_gbe_param.c |  7 ++++---
+ drivers/platform/cznic/turris-omnia-mcu-watchdog.c    |  3 ++-
+ drivers/rtc/rtc-ds1374.c                              |  3 ++-
+ drivers/thunderbolt/tb.c                              |  3 ++-
+ drivers/thunderbolt/tunnel.c                          |  5 +++--
+ drivers/tty/serial/8250/8250_platform.c               |  3 ++-
+ drivers/usb/atm/speedtch.c                            | 15 ++++++++-------
+ drivers/usb/atm/usbatm.c                              | 17 +++++++++--------
+ include/linux/module.h                                |  4 ----
+ 21 files changed, 76 insertions(+), 65 deletions(-)
+---
+base-commit: 6c2cb8b8b843d216ab549b678a0d8831c43153e0
+change-id: 20260919-module-string-d64816f203d9
