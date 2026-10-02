@@ -1,64 +1,64 @@
-Received: from mail-wr2-f34.google.com (mail-wr2-f34.google.com [74.125.225.98])
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 824BF457E61
-	for <linux-hwmon@vger.kernel.org>; Fri,  2 Oct 2026 08:32:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 786C5469857
+	for <linux-hwmon@vger.kernel.org>; Fri,  2 Oct 2026 08:32:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790929947; cv=none; b=H0w8f5CFK3AcV8CQiU0STDhMXn5QQw6ozGY0G/KXL/C4RiQpQyopdAXo4qjQbE3wNWyKWh4m+25DkgZ4zJi+OY+xogjVt5GAf6879OMizVSYjwjsQ/pj0x+MMI7aFNkWd2ZIefvp0aNtmKIYcsw9m7GebuIl0oIajYHv1ivens0=
+	t=1790929952; cv=none; b=R7cvXNsWHUDfBklq5czQBl0xZtLG07tZT6y1kJHB74Co3/2jhgmXEVHvpz7BYkRL6ABOqFkxDEUFKdgSCqRAoEVd7msKawstlT0f+7g2g6p54QBDKdDLMbuB9LIC5SFUGqSG0yUGcMRZhcyB3CR2xj4AQD268ywSw139MxxBlQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790929947; c=relaxed/simple;
-	bh=EgqUB+DoKqq6OdA2iGZBD4HDoUMih1j7Hjl6LdTfq+g=;
+	s=arc-20240116; t=1790929952; c=relaxed/simple;
+	bh=zF76oz4WZP/X06K0KuuyliwnKkh6eH6J1UrreBkUc1o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YDe+H0frx/Mg7oxqiHmrLiypK/GPUKlbMgQ+mauLt5r/jWZj+Ga6Fl03eFGeO/WjzhBaq16ZXvualeHQtBpII+UVgn/zJO8P/1qzHkkAjVYvKFExOz2O35CYlocBDa/IqGJJc2FlOzJGMeBUnAqWWUmhaonzUfYkdbh7/IOm4fU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Nyn3a88T; arc=none smtp.client-ip=74.125.225.98
+	 MIME-Version:Content-Type; b=oZ3UGmEvadLSrfhmQq4gee1g2vMw+XrPbMID/S3hxaUuRUGspOptDrdOlGH0YUHUUEWCzSiTR6d4ZMzbf3EDahcRoG4d6MumzuYJnWQF/+oQBUKAe8N2KJ9ETJq4F4YTd40np0mCtBLHOfhy94GHLPBs5Voc5Xd/GVzmj6b5H0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VhAXFi8a; arc=none smtp.client-ip=74.125.225.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Nyn3a88T"
-Received: by mail-wr2-f34.google.com with SMTP id ffacd0b85a97d-48af9f88c95so1174256f8f.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 02 Oct 2026 01:32:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VhAXFi8a"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49ff9621c5dso46617455e9.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 02 Oct 2026 01:32:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1790929942; x=1791534742; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1790929946; x=1791534746; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=5JuY5wMUTyN0P+KeYJB0ZAeckebQaYADB7Uozry53MU=;
-        b=Nyn3a88TOZtlgUwXBQxc99DKzD5cFPgYsqvYvDeQwuAmd8ZmJn0iuNV/Q+c1/wucVB
-         zzUsZx4MycUbiDevM2/3mVWsrsq83OvHZitjpilMq50kbLXwEAuL/gkDz8kmL2rID9TN
-         9C9duiA8OpJDOe81uhktZU2HpmpC2ZJKWCJDRaojX5FQpEm2OJv7z5TcKeCwwh/20hRp
-         qwchnpBQY39cOcpQkuR4dYP7JgRuh+jDGQpoxkCcpKst2Gwm6+fbG1WmEd/Bl1nUIwTO
-         QlzwsvcYDuZoIhYKWAvxKLTusMQYC1w3u9iaDJE3GRLFswFPJIiFSo2GHrKbY8tu2GsM
-         yhcQ==
+        bh=Ys5uWke9XBV3Ke8D3pwy0Lwn7XKjGlruZIy2p0X3uuk=;
+        b=VhAXFi8ambzYBv9n69bMkNca7/NJ7sPb3NrTSVe8FVSpIht92qKmRTWr3tjSBTgiAa
+         WEsXt8TnPQBCeLDTFhaciL/1AhWWGFe6ayK+7SOSdDRNa/PzqYvvcXpbwZ2l4Rg7sYLW
+         ub83ANUrqJxByICIMfe9EvytuOhHA7VsAHZ970gA82BMzNqXu09AOys9CXWQMAA5dZt4
+         D+MMNz9D23iBMBb7o9+YtCcjJOuH28IpKRGX/lgKEHdnz/oe0G4+7ETkTNoBGkf2yw72
+         I4+J8aQXuY5lvnMaFAvK11UlQoSh8GupOYg1ItqU4LvGv+OdWKtV7Qo5NOt7M7nrF7Xj
+         EzpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790929942; x=1791534742;
+        d=1e100.net; s=20260707; t=1790929946; x=1791534746;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=5JuY5wMUTyN0P+KeYJB0ZAeckebQaYADB7Uozry53MU=;
-        b=KWodo4R7V9MV1g1MTJmviuQppF8MzZrqOA8i2uki5ov989mfeGkccDQbNqRFWO1FYp
-         rWnV75fIyI8y6GrwSe7l/G5Rbc7pRTzCrwlQLWBx0gok2kw0CGVTaZBA3sKYi6NnZi0g
-         KOqel8ea4MazttdFCcIHdm1b+v9LR9+vL8m1qmKMQ40uFgfNZBmA1O5WXLTsmGbg0aLp
-         zagkx10630RcfEgQKczGErDp/eyQ5Lolub7Dl27yaIIuauKaAYdz+2c/3vGrh5t/ULcB
-         UhPc5C/uocbSEX61vPhIv42KlBAAlNMHbcALlkiOxszBzToysCjV8VjWzVwWlC0Y+4uf
-         Hfbw==
-X-Forwarded-Encrypted: i=1; AKwUvBwQxVpijmwhoPLcXP0zEnkLLe+MCglqBIunaU5OVs1rCkHAgBstBtXcP5JyVY1Op/SNRJDspY9rxTiN6A==@vger.kernel.org
-X-Gm-Message-State: AFuF++nRxQlv4pdQUttQxloGJeY0nkyGXgo48nAPyrpMzfeB+PNhNNY5
-	+rgrX1IvtOPHwD6wSSIuwiYIB4+KakzI2tw96uSTt0ZkoSljSlrk8mxFxz3hnnwQH8s=
-X-Gm-Gg: AYBFou0uBtKDiY9Ws04S964owSdcTpiD54fjXPfSsEqjuAymU2anNMTukpa8o/hKrEs
-	ZnqIxuoxN87vTZXteffUwWcMPGVRFbazkQC07ST0F84DxTInHNY3FkSaNV2clUzbfxrbfIuSK1U
-	9xSKushJvmYuQ9Ml5OkKxTKI23Ya178vKfXAsp8E/d1vDYAgRNeeGEIMWgk1P17YZD5SzUIDWTB
-	t6NldoeA0rlnE4FhIpdGiXZ/l4Own86wL+QVmVdGNBocTLjlcc6nSh4qx6Y2cBQQQOOBS3wGEV7
-	m7FpkShHt+hlC2bl0xmV9mKxjZJEGGktlakzfZCZaubfLwvWY4py3WOiWYMFzD6l96ilQjYbIMt
-	9rEYKV5mRNOUHnmZQWaM0hyczOqOKIUwCuDQ2L2V7uS7b0fndXLKTg/y5/iZwxGYDDUiY1y3jrQ
-	xADt1b8iHSDfBvtLlmdrCf4EveH1448KxsA2vx6lwpcGXoh0YChBQAWpEq8XEQypNLfrk=
-X-Received: by 2002:a05:600c:548c:b0:49e:65f2:db64 with SMTP id 5b1f17b1804b1-4a027534bd7mr33259805e9.5.1790929942490;
-        Fri, 02 Oct 2026 01:32:22 -0700 (PDT)
+        bh=Ys5uWke9XBV3Ke8D3pwy0Lwn7XKjGlruZIy2p0X3uuk=;
+        b=yu5rHB3lBUwU9+j0RH0+sAx3uAC1UhVryXpLcw8Trg9MEVMEjP7HiJ6rq7CHaG57mT
+         n6oUQRguLrHn+QRzsPBeEx0NCr83Wl39BDn9Fp9ElpjR4dAZOakraQBNE3LIp4w13reQ
+         xqpAmt31Eq2XsSuygkwQxGPM/OWUrkdnzoHuZabBuW4WBPWiquLYAviWIkcavTd+eo4I
+         VDgJCA1TCSTodbiiAJGFJ7LtQH59/9GGpXqT4lA+XuEEUjx/ZfocB/uGQ4VnqXc6Sq2L
+         nx0wMvwLWl4vCmNY3xh/dH6ac3+5yMrhTl9pcVOwh7ourH5noGNsiHQ2WXZILb3pcqC+
+         hStA==
+X-Forwarded-Encrypted: i=1; AKwUvBy6+Otx3Jue1IclVxBjtXXDO29GkrQmZOYpJ+CcwUalEzwtDfV05BK3U9tTh4lBFCCWMNLzmuJ8FXE9KQ==@vger.kernel.org
+X-Gm-Message-State: AFuF++lwEEIjmmd721CDN6y2JUqd/qLKG8oUZlp7SFCaJ2PhLVFSP77e
+	iOxokwDjEYT1Aa9WpUC/ZGN1QAGZXDQjaPQWSrWczFqo/IRasUZ9bWmj5PvE4OQw6ck=
+X-Gm-Gg: AYBFou0bKO2QbqY//PprEMNm3nI90bjn4EepjdtH01CgSp/mNl9svUh2Dxf70/tkjxc
+	lfzjP8bZpN/vUHhiS1POQk8YZ6NjZ8ZM241ADLrJx3P8sFvffGv51yPEM1oBkulJQ3aTV8FYS9y
+	0WtdfrdJk71qCOToa3Lk7V4VXh6JbD+fFjgOJKcQUzcpOAckDVbR+LOt8PDPkUpm2BJtmzIAKjj
+	Dw8efdXPcsZc9v1duW8vAefv7Mv0RVg4ja+qngwXwDHsUHi9PUJ6JLi3QB655YxKg+XOOLNmL0R
+	pIWe61NPzCh2I4MttN4QhrXd9dfv0gq+AVia9porM0o0Dumo6KCZHl8HrzDR2U8Adljw8/EMQ4W
+	3gu+04IxG4/XjW311ilsF58vZDFxbu+INBjxmCip6qev6/OYfiEApNocNMn/TL+DPCxS8Nxm7yc
+	eb4XzTigo2xzx6Hj91Uwzzv/9LgL4t02/3qy0D1+oMjbOOn67i281pQ2P36mIJzbmeMl8=
+X-Received: by 2002:a05:600c:4307:b0:4a0:b6:4619 with SMTP id 5b1f17b1804b1-4a0274569f9mr25694905e9.0.1790929945843;
+        Fri, 02 Oct 2026 01:32:25 -0700 (PDT)
 Received: from zovi.suse.cz ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a03feed16bsm42507905e9.4.2026.10.02.01.32.21
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a03feed16bsm42507905e9.4.2026.10.02.01.32.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Oct 2026 01:32:22 -0700 (PDT)
+        Fri, 02 Oct 2026 01:32:25 -0700 (PDT)
 From: Petr Pavlu <petr.pavlu@suse.com>
 To: Wim Van Sebroeck <wim@linux-watchdog.org>,
 	Guenter Roeck <linux@roeck-us.net>,
@@ -106,9 +106,9 @@ Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	linux-atm-general@lists.sourceforge.net,
 	linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/3] hwmon: Replace __MODULE_STRING() with __stringify()
-Date: Fri,  2 Oct 2026 10:31:01 +0200
-Message-ID: <20261002-module-string-v2-1-fc7438acaf4d@suse.com>
+Subject: [PATCH v2 3/3] module: Remove obsolete __MODULE_STRING()
+Date: Fri,  2 Oct 2026 10:31:03 +0200
+Message-ID: <20261002-module-string-v2-3-fc7438acaf4d@suse.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261002-module-string-v2-0-fc7438acaf4d@suse.com>
 References: <20261002-module-string-v2-0-fc7438acaf4d@suse.com>
@@ -125,114 +125,31 @@ __MODULE_STRING() has been an alias for __stringify() since "[PATCH]
 MODULE_PARM support for older modules" [1] in 2002-12. That change also
 moved it to the graveyard section at the end of linux/module.h
 
-Replace the remaining uses of __MODULE_STRING() with __stringify() in
-preparation for its removal.
+Remove __MODULE_STRING() now that all remaining uses have been replaced
+directly with __stringify().
 
 Link: https://git.kernel.org/tglx/history/c/136839a1b4 [1]
+Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
 Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
- drivers/hwmon/fschmd.c         | 3 ++-
- drivers/hwmon/nct7904.c        | 5 +++--
- drivers/hwmon/sch56xx-common.c | 3 ++-
- drivers/hwmon/w83793.c         | 5 +++--
- 4 files changed, 10 insertions(+), 6 deletions(-)
+ include/linux/module.h | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/hwmon/fschmd.c b/drivers/hwmon/fschmd.c
-index 019fc32bf318..df9418a86c83 100644
---- a/drivers/hwmon/fschmd.c
-+++ b/drivers/hwmon/fschmd.c
-@@ -35,6 +35,7 @@
- #include <linux/miscdevice.h>
- #include <linux/uaccess.h>
- #include <linux/kref.h>
-+#include <linux/stringify.h>
+diff --git a/include/linux/module.h b/include/linux/module.h
+index f6f90cd88f15..37de77340032 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -896,10 +896,6 @@ extern const struct kobj_type module_ktype;
  
- /* Addresses to scan */
- static const unsigned short normal_i2c[] = { 0x73, I2C_CLIENT_END };
-@@ -43,7 +44,7 @@ static const unsigned short normal_i2c[] = { 0x73, I2C_CLIENT_END };
- static bool nowayout = WATCHDOG_NOWAYOUT;
- module_param(nowayout, bool, 0);
- MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
--	__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+	__stringify(WATCHDOG_NOWAYOUT) ")");
+ #define symbol_request(x) try_then_request_module(symbol_get(x), "symbol:" #x)
  
- enum chips { fscpos, fscher, fscscy, fschrc, fschmd, fschds, fscsyl };
- 
-diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
-index 976b8a008e44..04e1a8e6db37 100644
---- a/drivers/hwmon/nct7904.c
-+++ b/drivers/hwmon/nct7904.c
-@@ -23,6 +23,7 @@
- #include <linux/i2c.h>
- #include <linux/hwmon.h>
- #include <linux/watchdog.h>
-+#include <linux/stringify.h>
- 
- #define VENDOR_ID_REG		0x7A	/* Any bank */
- #define NUVOTON_ID		0x50
-@@ -113,12 +114,12 @@
- static int timeout;
- module_param(timeout, int, 0);
- MODULE_PARM_DESC(timeout, "Watchdog timeout in minutes. 1 <= timeout <= 255, default="
--			__MODULE_STRING(WATCHDOG_TIMEOUT) ".");
-+			__stringify(WATCHDOG_TIMEOUT) ".");
- 
- static bool nowayout = WATCHDOG_NOWAYOUT;
- module_param(nowayout, bool, 0);
- MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
--			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+			__stringify(WATCHDOG_NOWAYOUT) ")");
- 
- static const unsigned short normal_i2c[] = {
- 	0x2d, 0x2e, I2C_CLIENT_END
-diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common.c
-index a385aae3bb0f..febb8ba7dc2c 100644
---- a/drivers/hwmon/sch56xx-common.c
-+++ b/drivers/hwmon/sch56xx-common.c
-@@ -18,13 +18,14 @@
- #include <linux/watchdog.h>
- #include <linux/uaccess.h>
- #include <linux/slab.h>
-+#include <linux/stringify.h>
- #include "sch56xx-common.h"
- 
- /* Insmod parameters */
- static bool nowayout = WATCHDOG_NOWAYOUT;
- module_param(nowayout, bool, 0);
- MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
--	__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+	__stringify(WATCHDOG_NOWAYOUT) ")");
- 
- #define SIO_SCH56XX_LD_EM	0x0C	/* Embedded uController Logical Dev */
- #define SIO_UNLOCK_KEY		0x55	/* Key to enable Super-I/O */
-diff --git a/drivers/hwmon/w83793.c b/drivers/hwmon/w83793.c
-index c6ef04c69856..e1f2708b5db6 100644
---- a/drivers/hwmon/w83793.c
-+++ b/drivers/hwmon/w83793.c
-@@ -34,6 +34,7 @@
- #include <linux/notifier.h>
- #include <linux/reboot.h>
- #include <linux/jiffies.h>
-+#include <linux/stringify.h>
- 
- /* Default values */
- #define WATCHDOG_TIMEOUT 2	/* 2 minute default timeout */
-@@ -57,13 +58,13 @@ static int timeout = WATCHDOG_TIMEOUT;	/* default timeout in minutes */
- module_param(timeout, int, 0);
- MODULE_PARM_DESC(timeout,
- 	"Watchdog timeout in minutes. 2<= timeout <=255 (default="
--				__MODULE_STRING(WATCHDOG_TIMEOUT) ")");
-+				__stringify(WATCHDOG_TIMEOUT) ")");
- 
- static bool nowayout = WATCHDOG_NOWAYOUT;
- module_param(nowayout, bool, 0);
- MODULE_PARM_DESC(nowayout,
- 	"Watchdog cannot be stopped once started (default="
--				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+				__stringify(WATCHDOG_NOWAYOUT) ")");
- 
- /*
-  * Address 0x00, 0x0d, 0x0e, 0x0f in all three banks are reserved
+-/* BELOW HERE ALL THESE ARE OBSOLETE AND WILL VANISH */
+-
+-#define __MODULE_STRING(x) __stringify(x)
+-
+ #ifdef CONFIG_GENERIC_BUG
+ void module_bug_finalize(const Elf_Ehdr *, const Elf_Shdr *,
+ 			 struct module *);
 
 -- 
 2.55.0
