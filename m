@@ -1,225 +1,194 @@
-Received: from relay-r21-hz12.hornetsecurity.com (relay-r21-hz12.hornetsecurity.com [94.100.138.221])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f33.google.com (mail-wr2-f33.google.com [74.125.225.97])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC812192D8A
-	for <linux-hwmon@vger.kernel.org>; Sat,  3 Oct 2026 00:15:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=94.100.138.221
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790986504; cv=fail; b=O4z5qCDHUmXRYTgwST5cqtCudJqlwGfWuUkEpBBjGG3BkMHklWrxS2mq/M2KX0RQiDWEkJMv9XgKhwwxoExuoPbnCHG7trW5jy6z8tGUna4v3qpzy6kUh6pDdi1UwPOgeX37iWqO7IHxoQ0pP4xrXM3scJiW0hLgQvWZD15BwWg=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790986504; c=relaxed/simple;
-	bh=5rnoLQ3jdXUqBD980dPE0c5x9H8JrOWAmBSuDKmqEFE=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=gqzKvaxFQGT67T2uASZWIX18J6H4Uw2o6tM8xqALTLxhQiIrlW6YQJ4c0yocTtzBxBJtRNn5S7lCGqTlbzfo0VbWPdBQitpMQEEooIYl33xK6ixRLqKd0t1KlM1LBPdFd6Rrs7aXMKNdBC14F5KUgg6h8EKarEkNgjH/+CkXs7A=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=witekio.com; spf=pass smtp.mailfrom=witekio.com; dkim=pass (2048-bit key) header.d=witekio.com header.i=@witekio.com header.b=CWJqSMKk; arc=fail smtp.client-ip=94.100.138.221
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=witekio.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=witekio.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628D1547071
+	for <linux-hwmon@vger.kernel.org>; Sat,  3 Oct 2026 20:21:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.97
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791058917; cv=none; b=V6UUjd++GIO9QLb9/w8wmcM5i90HJd4PPEUIKIQ24Xdw/E/FOQ+w6Sqsi9vmcAQEsWhnjPblu1nBzBNQXnBea/oP3kcji/8dwToRGjTmZ4/kDf2ozu/Nn9nVq5vyLaRpDQ1zqw+BFEXJmfkuW78Yj6tfGE3QSfwjTrda1TTVlkU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791058917; c=relaxed/simple;
+	bh=2u34eksTJWhirfi4M5VyDEfsUceCwd7uw1Xs3JVyAls=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KCQcQ1uq4AwEJbw3d9DGpFK161SUyJIxO3H+3A16odpDubShNgoHwORcEqLjmxVlV++FEBYYQiw+lpdRcUPAbyzlDWBBHDUw+dCZMVlBmC/Cl4MeIhSR5WFL9Lp8kWyIXoapY7Us+7qwG3NRK5L2q9bT+kBFUjc2IE/UIpbyg4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mKfEU408; arc=none smtp.client-ip=74.125.225.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=witekio.com header.i=@witekio.com header.b="CWJqSMKk"
-ARC-Authentication-Results: i=2; mx-gate101-hz12.hornetsecurity.com 1;
- spf=pass reason=mailfrom (ip=52.101.84.105, headerfrom=witekio.com)
- smtp.mailfrom=witekio.com
- smtp.helo=db3pr0202cu003.outbound.protection.outlook.com; dkim=pass
- header.d=witekio.com header.s=selector1 header.a=rsa-sha256; dmarc=pass
- header.from=witekio.com orig.disposition=pass
-ARC-Message-Signature: a=rsa-sha256;
- bh=XZLWHBGkp4i3Dcvh9DPzHAlKsX7K8QO6cp55S8r/UdQ=; c=relaxed/relaxed;
- d=hornetsecurity.com; h=from:to:date:subject:mime-version; i=2; s=hse1;
- t=1790986444;
- b=tggAzO6qfVKqzYHfFucnaCQeuRvQq9rOICox/sMZPWrpTHROaHj3d3vbVPBQN0NnAX+ZEUUl
- XT59JfIJyrX7dVqiXoYT2Lg/UvjI49OSXlbKhIw3gQgIAgLv4qoROLiWVoSqdYf6a8OBwAuHTzA
- qty7EK7P7tSM8kTuirKsOHdB9kPs55jsrmzSDs1PyBZPLnuzoBg4yGbErw6fwQIszVYNWDg2jAA
- 01D4OowFCEl92PxgxzoHhDZ3xO2aZ1mptAHPtU8QiLtlp2yWTemG4YW2Wjl2W/dH1FmG73pTDQe
- 5fSIPAl3RH8QhSqhX+fOhvZtY1L27VGVXCX1MEwBcwbnQ==
-ARC-Seal: a=rsa-sha256; cv=pass; d=hornetsecurity.com; i=2; s=hse1;
- t=1790986444;
- b=mE1XVe1tZjN13tCvTOct/YEXrRLw0vV/EWpoLMhpJlqoIWNSyPKSyO2iVV3zeHIq6WuWihPT
- ahd4WM/rEpunmnmHtaXg8m4shrNGsyZ+BxHeahvB7P4Xbwvr1ROuXcQETLbEIhaXom1atlWtn0W
- iZu9p4BAXD9gkur6+1XKHwMJbceuoquSr5Ol1goSvlPY5CTTknX+u1Z8CW9ada0GRqTXf6+4TCM
- o981y4qgUkTB7EU30+Sct5Xk3TTWwhTkJJgZDTjqgNEYaR6MwwifYnxdTbo++dlI/h1in2a/OKo
- vxlMqL+XvKhHky5LmOlOVd+ZRmZlkrRops+iLWMZuCD4g==
-Received: from mail-northeuropeazon11020105.outbound.protection.outlook.com ([52.101.84.105]) by mx-gate101-hz12.hornetsecurity.com;
- Sat, 03 Oct 2026 02:14:04 +0200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jxqYUqkLbRrutaexVxcbTw9bNi4MUtl3F1GNs2QPZG+eC8tGqtObFTrwFIRI/x7rtQPpo+pcSLBjmpmCmdda65eNQ70tEij63q7r3J3nXghmulEYYOvoKTcI0beIUhz9+gWAtFGQLhhAgmghA6vTs7NfT3PPbO2gg+B4R0erCyhCb+C9GQdvnMICSKLpt20iwBI8nLeJ5frYvM+IZiT+7mRY25o/Szb4s2OqULgZgrOuAeLfBgV0V/fvLv5F7XjO++Xo21KcW+UbhJC1S7ThtK1cOwLtcntiXJ1vRYfjCveYF22PHFpAVi9ELjHiMsj0aWvftahEQRnM6QYhcNQJWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XZLWHBGkp4i3Dcvh9DPzHAlKsX7K8QO6cp55S8r/UdQ=;
- b=zEVDFDSgX/5yCXf0kaBf6Huc/WeCElyVrVpC9mGJRIgZ+41kfoLH+S74naEjm3x11lHBD9U+BUZAjFOwJ5a9hhP14Smg1ANBjiBBSlTUPcVflrwFVrxoZ3U7y/o6Xkkb51ShGteKrFssRMO+SBb4cEWBghTvM2QttTnKuUDFpErGpZq3EiOybdg/jAbs475R8WWjSnZbUYBeRQ8eQBvhguI6wMPuJ72cJ6LeSJuKufwiPdhcMKa4ap3JpooyGbMZBtqMS9dJQNaVftzbkgxjRmwEFeEVWBfZQkVGuuWcd6vvZj5QsUzhf9wQ/eB6n9CUbGvxyCrTyfgHx5kkUE4Xpg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=witekio.com; dmarc=pass action=none header.from=witekio.com;
- dkim=pass header.d=witekio.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=witekio.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XZLWHBGkp4i3Dcvh9DPzHAlKsX7K8QO6cp55S8r/UdQ=;
- b=CWJqSMKkK5pzSe5E0xadhSJnGvYPtyzMwIFlNgOPhRQ9NsPaI+oDyb61/yTRqmFN2PJ0NMAR5L1txwEcBv5pdZHlU1S/PKH3+pWSXVbY7rFlhzEmqJ1Afsd3pp62sdB5ijFcu7E2gcFs+3gvJQ5SDBiXr1bZz4b3w+Qb8NepUeY7lEdcbyOsXYRQKgP9BiaB3vXClmWe7yzd3qXD8AC+Vu98d8YkmLYNrBEnNw7OXyq2Lxqz1MtU7MWG7IIbXQNoB0JTKVP0hh8Tb2WuYzAyYbNm9qdIAYPl5Lchgs3E7lfMoDyouAhJMZhbGbnZn1WjNR1HcZMIyuif5yITWH3e/A==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=witekio.com;
-Received: from DB8P192MB0792.EURP192.PROD.OUTLOOK.COM (2603:10a6:10:167::18)
- by GV1P192MB3050.EURP192.PROD.OUTLOOK.COM (2603:10a6:150:284::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.472.19; Sat, 3 Oct
- 2026 00:13:48 +0000
-Received: from DB8P192MB0792.EURP192.PROD.OUTLOOK.COM
- ([fe80::587b:a57b:3517:d13b]) by DB8P192MB0792.EURP192.PROD.OUTLOOK.COM
- ([fe80::587b:a57b:3517:d13b%7]) with mapi id 15.21.0472.016; Sat, 3 Oct 2026
- 00:13:48 +0000
-Message-ID: <998a06e7-a4a7-40f0-9c99-21a7d2938a6f@witekio.com>
-Date: Fri, 2 Oct 2026 17:13:43 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: (tps38900x) Add driver for TI
- TPS389004/TPS389006/TPS389008
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Luna Hart <lhart.opensource@witekio.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, Flaviu Nistor <flaviu.nistor@gmail.com>
-References: <20260929-lhart-dev-tps38900x-v1-0-7045c5894152@witekio.com>
- <20260929-lhart-dev-tps38900x-v1-2-7045c5894152@witekio.com>
- <20261001-judicious-oyster-from-atlantis-ec18aa@quoll>
-Content-Language: en-US
-From: Luna Hart <lhart.opensource@witekio.com>
-In-Reply-To: <20261001-judicious-oyster-from-atlantis-ec18aa@quoll>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0P221CA0017.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:610:11c::26) To DB8P192MB0792.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:10:167::18)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mKfEU408"
+Received: by mail-wr2-f33.google.com with SMTP id ffacd0b85a97d-48b0fc598f8so286137f8f.2
+        for <linux-hwmon@vger.kernel.org>; Sat, 03 Oct 2026 13:21:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791058914; x=1791663714; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=C75l2wsXWFqHqj6w9JaZEjjSQbkyybpKUQfglyD3Zx0=;
+        b=mKfEU408/R4DQSr3VCjM6QQXSSJwVHffiYXis2+lY/1tniotMiUiAmH14YG4yJRfqR
+         yC8OCyWxQprr2RlXdyhOdF6Q2A/qWXnjZQXQOOOdWbzjtPQGaji5fW2ZQXzglCrMibig
+         b1rQEIxHVLdxLllUGECEbObYSKuF3qXHSH64JFNWr0N6yhSp8GtbP0T4NgBMkjryxH3/
+         ncqBznGkC7vR2wcN/0xIs6cPF4s7NmvbKtad+XFJhP2GNlDn7JDpaucf1gec1BrIho1m
+         1k21WqO7ta7ECKB+ukoq5YPcDrNW6yEZ6JuUb9lf4desHXdbndYlwcgxLIWgbeFSp6aN
+         SmYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791058914; x=1791663714;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=C75l2wsXWFqHqj6w9JaZEjjSQbkyybpKUQfglyD3Zx0=;
+        b=r0x5jyL91jBBnzhNn4V14KVgAEptP1ni13NcMAPpH6a6mPoUXFP0jrg8GGnYmSjvr5
+         hQ6qOf/T1511H0tlrF6Ks1Hq2hTP2DNrGcHg0GqD7i0izz7XkrZ/qTQAb+z1pku5pat4
+         m7/hM9xCPwPkk/ymLRpHHYSn0Sn4jSR3r7+23R6YO4lih7N9XmqI8aY60PhCnd2x+YCJ
+         XZr97o07EFx+g8Sz3X5iMBaH56zSEDGP0K6lJJJFR3VmofAdeWuf5HCjVOGlECwmZgcb
+         I8jIs6PoEBBJjJGp4TofBKD6Y1ZD1vYO8A2bD+iVSzWVRGtSf/+zXeEE6+UJNkKXEZS3
+         t6dQ==
+X-Forwarded-Encrypted: i=1; AKwUvByifPpxF+qyQkx1PpyBAB2nsOrB1TUIuwioTlgDhdwE7CVkgE5tIBes5NB/iVbi06tIkiUckGmupy5PXw==@vger.kernel.org
+X-Gm-Message-State: AFq9FYIq9OYd1OtMXE+XfZjTISfYkMdMLqMpz5Wf0unKAfmS0PLqCRPs
+	56C84TeC3zrKNOoRT1lYVw4f4SfQRxPjRblFM8LXQsIbJ4cM0w/v3ZLz
+X-Gm-Gg: AYBFou39l9XSdlTocwumpMCVqkBMXft/CFHVk8CaBV9PVOJ69DMYXYFo/d9SPlp55pA
+	EPqX/tGUXNENLH/6Xknbjb0X1jtkn7MTCQOBjiQOgLTViygpKvNQ1NtKiX8XjYAPlcjomOICXew
+	3kEN/8XLLQdMsRZQN8DY8FRwRmtCSGJxtEQIYIDUsErRZLvRL8HhRrz7hwakrOagwjMuYSuIRkq
+	O/Vi+g/Xu44wCTZY3INol2Ovx378hWjmRwMA1nKiOUnHcRKt5kWVRDJcCnEZt9rsz693OPD/Kzt
+	3eVq0RT9GFIJ3KkNgW+j3d2Fac85kHTzgAksJf3agmNxl3K6B8d61TboMCSOxIrByYNM5JCZjuc
+	WwkrGYEbv371wvK6itNpdk6tdtEqILB5iaRoC7Hb62jylrs76wazmutfvPytAaulFU8cCGh1GlJ
+	E076tBYlJxxGE637WxdEfM25iGb3nRHC7qWlZTHpGeeZ+E5RNY3VM47/Eq7HJVB2dlKPi6zPgd3
+	MydOPF6EClgpJ5z
+X-Received: by 2002:a05:6000:4905:b0:48c:50db:30bb with SMTP id ffacd0b85a97d-48c50db37b2mr1760785f8f.26.1791058913464;
+        Sat, 03 Oct 2026 13:21:53 -0700 (PDT)
+Received: from localhost.localdomain ([94.252.75.11])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-48b380facfesm15083316f8f.23.2026.10.03.13.21.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Oct 2026 13:21:52 -0700 (PDT)
+From: Oleg Keri <okerixx@gmail.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Hans de Goede <hansg@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Abel Vesa <abelvesa@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH v5 0/3] platform/arm64: Lenovo Yoga Slim 7x Gen 11 embedded controller
+Date: Sat,  3 Oct 2026 22:21:40 +0200
+Message-ID: <20261003202143.4697-1-okerixx@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB8P192MB0792:EE_|GV1P192MB3050:EE_
-X-MS-Office365-Filtering-Correlation-Id: e52543f2-a4c5-4420-d873-08df20e3321d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|23010399003|366016|7416014|376014|4143699003|10067099003|56012099006|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	5cIr6PKFN7JqrRZpZRJ8KrRZO1cRl1BDai3jRZDd08B83/+Pf+wNAqWsSSJG0n8FrYICr/wA1hIdhWv3j+LNUyJcw+TV90a53FC9sJcQw1vXaJ0xOXiVklKFGYgZZ8C+NbSLK3aauH5CAiUT0jj9W67oBfHolv5FdySli42W96AMvf5GkrWr3b1z8jSs6AHf4o71KyqvBUeRk20qZtpcyHH5kaks2ocRAirwhKnIEsqLUU4XRQ0kjZI2G+OpGvPAUGrQQXPO5Zt96MVQyGLXc+XC44WMreL+EV9VnMAIsCdB6qc1PkjpC5R7aYY/xE4TrDfeB9H/FKDd4QlgyD825HdyObWdFUf46b5Yu81nrxy//vhyK4xYJTZHS5xwW+CUeZci7fa8S+2HQV9oTzPzYWeyWNZm2rTl07ipEucJR3iG6G+7nWxjsKwt47uGLhotz0oEdOI351t+08pjXgww9kkr8TN7Egv3KzcvNc0Fos94Mw5GScQ1VUCb8rbqHocNcfW0NRA8c4oga3yh8/P9joyuC+yueZDM5vvxOuf2xfqeOWgQykf8dHDJY/n1bkTqXNqeUALjAWcXvvdy7NKHl8pmki2tL+b0T7rRfp0jWcGHqh3XFn/h4fQBsdkaP7c1RoACT5rLteU7QvFzN6vfM3gDH9qIgtbmPjTeX0iTF+g=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8P192MB0792.EURP192.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(366016)(7416014)(376014)(4143699003)(10067099003)(56012099006)(18002099003)(22082099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ajUzTGxhZVoyM043a285RENJZkV0VU5jWklJVlZseHZqR3JUMVFtblE2Wm9E?=
- =?utf-8?B?a1daUHJhMDdqZExXU05ubVEwVFVkZ1hEQlQveWdJVFJZaE9jeUtOcUVCQmk2?=
- =?utf-8?B?ajBLR2RhNWNaOTc0ejh4Y1FLSm5mYklDVFFwOVF4bk10VkxDRFVNM2lkemI3?=
- =?utf-8?B?VzltZVFBZnJmMHFrZHAxbG9pOGwxZlVsUU5lZnNZaXpQaHlDRko3WFVFWCtl?=
- =?utf-8?B?a01ZK3BKTE85NnM0cmxGazBvUVhjU0l3L2RlK1V4UkcvcGxUSXZrVENqNnJv?=
- =?utf-8?B?bTU4d2I0YWxZT3U2T1ZudWY0cHkwZkwvc3R0MGdKdHNKTDc3U3E2bFFWaHZi?=
- =?utf-8?B?TzdyOXFKR3pIdFZHN0RHcWVJdWR5RDUxcXdUYXZER2dqL3BWK251S2tWRkJ3?=
- =?utf-8?B?LzI5QjNvVmlFSTBLVlJrbXZseFRxWVA0NkVwVzQzWHZPeXM5WDFyNHdQVFY1?=
- =?utf-8?B?blJ3SklOMEVnT3Nzc3NuVDk3NzBSTkExc3d3OHJ2R2ZmL2txMmxjeWtMRzVq?=
- =?utf-8?B?U0NhTlF1bjY3bTFwbUh2bEFEbngyU09lSWxWckFSYkRsZEs2c2FBdS9uVTE0?=
- =?utf-8?B?NTJ5akhDVDJSUVg4aVpPbnNPUnY0MHRocWlqVVlQNlRLSEdES2pqdlhtTXBr?=
- =?utf-8?B?SEpVa1FhQlk0K0dNRkFkK1k5dVhkY1ZOZXBsUWc2c2tZNFZpTXJkK0Q0Mlk4?=
- =?utf-8?B?d3RMV0VpTHQ3MXhKZTdJeHZxeTg1K2R1RUlzekVET3hVWFhTY2hIa2hFUnJP?=
- =?utf-8?B?V3FWaWZKSXJ2Zit3RTNRV0o0MVRadGVVWjRyTmIySUNMR1hLQ3VuSk80WklO?=
- =?utf-8?B?UFk5b3p6Tk00MjlLQmRPeHVJOFZLVG5JWkhLSnhCS3J4QjBXZ0ZVZTEyOFBP?=
- =?utf-8?B?WThWMlorQ0dwQ2VFWmVBeEozUVJZZXVJc1E0VlRGTXZlU21xUG44TGpJbWZO?=
- =?utf-8?B?UXMzOU1tQUhMbkFUaDU1NlFDYy9pL2hFMUR6ZlFKUWh3WXFTSDhPSUFNUzBq?=
- =?utf-8?B?aTlaT0pGQWgwdEtpSUk1a0lNbkM5UzJLeTk5WlY5ZGh0V2hlVGJGbmU1aDNM?=
- =?utf-8?B?Q2Z1WWVJRXNucXlWQTJTZmIxRUo1b2xxYXpabVdieTBWWGJTL0xnYWU1R1Bp?=
- =?utf-8?B?emlyVVJWR2FXQUZjREsrSzJXQjJlOGNzTzNQbG03TDNGU0IxMkkxUGMvVE5m?=
- =?utf-8?B?R2NhTTBPSE1pWU5DL1BuT1c0OU1GVDZJUFJTWTJkdGxHN0E4SVk2RzRJQlNx?=
- =?utf-8?B?T1NkTzhrL1FvSFZHL3RnTjcwWXBXSlIyc1dGUFBwaHkvbmVXTmRDZmt3czlK?=
- =?utf-8?B?MDZ5VS9mdnYrdnJ3dGRJTUFQSElIZEtMNzNYamdsUmFFTkUxR29VakVJeTNH?=
- =?utf-8?B?UzQ0eHRPbHdXTmRsWW1ZckF5Q1djUzZpYzJKL1RIa25paVE4N2dkSU1BSm9j?=
- =?utf-8?B?RzF4VUF3cXg3ZkhpVGVEWGVNN3lVWVUzNEJ3bE12ZnlyOURCaWFzMkxibDVY?=
- =?utf-8?B?OURQcUdDNXExZ2lad1hwNnJkeGlUSjJLeHlwWXZHN1NTVHZ2a0s2cWtmSlBn?=
- =?utf-8?B?c29sS0hGdkRGU1ZEbGswZXNtd0Y1Z1oxUVBycmxRQlQydjgxZ29qK3p6RWpu?=
- =?utf-8?B?Si9WOUFQR0lOWi83Qm5haXlzUFUwM3dwQUIvb3FuRlVRWWVLYWRWM2xPV0JZ?=
- =?utf-8?B?NmQzWmwxMStIekFDNEFqZEZYUlAybjhiWEI4Vkx4ZjJ1MUNKb3I0ZTRzQTNt?=
- =?utf-8?B?ZnBDRmZaTEhXcE1UTDV5SXY4UmRhSmU3cFBxS2QxVHZHYkZyT081WGRQKzBP?=
- =?utf-8?B?VVREY3BBNHhXTXM1YVFQREpzclUwYUoxY3RIY2RzOUEvT2x2NjF0K2IzQ2Zp?=
- =?utf-8?B?WlF6eHEra1diaGh1TDVjNFNrd0YzakJTVDB3RVAyUHZ6Y3VWUFZwWDFweHI1?=
- =?utf-8?B?QWQwYXAxNE9FSjlKV2orNlUrWmtGM3VpMU5sZE4vYU1ZYmZ2c1hURkNHT1I5?=
- =?utf-8?B?eWxRZnQxSFpCblAxUUsxOWEvb2Ezcm50dEtTVXdMaWhZVWg1UHdvMm9QVGR2?=
- =?utf-8?B?TmRwZE9MSENlSUMrR2o4OSs2eUZFMk1LMFBNYkdtek9rQXBCa1Q0ckdxQU80?=
- =?utf-8?B?cUNvMENKcEllVU9SOTczQ0tDWEF3TXVkUDMxRFVPbHFVVXhnNXNNdVJnendm?=
- =?utf-8?B?WlJSWit3N3lqajd3amZSNFY4a0k4UVZQQVBNNjZFVEFSZWZKeExJK1ZsNmVu?=
- =?utf-8?B?QVZ0akZmTmZlR0taSzMxRHU1NlRvNjljV0VIK0wwcG1HSXF0ZDNocVM1V2dp?=
- =?utf-8?B?ek5nbjZtVDJQdHhyalZNT0tIZGhIUTRpeTE4SXNNR1V1bkZVRER1dz09?=
-X-Exchange-RoutingPolicyChecked:
-	PrK5qIhvfdQN2wA4k24b8HlPqX9OTVeAc8vwiq5MRFuZMaP/2Dco44qejOkKvuYsahGYvdaZE2r/ynbg9iRqLYsbieB+sm5OtU2LlBF2KRX/wvCVOaBQA2UVReQhjsvzlROmMS80458hAy3Z6Heu6zhhwCkbPLyovIlha1iYNAZrwgj4E+/WMCsKPniOzuyCOnGc0l49dEfZ7jNCSIMBUW3P3qlyitmySDeu2uoOJ0WdN1vW/zF4seAICl43TagRDk9lkxwdmHbNLc6Vn7maU6w7WHtnOcN9JzZxFJ9YUpFQqrLsGX99hctcD80EUfFGrDYpjn7nhNrliujBALeICQ==
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	Ezf+5Zg2hs1f/QKw+RBK9ISMOulqqUoF8Cpw6cu/NeN1daT3i3K4Wc1zgOQSVrsFTz9ylH5MJGVKPyz/g5+pAgLvPFdWrvJgGv7+bTueSGQ4Ijx0joTurRlbyFUM3pStUvnQSTHpp9B6twFZZb7XTYet/ylYONrUzZWG3mfjZUUW2WpH4M+HRRGlszcYPsn8Hb2fY8/d68a6WC+a/1QnnU1OmltePg2nKUM4e1rYeX/mi47MTIZUiEzvjEKo7gTC410j/rekyFeiTdZh4IyZwBRY2eXerXTDS2KnPm2S4fR5OILkLXt7vZ1/ETkdR09K2eOIzdA0+/I8s4YMCqduc94Hxgpt4Lav5DUArqntBEUP6nRzD0gNeVQdDx8ZTNF7yUZtJwdrhDKYf48yFpIsB3o1VqRrTMAEF67YKgb5CWK91w4amNLmrKnXMUY/PgOsckWkwaypMEVS0+issGAECjqd3dXDstm3ZhFt3GvsgRZbCI7K0Z8k9fU61+wVt1gEy2TD3OtZDRdX6NsKt7eXwMSDrpTRxAWfENBrR/ceMiB3XCyBJRyLktFfxGvTiJLsXYUT1Z3zFCSo+4tEmfxkhn9+o6uOcdWQkBLEkI6oFS+6oUp426dv6GM7OX5N41xm
-X-OriginatorOrg: witekio.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e52543f2-a4c5-4420-d873-08df20e3321d
-X-MS-Exchange-CrossTenant-AuthSource: DB8P192MB0792.EURP192.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2026 00:13:48.2329
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 317e086a-301a-49af-9ea4-48a1c458b903
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FuzLSKa0ulSbLKReH0mWgKH8ftymir9i64fCRtyT3SxctEwtR11IwrlV666zkGWzxugMVV+vQo80ZZaCOMtdwg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1P192MB3050
-X-cloud-security-sender:lhart@witekio.com
-X-cloud-security-recipient:linux-hwmon@vger.kernel.org
-X-cloud-security-crypt: load encryption module
-X-cloud-security-Mailarchiv: E-Mail archived for: lhart.opensource@witekio.com
-X-cloud-security-Mailarchivtype:outbound
-X-cloud-security-Virusscan:CLEAN
-X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-gate101-hz12.hornetsecurity.com with 4hxR2m1JJmz1dxnF
-X-cloud-security-connect: mail-northeuropeazon11020105.outbound.protection.outlook.com[52.101.84.105], TLS=1, IP=52.101.84.105
-X-cloud-security-Digest:27236412db9cfd462628b0cd40b06c92
-X-cloud-security:scantime:2.255
+Content-Transfer-Encoding: 8bit
 
-On 10/1/26 1:19 AM, Krzysztof Kozlowski wrote:
-> On Tue, Sep 29, 2026 at 04:04:05PM -0700, Luna Hart wrote:
->> +static const struct i2c_device_id tps38900x_id[] = {
->> +	{ .name = "tps389004", .driver_data = 4 },
->> +	{ .name = "tps389006", .driver_data = 6 },
->> +	{ .name = "tps389008", .driver_data = 8 },
->> +	{}
->> +};
->> +MODULE_DEVICE_TABLE(i2c, tps38900x_id);
->> +
->> +static const struct of_device_id tps38900x_of_match[] = {
->> +	{ .compatible = "ti,tps389004", .data = (void *)4 },
->> +	{ .compatible = "ti,tps389006", .data = (void *)6 },
->> +	{ .compatible = "ti,tps389008", .data = (void *)8 },
-> 
-> Does this mean programming model is exactly the same for all of them,
-> just additional channels?
-> 
-> If so, then these could be made compatible in the binding - use
-> fallback, to the ti,tps389004. I don't insist, though.
-> 
-> Best regards,
-> Krzysztof
-> 
+The Lenovo Yoga Slim 7x Gen 11 is a Qualcomm Snapdragon X2 Elite (glymur)
+laptop. It carries a Compal EF06 embedded controller on I2C at address
+0x70, which is the only source on this machine for the board thermistors,
+the fan tachometer, the keyboard backlight, Fn-lock, and the mic-mute
+and airplane-mode keys.
 
-This is correct. The programming is the same across these parts,
-they are differentiated just by number of channels. The tps389006
-datasheet also applies to the tps389004.
+Patch 1 documents the binding, patch 2 adds the driver, patch 3 adds the
+node to the board.
 
-That said, while double checking this, I could not find any
-substantial reference for the tps389004. I could not find a
-datasheet or any listing of parts with that name. The closest
-I found was a mention about a nameless 4 channel version of this
-part in some developer documentation. Expectation of a tps389004
-came from the previous driver.
+Why one driver
+--------------
 
-As such, I have dropped the tps389004. Leaving only the *006 and
-*008, which share a datasheet.
+The automated review of v2 asked for the hwmon part to become an
+auxiliary driver under drivers/hwmon/. The hwmon channels, the LED and
+the input device all sit behind one command mailbox and one interrupt,
+so the driver stays in one file, like huawei-gaokun-ec,
+lenovo-thinkpad-t14s and qcom-hamoa-ec next to it. It is documented
+under Documentation/ABI only.
 
-For the fallback: I'm unsure if it would be helpful in practice here.
-What does a fallback look like for the bindings? Could you point me
-at an example?
+Notes
+-----
 
-Regards,
-Luna Hart
+Fan speed is reported but not controlled, deliberately - the EC enforces no
+thermal floor over a manual setpoint. Patch 2 has the measurement.
 
+Tested on a Lenovo Yoga Slim 7x Gen 11 (DMI 83QR, "Yoga Slim 7 14Q8Y11").
+
+Changes in v5:
+- Patch 2: drop the battery cell voltages. They live in an EC bank shared
+  with other EC activity, and 43-79% of reads failed the signature check
+  across runs; retries, a cache and a stale window only hid that.
+- Patch 2: fn_lock had the polarity inverted: 1 left the multimedia keys
+  primary and the Fn-lock LED off. SCUK bit 7 selects the multimedia keys
+  and bit 5 turns the LED off, as the vendor ACPI FNUS method reports it;
+  1 now means F1..F12, as documented and as in ideapad-laptop.
+- Patch 2: FIELD_MODIFY() for the backlight level; notify fn_lock when
+  the EC toggles it on Fn+Esc; Kconfig help updated; the ABI entry dated
+  October 2026 for 7.5.
+- Patch 3: pick up Reviewed-by from Konrad and Abel.
+- Link to v4: https://lore.kernel.org/all/20260922165737.260443-1-okerixx@gmail.com/
+
+Changes in v4:
+- Patch 2, after Ilpo's review: the missing includes added where the
+  symbols are used; the cache and stale periods defined in milliseconds
+  with the unit in the name and converted to jiffies at the call;
+  lockdep_assert_held() in the command path every EC access goes
+  through; each EC read checked right after the call; ARRAY_SIZE() for
+  the cell loop; MILLIDEGREE_PER_DEGREE from units.h; braces on the
+  multi-line returns; the ABI entry dated September 2026 for 7.4.
+- Patch 2: the i2c id was 20 characters, the size of i2c_device_id.name,
+  leaving no room for the terminator; now "slim7x-gen11-ec".
+- Patch 2: symbol prefix renamed from yoga_ec to slim7x11_ec, naming the
+  machine like the driver does. No user-visible name changes.
+- Link to v3: https://lore.kernel.org/all/20260921144953.15113-1-okerixx@gmail.com/
+
+Changes in v3:
+- Add the board DT node as patch 3. It was posted on its own [1], and a
+  node cannot be merged before its binding (Konrad).
+- Add the "Why one driver" section above.
+- Patch 2: name the driver after the module, and the i2c id after the
+  compatible.
+- Patch 2: spell out both SCUK bits the Fn-lock toggle moves instead of
+  the 0xa0/0x5f masks.
+- Patch 2: return -ENODATA for a thermistor reading of 0, as probe already
+  treats 0 as "not fitted".
+- Patch 2: ten tries for a cell-voltage sample instead of thirty.
+- Patch 2: include what is used directly, devm_mutex_init(), comment the
+  mutex, fix the address in MODULE_AUTHOR, say in the commit message that
+  results cannot be matched to commands.
+- Link to v2: https://lore.kernel.org/all/20260908183403.2107-1-okerixx@gmail.com/
+
+Changes in v2:
+- Patch 2: drop #include <linux/mod_devicetable.h>; <linux/i2c.h> already
+  provides both of_device_id (via linux/of.h) and i2c_device_id (via
+  linux/device-id/i2c.h), and the header is on its way out.
+  Reported-by: Uwe Kleine-Koenig <u.kleine-koenig@baylibre.com>
+- Patch 2: add "depends on INPUT" to EC_LENOVO_YOGA_SLIM7X_GEN11; the driver
+  registers an input device unconditionally, so a config with INPUT=n did
+  not link.
+- Patch 1: pick up Conor Dooley's Acked-by.
+- Link to v1: https://lore.kernel.org/all/20260908091752.5508-1-okerixx@gmail.com/
+
+[1] https://lore.kernel.org/all/20260914082950.9393-1-okerixx@gmail.com/
+
+Oleg Keri (3):
+  dt-bindings: embedded-controller: add Lenovo Yoga Slim 7x Gen 11 EC
+  platform/arm64: add Lenovo Yoga Slim 7x Gen 11 EC driver
+  arm64: dts: qcom: glymur-lenovo-yoga-slim7x: add the embedded
+    controller
+
+ .../sysfs-driver-lenovo-yoga-slim7x-gen11-ec  |  22 +
+ .../lenovo,yoga-slim7x-gen11-ec.yaml          |  56 ++
+ MAINTAINERS                                   |   8 +
+ .../dts/qcom/glymur-lenovo-yoga-slim7x.dts    |  12 +-
+ drivers/platform/arm64/Kconfig                |  23 +
+ drivers/platform/arm64/Makefile               |   1 +
+ .../arm64/lenovo-yoga-slim7x-gen11-ec.c       | 547 ++++++++++++++++++
+ 7 files changed, 667 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-lenovo-yoga-slim7x-gen11-ec
+ create mode 100644 Documentation/devicetree/bindings/embedded-controller/lenovo,yoga-slim7x-gen11-ec.yaml
+ create mode 100644 drivers/platform/arm64/lenovo-yoga-slim7x-gen11-ec.c
+
+
+base-commit: f0406245cb9855e6318335a8a223551354291a46
+-- 
+2.55.0
 
