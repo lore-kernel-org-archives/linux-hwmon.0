@@ -1,69 +1,73 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out-2uec-a122.jellyfish.systems (out-2uec-a122.jellyfish.systems [63.250.43.122])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F4A62EEE75
-	for <linux-hwmon@vger.kernel.org>; Sun,  4 Oct 2026 14:32:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F328353EC0
+	for <linux-hwmon@vger.kernel.org>; Sun,  4 Oct 2026 15:33:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.250.43.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791124363; cv=none; b=ALPA/8chijr7uno286Z0E5Vs9P+cENh23oTWzG70zY9lgbMC2rSMCjNScxPNgN1nUOobmYEBqqFWD+JDA3aeJbdQJITwynyCDh083/GaaBuWUBpUN026xuez+5yhvgmy6GSIP/d6+PmSO33U+hfmMQtiH4iDiFpFcCaI0kGZigQ=
+	t=1791128040; cv=none; b=qbZvgx4yriX78BdVNkGDFYhVd32oRwUuuS/xts42kQRgh9V/IW7qYReXMlICuTUphuKw3bcXqze3harWtaNfvsrmM0CKiai7xy1vgEseaUifOWfLWEVa56oGjnPCZSXZN5xFJBKdrNPFXvRHkGkrcyczgdTl/cuvuubgTyn4Q6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791124363; c=relaxed/simple;
-	bh=jtYuII/XHP21/VeZ/jrP4g7eb+cLyLcXYEmgtxT3U0I=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uxRhFemCNCvlVOmq698kj9lkJ0/qWjabpduIxs1DMsaUVbvVmGSmWU8awTv2zOGMjhjfy8q25XXATK7fZYD2es/M+BT2nU1wtPAjEPN3qzjp724dEa4ytbgo/EBlP+JGaFYZJz/0HtMDc3wvEbmDdZ2VXJtA7tYMCZnrf1cgXAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hs1wc9RG; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hs1wc9RG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3DB91F000FF;
-	Sun,  4 Oct 2026 14:32:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791124361;
-	bh=jtYuII/XHP21/VeZ/jrP4g7eb+cLyLcXYEmgtxT3U0I=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hs1wc9RGVdescIH0IBPwwS0rT2kUxcHnTxXRU6AkNhba40qle5MfRyHRZDQYEB+58
-	 +WxHUG1SENmkOuqJOcbc44xdSkMJ/FMk6i5Z6MsMquZZC76IPGPfSNGOswOiN6iARU
-	 goWNJUOteg5o67wQYCf9NFnnKId0Y+0Y0HUP1EiqZQpGHyY6c+DxbVajxhuC3Tj+Dt
-	 x8JWemMWiKPkPVG/au6zcLMr66FOlNmXztKQAV9UqrEjNENjBCtAyOoA7KWNwNFHow
-	 tYwLp4A/a17SHc3xBdhRUC5lXqfb6NnBFH8/yORQ3wLY41pC38Jfc3TpW2/dZzMn31
-	 P8YTbMO2QcNuw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add CPU_Opt fan for ROG STRIX
- X570-E GAMING
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Matt Layher" <mdlayher@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261004-asus-ec-x570e-cpu-opt-v1-1-d9ea371c30d5@gmail.com>
-References: <20261004-asus-ec-x570e-cpu-opt-v1-1-d9ea371c30d5@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 04 Oct 2026 14:32:41 +0000
-Message-Id: <20261004143241.B3DB91F000FF@smtp.kernel.org>
+	s=arc-20240116; t=1791128040; c=relaxed/simple;
+	bh=l7nmUuWJjOffCPJDMvHFvCPTSGs2wiisRvGHPT+sZF4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FO2nrau3AVaaYxlGS8Pu/uQKOHPeWDpP1v9uebmEbhugPCeQUy3SnbC58bFOgkQmuejACXDmoZHPZftTqC8uyeHYL6Yl+OiPnk170qlXSzZdKoKRtY+IGdpUyTBJpfqgOr0QLr0s8wevG/3BX9zK/M3B+NlnB4RZg/tD5gRI0ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=effective-light.com; spf=pass smtp.mailfrom=effective-light.com; arc=none smtp.client-ip=63.250.43.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=effective-light.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=effective-light.com
+Received: from mail.privateemail.com (unknown [174.89.145.246])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.privateemail.com (Postfix) with ESMTPSA id 4hyRPt75f1zyNV;
+	Sun, 04 Oct 2026 15:33:54 +0000 (UTC)
+From: Hamza Mahfooz <someguy@effective-light.com>
+To: linux-hwmon@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hamza Mahfooz <someguy@effective-light.com>
+Subject: [PATCH 0/2] hwmon: (nct6683) Add fan control support for MSI boards with NCT6687D-R
+Date: Sun,  4 Oct 2026 11:32:48 -0400
+Message-ID: <20261004153250.516730-1-someguy@effective-light.com>
+X-Mailer: git-send-email 2.56.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Envelope-From: someguy@effective-light.com
 
-> From: Matt Layher <mdlayher@gmail.com>
->=20
-> Enable the CPU_Opt fan sensor for ROG STRIX X570-E GAMING.
->=20
-> The board has a CPU_OPT fan header, and its UEFI hardware monitor shows a
-> fan connected to it spinning at about 2000 RPM, but the driver does not
-> expose the sensor and the board's NCT6798D does not report it either.
->=20
-> Reading the EC directly through ec_sys on this board (BIOS 4408), the
-> CPU_Opt register used by the rest of the AMD 500 series family (bank 0,
-> 0xb0) returns 0x0580, 1408 RPM under the operating system's fan curve,
-> while the chipset fan register at 0xb4 returns 0, matching what the
-> driver already reports for that fan.
->=20
-> Assisted-by: LLM sparse
-> Signed-off-by: Matt Layher <mdlayher@gmail.com>
+Recent MSI boards (customer ID 0x20d) use an NCT6687D-R, whose fan
+control registers differ from the ones used on Mitac boards, the only
+boards for which the driver supports fan control so far. In addition,
+the system fans of these boards are connected to channels 10-15, whose
+duty cycle the driver does not report.
 
-Sashiko has reviewed this patch and found no issues. It looks great!
+This series adds fan control support for these boards, based on the
+register map reverse engineered by the LibreHardwareMonitor project [1],
+which uses it on MSI 800-series boards.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261004-asus-ec-x5=
-70e-cpu-opt-v1-1-d9ea371c30d5@gmail.com?part=3D1
+Patch 1 reports the duty cycle of the system fans, and patch 2 adds fan
+control support for the CPU, pump and system fan headers. 
+
+Tested on an MSI PRO B850-P WIFI (MS-7E56, BIOS 2.A93, NCT6687D EC
+firmware version 0.0 build 04/18/25), on top of kernel v7.3-rc5. Fan
+control is available on pwm1, pwm2 and pwm13 to pwm16 on this board.
+
+[1] https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/pull/2294
+
+Hamza Mahfooz (2):
+  hwmon: (nct6683) Report the duty cycle of NCT6687D-R system fans
+  hwmon: (nct6683) Add fan control support for MSI boards with
+    NCT6687D-R
+
+ Documentation/hwmon/nct6683.rst |  17 +++
+ drivers/hwmon/nct6683.c         | 233 +++++++++++++++++++++++++++++++-
+ 2 files changed, 244 insertions(+), 6 deletions(-)
+
+-- 
+2.56.0
 
