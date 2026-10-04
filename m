@@ -1,133 +1,120 @@
-Received: from aib29aea145.syd1.oracleemaildelivery.com (aib29aea145.syd1.oracleemaildelivery.com [192.29.151.145])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0965F379993
-	for <linux-hwmon@vger.kernel.org>; Sun,  4 Oct 2026 01:27:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.29.151.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCBC33612F1;
+	Sun,  4 Oct 2026 14:26:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791077276; cv=none; b=PT1y2WaCTCaHgc9kMK4IrkSUGd46B33NfoGQHtpwWgO0kSFHAdJyaze36eXmK6y4VoKVQjqaYc8VoKh92XNCcliuNgmUeVTcwbx12ecXmcjX9waUx4dL3JmACH7yxom53zNl5m3GfJCQjzU6FMjvB6itt19EDXYckjjjbUA6/qg=
+	t=1791124003; cv=none; b=IxG4DUKVJgvw9hymEu4FCcxazOzoroJ1HRLE78dTJ6RvALDtOG38m+CMIS+LLFidFBFc/775hncidKMBI2Of3XgDvdmo1VfYTkeenbJ/DX8LRNMWoMPkgDWeCUwtibYknb/IsoPPljmIOeAsQws9xPkeYns4guD663awdsmw/eM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791077276; c=relaxed/simple;
-	bh=YHwjaGEXhooScUMhN4sjKblUiQTTIR+wIjD3ycbLnbQ=;
-	h=Message-id:Date:MIME-version:Subject:To:Cc:References:From:
-	 In-reply-to:Content-type; b=ILvgDuiAqqrfVOfcCYjYzxSyVgviwMKOgHQov5VmyVCZwyD4jN+ZzH2E6DEB+uzWkixiuGZjpMicMWMXbxkkwTzODrnLKdFHW3HHLQ/SYxTr36FmNsD1daURNAMPOltuMmu4bgXVDONwXLNK1o4i3f0toMCmzrF2WPOfZa4+MXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=stevetech.au; spf=pass smtp.mailfrom=syd1.rp.oracleemaildelivery.com; dkim=pass (2048-bit key) header.d=stevetech.au header.i=@stevetech.au header.b=NQnUp56v; dkim=pass (2048-bit key) header.d=syd1.rp.oracleemaildelivery.com header.i=@syd1.rp.oracleemaildelivery.com header.b=E14yi3io; arc=none smtp.client-ip=192.29.151.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=stevetech.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=syd1.rp.oracleemaildelivery.com
+	s=arc-20240116; t=1791124003; c=relaxed/simple;
+	bh=mYyoKmz7PztwvOgGfWP9fwPEmOF10/H8tStniHmi9zg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YnZLB3RKw+h4arj6PYJd6ZnSnhIlkDKAu5zqC26QsBNfNn4Mi1bycy1n8DsH9P75bL1tDjrqRJgBwe+U8m+hVhmWSRywpp8EAEZ4YqxjKmyMXiwb5CsCyE1F2oMk+Ofqnu3ScjCbwNZHW/fYe2DdknCDM3BnJ2/aAPlefyhUrTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IXpfFZiK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=stevetech.au header.i=@stevetech.au header.b="NQnUp56v";
-	dkim=pass (2048-bit key) header.d=syd1.rp.oracleemaildelivery.com header.i=@syd1.rp.oracleemaildelivery.com header.b="E14yi3io"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=oracle-2026;
- d=stevetech.au;
- h=Date:To:From:Subject:Message-Id:MIME-Version:Sender:List-Unsubscribe:List-Unsubscribe-Post;
- bh=kpjG6rYXPTe/tizbo7cfjo5Jk+SyMjAmc1fPSNDuai4=;
- b=NQnUp56vheBunbWhvQPI+Ai90BFnwy7MHCpR8pJZ8W/34d5JV6zSpJYOA80JGW2+H1eVNIWINN/l
-   6T4UtkdSYaP6zJWdF8yl1rL1vapJpmOxvMqHn18MyQOt6El00sb/r3ighP3UV8sT0HFAihmUpn4j
-   E8k1p9tX2fmMkmXv5Em1sMDhPTMy/K6OwMbrylewMhAo4h+B2qQleX+biWMWJJalNrGdOoBOICUS
-   BH9rjNGe8N3qCrv4MNACgDSICloWI6G3Y3xhqpZSpAL0w1OZO597APSmbVyZZxK753BnZiHFBWUl
-   0QXxiJQtOGuj1xiYxciI90422CMIoRv4ETF4jQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=prod-syd-20200122;
- d=syd1.rp.oracleemaildelivery.com;
- h=Date:To:From:Subject:Message-Id:MIME-Version:Sender:List-Unsubscribe:List-Unsubscribe-Post;
- bh=kpjG6rYXPTe/tizbo7cfjo5Jk+SyMjAmc1fPSNDuai4=;
- b=E14yi3iobvJYkor+jGiJXqX+bsbXKZo0o4W+7/OCMXCkr2IOXE5ELDssxHPZtZT494vZOReLRdgB
-   z+hr2diHOx419o/UMHdZfbIIPkQUXppWZQ283CXZC49hN0KrMzlb/eFeZusCAvU/YnZXFcm1OHum
-   xBvnYZ3K1urnpTCPm0EcKiyKNyElk5hWYg/S7pK5K4g7kKfIyAzKlMzRwitMlBpN1zgpNcDnn/lc
-   +cfrdhF4/hI1ALq+7DBI9L+fNsB4CO6V5mxqTMok47WkT0lbL5IMosEUwSiA7F9PlHzBDQJhY7ey
-   8NFPrW8qyaLjpSOsdoGkMa1o6HnvqPJ+JdlfSA==
-Received: by omta-ad1-fd1-1401-ap-sydney-1.omtaad1.vcndpsyd.oraclevcn.com
- (Oracle Communications Messaging Server 8.1.0.1.20260817 64bit (built Aug 17
- 2026))
- with ESMTPS id <0TMD0SVKP02GK190@omta-ad1-fd1-1401-ap-sydney-1.omtaad1.vcndpsyd.oraclevcn.com> for
- linux-hwmon@vger.kernel.org; Sun, 04 Oct 2026 01:27:52 +0000 (GMT)
-List-Unsubscribe-Post: List-Unsubscribe=One-Click
-Message-id: <736f095c-d7d3-4023-a2c0-0b5fbb1baa78@stevetech.au>
-Date: Sun, 4 Oct 2026 11:27:49 +1000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IXpfFZiK"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 386A2C2BCB9;
+	Sun,  4 Oct 2026 14:26:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1791124003;
+	bh=mYyoKmz7PztwvOgGfWP9fwPEmOF10/H8tStniHmi9zg=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=IXpfFZiKL8j2UdAi1xu906FLfp7BAu0jvj/zX2pLxiB4PwdR3KbIckdPUjNDFdpbI
+	 zTVj13J0j+xVuA0a5KFv86ZWnUlKD5sQvFxtMnAFV8tY5yVpcP9uPPeqOMc4RxpV8O
+	 QOI4ElDqbI+X2AvLzMOzhcwA7zBHO7sbrIGaTT5HQkATp77AKp6XcOnvnsh5ywfMBT
+	 r3svFxx0sIcd7hU0YSLEiBqL6gzjh6pZPku74+IkldMygKx694lNcFFG47nT+t2UxD
+	 x3O0RAqRqxuXNef4iHCiaOH/BCdK+DAXDkJdUYQ3l07op6T5y8yejw0A9qrj57YWwd
+	 IwCJE7Uw5cqdA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1442ACA5FEF;
+	Sun,  4 Oct 2026 14:26:43 +0000 (UTC)
+From: Matt Layher via B4 Relay <devnull+mdlayher.gmail.com@kernel.org>
+Date: Sun, 04 Oct 2026 10:26:27 -0400
+Subject: [PATCH] hwmon: (asus-ec-sensors) add CPU_Opt fan for ROG STRIX
+ X570-E GAMING
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] usb: xhci-pci: Add AMD 600 series to xhci-pci-prom21
-To: Mirko Jechow <mirko.jechow@gmx.de>,
- Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org, Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
- Jihong Min <hurryman2212@gmail.com>
-References: <20261004002731.49927-1-mirko.jechow@gmx.de>
-From: Stephen Horvath <linux@stevetech.au>
-Content-language: en-AU, en-US, en-GB
-In-reply-to: <20261004002731.49927-1-mirko.jechow@gmx.de>
-Content-type: text/plain; charset=UTF-8
-Content-transfer-encoding: 7bit
-Reporting-Meta:
- AAHV7gL8JXoT6sfqXyJYFrulzXJdLpnzbDVduAssYr0JF2y5vo/IUbz12dA/L56G
- IrlTQ/k3MADBWKY+uIyAVcindxxYfs1QOPRLW/H8fReyxrAcmVXziN/+V/XogfFj
- KTXd1p23GNKFhaWEuwXU4G+rsSMWZ4SotWLcLZ5eMCl7tf5sUyUVBhTZ5bI4MdP2
- TmqC5g3RUe+l94CKVWoAE/usVp5/KIEFdUWCK6fiGf3qluxsz4ADcePlSAVyffFT
- /qj4EL0FAb5iUaNB7i813iFciAINOF0f8wUEnHLFDVPjWBkzscd9F+KjpciD9P3l
- mzhh/4GBSQt9kJmquxvtxm7EbTCWEPLIYEny+d6YdZ8/8l4aT1D6zIncxcmLFQ8K
- sv3M0xPBRly7wdu6caXZoN3TD8VTPhRwGkmZ2tcglngQxR2qt1HHjxq5TMbbRy8=
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261004-asus-ec-x570e-cpu-opt-v1-1-d9ea371c30d5@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQ6CMBBA0auQWTvJtEKJXsW4qHWAYQFNpzUkh
+ LtTdfkW/++gnIQV7s0OiT+isi4V5tJAmPwyMsq7GixZZ4ha9FoUOeDW9cQYYsE1ZnT26qzxA/U
+ 3gtrGxINsv+/j+beW18whf2dwHCcRgOQSeQAAAA==
+X-Change-ID: 20261004-asus-ec-x570e-cpu-opt-623621af0790
+To: Eugene Shalygin <eugene.shalygin@gmail.com>, 
+ Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Matt Layher <mdlayher@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791124002; l=2211;
+ i=mdlayher@gmail.com; s=linuxdev; h=from:subject:message-id;
+ bh=HEHb7pz+5CIVTAUXjsxnncxE0oQGAoREpSaAebUx9AQ=;
+ b=lH+GY7hQhCIRrlVSwJEabDbMMuuSttNbGlGKto0goC43sa7ced/zA6BldftpntEozBMDear3u
+ 374btCATaKDBmZqbkFcVxUwTjxw+zVZyahe44B4ZuLzAzq5fosBTLGC
+X-Developer-Key: i=mdlayher@gmail.com; a=ed25519;
+ pk=jO44g3WNw2T0EoKPeB+RUgDmyrZpA5Pmr830ITlwhaA=
+X-Endpoint-Received: by B4 Relay for mdlayher@gmail.com/linuxdev with
+ auth_id=1109
+X-Original-From: Matt Layher <mdlayher@gmail.com>
+Reply-To: mdlayher@gmail.com
 
-Hi Mirko.
+From: Matt Layher <mdlayher@gmail.com>
 
-On 4/10/26 10:27, Mirko Jechow wrote:
-> From: Stephen Horvath <linux@stevetech.au>
-> 
-> It seems the xhci-pci-prom21 module only has IDs for the 800 series
-> chipsets. However, the 600 series chipsets also have Promontory 21
-> chips, so we should add their IDs to the list as well.
-> 
-> I have tested this on my X670 board featuring DID `0x43f7`.
-> 
-> `1022:43f7` also appears on the PCI ID database
-> (https://pci-ids.ucw.cz/read/PC/1022/43f7).
-> Device IDs `0x43f9` (B665) & `0x43fa` (A620) were suggested by Shyam.
-> 
-> Also list the new IDs in Documentation/hwmon/prom21-xhci.rst.
-> 
-> Cc: stable@vger.kernel.org # 7.2.x
-> Cc: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-> Cc: Jihong Min <hurryman2212@gmail.com>
-> Signed-off-by: Stephen Horvath <linux@stevetech.au>
-> Tested-by: Mirko Jechow <mirko.jechow@gmx.de>
-> [mirko.jechow@gmx.de: add new IDs to prom21-xhci.rst]
-> Signed-off-by: Mirko Jechow <mirko.jechow@gmx.de>
-> ---
-> Changes in v3:
-> - List the new IDs on the PCI IDs line of Documentation/hwmon/prom21-xhci.rst
->   (requested by Jihong Min)
-> - Picked up from Stephen; v2 had no follow-up since 2026-08-23
+Enable the CPU_Opt fan sensor for ROG STRIX X570-E GAMING.
 
-Thanks for picking this up! Sorry I've been busy and forgot about this.
+The board has a CPU_OPT fan header, and its UEFI hardware monitor shows a
+fan connected to it spinning at about 2000 RPM, but the driver does not
+expose the sensor and the board's NCT6798D does not report it either.
 
-> - Link to v2: https://patch.msgid.link/20260820-xhci-pci-prom21-v2-1-638e5958fbbf@stevetech.au
-> ---
->  Documentation/hwmon/prom21-xhci.rst | 2 +-
->  drivers/usb/host/xhci-pci-prom21.c  | 3 +++
->  drivers/usb/host/xhci-pci.c         | 3 +++
->  drivers/usb/host/xhci-pci.h         | 3 +++
->  4 files changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/hwmon/prom21-xhci.rst b/Documentation/hwmon/prom21-xhci.rst
-> index 7984fb187bd8a..6c0b6e7368921 100644
-> --- a/Documentation/hwmon/prom21-xhci.rst
-> +++ b/Documentation/hwmon/prom21-xhci.rst
-> @@ -9,7 +9,7 @@ Supported chips:
->  
->      Prefix: 'prom21_xhci'
->  
-> -    PCI IDs: 1022:43fc, 1022:43fd
-> +    PCI IDs: 1022:43f7, 1022:43f9, 1022:43fa, 1022:43fc, 1022:43fd
->  
->  Author:
->  
+Reading the EC directly through ec_sys on this board (BIOS 4408), the
+CPU_Opt register used by the rest of the AMD 500 series family (bank 0,
+0xb0) returns 0x0580, 1408 RPM under the operating system's fan curve,
+while the chipset fan register at 0xb4 returns 0, matching what the
+driver already reports for that fan.
 
-Looks good to me!
+Assisted-by: LLM sparse
+Signed-off-by: Matt Layher <mdlayher@gmail.com>
+---
+An LLM coding assistant did most of the work on this patch: it found the
+missing sensor while auditing this machine's monitoring, compared the
+driver's board table with the BIOS hardware monitor, worked out which EC
+register to read, and drafted the change and this changelog. I
+reviewed both, and every test below ran on my own machines.
 
-Thanks,
-Steve
+Testing:
+- Runtime: the same one-line change applied to the driver in v6.18.54,
+  loaded on the board in place of the stock module; CPU_Opt read
+  1454-1463 RPM and the chipset fan 0.
+- Build: hwmon-next with W=1 and sparse (C=1), no warnings;
+  checkpatch --strict reports no errors, warnings or checks.
+---
+ drivers/hwmon/asus-ec-sensors.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index 19f423e45ce5..8261ddd00653 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -721,7 +721,7 @@ static const struct ec_board_info board_info_strix_x470_i_gaming = {
+ 
+ static const struct ec_board_info board_info_strix_x570_e_gaming = {
+ 	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+-		SENSOR_TEMP_T_SENSOR |
++		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CPU_OPT |
+ 		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
+ 		SENSOR_IN_CPU_CORE,
+ 	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+
+---
+base-commit: 4781ca52761e666cf18b591e6bb0478396c90320
+change-id: 20261004-asus-ec-x570e-cpu-opt-623621af0790
+
+Best regards,
+--  
+Matt Layher <mdlayher@gmail.com>
+
+
