@@ -1,51 +1,51 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9346147ECFD;
-	Mon,  5 Oct 2026 12:44:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F0B4480DEB;
+	Mon,  5 Oct 2026 12:44:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791204243; cv=none; b=hzkNHw+CsrYVTlHEOP6ENnXk31PKD8J141frJUGgwqkLugrIG/asrhF7g2mA+bKLcdb8f5xAiW5Tc3L5cno0acIm9fzYsFUKaWmIiYs7xZRZjyKvnpx4haA9w3ztXY7lHg4KQEDf7swY9yOKW79FzOVnJFiR2XqQCYhQpu6vlM4=
+	t=1791204269; cv=none; b=u08/MnguJx4t82GaTcKabyJY0pmwYdEOt+IPaFWZX+uI3UI6AQD9yoxJtDYfCJVYFqQP6PXBF5ybE5GKo67MLpHbTvGrqLWW1tBap3WAg/0LoeV+2ChEZkV7q1Mhz93qKYjzoLZKrmb1UU0G83VeVDytkkX7CyWt03kM6JbTnnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791204243; c=relaxed/simple;
-	bh=LGKOD8h4LqaKyXZDr5pYBUkt6cd20P7/qWcy+dXVkzY=;
+	s=arc-20240116; t=1791204269; c=relaxed/simple;
+	bh=CjyhT6uAT/zfhYv2M72tNWfa4qHOBMfA52ySEjvinAc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=CWnKHGptjpzdogIbVEL6zsAtvq8cUImndexRGYBmcW6riU9t9zqC9ZDFNvOhNkWHUaqJAlVUIoyI/kkQwj5tdg+uT1TnKbkSO212fOuVzntzmkYQ58tjXdwfN4U84kuOfTvFBvJ6xZgoAucame+F6bjGA07BSpW6QqU3JUyppLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xwc+JulV; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=n0ZJ9A//AUUzvhHSg8fRpfCA4S3stuCpzXEGzAWS8rjz5gBCZ3xrYaa8fc5BLPN01015AQ5bU2jdB/Y1Ad/bx66CF8mF9sFpGl17khCcUQhsft/ZjO/OH+c/hEKB/A2SRDfx22T7bT6P4qDgGsDkTYNbEd5NnQSjlK+2A7q4Fw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F8jgaMFM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xwc+JulV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D93AD1F000FF;
-	Mon,  5 Oct 2026 12:44:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F8jgaMFM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A49371F000FF;
+	Mon,  5 Oct 2026 12:44:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791204242;
-	bh=LGKOD8h4LqaKyXZDr5pYBUkt6cd20P7/qWcy+dXVkzY=;
+	s=k20260515; t=1791204268;
+	bh=CjyhT6uAT/zfhYv2M72tNWfa4qHOBMfA52ySEjvinAc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Xwc+JulVjIfzv0TVUVoSTBj/Nmlf2s+Es+bh/A/gka7bmC2u6k0rcqdbITpNcOKn+
-	 /jsTCqvR0An2SerVeMNJlFKRO+j4B1BwQ0yQ/WEgrb9rrfQzhEq4CgMJ6fskrJzXLA
-	 iny6mVe6cJdkqxV95aKwRkP8aUnP7ioqX9AB2Y9XZd8837iZTYjoAOzQojp7bA6Osq
-	 b4x0xVAaTxFThzAXve6z0pbsmWvNZXW0QAN3G1wO4tvAW5ZPL+rCRtxRlY/3p1NZ0J
-	 yc4VijHW0D96rXYeKe4QlxmUHPpvB88s0KkMgP61IplstNTq8Z++Xc09rreknfd1Nu
-	 A5JgSV6IX8LRw==
+	b=F8jgaMFMkHJqt1uW/TiXe54aATGybS/N2SeMz+ef3X/eURAMJhrvjL8zJ4mgmSE38
+	 fi9ZjHrkiQ7cUPZZ+CirK4m2VqHoUVq//jIctVyqR6+lUCrfp44mQfmGskF1k3hGB+
+	 tGdRxqJoh+YsmvPFQtgKbAv05bZGrn0i24ZX4UZdk81iuiPB1GSDfiyNSPdByft5Fs
+	 K6vhSiy6G0n1mtoiBvwwdn/K+2fcs0YWFIxSSThC8QFDbtOpa8ksrjCtwDyw9oyaQb
+	 q2FnMeRtIprBtk6U9zblZOPmO1LCRs5GHGOXPYk+LZP2BSlU73c4e3vIy1idO1Hqxm
+	 uaiWteXpZHA6w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 10/12] arm64: dts: qcom: pmih0108-kaanapali: Enable
- BCL sensor node
+Subject: Re: [PATCH v4 08/12] arm64: dts: qcom: pm8550: Enable BCL sensor
+ node
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Manaf Meethalavalappu Pallikunhi" <manaf.pallikunhi@oss.qualcomm.com>
-Cc: linux-hwmon@vger.kernel.org, robh@kernel.org, lee@kernel.org, mfd@lists.linux.dev, conor+dt@kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <20261005-qcom-bcl-hwmon-v4-10-50b9a8c730b7@oss.qualcomm.com>
+Cc: conor+dt@kernel.org, mfd@lists.linux.dev, lee@kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20261005-qcom-bcl-hwmon-v4-8-50b9a8c730b7@oss.qualcomm.com>
 References: <20261005-qcom-bcl-hwmon-v4-0-50b9a8c730b7@oss.qualcomm.com>
- <20261005-qcom-bcl-hwmon-v4-10-50b9a8c730b7@oss.qualcomm.com>
+ <20261005-qcom-bcl-hwmon-v4-8-50b9a8c730b7@oss.qualcomm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 05 Oct 2026 12:44:01 +0000
-Message-Id: <20261005124401.D93AD1F000FF@smtp.kernel.org>
+Date: Mon, 05 Oct 2026 12:44:27 +0000
+Message-Id: <20261005124427.A49371F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-> Add Battery Current Limiting (BCL) hardware monitor node for pmih0108
+> Add Battery Current Limiting (BCL) hardware monitor node for pm8550
 > PMIC. The BCL monitors battery voltage and current, providing hardware
 > interrupts when configurable thresholds are violated.
 >=20
@@ -57,5 +57,5 @@ Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261005-qcom-bcl-h=
-wmon-v4-0-50b9a8c730b7@oss.qualcomm.com?part=3D10
+wmon-v4-0-50b9a8c730b7@oss.qualcomm.com?part=3D8
 
