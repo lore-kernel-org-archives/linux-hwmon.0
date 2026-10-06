@@ -1,61 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D550C480336;
-	Mon,  5 Oct 2026 12:47:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791204477; cv=none; b=IQPv/o3/ocQo1GQ5LdZwxtIKS/p1gPEE2kBtJdxHOf3GzIkAvBTG9hyggKNOObFNLloUZIObnttADBtCqILVOQi9xjvuWgzcV+zNdQPYZ0R4Lo6nAp51/qemln8AC9mcxWLTtK7lH8+QoxceItCw+OpxrKSwqYsXkexdUMOa0QU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791204477; c=relaxed/simple;
-	bh=y35WiGkKFg8P2EwGd+G/Kxpo5hnfuNLawgMvustZLug=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UiILcdgNax0ql8DWzK4RgR6wKfFUrZJxlEdjG37rkJnGdVZCCls64iIEZ9B0rh3AOsrXWmwo3q4EF8I4xypWX/CtzeHe4j6cP/cK4MEoPEAbAENUj9wSI/OGV0khxrZtuu8V8T1jPM0AOoyZaNdiN7ZyxDCSHZzaPiaafdmxxwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IZIlEsAt; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17AC5370ADF
+	for <linux-hwmon@vger.kernel.org>; Tue,  6 Oct 2026 11:48:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791287334; cv=pass; b=brk/jls+WuNMFiqkTQueG6hWsCBkNw88UEsSh5NT4Y393oI6E0YbdxAiKq1qBLA2izxj9sReRzeIk838B7DYnnPSNBr8rb/QYxioD+y4RUERKW6O/BI2FiszxVBvUp9NeJDuuGTaIzU4/zinWrcFwkaZM8WdCT1bwz09aNgwIWI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791287334; c=relaxed/simple;
+	bh=jYJ3IdQnPrGlZkney67DWpSuVjwOBnDlJr0yOA4BAXA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=j6NdOuqswBrFMfcKrVTLhM+rGpeT/Wb5oiixQpFPE0ah1gkKsVAhdHa0SDr0XGySKmT5JXJnv7AcGbB+oCayqPaWZjbF22iqBpeqZCz5Svw3RC0XohDdJX+BDJe0Lo1NjQITUwSn3ERtSEYI6Og6bz9MSk1ocDH6uede5sfQJ3w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S/S3AV4W; arc=pass smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IZIlEsAt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36E551F000FF;
-	Mon,  5 Oct 2026 12:47:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791204476;
-	bh=y35WiGkKFg8P2EwGd+G/Kxpo5hnfuNLawgMvustZLug=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=IZIlEsAtOlwhc7cMm7nESmTD1aoKytn7PhPJ/YerCXe4iQEegAK/Qnu4VDARAVITr
-	 cowjQQqP80DO0eDhC2A00Q3hv+tRAfmGHbqb4p9zcqXlvRx51NBj/pyC8p9O9y7PRm
-	 p2ibApiYDfCfpZ1+GcAyzrJm8YdyzGrmFU7gwbSAWWmnfrsw5Zi0EscDp/f2adYqbE
-	 jM1ZfGU2+4W5yOgx61L5RjhgJDElTfsp7cMRR0CMTR0WhLKlTn4djIvywvv6Ar6bcp
-	 UmIY7e3IYIgBBkTJrGaWeuq9l4x/YNwtR2/Skm+O7uB87bUp+JXFzMLM8im3Y63UMJ
-	 +6jsiTWrGeFfw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 12/12] arm64: dts: qcom: smb2370: Enable BCL sensor
- node
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Manaf Meethalavalappu Pallikunhi" <manaf.pallikunhi@oss.qualcomm.com>
-Cc: devicetree@vger.kernel.org, robh@kernel.org, mfd@lists.linux.dev, conor+dt@kernel.org, lee@kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20261005-qcom-bcl-hwmon-v4-12-50b9a8c730b7@oss.qualcomm.com>
-References: <20261005-qcom-bcl-hwmon-v4-0-50b9a8c730b7@oss.qualcomm.com>
- <20261005-qcom-bcl-hwmon-v4-12-50b9a8c730b7@oss.qualcomm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 05 Oct 2026 12:47:55 +0000
-Message-Id: <20261005124756.36E551F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S/S3AV4W"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2d71d1cc8b2so3841835ad.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 06 Oct 2026 04:48:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791287332; cv=none;
+        d=google.com; s=arc-20260327;
+        b=E6xYdJknUqYzdadsYxFERd/pa/Jv4LNz2F28ccNcNn46r8sX3gHBhQpy5S2ret9UHk
+         vnE+l6CkrWg+aWETFj7NgOoBukPW8qBJcJHg0ZQCw5y18IpvyWlHRj3pLHpNxp6oP8V8
+         EKARZgJlH36TFgdC07bdgYr8xTOVv0K0jzNLDRgFENDdTJA31Qi9RhHxMYFhEpsJUYnP
+         /MM1VUTKfIIviX8FQx+kdSCyRP/GjeENT0RW7MwdnmxRXOjFDEsZpor2CGC7gws7I1PK
+         v2JdHzRM4J7JR27vHCwBddw4BWCl22u8JET4X5MoPC34UY1D+fYNRtYOCAYH084k8H7f
+         aWfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=jYJ3IdQnPrGlZkney67DWpSuVjwOBnDlJr0yOA4BAXA=;
+        fh=PTnsV/oVeNDz1N4/noxsj8dufCBc9g4BgPTE+UiVx+I=;
+        b=cVjNtSrrgG7vv7NZPUkIFPz1TM/GtBj4+SnxO4hGI/QSr3nPGeVx+b3POISxpFRTiu
+         8cz6Epxd6Ie4vW+Xp/N71VK1t3Ckv0DymhrvqeaFeQDAX5mEvRNxXhy9FNnXl93BUlyg
+         lgFqGNvbBiNs4iWUK/ibun/I70Q7PTGXNirsFRvtAwlAFm86O7h9wybL6xAmBY5LVif6
+         pJreY85WHK7KO/rFc7jGjrGGEdRgLxCKHNRNjNcd4w+H84nDm0JN9f7ih1ZJkIkhjKP5
+         NPG5Hso34350X39BLNLbsU/y2mlvdk33ouequfr9DFwuGtuPBd91Xau5qmL0Os4q0UGv
+         r2jg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791287332; x=1791892132; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jYJ3IdQnPrGlZkney67DWpSuVjwOBnDlJr0yOA4BAXA=;
+        b=S/S3AV4Wb/6L+uQ1KRumjH7w+tNlWIs3J7jc0gd7dz2RltFveeFx8NA0NC2mY5+7iC
+         zOPdBQc/1qMLLZe0ER1yWSC9jCOT6xVztDvYRhjZmiadCkMRBZks6v3psAxctwDy2CUD
+         oI8bWhLLSerOQ4BZEV+BNP53sYCUKpFru1OWrboVFzY4DQaTX5KGLmGCltZ2YaiE49zo
+         KEkU1sODQh7Sr9QxWRaeEuKiUkrx2wA9VmLljpc+ujVKgxfYMPy6AIsQ3D8V2qIb823H
+         DqlahuOJu+GhhrCR+LG5zd0/YBXCUC/bKHoOXoFcqRCCqn/M1B0nChNRT9BvsR81o7qd
+         ux5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791287332; x=1791892132;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=jYJ3IdQnPrGlZkney67DWpSuVjwOBnDlJr0yOA4BAXA=;
+        b=CBXtsR+jc/yBBbMGp/zGbduAEG1lXF9BNp4rOaa7bpf8g95/RcmYyAf5fRPl4Y/PXK
+         Lt5CbNuNBT1637cdi6gHy1noz5ADPRCTP7xkFzqCfxiMgZ4HQ3sXGuEp9eMnxU5ATUdE
+         fAF0D8sv6LESXUTvx8j8AYuExt7BZNY/P2ntQdIIj1AbE9HKvgD5OGarXS101Az41XWE
+         bKcqDsgFljeF5QgzAJrZbZQr+fybnB3sRENemyNiJe5XhNz+MZ9TwDsBr2rdxV729nAY
+         zUz1p12yj1vrb+GbuduLZxu8OE9DNnh3Vd/ImEnPUP4PkuLLHcWOOgJO6MSA+6Yj9Vuv
+         5tvw==
+X-Forwarded-Encrypted: i=1; AKwUvBzKi3f3vLRkc/8Kib2Dei/4U56AUTwWR7xWbpvG+0R3Zo90IL870UThOEdoxNPYryUijab9MhocLAarwg==@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ93jB1pvVveyaTJCTdrn9XMWleLsmBtLmnnx2g4j90eWBce7Bb
+	2DtkFIFOEYjnejbxV+DErQffkY/euC/Fmpqz5mcvzQvY5X4zGIAntH1daRWaAhTzunIE+LVSpgr
+	EWvC22t349eYjoAuE5mITDToY+6dcDEM=
+X-Gm-Gg: AYBFou3Ot37vTP3MIGKoJW7s2CYyF3BJqTc6qt2Oo1qfAkpEUm8EPZ0+slbqKfayujP
+	Yxb9kOarKnOvGrBrEtpedtwcsUNclhN/siaqv3T/PNvKpvU9tgNLzk2pSQVN4y8XwoCE1tnw/Yh
+	8uAjf4M3qJ7pxmzRGqRhC349LOhWRd9zFbajxAivMrr5gs4TXtq18cJVL5Rj0WxN2Uj37zBb/Xo
+	9wZDbEvtS+B7svhuvwUWtVrzfY8R86+ZE5LGwz40liIm0S0J3XFujZlSGWlC+Z6lB6t76WLYoL8
+	TEhTTXKxz+Ml3pOtOmZMiKuFtpVO/BRPiT5wJZdqGQK9RG+a556W2bHJH7twoPALzZMFYX4Dj2+
+	tWq9pBl32sMUPpr8hkM8=
+X-Received: by 2002:a17:903:244e:b0:2dd:ad74:ac7f with SMTP id
+ d9443c01a7336-2e5dcda375bmr8786655ad.26.1791287332318; Tue, 06 Oct 2026
+ 04:48:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20261004-asus-ec-x570e-cpu-opt-v1-1-d9ea371c30d5@gmail.com>
+In-Reply-To: <20261004-asus-ec-x570e-cpu-opt-v1-1-d9ea371c30d5@gmail.com>
+From: Eugene Shalygin <eugene.shalygin@gmail.com>
+Date: Tue, 6 Oct 2026 13:48:40 +0200
+X-Gm-Features: AclHuK8vZ3ZZc1eQpcjpnegkwDCbrJBuk7gokOoEYOfEz1Xn_OmcqrH8tPcCuB8
+Message-ID: <CAB95QASjtm0sUOSjr70+SNi2qGsCSMJKFh3D1intNKdmK5UHcw@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add CPU_Opt fan for ROG STRIX
+ X570-E GAMING
+To: mdlayher@gmail.com
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-> Add Battery Current Limiting (BCL) hardware monitor node for smb2370
-> PMIC. The BCL monitors battery voltage and current, providing hardware
-> interrupts when configurable thresholds are violated.
->=20
-> Reviewed-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
-> Signed-off-by: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qua=
-lcomm.com>
+Hi Matt,
 
-Sashiko has reviewed this patch and found no issues. It looks great!
+On Sun, 4 Oct 2026 at 16:26, Matt Layher via B4 Relay
+<devnull+mdlayher.gmail.com@kernel.org> wrote:
+>
+> From: Matt Layher <mdlayher@gmail.com>
+>
+> Enable the CPU_Opt fan sensor for ROG STRIX X570-E GAMING.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261005-qcom-bcl-h=
-wmon-v4-0-50b9a8c730b7@oss.qualcomm.com?part=3D12
+Can we have a laconic description for this more or less trivial change, please?
 
+Cheers,
+Eugene
