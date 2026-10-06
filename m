@@ -1,110 +1,185 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17AC5370ADF
-	for <linux-hwmon@vger.kernel.org>; Tue,  6 Oct 2026 11:48:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791287334; cv=pass; b=brk/jls+WuNMFiqkTQueG6hWsCBkNw88UEsSh5NT4Y393oI6E0YbdxAiKq1qBLA2izxj9sReRzeIk838B7DYnnPSNBr8rb/QYxioD+y4RUERKW6O/BI2FiszxVBvUp9NeJDuuGTaIzU4/zinWrcFwkaZM8WdCT1bwz09aNgwIWI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791287334; c=relaxed/simple;
-	bh=jYJ3IdQnPrGlZkney67DWpSuVjwOBnDlJr0yOA4BAXA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=j6NdOuqswBrFMfcKrVTLhM+rGpeT/Wb5oiixQpFPE0ah1gkKsVAhdHa0SDr0XGySKmT5JXJnv7AcGbB+oCayqPaWZjbF22iqBpeqZCz5Svw3RC0XohDdJX+BDJe0Lo1NjQITUwSn3ERtSEYI6Og6bz9MSk1ocDH6uede5sfQJ3w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S/S3AV4W; arc=pass smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1787D4503E1;
+	Tue,  6 Oct 2026 12:54:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791291275; cv=none; b=Z++8g3J2LOajDPI0TbKSebDwlYF86//rpr++brF8jOqRAVMCvfCBGnoDgJw3OPvg9csN8NKtbXtoHMtgpcxvN5DAd/9Thqzr61g3IgGieW46FzFuCINKK6nYTeHTnTw+vN+DjtfgTciEU3oS0JEtZS8FRo/wVuEzt5tCwLfTvhE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791291275; c=relaxed/simple;
+	bh=f6IAYwcrCk+Y0JiLWHhRpS+GzXmDGgNOUxGjDzM874c=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=TsSTa7OO7BQcinby3tmSfFGKXpCeaR2XvjH56Vaj1NAptXY1p1xdXUBHZByzUFGYb3uBlY4NLLnm1PT7NVLI0YWLNjvdIHVgPITv9uG1VULOv+9ykmK4mkI2YWWGAX5oDaQ22utpEkkkBY/0wBneCnTO1j3RtgDLNsXrJw5s8qE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BKJepJvA; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S/S3AV4W"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2d71d1cc8b2so3841835ad.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 06 Oct 2026 04:48:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791287332; cv=none;
-        d=google.com; s=arc-20260327;
-        b=E6xYdJknUqYzdadsYxFERd/pa/Jv4LNz2F28ccNcNn46r8sX3gHBhQpy5S2ret9UHk
-         vnE+l6CkrWg+aWETFj7NgOoBukPW8qBJcJHg0ZQCw5y18IpvyWlHRj3pLHpNxp6oP8V8
-         EKARZgJlH36TFgdC07bdgYr8xTOVv0K0jzNLDRgFENDdTJA31Qi9RhHxMYFhEpsJUYnP
-         /MM1VUTKfIIviX8FQx+kdSCyRP/GjeENT0RW7MwdnmxRXOjFDEsZpor2CGC7gws7I1PK
-         v2JdHzRM4J7JR27vHCwBddw4BWCl22u8JET4X5MoPC34UY1D+fYNRtYOCAYH084k8H7f
-         aWfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=jYJ3IdQnPrGlZkney67DWpSuVjwOBnDlJr0yOA4BAXA=;
-        fh=PTnsV/oVeNDz1N4/noxsj8dufCBc9g4BgPTE+UiVx+I=;
-        b=cVjNtSrrgG7vv7NZPUkIFPz1TM/GtBj4+SnxO4hGI/QSr3nPGeVx+b3POISxpFRTiu
-         8cz6Epxd6Ie4vW+Xp/N71VK1t3Ckv0DymhrvqeaFeQDAX5mEvRNxXhy9FNnXl93BUlyg
-         lgFqGNvbBiNs4iWUK/ibun/I70Q7PTGXNirsFRvtAwlAFm86O7h9wybL6xAmBY5LVif6
-         pJreY85WHK7KO/rFc7jGjrGGEdRgLxCKHNRNjNcd4w+H84nDm0JN9f7ih1ZJkIkhjKP5
-         NPG5Hso34350X39BLNLbsU/y2mlvdk33ouequfr9DFwuGtuPBd91Xau5qmL0Os4q0UGv
-         r2jg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791287332; x=1791892132; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jYJ3IdQnPrGlZkney67DWpSuVjwOBnDlJr0yOA4BAXA=;
-        b=S/S3AV4Wb/6L+uQ1KRumjH7w+tNlWIs3J7jc0gd7dz2RltFveeFx8NA0NC2mY5+7iC
-         zOPdBQc/1qMLLZe0ER1yWSC9jCOT6xVztDvYRhjZmiadCkMRBZks6v3psAxctwDy2CUD
-         oI8bWhLLSerOQ4BZEV+BNP53sYCUKpFru1OWrboVFzY4DQaTX5KGLmGCltZ2YaiE49zo
-         KEkU1sODQh7Sr9QxWRaeEuKiUkrx2wA9VmLljpc+ujVKgxfYMPy6AIsQ3D8V2qIb823H
-         DqlahuOJu+GhhrCR+LG5zd0/YBXCUC/bKHoOXoFcqRCCqn/M1B0nChNRT9BvsR81o7qd
-         ux5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791287332; x=1791892132;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=jYJ3IdQnPrGlZkney67DWpSuVjwOBnDlJr0yOA4BAXA=;
-        b=CBXtsR+jc/yBBbMGp/zGbduAEG1lXF9BNp4rOaa7bpf8g95/RcmYyAf5fRPl4Y/PXK
-         Lt5CbNuNBT1637cdi6gHy1noz5ADPRCTP7xkFzqCfxiMgZ4HQ3sXGuEp9eMnxU5ATUdE
-         fAF0D8sv6LESXUTvx8j8AYuExt7BZNY/P2ntQdIIj1AbE9HKvgD5OGarXS101Az41XWE
-         bKcqDsgFljeF5QgzAJrZbZQr+fybnB3sRENemyNiJe5XhNz+MZ9TwDsBr2rdxV729nAY
-         zUz1p12yj1vrb+GbuduLZxu8OE9DNnh3Vd/ImEnPUP4PkuLLHcWOOgJO6MSA+6Yj9Vuv
-         5tvw==
-X-Forwarded-Encrypted: i=1; AKwUvBzKi3f3vLRkc/8Kib2Dei/4U56AUTwWR7xWbpvG+0R3Zo90IL870UThOEdoxNPYryUijab9MhocLAarwg==@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ93jB1pvVveyaTJCTdrn9XMWleLsmBtLmnnx2g4j90eWBce7Bb
-	2DtkFIFOEYjnejbxV+DErQffkY/euC/Fmpqz5mcvzQvY5X4zGIAntH1daRWaAhTzunIE+LVSpgr
-	EWvC22t349eYjoAuE5mITDToY+6dcDEM=
-X-Gm-Gg: AYBFou3Ot37vTP3MIGKoJW7s2CYyF3BJqTc6qt2Oo1qfAkpEUm8EPZ0+slbqKfayujP
-	Yxb9kOarKnOvGrBrEtpedtwcsUNclhN/siaqv3T/PNvKpvU9tgNLzk2pSQVN4y8XwoCE1tnw/Yh
-	8uAjf4M3qJ7pxmzRGqRhC349LOhWRd9zFbajxAivMrr5gs4TXtq18cJVL5Rj0WxN2Uj37zBb/Xo
-	9wZDbEvtS+B7svhuvwUWtVrzfY8R86+ZE5LGwz40liIm0S0J3XFujZlSGWlC+Z6lB6t76WLYoL8
-	TEhTTXKxz+Ml3pOtOmZMiKuFtpVO/BRPiT5wJZdqGQK9RG+a556W2bHJH7twoPALzZMFYX4Dj2+
-	tWq9pBl32sMUPpr8hkM8=
-X-Received: by 2002:a17:903:244e:b0:2dd:ad74:ac7f with SMTP id
- d9443c01a7336-2e5dcda375bmr8786655ad.26.1791287332318; Tue, 06 Oct 2026
- 04:48:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BKJepJvA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791291272; x=1822827272;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:to:cc;
+  bh=f6IAYwcrCk+Y0JiLWHhRpS+GzXmDGgNOUxGjDzM874c=;
+  b=BKJepJvAlhx2BSAuQ9flurUbyLrbYH1mz20PYQT5qDrSpU7neBn4YMXV
+   Inr7KYzEGArRd+0xrGOT8rQa4Mzk2Xh9G2SEn46BS5SjJ1FVJJXQjZeL8
+   z+Ljm0+sthPat7MzAW9GQ5dC0Q0Dz0uPFtg/p5Eoi3juoeVVuaj+9BvM9
+   fZB+UF3SudwBAuDvLt89VYx4SjMggoabs/HAjHjeNIH69echTrFaA3aiV
+   +N52xU1Y+dK6aaCGMIcDIEeroBAw0BZIm6I1AnqMZaYPg6rppTeJ5sYvt
+   vaNUnOWpU9ngQ8wmhJgV54dRyPmdS4YCgmB4he3UKBIRzBMbRVv2iWi4z
+   g==;
+X-CSE-ConnectionGUID: MaBKzO15TxWhHBVbQXA3Hw==
+X-CSE-MsgGUID: zIZUrMLOQIaw5TTkYWEJsw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11926"; a="94850388"
+X-IronPort-AV: E=Sophos;i="6.27,143,1787036400"; 
+   d="scan'208";a="94850388"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2026 05:54:29 -0700
+X-CSE-ConnectionGUID: iDDkTCUdSWWyE/9g+d/VRw==
+X-CSE-MsgGUID: D42SBJwdTOOTaBhVhxHqAQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,143,1787036400"; 
+   d="scan'208";a="285044250"
+Received: from unknown (HELO [172.25.112.21]) ([172.25.112.21])
+  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2026 05:54:29 -0700
+From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Date: Tue, 06 Oct 2026 06:04:56 -0700
+Subject: [PATCH v2] hwmon: (coretemp) Return -ENODATA for invalid
+ temperature readings
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261004-asus-ec-x570e-cpu-opt-v1-1-d9ea371c30d5@gmail.com>
-In-Reply-To: <20261004-asus-ec-x570e-cpu-opt-v1-1-d9ea371c30d5@gmail.com>
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-Date: Tue, 6 Oct 2026 13:48:40 +0200
-X-Gm-Features: AclHuK8vZ3ZZc1eQpcjpnegkwDCbrJBuk7gokOoEYOfEz1Xn_OmcqrH8tPcCuB8
-Message-ID: <CAB95QASjtm0sUOSjr70+SNi2qGsCSMJKFh3D1intNKdmK5UHcw@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add CPU_Opt fan for ROG STRIX
- X570-E GAMING
-To: mdlayher@gmail.com
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261006-coretemp-enodata-v2-1-64e788acc7dc@linux.intel.com>
+X-B4-Tracking: v=1; b=H4sIAPfxxGoC/x3MsQqAIBRG4VeJOyeYWkOvEg1mf3WHVDQikN49a
+ fyGcwplJEamsSmUcHPm4CtU25A7rN8heK0mJdXQSamFCwkXzijgw2ovK2CU6Y2EXoyjmsWEjZ9
+ /Oc3v+wEIoHBIYgAAAA==
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: david.nystrom@est.tech, linux-hwmon@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ ricardo.neri@intel.com, 
+ Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791291906; l=4497;
+ i=ricardo.neri-calderon@linux.intel.com; s=20250602;
+ h=from:subject:message-id; bh=f6IAYwcrCk+Y0JiLWHhRpS+GzXmDGgNOUxGjDzM874c=;
+ b=2I0MHVe9AlES+YTQAJKs6o4vH7sVhPPuXlENeEJKMHcJEW9shBZ1s+z5Y2o2Qqa0jIywksgTo
+ G58h0AI2Pd3AIn/qkDxEL97RtlxL1YWdItD5U9Xlg9ms7DmhnWVEFd2
+X-Developer-Key: i=ricardo.neri-calderon@linux.intel.com; a=ed25519;
+ pk=NfZw5SyQ2lxVfmNMaMR6KUj3+0OhcwDPyRzFDH9gY2w=
 
-Hi Matt,
+IA32_THERM_STATUS and IA32_PACKAGE_THERM_STATUS have a valid bit, bit 31.
+The Intel SDM documents it only for the former, but the package register
+implements it too: x86_pkg_temp_thermal has required it since commit
+f1a18a105660 ("Thermal: CPU Package temperature thermal").
 
-On Sun, 4 Oct 2026 at 16:26, Matt Layher via B4 Relay
-<devnull+mdlayher.gmail.com@kernel.org> wrote:
->
-> From: Matt Layher <mdlayher@gmail.com>
->
-> Enable the CPU_Opt fan sensor for ROG STRIX X570-E GAMING.
+This driver checked the bit for both registers as well, until
+commit bf6ea084ebb5 ("hwmon: (coretemp) Do not return -EAGAIN for low
+temperatures") made it ignore the bit because some CPUs clear it while
+the temperature is too low to be measured. Since then, temp%d_input
+reports such a reading as a real temperature. Userspace cannot tell it
+apart from a genuinely low one.
 
-Can we have a laconic description for this more or less trivial change, please?
+Fail the read with -ENODATA while the CPU reports the reading as invalid.
+On a CPU that clears the bit, reading temp%d_input now fails where it
+used to return a low value. sensors(1) shows N/A in its place.
 
-Cheers,
-Eugene
+Suggested-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/all/46f9f319-de71-412f-a424-6cb801478456@roeck-us.net/
+Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+---
+Changes in v2:
+- Patches 1 and 2 of v1 have been applied. This is a rework of patch 3.
+- Drop temp%d_fault and fail temp%d_input with -ENODATA instead. (Guenter)
+- Link to v1: https://lore.kernel.org/r/20260924-coretemp-temp-fault-v1-0-1884f0ff97d5@linux.intel.com
+---
+ Documentation/hwmon/coretemp.rst |  3 +++
+ drivers/hwmon/coretemp.c         | 21 +++++++++++++++------
+ 2 files changed, 18 insertions(+), 6 deletions(-)
+
+diff --git a/Documentation/hwmon/coretemp.rst b/Documentation/hwmon/coretemp.rst
+index 349301683381..09f885a847e3 100644
+--- a/Documentation/hwmon/coretemp.rst
++++ b/Documentation/hwmon/coretemp.rst
+@@ -50,6 +50,9 @@ All sysfs entries are named with their core_id (represented here by 'X').
+ 
+ ================= ========================================================
+ tempX_input	  Core temperature (in millidegrees Celsius).
++		  Reading fails with -ENODATA while the CPU reports the
++		  temperature as invalid. Some CPUs do this when the
++		  temperature is too low to be measured.
+ tempX_max	  Maximum recommended operating temperature (Tcontrol).
+ 		  All cooling devices should be turned on.
+ tempX_crit	  Maximum junction temperature (in millidegrees Celsius).
+diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+index 0ab6bbff5637..a9edbb4924a7 100644
+--- a/drivers/hwmon/coretemp.c
++++ b/drivers/hwmon/coretemp.c
+@@ -60,6 +60,8 @@ enum coretemp_attr_index {
+ 
+ /*
+  * Per-Core Temperature Data
++ * @temp_valid: Whether the CPU reported @temp as valid. @temp is not
++ *		reported when this is false.
+  * @tjmax: The static tjmax value when tjmax cannot be retrieved from
+  *		IA32_TEMPERATURE_TARGET MSR.
+  * @last_updated: The time when the current temperature value was updated
+@@ -72,6 +74,7 @@ enum coretemp_attr_index {
+  */
+ struct temp_data {
+ 	int temp;
++	bool temp_valid;
+ 	int tjmax;
+ 	unsigned long last_updated;
+ 	unsigned int cpu;
+@@ -398,7 +401,8 @@ static ssize_t show_temp(struct device *dev,
+ {
+ 	struct msr val;
+ 	struct temp_data *tdata = container_of(devattr, struct temp_data, sd_attrs[ATTR_TEMP]);
+-	int tjmax;
++	int tjmax, temp;
++	bool valid;
+ 
+ 	mutex_lock(&tdata->update_lock);
+ 
+@@ -407,17 +411,22 @@ static ssize_t show_temp(struct device *dev,
+ 		tjmax = get_tjmax(tdata, dev);
+ 		rdmsrq_on_cpu(tdata->cpu, tdata->status_reg, &val.q);
+ 		/*
+-		 * Ignore the valid bit. In all observed cases the register
+-		 * value is either low or zero if the valid bit is 0.
+-		 * Return it instead of reporting an error which doesn't
+-		 * really help at all.
++		 * Bit 31 indicates whether the reading is valid. Some CPUs
++		 * clear it while the temperature is too low to be measured.
++		 * Such a reading is not a temperature. Do not report it.
+ 		 */
++		tdata->temp_valid = (val.l >> 31) & 1;
+ 		tdata->temp = tjmax - ((val.l >> 16) & 0xff) * 1000;
+ 		tdata->last_updated = jiffies;
+ 	}
+ 
++	valid = tdata->temp_valid;
++	temp = tdata->temp;
+ 	mutex_unlock(&tdata->update_lock);
+-	return sprintf(buf, "%d\n", tdata->temp);
++
++	if (!valid)
++		return -ENODATA;
++	return sprintf(buf, "%d\n", temp);
+ }
+ 
+ static int create_core_attrs(struct temp_data *tdata, struct device *dev)
+
+---
+base-commit: 4781ca52761e666cf18b591e6bb0478396c90320
+change-id: 20261003-coretemp-enodata-e424540e3b4c
+
+Best regards,
+-- 
+Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+
