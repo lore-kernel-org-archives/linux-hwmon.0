@@ -1,161 +1,75 @@
-Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8332F43B6DE
-	for <linux-hwmon@vger.kernel.org>; Thu,  8 Oct 2026 20:54:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46F013939DB
+	for <linux-hwmon@vger.kernel.org>; Thu,  8 Oct 2026 21:05:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791492877; cv=none; b=TAhH28IAVuIKIQiZDYYATdPqx4u1Mr0xlgXjEdrRsni/DeeJTb+1NpuF8x24xfqjLBQwZSRWTghMVMkV9hOWuDVh3yc/NzUjz5t4IYSn5dxOlIDiWuaQ4BRFAyxjstUZGDz4Ko7saFGZYs2bF1LRsnZEp1rQnp/M/9Mm0CkdFhY=
+	t=1791493543; cv=none; b=k+K97LRNWV7jXWXOpUspWBzP797lB4U4gLlGJOImTvNlwFWoZ+1CKKBfF2F1uALjSqJ+IFb++wPx4VWXKflEMdk7ZVqb2XffKBij3tNLcpfvLP0GKBdDinr3GIfazjcAqS0QUQjLw+93Zl2UbrljiUBaU4cmPyKxdc6yYUp9HAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791492877; c=relaxed/simple;
-	bh=Ja/n8vnyXKQ4zDXeNyS8eJjsWsS+vVM2lTFns7Ob23M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZSC8qZZ0gUBYBudlPGtWAYYl/jB/GDsM7BXwCQQVOIwlzohl5OoxUCm8U3068Ftm7gnHmGaV7n6Xn2JSKqnFwUS+4C2qZxbVmRbR3ayqHt+9rh2Sx5m7P54/IRZbDfqoYEhCumoq0sLdPHRcP2O4N/7Ejgx/psrUWWjVpe7OpWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GqPOK7NZ; arc=none smtp.client-ip=209.85.221.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791493543; c=relaxed/simple;
+	bh=2HrPDmijIBAa9LOcoxg2wWHo6E4HdkDXMtqkEiIWB5s=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=tDnyGqX4n4/Ml6UhSiA+eFn3H1OICABAauy6DMRF9hvMfTlqjJjP3/OT06TUPmvPtUpV/oMXtq/y4iye0VQTnuW817PcwIJvmUtq9okx4ybQaPHdkjmcsavKB5aCW6pIM4LfHH87JPR4g0gPu7ax/EEOMEQnSCsr0rqd9f7bGVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fQFl/I+W; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GqPOK7NZ"
-Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-5e6cc881293so56106e0c.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 08 Oct 2026 13:54:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791492873; x=1792097673; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=TUgbiGOrc5TwQa04SOQbqot27foFidgkJz8QzlDVcY8=;
-        b=GqPOK7NZfDvGtiQ1p2ZMHU3T7JmqcIq+UelzCkclihcVg1lm4ibq0zKi0odJNili9V
-         /GQjYM+iSMMv7R548mNHCV/ztb4Tjg4vMsHMzoKsuhErkn0f6zkscOjLXLSk6N5PQ6mF
-         4xMCYFmIKEMmxdB/v8Lm+9+17TY1nlxIiBa6SgvCuGxBiHwWJUPOx2e3b8nCWjkWy9Vg
-         4iRStHdx1/px453xNhdg/Z49f8ybdpeIDnc4U2wH42GCIEocx9wgETX4wghxc2/UOjlL
-         WBntdRYPBGjUUNmm3RiY28rR1JM4FXtPds8c1kQ05JQtLV/DvlVyn3lMv0fJ1FWTvrDK
-         /b8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791492873; x=1792097673;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=TUgbiGOrc5TwQa04SOQbqot27foFidgkJz8QzlDVcY8=;
-        b=AZoFrQdcGrmd/24WlgHb2euzCPCzbT9nJEIBuJV/VQkfPeXl1LJ0qQgBGCRaxA0LSh
-         0upSkaq31iRQqIhbcIk0f6zOQ1Y2iU5CRbEuzK34scao4QAdu83VYTGYX72KGHQAXcwX
-         ct2pVA7tE93iyx3RKlHM95u3eBQNvmM1vpwK13H+hNFQ5Lj8r0HFn3/VjKC/sr5iw2eT
-         DPmQhbrv2R3S4+Onlw0BDgfNM4nbmbZnLITK5wptTSKoYkSnMucBTumFvMJrTewxCdXI
-         WDu25IwvvYQtK7USNq4hZTFz2GAueBTq/rTJ4SMCun3NyJG5uZwR1ktxEbKQozDKkQw0
-         SnHA==
-X-Forwarded-Encrypted: i=1; AKwUvBwh/068FNkndOTsaWyRicmQmqec8/JJFaGMUcAPyIzeY0V7MTkwppmiJDIpxTuHICqgrj5bJ8q8hV+IXQ==@vger.kernel.org
-X-Gm-Message-State: AFq9FYKQ++g+v9jPwg+/hqjJ6F508yhz9CyWB7h99iGzDo4tVWStUafd
-	1oBKtgN7wz3VW99zI1ISrKlK1QoH2vHVk77zQWf5z7ZmVOvc0SPlcDUb
-X-Gm-Gg: AYBFou02HE8+aGD7XmpaQAn4g0jBUAjWeo4355LKdo9zyEYtCeuuNocqZS80dGAQo5j
-	RsnG+zgt4FUSeS2+Sa3HtHkK0wIJj1STFiZUarYMCKCnluGFHV1c+ZOWPpnkhbb9wqNUb3egPNR
-	o6tvKTgRbeG7mi5opkQEm0/I/cgbPb1CWa7aRUHZiR70EABMgjKFwLh+B0JNI+manuOyzDP+xkE
-	rQKu0XdIeLGwTwdFDfRH6KSgvkkC/z1PHH5w+9zMAP3vhmqQ4rm7tEhnA2qq1YAUdLu8rpI1jGu
-	GdA3qIBfUqojvty591BcIq61dIhp4M+CboABBMYWWbxDZsqlQ3IXxBHhFZ/3Twf5fAZbTd/ciEO
-	XhESlP0Yo6b7fNmjppMjlX3p5b2IcsYdCNAGRw2Dgif8y4zchPUe8Tqq+9XQsH1TrKSD0zkIOoi
-	xFpIriHFVYreVVTkn52Rqje3PPf0L7F8OgH88Vrd2YGNkzNAwuGFBsVrsfiViQAKV6EwUiYSiWD
-	UPGCweyDFUXUR6dIbP+dbf9xc5QKuj67yLxnQMY0qfiwpHrit0U/5ocOXjUAJkBszAEihuoar3E
-	4B1LLoWbUyKiatT4gvE=
-X-Received: by 2002:a05:6102:5cca:b0:7c3:99a3:314e with SMTP id ada2fe7eead31-7cb361df77amr41886137.0.1791492873129;
-        Thu, 08 Oct 2026 13:54:33 -0700 (PDT)
-Received: from localhost.localdomain ([132.170.205.109])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7cb35394b27sm124191137.5.2026.10.08.13.54.32
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 08 Oct 2026 13:54:32 -0700 (PDT)
-From: Sanan Hasanov <sanan.hasanou@gmail.com>
-To: Marius Zachmann <mail@mariuszachmann.de>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Sanan Hasanov <sanan.hasanov@ucf.edu>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Aleksa Savic <savicaleksa83@gmail.com>,
-	syzbot+0f98b0c0bdeaab2dc2fd@syzkaller.appspotmail.com,
-	stable@vger.kernel.org
-Subject: [PATCH] hwmon: (corsair-cpro) Make wait_input_report_lock IRQ safe
-Date: Thu,  8 Oct 2026 16:52:45 -0400
-Message-ID: <20261008205310.30832-1-sanan.hasanou@gmail.com>
-X-Mailer: git-send-email 2.48.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fQFl/I+W"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9B771F000FF;
+	Thu,  8 Oct 2026 21:05:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791493541;
+	bh=ixdsfL2wLj+8HtyeokxFS1yzjkwwL4gWUYEz3joTbsI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=fQFl/I+W0siUbJxy8+pIwavEnx27FfukOc9vdtP5dWqBKuBu6N9ufTxnHWKDXD25T
+	 Qyeb8g3rcgQ9wZJV1Zk0biUxXZMvWjDyMbB/hU3i92X/I+Z/1E6ajD/cQtwZY3FsID
+	 zUcgJeB1I5gCgrXP3JfMTudW3JFtcUjV8oeDwr2TSHXtRLozIpJb4nImdJ4cBvYA7+
+	 yhc0mo1Yyntsae/19NJcz3C4BakiyNVsn2S4ACepEpWo8WWMZjWw+94hcwPhQovhur
+	 NDaiDJu+dzM6fBiAjNYyoj67nt221B1lUb8CdutUYLiVu5RH7noOD7igGBM4XMDJlD
+	 RgcHA0TtvvBxA==
+Message-ID: <sashiko-outbox-164595@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (corsair-cpro) Make wait_input_report_lock IRQ
+ safe
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sanan Hasanov" <sanan.hasanou@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20261008205310.30832-1-sanan.hasanou@gmail.com>
+References: <20261008205310.30832-1-sanan.hasanou@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 08 Oct 2026 21:05:41 +0000
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Sanan Hasanov <sanan.hasanov@ucf.edu>
+> From: Sanan Hasanov <sanan.hasanov@ucf.edu>
+>=20
+> ccp_raw_event() is the HID ->raw_event() callback and takes
+> wait_input_report_lock with a plain spin_lock(). This callback can run
+> in very different contexts depending on the transport: from process
+> context (e.g. uhid, via a write() to /dev/uhid) with softirqs and
+> interrupts enabled, and from URB completion, which is softirq context
+> for HCDs using HCD_BH and hard interrupt context for HCDs that do not
+> (e.g. OHCI, UHCI).
+>=20
+> Taking the lock from process context with softirqs enabled while the
+> same lock is also taken from softirq context can deadlock if the
+> softirq interrupts the lock holder on the same CPU. Lockdep reports:
+>=20
+>   WARNING: inconsistent lock state
+> [ ... ]
+> Fixes: d02abd57e794 ("hwmon: (corsair-cpro) Protect ccp->wait_input_repor=
+t with a spinlock")
+> Reported-by: syzbot+0f98b0c0bdeaab2dc2fd@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=3D0f98b0c0bdeaab2dc2fd
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sanan Hasanov <sanan.hasanov@ucf.edu>
 
-ccp_raw_event() is the HID ->raw_event() callback and takes
-wait_input_report_lock with a plain spin_lock(). This callback can run
-in very different contexts depending on the transport: from process
-context (e.g. uhid, via a write() to /dev/uhid) with softirqs and
-interrupts enabled, and from URB completion, which is softirq context
-for HCDs using HCD_BH and hard interrupt context for HCDs that do not
-(e.g. OHCI, UHCI).
+Sashiko has reviewed this patch and found no issues. It looks great!
 
-Taking the lock from process context with softirqs enabled while the
-same lock is also taken from softirq context can deadlock if the
-softirq interrupts the lock holder on the same CPU. Lockdep reports:
-
-  WARNING: inconsistent lock state
-  inconsistent {SOFTIRQ-ON-W} -> {IN-SOFTIRQ-W} usage.
-  ...
-   spin_lock include/linux/spinlock.h:347 [inline]
-   ccp_raw_event+0x51/0x110 drivers/hwmon/corsair-cpro.c:161
-   __hid_input_report+0x41c/0x580 drivers/hid/hid-core.c:2175
-   hid_irq_in+0x492/0x710 drivers/hid/usbhid/hid-core.c:287
-   __usb_hcd_giveback_urb+0x378/0x540 drivers/usb/core/hcd.c:1657
-   dummy_timer+0xa91/0x4cc0 drivers/usb/gadget/udc/dummy_hcd.c:2023
-
-For the same reason, the spin_lock_bh() in send_usb_cmd() is not
-sufficient when ccp_raw_event() is called from hard interrupt context.
-
-Use spin_lock_irqsave() in ccp_raw_event(), since it may be called with
-interrupts already disabled, and spin_lock_irq() in send_usb_cmd(),
-which always runs in process context.
-
-Fixes: d02abd57e794 ("hwmon: (corsair-cpro) Protect ccp->wait_input_report with a spinlock")
-Reported-by: syzbot+0f98b0c0bdeaab2dc2fd@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=0f98b0c0bdeaab2dc2fd
-Cc: stable@vger.kernel.org
-Signed-off-by: Sanan Hasanov <sanan.hasanov@ucf.edu>
----
- drivers/hwmon/corsair-cpro.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
-index c09645152..e6d31d367 100644
---- a/drivers/hwmon/corsair-cpro.c
-+++ b/drivers/hwmon/corsair-cpro.c
-@@ -135,9 +135,9 @@ static int send_usb_cmd(struct ccp_device *ccp, u8 command, u8 byte1, u8 byte2,
- 	 * the raw event parsing and marked the ccp->wait_input_report
- 	 * completion as done.
- 	 */
--	spin_lock_bh(&ccp->wait_input_report_lock);
-+	spin_lock_irq(&ccp->wait_input_report_lock);
- 	reinit_completion(&ccp->wait_input_report);
--	spin_unlock_bh(&ccp->wait_input_report_lock);
-+	spin_unlock_irq(&ccp->wait_input_report_lock);
- 
- 	ret = hid_hw_output_report(ccp->hdev, ccp->cmd_buffer, OUT_BUFFER_SIZE);
- 	if (ret < 0)
-@@ -156,15 +156,16 @@ static int send_usb_cmd(struct ccp_device *ccp, u8 command, u8 byte1, u8 byte2,
- static int ccp_raw_event(struct hid_device *hdev, struct hid_report *report, u8 *data, int size)
- {
- 	struct ccp_device *ccp = hid_get_drvdata(hdev);
-+	unsigned long flags;
- 
- 	/* only copy buffer when requested */
--	spin_lock(&ccp->wait_input_report_lock);
-+	spin_lock_irqsave(&ccp->wait_input_report_lock, flags);
- 	if (!completion_done(&ccp->wait_input_report)) {
- 		memcpy(ccp->buffer, data, min(IN_BUFFER_SIZE, size));
- 		ccp->buffer_recv_size = size;
- 		complete_all(&ccp->wait_input_report);
- 	}
--	spin_unlock(&ccp->wait_input_report_lock);
-+	spin_unlock_irqrestore(&ccp->wait_input_report_lock, flags);
- 
- 	return 0;
- }
-
-base-commit: 6c377d19d4a5116d9bec5203aa3c6c11523e7898
--- 
-2.48.1
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261008205310.3083=
+2-1-sanan.hasanou@gmail.com?part=3D1
 
