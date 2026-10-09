@@ -1,73 +1,67 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27A48377AAC
-	for <linux-hwmon@vger.kernel.org>; Fri,  9 Oct 2026 15:55:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B3836B934
+	for <linux-hwmon@vger.kernel.org>; Fri,  9 Oct 2026 15:56:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791561351; cv=none; b=Yc9vJsmzxqd84zX44g6uo/hlj0n5G/SXpN2mMMdAVlpQjGN3/AdQGmVnZMDj4PDUml3LdPGbmIvmwPm1iI/o8tre+tLyP/iPmQI0z0BFF6KrrEL/8XjFgVDG9OAs+ViDRmv1KY2xWqKs/4HKklMe94e4VCdC5Hp0lREjuAyUYoI=
+	t=1791561387; cv=none; b=LBKs1xLNM9qaV9fv2CintGwdhtrt+go2rUC8pecxyF5JdIyYQ6sWTaeWkp6d9maSChHkz8KKDvq1H3d16Kjwd9mv2yYAswbOfeTCdW4yUdNXmbIXDitE0BhQvCbB9xM4tkFVdgILJ8L9ogXJ2/J+sa06smQDrH4y0dZKCZEWDE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791561351; c=relaxed/simple;
-	bh=KVQdeN+DX01QFLnBja+VYVrxllq+Jrnkw+JMubZ6Xu0=;
+	s=arc-20240116; t=1791561387; c=relaxed/simple;
+	bh=7YT7+wWj6G1VKqXxxpoY54JVtQTCQw3psKrE+9gHR/w=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=dwpdfky+BwndKg+IIcwzJ1pk7ESXC0rl37y4oobfpLUaO2nSgAs2jYUgMuv3pmYrVHGrynX/AWZxrCGS+gy83MrwK+68j9W+COmdAdPOBMpIKkhUlvfjGQLH1g5qB9pPvsA1+olHlW1WRGmHk2Z6cUVll59/IJyIAX4aWcoq7g4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B1VCNVzo; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=QljrEYj5clBNWIQEQlnDrFjeMPNqbkRzYZozW0sk9rbj6XyFo7P2l8AnhOmzm5yWbSomMV+lU6V9lwLzYAZqFLZVa0agu6GFTroHVavtrFTzQmGxblEAJyQL+o3o0REEJYCfpHvZumapnfTRtwAZyB4hy06fn+ZE449PCbkdprE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=esCsSVZj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B1VCNVzo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E51C81F000FF;
-	Fri,  9 Oct 2026 15:55:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="esCsSVZj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C40C1F000FF;
+	Fri,  9 Oct 2026 15:56:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791561350;
-	bh=OBYiyaI/QXTFs7zGpAYyVUGPnwil0UopBghuOiZXyYE=;
+	s=k20260515; t=1791561385;
+	bh=Ad/IvRX99/TF+Y8MWflVjAqFUaWTvNHvn3z0Iz8DChU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=B1VCNVzonBLPW5XbxWR1/qM+VPEw9OUnL9AZqECimf/1LYOaI0xHNyqo6SkkIG1Xs
-	 BjwCDOU3pYlM0lJSceLAkPMDZQpn7YVhU/pSrdgeUOzR8LYRohr7PycrExUK8dwdAI
-	 916jZhHDKNkItX6t/ahUYmkgdiW0bdka/bHNwI+bHx9RRLaitbwPBv0uwUi4wuyhBF
-	 GWAjwgD5naAMpi+kB2Ik5NwgiGUUhXiLoacvGp+E5G3givZSVyMV9eNdZv2mWY0t/j
-	 AkQk5I1q/dS/gNEhtf/ECxXslVbtboh4t28c1Gb8lmVLOfROynq09MvvKqJWigeoY/
-	 HsCpgH7noZCww==
-Message-ID: <sashiko-outbox-165800@kernel.org>
+	b=esCsSVZj4FMgjo7dCnRLjMb4LVZydYpdkH1EFwhny14qClox0yd2ldMW7aiwWDVZ8
+	 OLmCsrroq+ve5klTHVhAnDsMrW7VmvP2T/+Taz82uk7XFCypXPRiGltCbb+GHgOck/
+	 z6KXxhLVmGmrxvWmVAfcH/+hLbpaUfXv4ZVynby8LJHaa5zZra+nG+KK1mzkyKLM9A
+	 XtKMblvj97qP5a+XUhtVCK/rOckX7z7ZutitfY5h6X1J0xF2MWDPM/g/3gv/OlyobD
+	 2MzuwjFKgzfjzSXgbSO4Wjk2WojSkUK3GBwgIpAblnl4nnyJ+vWk6DoUfnXts2LJy+
+	 c6TzX/Qaha7SA==
+Message-ID: <sashiko-outbox-165801@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 5/5] docs: hwmon: Document the uhwmon userspace
- interface
+Subject: Re: [PATCH 3/5] hwmon: Add a generic interface for userspace
+ implementations
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jihong Min" <hurryman2212@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <c02aeee5b7e7a5d159d4df5baabe925e16814e94.1791559095.git.hurryman2212@gmail.com>
+In-Reply-To: <27071a389536dfbc35b628a50e90636ce012c21f.1791559095.git.hurryman2212@gmail.com>
 References: <cover.1791531025.git.hurryman2212@gmail.com>
- <c02aeee5b7e7a5d159d4df5baabe925e16814e94.1791559095.git.hurryman2212@gmail.com>
+ <27071a389536dfbc35b628a50e90636ce012c21f.1791559095.git.hurryman2212@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 09 Oct 2026 15:55:49 +0000
+Date: Fri, 09 Oct 2026 15:56:25 +0000
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] hwmon: uhwmon: userfaultfd-based unkillable hangs via copy_to_user=
- under mutex
-- [High] hwmon: uhwmon: name collision logic blocks multiple devices and sc=
-hema updates
-- [High] hwmon: wait_event_killable() in uhwmon_request() allows daemon to =
-hang sysfs
-- [Medium] hwmon: uhwmon: uhwmon_exit() destroys parent miscdevice before c=
-hild hwmon devices
+- [High] hwmon: O(N^2) attribute validation loop causes CPU soft lockup
+- [High] sysfs: 1-byte buffer overflow in hwmon_attr_show_string due to PAG=
+E_SIZE limit
+- [Medium] driver-core: invalid teardown order in uhwmon_exit() destroys pa=
+rent before children
 --
 
-commit b2f6043289b80f507b7c7bd6ff84bc7129c9ba48
+commit c2824f78f1fac4c2c5b17a97b2a2b5679a625be3
 Author: Jihong Min <hurryman2212@gmail.com>
 
-docs: hwmon: Document the uhwmon userspace interface
-
-This commit introduces the uhwmon userspace API documentation, which connec=
-ts
-userspace drivers to hwmon_ops through the /dev/uhwmon control device. It
-details how developers can register devices, handle requests, notify change=
-s,
-and manage device lifetimes.
+    hwmon: Add a generic interface for userspace implementations
+   =20
+    Add /dev/uhwmon so userspace drivers can expose standard hwmon
+    attributes. Use the shared hwmon identifiers directly and forward
+    numeric values or labels through read and write requests.
 
 > diff --git a/drivers/hwmon/uhwmon.c b/drivers/hwmon/uhwmon.c
 > new file mode 100644
@@ -75,180 +69,89 @@ and manage device lifetimes.
 > --- /dev/null
 > +++ b/drivers/hwmon/uhwmon.c
 > @@ -0,0 +1,641 @@
-
-[ ... ]
-
-> +static int uhwmon_request(struct uhwmon_device *data, unsigned int index,
-> +			  u32 op, s64 *value)
-> +{
-
-[ ... ]
-
-> +	ret =3D wait_event_interruptible(data->wait, READ_ONCE(pending.done));
-> +	mutex_lock(&data->lock);
-> +	if (!pending.done && !data->readable) {
-> +		/* Once delivered, only fatal signals may abort the wait. */
-> +		mutex_unlock(&data->lock);
-> +		ret =3D wait_event_killable(data->wait, READ_ONCE(pending.done));
-> +		mutex_lock(&data->lock);
-> +	}
-
-[Severity: High]
-Does wait_event_killable() here allow the daemon to hang sysfs?
-
-Because TASK_KILLABLE only responds to fatal signals, monitoring utilities
-(like sensors or prometheus-node-exporter) that catch SIGTERM or SIGINT will
-become unkillable and fail to shut down cleanly, delaying system reboots by
-up to 90 seconds.
-
-Any user with sysfs access can read the sensor, and any bug in the daemon
-can trigger the hang. Although the daemon requires root to open /dev/uhwmon,
-a buggy daemon shouldn't cause unkillable kernel deadlocks.
-
-[ ... ]
-
+> [ ... ]
 > +static int uhwmon_create(struct file *file, void __user *arg)
 > +{
-> +	struct uhwmon_device *data, *existing;
-
-[ ... ]
-
-> +	data =3D kzalloc_obj(*data);
-> +	if (!data)
-> +		return -ENOMEM;
-> +	mutex_init(&data->lock);
-> +	init_waitqueue_head(&data->wait);
-> +	data->name =3D strndup_user(u64_to_user_ptr(create.name), NAME_MAX + 1);
-
-[Severity: High]
-Could this strndup_user() combined with memdup_array_user() below cause
-an unkillable hang?
-
-uhwmon_create() is called from uhwmon_ioctl() which holds the global
-uhwmon_control_lock. If a daemon issues an ioctl(UHWMON_CREATE) providing a
-buffer backed by userfaultfd, the kernel will block indefinitely while hold=
-ing
-uhwmon_control_lock.
-
-This freezes all device creation, notification, and release, causing a local
-denial of service.
-
-[ ... ]
-
-> +	list_for_each_entry(existing, &uhwmon_devices, node) {
-> +		if (strcmp(existing->name, data->name))
-> +			continue;
-> +		ret =3D -EBUSY;
-> +		if (existing->online)
-> +			goto out;
+> [ ... ]
+> +	for (i =3D 0; i < data->num_attrs; i++) {
+> +		struct uhwmon_attr *attr =3D &data->attrs[i];
+> +		u32 type;
+> +		bool string;
+> +
 > +		ret =3D -EINVAL;
-> +		if (!uhwmon_same_schema(existing, data))
+> +		if (spec[i].attr >=3D 32 ||
+> +		    !hwmon_is_valid_attr(spec[i].type, spec[i].attr) ||
+> +		    !spec[i].mode || spec[i].mode & ~0644 ||
+> +		    spec[i].flags & ~UHWMON_ATTR_CONSTANT)
 > +			goto out;
-> +		mutex_lock(&existing->lock);
-
-[Severity: High]
-Is it possible that this rigid name-matching logic incorrectly rejects valid
-registrations?
-
-It appears to block multiple independent devices from sharing the same name=
- by
-returning -EBUSY, breaking standard hwmon functionality.
-
-Additionally, if a daemon crashes (leaving the device offline) and restarts
-with a modified schema, UHWMON_CREATE returns -EINVAL without attaching the
-file descriptor.
-
-This permanently locks out the device name because the daemon cannot issue
-UHWMON_DESTROY to clean up the old offline device.
-
-[ ... ]
-
-> +static ssize_t uhwmon_read(struct file *file, char __user *buf, size_t c=
-ount,
-> +			   loff_t *offset)
-> +{
-
-[ ... ]
-
-> +		if (mutex_lock_interruptible(&data->lock))
-> +			return -ERESTARTSYS;
-
-[ ... ]
-
-> +	ret =3D -EFAULT;
-> +	if (copy_to_user(buf, &data->pending->request,
-> +			 sizeof(data->pending->request)))
-> +		goto out;
-> +	data->readable =3D false;
-> +	ret =3D sizeof(data->pending->request);
-> +out:
-> +	mutex_unlock(&data->lock);
-
-[Severity: High]
-Can this copy_to_user() while holding data->lock allow userfaultfd to block
-indefinitely?
-
-If a daemon issues a read() providing a buffer backed by userfaultfd, the
-kernel will block indefinitely while data->lock is held.
-
-Since hwmon core serializes sysfs accesses, any standard monitoring utility
-(like sensors) reading the sysfs attribute will invoke uhwmon_request(),
-which calls mutex_lock(&data->lock) and blocks in TASK_UNINTERRUPTIBLE
-(D-state).
-
-Standard kernel design strictly forbids holding standard mutexes across
-userspace memory accesses if those mutexes are shared with system-wide read=
-er
-processes.
-
-[ ... ]
-
-> +static ssize_t uhwmon_write(struct file *file, const char __user *buf,
-> +			    size_t count, loff_t *offset)
-> +{
-
-[ ... ]
-
-> +	mutex_lock(&data->lock);
-
-[ ... ]
-
-> +		if (size) {
-> +			if (count < sizeof(reply) + size)
-> +				goto out;
-> +			ret =3D -EFAULT;
-> +			if (copy_from_user(data->text, buf + sizeof(reply),
-> +					   size))
+> +		if (spec[i].type =3D=3D hwmon_chip && spec[i].channel)
+> +			goto out;
+> +		/*
+> +		 * N is a zero-based channel index: channels 0..N need at least
+> +		 * N + 1 attribute slots, plus a NULL terminator. The core uses
+> +		 * int counts, so N + 2 <=3D INT_MAX. The full count is checked below.
+> +		 */
+> +		if (spec[i].channel > INT_MAX - 2) {
+> +			ret =3D -EOVERFLOW;
+> +			goto out;
+> +		}
+> +		string =3D hwmon_is_string_attr(spec[i].type, spec[i].attr);
+> +		if (string) {
+> +			if (!spec[i].size || spec[i].size > PAGE_SIZE ||
+> +			    spec[i].mode & 0222 || spec[i].value)
 > +				goto out;
 
 [Severity: High]
-Similar to the issue in uhwmon_read(), could this copy_from_user() while
-holding data->lock also allow a userfaultfd-based unkillable hang?
+Does this PAGE_SIZE check leave enough room for the newline character appen=
+ded
+by the hwmon core?
 
-> +			length =3D strnlen(data->text, size);
-> +			ret =3D -EINVAL;
-> +			if (length =3D=3D size)
+If a daemon writes a string of length PAGE_SIZE - 1 plus a null terminator,
+when read via sysfs, the hwmon core passes this string to
+sprintf(buf, "%s\n", s) where buf is exactly PAGE_SIZE bytes.
+
+This would write PAGE_SIZE - 1 characters, followed by the newline and null
+terminator, totaling PAGE_SIZE + 1 bytes.
+
+Could this cause a 1-byte overflow and memory corruption?
+
+> +		} else if (spec[i].size || spec[i].text) {
+> +			goto out;
+> +		}
+> [ ... ]
+> +		type =3D spec[i].type =3D=3D hwmon_energy64 ? hwmon_energy :
+> +							spec[i].type;
+> +		for (j =3D 0; j < i; j++) {
+> +			u32 other_type =3D spec[j].type =3D=3D hwmon_energy64 ?
+> +						 hwmon_energy :
+> +						 spec[j].type;
+> +
+> +			if (type =3D=3D other_type &&
+> +			    spec[i].attr =3D=3D spec[j].attr &&
+> +			    spec[i].channel =3D=3D spec[j].channel)
 > +				goto out;
+> +		}
 
 [Severity: High]
-What happens if an invalid string reply is provided here, does it permanent=
-ly
-strand the sysfs reader?
+Can this nested loop cause a CPU soft lockup?
 
-If the daemon sends a non-null-terminated string, length =3D=3D size evalua=
-tes
-to true and the function branches to goto out without setting
-pending->done =3D true.
+Since uhwmon_create() accepts a user-provided num_attrs bounded only by
+kmalloc limits (which could exceed 100,000 attributes depending on max slab
+size), this loop compares every attribute against all preceding attributes =
+to
+prevent duplicates.
 
-This permanently strands the sysfs reader in the killable wait from
-uhwmon_request().
+For a large number of attributes, this results in billions of iterations.
 
-Since hwmon core serializes sysfs accesses, this single hung reader deadloc=
-ks
-the entire hwmon device.
+As the loop lacks preemption points like cond_resched(), could it hold the
+CPU exclusively for multiple seconds and trigger the soft lockup watchdog?
 
-[ ... ]
-
+> +		attr->spec =3D spec[i];
+> +		attr->spec.text =3D 0;
+> +		counts[spec[i].type] =3D
+> +			max(counts[spec[i].type], spec[i].channel + 1);
+> +	}
+> [ ... ]
 > +static void __exit uhwmon_exit(void)
 > +{
 > +	struct uhwmon_device *data, *next;
@@ -262,22 +165,21 @@ the entire hwmon device.
 > +}
 
 [Severity: Medium]
-Is it safe for uhwmon_exit() to destroy the parent miscdevice before the ch=
-ild
+Is it safe to deregister the parent miscdevice before unregistering the chi=
+ld
 hwmon devices?
 
-uhwmon_create() registers child hwmon devices using uhwmon_misc.this_device
-as their parent. These child devices persist even after the userspace daemon
-closes the control file descriptor.
+Calling misc_deregister() destroys uhwmon_misc.this_device, which is the
+parent of all registered hwmon devices. Destroying a parent device before i=
+ts
+children violates the driver core's topological ordering and lifecycle rule=
+s.
 
-During module unload, calling misc_deregister(&uhwmon_misc) before iterating
-the uhwmon_devices list to unregister the child hwmon devices leaves
-dangling child kobjects.
-
-The driver core strictly requires children to be unregistered before their
-parent. Unregistering the parent first triggers sysfs warnings and
-use-after-free bugs when the children are subsequently unregistered.
+Could this cause sysfs warnings and potential use-after-free when the child=
+ren
+subsequently attempt to unregister their sysfs directories from the
+already-deleted parent?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1791531025.gi=
-t.hurryman2212@gmail.com?part=3D5
+t.hurryman2212@gmail.com?part=3D3
