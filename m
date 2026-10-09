@@ -1,185 +1,187 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B3836B934
-	for <linux-hwmon@vger.kernel.org>; Fri,  9 Oct 2026 15:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24C42F9D85
+	for <linux-hwmon@vger.kernel.org>; Fri,  9 Oct 2026 21:35:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791561387; cv=none; b=LBKs1xLNM9qaV9fv2CintGwdhtrt+go2rUC8pecxyF5JdIyYQ6sWTaeWkp6d9maSChHkz8KKDvq1H3d16Kjwd9mv2yYAswbOfeTCdW4yUdNXmbIXDitE0BhQvCbB9xM4tkFVdgILJ8L9ogXJ2/J+sa06smQDrH4y0dZKCZEWDE0=
+	t=1791581720; cv=none; b=bCrJEBHZw23bpOD6rRc/8h2qQhNWPvMd6FApCG3+lFEUgb95ssXGs2n+Z0FQPlOdYXOhapGItMmDVBlkyBceZe0K7yOKRbmhbK66yC+UrUtPtd6qN+VDFsgPl1JFWQLZ8IWX5lNRBZOhRXzbCacej62ZRh96EUc0vJGPmVzEKsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791561387; c=relaxed/simple;
-	bh=7YT7+wWj6G1VKqXxxpoY54JVtQTCQw3psKrE+9gHR/w=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=QljrEYj5clBNWIQEQlnDrFjeMPNqbkRzYZozW0sk9rbj6XyFo7P2l8AnhOmzm5yWbSomMV+lU6V9lwLzYAZqFLZVa0agu6GFTroHVavtrFTzQmGxblEAJyQL+o3o0REEJYCfpHvZumapnfTRtwAZyB4hy06fn+ZE449PCbkdprE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=esCsSVZj; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791581720; c=relaxed/simple;
+	bh=Wf05kQbcbOkiyKMTmOPnih+WYMI6b4lzX2eT4vVhcsM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sT4TurJ9CziV2+gTGLQu3rG1D2H42YpNLieCO+/E8TBUZmTxhLO5v5LOtsL/vng+wK+unzgLO6M0xDeGNXD52uBXfXRvammtYPNOVi5T3NeGBfudFKbglKdjg5YjFsoGJe7NBB5sP3etBUEVpykpglYvy+MHrUjWk+0GLXfko7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZSFjCFm+; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=TbB0Ge0l; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="esCsSVZj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C40C1F000FF;
-	Fri,  9 Oct 2026 15:56:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791561385;
-	bh=Ad/IvRX99/TF+Y8MWflVjAqFUaWTvNHvn3z0Iz8DChU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=esCsSVZj4FMgjo7dCnRLjMb4LVZydYpdkH1EFwhny14qClox0yd2ldMW7aiwWDVZ8
-	 OLmCsrroq+ve5klTHVhAnDsMrW7VmvP2T/+Taz82uk7XFCypXPRiGltCbb+GHgOck/
-	 z6KXxhLVmGmrxvWmVAfcH/+hLbpaUfXv4ZVynby8LJHaa5zZra+nG+KK1mzkyKLM9A
-	 XtKMblvj97qP5a+XUhtVCK/rOckX7z7ZutitfY5h6X1J0xF2MWDPM/g/3gv/OlyobD
-	 2MzuwjFKgzfjzSXgbSO4Wjk2WojSkUK3GBwgIpAblnl4nnyJ+vWk6DoUfnXts2LJy+
-	 c6TzX/Qaha7SA==
-Message-ID: <sashiko-outbox-165801@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 3/5] hwmon: Add a generic interface for userspace
- implementations
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jihong Min" <hurryman2212@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <27071a389536dfbc35b628a50e90636ce012c21f.1791559095.git.hurryman2212@gmail.com>
-References: <cover.1791531025.git.hurryman2212@gmail.com>
- <27071a389536dfbc35b628a50e90636ce012c21f.1791559095.git.hurryman2212@gmail.com>
-Content-Type: text/plain; charset=utf-8
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZSFjCFm+";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="TbB0Ge0l"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1791581717;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NZbd6xFkyNScCfIhKBOuLvqJ7Rh/HkXO4uKgVfA+mJo=;
+	b=ZSFjCFm+d5s8RmO7QFpgykPPICZuJjnwouTO9LdSsj54ZC9nv2ufejTxhnneJlYk093Pzp
+	Fjl3R+U29hRZTSnnxAWkEnYX1YMqa04BcVoouuuJXcLGT+nn3fUl0ziT5LQ1bMfx98d5s6
+	y2CvdJg453oGbILoZViiKSJruSvJbtQ=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-153-MH8mqCAPPuu4XI1iFH85oA-1; Fri, 9 Oct 2026 21:35:16 +0000
+X-MC-Unique: MH8mqCAPPuu4XI1iFH85oA-1
+X-Mimecast-MFC-AGG-ID: MH8mqCAPPuu4XI1iFH85oA_1791581716
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-53390e79a19so2769381cf.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 09 Oct 2026 14:35:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1791581716; x=1792186516; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=NZbd6xFkyNScCfIhKBOuLvqJ7Rh/HkXO4uKgVfA+mJo=;
+        b=TbB0Ge0lPhT3jZFinbZttJN3rLZJrL4anNPfOsS+MjH4ic5FBjXJZbvDIG7mJEL2N3
+         wQWscDfHQRupEM2tfFZSf6iWl8RRU54JUaL0Lc2vN6m7m/g4f0OjX4V3sEyIT59d+lW8
+         zEGpKgixsawk227DtEhmQkz+mdw6Z1IQm+rHf2UyizCvXk/BgtFVh5SEohv7LrXp+bp2
+         8ECmmRSsdFNfoB4wIm7BBIRRdREXWEkNIkxuGrYzWjmJJtO1eBWXIAyv1VHtZiqDVSQc
+         kSBO9pQLkGxcj9DOPqfZYW4OdeOJ2iIXrhqwQr01WqTpGEfnmGSJQGU7yp2dujRj9xHK
+         zrHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791581716; x=1792186516;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NZbd6xFkyNScCfIhKBOuLvqJ7Rh/HkXO4uKgVfA+mJo=;
+        b=QvQuGUeNPEzws5c8+B6FCuJMWYHkKILtmyHrG/Tue6h1Luk3oo0XpY6D/5N4JZ/jy8
+         O1KeFD1oducb7UIf+aSVigbAN/OwccFvqe30QbiWLzBbJfSY3GGbJWL5ORaTHzXIr4g0
+         ryPGTsUzukb/gkIYgxnCkT8Rg840guW29alpCj5R8AMKZo+seLV7dWucbCVdT8oOEH1a
+         3qvL8kHz+XyQgeHwb2OwASiXRwWUr9MpCZu9umtiQlYE7AlM+BhgPLkfwzHO5K/Abxjs
+         3zbUxHVMKjiXZKtr1asMQ4lcBwogyxkhudKK4HB9bjy4KpCAAFPmdTIqdG2ITi7VcCu+
+         Do3Q==
+X-Forwarded-Encrypted: i=1; AKwUvBz2XmpTlEKHF0SpBXRK5HDIkynn4oVLoJxYl2vLC75dA+cGD8Prw9Yjac3B00QhBz3cAgGby/PwxVWqgA==@vger.kernel.org
+X-Gm-Message-State: AFq9FYK0UIkuqNmenM1kOEEu9qnyyZHg6ZsMcxm1jK7YF7Ukwo1KcaiL
+	046bWKwo43TDgcuuN55wr7WyYiJ9P2Q1xtmzOXySgF6sY063vze2CoMTpOtux4gB1NbBmcooHhh
+	6Cf8H4HQfw50j0BOHUuiEnIwqM5jIoFIO71FDa1NIh28r8R2SCOw+IwsCa371Bb9/
+X-Gm-Gg: AYBFou2MRR0pkLzAJyqKlyMmky6Di9SWfBjQAQBySSvIPmSu2TYQQ+cLX5oAU7Cyzkg
+	CO6oJ9qrPkVcrl3j7qSjDM75UI5Tzqd5CyA0o7M0xOBwwCB9cVz7S6ID3ZCa1hEZ6BSGUR/FoR6
+	2x1QnnCiQwfiagpsiv36dYA72xxf4CQinwNLNpfJoB1Yr07QyMA+p5LZqgOaKxddo8BiFEvIzhL
+	QYIQLmd/I+eqSnYgxdBC2H6++oNZv7MEmETt5vd/vX0K8rrvR9BS4fhi3aFQd0EvRTX+FYSDH5t
+	iLVE5Lokofu8jrjzV4pL6k//xXZipw70I+MArMoRz+hFwMYUP5x1W+U7ol/pciX9WScU8Iw=
+X-Received: by 2002:a05:622a:58c4:b0:535:a5fb:67fc with SMTP id d75a77b69052e-535a5fb850cmr34635101cf.72.1791581715826;
+        Fri, 09 Oct 2026 14:35:15 -0700 (PDT)
+X-Received: by 2002:a05:622a:58c4:b0:535:a5fb:67fc with SMTP id d75a77b69052e-535a5fb850cmr34634721cf.72.1791581715415;
+        Fri, 09 Oct 2026 14:35:15 -0700 (PDT)
+Received: from [192.168.8.4] ([100.0.180.93])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5359b6fa0f9sm27073771cf.8.2026.10.09.14.35.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2026 14:35:13 -0700 (PDT)
+Message-ID: <25778dca265f58185917c5948490e76184c778d3.camel@redhat.com>
+Subject: Re: [PATCH v3] drm/nouveau: Fix memory leaks in debugfs and hwmon
+ init error paths
+From: lyude@redhat.com
+To: liupeng <liupeng01@kylinos.cn>, dakr@kernel.org
+Cc: maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+ tzimmermann@suse.de, 	airlied@gmail.com, simona@ffwll.ch,
+ linux@roeck-us.net, nouveau@karolherbst.de, 	bskeggs@redhat.com,
+ dri-devel@lists.freedesktop.org, 	nouveau@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, 	linux-hwmon@vger.kernel.org,
+ stable@vger.kernel.org
+Date: Fri, 09 Oct 2026 17:35:12 -0400
+In-Reply-To: <20261009115151.13877-1-liupeng01@kylinos.cn>
+References: <ea9a1d374cf3127e5047bc73807ce821022e026e.camel@redhat.com>
+	 <20261009115151.13877-1-liupeng01@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 09 Oct 2026 15:56:25 +0000
+User-Agent: Evolution 3.58.3 (3.58.3-2.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] hwmon: O(N^2) attribute validation loop causes CPU soft lockup
-- [High] sysfs: 1-byte buffer overflow in hwmon_attr_show_string due to PAG=
-E_SIZE limit
-- [Medium] driver-core: invalid teardown order in uhwmon_exit() destroys pa=
-rent before children
---
+Reviewed-by: Lyude Paul <lyude@redhat.com>
 
-commit c2824f78f1fac4c2c5b17a97b2a2b5679a625be3
-Author: Jihong Min <hurryman2212@gmail.com>
+Will push to drm-misc-fixes in a moment
 
-    hwmon: Add a generic interface for userspace implementations
-   =20
-    Add /dev/uhwmon so userspace drivers can expose standard hwmon
-    attributes. Use the shared hwmon identifiers directly and forward
-    numeric values or labels through read and write requests.
-
-> diff --git a/drivers/hwmon/uhwmon.c b/drivers/hwmon/uhwmon.c
-> new file mode 100644
-> index 0000000000000..1855c87f06d9d
-> --- /dev/null
-> +++ b/drivers/hwmon/uhwmon.c
-> @@ -0,0 +1,641 @@
-> [ ... ]
-> +static int uhwmon_create(struct file *file, void __user *arg)
-> +{
-> [ ... ]
-> +	for (i =3D 0; i < data->num_attrs; i++) {
-> +		struct uhwmon_attr *attr =3D &data->attrs[i];
-> +		u32 type;
-> +		bool string;
+On Fri, 2026-10-09 at 19:51 +0800, liupeng wrote:
+> In nouveau_debugfs_init(), if nvif_object_ctor() fails, the
+> previously
+> allocated drm->debugfs is leaked because the function returns the
+> error code directly.
+>=20
+> In nouveau_hwmon_init(), if hwmon_device_register_with_info() fails,
+> the allocated hwmon structure is leaked because the function returns
+> the error code directly.
+>=20
+> Fix both by freeing the allocated memory and clearing the pointer on
+> the error paths.
+>=20
+> Fixes: b126a200e9db ("drm/nouveau/debugfs: we need a ctrl object for
+> debugfs")
+> Fixes: b9ed919f1c8f ("drm/nouveau/drm/pm: remove everything except
+> the hwmon interfaces to THERM")
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Lyude Paul <lyude@redhat.com>
+> Signed-off-by: liupeng <liupeng01@kylinos.cn>
+> ---
+> Changes in v3:
+> - Drop the extra return in nouveau_debugfs_init() as suggested by
+> Lyude.
+> - Add Reviewed-by tag.
+>=20
+> =C2=A0drivers/gpu/drm/nouveau/nouveau_debugfs.c | 14 +++++++++++---
+> =C2=A0drivers/gpu/drm/nouveau/nouveau_hwmon.c=C2=A0=C2=A0 |=C2=A0 2 ++
+> =C2=A02 files changed, 13 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/nouveau/nouveau_debugfs.c
+> b/drivers/gpu/drm/nouveau/nouveau_debugfs.c
+> index 47d5579c568d..338421e52f69 100644
+> --- a/drivers/gpu/drm/nouveau/nouveau_debugfs.c
+> +++ b/drivers/gpu/drm/nouveau/nouveau_debugfs.c
+> @@ -295,13 +295,21 @@ nouveau_drm_debugfs_init(struct drm_minor
+> *minor)
+> =C2=A0int
+> =C2=A0nouveau_debugfs_init(struct nouveau_drm *drm)
+> =C2=A0{
+> +	int ret;
 > +
-> +		ret =3D -EINVAL;
-> +		if (spec[i].attr >=3D 32 ||
-> +		    !hwmon_is_valid_attr(spec[i].type, spec[i].attr) ||
-> +		    !spec[i].mode || spec[i].mode & ~0644 ||
-> +		    spec[i].flags & ~UHWMON_ATTR_CONSTANT)
-> +			goto out;
-> +		if (spec[i].type =3D=3D hwmon_chip && spec[i].channel)
-> +			goto out;
-> +		/*
-> +		 * N is a zero-based channel index: channels 0..N need at least
-> +		 * N + 1 attribute slots, plus a NULL terminator. The core uses
-> +		 * int counts, so N + 2 <=3D INT_MAX. The full count is checked below.
-> +		 */
-> +		if (spec[i].channel > INT_MAX - 2) {
-> +			ret =3D -EOVERFLOW;
-> +			goto out;
-> +		}
-> +		string =3D hwmon_is_string_attr(spec[i].type, spec[i].attr);
-> +		if (string) {
-> +			if (!spec[i].size || spec[i].size > PAGE_SIZE ||
-> +			    spec[i].mode & 0222 || spec[i].value)
-> +				goto out;
-
-[Severity: High]
-Does this PAGE_SIZE check leave enough room for the newline character appen=
-ded
-by the hwmon core?
-
-If a daemon writes a string of length PAGE_SIZE - 1 plus a null terminator,
-when read via sysfs, the hwmon core passes this string to
-sprintf(buf, "%s\n", s) where buf is exactly PAGE_SIZE bytes.
-
-This would write PAGE_SIZE - 1 characters, followed by the newline and null
-terminator, totaling PAGE_SIZE + 1 bytes.
-
-Could this cause a 1-byte overflow and memory corruption?
-
-> +		} else if (spec[i].size || spec[i].text) {
-> +			goto out;
-> +		}
-> [ ... ]
-> +		type =3D spec[i].type =3D=3D hwmon_energy64 ? hwmon_energy :
-> +							spec[i].type;
-> +		for (j =3D 0; j < i; j++) {
-> +			u32 other_type =3D spec[j].type =3D=3D hwmon_energy64 ?
-> +						 hwmon_energy :
-> +						 spec[j].type;
-> +
-> +			if (type =3D=3D other_type &&
-> +			    spec[i].attr =3D=3D spec[j].attr &&
-> +			    spec[i].channel =3D=3D spec[j].channel)
-> +				goto out;
-> +		}
-
-[Severity: High]
-Can this nested loop cause a CPU soft lockup?
-
-Since uhwmon_create() accepts a user-provided num_attrs bounded only by
-kmalloc limits (which could exceed 100,000 attributes depending on max slab
-size), this loop compares every attribute against all preceding attributes =
-to
-prevent duplicates.
-
-For a large number of attributes, this results in billions of iterations.
-
-As the loop lacks preemption points like cond_resched(), could it hold the
-CPU exclusively for multiple seconds and trigger the soft lockup watchdog?
-
-> +		attr->spec =3D spec[i];
-> +		attr->spec.text =3D 0;
-> +		counts[spec[i].type] =3D
-> +			max(counts[spec[i].type], spec[i].channel + 1);
+> =C2=A0	drm->debugfs =3D kzalloc_obj(*drm->debugfs);
+> =C2=A0	if (!drm->debugfs)
+> =C2=A0		return -ENOMEM;
+> =C2=A0
+> -	return nvif_object_ctor(&drm->client.device.object,
+> "debugfsCtrl", 0,
+> -				NVIF_CLASS_CONTROL, NULL, 0,
+> -				&drm->debugfs->ctrl);
+> +	ret =3D nvif_object_ctor(&drm->client.device.object,
+> "debugfsCtrl", 0,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 NVIF_CLASS_CONTROL, NULL, 0,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &drm->debugfs->ctrl);
+> +	if (ret) {
+> +		kfree(drm->debugfs);
+> +		drm->debugfs =3D NULL;
 > +	}
-> [ ... ]
-> +static void __exit uhwmon_exit(void)
-> +{
-> +	struct uhwmon_device *data, *next;
 > +
-> +	misc_deregister(&uhwmon_misc);
-> +	list_for_each_entry_safe(data, next, &uhwmon_devices, node) {
-> +		uhwmon_unregister(data);
-> +		list_del(&data->node);
-> +		uhwmon_free(data);
-> +	}
-> +}
+> +	return ret;
+> =C2=A0}
+> =C2=A0
+> =C2=A0void
+> diff --git a/drivers/gpu/drm/nouveau/nouveau_hwmon.c
+> b/drivers/gpu/drm/nouveau/nouveau_hwmon.c
+> index 726397ab035d..ffbe7f542ab0 100644
+> --- a/drivers/gpu/drm/nouveau/nouveau_hwmon.c
+> +++ b/drivers/gpu/drm/nouveau/nouveau_hwmon.c
+> @@ -697,6 +697,8 @@ nouveau_hwmon_init(struct drm_device *dev)
+> =C2=A0	if (IS_ERR(hwmon_dev)) {
+> =C2=A0		ret =3D PTR_ERR(hwmon_dev);
+> =C2=A0		NV_ERROR(drm, "Unable to register hwmon device:
+> %d\n", ret);
+> +		drm->hwmon =3D NULL;
+> +		kfree(hwmon);
+> =C2=A0		return ret;
+> =C2=A0	}
+> =C2=A0
 
-[Severity: Medium]
-Is it safe to deregister the parent miscdevice before unregistering the chi=
-ld
-hwmon devices?
-
-Calling misc_deregister() destroys uhwmon_misc.this_device, which is the
-parent of all registered hwmon devices. Destroying a parent device before i=
-ts
-children violates the driver core's topological ordering and lifecycle rule=
-s.
-
-Could this cause sysfs warnings and potential use-after-free when the child=
-ren
-subsequently attempt to unregister their sysfs directories from the
-already-deleted parent?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1791531025.gi=
-t.hurryman2212@gmail.com?part=3D3
