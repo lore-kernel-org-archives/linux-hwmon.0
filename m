@@ -1,256 +1,141 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35AC3BE64B
-	for <linux-hwmon@vger.kernel.org>; Mon, 12 Oct 2026 08:08:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791792540; cv=pass; b=Oy4s/pu7czRIGuHt5IgLu/VDMRZ4EUD5HmgaOqR0P6fFWUE2RzRk0JULVkyQIDiYm6n0GQRdZnR758/KjTiwOHjyTGAPppLguqZ45HHrdpM1M5l9fojYp5yhTJveCSWz9uckZUmBvmsEPrqKs0WP3flyjx/FxFBkeOljKofpLck=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791792540; c=relaxed/simple;
-	bh=9s3mrYJ7+5SgZM2v5YsLEH8BsKpU23j+dxsH+EwUIBY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k/bVhus70cNUniyrmX5+P8f2Fn3rzQ5aZDu+dfqcL69ElstvantH/21ByVWOaVKgKwhGIL5UqWNM8AHwa04dZRvCi91Bs1z8XXB1c8oGNDzYqKwrT/hLbB4RnDxZkqidCv3gma/vsMO+SYoegMI+lSoufGA6WE/mpEcdDYowqGA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cbp0jgyg; arc=pass smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794C341167F
+	for <linux-hwmon@vger.kernel.org>; Mon, 12 Oct 2026 10:57:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791802662; cv=none; b=fDVrFQjvcVw0GoXawHNqCbrX1FjZU+rKTjaSNVs9V+cPhjgESwVkXoJn742hPAAuMYcc+3CBcii4H1WVcImwTHVsGulmE6k783Y+TFaQAg1Rw6ArHGstWH2uKFRNaJ/OGN1egvxNyu6GK/jnpqU0aZ1/COQaLEED36MlPjXLkRc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791802662; c=relaxed/simple;
+	bh=BDqmE2ovCASMLGpvn0PIbmd0++tdc88S3TIXBLKQRbU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JP+s96KaSczf8F7IEWPZGMFEJrQg7Ebz7hFL62LbP3lKLezKKPMqGyXfPJzvMW0sniob1llOkMPQqjAWEQUDR3Fo3CjxRwdgBoVAdVJz2L9AmPxrYz7P51nLCmvfGJe8qfFx4ku3JsPROPM/IGUty45Tla7ZrHHzMlQKKczCOgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=c3DUoYg6; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cbp0jgyg"
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-3a81c6ceed2so2400921fa.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Oct 2026 01:08:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791792537; cv=none;
-        d=google.com; s=arc-20260327;
-        b=QrCNPTsSenB24scDNiwEqSRNUs96yB7vumCLajkGkPvnsJn2lH/VEsejtUTx4/Kcgh
-         OZsaMrEzZ06Oa/dcguKyigb7vpnd2Hgg86+ikjyvTKqztrlHttuYoISqw9kQACceCPuJ
-         Ec0twcQXdSrw1zs6xtLs+ZvzIopiDft+8j7TfCBlcgxCYa66XiVuTtueA5ucjR17T4kn
-         RCU6oQxw+Zl4gEBgeWy2GVyggGxEQhFoMtaKR3ZsPiAwlRUzKRYZIt2jr+mNS/Bfp9xg
-         nhPxwsjzHjpkPiPCkdE8jEYnf24knxrEzQe99PbLjq+ZeZomyWd/qP3plOSQ6fwg7PDl
-         TGvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=/Bid3bokAT8GtDHUcm91fXQib8AjiPPpst1kvF9OlyE=;
-        fh=56IIaQpDYXxGRdbz7wElbsR+ObMJICEXt4VWzgIrTBs=;
-        b=QKKqFnF3/Fn89GLrcbcwVOHey9nKXEr9j4Oc+aKe8aLyCWq+At2Gm+REPeBH4twvUE
-         IeT/32PHI+yROMsEOsN7wOJzW62YZ2NhkCKoCkc+5wDaJZMpTPVcXmW0X2no7/dDfZRQ
-         6gODfxsv66h9Q4vCBy76qCv5Apb1u38ox/iNMPekAq5tDLP5RdJRsaaDMr2ZRn2LLpZ/
-         VBg9+Ovi4s/dOKepsbPbLV0JVCuz/hjIYZS2/rQ7Oh4gdFMmCPMSuaaqfPGWWph9rLfj
-         sYPwsP/xtjivLd9OIEolz3k9xo/VcLdHzsHXHUvc4qQnmw1xGThOcwazyVMpg2y3wuSs
-         pvMw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="c3DUoYg6"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-48c4d870d54so977828f8f.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Oct 2026 03:57:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791792537; x=1792397337; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/Bid3bokAT8GtDHUcm91fXQib8AjiPPpst1kvF9OlyE=;
-        b=cbp0jgyg/Eti/YMH0nvU0ckfTxbzFBKYSKz9i7k4qjRTyiIut8QNojj2wiYeW0MAAh
-         AQIj4mNWZjimwfAvKB9aSa4ipT2eXOnjWVZXdmre8r32ktR3lnNBcZL1rbzPhWEdslvW
-         byxAYmo4PXgrYWFGLCzBOd/Fpg50oyuqLSTUKckJSUmCTc3VuyM8fs8q2k+pNrDV59M1
-         ErawgYWwNw8uAEyrvCpi0CKO1RWmaMH89vLBy87HqLxuIqg187oyg0qlxN52nUsj9Eov
-         KLpaHQ4CzSJg2epdwVi3fx6dpUANIKw/eVOYcBFqVTfK0BD2BEc9c2v+oAnDsObiOUK1
-         axrg==
+        d=baylibre.com; s=google; t=1791802656; x=1792407456; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=RLup6P06ESS7erm0ADUuu6e9Di2cilyz4zC5+dpI2eU=;
+        b=c3DUoYg6LPcnSwfJ9IP9UFG7dMc9d6cAdw6B+Iy9+LjdNdnSS46nitKhEWuwsWAC74
+         5tbFsTgKDfSp7OXifP9xaoQNnLRJp6kZqmlyNcAAasMOUbuANEfUYtmUbIoteDwiXGSk
+         KJa2Nu5OiofBgnUMPu3FBGnF04P3ee42wYjO8qzLeWeSpzkrAXDIeFXGEPZmegFaMWhf
+         bxIcCj9fJL+VsCwerMoyoyehrWcKVU7VIF3vl2ZbZ1DIAc1z50PoSaPscxFhiR9sOAYW
+         vuzfG06DvAdMGH85P3zSr5aUkgaL6wvNPocXZDpWNoTXi7CLuKNijrLaZmoXcx4Ek4Bq
+         3LQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791792537; x=1792397337;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=/Bid3bokAT8GtDHUcm91fXQib8AjiPPpst1kvF9OlyE=;
-        b=iwR8+EKJbjFnhLdVh51MBMYnVuKLeBlgKU9wCLnqr89WEp0FzGO8dB9t5RXRQrBTwh
-         yT+nB0l1yA5UrpJuHzf4US1gIZl1ZzjikS3VX+HC0wjG65Nr7wWS0Y7+56H1/f5TWzIY
-         Scf+HLJILhdRqM3czkMsz88eTtNwST46niRuQB6q7o8wcFjo6B3N6cnJOq31BDfwno9W
-         g6A4mQ62GVJQqtH2AtjGQCnc6n1SAFwQUyjFd98G4J8as6UDCQYHS/53xWat+1AQB4q8
-         fGkDpRDFO9ljRFelypa97PTbRqS6oZeEWa2c3tC/363jQzwukDlc0rouX/nsVN77B7Wz
-         PyUg==
-X-Forwarded-Encrypted: i=1; AKwUvByEpgNYuuxddGi21pDBkSPK/awp5amC1QJOV3CvfOVLdHUIorA04NGVYrTt+K8MeTcNkBMPl+Lnfiz+vA==@vger.kernel.org
-X-Gm-Message-State: AFq9FYK3VJ/XNKDtEfwpAF7lOTDqJvYPrsRDXoSsDgPZysL2GvO1JAeF
-	xhcRNWIxaEzmie2a8YOUPPGaJHZFxPFNZXxLy0ZODV1jObPx8QRl9qttqCe6vklbJZrNTU5mg1v
-	YLV2YQeqQ+c5NnhWMsNtZfL2VS1N960kwkh1fsKKkHA==
-X-Gm-Gg: AYBFou2cr2DHBhshGhvCt4cMzLX6Eh7AQyPYzyQi1TL9ks/yNXQC56TxI4cdXnrJIoK
-	gmPafR2P6z5vyjpczYACp/mGGTUGijq5Tdy5Q4ERQwXJIjxhJ4Y0b32rPHNkbTZDoawd1Ow0jAz
-	T6s5qR62eT3Ojt2lNL3KgK5JgQlf2DwZ3CY+chXbft+w+CyOhIcHSn8aYSwtB9v6OBk1p5qAFj5
-	R1FvpcEtF66odRYRbShwAxzEJ7qjp/vOWe3OeJz3Fg8bsjN28ww4NnQ0Krc4qmmSABODimCGcDe
-	vgNJCcR+0ItBOilpsgMUGLrVKy2nTvIErbffTNN57RJ03JwG1OkwxekhUKnPBF282NNff1pv2L+
-	g3GG15XjPcBur
-X-Received: by 2002:a05:651c:3605:b0:3a5:cee6:9439 with SMTP id
- 38308e7fff4ca-3a9c4850930mr20579991fa.0.1791792535033; Mon, 12 Oct 2026
- 01:08:55 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1791802656; x=1792407456;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=RLup6P06ESS7erm0ADUuu6e9Di2cilyz4zC5+dpI2eU=;
+        b=Sj6xK+h8X809F6KzsX6XWD0XBGMJw9298jIm/OiGZnoUr66yxH8PpYGwfK+IegeV6e
+         LYFHVLpcwJypgkofeE3OA+jR8ZLwKdJWhrGLSlZiOTl8nEAmHQQzgBNIsmBLuDIpNJyI
+         eFWOsC/pxIICIJt+vzDcPmR6XUsQaCVvL2zk01vBFEXdT2cKj7USw+ni7l25ojyUGn92
+         Z4ov7zZFrRn3fPjeYO5XWmKBg14HpzkCAsVdZWpqTff0gOs7CCnVAO1q8GeVhWJx5JGp
+         57S/zmelySaerdq/RhgxESdKbUNjxj4oPcp1kxFoQpNS7kqkAMQAgOof/jl4UYpFRTA3
+         wEdA==
+X-Forwarded-Encrypted: i=1; AKwUvByv/maXOhKVRvRTLXbKqyi1UCfZxtaHHvYwC1ckuTn9nz/isT5XB+ilykGnv8LHz4N8ZH4+Jf3O2cYwog==@vger.kernel.org
+X-Gm-Message-State: AFq9FYIdDN4QqRIo29qq0OTg2hOKXUbYiED6v7cbnZwcdJdDVuDlRHUG
+	fHtvfPSNx7Ky4R9xsqFqIWJinoOGWZcT63Qxz3IQDYVaaVNXm7GQAtZu9f5I217s+So=
+X-Gm-Gg: AYBFou1oVm8cbukcw+dSVN7Qxe5HUP3iFlbx5au6nlBPFijIRE5JVCq0EfbosxHALyb
+	LWicg91LU1HuWFPtBl/zSPBT3f3gHuDAV0XlrP+7xH2cQG1T/vB6WC+PMQFj+kSnKNIeBLyunYd
+	BziUCDFmZetXGvgqqERhGFdpB7UnfSsM4B23r5Q7xek+Pbw648dFsEooUpnYxw7DKHiWeuwCXWk
+	FCPZfnKbJuT8tLHnaZQKuCUBgVNOu2WwXmPgi6ovcamA4u3Uqb1IYuR4t+K1M41lvbji156xKSI
+	W2+T2JGJMs06/gd7ZQUp4KvRwAibBUfF7H+m58wRBP1etrjbRLRhYDeVO41CtNfboqPePCZykPa
+	qvDxnRp0MShqhQHsm+P7uqZ0nZHRXjN2b9kF5OjvmSardzdUgwtFoYfpqX3e9TOs7cSwG1PG8kK
+	o2dS4ucuWB19o4Shrvs41ijUO7W2hXmZoI9ppWlQVbbkWqof1aZngJnFEqUBlywLXdjqTCSljVc
+	rPoDwvXMhk/is1YeR8HY5stTR3F/CziOGqP97TdBEUWsgy9eWOf1b04gYPZlg==
+X-Received: by 2002:a05:600c:3b1a:b0:49c:fa20:cbfd with SMTP id 5b1f17b1804b1-4a18e4b91f8mr158595575e9.20.1791802656360;
+        Mon, 12 Oct 2026 03:57:36 -0700 (PDT)
+Received: from localhost (p200300f65f19a904ade4f69ba751c34c.dip0.t-ipconnect.de. [2003:f6:5f19:a904:ade4:f69b:a751:c34c])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4a18bf2343asm525197235e9.9.2026.10.12.03.57.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Oct 2026 03:57:35 -0700 (PDT)
+Date: Mon, 12 Oct 2026 12:57:34 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Luna Hart <lhart.opensource@witekio.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	Flaviu Nistor <flaviu.nistor@gmail.com>
+Subject: Re: [PATCH 2/2] hwmon: (tps38900x) Add driver for TI
+ TPS389004/TPS389006/TPS389008
+Message-ID: <asy8rKc0bLUo2xCK@monoceros>
+References: <20260929-lhart-dev-tps38900x-v1-0-7045c5894152@witekio.com>
+ <20260929-lhart-dev-tps38900x-v1-2-7045c5894152@witekio.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAPvUaSo1D+1Tvk3-4TMiXw-ScBtY8Mu0FzO7R_EG6zrjYfjYqg@mail.gmail.com>
- <asxTYBiGy6lf6-Ki@archlinux>
-In-Reply-To: <asxTYBiGy6lf6-Ki@archlinux>
-From: Lorenzo Collevecchio <lorenzocollevecchio17@gmail.com>
-Date: Mon, 12 Oct 2026 10:08:43 +0200
-X-Gm-Features: AclHuK9QIm_cyAxCJbd_dL0bCv_1RDgkPqpwV7qsRDi6PUx5VbyZNkuR62_tvDc
-Message-ID: <CAPvUaSo-ubCOCYYPadY1C23y1Fd_AAhQLuVKWRa6F1XVh6mk_Q@mail.gmail.com>
-Subject: Re: hp-wmi: WHCM AE_AML_OPERAND_TYPE and fan init -22 on HP OmniBook
- 5 16-ag1xxx (board 8DF4)
-To: Krishna Chomal <krishna.chomal108@gmail.com>
-Cc: platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, W_Armin@gmx.de
-Content-Type: multipart/mixed; boundary="0000000000008ff39a065da0354e"
-
---0000000000008ff39a065da0354e
-Content-Type: text/plain; charset="UTF-8"
-
-Hi Armin, Krishna,
-
-Thanks for the quick replies.
-
-acpidump:
-https://gist.github.com/CollevecchioLorenzo/aef5917d9775629d48618bd42cb5f5e2
-
-I booted 7.2.9-2-cachyos with modprobe.blacklist=hp_bioscfg
-(confirmed in /proc/cmdline; hp_bioscfg is not loaded). Counts of
-each message in dmesg, before and after:
-
-  WHCM AE_AML_OPERAND_TYPE:                 3 before, 3 after
-  "Failed to apply initial fan settings: -22": 1 before, 1 after
-  WQBC / WQBE AE_AML_OPERAND_VALUE:         1/1 before, 0/0 after
-
-So the WQBC/WQBE errors come from hp_bioscfg, as you suspected. The
-WHCM errors and the -22 are not caused by it: they still occur with
-hp_bioscfg blacklisted, right before "hp_wmi: Registered as platform
-profile handler".
-
-Windows, as you asked (Krishna):
-- The Windows power mode setting exists, but that is standard
-  Windows, i didn't check for HP specific.
-- Omen Gaming Hub offers a performance mode
-  option on this laptop.
-- The BIOS has a "Fan Always On" setting. I had it turned off
-
-Happy to test any patch or run further commands.
-
-Thanks,
-Lorenzo
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="jub6o62xngj3zzzr"
+Content-Disposition: inline
+In-Reply-To: <20260929-lhart-dev-tps38900x-v1-2-7045c5894152@witekio.com>
 
 
+--jub6o62xngj3zzzr
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Subject: Re: [PATCH 2/2] hwmon: (tps38900x) Add driver for TI
+ TPS389004/TPS389006/TPS389008
+MIME-Version: 1.0
+
+Hello,
+
+On Tue, Sep 29, 2026 at 04:04:05PM -0700, Luna Hart wrote:
+> +#include <linux/i2c.h>
+> +#include <linux/mod_devicetable.h>
+
+You can rely on <linux/i2c.h> to provide of_device_id and i2c_device_id
+and drop <linux/mod_devicetable.h>.
+
+The mod_devicetable.h header pulls in many unneeded dependencies and is
+bad for this reason.
+
+> [...]
+> +static const struct i2c_device_id tps38900x_id[] = {
+> +	{ .name = "tps389004", .driver_data = 4 },
+> +	{ .name = "tps389006", .driver_data = 6 },
+> +	{ .name = "tps389008", .driver_data = 8 },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, tps38900x_id);
+> +
+> +static const struct of_device_id tps38900x_of_match[] = {
+> +	{ .compatible = "ti,tps389004", .data = (void *)4 },
+> +	{ .compatible = "ti,tps389006", .data = (void *)6 },
+> +	{ .compatible = "ti,tps389008", .data = (void *)8 },
+> +	{}
+
+Please use { } with a space in the list terminator.
 
 
-Il giorno lun 12 ott 2026 alle ore 06:03 Krishna Chomal
-<krishna.chomal108@gmail.com> ha scritto:
->
-> +Armin Wolf
->
-> On Sun, Oct 11, 2026 at 06:03:25PM +0200, Lorenzo Collevecchio wrote:
-> >Hello,
-> >
-> >I am seeing hp-wmi fan interface failures on an HP OmniBook 5
-> >16-ag1xxx. This is not a gaming model.
->
-> Hi Lorenzo,
->
-> Thanks for reporting.
->
-> >Hardware:
-> >  product_name: HP OmniBook 5 Laptop 16-ag1xxx (16-AG1002SL)
-> >  board_name:   8DF4
-> >  BIOS:         F.12, 04/10/2026 (no newer firmware listed on LVFS for
-> >this machine)
-> >  Kernel:       7.2.9-2-cachyos (also tested 6.18.55-2-cachyos-lts;
-> >ACPICA 20250807 vs 20260408)
-> >
-> >Symptoms:
-> >1. At boot, \_SB.WMID.WHCM (called via WMAA) fails three times with
-> >   "AE_AML_OPERAND_TYPE: Needed [Buffer/String/Package], found
-> >[Integer]" while resolving operands for [Index].
->
-> This is likely due to hp-bioscfg instead of hp-wmi.
->
-> >2. Immediately afterwards: "hp-wmi hp-wmi: Failed to apply initial fan
-> >settings: -22".
->
-> Ah yes! This is because we are currently enabling fan control for ALL
-> devices. If you share your acpidump, I can check if we should use the
-> HPWMI_FAN_COUNT_GET_QUERY to decide whether to allow pwm1_enable or not.
->
-> >3. Later: "Attempt to CreateField of length zero" in \_SB.WMID.WQBC
-> >and WQBE (AE_AML_OPERAND_VALUE).
->
-> This is also likely due to hp-bioscfg. Try booting with kernel cmdline
-> parameter "modprobe.blacklist=hp_bioscfg" and see if these disappear.
-> That will help us narrow down the scope. But in any case, I think Armin
-> Wolf will have to help here since I am not familiar with bioscfg anyway.
->
-> >4. hp_wmi still registers as a platform profile handler (quiet
-> >balanced performance).
->
-> This is because 8DF4 is not present in any whitelists, so it takes a
-> fallback path and uses legacy WMI queries. Honestly, I am not sure if
-> platform profile should be registered for OmniBook devices. Could you
-> let me know if Omen Gaming Hub on Windows allows you to switch
-> performance modes or there is no option for this?
->
-> >5. /sys/devices/platform/hp-wmi/hwmon/*/ contains only pwm1_enable
-> >(rw); there is no pwm1 and no fan1_input.
->
-> Intended.
->
-> * pwm1_enable - As said, this is because we are currently (incorrectly)
->                  enabling fan control for all devices.
-> * pwm1 - Absent because manual fan control must be unavailable on this
->           board.
-> * fan1_input - Absent because get fan speed query must be failing.
->
-> >6. On the LTS kernel the same WHCM error repeats about every 2.2 s
-> >while something polls the hp hwmon device (277 times between 551 s and
-> >1165 s uptime).
-> >7. ACPI thermal: "Invalid critical threshold (-274000)" and "No valid
-> >trip points!" for thermal zone TSZ0.
-> >
-> >Fan behaviour:
-> >- acpi_fan (acpi-fan PNP0C0B, "Using Microsoft fan extensions")
-> >exposes fan1_input. It sometimes shows about 2400 RPM and sometimes 0
-> >RPM.
-> >- The fan works normally under Windows on the same machine.
-> >- I once saw the CPU around 95 C with the fan apparently stopped on
-> >Linux; I have not been able to reproduce it yet and am collecting a
-> >temperature/RPM log.
-> >
-> >I suspect the WMI query path the driver uses for fan settings is not
-> >implemented by this firmware, so hp-wmi should probably not attempt it
-> >on board 8DF4. I would be glad to test patches or provide acpidump
-> >output, WMI GUID listings or any other data.
->
-> acpidump would be helpful.
->
-> Thanks,
-> Krishna
->
-> >Thanks,
-> >Lorenzo
+--jub6o62xngj3zzzr
+Content-Type: application/pgp-signature; name="signature.asc"
 
---0000000000008ff39a065da0354e
-Content-Type: text/plain; charset="US-ASCII"; name="blacklist-boot.txt"
-Content-Disposition: attachment; filename="blacklist-boot.txt"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mv4xj8h90>
-X-Attachment-Id: f_mv4xj8h90
+-----BEGIN PGP SIGNATURE-----
 
-WyAgICAwLjAwMDAwMF0gQ29tbWFuZCBsaW5lOiBCT09UX0lNQUdFPS9ib290L3ZtbGludXotbGlu
-dXgtY2FjaHlvcyByb290PVVVSUQ9MWZjYWU4YzgtYzI0Yy00OTMwLWI2ZTAtMzYzMmI5ZTY2YTE1
-IHJ3IG5vd2F0Y2hkb2cgbnZtZV9sb2FkPVlFUyBzcGxhc2ggbG9nbGV2ZWw9MyB1c2Itc3RvcmFn
-ZS5xdWlya3M9b2JkYTo5MjEwOnUgbW9kcHJvYmUuYmxhY2tsaXN0PWhwX2Jpb3NjZmcKWyAgICAw
-LjAxNDg1NV0gS2VybmVsIGNvbW1hbmQgbGluZTogQk9PVF9JTUFHRT0vYm9vdC92bWxpbnV6LWxp
-bnV4LWNhY2h5b3Mgcm9vdD1VVUlEPTFmY2FlOGM4LWMyNGMtNDkzMC1iNmUwLTM2MzJiOWU2NmEx
-NSBydyBub3dhdGNoZG9nIG52bWVfbG9hZD1ZRVMgc3BsYXNoIGxvZ2xldmVsPTMgdXNiLXN0b3Jh
-Z2UucXVpcmtzPW9iZGE6OTIxMDp1IG1vZHByb2JlLmJsYWNrbGlzdD1ocF9iaW9zY2ZnClsgICAg
-Ni4xMzkwODZdIGlucHV0OiBIUCBXTUkgaG90a2V5cyBhcyAvZGV2aWNlcy92aXJ0dWFsL2lucHV0
-L2lucHV0MjMKWyAgICA2LjU0NTcxMF0gQUNQSSBFcnJvcjogQWJvcnRpbmcgbWV0aG9kIFxfU0Iu
-V01JRC5XSENNIGR1ZSB0byBwcmV2aW91cyBlcnJvciAoQUVfQU1MX09QRVJBTkRfVFlQRSkgKDIw
-MjYwNDA4L3BzcGFyc2UtNTQ1KQpbICAgIDYuNzQ5ODI0XSBBQ1BJIEVycm9yOiBBYm9ydGluZyBt
-ZXRob2QgXF9TQi5XTUlELldIQ00gZHVlIHRvIHByZXZpb3VzIGVycm9yIChBRV9BTUxfT1BFUkFO
-RF9UWVBFKSAoMjAyNjA0MDgvcHNwYXJzZS01NDUpClsgICAgNi45NTM1MjRdIEFDUEkgRXJyb3I6
-IEFib3J0aW5nIG1ldGhvZCBcX1NCLldNSUQuV0hDTSBkdWUgdG8gcHJldmlvdXMgZXJyb3IgKEFF
-X0FNTF9PUEVSQU5EX1RZUEUpICgyMDI2MDQwOC9wc3BhcnNlLTU0NSkKWyAgICA2Ljk1MzU0OF0g
-aHAtd21pIGhwLXdtaTogRmFpbGVkIHRvIGFwcGx5IGluaXRpYWwgZmFuIHNldHRpbmdzOiAtMjIK
-WyAgICA3LjM1OTcxOV0gaHBfd21pOiBSZWdpc3RlcmVkIGFzIHBsYXRmb3JtIHByb2ZpbGUgaGFu
-ZGxlcgo=
---0000000000008ff39a065da0354e--
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmrMvRsACgkQj4D7WH0S
+/k5rDQf/ZR/aBJ51FBzSPY3CLIfaH0pvP1Gj2j3CUzW0Vom/XobHRZB1Ti3CNv7u
+FoToTijxGUAgNf01mcy4kAsKlH51piW9LmhgAhDt9yk8TrD8rDwuHcGKn2xThTdq
+SyUWpDvd1KLJt1BrIbb0XLxVKJQWrwi0T1KjX2cc/Kub2y8u0KMPQmSm1hJnYY83
+Dzjl4aJmfNJ8lFZwpV8Dm5a/cJDaFS6fcjmbiqrskHLo3DAJQGTINdxMT1k/y6nM
+5ApNcvwdC0zs0csER7LQtHsMvu5zTGaXJhDOnhVEQzof7auCFJyoC6WlaaAWpDsr
+sGnCLL/cr+GS8SOeZDlFvyWuLBjnTg==
+=0D0m
+-----END PGP SIGNATURE-----
+
+--jub6o62xngj3zzzr--
