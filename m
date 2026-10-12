@@ -1,170 +1,197 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010037.outbound.protection.outlook.com [52.101.201.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8FD2F7F07
-	for <linux-hwmon@vger.kernel.org>; Mon, 12 Oct 2026 04:03:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791777834; cv=none; b=d5fOGp7a0pO393pnRyUQzNC86Ne6U6qkO+pPcMfHQfah5BZebvH4+SILHilE+yXEvPOj12wl4UKHAJ92ytxbY2/fqCPX1dh+/3UnxYqmKyMdBQUHyQW8YQm0ZMUbh5CpwYSVW814IIzLJYpSg1nFddfHKaEeDmL/Hdi+tt19NP8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791777834; c=relaxed/simple;
-	bh=FAil7OtxKTXvJbTvgGlszJiV2VHkZULg/wq6sGEenPI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pa01pfJ2iFj5Z2X2nNbLo+xcsE7DxPb5N2FfiGeyi8I+wRdTaNMA6gBSi09MCaaGp2gNbOhM9CMo01tz8pjAOSkYBCv73yMA2Ia0LQ/z7Yj03KIiKcEpsK6yerWEFvM4nLJOkZI0rZzSI+GvbAJNAKlgzIJw8HUl53j80IZnb6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VvjjXgQa; arc=none smtp.client-ip=74.125.82.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 937511B3925;
+	Mon, 12 Oct 2026 06:01:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.37
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791784865; cv=fail; b=BY/E+zuqPAq/ANB6PxHI7toyxu3drC95o4DUu0S6EE9TZWXqNTKkYb3UUf/JyURqLbBz2V57leNOt71ipow5h+ghrLFreW9BEmEiW8IjsTX7tlj6o7IKs4wRlgF5yAaJecfEprBV1pYDpItdaNjt99S/vNcJorF3m5Q4l20MO4Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791784865; c=relaxed/simple;
+	bh=rf7S4klWLVfWwWBj3aqJMRirrB0msIgkbMFJqObAXf0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=jb7kMg8dHU7f6Sk1ccJE6m1oebY6iQRWon4BBWr2XkmCzWnNVBkxk5WL+AQFMXlegR+W+Pu6uZB/WvjyObAbCr6o1XtV2PXytIdGjKHvZkGdZflpCvXbIYthBsMADF07sejbShY3Dp8Xdgk3I5SqcdFFTZoNtvDdUSIBFOfjL2Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=REvgliFe; arc=fail smtp.client-ip=52.101.201.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VvjjXgQa"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-35a31bb9fb6so1891291eec.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 11 Oct 2026 21:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791777832; x=1792382632; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Td54Itf2pNbuD++sK6cqexZnB1UToN3nPCQFL5wlNVE=;
-        b=VvjjXgQaBiu3lG3EhOrptVGqTpcqIC0c5zRPr/1eOaoZd3+4DFEYe1JlqomVEpyq+u
-         Abj1jOF0UPNpVaz3A4amvV11NDuie/2QfWXbxsZCRc9fmteH3Q8bBJujyHPmyHVwb7XF
-         0vXf6Bvz4cyQAOFQI343O9gVbY3KSSYYY/1eFkHPMbdEkyTZJ7z3SwKvu5+pld5dlSr/
-         GCDW31/f5BASM+1PqdSRGK+qrhxGcSrWVr6qEDhGTz6WeWcGbHfIfjusYG8fUSHzTlh8
-         DA/KK1DH3RX8SAwZiUpR0aLrz2eZrzKvJnpwdqdvuC0GozYPJNN0iWZjzXPL5XCmJtyU
-         RANw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791777832; x=1792382632;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Td54Itf2pNbuD++sK6cqexZnB1UToN3nPCQFL5wlNVE=;
-        b=l/wIPV6iz9u2MVKnCfhh6bxX+doPqMvGC9+GNN8myNOx1ESU+Kvhl1mzTWC5UhbHhG
-         HBQIeZnMkpvCL+KIsQRtUC1Yh3JAf1Om+DyLiS3+3AWFT8bP09zanInqZD+3dIFe94X2
-         i+j2e2PSAMZVrwjcWNrdb0Dr1LcapjkseF7XHK2z522pxfBrzmIWlTpfQYyEnPCtc9hu
-         ctX/R/w+NSmFFp6gc/R9kKOfEvX0kGjtHuw57Cq1bsL34EHVSKG+hfGlae1ZbKof1zRz
-         HrwdrwCtcrVbIHQSxNYr1t5cOVIU6OW4svkjDsS3lzBGccPNstjFstmTM1r43E14SSCQ
-         oUGg==
-X-Forwarded-Encrypted: i=1; AKwUvBwjk0h7eXxaA4m4AAeZy7RQ082S1O55T8qUUiTepmso/cQSb/3Pt2jeIAyAq7Urese+vKrMbtWUMX1LxQ==@vger.kernel.org
-X-Gm-Message-State: AFq9FYK/SXZ4o1jcPmso7x+A8GT0fyEX2DbzMEyV/M0auqBb7nl97yQl
-	kZgn2J52AmR93gAFwkfgKcKl1YPzyPDEek/i0TBPd0q8wA126EDofVArpAhwtA==
-X-Gm-Gg: AYBFou2KusbqTZdsPCelDezyiw7nUf6ugPlKe0exseb/O5slIvYOtrcO2su5mQj7QCP
-	tuALYiHyi9kgg7zAaTyu1KN+GuLCfd1RyQ4XJU0snLq0Y5MbYhON2+xHu40nO9A9PGBN5VcdRGd
-	f4iT36r20/rVH2sxLi9YUNDlAxc+zxSiYSAsRA9FJ7Eu5QUwWIQwjdlMc/NeWNIbl7Yzzc4YohH
-	YoTDya1VkY3OesM0qtUwUNB5MuDwoQoGrtLMZPMqhkss6WMIKb5tLKx36DrTswTaSB2djCi30iY
-	Hq6tls5qS84pRX5hMZPr/c04SgbAYhUEutsePya5t7pRt3IHMyD/uMbZtyy1qb9n6Dg6HFS+hj4
-	l1eZQ7CNeyYDGvNNO51TXa0h3jZwpBYWEAJOVuStZ+AGvINZbjI3k3KCknrwejskfTX/ulUHWhS
-	FDLvoAfImcIoby1ak+Eqcw1ZubQf5F/CNPYeBaO6RBC9i9tcy5lVosq+BiN7PgYJf7zR1S5a7mG
-	USEP3cHwjsNrgCmBCgML4Kcgo+G6BPtWB0Glpx5H9dVSsDNVj+OMa8A9FCALgV5wUDEHw==
-X-Received: by 2002:a05:7301:fd84:b0:359:8540:19d3 with SMTP id 5a478bee46e88-35985401cfcmr4645193eec.14.1791777832154;
-        Sun, 11 Oct 2026 21:03:52 -0700 (PDT)
-Received: from archlinux ([2405:201:1b:20ef:8b08:15c4:66f2:a984])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537c841648sm32226476eec.3.2026.10.11.21.03.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Oct 2026 21:03:51 -0700 (PDT)
-Date: Mon, 12 Oct 2026 09:33:46 +0530
-From: Krishna Chomal <krishna.chomal108@gmail.com>
-To: Lorenzo Collevecchio <lorenzocollevecchio17@gmail.com>
-Cc: platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, W_Armin@gmx.de
-Subject: Re: hp-wmi: WHCM AE_AML_OPERAND_TYPE and fan init -22 on HP OmniBook
- 5 16-ag1xxx (board 8DF4)
-Message-ID: <asxTYBiGy6lf6-Ki@archlinux>
-References: <CAPvUaSo1D+1Tvk3-4TMiXw-ScBtY8Mu0FzO7R_EG6zrjYfjYqg@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="REvgliFe"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YdndVQv7Pp/pjB5WZW1ATFwHqVZf7bIhmQY5jsohIhPKQK7sZtLw8qPP40XcUUs6lk1v3PEIQ2bmmmsNavAlf/5BlhXEdQ9l2ZUm+jA900TSAkAHW+aCzoaeQta+OOKqdCKNuhykMSzTkqk+k7jklOZVBKVYgYQjbaAtCA7pFausMrbujP9/PcNo4QMY/DKaz7FW+TxGGAgJmqJyjcEKdmdkX3G/1HZTWG08SKnhDVM4ziQGTYo8GKAyj3awAVe4zffhDquOkOWT60KfyvTTAjq4jKxA5xVdQb5/XQq66fAmXAVylf4BYN2POrL2IR+z4zNslAiX8JKow2ji1He7rg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7Smck2Bpq2BqceuhanfQ8/7aHT50jGp8guUJfZ5IM5M=;
+ b=LDvY6hp+Ap5qA+w75mmWJGWvnibPSCwJtgFM3FbeIIPWnicycJ+H8vDuPvxLVnbqsqtkePLJ/7TED/Bdyzo0XDOY+Ao5siob7w6+YVWjqLBVHNHNHC89o/71QRDPKadlgLHP235IntuKPI2Mu71pWt9UdGUAeLkk4vtPNQtZFw9xp4/0scjf27iuBOU3Uo0oawz0iU3gz/ql4IPFY3HgL9wa2MForacGndCb1q/y12LSgOdrRAoPTtWNrsYp8emOlEko5wviW2r1TCpKhWArIOaIytL/1ZkPhbNznHufevgNX1EDPA58HEr2O+cQiVoXGyyV/U+hTribXz/I3VkPJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=suse.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7Smck2Bpq2BqceuhanfQ8/7aHT50jGp8guUJfZ5IM5M=;
+ b=REvgliFe6xqeGmJaHQpBPQkuDcwnC+71UR0LQltJw4zmcdi+ul5Edno40nCS2b8kCnBCy2MdkkhnLagyiHXQoz4nJNO+GH9rrb5HIxUjIgeXsOoxFvc3Qdv8Y4HYw1atKJLnaq8aU2EfwdemOoFyUWu4kNwujEiK3uPZ1l0PgJo=
+Received: from BN0PR04CA0020.namprd04.prod.outlook.com (2603:10b6:408:ee::25)
+ by DM4PR12MB5915.namprd12.prod.outlook.com (2603:10b6:8:68::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.496.17; Mon, 12 Oct
+ 2026 06:00:50 +0000
+Received: from BL2PEPF000352CE.namprd02.prod.outlook.com
+ (2603:10b6:408:ee:cafe::4d) by BN0PR04CA0020.outlook.office365.com
+ (2603:10b6:408:ee::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.496.15 via Frontend Transport; Mon,
+ 12 Oct 2026 06:00:50 +0000
+X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
+ is 165.204.84.17) smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ BL2PEPF000352CE.mail.protection.outlook.com (10.167.249.136) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.522.6 via Frontend Transport; Mon, 12 Oct 2026 06:00:50 +0000
+Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.53; Mon, 12 Oct
+ 2026 01:00:44 -0500
+Received: from [10.136.45.168] (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.53 via Frontend
+ Transport; Mon, 12 Oct 2026 01:00:21 -0500
+Message-ID: <c40415f4-7bc8-4479-a07c-22b9f67a7613@amd.com>
+Date: Mon, 12 Oct 2026 11:30:15 +0530
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAPvUaSo1D+1Tvk3-4TMiXw-ScBtY8Mu0FzO7R_EG6zrjYfjYqg@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 12/13] treewide: convert rdmsrq() from a macro to an
+ inline function
+To: Juergen Gross <jgross@suse.com>, <linux-kernel@vger.kernel.org>,
+	<x86@kernel.org>, <linux-perf-users@vger.kernel.org>,
+	<linux-hyperv@vger.kernel.org>, <kvm@vger.kernel.org>,
+	<virtualization@lists.linux.dev>, <linux-edac@vger.kernel.org>,
+	<linux-pci@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-coco@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-ide@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+	<linux-crypto@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+	<platform-driver-x86@vger.kernel.org>, <linux-fbdev@vger.kernel.org>
+CC: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
+	<namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, "Alexander
+ Shishkin" <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>, "K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, "Dexuan
+ Cui" <decui@microsoft.com>, Long Li <longli@microsoft.com>, "Sean
+ Christopherson" <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>,
+	"Ajay Kaher" <ajay.kaher@broadcom.com>, Alexey Makhalov
+	<alexey.makhalov@broadcom.com>, Broadcom internal kernel review list
+	<bcm-kernel-feedback-list@broadcom.com>, Josh Poimboeuf
+	<jpoimboe@kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, "Pu
+ Wen" <puwen@hygon.cn>, Tony Luck <tony.luck@intel.com>, Reinette Chatre
+	<reinette.chatre@intel.com>, Dave Martin <Dave.Martin@arm.com>, James Morse
+	<james.morse@arm.com>, Babu Moger <babu.moger@amd.com>, Tony W Wang-oc
+	<TonyWWang-oc@zhaoxin.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, "Andy
+ Lutomirski" <luto@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, "Rafael
+ J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, "Kiryl
+ Shutsemau" <kas@kernel.org>, Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Len Brown <lenb@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
+	"David Airlie" <airlied@redhat.com>, Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>, Viresh Kumar
+	<viresh.kumar@linaro.org>, "Huang Rui" <ray.huang@amd.com>, Mario Limonciello
+	<mario.limonciello@amd.com>, "Perry Yuan" <perry.yuan@amd.com>, Srinivas
+ Pandruvada <srinivas.pandruvada@linux.intel.com>, Yazen Ghannam
+	<yazen.ghannam@amd.com>, Linus Walleij <linusw@kernel.org>, Bartosz
+ Golaszewski <brgl@kernel.org>, Guenter Roeck <linux@roeck-us.net>, Artem
+ Bityutskiy <artem.bityutskiy@linux.intel.com>, Artem Bityutskiy
+	<dedekind1@gmail.com>, Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+	Ashok Raj <ashok.raj.linux@gmail.com>, Hans de Goede <hansg@kernel.org>,
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, "Rajneesh
+ Bhardwaj" <irenic.rajneesh@gmail.com>, Xi Pardee <xi.pardee@linux.intel.com>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>, Helge Deller <deller@gmx.de>,
+	<xen-devel@lists.xenproject.org>, <linux-geode@lists.infradead.org>, "Michael
+ Kelley" <mhklinux@outlook.com>, Zhongqiu Han <zhongqiu.han@oss.qualcomm.com>
+References: <20261008071839.2247074-1-jgross@suse.com>
+ <20261008071839.2247074-13-jgross@suse.com>
+Content-Language: en-US
+From: K Prateek Nayak <kprateek.nayak@amd.com>
+In-Reply-To: <20261008071839.2247074-13-jgross@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL2PEPF000352CE:EE_|DM4PR12MB5915:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7cfeebe3-ee41-47b1-9a45-08df28262b02
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|32650700020|82310400026|23010399003|1800799024|376014|36860700016|7416014|18002099003|10067099003|22082099003|921020|4143699003|11063799006|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	iF/4vsFZ0oCxke5nY+IzxcsajSzz5fPHlKfX0Y7e1Yx6IxBZC2sr3ME/4gk3EsXUGoPLFu//3fq/5B93Fmnz6J+cejonYpLtAT5O3MoE9q/2qtUyA6JQVe9/KyUI0Zq2D53G0gSEYWNHVkklvOhGU3AX60Gl1/Dp2o8a7kr9auN2+ROJk55lgWuFVdOkGsnI/RjqR5yBE4YcIzdhUzo75yL+R1wluPkHvKzcBNUfJfs6UStcg3RvocQJvos3t8Ie55dbTBkmiXWO4GzaPMQMnWvyrNt99CU+kzYB2REQ6ZgmORiF6Vk/sQETKzhd/wI0RnhOuijITF21qZ+26lP8Z1rMGjpDfGCIA9/mHEWxy19fLdKyoLhnKunjb3sOk/NjA6nyZye1VKAQiR8L+P5Ix+8q4LpC4K9NO5pUbHiCkPwvUKcnq+gpAnjBtETeBz9J8IgxTvjLZVYS/5A/5aHcDzbNe/52x+IvEtxiu4QwbGgfgQNEwe5+0Ldvt/OFZn81u5mxvzdiUgvrqnm5Z0EPSmw6fhhzpuABtp4EULwt7/UHejEZxA8hCVUgDY1Q+MtNR7qd7b7NKZfskF+X+GyK6f1MXX9RGTjpff8PVrN7Vh2ybgNyjgBkyttYSxy15Sbssdy9hqKgVgE1S47frdT5p4BSbk28gX3HPHxEKRKgrLPQYvWGajX7RRYx+4XJkjMv2YlOgsIGCq/STIrTUogxtK+o1EhIKanpaAYU/pnTG0R/okTYWsplHnynkYPwx2IJ
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(32650700020)(82310400026)(23010399003)(1800799024)(376014)(36860700016)(7416014)(18002099003)(10067099003)(22082099003)(921020)(4143699003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	7oS2RettfJciXjAoPrqIpsgslkhkkpGAiW01FyzZHJNa6VOeV1Fs9l0RKNylshp8F43mwG7dYZK4yEnC3v2OZJfklqhnVYV8xmuueMD12u9jjbrj9fZR1VkqsUWmm6umnN6nxJeXy+PoYlQEQJEoloPH4EFw7pN+5lvyUMKMLbcWDF1wFCxmgit2RPf6HuaBXte6l7/4hBbWSHicYtdXGpY5AbGKJBmFA25RMv92aM3cXFiCCKCvG1U1CnGToXMhntV12UFo+3Pw59MKrc8GTvPBosZ0etwE2n1Wp4DIHjySvFMuIGuPBtltL9UDWxOmFJngwwXyApuTDlKSDb3h4ptwXkO8ss96jh/qHKPb0lo2Kg4bHCwK5V1iWIh7xJJ4YSFLPtrgDz0pQVTJQQpgka82T+jZZUitzlQX5OGrgr2p+XXZY9v881FQ+I0KBjNe
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2026 06:00:50.4752
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7cfeebe3-ee41-47b1-9a45-08df28262b02
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL2PEPF000352CE.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5915
 
-+Armin Wolf
+Hello Juergen,
 
-On Sun, Oct 11, 2026 at 06:03:25PM +0200, Lorenzo Collevecchio wrote:
->Hello,
->
->I am seeing hp-wmi fan interface failures on an HP OmniBook 5
->16-ag1xxx. This is not a gaming model.
+On 10/8/2026 12:48 PM, Juergen Gross wrote:
+> Today rdmsrq() is a macro using its second parameter as the target for
+> storing the read MSR value.
+> 
+> Convert rdmsrq() to an inline function returning the MSR value.
+> 
+> The users have been converted using the following semantic patch:
+> 
+>   // Options: --include-headers
+> 
+>   virtual patch
+>   virtual report
+> 
+>   @@
+>   expression msr, val;
+>   @@
+>   (
+>   - rdmsrq(msr,val)
+>   + val = rdmsrq(msr)
+>   )
+> 
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+> Acked-by: Damien Le Moal <dlemoal@kernel.org>      # ATA
+> Reviewed-by: Michael Kelley <mhklinux@outlook.com> # Hyper-V
+> Acked-by: Rafael J. Wysocki (Intel) <rafael@kernel.org> # ACPI, cpufreq, powercap, thermal
+> Acked-by: Sean Christopherson <seanjc@google.com>
+> Acked-by: Reinette Chatre <reinette.chatre@intel.com> # resctrl
+> Reviewed-by: Zhongqiu Han <zhongqiu.han@oss.qualcomm.com> # cpufreq
+> Acked-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>		# pdx86
 
-Hi Lorenzo,
+Feel free to include:
 
-Thanks for reporting.
+Reviewed-by: K Prateek Nayak <kprateek.nayak@amd.com> # amd-pstate
+Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
 
->Hardware:
->  product_name: HP OmniBook 5 Laptop 16-ag1xxx (16-AG1002SL)
->  board_name:   8DF4
->  BIOS:         F.12, 04/10/2026 (no newer firmware listed on LVFS for
->this machine)
->  Kernel:       7.2.9-2-cachyos (also tested 6.18.55-2-cachyos-lts;
->ACPICA 20250807 vs 20260408)
->
->Symptoms:
->1. At boot, \_SB.WMID.WHCM (called via WMAA) fails three times with
->   "AE_AML_OPERAND_TYPE: Needed [Buffer/String/Package], found
->[Integer]" while resolving operands for [Index].
+-- 
+Thanks and Regards,
+Prateek
 
-This is likely due to hp-bioscfg instead of hp-wmi.
-
->2. Immediately afterwards: "hp-wmi hp-wmi: Failed to apply initial fan
->settings: -22".
-
-Ah yes! This is because we are currently enabling fan control for ALL
-devices. If you share your acpidump, I can check if we should use the
-HPWMI_FAN_COUNT_GET_QUERY to decide whether to allow pwm1_enable or not.
-
->3. Later: "Attempt to CreateField of length zero" in \_SB.WMID.WQBC
->and WQBE (AE_AML_OPERAND_VALUE).
-
-This is also likely due to hp-bioscfg. Try booting with kernel cmdline
-parameter "modprobe.blacklist=hp_bioscfg" and see if these disappear.
-That will help us narrow down the scope. But in any case, I think Armin
-Wolf will have to help here since I am not familiar with bioscfg anyway.
-
->4. hp_wmi still registers as a platform profile handler (quiet
->balanced performance).
-
-This is because 8DF4 is not present in any whitelists, so it takes a
-fallback path and uses legacy WMI queries. Honestly, I am not sure if
-platform profile should be registered for OmniBook devices. Could you
-let me know if Omen Gaming Hub on Windows allows you to switch
-performance modes or there is no option for this?
-
->5. /sys/devices/platform/hp-wmi/hwmon/*/ contains only pwm1_enable
->(rw); there is no pwm1 and no fan1_input.
-
-Intended.
-
-* pwm1_enable - As said, this is because we are currently (incorrectly)
-                 enabling fan control for all devices.
-* pwm1 - Absent because manual fan control must be unavailable on this
-          board.
-* fan1_input - Absent because get fan speed query must be failing.
-
->6. On the LTS kernel the same WHCM error repeats about every 2.2 s
->while something polls the hp hwmon device (277 times between 551 s and
->1165 s uptime).
->7. ACPI thermal: "Invalid critical threshold (-274000)" and "No valid
->trip points!" for thermal zone TSZ0.
->
->Fan behaviour:
->- acpi_fan (acpi-fan PNP0C0B, "Using Microsoft fan extensions")
->exposes fan1_input. It sometimes shows about 2400 RPM and sometimes 0
->RPM.
->- The fan works normally under Windows on the same machine.
->- I once saw the CPU around 95 C with the fan apparently stopped on
->Linux; I have not been able to reproduce it yet and am collecting a
->temperature/RPM log.
->
->I suspect the WMI query path the driver uses for fan settings is not
->implemented by this firmware, so hp-wmi should probably not attempt it
->on board 8DF4. I would be glad to test patches or provide acpidump
->output, WMI GUID listings or any other data.
-
-acpidump would be helpful.
-
-Thanks,
-Krishna
-
->Thanks,
->Lorenzo
