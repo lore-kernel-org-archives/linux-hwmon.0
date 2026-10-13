@@ -1,371 +1,534 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0035D3EE1E0
-	for <linux-hwmon@vger.kernel.org>; Tue, 13 Oct 2026 14:23:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F9A33F412B;
+	Tue, 13 Oct 2026 14:53:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791901434; cv=none; b=o7Lq3PyafKrkbo2b7yoWCNmoTRVfvB/aFU/pTDpYig9nDIVA1FpSsvYKWeyLfjTLpaDiWf5J02OzHv84wCYY5mjHdFgXCigDC7i0HUpmU682p5aWRWq3Il4tPpraAfrBKgPBNrNw6TWzc9MkosiOgXh+cTLls/YnA+Eeopb308o=
+	t=1791903197; cv=none; b=YyOic1zXK0cTjVWaxlTizxgodqb35X/mzkRDU0F5kreW7B1nXLNu3RgJy7oZz6s5vqXg0kZjuQLh8QL2XGKsR93rsHHOWi/m7yCixlQfPEBLA79j6Yjun+nykgik5oNl3mEZDiIiiHBptnrkwi/DZdXVxEnibWVs1StCKJgiwnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791901434; c=relaxed/simple;
-	bh=F6xdNylOra+d6nScPWTOEdS7UIVxYDy2KpsyhXvVqUY=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=j+vb2ZciQovGqA0B80CwueUjowZQF7j1sYO8NHmtFvqoVGqcUFvLJmpjdJ4zKeGqLPZr3Qrq1cx5wwC/d6+UMYODjn/ly11ZEBOW/+s7sE1SiVCvKphoynV78VBWsugyQCm1HcznbjmZU61bR0K82fnyNhOrdEJiOQ+iZNpz7Vw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=k0IbU070; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1791903197; c=relaxed/simple;
+	bh=BVXhtHIZWs9oxiAVBwDWppeHWY0Joo6grmAQKjAVdtI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LDQcUKA2b3jTF1WuPETNofP8XZoiahAra1TrcAv9hR2P/QTO6aoa5tjpndtRwUCw3yiVFt0Vr1J1WyIkhKcvcvAWAUIQBHo2SVjyBwl2N7OVCjsSAaFv1JrxbzKU4Fqm9hYszm90Nrfrro+R5MaXV2mCV6bVucotohg9D/GD5cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YTMKRY6G; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="k0IbU070"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a16bc2278aso21643205e9.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 13 Oct 2026 07:23:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1791901431; x=1792506231; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:content-language:references:cc:to:subject:reply-to:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ab10SuSZKniPFCPp3hIt28gYpjjC/wvqCg5uxaP7xbQ=;
-        b=k0IbU070ZVB+i6N0ptron3p4her+E1u+kSDWlpRnSZfmM6YqDAZtn6mVzniL1mJUZV
-         k7fPqUSjeD6cJL7yKgq3hSLVZGvKIXgKxUsl9JJkrot6kWFVIjao/1LcbhnJnoGjbGqF
-         Q75c7Z/6rmA2ZFL8XmlntYF/Eq1PzrMOqulRFyJrva2Bajj6db01km6okW+mffGm4xBK
-         F+p5O7LcbzvtUfMFLGq7HRyG/4HYYkD6e7gEn1AJo7ilW3eU8xM7lGbWcwc26/GmRlBC
-         YaM/2NaR7O8I4LjKNITtGApSqp0rUTNBGDOivvoks9zb1cELo2BCbknKN/BKSFuAtt5I
-         r8KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791901431; x=1792506231;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:content-language:references:cc:to:subject:reply-to:from
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ab10SuSZKniPFCPp3hIt28gYpjjC/wvqCg5uxaP7xbQ=;
-        b=fB6dbjRk3InXLhHswbMhThpYHzgL/en9OeqrRNkne/sELkihNF4F1Y16f/hnBAljpA
-         L3svvUbASCqL00T6z59ftH26IkL+JGeRlJ7h8yUVBIHsHlteYt/tzGfV7LewQk28e4UI
-         PNWk2fLxM9UMSK64oEJDan8IXYtHzG4WAFz0+dec2E2sIkU6kXGkamHHiHi7ENmuZz58
-         PVQ3EOPeaTGw6uN4wluUP7ilRaurp8FXIun6FY2R+e8wW4UPUXWoBDZXcRJibO89UN/1
-         lNRtbMW9qyByNbf8n0vIK7Okp5qO6/LIGSaZrkUownl3PikBjeDthZLpoA1evtjMkhs7
-         joZA==
-X-Forwarded-Encrypted: i=1; AKwUvBzR8blYvrrFyPMsng0sBU6UMIEpIRQ+7lpvrOfnwFryBaJSQDcJRjJePBJslGv3GEHDtiPGkoRIQtSuMg==@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ12nSbpYJXnWvChyutSz0AGzUFv0XqLDQniLonrDFSG+EugUmj
-	vT6qcYXwWIfoQK0yRo01BaTvO81ZPZqR19d46VRBP7OthBqOdxIg3qKzApF74zsuqqQ=
-X-Gm-Gg: AYBFou0y6W7wDQmQx6TjbxOnX46n4hhbKd/0ZKNg33woJ4X5ilttMMu40Tg7kZJESSC
-	EN1XtTVbGoONvTzhfb6gkd0tj5QVHzr99r7jz04RyXJMLNiRpUHGkAxjNVPZ5ZzPJtVQXI15ZHw
-	aa0Y0CiZohoUEXJYhBf/C6i6m0jemJpxKqlMUReJNmNwl4TiblxwwigTWnpCFZxvDKg8X08eKvn
-	YAq0PRIlQd3gOFIoCGHVMdyVAPE0Ya1Apweny42I3mdjdoHgLkTovTsenrHkZf56i3op9PRJ+sl
-	zYkpazPxsKGA6H31sGEZNbTgOUdKqf40aDUwok1WM0x1XQL8MBjXDTXXBWHyc72ahj656gWM5g+
-	hIp25NepSWmrrZi8tmtE+ekYov2fY6uKfVmvN4+CxN6pkA2wKYs7fWVWqC0aybADuqCLMk6KP7u
-	5ICbtk+ePCSpa7DkJI893n5ibl3prFcIGRVOd95BVLgE2thxk2OFBE5PEGQ6ThRr+tY28ttXIqs
-	6lFvjjUmU0MJs5SDCOUZAU6ZG/OZxLh6gc9pESvs1fRv7YXusBmbw==
-X-Received: by 2002:a05:600c:83c9:b0:4a1:70f0:ac2 with SMTP id 5b1f17b1804b1-4a18e4ce9cfmr247499385e9.24.1791901430730;
-        Tue, 13 Oct 2026 07:23:50 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:106d:1080:ef1f:5ab3:36fa:3ccb? ([2a01:e0a:106d:1080:ef1f:5ab3:36fa:3ccb])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1ae508ef8sm26764285e9.3.2026.10.13.07.23.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Oct 2026 07:23:50 -0700 (PDT)
-Message-ID: <d716146b-6d84-48fe-b6f4-18fce93cfc4a@linaro.org>
-Date: Tue, 13 Oct 2026 16:23:49 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YTMKRY6G"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791903196; x=1823439196;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BVXhtHIZWs9oxiAVBwDWppeHWY0Joo6grmAQKjAVdtI=;
+  b=YTMKRY6GvPsVH2bCYXPpauzpzCTlBvER1fln1EncM+nnygOEpFGuiZ0S
+   sSJZUv3vB07942sPKwudSPs4T61gMzW5JlCBwqA/RL0Pe3AUO5mmSsLeQ
+   8Dy+OumeODStB5gc/m6AvJkDJyNUv4hEAg7Uh4HlmIAgdQYXmXNEIA9ri
+   wNGG/XCU+wKP1EFklz+IYnTgAQ7OeQVzDX4KKQJtEKjq6mnv4114I5ZsE
+   O1Czhzn9iq3a4kn82Xyeac3aCUePhYmkWnn8ymUnVnZ7jKHAsOrF+xMvX
+   53syUMD0nfZzER06Qpz97xE2+dqQHqN03bDHfD/aSJHEx3ochzeyZmtfe
+   w==;
+X-CSE-ConnectionGUID: rFrzTKxLRaq1jzrDNRYK0g==
+X-CSE-MsgGUID: 9esOkwE0RXqt1lGVh8Na3w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11934"; a="638086"
+X-IronPort-AV: E=Sophos;i="6.27,155,1787036400"; 
+   d="scan'208";a="638086"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2026 07:53:16 -0700
+X-CSE-ConnectionGUID: Dlnx3moDSjOtP/NCpGly7g==
+X-CSE-MsgGUID: DxGGuWfhTG+efQuQ91p/1A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,155,1787036400"; 
+   d="scan'208";a="1541351"
+Received: from ncintean-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.48])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2026 07:53:13 -0700
+Date: Tue, 13 Oct 2026 17:53:10 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] iio: adc: add driver for the MAX34417
+ Four-Channel High Dynamic Range Power Accumulator
+Message-ID: <as5F1uZ3DnOPYoWV@ashevche-desk.local>
+References: <20261013-topic-sm8x50-iio-max34417-adc-v3-0-d3604ae4a229@linaro.org>
+ <20261013-topic-sm8x50-iio-max34417-adc-v3-3-d3604ae4a229@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v3 3/3] iio: adc: add driver for the MAX34417 Four-Channel
- High Dynamic Range Power Accumulator
-To: sashiko-reviews@lists.linux.dev
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org,
- conor+dt@kernel.org
-References: <20261013-topic-sm8x50-iio-max34417-adc-v3-0-d3604ae4a229@linaro.org>
- <20261013-topic-sm8x50-iio-max34417-adc-v3-3-d3604ae4a229@linaro.org>
- <sashiko-outbox-169896@kernel.org>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <sashiko-outbox-169896@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261013-topic-sm8x50-iio-max34417-adc-v3-3-d3604ae4a229@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On 10/13/26 16:19, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 6 potential issue(s) to consider:
-> - [High] iio: max34417: silent truncation of 64-bit software accumulator
-> - [High] iio: max34417: sysfs reads violate 1ms hardware UPDATE delay constraint
-> - [Medium] iio: max34417: u32 acc_count overflows causing corrupted power calculations
-> - [Medium] iio: max34417: device registered before hardware initialization completes
-> - [Medium] iio: max34417: unprivileged log-spam DoS via non-rate-limited dev_warn
-> - [Medium] iio: adc: max34417: data race and TOCTOU on cam_mode causes incorrect statistics
-> --
+On Tue, Oct 13, 2026 at 04:07:13PM +0200, Neil Armstrong wrote:
+> The MAX34417 is a specialized current and voltage monitor used to
+> determine power consumption of portable systems. The driver support
+> getting the channels voltage, average power and accumulated average
+> power and energy over an I2C/SMBUS serial interface.
 > 
-> commit ebd13d02bb2cfb7ea4951f2b1c27883dde2b138e
-> Author: Neil Armstrong <neil.armstrong@linaro.org>
+> The MAX34417 datasheet only specified on how to calculate the
+> accumulated average power, but with the Sample Per Second rate
+> we can easily get accumulated Energy in mJ.
 > 
-> iio: adc: add driver for the MAX34417 Four-Channel High Dynamic Range Power Accumulator
+> By default the IIO driver only supports single-shot Voltage
+> and Power sensing, but the accumulation can be enabled by
+> enabling the Energy IIO channel which then enables the
+> Continuous Accumulation Mode.
 > 
-> The MAX34417 is a specialized current and voltage monitor used to determine
-> power consumption of portable systems. The driver supports getting the channels
-> voltage, average power and accumulated average power and energy over an
-> I2C/SMBUS serial interface.
-> 
->> diff --git a/drivers/iio/adc/max34417.c b/drivers/iio/adc/max34417.c
->> new file mode 100644
->> index 0000000000000..00d7f20cd9531
->> --- /dev/null
->> +++ b/drivers/iio/adc/max34417.c
->> @@ -0,0 +1,777 @@
-> 
-> [ ... ]
-> 
->> +struct max34417_data {
->> +	struct iio_dev *indio_dev;
->> +	struct regmap *regmap;
->> +	struct device *dev;
->> +	struct mutex lock;
->> +	u32 input_correction[MAX34417_CHANNEL_COUNT];
->> +	const char *input_label[MAX34417_CHANNEL_COUNT];
->> +	bool cam_mode;
->> +	u64 acc_power[MAX34417_CHANNEL_COUNT];
->> +	u32 acc_count[MAX34417_CHANNEL_COUNT];
->> +};
-> 
-> [Severity: Medium]
-> Will this 32-bit counter overflow during continuous long-term accumulation?
-> 
-> In Continuous Accumulation Mode (CAM), the hardware sample counter is repeatedly
-> added to this variable across sysfs reads. At the maximum sample rate of 1024
-> SPS, a 32-bit counter will overflow in approximately 48 days. When this
-> wrap-around occurs, the subsequent average power calculation
-> (div_u64(acc_power, acc_count)) will divide the large 64-bit acc_power by a
-> small or zero acc_count, resulting in a corrupted power reading or a division
-> by zero panic. Should acc_count be promoted to u64?
+> The counter is common to all channels, so when reading a single
+> channel we will copy all accumulators to registers, so in order
+> to permit reading individual channels we must accumulate the
+> other channels in the driver when Continuous Accumulation Mode
+> is enabled.
 
-Eventually yes
+...
 
-> 
-> [ ... ]
-> 
->> +static int max34417_read_voltage(struct max34417_data *max34417,
->> +				 const struct iio_chan_spec *chan, int *val)
->> +{
->> +	u8 buf[MAX34417_VOLTAGE_READ_LENGTH];
->> +	u16 voltage;
->> +	int rc;
->> +
->> +	guard(mutex)(&max34417->lock);
->> +
->> +	/* In SMM mode, trigger a measurement cycle manually */
->> +	if (!max34417->cam_mode) {
->> +		rc = max34417_trigger_smm(max34417);
->> +		if (rc)
->> +			return rc;
->> +	}
->> +
->> +	/* Move the new UPDATE data into the SMBus read registers */
->> +	rc = regmap_write(max34417->regmap, MAX34417_UPDATE_REG, 1);
-> 
-> [Severity: High]
-> Does this bypass the hardware's 1ms UPDATE delay constraint?
-> 
-> The driver notes that "UPDATE commands should be no less than 1msec apart for
-> reliable measurements." While max34417_trigger_smm() properly enforces this
-> delay, the sysfs read handlers for CAM mode unconditionally write to
-> MAX34417_UPDATE_REG. If an unprivileged userspace process polls the sysfs
-> attributes faster than 1ms, it might violate this constraint, potentially
-> leading to unreliable measurements, missing samples, or bus lockups.
+> +#define MAX34417_MIN_RSENSE		(MILLI)	/* 1 milliOhm */
 
-The 1ms update delay is only for the Single Shot Mode, not for the Continuous Update Mode.
+1 * MILLI
 
-> 
-> [ ... ]
-> 
->> +static int max34417_read_power(struct max34417_data *max34417,
->> +			       const struct iio_chan_spec *chan,
->> +			       int *val, int *val2)
->> +{
-> 
-> [ ... ]
-> 
->> +	if (max34417->cam_mode) {
->> +		u32 acc_count;
->> +		u64 acc_power;
->> +
->> +		/* Retrieve all channels to avoid missing data for other channels */
->> +		rc = max34417_save_accumulators(max34417);
->> +		if (rc)
->> +			return rc;
->> +
->> +		/* Get current channel power, counter and reset them */
->> +		acc_power = max34417->acc_power[chan->channel];
->> +		acc_count = max34417->acc_count[chan->channel];
->> +		max34417->acc_power[chan->channel] = 0;
->> +		max34417->acc_count[chan->channel] = 0;
->> +
->> +		if (unlikely(acc_count == 0)) {
->> +			dev_warn(max34417->dev, "unexpected zero accumulator count\n");
-> 
-> [Severity: Medium]
-> Could this non-rate-limited warning lead to a log-spam denial of service?
-> 
-> If an unprivileged userspace process repeatedly reads the attribute in a tight
-> loop, it will extract data faster than the hardware's sample rate, causing the
-> counter to evaluate to 0. This blindly prints a warning using dev_warn()
-> without any rate limiting, which could flood the kernel log buffer and mask
-> legitimate kernel messages. Should dev_warn_ratelimited() be used instead?
+> +#define MAX34417_MAX_RSENSE		(100 * MILLI) /* 100 milliOhm */
+> +#define MAX34417_DEFAULT_RSENSE		MAX34417_MIN_RSENSE
 
-Perhaps yes
+I would rather put the exact value here as well.
 
-> 
->> +			*val = 0;
->> +			*val2 = 0;
->> +
->> +			return IIO_VAL_INT_64;
->> +		}
->> +
->> +		power = div_u64(acc_power, acc_count);
->> +	} else {
->> +		rc = max34417_read_acc_power(max34417, chan->address, &power);
->> +		if (rc)
->> +			return rc;
->> +
->> +		rc = max34417_reset_smm(max34417);
->> +		if (rc)
->> +			return rc;
->> +	}
->> +
->> +	*val = FIELD_GET(GENMASK_ULL(31, 0), power);
->> +	*val2 = FIELD_GET(GENMASK_ULL(55, 32), power);
-> 
-> [Severity: High]
-> Does this silently truncate the upper 8 bits of the 64-bit software
-> accumulator?
-> 
-> GENMASK_ULL(55, 32) explicitly masks off bits 56-63, meaning any accumulated
-> value exceeding 56 bits is silently truncated and dropped before being
-> exported to IIO userspace. Since CAM mode continuously accumulates readings,
-> the u64 can easily exceed 56 bits in sustained operation, causing the
-> userspace reading to wrap around prematurely. Should this use
-> GENMASK_ULL(63, 32) or upper_32_bits(power)?
+...
 
-Value from register is 56bit, there's no truncation.
+> +struct max34417_data {
+> +	struct iio_dev *indio_dev;
 
-> 
->> +
->> +	return IIO_VAL_INT_64;
->> +}
->> +
->> +static int max34417_read_energy(struct max34417_data *max34417,
->> +			       const struct iio_chan_spec *chan,
->> +			       int *val, int *val2)
->> +{
-> 
-> [ ... ]
-> 
->> +	/* Get current channel power and reset them */
->> +	acc_power = max34417->acc_power[chan->channel];
->> +	max34417->acc_power[chan->channel] = 0;
->> +	max34417->acc_count[chan->channel] = 0;
->> +
->> +	*val = FIELD_GET(GENMASK_ULL(31, 0), acc_power);
->> +	*val2 = FIELD_GET(GENMASK_ULL(55, 32), acc_power);
-> 
-> [Severity: High]
-> Does this also silently truncate the upper 8 bits of the 64-bit accumulator?
-> 
-> Just as in max34417_read_power(), this GENMASK_ULL(55, 32) truncates bits
-> 56-63 of acc_power.
+> +	struct regmap *regmap;
+> +	struct device *dev;
 
-Value from register is 56bit, there's no truncation.
+One of them seems redundant (I suppose the 'dev').
 
-> 
-> [ ... ]
-> 
->> +static int max34417_read_raw(struct iio_dev *indio_dev,
->> +			     struct iio_chan_spec const *chan,
->> +			     int *val, int *val2, long mask)
->> +{
->> +	struct max34417_data *max34417 = iio_priv(indio_dev);
->> +
->> +	switch (mask) {
->> +	case IIO_CHAN_INFO_RAW:
->> +		switch (chan->type) {
->> +		case IIO_VOLTAGE:
->> +			return max34417_read_voltage(max34417, chan, val);
->> +		case IIO_POWER:
->> +			/* In default mode, we return a single measurement */
->> +			if (max34417->cam_mode)
->> +				return -EINVAL;
->> +
->> +			return max34417_read_power(max34417, chan, val, val2);
-> 
-> [Severity: Medium]
-> Could this lockless check of cam_mode lead to a TOCTOU race and return
-> incorrect statistics?
-> 
-> Here, cam_mode is evaluated without holding the mutex. Concurrently, a sysfs
-> write to in_energy_enable could call max34417_setup_cam_mode(), taking the
-> mutex and setting cam_mode to true. When max34417_read_power() is then
-> called, it acquires the mutex, sees cam_mode is true, and executes the CAM
-> mode logic. This would unexpectedly return an averaged measurement instead of
-> a single-shot reading, violating the expected IIO channel behavior.
+> +	struct mutex lock;
+> +	u32 input_correction[MAX34417_CHANNEL_COUNT];
+> +	const char *input_label[MAX34417_CHANNEL_COUNT];
+> +	bool cam_mode;
+> +	u64 acc_power[MAX34417_CHANNEL_COUNT];
+> +	u32 acc_count[MAX34417_CHANNEL_COUNT];
+> +};
+> +
+> +static const struct regmap_config max34417_regmap_config = {
+> +	.reg_bits	= 8,
+> +	.val_bits	= 8,
+> +	.max_register	= MAX34417_BULK_VOLTAGE_READOUT_REG,
 
-Good catch
+No cache? All registers are volatile?
 
-> 
-> [ ... ]
-> 
->> +static int max34417_probe(struct i2c_client *client)
->> +{
-> 
-> [ ... ]
-> 
->> +	indio_dev->channels = max34417_channels;
->> +	indio_dev->num_channels = ARRAY_SIZE(max34417_channels);
->> +	indio_dev->name = "max34417";
->> +	indio_dev->info = &max34417_info;
->> +	indio_dev->modes = INDIO_DIRECT_MODE;
->> +
->> +	rc = devm_iio_device_register(dev, indio_dev);
->> +	if (rc)
->> +		return rc;
->> +
->> +	/* Reset mode and set accumulator width to Wide */
->> +	rc = regmap_write(max34417->regmap, MAX34417_CONTROL_REG, MAX34417_CONTROL_MODE);
-> 
-> [Severity: Medium]
-> Is it safe to register the IIO device before the hardware initialization
-> completes?
-> 
-> devm_iio_device_register() exposes the device and its sysfs attributes to
-> userspace immediately. A userspace process or udev rule could open the device
-> and trigger read_raw or write_raw callbacks before the hardware is placed
-> into the correct mode (MAX34417_CONTROL_MODE) or its internal accumulators
-> are reset. Should the hardware configuration happen prior to registration?
-> 
+> +};
 
-Good catch
+...
 
-Neil
+> +#define MAX34417_CHANNEL(_index, _v_address, _power_address)	\
+> +	{							\
+> +		.type = IIO_VOLTAGE,				\
+> +		.info_mask_separate	= BIT(IIO_CHAN_INFO_RAW) | \
+> +					  BIT(IIO_CHAN_INFO_SCALE), \
+
+Instead of broken indentation at the end, use different style for these type of
+assignments, like
+
+		.info_mask_separate =
+			BIT(IIO_CHAN_INFO_RAW) |		\
+			BIT(IIO_CHAN_INFO_SCALE),		\
+
+Also do not use brokenly indented '=', just a space after the field is enough.
+
+
+> +		.channel = (_index),				\
+> +		.address = (_v_address),			\
+> +		.indexed = 1,					\
+> +	},							\
+> +	{							\
+> +		.type = IIO_POWER,				\
+> +		.info_mask_separate	= BIT(IIO_CHAN_INFO_RAW) | \
+> +					  BIT(IIO_CHAN_INFO_AVERAGE_RAW) | \
+> +					  BIT(IIO_CHAN_INFO_SCALE), \
+> +		.channel = (_index),				\
+> +		.address = (_power_address),			\
+> +		.indexed = 1,					\
+> +	},							\
+> +	{							\
+> +		.type = IIO_ENERGY,				\
+> +		.info_mask_separate	= BIT(IIO_CHAN_INFO_RAW) | \
+> +					  BIT(IIO_CHAN_INFO_SCALE), \
+> +		.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_ENABLE), \
+> +		.channel = (_index),				\
+> +		.address = (_power_address),			\
+> +		.indexed = 1,					\
+> +	}
+
+...
+
+> +static int max34417_reset_smm(struct max34417_data *max34417)
+> +{
+> +	u32 control;
+> +	int rc;
+> +
+> +	rc = regmap_read(max34417->regmap, MAX34417_CONTROL_REG, &control);
+> +	if (rc)
+> +		return rc;
+> +
+> +	/* Set SMM=0 to re-init the SMM mode */
+> +	control &= ~(MAX34417_CONTROL_SMM);
+> +	rc = regmap_write(max34417->regmap, MAX34417_CONTROL_REG, control);
+> +	if (rc)
+> +		return rc;
+
+regmap_update_bits() / regmap_clear_bits()?
+
+> +	/* Reset accumulators after setting SMM=0 */
+> +	rc = regmap_write(max34417->regmap, MAX34417_UPDATE_REG, 1);
+> +	if (rc)
+> +		return rc;
+
+regmap_set_bits() ?
+
+> +	return 0;
+> +}
+
+...
+
+Also check the rest of the code for the similar RMW cases.
+
+...
+
+> +	/*
+> +	 * UPDATE commands should be no less than 1msec apart for reliable
+> +	 * measurements.
+> +	 */
+> +	fsleep(1000);
+
+1 * USEC_PER_MSEC
+
+> +	u32 acc_count;
+> +	int rc;
+> +
+> +	rc = max34417_read_acc_count(max34417, &acc_count);
+> +	if (rc)
+> +		return rc;
+> +
+> +	for (i = 0; i < MAX34417_CHANNEL_COUNT; ++i) {
+
+'i' is not used outside of the loop AFAICS. Also why pre-increment?
+
+	for (int i = 0; i < MAX34417_CHANNEL_COUNT; i++) {
+
+> +		rc = max34417_read_acc_power(max34417, MAX34417_PWR_ACC_1_REG + i,
+> +					     &acc_power);
+> +		if (rc)
+> +			return rc;
+> +
+> +		max34417->acc_power[i] += acc_power;
+> +		max34417->acc_count[i] += acc_count;
+> +	}
+
+...
+
+> +	/* Check for overflow */
+> +	rc = max34417_check_ovf(max34417);
+> +	if (rc)
+> +		return rc;
+> +
+> +	return 0;
+
+	return ..._check_ovf(...);
+
+...
+
+> +	/* Ignore byte0 */
+> +	voltage = get_unaligned_be16(&buf[MAX34417_VOLTAGE_READ_OFFSET]);
+> +	voltage >>= 2;
+
+The above comment is odd. Please, clarify, ideally with a reference to
+the datasheet table / section / et cetera.
+
+Also can be folded into a single expression:
+
+	voltage = get_unaligned_be16(&buf[MAX34417_VOLTAGE_READ_OFFSET]) >> 2;
+
+...
+
+> +		if (unlikely(acc_count == 0)) {
+
+Why unlikely()? Is this a hot-path? What is the performance effect will it give?
+
+> +			dev_warn(max34417->dev, "unexpected zero accumulator count\n");
+> +
+> +			*val = 0;
+> +			*val2 = 0;
+> +
+> +			return IIO_VAL_INT_64;
+> +		}
+
+...
+
+> +	/*
+> +	 * Move the data to the SMBus registers
+> +	 */
+
+A single line comment.
+
+...
+
+> +static int max34417_setup_cam_mode(struct max34417_data *max34417, int val)
+> +{
+> +	u32 control;
+> +	int rc, i;
+> +
+> +	guard(mutex)(&max34417->lock);
+> +
+> +	rc = regmap_read(max34417->regmap, MAX34417_CONTROL_REG, &control);
+> +	if (rc)
+> +		return rc;
+> +
+> +	if (max34417->cam_mode && !val) {
+> +		/* SMM and CAM modes should not be enabled at the same time */
+> +		control &= ~(MAX34417_CONTROL_CAM | MAX34417_CONTROL_SMM);
+> +		rc = regmap_write(max34417->regmap, MAX34417_CONTROL_REG, control);
+> +		if (rc)
+> +			return rc;
+> +
+> +		/*
+> +		 * If CAM mode must be set, the Control byte must be set to
+> +		 * desired values with CAM = 0, then followed by an UPDATE
+> +		 */
+> +		rc = regmap_write(max34417->regmap, MAX34417_UPDATE_REG, 1);
+> +		if (rc)
+> +			return rc;
+> +	} else if (!max34417->cam_mode && val) {
+> +		/*
+> +		 * After this, the CAM mode bit can be set and another
+> +		 * UPDATE must be sent.
+> +		 */
+> +		control |= MAX34417_CONTROL_CAM;
+> +		/* SMM and CAM modes should not be enabled at the same time */
+> +		control &= ~(MAX34417_CONTROL_SMM);
+> +		rc = regmap_write(max34417->regmap, MAX34417_CONTROL_REG, control);
+> +		if (rc)
+> +			return rc;
+> +
+> +		rc = regmap_write(max34417->regmap, MAX34417_UPDATE_REG, 1);
+> +		if (rc)
+> +			return rc;
+> +
+> +		/* Reset counters and accumulators */
+> +		for (i = 0; i < MAX34417_CHANNEL_COUNT; ++i) {
+
+		for (int i = 0; i < MAX34417_CHANNEL_COUNT; i++) {
+
+> +			max34417->acc_power[i] = 0;
+> +			max34417->acc_count[i] = 0;
+> +		}
+> +	}
+> +
+> +	max34417->cam_mode = val;
+> +
+> +	return 0;
+> +}
+
+...
+
+> +static int max34417_read_raw(struct iio_dev *indio_dev,
+> +			     struct iio_chan_spec const *chan,
+> +			     int *val, int *val2, long mask)
+> +{
+> +	struct max34417_data *max34417 = iio_priv(indio_dev);
+> +
+> +	switch (mask) {
+> +	case IIO_CHAN_INFO_RAW:
+> +		switch (chan->type) {
+> +		case IIO_VOLTAGE:
+> +			return max34417_read_voltage(max34417, chan, val);
+> +		case IIO_POWER:
+> +			/* In default mode, we return a single measurement */
+> +			if (max34417->cam_mode)
+> +				return -EINVAL;
+> +
+> +			return max34417_read_power(max34417, chan, val, val2);
+> +		case IIO_ENERGY:
+> +			if (!max34417->cam_mode)
+> +				return -EINVAL;
+> +
+> +			return max34417_read_energy(max34417, chan, val, val2);
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +	case IIO_CHAN_INFO_AVERAGE_RAW:
+> +		if (chan->type != IIO_POWER)
+> +			return -EINVAL;
+> +
+> +		/* In CAM mode, we return an average measurement */
+> +		if (!max34417->cam_mode)
+> +			return -EINVAL;
+> +
+> +		return max34417_read_power(max34417, chan, val, val2);
+> +	case IIO_CHAN_INFO_SCALE:
+> +		if (chan->type == IIO_VOLTAGE) {
+> +			/* Scale to mV */
+> +			*val = MAX34417_VOLTAGE_CORRECTION_SCALE * MILLI;
+> +			*val2 = MAX34417_VOLTAGE_FULL_SCALE_BITS;
+> +
+> +			return IIO_VAL_FRACTIONAL_LOG2;
+> +		} else if (chan->type == IIO_POWER) {
+> +			/*
+> +			 * Scale to mW
+> +			 * (1000 * (Power Accumulation / Counter) * Correction) / 2^30
+> +			 */
+> +			*val = max34417->input_correction[chan->channel] * MILLI;
+
+MILLIWATT_PER_WATT
+
+> +			*val2 = MAX34417_PWR_AVG_FULL_SCALE_BITS;
+> +
+> +			return IIO_VAL_FRACTIONAL_LOG2;
+> +		} else if (chan->type == IIO_ENERGY) {
+> +			/*
+> +			 * Scale to mJ
+> +			 * P=(1000 * (Power Accumulation / Counter) * Correction) / 2^30
+> +			 * t=(Counter / Samples per Second)
+> +			 * E=(P * t)
+> +			 * Can be simplified to:
+> +			 * (1000 * Power Accumulation * Correction) / (2^30 * SPS)
+> +			 * The denominator doesn't fit in 32bit so scale down both terms.
+> +			 */
+> +			*val = max34417->input_correction[chan->channel];
+> +			*val2 = ((u64)(1 << MAX34417_PWR_AVG_FULL_SCALE_BITS) *
+
+Why not BIT_ULL() and drop that casting altogether? Also seems that it becomes
+64-bit division. Does it compile on 32-bit?
+
+> +				 MAX34417_FAST_SPS_CAM) / MILLI;
+> +
+> +			return IIO_VAL_FRACTIONAL;
+> +		}
+> +
+> +		return -EINVAL;
+> +	case IIO_CHAN_INFO_ENABLE:
+> +		*val = max34417->cam_mode;
+> +
+> +		return IIO_VAL_INT;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+
+...
+
+> +static int max34417_read_label(struct iio_dev *indio_dev,
+> +			       struct iio_chan_spec const *chan,
+> +			       char *label)
+> +{
+> +	struct max34417_data *max34417 = iio_priv(indio_dev);
+> +	const char *input_label = max34417->input_label[chan->channel];
+> +
+> +	if (chan->type == IIO_VOLTAGE) {
+> +		if (input_label)
+> +			return sysfs_emit(label, "%s-voltage\n", input_label);
+> +
+> +		return sysfs_emit(label, "channel%d-voltage\n", chan->channel);
+> +	}
+> +
+> +	if (chan->type == IIO_POWER) {
+> +		if (input_label)
+> +			return sysfs_emit(label, "%s-power\n", input_label);
+> +
+> +		return sysfs_emit(label, "channel%d-power\n", chan->channel);
+> +	}
+> +
+> +	if (chan->type == IIO_ENERGY) {
+> +		if (input_label)
+> +			return sysfs_emit(label, "%s-energy\n", input_label);
+> +
+> +		return sysfs_emit(label, "channel%d-energy\n", chan->channel);
+> +	}
+> +
+> +	return 0;
+> +}
+
+This can be simplified, right?
+
+	if (input_label) {
+		switch (chan->type) {
+		case IIO_VOLTAGE:
+			return sysfs_emit(label, "%s-voltage\n", input_label);
+		...
+		default:
+			return 0;
+		}
+	}
+
+	switch (chan->type) {
+	case IIO_VOLTAGE:
+		return sysfs_emit(label, "channel%d-voltage\n", chan->channel);
+	...
+	default:
+		return 0;
+	}
+
+...
+
+> +	mutex_init(&max34417->lock);
+
+Why not devm_mutex_init()?
+
+...
+
+> +	/* Set default input correction for all channels */
+> +	for (i = 0; i < MAX34417_CHANNEL_COUNT; ++i)
+
+	for (int i = 0; i < MAX34417_CHANNEL_COUNT; i++)
+
+> +		max34417->input_correction[i] =
+> +			max34417_calc_input_correction(MAX34417_DEFAULT_RSENSE);
+
+...
+
+> +		if (fwnode_property_present(node, "shunt-resistor-micro-ohms")) {
+> +			rc = fwnode_property_read_u32(node, "shunt-resistor-micro-ohms",
+> +						      &rsense);
+
+Name the variable with units, rsense_mOhm.
+
+> +			if (rc)
+> +				return dev_err_probe(dev, rc,
+> +						"failure reading shunt property of %pfwP\n",
+> +						node);
+> +
+> +			if (!rsense || rsense < MAX34417_MIN_RSENSE ||
+> +			    rsense > MAX34417_MAX_RSENSE)
+
+Please, make it logically split
+
+			// also == 0 is okay for the actual values
+			// (which have not a semantic of pointer or error)
+			if (rsense == 0 ||
+			    rsense < MAX34417_MIN_RSENSE || rsense > MAX34417_MAX_RSENSE)
+
+> +				return dev_err_probe(dev, -EINVAL,
+> +						     "invalid shunt value %d of %pfwP\n",
+> +						     rsense, node);
+> +
+> +			max34417->input_correction[index] =
+> +				max34417_calc_input_correction(rsense);
+> +		}
+> +	}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
