@@ -1,508 +1,294 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB7CA4AC152
-	for <linux-hwmon@vger.kernel.org>; Mon, 12 Oct 2026 19:34:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791833665; cv=pass; b=aPGYYKw3MeCI2fk1c/DcFoIzFdCwTVBA1iQdhQfWYNrrPg9Dpe/nwHG4ZDoJqCpoTUA1SmBWEqTnujKm2W97bvR1w86MDcctXU3uVN/9xjrIEAiW7qMWH9uO/4zM3y0Vi3Vv+dXm7gz/1yz9L3Pds3f/q2co2ZmfkSyRwZC3CaU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791833665; c=relaxed/simple;
-	bh=BK90vSA3QoQY5cbEAXTsWUGjvJUhb72aPaTgSCPSwlg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YsAZXY4XR9cJsrt87SdbZtj0ZC0VAD8vbgl9EwbabsICy/ZnlRdnWIrJvN3U3AUsNs/stZ61u58LNaQ/1UHFKVEB9GOYnUwxjc+Qz0Oq+7VM8l32+2I5O3zGacFRoid44j8Ss0l/R5zqzjM6kKBLAx0mx+TpTlYugq2ZOTHtzww=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bubiXXEI; arc=pass smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FD504BC007
+	for <linux-hwmon@vger.kernel.org>; Tue, 13 Oct 2026 06:33:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791873236; cv=none; b=tOLD3VNV8WTtrXmabgpSWV7JOlq7n0bg1OCy1PfzOrnH27T6Tq+XRCoO+l9kvL+yXZUK7v7RwltwoCCn+bHFys4Blc9732aW8radJwBuVs8w5WQFq1FoTQWqWIazUQcLeB4Gb1KAcPgfDDswnMoMOVzi2A+LC7bpoV8w+dH+edA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791873236; c=relaxed/simple;
+	bh=PKDt9a17x5JwDBBG2cr351fvRdaGcmqb74KmAxG/+jI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=DOgvOb7IOzhmaogLQZvjnfA+312A80t73v4mDwWcSZrewoli+mPXvVDL2xHzZKwUhHK5sdTZJSaqdcYlzE+kNVYDHFOO58tVItDoW+b7dk09b+I43Ky9Gt0tTS2xK+hbZsRCMNhxqxwUV+0HKVkqXiqiB8UprOs6+uhn7oJxCgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=myzr4P6w; arc=none smtp.client-ip=209.85.215.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bubiXXEI"
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-3a65120bf25so3889061fa.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Oct 2026 12:34:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791833661; cv=none;
-        d=google.com; s=arc-20260327;
-        b=AXX6PUUU2lDgjYYLkvHBnwY/CkegXKM8zoEuOHJM5DJ8z2DvVDXwrYz2m/YsTV1euC
-         5WdUpb/UqEhVSraDGjQWRNddDIhqfDWfHV1k5bxrLFQLjc8gtd/0p4hVI0jwsWhvTXDF
-         4vr5t2RaWwSpH613JHwlmNc7+En3jCe/vqNBKHR9LyKEq/gFriIGIRbPI9P4JVTyiWSs
-         zU2qOEoMy0Fowp0OU2vLu53Y/eM1DkEHrUvYAwc2K9IR/B+3eALcZ7PlGZYnVb86aTO0
-         rZs6UonV8IFSyR0aiALa19N/tZJFXG7TT/ZZsH9CeU8KqlGkx99SL8m6TwWgBYEmSHxE
-         fHag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=9Y4WYaisFauvdhTru1K85uOadNWxqEHIJLaeUHvJIRQ=;
-        fh=EGArXqObEDZsGGXBBbtIlmFTjFTWAQ9IrapJU5Br328=;
-        b=NnP2reB2uvVjP+X+qRje0yyjFNhquXiJuRUu8d5CTbo54Jzzb1UzbMu+9vGeR+DTK/
-         mPsJjonkOwq28AxCJyVxjW2wLa6k1ljn8hQwe8IwFAYAEeFN4+ChsXaAZMWHvwyCDYXs
-         zXwhhWt6k7eamnpv/SQUx7C88B3ZUFWMLpbc4Q9Lt7RzsgypcmqL9DeLMQ+F1MHXnLlE
-         LCX0NONgDme/YgDQIKSyNIzLQtki7AAXKyuaP5moRKXwGPUDKu/1I0BL+OIb+pMYLS8s
-         q1R0PYpMZFgiwTKuAFWroK7O8Yk+KdKvFEnUaXVD14Vl3B1EkyKnPUwBWrOkai/H9gac
-         BmJA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="myzr4P6w"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cc1c9879395so788494a12.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Oct 2026 23:33:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791833661; x=1792438461; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=9Y4WYaisFauvdhTru1K85uOadNWxqEHIJLaeUHvJIRQ=;
-        b=bubiXXEIRLAuvaCqoeC3p7urLfwCpb063MO4SdCU/3jKIiwhwCtHNwY9bM1WzTc8RP
-         BiwYFVy8uhgZDugKIfp6N+Ezs+vX9JOzPk9CirnS+NJP6FAD09emXuvOpWL5sKM2cJQL
-         RRAkIjQGim4YUTUndNFGtJLmF+GS4R2WXRyaeGJs8JiIeDStgSGIr7Ir0JuK/FkSTM4v
-         Y/mCe+nL5oYmuKg5/yDj8jeSX7SK90a3vQWqfo84cNRekkDKyHA9u/qVkAfBv+3qvYDd
-         YpRCk9OLlIBfNr65epIrOU+slq2H9hVgnflJCNDi+smM9xl/4sMzdmS/ckcXkTWrBypg
-         9n4w==
+        d=gmail.com; s=20251104; t=1791873234; x=1792478034; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=oTNsy5m2fl3FNNHCS2M1Dkdj9lpqET4GIobo7b5ehNE=;
+        b=myzr4P6wCvoZJlBMOFMxmkdSIEPnMsg6M4vjI+H+7NW2TPn0QXtMC5IBAzW1QRId2J
+         XJE09aNDoZsJQqoZLoR7UfRaP2SXqjc0K4TuV7i2scG4fWwcsg2xHwtWYyduxm7QUvvv
+         Ba5kC7IAZCDUYHYN4Z0TBWGv88XsIYhNa9ESxsqCsjBlICkpXRMSgyp1hjHTlk/+e6mO
+         HkP+xaP9nlpkU21qHiKpO2NMr8zjCRzE5jeILBJUTgQTcvG9nVLMLQMpynjz3w0HNbSe
+         7hkotiRDIXagzJ+5T1eBADkm2Vpk7/JvzZ+s3vMH+WCbH27ScyFS31mqLXGdQGdXIFin
+         HNUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791833661; x=1792438461;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=9Y4WYaisFauvdhTru1K85uOadNWxqEHIJLaeUHvJIRQ=;
-        b=VNDv08qTeX3k6MBsy9+wPuFg1kTxSG1aeV4bpdlhNSGz+7Oesq0jq2IPJ+owuYS2fs
-         1vcnmjOxAGXMMgwLIxk+6DsoTDBAWXsJ2QtrfYJGMRr9zEd+mRdgBCGF/nFa3gfrXFZ7
-         840Ex601ExfljYIPtrUuKrK3JY6nkAlrFtEBCXdMLMTxHJIqy+nDc+aydHkSDsJk7rzu
-         UK+Hxr1qxouUBLUs/J8KGufXYKZHYoor7hHKEt5B2k8U9cMxmVFe25NYLOjR2XDBjnrt
-         HHu9AYs0L0AB5KnnQ6P9TxhXIPgu7nL/EZdUK69O98qlnMQJ7Zux7sH16TQ/Le3YSzTk
-         PNcQ==
-X-Forwarded-Encrypted: i=1; AKwUvBy7MdEZrHkFQr3e/DS1vP9FsnsL3zeCUh6WQap08X5pnL8sktVvrtZjNM6TBlUvQR5HRUsh0ItSEcgM5g==@vger.kernel.org
-X-Gm-Message-State: AFq9FYIIRVl95ps/XgHPlXxuatQ/vJK1xTPQ2qjGcbuhu3dSbchetMoC
-	XKFl4h2p2ZAMmtZ5/WhhLsjbYIs70Byi3T4vqp3932jGjHdf50eqcnTKJTdjbSMv0VxIGiA0+Mg
-	Tpzc3yj/+2jdEh9z7+q5cjluPtcAE6gg=
-X-Gm-Gg: AYBFou3M/MVtXfAAGmNW9Crami+D4bfmrrMt+Ii8hHeJneQLk2qL+IIrtBXFkKncB+k
-	Uk0XBr1TyKVWp5K7J9PIJ/+9E/TPnSgt55A9e2sf5Ruys/SZJbwn8+Skgh6dPWZRBs8FaYP07Oj
-	/G7Gs9d14u3w3twCyHr1WJTOCVCZyKNF8XtcSB4zrFUeWcJ7dlpTgNvq7EXu2dFW7woBonhdzNI
-	QHyC2qY54uyFM8LSTdeP0mlq38LTdFn42FDBeUsHFN1szpC871Sk817cjoZ/5ekDuHWSe2X1H6o
-	XvmLJfFW4MZWXdFjho4uRNPbHB2EAKlX6Xn5AkW2mfrIN4w4CZFc2mgSIN/5HsacBUtR/3Wn4qR
-	njIDW8fD2IwKA
-X-Received: by 2002:a2e:a10e:0:b0:3a7:7ce9:7530 with SMTP id
- 38308e7fff4ca-3a9c53505bcmr20544211fa.2.1791833660578; Mon, 12 Oct 2026
- 12:34:20 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1791873234; x=1792478034;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=oTNsy5m2fl3FNNHCS2M1Dkdj9lpqET4GIobo7b5ehNE=;
+        b=LSQd90n7sq0mFgtTFhKqYGL784zI3coOgz4XNVCTpBfIwsUZmuT+JPODMcCazKQ2e+
+         TwjzxYR2jMrvODwT24CFVl4H7Sr8mEv18xbU/6Ni4kCmDbBVzb2Z5pdlMCZtyNqQLuRK
+         YVT37iuW1fIYz/yHmpy1Jys94gjFofdEf0Jyip89J8iD+v2W4+xLcz5nMnNqGzi4Itp/
+         0FwZIo2wl1DK6+HNl8keo+kQcxve8k7LQlT8DK+bjsP487oDUMWJ0hl4tu+62JlXxrBX
+         Naq6YinTaBYfQiuHeGcnvVL9WUL9jUGgkulobLTFwcX2g1U7stOC+RDHuWg0f9SsINr0
+         m1Mg==
+X-Forwarded-Encrypted: i=1; AKwUvBxWL0scqslOhrQL6x3yxjbGGiKGg0Cx4vTCaAzydZ8mEbU9cW+B1MOJbRYXkiXA4XaKLmR4ydGOd36WTA==@vger.kernel.org
+X-Gm-Message-State: AFq9FYL9+Uh/siWACZzG+G71YLCSl9pjOMd57tkax82y62KHzZb0FXBF
+	zTDCDQx8AVI9HagdftCYs/UR8mhZCS4+qXh4N/UYnHqBGGS7jV9XxNe6
+X-Gm-Gg: AYBFou08gQe/wE6NXxxSPHYSif3uuZ7b8hzutF8HNhhh40AbSPYs5uLf/gr/JYohptU
+	+0B97uEIpAT2rSTerbyqQdmfPk9cU9wF/6LF8JbGYhy9pDjh7c9bV9qrL/dirjnZjR7Z7JzmBln
+	sdFR4oIk1V/dQkTWOfTw7ir7g3R93WO9amVhqFLoh5UxzXmzp+eFFhq5FCfx+xRearP9rJjNihg
+	JsWg0mgMce3grM3c9qnxyKUC79QzQ6hP/opGY1D/JLg5XNK5Lqd4k3eU2gDPfz7i8jSBnfXuT9q
+	i7Hz53IZb2vMJgycUitATGux7/YbMfB0HM72u12C6Bg3vGZscSl1bLTnN8FcgAox+oxLz/eX82v
+	utwo7i8rKwJD4WN9ie4AsYYyEWiGO0RkaoLeGFCTl4vpIcOP1RnVziWoosMmQ2+vFuSynnc5qB0
+	RgrdMSjnMSS8K32FLUcCYsw2VKaCmwmzd3azFVIr5HUwXNb71PPNbp3FJlF68u3qF+dH6o6blhf
+	YQCVKhp6oAAkjcosuNVgsON0dABR2Bl7Rs5tUsKPXgMSB1rG2k=
+X-Received: by 2002:a17:90b:1dc1:b0:39e:4c7f:7304 with SMTP id 98e67ed59e1d1-3ab3ac9f622mr8108214a91.27.1791873233720;
+        Mon, 12 Oct 2026 23:33:53 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab38f4863esm23169595a91.11.2026.10.12.23.33.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Oct 2026 23:33:53 -0700 (PDT)
+From: a0282524688@gmail.com
+To: lee@kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: linux-kernel@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>,
+	linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	mfd@lists.linux.dev
+Subject: [PATCH v9 05/12] mfd: nct6694: Move module type macros to shared header
+Date: Tue, 13 Oct 2026 14:32:51 +0800
+Message-Id: <20261013063259.2734757-6-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20261013063259.2734757-1-a0282524688@gmail.com>
+References: <20261013063259.2734757-1-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAPvUaSo1D+1Tvk3-4TMiXw-ScBtY8Mu0FzO7R_EG6zrjYfjYqg@mail.gmail.com>
- <asxTYBiGy6lf6-Ki@archlinux> <CAPvUaSo-ubCOCYYPadY1C23y1Fd_AAhQLuVKWRa6F1XVh6mk_Q@mail.gmail.com>
- <asz7WqGzukhkYHGD@archlinux> <CAPvUaSrbWrBuvAi3R02xC8w8M5Yh97pVd3-+FBXLp3mPgG5cUQ@mail.gmail.com>
- <as0bOFOoaaw-smyB@archlinux>
-In-Reply-To: <as0bOFOoaaw-smyB@archlinux>
-From: Lorenzo Collevecchio <lorenzocollevecchio17@gmail.com>
-Date: Mon, 12 Oct 2026 21:34:07 +0200
-X-Gm-Features: AclHuK9gwhlBAzOTdnpC_DKY74oNreZZ1z9ydlMApMHSbMiUysB2biOQPudp18Q
-Message-ID: <CAPvUaSoBgAG=MX93vMhfEiEk5bYXGydFsGn8CpoCu_QVQRPTCQ@mail.gmail.com>
-Subject: Re: hp-wmi: WHCM AE_AML_OPERAND_TYPE and fan init -22 on HP OmniBook
- 5 16-ag1xxx (board 8DF4)
-To: Krishna Chomal <krishna.chomal108@gmail.com>
-Cc: platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, W_Armin@gmx.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Subject: Re: hp-wmi: WHCM AE_AML_OPERAND_TYPE and fan init -22 on HP
-OmniBook 5 16-ag1xxx (board 8DF4)
+From: Ming Yu <a0282524688@gmail.com>
 
-Hi Krishna,
+Each sub-device driver defines the module type used by its own
+commands. The upcoming HIF transport also needs to recognise
+NCT6694_RPT_MOD, as report accesses are served from a separate
+register space rather than through the command mailbox.
 
-No problem, thanks for the revised patch.
+Move all module types into the shared header so that the transports
+and the sub-device drivers use a single set of definitions.
 
-Base: stable v7.2.9 (drivers/platform/x86/hp/hp-wmi.c), built out of
-tree against 7.2.9-2-cachyos. I applied your three hunks by hand,
-because the context in my tree differs (my hp_wmi_hwmon_is_visible()
-uses is_victus_s_thermal_profile()). The resulting hp_wmi_hwmon_init()
-has the same structure as your diff: hwmon registration first, then
-fan_count with the pr_info, then the early return before
-hp_wmi_setup_fan_settings().
+No functional change.
 
-Test: normal boot (hp_bioscfg loaded), rmmod hp_wmi, insmod the
-patched module. dmesg after the reload:
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+Signed-off-by: Ming Yu <a0282524688@gmail.com>
+---
+Changes in v9:
+- Added Andi's Reviewed-by.
 
-[  318.615352] hp_wmi: loading out-of-tree module taints kernel.
-[  319.235086] input: HP WMI hotkeys as /devices/virtual/input/input27
-[  319.646490] ACPI Error: Aborting method \_SB.WMID.WHCM due to
-previous error (AE_AML_OPERAND_TYPE)
-[  319.646528] hp_wmi: channel = 0 | fan_speed = -22
-[  319.851354] ACPI Error: Aborting method \_SB.WMID.WHCM due to
-previous error (AE_AML_OPERAND_TYPE)
-[  319.851395] hp_wmi: channel = 1 | fan_speed = -22
-[  320.056884] ACPI Error: Aborting method \_SB.WMID.WHCM due to
-previous error (AE_AML_OPERAND_TYPE)
-[  320.262561] ACPI Error: Aborting method \_SB.WMID.WHCM due to
-previous error (AE_AML_OPERAND_TYPE)
-[  320.466854] ACPI Error: Aborting method \_SB.WMID.WHCM due to
-previous error (AE_AML_OPERAND_TYPE)
-[  320.466894] hp_wmi: fan_count = -22
-[  320.878745] hp_wmi: Registered as platform profile handler
+Changes in v8:
+- Reworded the commit message to explain why the transport needs the
+  module types.
 
-hwmon folder: contains only device, name, power, subsystem, uevent. No
-pwm1_enable, and no fan*_input.
+Changes in v7:
+- None.
 
-So:
-  - The hwmon device is registered and pwm1_enable is hidden, as you expected.
-  - "Failed to apply initial fan settings: -22" is no longer printed.
-  - fan1_input/fan2_input are not visible because
-hp_wmi_get_fan_speed() returns -22 for both channels, not 0. Each of
-these queries (fan speed per channel, and fan count) ends in a WHCM
-abort with AE_AML_OPERAND_TYPE, so no result buffer is returned at
-all, rather than a stub all-zero one.
-  - fan_count is also -22, which is why the early return is taken.
+Changes in v6:
+- None.
 
-I wonder whether the AML error depends on what the driver passes in:
-the error says Index() found an Integer where it needs a
-Buffer/String/Package. Does it look to you as if WHCM expects a
-different argument layout than the driver sends for these queries? I
-can test any variant.
+Changes in v5:
+- Split from the monolithic v4 patch to follow the single logical change
+  principle.
 
-Happy to test further patches.
+ drivers/gpio/gpio-nct6694.c         |  7 -------
+ drivers/hwmon/nct6694-hwmon.c       | 21 ---------------------
+ drivers/i2c/busses/i2c-nct6694.c    |  7 -------
+ drivers/net/can/usb/nct6694_canfd.c |  6 ------
+ drivers/rtc/rtc-nct6694.c           |  7 -------
+ drivers/watchdog/nct6694_wdt.c      |  7 -------
+ include/linux/mfd/nct6694.h         |  9 +++++++++
+ 7 files changed, 9 insertions(+), 55 deletions(-)
 
-Thanks,
-Lorenzo
+diff --git a/drivers/gpio/gpio-nct6694.c b/drivers/gpio/gpio-nct6694.c
+index a8607f0d9915..53bfc5983648 100644
+--- a/drivers/gpio/gpio-nct6694.c
++++ b/drivers/gpio/gpio-nct6694.c
+@@ -13,13 +13,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ 
+-/*
+- * USB command module type for NCT6694 GPIO controller.
+- * This defines the module type used for communication with the NCT6694
+- * GPIO controller over the USB interface.
+- */
+-#define NCT6694_GPIO_MOD	0xFF
+-
+ #define NCT6694_GPIO_VER	0x90
+ #define NCT6694_GPIO_VALID	0x110
+ #define NCT6694_GPI_DATA	0x120
+diff --git a/drivers/hwmon/nct6694-hwmon.c b/drivers/hwmon/nct6694-hwmon.c
+index 9a9a4db434c4..bd4c106305c7 100644
+--- a/drivers/hwmon/nct6694-hwmon.c
++++ b/drivers/hwmon/nct6694-hwmon.c
+@@ -15,13 +15,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ 
+-/*
+- * USB command module type for NCT6694 report channel
+- * This defines the module type used for communication with the NCT6694
+- * report channel over the USB interface.
+- */
+-#define NCT6694_RPT_MOD			0xFF
+-
+ /* Report channel */
+ /*
+  * The report channel is used to report the status of the hardware monitor
+@@ -38,13 +31,6 @@
+ #define NCT6694_TIN_STS(x)		(0x6A + (x))
+ #define NCT6694_FIN_STS(x)		(0x6E + (x))
+ 
+-/*
+- * USB command module type for NCT6694 HWMON controller.
+- * This defines the module type used for communication with the NCT6694
+- * HWMON controller over the USB interface.
+- */
+-#define NCT6694_HWMON_MOD		0x00
+-
+ /* Command 00h - Hardware Monitor Control */
+ #define NCT6694_HWMON_CONTROL		0x00
+ #define NCT6694_HWMON_CONTROL_SEL	0x00
+@@ -53,13 +39,6 @@
+ #define NCT6694_HWMON_ALARM		0x02
+ #define NCT6694_HWMON_ALARM_SEL		0x00
+ 
+-/*
+- * USB command module type for NCT6694 PWM controller.
+- * This defines the module type used for communication with the NCT6694
+- * PWM controller over the USB interface.
+- */
+-#define NCT6694_PWM_MOD			0x01
+-
+ /* PWM Command - Manual Control */
+ #define NCT6694_PWM_CONTROL		0x01
+ #define NCT6694_PWM_CONTROL_SEL		0x00
+diff --git a/drivers/i2c/busses/i2c-nct6694.c b/drivers/i2c/busses/i2c-nct6694.c
+index 1413ab6f9462..ef3329f34246 100644
+--- a/drivers/i2c/busses/i2c-nct6694.c
++++ b/drivers/i2c/busses/i2c-nct6694.c
+@@ -12,13 +12,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ 
+-/*
+- * USB command module type for NCT6694 I2C controller.
+- * This defines the module type used for communication with the NCT6694
+- * I2C controller over the USB interface.
+- */
+-#define NCT6694_I2C_MOD			0x03
+-
+ /* Command 00h - I2C Deliver */
+ #define NCT6694_I2C_DELIVER		0x00
+ #define NCT6694_I2C_DELIVER_SEL		0x00
+diff --git a/drivers/net/can/usb/nct6694_canfd.c b/drivers/net/can/usb/nct6694_canfd.c
+index e5f7f8849a73..262b4c26c9d4 100644
+--- a/drivers/net/can/usb/nct6694_canfd.c
++++ b/drivers/net/can/usb/nct6694_canfd.c
+@@ -18,12 +18,6 @@
+ 
+ #define DEVICE_NAME "nct6694-canfd"
+ 
+-/* USB command module type for NCT6694 CANfd controller.
+- * This defines the module type used for communication with the NCT6694
+- * CANfd controller over the USB interface.
+- */
+-#define NCT6694_CANFD_MOD			0x05
+-
+ /* Command 00h - CAN Setting and Initialization */
+ #define NCT6694_CANFD_SETTING			0x00
+ #define NCT6694_CANFD_SETTING_ACTIVE_CTRL1	BIT(0)
+diff --git a/drivers/rtc/rtc-nct6694.c b/drivers/rtc/rtc-nct6694.c
+index 35401a0d9cf5..c06902f150c9 100644
+--- a/drivers/rtc/rtc-nct6694.c
++++ b/drivers/rtc/rtc-nct6694.c
+@@ -14,13 +14,6 @@
+ #include <linux/rtc.h>
+ #include <linux/slab.h>
+ 
+-/*
+- * USB command module type for NCT6694 RTC controller.
+- * This defines the module type used for communication with the NCT6694
+- * RTC controller over the USB interface.
+- */
+-#define NCT6694_RTC_MOD		0x08
+-
+ /* Command 00h - RTC Time */
+ #define NCT6694_RTC_TIME	0x0000
+ #define NCT6694_RTC_TIME_SEL	0x00
+diff --git a/drivers/watchdog/nct6694_wdt.c b/drivers/watchdog/nct6694_wdt.c
+index bc3689bd4b6b..4c06ac105562 100644
+--- a/drivers/watchdog/nct6694_wdt.c
++++ b/drivers/watchdog/nct6694_wdt.c
+@@ -20,13 +20,6 @@
+ 
+ #define NCT6694_WDT_MAX_DEVS		2
+ 
+-/*
+- * USB command module type for NCT6694 WDT controller.
+- * This defines the module type used for communication with the NCT6694
+- * WDT controller over the USB interface.
+- */
+-#define NCT6694_WDT_MOD			0x07
+-
+ /* Command 00h - WDT Setup */
+ #define NCT6694_WDT_SETUP		0x00
+ #define NCT6694_WDT_SETUP_SEL(idx)	(idx ? 0x01 : 0x00)
+diff --git a/include/linux/mfd/nct6694.h b/include/linux/mfd/nct6694.h
+index 69e4652cf16c..d46ae34a497e 100644
+--- a/include/linux/mfd/nct6694.h
++++ b/include/linux/mfd/nct6694.h
+@@ -8,6 +8,15 @@
+ #ifndef __MFD_NCT6694_H
+ #define __MFD_NCT6694_H
+ 
++#define NCT6694_HWMON_MOD	0x00
++#define NCT6694_PWM_MOD		0x01
++#define NCT6694_I2C_MOD		0x03
++#define NCT6694_CANFD_MOD	0x05
++#define NCT6694_WDT_MOD		0x07
++#define NCT6694_RTC_MOD		0x08
++#define NCT6694_RPT_MOD		0xFF
++#define NCT6694_GPIO_MOD	NCT6694_RPT_MOD
++
+ #define NCT6694_VENDOR_ID	0x0416
+ #define NCT6694_PRODUCT_ID	0x200B
+ #define NCT6694_INT_IN_EP	0x01
+-- 
+2.34.1
 
-Il giorno lun 12 ott 2026 alle ore 19:49 Krishna Chomal
-<krishna.chomal108@gmail.com> ha scritto:
->
-> On Mon, Oct 12, 2026 at 06:04:37PM +0200, Lorenzo Collevecchio wrote:
-> >Subject: Re: hp-wmi: WHCM AE_AML_OPERAND_TYPE and fan init -22 on HP
-> >OmniBook 5 16-ag1xxx (board 8DF4)
-> >
-> >Hi Krishna,
-> >
-> >Thanks for the patch. Results below.
-> >
-> >Base and adaptation:
-> >I used drivers/platform/x86/hp/hp-wmi.c from stable v7.2.9, built out
-> >of tree against 7.2.9-2-cachyos. Your diff did not apply cleanly: hunk
-> >1 failed, because my hp_wmi_hwmon_is_visible() uses
-> >is_victus_s_thermal_profile() and hp_wmi_get_fan_speed_victus_s()
-> >rather than the helpers in your context lines. Hunks 2 and 3 applied
-> >with offsets of about -230 lines. So I made these changes by hand:
-> >  - declared int fan_speed in hp_wmi_hwmon_is_visible()
-> >  - added your pr_info() and the fan_speed variable in the non-Victus
-> >hwmon_fan branch
-> >  - added the fan_count <= 0 early return in hp_wmi_hwmon_init()
-> >I did NOT add the hwmon_pwm_enable check in is_visible(), since the
-> >early return in init already prevents hwmon registration. If you want
-> >me to test against a different tree, tell me which one.
-> >
-> >Test: normal boot (hp_bioscfg not blacklisted), then rmmod hp_wmi and
-> >insmod the patched module. Output of dmesg | grep -i -E
-> >"hp.wmi|WHCM|WQB|fan", showing the stock boot first and then the
-> >reload at about 5156 s:
-> >
-> >[    6.453093] ACPI Error: Aborting method \_SB.WMID.WHCM ...
-> >(AE_AML_OPERAND_TYPE)
-> >[    6.655089] ACPI Error: Aborting method \_SB.WMID.WHCM ...
-> >(AE_AML_OPERAND_TYPE)
-> >[    6.857553] ACPI Error: Aborting method \_SB.WMID.WHCM ...
-> >(AE_AML_OPERAND_TYPE)
-> >[    6.857581] hp-wmi hp-wmi: Failed to apply initial fan settings: -22
-> >[    7.262812] hp_wmi: Registered as platform profile handler
-> >[    7.308567] ACPI Error: Aborting method \_SB.WMID.WQBC ...
-> >(AE_AML_OPERAND_VALUE)
-> >[    7.309182] ACPI Error: Aborting method \_SB.WMID.WQBE ...
-> >(AE_AML_OPERAND_VALUE)
-> >[ 5156.582212] hp_wmi: loading out-of-tree module taints kernel.
-> >[ 5156.582224] hp_wmi: module verification failed: signature and/or
-> >required key missing - tainting kernel
-> >[ 5157.203181] input: HP WMI hotkeys as /devices/virtual/input/input27
-> >[ 5157.614765] ACPI Error: Aborting method \_SB.WMID.WHCM ...
-> >(AE_AML_OPERAND_TYPE)
-> >[ 5158.026462] hp_wmi: Registered as platform profile handler
-> >
-> >What I see with the patched module:
-> >  - "Failed to apply initial fan settings: -22" is gone.
-> >  - /sys/devices/platform/hp-wmi/hwmon/ does not exist any more, so
-> >pwm1_enable is hidden as you expected.
-> >  - Only one WHCM error is logged after the reload instead of three. I
-> >do not know which call produces it; I am guessing it is the fan count
-> >query.
-> >  - No "channel = ... | fan_speed = ..." lines appear, because no
-> >hwmon device is registered once fan_count <= 0, so is_visible() never
-> >runs. If you want to see the fan speed query result, the print would
-> >have to go somewhere that runs in this case. I can test a modified
-> >patch.
-> >  - WQBC/WQBE do not appear in the reload because only hp_wmi was
-> >reloaded (hp_bioscfg stayed loaded).
-> >  - The platform profile still registers with quiet balanced performance.
-> >
-> >Fan Always On in the BIOS was off during all my tests.
-> >
-> >Fan behaviour, in case it is useful: on a cold boot with a 2-core
-> >stress-ng load, the CPU went from 46 C to 80 C in about 18 seconds
-> >while acpi_fan fan1_input stayed at 0 RPM (Fan Always On off). I
-> >stopped the test at 80 C. I can send the full log, and I can retest
-> >with Fan Always On enabled if you want.
-> >
-> >Happy to test further patches.
->
-> My fault, sorry. I should have clarified earlier that my patch was
-> based off of pdx86 tree[1] (master branch). Regarding the patch yes,
-> by mistake I ended up disabling the whole hwmon device (not what we
-> want). Let's register the hwmon device first then later handle the fan
-> logic optionally with the count guards.
->
-> Now hwmon should be available but pwm1_enable will be hidden. Also,
-> fan{1,2}_input is expected to be visible, I am not sure why it isn't
-> showing up for your device.
->
-> (as usual, rest all errors would be same)
->
-> diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
-> index b2773fc1aca4..422d65d5c514 100644
-> --- a/drivers/platform/x86/hp/hp-wmi.c
-> +++ b/drivers/platform/x86/hp/hp-wmi.c
-> @@ -2679,8 +2679,14 @@ static umode_t hp_wmi_hwmon_is_visible(const void *data,
->                                        enum hwmon_sensor_types type,
->                                        u32 attr, int channel)
->   {
-> +       int fan_count;
-> +       int fan_speed;
-> +
->         switch (type) {
->         case hwmon_pwm:
-> +               fan_count = hp_wmi_get_fan_count_userdefine_trigger();
-> +               if (attr == hwmon_pwm_enable && fan_count <= 0)
-> +                       return 0;
->                 if (attr == hwmon_pwm_input && !hp_wmi_fan_control_supported())
->                         return 0;
->                 return 0644;
-> @@ -2689,7 +2695,9 @@ static umode_t hp_wmi_hwmon_is_visible(const void *data,
->                         if (hp_wmi_get_active_fan_speed(channel) >= 0)
->                                 return 0444;
->                 } else {
-> -                       if (hp_wmi_get_fan_speed(channel) >= 0)
-> +                       fan_speed = hp_wmi_get_fan_speed(channel);
-> +                       pr_info("channel = %d | fan_speed = %d\n", channel, fan_speed);
-> +                       if (fan_speed >= 0)
->                                 return 0444;
->                 }
->                 break;
-> @@ -2905,6 +2913,7 @@ static int hp_wmi_hwmon_init(void)
->         struct device *dev = &hp_wmi_platform_dev->dev;
->         struct hp_wmi_hwmon_priv *priv;
->         struct device *hwmon;
-> +       int fan_count;
->         int ret;
->
->         priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> @@ -2915,11 +2924,17 @@ static int hp_wmi_hwmon_init(void)
->         if (ret)
->                 return ret;
->
-> +       hwmon = devm_hwmon_device_register_with_info(dev, "hp", priv,
-> +                                                    &chip_info, NULL);
-> +
-> +       fan_count = hp_wmi_get_fan_count_userdefine_trigger();
-> +       pr_info("fan_count = %d\n", fan_count);
-> +       if (fan_count <= 0)
-> +               return 0;
-> +
->         ret = hp_wmi_setup_fan_settings(priv);
->         if (ret)
->                 return ret;
-> -       hwmon = devm_hwmon_device_register_with_info(dev, "hp", priv,
-> -                                                    &chip_info, NULL);
->
->         if (IS_ERR(hwmon)) {
->                 dev_err(dev, "Could not register hp hwmon device\n");
->
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
->
-> >Thanks,
-> >Lorenzo
-> >
-> >Il giorno lun 12 ott 2026 alle ore 17:24 Krishna Chomal
-> ><krishna.chomal108@gmail.com> ha scritto:
-> >>
-> >> On Mon, Oct 12, 2026 at 10:08:43AM +0200, Lorenzo Collevecchio wrote:
-> >> >Hi Armin, Krishna,
-> >> >
-> >> >Thanks for the quick replies.
-> >> >
-> >> >acpidump:
-> >> >https://gist.github.com/CollevecchioLorenzo/aef5917d9775629d48618bd42cb5f5e2
-> >> >
-> >> >I booted 7.2.9-2-cachyos with modprobe.blacklist=hp_bioscfg
-> >> >(confirmed in /proc/cmdline; hp_bioscfg is not loaded). Counts of
-> >> >each message in dmesg, before and after:
-> >> >
-> >> >  WHCM AE_AML_OPERAND_TYPE:                 3 before, 3 after
-> >> >  "Failed to apply initial fan settings: -22": 1 before, 1 after
-> >> >  WQBC / WQBE AE_AML_OPERAND_VALUE:         1/1 before, 0/0 after
-> >> >
-> >> >So the WQBC/WQBE errors come from hp_bioscfg, as you suspected. The
-> >> >WHCM errors and the -22 are not caused by it: they still occur with
-> >> >hp_bioscfg blacklisted, right before "hp_wmi: Registered as platform
-> >> >profile handler".
-> >> >
-> >> >Windows, as you asked (Krishna):
-> >> >- The Windows power mode setting exists, but that is standard
-> >> >  Windows, i didn't check for HP specific.
-> >> >- Omen Gaming Hub offers a performance mode
-> >> >  option on this laptop.
-> >>
-> >> Interesting, what choices does it offer you? Eco/Balanced/Performance?
-> >> Or something else?
-> >>
-> >> >- The BIOS has a "Fan Always On" setting. I had it turned off
-> >> >
-> >> >Happy to test any patch or run further commands.
-> >>
-> >> Can you apply the following diff and share the output of:
-> >> # dmesg | grep "hp_wmi"
-> >>
-> >> Expected results:
-> >> - No "failed to apply initial fan settings: -22" in dmesg
-> >> - pwm1_enable should be hidden
-> >>
-> >> Note:
-> >> - I have also added a debug print to get fan speed query result. From your
-> >>    acpidump, it looks like a stub implementation returning all zeros buffer
-> >>    (0 RPM) which should have made fan{1,2}_input visible but it's interesting
-> >>    that it isn't visible; the dmesg log should help us gain more insight.
-> >> - All other errors in dmesg may (will) be same, as this patch isn't
-> >>    intended to solve them.
-> >>
-> >> diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
-> >> index 3ec6047c0f89..ee51790549ed 100644
-> >> --- a/drivers/platform/x86/hp/hp-wmi.c
-> >> +++ b/drivers/platform/x86/hp/hp-wmi.c
-> >> @@ -2705,8 +2705,14 @@ static umode_t hp_wmi_hwmon_is_visible(const void *data,
-> >>                                        enum hwmon_sensor_types type,
-> >>                                        u32 attr, int channel)
-> >>   {
-> >> +       int fan_count;
-> >> +       int fan_speed;
-> >> +
-> >>         switch (type) {
-> >>         case hwmon_pwm:
-> >> +               fan_count = hp_wmi_get_fan_count_userdefine_trigger();
-> >> +               if (attr == hwmon_pwm_enable && fan_count <= 0)
-> >> +                       return 0;
-> >>                 if (attr == hwmon_pwm_input && !hp_wmi_fan_control_supported())
-> >>                         return 0;
-> >>                 return 0644;
-> >> @@ -2715,7 +2721,9 @@ static umode_t hp_wmi_hwmon_is_visible(const void *data,
-> >>                         if (hp_wmi_get_active_fan_speed(channel) >= 0)
-> >>                                 return 0444;
-> >>                 } else {
-> >> -                       if (hp_wmi_get_fan_speed(channel) >= 0)
-> >> +                       fan_speed = hp_wmi_get_fan_speed(channel);
-> >> +                       pr_info("channel = %d | fan_speed = %d\n", channel, fan_speed);
-> >> +                       if (fan_speed >= 0)
-> >>                                 return 0444;
-> >>                 }
-> >>                 break;
-> >> @@ -2931,8 +2939,13 @@ static int hp_wmi_hwmon_init(void)
-> >>         struct device *dev = &hp_wmi_platform_dev->dev;
-> >>         struct hp_wmi_hwmon_priv *priv;
-> >>         struct device *hwmon;
-> >> +       int fan_count;
-> >>         int ret;
-> >>
-> >> +       fan_count = hp_wmi_get_fan_count_userdefine_trigger();
-> >> +       if (fan_count <= 0)
-> >> +               return 0;
-> >> +
-> >>         priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> >>         if (!priv)
-> >>                 return -ENOMEM;
-> >>
-> >>
-> >> >Thanks,
-> >> >Lorenzo
-> >> >
-> >> >
-> >> >
-> >> >
-> >> >Il giorno lun 12 ott 2026 alle ore 06:03 Krishna Chomal
-> >> ><krishna.chomal108@gmail.com> ha scritto:
-> >> >>
-> >> >> +Armin Wolf
-> >> >>
-> >> >> On Sun, Oct 11, 2026 at 06:03:25PM +0200, Lorenzo Collevecchio wrote:
-> >> >> >Hello,
-> >> >> >
-> >> >> >I am seeing hp-wmi fan interface failures on an HP OmniBook 5
-> >> >> >16-ag1xxx. This is not a gaming model.
-> >> >>
-> >> >> Hi Lorenzo,
-> >> >>
-> >> >> Thanks for reporting.
-> >> >>
-> >> >> >Hardware:
-> >> >> >  product_name: HP OmniBook 5 Laptop 16-ag1xxx (16-AG1002SL)
-> >> >> >  board_name:   8DF4
-> >> >> >  BIOS:         F.12, 04/10/2026 (no newer firmware listed on LVFS for
-> >> >> >this machine)
-> >> >> >  Kernel:       7.2.9-2-cachyos (also tested 6.18.55-2-cachyos-lts;
-> >> >> >ACPICA 20250807 vs 20260408)
-> >> >> >
-> >> >> >Symptoms:
-> >> >> >1. At boot, \_SB.WMID.WHCM (called via WMAA) fails three times with
-> >> >> >   "AE_AML_OPERAND_TYPE: Needed [Buffer/String/Package], found
-> >> >> >[Integer]" while resolving operands for [Index].
-> >> >>
-> >> >> This is likely due to hp-bioscfg instead of hp-wmi.
-> >> >>
-> >> >> >2. Immediately afterwards: "hp-wmi hp-wmi: Failed to apply initial fan
-> >> >> >settings: -22".
-> >> >>
-> >> >> Ah yes! This is because we are currently enabling fan control for ALL
-> >> >> devices. If you share your acpidump, I can check if we should use the
-> >> >> HPWMI_FAN_COUNT_GET_QUERY to decide whether to allow pwm1_enable or not.
-> >> >>
-> >> >> >3. Later: "Attempt to CreateField of length zero" in \_SB.WMID.WQBC
-> >> >> >and WQBE (AE_AML_OPERAND_VALUE).
-> >> >>
-> >> >> This is also likely due to hp-bioscfg. Try booting with kernel cmdline
-> >> >> parameter "modprobe.blacklist=hp_bioscfg" and see if these disappear.
-> >> >> That will help us narrow down the scope. But in any case, I think Armin
-> >> >> Wolf will have to help here since I am not familiar with bioscfg anyway.
-> >> >>
-> >> >> >4. hp_wmi still registers as a platform profile handler (quiet
-> >> >> >balanced performance).
-> >> >>
-> >> >> This is because 8DF4 is not present in any whitelists, so it takes a
-> >> >> fallback path and uses legacy WMI queries. Honestly, I am not sure if
-> >> >> platform profile should be registered for OmniBook devices. Could you
-> >> >> let me know if Omen Gaming Hub on Windows allows you to switch
-> >> >> performance modes or there is no option for this?
-> >> >>
-> >> >> >5. /sys/devices/platform/hp-wmi/hwmon/*/ contains only pwm1_enable
-> >> >> >(rw); there is no pwm1 and no fan1_input.
-> >> >>
-> >> >> Intended.
-> >> >>
-> >> >> * pwm1_enable - As said, this is because we are currently (incorrectly)
-> >> >>                  enabling fan control for all devices.
-> >> >> * pwm1 - Absent because manual fan control must be unavailable on this
-> >> >>           board.
-> >> >> * fan1_input - Absent because get fan speed query must be failing.
-> >> >>
-> >> >> >6. On the LTS kernel the same WHCM error repeats about every 2.2 s
-> >> >> >while something polls the hp hwmon device (277 times between 551 s and
-> >> >> >1165 s uptime).
-> >> >> >7. ACPI thermal: "Invalid critical threshold (-274000)" and "No valid
-> >> >> >trip points!" for thermal zone TSZ0.
-> >> >> >
-> >> >> >Fan behaviour:
-> >> >> >- acpi_fan (acpi-fan PNP0C0B, "Using Microsoft fan extensions")
-> >> >> >exposes fan1_input. It sometimes shows about 2400 RPM and sometimes 0
-> >> >> >RPM.
-> >> >> >- The fan works normally under Windows on the same machine.
-> >> >> >- I once saw the CPU around 95 C with the fan apparently stopped on
-> >> >> >Linux; I have not been able to reproduce it yet and am collecting a
-> >> >> >temperature/RPM log.
-> >> >> >
-> >> >> >I suspect the WMI query path the driver uses for fan settings is not
-> >> >> >implemented by this firmware, so hp-wmi should probably not attempt it
-> >> >> >on board 8DF4. I would be glad to test patches or provide acpidump
-> >> >> >output, WMI GUID listings or any other data.
-> >> >>
-> >> >> acpidump would be helpful.
-> >> >>
-> >> >> Thanks,
-> >> >> Krishna
-> >> >>
-> >> >> >Thanks,
-> >> >> >Lorenzo
