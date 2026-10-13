@@ -1,47 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 410265208A0;
-	Tue, 13 Oct 2026 16:28:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02C8C3921E6;
+	Tue, 13 Oct 2026 16:30:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791908888; cv=none; b=nfVUvdOq3vmL6m9lUw5bpsqNCPOB0bY98IAWrHzoJy8FWYDGhqXvE3fC6bCQv1jepSyuvhuqDeYyjffoyLkqOc7FSekOqIFo2ZA7S2YPlS86lPYY10FhADnmYnfnIlPd04CivgInIncFTvzQGMXSZ8u+/dyQ+GoQYVaOQLxwuto=
+	t=1791909036; cv=none; b=amiVFJLS3vWthGBXLVx0+tItp7eTre6YBtIVhS1btL9lFwbZ1RWg0KDyntv/r2kZzwlV6UJQ4Ayr0pem6QRb2RBDb4U6XAvrXYZ9FhKFfGmU3h+9GoD2s+JTbN6mhSTKV/bbs1Z80/aM32FrwWW03SO3miWFPZQB2rLMP7o8Uhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791908888; c=relaxed/simple;
-	bh=ry1zMcfYwKFFs/NdI1mzS9damOmuJGURuz21CLKVnsw=;
+	s=arc-20240116; t=1791909036; c=relaxed/simple;
+	bh=//YOPY6vQKmq/roFbnBBtV0XyZS3rD1vuPJk0J3JdRI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WJGfFX7YeMgJ14wf9r4DVa2yT8vXe2/rk+bESGYnfDupgwDTzVK8Zdh4amIfS7MXIEduhlPiLQajOc7ZkmmmWuObOwI0ixcJn8/stLxRIfE9Jb9qy8LJDwVMQco81lfN+ANBO9JH5HTjM+sCsZpWuoHurytjFeDUzpUEtAzFItE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lHnqvybe; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=usLVt+nc1Q4gMZkbfCElhxk8jSsiW8TPZBzOt6A0hRMmlBEsgNjBEvrnVsRfnjoXZuPbQ7wYVP/pIYuJUIjuS3Ha91SPoP3ACHui17V2fnQn90oLtItak9i3mwMzbEzKu/zrrGW1lBTV3x2OYakn1hWMY73p9N1jTWGEZ/KGAgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ICic/5CH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lHnqvybe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88B901F000FF;
-	Tue, 13 Oct 2026 16:28:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ICic/5CH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC32D1F000FF;
+	Tue, 13 Oct 2026 16:30:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791908886;
-	bh=4qECQLBZag2Z6hnsQn+EA+w/xPg1/6d82FsVEqu9mG4=;
+	s=k20260515; t=1791909034;
+	bh=bCylcL8r7dne6e2xSUn57/ruC99iqBkZb4CHlqtT1Rk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=lHnqvybeUm68HtG0je9hHehQZb1iLVcY8LX/J9SX3k+HW+8U8w430Fcs7sX4q06bW
-	 AfmKm8zZmQFVMGq4CpZ282GvKj9wkQe8RLCEbjtvI2npp4qlvVR9Po3ckajrny29Z5
-	 bFrrz9zQVWF3c6SNKuFoV84wATd5LW9+aXaVz1im4uhPx9uJzyzd6CsheXWNjofVLc
-	 MG2ZQ5lB5IOU8Wg4aprhq8foSZTy3GMG56EntshrsBoY8vSAGQ+WU51/Fghd6jVgIR
-	 DBvpEvu7dKYH2dHFtYBaWbJDz/BC/2QMbLll2jyGn33eXBXpw+T7yQqxz2MmBbnwOt
-	 TnfjHgPBeYlZQ==
-Date: Tue, 13 Oct 2026 17:28:02 +0100
+	b=ICic/5CHydH+9bIuXE2dag452kYIQD66ar9sDhSFziK7acorOlC2b8bwaJpcjdLTk
+	 pSO4dM9E8PXgsVbA7+4jpxZEeBlys/BOwQcPXPSUg+iSiZY5PGOC+qJMAjAfqZOMJt
+	 KuGn5E/rxXhExFAlde+eF/DzjYHZU7ZQ2cHI7KNz5myUOXQwYxqk6FJTZgXyvVWxHG
+	 nzFDLKHSya7+8Gic0X7znR/feoR8oTgrgYnZqwkmlFr1hT8i+vPr7u2XYmm0mcjO+r
+	 gCTLi2MehvMBJs2UkLM58h7ogPS7qWiQ5lNbm77jBCkaYLHDqRf+MGLDH/gsOjXr/y
+	 kbiwEoTzXL8vQ==
+Date: Tue, 13 Oct 2026 17:30:29 +0100
 From: Conor Dooley <conor@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] dt-bindings: iio: add: document the MAX34417
- Four-Channel High Dynamic Range Power Accumulator
-Message-ID: <20261013-subtract-oblong-cc6cd3d9cee2@spud>
-References: <20261013-topic-sm8x50-iio-max34417-adc-v3-0-d3604ae4a229@linaro.org>
- <20261013-topic-sm8x50-iio-max34417-adc-v3-1-d3604ae4a229@linaro.org>
+To: Robert Marko <robert.marko@sartura.hr>
+Cc: linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, Steen.Hegelund@microchip.com,
+	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
+	nicolas.ferre@microchip.com, claudiu.beznea@tuxon.dev,
+	lars.povlsen@microchip.com, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, luka.perkov@sartura.hr
+Subject: Re: [PATCH 1/6] dt-bindings: hwmon: sparx5: add LAN969x fan
+ controller
+Message-ID: <20261013-stylized-plethora-2a9e27545adb@spud>
+References: <20261013125735.1542349-1-robert.marko@sartura.hr>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,161 +47,187 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="olTPtcV1frKmgnZT"
+	protocol="application/pgp-signature"; boundary="XdQaVzIG9Y1sxA5J"
 Content-Disposition: inline
-In-Reply-To: <20261013-topic-sm8x50-iio-max34417-adc-v3-1-d3604ae4a229@linaro.org>
+In-Reply-To: <20261013125735.1542349-1-robert.marko@sartura.hr>
 
---olTPtcV1frKmgnZT
+--XdQaVzIG9Y1sxA5J
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 13, 2026 at 04:07:11PM +0200, Neil Armstrong wrote:
-> Document the Maxim MAX34417 Four-Channel High Dynamic Range Power
-> Accumulator used to monitor power consumption of portable systems.
+On Tue, Oct 13, 2026 at 02:56:25PM +0200, Robert Marko wrote:
+> LAN969x integrates a PWM fan controller with a tachometer input in
+> addition to the Sparx5-compatible temperature sensor. Add a LAN969x
+> hardware-monitor compatible and describe the second register region.
 >=20
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Describe the fan as a child node using a two-cell PWM specifier for the
+> period and standard polarity flags. The child also carries the optional
+> tachometer pulses-per-revolution and thermal cooling properties.
+>=20
+> Keep the existing microchip,lan9691-temp compatible for device tree ABI
+> compatibility.
+>=20
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> ---
+>  .../bindings/hwmon/microchip,sparx5-temp.yaml | 90 ++++++++++++++++++-
+>  1 file changed, 87 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/microchip,sparx5-tem=
+p.yaml b/Documentation/devicetree/bindings/hwmon/microchip,sparx5-temp.yaml
+> index 611fcadb1e771..e91c2a3ccd3c9 100644
+> --- a/Documentation/devicetree/bindings/hwmon/microchip,sparx5-temp.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/microchip,sparx5-temp.yaml
+> @@ -4,13 +4,15 @@
+>  $id: http://devicetree.org/schemas/hwmon/microchip,sparx5-temp.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> =20
+> -title: Microchip Sparx5 Temperature Monitor
+> +title: Microchip Sparx5 Hardware Monitor
+> =20
+>  maintainers:
+>    - Lars Povlsen <lars.povlsen@microchip.com>
+> =20
+>  description: |
+> -  Microchip Sparx5 embedded temperature monitor
+> +  Microchip Sparx5 temperature monitor with a fan controller on LAN969x.
+> +  The fan child's pwms property references this node to specify the
+> +  PWM period and polarity.
+> =20
+>  properties:
+>    compatible:
+> @@ -18,11 +20,19 @@ properties:
+>        - const: microchip,sparx5-temp
+>        - items:
+>            - enum:
+> +              - microchip,lan9691-hwmon
+>                - microchip,lan9691-temp
+>            - const: microchip,sparx5-temp
+> =20
+>    reg:
+> -    maxItems: 1
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  reg-names:
+> +    minItems: 1
+> +    items:
+> +      - const: temp
+> +      - const: fan
+> =20
+>    clocks:
+>      items:
+> @@ -31,11 +41,67 @@ properties:
+>    '#thermal-sensor-cells':
+>      const: 0
+> =20
+> +  '#pwm-cells':
+> +    const: 2
+> +    description: |
+> +      Number of cells in a PWM specifier.
+> +      - cell 0: PWM period in nanoseconds
+> +      - cell 1: PWM polarity: 0 or PWM_POLARITY_INVERTED
+> +
+> +  fan:
+> +    $ref: fan-common.yaml#
+> +    unevaluatedProperties: false
+> +
+> +    properties:
+> +      cooling-levels:
+> +        description:
+> +          PWM duty-cycle values corresponding to thermal cooling states.
+> +        items:
+> +          maximum: 255
+> +
+> +      pulses-per-revolution:
+> +        minimum: 1
+> +        maximum: 4
+> +        default: 2
+> +
+> +    required:
+> +      - pwms
+> +
+> +    dependencies:
+> +      '#cooling-cells':
+> +        - cooling-levels
+> +      cooling-levels:
+> +        - '#cooling-cells'
+> +
+>  required:
+>    - compatible
+>    - reg
+>    - clocks
+> =20
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: microchip,lan9691-hwmon
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 2
+> +        reg-names:
+> +          minItems: 2
+> +      required:
+> +        - '#pwm-cells'
+> +        - reg-names
+> +    else:
+> +      properties:
+> +        '#pwm-cells': false
+> +        fan: false
+> +        reg:
+> +          maxItems: 1
+> +        reg-names:
+> +          maxItems: 1
+> +
+>  additionalProperties: false
+> =20
+>  examples:
+> @@ -46,3 +112,21 @@ examples:
+>          #thermal-sensor-cells =3D <0>;
+>          clocks =3D <&sys_clk>;
+>      };
+> +
+> +  - |
+> +    #include <dt-bindings/pwm/pwm.h>
+> +
+> +    hwmon: hwmon@e2020100 {
+> +        compatible =3D "microchip,lan9691-hwmon", "microchip,sparx5-temp=
+";
+> +        reg =3D <0xe2020100 0xc>, <0xe2010348 0xc>;
 
-Previous review still applies?
-https://lore.kernel.org/all/20260924-circling-punk-e75ea71e60b0@spud/
-
-pw-bot: changes-requested
+Are these actually the same device? These are somewhat disparate
+register regions - and the second is at a very odd offset.
 
 Thanks,
 Conor.
 
-> ---
->  .../bindings/iio/adc/maxim,max34417.yaml           | 100 +++++++++++++++=
-++++++
->  1 file changed, 100 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/iio/adc/maxim,max34417.yam=
-l b/Documentation/devicetree/bindings/iio/adc/maxim,max34417.yaml
-> new file mode 100644
-> index 000000000000..058af61cc04e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/adc/maxim,max34417.yaml
-> @@ -0,0 +1,100 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/adc/maxim,max34417.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +        reg-names =3D "temp", "fan";
+> +        #pwm-cells =3D <2>;
+> +        #thermal-sensor-cells =3D <0>;
+> +        clocks =3D <&sys_clk>;
 > +
-> +title: Maxim MAX34417 Four-Channel High Dynamic Range Power Accumulator
-> +
-> +maintainers:
-> +  - Neil Armstrong <neil.armstrong@linaro.org>
-> +
-> +description: |
-> +  The MAX34417 is a specialized current and voltage monitor used to dete=
-rmine
-> +  power consumption of portable systems. The device has a very wide dyna=
-mic
-> +  range (20,000:1) that allows for the accurate measurement of power in =
-such
-> +  systems. The device is configured and monitored with a standard I2C/SM=
-Bus
-> +  serial interface. The unidirectional current sensor offers precision
-> +  high-side operation with a low full-scale sense voltage.
-> +
-> +  Specifications about the device can be found at:
-> +  https://www.analog.com/media/en/technical-documentation/data-sheets/ma=
-x34417.pdf
-> +
-> +properties:
-> +  compatible:
-> +    const: maxim,max34417
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  vdd-supply: true
-> +  vio-supply: true
-> +
-> +patternProperties:
-> +  "^channel@[0-3]$":
-> +    $ref: adc.yaml
-> +    type: object
-> +    description:
-> +      Represents the internal channels of the sensor.
-> +
-> +    properties:
-> +      reg:
-> +        items:
-> +          - minimum: 0
-> +            maximum: 3
-> +
-> +      label: true
-> +
-> +      shunt-resistor-micro-ohms:
-> +        description:
-> +          Value in micro Ohms of the shunt resistor connected between th=
-e RS+ and RS- inputs.
-> +        minimum: 1000
-> +        maximum: 100000
-> +        default: 1000
-> +
-> +    required:
-> +      - reg
-> +
-> +    unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        sensor@10 {
-> +              compatible =3D "maxim,max34417";
-> +              reg =3D <0x10>;
-> +
-> +              #address-cells =3D <1>;
-> +              #size-cells =3D <0>;
-> +
-> +              channel@0 {
-> +                  reg =3D <0>;
-> +                  label =3D "ch0";
-> +                  shunt-resistor-micro-ohms =3D <5000>;
-> +              };
-> +
-> +              channel@1 {
-> +                  reg =3D <1>;
-> +                  label =3D "ch1";
-> +             };
-> +
-> +              channel@2 {
-> +                  reg =3D <2>;
-> +             };
+> +        fan {
+> +            pwms =3D <&hwmon 40000 PWM_POLARITY_INVERTED>;
+> +            cooling-levels =3D <0 128 192 255>;
+> +            #cooling-cells =3D <2>;
 > +        };
 > +    };
->=20
 > --=20
-> 2.34.1
+> 2.56.0
 >=20
 
---olTPtcV1frKmgnZT
+--XdQaVzIG9Y1sxA5J
 Content-Type: application/pgp-signature; name=signature.asc
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCas5cEgAKCRB4tDGHoIJi
-0jYtAQDG/Kdajpu4lXNcTYJNmvR0ro/5maQnxMwQuxIRbf88EQD/Uq+r1EcahyWw
-CUFXkn1dVvJ/uVGHOLSwm4kEvAchUww=
-=iQGf
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCas5cpQAKCRB4tDGHoIJi
+0lm9AQCXQpPsK/Qh9JeeV83vBvj/4SlEGRYK70WcyV1ZZ+XUbwD/RVsReE5mgon+
+LvkceSyYW2eJr5Na+TSfbgUhFxZFYg4=
+=b6zh
 -----END PGP SIGNATURE-----
 
---olTPtcV1frKmgnZT--
+--XdQaVzIG9Y1sxA5J--
