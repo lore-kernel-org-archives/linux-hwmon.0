@@ -1,65 +1,65 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA984F5DF3
-	for <linux-hwmon@vger.kernel.org>; Tue, 13 Oct 2026 12:57:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A84F4F7975
+	for <linux-hwmon@vger.kernel.org>; Tue, 13 Oct 2026 12:57:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791896276; cv=none; b=neQbDS6gWF4MCCvFuxgBrJQ7Dp9qdG2zccU9sSfbvoH+GJjnt8o14cMcvH6u75oqVC8IHxjgADZ2UfAj0OFMG6W0KnHfg2PfOIUIp5q8MQf1+YOLY+XNt27Ia/S/r3f5zanZJ9cJ2fJ0cpcpGnqOaTWv1HeE9yP9eqJWRlC8nn4=
+	t=1791896277; cv=none; b=ELQ2XnrJhGdTRBG6gZn7O1YC0VsV6479LWzLGoDbFcbtc0VIyb4S+rPe0NCIHOnjr2JqSJLN97j1EmCeMniyQfSdfqJSaCG3/vSALud/Fvsi+KXEj0uUl7kGPz0JlWuuLJEUoOaCjhBM7XYsODf1MN3mVzX6dFrkKkWArT/sFwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791896276; c=relaxed/simple;
-	bh=LKC1NuYLR9aO86h6ti96kyynrimHOImk73G7vHbkj0w=;
+	s=arc-20240116; t=1791896277; c=relaxed/simple;
+	bh=DHc0g/F3EUpG2x9KhyBTLKsKLa4+6ERGRdXRqP7TCP4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dccoWsRudPD5uKYwAGtH1AtnT2jVa7TyhAM3iAUtucWMb9zoI6TIEwhOU/KSaNT4xoKRe9EmmMKl/hzscN3Q7hkOEVisZ6c7Yqa23Ylu5ZmaIRrUmx7L9qnN1XujFSr42wMmLOpYt/xjH4kVZDPxKp3wWGgNXbZ4SkBRPw11fjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=xht4ac3q; arc=none smtp.client-ip=209.85.218.53
+	 MIME-Version; b=qomSKNkaBikBEA4TRdgy2G7vIRyUs9kh6ZCtwb6IY4S+Pkq5ncVhi3/0ylyUMXo7AxLHLOf60zb7PiHNoSPtI9YkgY27qe5Ys9Hd4mKisjKlBpigP0sjm/KcezNMeb+uI0aJeeMJ21uKiC14YufeLsCkWKW7iJw0NJkGxXgWYgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=PnR/HATf; arc=none smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="xht4ac3q"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c34bff61551so333621666b.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 13 Oct 2026 05:57:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="PnR/HATf"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c2e43f3d1fdso410561166b.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 13 Oct 2026 05:57:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura; t=1791896271; x=1792501071; darn=vger.kernel.org;
+        d=sartura.hr; s=sartura; t=1791896272; x=1792501072; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=G00YG7FNX3IZ3pyrtpioSmQlRthZHGJ4uJgy/p0MtDE=;
-        b=xht4ac3ql5onL/lGwKX6GXQZHzEyPxzCDnOJNZLjVOeBvdMP1vZlqvXVHOkNHoRHBB
-         3BQAbPg59EHigueYScgGQw0VWiap3tYkqg58Tfd6MJFLZw1jmPid0uPuTyd+KeJvDZ9+
-         aVgHtJ7WTsxrMC1gu2/hSCi0Syt/2y4OFBvxFQAYdPB2xvAlbk7nOI6mgX73GUyQRADs
-         W5GB8OT9NHSLPviJ/fJsUiiIhIX3u88wTi3UfHDcAhz+eFlt93a2XOjrWGT8DpLbk1ZN
-         YDy2iSYBUyt7hdC+pAeq9VH29PuOTPyv/s5lBTeZGO2MhCGtov18GlvXxvcGi5wSDobD
-         Mlww==
+        bh=kx/NaHtDqW/DqxLCYs2+7QWMT+PtyYPSsJHTFDdyCUA=;
+        b=PnR/HATfRdGTAFHaGNiqKw5q6n74v04ma3Y9Pfhm0pVNJ5aFYt/Bfz8Ytt48k1yYDc
+         lFvvMhbdkolUmUlq0GLF88LWw+uMF+snU1+mmqsdD58FwiXvvmkDNfK1guBiOPxJ3GeD
+         9p5a2N/GsaIS60QijOcUZW7pM0C22+Uib8S1wOzMDg1mBVRygE5ep8MiCMPC1q3BmG4T
+         xsca1F+EudO0WOWLRfbMpJ5+EJ7Pf5K8e6+THk3pqdKYY4Nk38U++Dd3SIyfeeD57CZm
+         VcsfOD2EC+OmDa0DKFUMRZHyf37vI+Fin+NBKp8jce1NfBhiN6WhgyGYaXFxg78Pt3RI
+         knYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791896271; x=1792501071;
+        d=1e100.net; s=20260707; t=1791896272; x=1792501072;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=G00YG7FNX3IZ3pyrtpioSmQlRthZHGJ4uJgy/p0MtDE=;
-        b=UZLONJn/XTf5KcLZyEGXQ/YgnvojoKliQiC4yuoOU0BrUWGiliL8EOlVYoJAJ45iG+
-         wjMgQRklguANj3vYOsI6BdJuNATs0aE4tHxuuOJS6iDQ5U4+ZIuzNLEks+zQm22CzcXr
-         9iBONvh7/UfyA18sZIkQ8a8VzSdWzMK+50DILnOf45CrEb5d39qBZWcWrEDvhvDOFvLr
-         18qvVLK8lPNyEDpXcskwa9VikbdbwcYwWx0Krmqt/Muiy+/EbCpQWYwpLchej3RVRXDE
-         O2Ygn29CJ2Hui1W1OU63r9WxPd550tO94XySW2jld9/V3tuzUE9pKmfYz5Hs46Xram5p
-         AyRA==
-X-Forwarded-Encrypted: i=1; AKwUvBy7EHj8to6KYNUJIqdKeo84L0CjqWbs9VKKdo4HamuWhYu6T2StSg3Q9ZSMNUe+/DpE+JpXGsSiw07VlA==@vger.kernel.org
-X-Gm-Message-State: AFq9FYIY2FEwwSOG3oSRJsN5rbFlaSIwI0f9imk0nCUYXgg/SgvdL/GT
-	96pinhx/yBLMHB0ZVaBQVRNSymeO4cbRyEnrz+ugdIPfhe9NzRMFShhvv6SnDwgCm+k=
-X-Gm-Gg: AYBFou1ocM1i4mx9U5VTapqNqkbzsf9R3dOt+F4S7RwxP1Bk3qh4Vf5vd/jN5j3VmTW
-	WeXexkvEzMlebw5HAbJDClX3cPQszA2oAYJBzcRfBsldi5WPibChY2ufZfKNx/Km2W1bp8uT02C
-	6gyoJ2QipC5p+51Y2WBHusAq4j064v36hYv5McUeEy2El8rMWR6zD8LoggQv6Lkq4AaUfFP0Mbh
-	UH6rdcspXRa6V5D1OM3hfhVk/T6Y3IJhZN4e3OKmHPwAKC1DTKF0S0qGz2+WIMmPcL0eLPE6mky
-	RkcfCCFJ5MjdYHb2ZGZyWD9oVszAN33lBoKyu8o3PzO2Gkf08gCwxSUiHcA9+Jz/cV22i9MaQVJ
-	hUZnwXn3MWDrC712RTMLp28i6zhQna+luiOSgwQv/ycduMVswOgw9wGcup77C/YcEWToMU3L1Nj
-	p2K7R0BQNMQ58iiN1dtKopH4tIn73X/wHpRVlGO9GjBRUzuB2X96Ki6LGKhApVOgdO3UbzMoOuT
-	zcUdZZKVgt00HCudhb6BLwNmGAlVQhvLqObWoniKOdxPe1r0BdSERG/ybLK4PYlb9q0WTMZUPWd
-	rb0lYtvKg56J93dWXdhRV2vEQppvlW4=
-X-Received: by 2002:a17:907:3eaa:b0:c2b:4142:2db1 with SMTP id a640c23a62f3a-c31aa0d82b6mr1330656966b.40.1791896271123;
-        Tue, 13 Oct 2026 05:57:51 -0700 (PDT)
+        bh=kx/NaHtDqW/DqxLCYs2+7QWMT+PtyYPSsJHTFDdyCUA=;
+        b=X5kWovYMYHF2mZcV8dL+st0v3PlBXzeJHRREM2os2n8e45KmcL1iDOkpbkmVoU6V8p
+         IB7/Rr+B1Zj9mMsxCiOxAD7tCO4/CQOhlqlOiq5zXIcDWmH1MJzWmoP/4IDNd2hk1qP4
+         CChi1mGRCJKYhWHDKhxa2rJzR3fMdxHD3CMFi9693rZVCA4I67XE/256LDd0SYwg+E2A
+         3Tmjg0z4N7n6WnBEFS3Trx95JU/7UZYcKzNS6Rao+pKaU3uhKcJxZhT4AcDO13XWd5WH
+         PzH5Mt638sNLO1K2lCR+1XW2zASehU3mSdICwsL/oGfH55iS9gc7iXi7JNIwiA1hOLhy
+         3FjA==
+X-Forwarded-Encrypted: i=1; AKwUvBzDFDfmnVl2KymI/Z2pLTtdDnO3TwdTwQlvMjwyggGY0fxBq3nXgcRob9oEYDc8qZgYSgxwLoPIPYw06g==@vger.kernel.org
+X-Gm-Message-State: AFq9FYJHfhrnCYij3yfXMx0MBI6wWdfs0oOMzSalK/XGhy16n6vH8m5/
+	mRKJQRJKoZo3lgQkC6uimvKbVWfph+M0yfWgrFr+KDQkFiDGR13nPAldQF3UrTEoYsI=
+X-Gm-Gg: AYBFou2oonp3wCpl6U+gZRnzIpbumPnYyngWj7YNMypR/sYHHzjmtFWjXZa266xYzqE
+	r/6Uir5+LT+YJUn/qZsz6XJENojxEZOevhOdsc51Hkbc3HJtCzCWVbwIB+hrZ69JBdquUVvxpCJ
+	rQasc6KKUAyiE5LDQq2KZ4be+6iWdCRjoQEibICv02QkCbqipoa2StkQt0200JKfHjJjbrb2HYS
+	+9PRuujYDpJzI90SfKBlTCDgd00k3rDQnysCpQYmabe16f7nG/C1aTOf3mRrWDbLfyUSU5r43Xx
+	sWIj/CuvF90Gwr1SlDTbwPpzWRMH0XCJhbAiDYIUieHPCff/6la6ZbTYyiLv6Chad1MZ6JH3uoe
+	s1TRr+TZx9ODqW3sLaw1iwHuRa397eQO9MJB4NhAa7abxDOv+HEdouBB7If12pXqeM7F6xPOjQb
+	bjb2t4FWMD8IZmOgnJD0wq9LWXT3giGqCMGOm6fYXMiyoXN3gooe/l8UK+ITr8MekOW2vNIgj3v
+	dLWr9B7ArhkgrnafwkbMVSG6ndFk//2l2bJstqXGq+iLObCQ8E13w4FdyXqKTYO7M556lkZ/fFy
+	OC1rzcvvzFCvV6OWAK6UeT2fZFWR7Hf9ksrOboVnBQ==
+X-Received: by 2002:a17:907:c78b:b0:c37:c0dd:6642 with SMTP id a640c23a62f3a-c37c0dd6c88mr39677766b.37.1791896272427;
+        Tue, 13 Oct 2026 05:57:52 -0700 (PDT)
 Received: from threadripper-fedora-workstation (d-zg2-045.globalnet.hr. [213.149.37.45])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c31a9ac9ecfsm605985766b.74.2026.10.13.05.57.49
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c31a9ac9ecfsm605985766b.74.2026.10.13.05.57.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2026 05:57:50 -0700 (PDT)
+        Tue, 13 Oct 2026 05:57:51 -0700 (PDT)
 From: Robert Marko <robert.marko@sartura.hr>
 To: linux@roeck-us.net,
 	robh@kernel.org,
@@ -77,9 +77,9 @@ To: linux@roeck-us.net,
 	linux-kernel@vger.kernel.org
 Cc: luka.perkov@sartura.hr,
 	Robert Marko <robert.marko@sartura.hr>
-Subject: [PATCH 3/6] hwmon: sparx5: add LAN969x fan monitoring support
-Date: Tue, 13 Oct 2026 14:56:27 +0200
-Message-ID: <20261013125735.1542349-3-robert.marko@sartura.hr>
+Subject: [PATCH 4/6] hwmon: sparx5: add LAN969x PWM support
+Date: Tue, 13 Oct 2026 14:56:28 +0200
+Message-ID: <20261013125735.1542349-4-robert.marko@sartura.hr>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261013125735.1542349-1-robert.marko@sartura.hr>
 References: <20261013125735.1542349-1-robert.marko@sartura.hr>
@@ -91,147 +91,143 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-LAN969x contains a tachometer input alongside its Sparx5-compatible
-temperature sensor.
+The LAN969x fan controller provides an 8-bit PWM output with a
+programmable frequency and polarity.
 
-Use match data to map and initialize the additional fan controller
-register region only for the LAN969x hardware-monitor compatible. Read
-the optional pulses-per-revolution property from the fan child and expose
-the measured speed through fan1_input.
-
-Leave existing Sparx5 and LAN969x temperature-only device trees
-unchanged.
+Expose pwm1 and pwm1_freq, and serialize fan controller register access.
+Parse the fan child node's standard PWM specifier and use its period and
+polarity flags to configure the hardware.
 
 Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 ---
- Documentation/hwmon/sparx5-temp.rst |   8 +++
- drivers/hwmon/Kconfig               |   7 +-
- drivers/hwmon/sparx5-temp.c         | 108 +++++++++++++++++++++++++---
- 3 files changed, 110 insertions(+), 13 deletions(-)
+ Documentation/hwmon/sparx5-temp.rst |   9 ++
+ drivers/hwmon/Kconfig               |   2 +-
+ drivers/hwmon/sparx5-temp.c         | 183 ++++++++++++++++++++++++++--
+ 3 files changed, 184 insertions(+), 10 deletions(-)
 
 diff --git a/Documentation/hwmon/sparx5-temp.rst b/Documentation/hwmon/sparx5-temp.rst
-index 0140809089542..1256d37e1c091 100644
+index 1256d37e1c091..a1f8218e68794 100644
 --- a/Documentation/hwmon/sparx5-temp.rst
 +++ b/Documentation/hwmon/sparx5-temp.rst
-@@ -15,6 +15,9 @@ Supported chips:
- 
- Author: Lars Povlsen <lars.povlsen@microchip.com>
- 
-+The driver also supports the Microchip LAN969x temperature sensor and fan
-+tachometer through the microchip,lan9691-hwmon compatible.
-+
- Description
- -----------
- 
-@@ -30,4 +33,9 @@ The following attributes are supported.
- 
+@@ -34,8 +34,17 @@ The following attributes are supported.
  ======================= ========================================================
  temp1_input		Die temperature (in millidegree Celsius.)
-+fan1_input              Fan speed in RPM (LAN969x only).
+ fan1_input              Fan speed in RPM (LAN969x only).
++pwm1                    PWM duty cycle, from 0 to 255 (LAN969x only).
++pwm1_freq               PWM frequency in Hz (LAN969x only).
  ======================= ========================================================
+ 
+ The tachometer counts pulses over one-second intervals, independently of the
+ PWM output. The fan child's pulses-per-revolution property specifies how many
+ pulses represent one revolution; it defaults to two.
 +
-+The tachometer counts pulses over one-second intervals, independently of the
-+PWM output. The fan child's pulses-per-revolution property specifies how many
-+pulses represent one revolution; it defaults to two.
++On LAN969x, the fan child's pwms property selects the initial PWM period and
++polarity. The output is dedicated to this fan and is not available to external
++PWM consumers. The pwm1 value describes the logical duty cycle independently
++of the output polarity. Frequency requests are rounded to the nearest
++hardware divider value; requests outside the divider range are rejected.
++pwm1_freq reports the resulting frequency.
 diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 18c682e1a4756..01ac166380905 100644
+index 01ac166380905..e0cd6195d5b45 100644
 --- a/drivers/hwmon/Kconfig
 +++ b/drivers/hwmon/Kconfig
-@@ -649,11 +649,12 @@ config SENSORS_I5K_AMB
- 	  will be called i5k_amb.
- 
- config SENSORS_SPARX5
--	tristate "Sparx5 SoC temperature sensor"
-+	tristate "Sparx5 and LAN969x SoC hardware monitoring"
+@@ -653,7 +653,7 @@ config SENSORS_SPARX5
  	depends on ARCH_SPARX5 || ARCH_LAN969X || COMPILE_TEST
  	help
--	  If you say yes here you get support for temperature monitoring
--	  with the Microchip Sparx5 SoC.
-+	  If you say yes here you get support for temperature monitoring on
-+	  Microchip Sparx5 and LAN969x SoCs, as well as fan monitoring on
-+	  LAN969x SoCs.
+ 	  If you say yes here you get support for temperature monitoring on
+-	  Microchip Sparx5 and LAN969x SoCs, as well as fan monitoring on
++	  Microchip Sparx5 and LAN969x SoCs, as well as the fan controller on
+ 	  LAN969x SoCs.
  
  	  This driver can also be built as a module. If so, the module
- 	  will be called sparx5-temp.
 diff --git a/drivers/hwmon/sparx5-temp.c b/drivers/hwmon/sparx5-temp.c
-index 0fd5c147f8167..922c3c33a049a 100644
+index 922c3c33a049a..5130140e1b579 100644
 --- a/drivers/hwmon/sparx5-temp.c
 +++ b/drivers/hwmon/sparx5-temp.c
-@@ -9,8 +9,11 @@
- #include <linux/hwmon.h>
- #include <linux/init.h>
+@@ -11,10 +11,13 @@
  #include <linux/io.h>
-+#include <linux/kernel.h>
+ #include <linux/kernel.h>
  #include <linux/module.h>
-+#include <linux/of.h>
++#include <linux/mutex.h>
+ #include <linux/of.h>
  #include <linux/platform_device.h>
-+#include <linux/property.h>
+ #include <linux/property.h>
  
++#include <dt-bindings/pwm/pwm.h>
++
  #define TEMP_CTRL		0
  #define TEMP_CFG		4
-@@ -20,9 +23,26 @@
- #define  TEMP_STAT_VALID	BIT(12)
+ #define  TEMP_CFG_CYCLES	GENMASK(24, 15)
+@@ -24,14 +27,18 @@
  #define  TEMP_STAT_TEMP		GENMASK(11, 0)
  
-+#define FAN_CFG			0
-+#define  FAN_CFG_GATE_ENA	BIT(2)
-+#define  FAN_CFG_STAT_MODE	BIT(0)
-+#define FAN_PWM_FREQ		4
-+#define  FAN_PWM_FREQ_CYCLES	GENMASK(27, 16)
-+#define FAN_CNT			8
-+#define  FAN_CNT_DATA		GENMASK(15, 0)
-+
-+#define FAN_TACH_INTERVAL_HZ	100000
-+
-+struct s5_match_data {
-+	bool has_fan;
-+};
-+
- struct s5_hwmon {
+ #define FAN_CFG			0
++#define  FAN_CFG_DUTY_CYCLE	GENMASK(23, 16)
++#define  FAN_CFG_INV_POL	BIT(3)
+ #define  FAN_CFG_GATE_ENA	BIT(2)
+ #define  FAN_CFG_STAT_MODE	BIT(0)
+ #define FAN_PWM_FREQ		4
+ #define  FAN_PWM_FREQ_CYCLES	GENMASK(27, 16)
++#define  FAN_PWM_FREQ_DIV	GENMASK(15, 0)
+ #define FAN_CNT			8
+ #define  FAN_CNT_DATA		GENMASK(15, 0)
+ 
+ #define FAN_TACH_INTERVAL_HZ	100000
++#define FAN_PWM_FREQ_SCALE	256
+ 
+ struct s5_match_data {
+ 	bool has_fan;
+@@ -41,8 +48,11 @@ struct s5_hwmon {
  	void __iomem *base;
-+	void __iomem *fan;
+ 	void __iomem *fan;
  	struct clk *clk;
-+	unsigned long clk_rate;
-+	u32 pulses_per_revolution;
++	struct mutex lock; /* protects fan controller state and registers */
+ 	unsigned long clk_rate;
+ 	u32 pulses_per_revolution;
++	u32 pwm_frequency;
++	bool pwm_inverted;
  };
  
  static void s5_temp_enable(struct s5_hwmon *hwmon)
-@@ -37,6 +57,24 @@ static void s5_temp_enable(struct s5_hwmon *hwmon)
- 	writel(val, hwmon->base + TEMP_CFG);
+@@ -71,7 +81,9 @@ static void s5_fan_enable(struct s5_hwmon *hwmon)
+ 
+ 	/* Count all tachometer pulses over one-second intervals. */
+ 	val = readl(hwmon->fan + FAN_CFG);
+-	val &= ~(FAN_CFG_STAT_MODE | FAN_CFG_GATE_ENA);
++	val &= ~(FAN_CFG_STAT_MODE | FAN_CFG_GATE_ENA | FAN_CFG_INV_POL);
++	if (hwmon->pwm_inverted)
++		val |= FAN_CFG_INV_POL;
+ 	writel(val, hwmon->fan + FAN_CFG);
  }
  
-+static void s5_fan_enable(struct s5_hwmon *hwmon)
-+{
-+	u32 cycles, val;
-+
-+	cycles = DIV_ROUND_CLOSEST(hwmon->clk_rate, FAN_TACH_INTERVAL_HZ);
-+	cycles = clamp_val(cycles, 1, FIELD_MAX(FAN_PWM_FREQ_CYCLES));
-+
-+	val = readl(hwmon->fan + FAN_PWM_FREQ);
-+	val &= ~FAN_PWM_FREQ_CYCLES;
-+	val |= FIELD_PREP(FAN_PWM_FREQ_CYCLES, cycles);
-+	writel(val, hwmon->fan + FAN_PWM_FREQ);
-+
-+	/* Count all tachometer pulses over one-second intervals. */
-+	val = readl(hwmon->fan + FAN_CFG);
-+	val &= ~(FAN_CFG_STAT_MODE | FAN_CFG_GATE_ENA);
-+	writel(val, hwmon->fan + FAN_CFG);
-+}
-+
- static int s5_read_temp(struct s5_hwmon *hwmon, long *temp)
- {
- 	int value;
-@@ -62,6 +100,17 @@ static int s5_read_temp(struct s5_hwmon *hwmon, long *temp)
+@@ -111,6 +123,34 @@ static int s5_read_fan(struct s5_hwmon *hwmon, long *val)
  	return 0;
  }
  
-+static int s5_read_fan(struct s5_hwmon *hwmon, long *val)
++static int s5_read_pwm(struct s5_hwmon *hwmon, long *val)
 +{
-+	u32 count;
++	u32 data;
 +
-+	count = readl_relaxed(hwmon->fan + FAN_CNT);
-+	count = FIELD_GET(FAN_CNT_DATA, count);
-+	*val = count * 60 / hwmon->pulses_per_revolution;
++	mutex_lock(&hwmon->lock);
++	data = readl_relaxed(hwmon->fan + FAN_CFG);
++	mutex_unlock(&hwmon->lock);
++	*val = FIELD_GET(FAN_CFG_DUTY_CYCLE, data);
++
++	return 0;
++}
++
++static int s5_read_pwm_freq(struct s5_hwmon *hwmon, long *val)
++{
++	unsigned long rate;
++	u32 divider;
++
++	divider = readl_relaxed(hwmon->fan + FAN_PWM_FREQ);
++	divider = FIELD_GET(FAN_PWM_FREQ_DIV, divider);
++	if (!divider)
++		return -ENODATA;
++
++	rate = DIV_ROUND_CLOSEST(hwmon->clk_rate, FAN_PWM_FREQ_SCALE);
++	*val = DIV_ROUND_CLOSEST(rate, divider);
 +
 +	return 0;
 +}
@@ -239,122 +235,217 @@ index 0fd5c147f8167..922c3c33a049a 100644
  static int s5_read(struct device *dev, enum hwmon_sensor_types type,
  		   u32 attr, int channel, long *val)
  {
-@@ -72,6 +121,10 @@ static int s5_read(struct device *dev, enum hwmon_sensor_types type,
- 		if (attr == hwmon_temp_input)
- 			return s5_read_temp(hwmon, val);
+@@ -125,6 +165,18 @@ static int s5_read(struct device *dev, enum hwmon_sensor_types type,
+ 		if (attr == hwmon_fan_input && hwmon->fan)
+ 			return s5_read_fan(hwmon, val);
  		break;
-+	case hwmon_fan:
-+		if (attr == hwmon_fan_input && hwmon->fan)
-+			return s5_read_fan(hwmon, val);
++	case hwmon_pwm:
++		if (!hwmon->fan)
++			break;
++		switch (attr) {
++		case hwmon_pwm_input:
++			return s5_read_pwm(hwmon, val);
++		case hwmon_pwm_freq:
++			return s5_read_pwm_freq(hwmon, val);
++		default:
++			break;
++		}
 +		break;
  	default:
  		break;
  	}
-@@ -82,12 +135,15 @@ static int s5_read(struct device *dev, enum hwmon_sensor_types type,
+@@ -132,6 +184,69 @@ static int s5_read(struct device *dev, enum hwmon_sensor_types type,
+ 	return -EOPNOTSUPP;
+ }
+ 
++static int s5_write_pwm(struct s5_hwmon *hwmon, long val)
++{
++	u32 data;
++
++	if (val < 0 || val > 255)
++		return -EINVAL;
++
++	mutex_lock(&hwmon->lock);
++
++	data = readl_relaxed(hwmon->fan + FAN_CFG);
++	data &= ~FAN_CFG_DUTY_CYCLE;
++	data |= FIELD_PREP(FAN_CFG_DUTY_CYCLE, val);
++	writel_relaxed(data, hwmon->fan + FAN_CFG);
++
++	mutex_unlock(&hwmon->lock);
++
++	return 0;
++}
++
++static int s5_write_pwm_freq(struct s5_hwmon *hwmon, long val)
++{
++	unsigned long rate, divider;
++	u32 data;
++
++	if (val <= 0)
++		return -EINVAL;
++
++	rate = DIV_ROUND_CLOSEST(hwmon->clk_rate, FAN_PWM_FREQ_SCALE);
++	if (val < DIV_ROUND_CLOSEST(rate, FIELD_MAX(FAN_PWM_FREQ_DIV)) ||
++	    val > rate)
++		return -ERANGE;
++
++	divider = DIV_ROUND_CLOSEST(rate, val);
++	divider = min_t(unsigned long, divider, FIELD_MAX(FAN_PWM_FREQ_DIV));
++
++	mutex_lock(&hwmon->lock);
++	data = readl_relaxed(hwmon->fan + FAN_PWM_FREQ);
++	data &= ~FAN_PWM_FREQ_DIV;
++	data |= FIELD_PREP(FAN_PWM_FREQ_DIV, divider);
++	writel_relaxed(data, hwmon->fan + FAN_PWM_FREQ);
++	mutex_unlock(&hwmon->lock);
++
++	return 0;
++}
++
++static int s5_write(struct device *dev, enum hwmon_sensor_types type,
++		    u32 attr, int channel, long val)
++{
++	struct s5_hwmon *hwmon = dev_get_drvdata(dev);
++
++	if (type != hwmon_pwm || !hwmon->fan)
++		return -EOPNOTSUPP;
++
++	switch (attr) {
++	case hwmon_pwm_input:
++		return s5_write_pwm(hwmon, val);
++	case hwmon_pwm_freq:
++		return s5_write_pwm_freq(hwmon, val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
  static umode_t s5_is_visible(const void *_data, enum hwmon_sensor_types type,
  			     u32 attr, int channel)
  {
--	if (type != hwmon_temp)
--		return 0;
-+	const struct s5_hwmon *hwmon = _data;
- 
--	switch (attr) {
--	case hwmon_temp_input:
--		return 0444;
-+	switch (type) {
-+	case hwmon_temp:
-+		return attr == hwmon_temp_input ? 0444 : 0;
-+	case hwmon_fan:
-+		if (hwmon->fan && attr == hwmon_fan_input)
-+			return 0444;
+@@ -144,6 +259,12 @@ static umode_t s5_is_visible(const void *_data, enum hwmon_sensor_types type,
+ 		if (hwmon->fan && attr == hwmon_fan_input)
+ 			return 0444;
+ 		return 0;
++	case hwmon_pwm:
++		if (!hwmon->fan)
++			return 0;
++		if (attr == hwmon_pwm_input || attr == hwmon_pwm_freq)
++			return 0644;
 +		return 0;
  	default:
  		return 0;
  	}
-@@ -96,6 +152,7 @@ static umode_t s5_is_visible(const void *_data, enum hwmon_sensor_types type,
- static const struct hwmon_channel_info * const s5_info[] = {
+@@ -153,12 +274,14 @@ static const struct hwmon_channel_info * const s5_info[] = {
  	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
  	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-+	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT),
+ 	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT),
++	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_INPUT | HWMON_PWM_FREQ),
  	NULL
  };
  
-@@ -111,10 +168,15 @@ static const struct hwmon_chip_info s5_chip_info = {
+ static const struct hwmon_ops s5_hwmon_ops = {
+ 	.is_visible = s5_is_visible,
+ 	.read = s5_read,
++	.write = s5_write,
+ };
  
- static int s5_temp_probe(struct platform_device *pdev)
- {
-+	const struct s5_match_data *match_data;
-+	struct device *dev = &pdev->dev;
- 	struct device *hwmon_dev;
- 	struct s5_hwmon *hwmon;
-+	struct device_node *fan_np __free(device_node) = NULL;
+ static const struct hwmon_chip_info s5_chip_info = {
+@@ -166,6 +289,40 @@ static const struct hwmon_chip_info s5_chip_info = {
+ 	.info = s5_info,
+ };
  
--	hwmon = devm_kzalloc(&pdev->dev, sizeof(*hwmon), GFP_KERNEL);
-+	match_data = device_get_match_data(dev);
++static int s5_get_fan_data(struct device *dev, struct device_node *fan_np,
++			   struct s5_hwmon *hwmon)
++{
++	struct of_phandle_args args;
++	int ret;
 +
-+	hwmon = devm_kzalloc(dev, sizeof(*hwmon), GFP_KERNEL);
- 	if (!hwmon)
- 		return -ENOMEM;
- 
-@@ -122,14 +184,32 @@ static int s5_temp_probe(struct platform_device *pdev)
- 	if (IS_ERR(hwmon->base))
- 		return PTR_ERR(hwmon->base);
- 
--	hwmon->clk = devm_clk_get_enabled(&pdev->dev, NULL);
-+	if (match_data && match_data->has_fan) {
-+		hwmon->fan = devm_platform_ioremap_resource_byname(pdev, "fan");
-+		if (IS_ERR(hwmon->fan))
-+			return PTR_ERR(hwmon->fan);
++	ret = of_parse_phandle_with_args(fan_np, "pwms", "#pwm-cells", 0,
++					 &args);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to parse fan PWM\n");
 +
-+		hwmon->pulses_per_revolution = 2;
-+		fan_np = of_get_available_child_by_name(dev->of_node, "fan");
-+		if (fan_np)
-+			of_property_read_u32(fan_np, "pulses-per-revolution",
-+					     &hwmon->pulses_per_revolution);
-+		if (!hwmon->pulses_per_revolution ||
-+		    hwmon->pulses_per_revolution > 4)
-+			return dev_err_probe(dev, -EINVAL,
-+					     "invalid pulses-per-revolution\n");
++	if (args.np != dev->of_node || args.args_count != 2 || !args.args[0] ||
++	    args.args[1] & ~PWM_POLARITY_INVERTED) {
++		of_node_put(args.np);
++		return dev_err_probe(dev, -EINVAL, "invalid fan PWM specifier\n");
 +	}
 +
-+	hwmon->clk = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(hwmon->clk))
- 		return PTR_ERR(hwmon->clk);
-+	hwmon->clk_rate = clk_get_rate(hwmon->clk);
++	hwmon->pwm_frequency = DIV_ROUND_CLOSEST(NSEC_PER_SEC, args.args[0]);
++	hwmon->pwm_inverted = args.args[1] & PWM_POLARITY_INVERTED;
++	of_node_put(args.np);
++
++	if (!hwmon->pwm_frequency)
++		return dev_err_probe(dev, -EINVAL, "fan PWM period is too long\n");
++
++	of_property_read_u32(fan_np, "pulses-per-revolution",
++			     &hwmon->pulses_per_revolution);
++	if (!hwmon->pulses_per_revolution ||
++	    hwmon->pulses_per_revolution > 4)
++		return dev_err_probe(dev, -EINVAL,
++				     "invalid pulses-per-revolution\n");
++
++	return 0;
++}
++
+ static int s5_temp_probe(struct platform_device *pdev)
+ {
+ 	const struct s5_match_data *match_data;
+@@ -173,12 +330,14 @@ static int s5_temp_probe(struct platform_device *pdev)
+ 	struct device *hwmon_dev;
+ 	struct s5_hwmon *hwmon;
+ 	struct device_node *fan_np __free(device_node) = NULL;
++	int ret;
+ 
+ 	match_data = device_get_match_data(dev);
+ 
+ 	hwmon = devm_kzalloc(dev, sizeof(*hwmon), GFP_KERNEL);
+ 	if (!hwmon)
+ 		return -ENOMEM;
++	mutex_init(&hwmon->lock);
+ 
+ 	hwmon->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(hwmon->base))
+@@ -191,13 +350,11 @@ static int s5_temp_probe(struct platform_device *pdev)
+ 
+ 		hwmon->pulses_per_revolution = 2;
+ 		fan_np = of_get_available_child_by_name(dev->of_node, "fan");
+-		if (fan_np)
+-			of_property_read_u32(fan_np, "pulses-per-revolution",
+-					     &hwmon->pulses_per_revolution);
+-		if (!hwmon->pulses_per_revolution ||
+-		    hwmon->pulses_per_revolution > 4)
+-			return dev_err_probe(dev, -EINVAL,
+-					     "invalid pulses-per-revolution\n");
++		if (fan_np) {
++			ret = s5_get_fan_data(dev, fan_np, hwmon);
++			if (ret)
++				return ret;
++		}
+ 	}
+ 
+ 	hwmon->clk = devm_clk_get_enabled(dev, NULL);
+@@ -206,9 +363,17 @@ static int s5_temp_probe(struct platform_device *pdev)
+ 	hwmon->clk_rate = clk_get_rate(hwmon->clk);
  
  	s5_temp_enable(hwmon);
-+	if (hwmon->fan)
-+		s5_fan_enable(hwmon);
+-	if (hwmon->fan)
++	if (hwmon->fan) {
+ 		s5_fan_enable(hwmon);
  
--	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
--							 "s5_temp",
-+	hwmon_dev = devm_hwmon_device_register_with_info(dev, "s5_temp",
++		if (hwmon->pwm_frequency) {
++			ret = s5_write_pwm_freq(hwmon, hwmon->pwm_frequency);
++			if (ret)
++				return dev_err_probe(dev, ret,
++						     "invalid fan PWM period\n");
++		}
++	}
++
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev, "s5_temp",
  							 hwmon,
  							 &s5_chip_info,
- 							 NULL);
-@@ -137,7 +217,15 @@ static int s5_temp_probe(struct platform_device *pdev)
- 	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
- 
-+static const struct s5_match_data lan969x_match_data = {
-+	.has_fan = true,
-+};
-+
- static const struct of_device_id s5_temp_match[] = {
-+	{
-+		.compatible = "microchip,lan9691-hwmon",
-+		.data = &lan969x_match_data,
-+	},
- 	{ .compatible = "microchip,sparx5-temp" },
- 	{},
- };
-@@ -154,5 +242,5 @@ static struct platform_driver s5_temp_driver = {
- module_platform_driver(s5_temp_driver);
- 
- MODULE_AUTHOR("Lars Povlsen <lars.povlsen@microchip.com>");
--MODULE_DESCRIPTION("Sparx5 SoC temperature sensor driver");
-+MODULE_DESCRIPTION("Sparx5 SoC hardware monitoring driver");
- MODULE_LICENSE("GPL");
 -- 
 2.56.0
 
