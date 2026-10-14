@@ -1,66 +1,67 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E93056510C
-	for <linux-hwmon@vger.kernel.org>; Wed, 14 Oct 2026 17:34:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37137565105
+	for <linux-hwmon@vger.kernel.org>; Wed, 14 Oct 2026 17:34:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791999259; cv=none; b=bMROAfBzBqe2UdQVvDj2oGDqOYRFtwtIl+h1kOfyj72WBQ8TkH2mMxJcL/QbS5wQ47ROEt20NV3k4Xa3eRiNkzhz6MiBwlqn3WyVRh09v08kG/0Sh4OSDcW46SzUvM1pByrjn1VVJSTVA4Nv1FchzEl3gigeFgp09hS/Zr9utEI=
+	t=1791999261; cv=none; b=Lpn92wAc61BcFRUXA8aFs3rg7CZUfpF0X7g4wbSfu1S+nzyEebsRWQEmofd6CfXxuepcMFz+RXx5qKWyJ5oCc5U7prP9Ms5eSO56czomL/VikknN5mfYw2dw5r8N4T4qLkqThB6nafr0nr/M6qFdCBr5yq+asLYys+/8mLSKkcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791999259; c=relaxed/simple;
-	bh=nL8AKCXv4wFFNZr4gsMPaVgnqddBtHtqnb8fOUCJWV4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DzqXbdLAUT9fXPYxbo7RWDRvEnMn1xw+EicFu4kgVwBBG63n7vhd85+ydLGdkgVu9nLaagoeyqPMpwpn5L8asghn9lNTfEvUR8Or/hVF0nK7ZG3pP7GXYtrdQveCV7SFQuVIUSkLdhFaFxmCA62RadggBA9Ee+vW2UMfTo9DnQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NlXs/NZV; arc=none smtp.client-ip=209.85.218.47
+	s=arc-20240116; t=1791999261; c=relaxed/simple;
+	bh=wYvYZooxr0D1eXxyAs7RyhlSeI5pKL4CUGAokR/iUDg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=TKGIEGrDniuMlOwd/t9Y4SbmbfWX8QxcwGrg2tE8V7XQUaAvtzW2y2zuPOQpG4DQGhD5ekZZhTvPYo40Q7eqsYNjbVhk98Oa8HgCPwhWyYMimNmz2s67bUU0ObXtPyHjhi71pxuftepq8LZ3Hnc2HbVVyOIavu+s0+NWAv9vrSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q8jPRoKc; arc=none smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NlXs/NZV"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-c2e3846d1caso711460566b.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Oct 2026 10:34:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q8jPRoKc"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c2afa22e1dcso637175966b.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Oct 2026 10:34:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791999254; x=1792604054; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=tiUB8PFGT5iZBTUugnLJiJSnsGsuX1stV8dPYo7E0YM=;
-        b=NlXs/NZVO0P7m6CA2pn+aCWdu/kKAaY6UGVjgYJiSSvmK6WZneH1tTqhYOhBehGrrm
-         ccGVWKlfpkoFQAENRTg6hj4f7S3xWc+d4lq8TomtD5FcH8rNX6yfmK6bQ45V4T1Go+Lt
-         Lftw2zbf3B12CJ78aJzd0mM5r05z78NEUNYOiFyludAqSaAV03z/u2xdZ4qzOiwsrL4t
-         KmclPWbrk37WqDivvmg034wmXYQWrI5DZbm0y6TRQLWsVSroMNZ3PRKBMoipZKyP8zUN
-         qbZwolGKOBhPdaaug9Q+F7xRbZhsMMoRihZTP508O5QlX9BY+6grceqBviQlghRUnCSS
-         Sd0A==
+        d=gmail.com; s=20251104; t=1791999255; x=1792604055; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=XBS27E8nAsA1v/XdjrYHK0evNjP09PVvsY7+Bln2L+4=;
+        b=q8jPRoKcFssfJ2HTRJ5epil3rJ+0kV6rz0Oy/wwIiwyQyDSJIkcaZrlS2OuncqHDTP
+         rckpmHu5lA8jwe4yPG5qiKY8mUN9/F5Uhu3zxbszc0nMXK9R2yQNASkF/HHMVsBAJ5Lu
+         9TLj9Fp3li6Lo0GkingmFvclt+YkRXRmrNB6a95+rBna97HI6k7BmMaN938noPoFVbuI
+         uPsFRyXVP7AmVsn3rG+mQaQDNOXKZrrnpD2ZPOi1XG3pqfh3RTg98G5pU48wsYxl14nR
+         XWCFzTPftzfGrrNWTIvnNCqH6DulNxS2YU/oa4WAcO2D0Kj6FTCbkkslBQiv4bBvCx9y
+         zKpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791999254; x=1792604054;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=tiUB8PFGT5iZBTUugnLJiJSnsGsuX1stV8dPYo7E0YM=;
-        b=uOKE9qL5zCrIYMo7wSv7RAEWvzueRA+FtwejthzzfzEocADpi97p9RsXD+dLxmHimx
-         AKZVCb68vPf6tfDgnSG3oT1caBWlEqG1qyVip4DKZPi5eq/iyhHg6C6kf1nwACUw2d8g
-         b3sD9W186Pnu+M70ivBxW8JTdIpVdbGiGrF0jqxygnqotrD6woxndBxLnwYERQolR1M3
-         Zh6KfoYi0/WsJJpo2e3L7NyL7fDmpkL8LFCaWy4765y6G4nQI40JXsjj3Nrfxg8J0tJ+
-         3Jk7GuVTSgMzK0m7CzR26IceRl4nz6B3eN3Xeu01dxEhjJmKvfiDVHSK9RVDB4eUrqp6
-         jxzQ==
-X-Gm-Message-State: AFq9FYJBpVW4Jbina1WW40s2ZPQfS/DmThhQDNix7pFWy6PPr/zHPmGm
-	uYPKAXauCme0q2/1qQA7uhTvH+y9gxSdqg8/RkFP8FQx+HeuzrVHl/zXxkPOezyN
-X-Gm-Gg: AYBFou3XlFSspl6wEmsmSiNo1FZJPGMZ/0HEaVvo0NaqLhFSnavRuMY3MEOHfyEgB1t
-	a2azo69BDgPKuMz+gbYnUVWKR1KDpxovKjvlrKJyVW5F51NBm5jLKzyywElKEFJKdxpbxQZPiuQ
-	hi6G+HvX47tzApJmScB5wMNQ7LDfq9N99IZPBW/JU35ULprm4GM4J7UcyvMN+CmM6h9FhoLEPmG
-	QjLkfkXneizH0Cws7NDnqbOZ0+tqHUQClMU/9URRe6zcN61YrsJAXs6utXXegRstIbbXNvPULtq
-	tG+N5TMUq67lhUlRSwxA5PpoS08EIh6WPewmO9r4pNaxPPG3rFpWEJma/QmbBy6N9wM7aZgph/8
-	2EPo++XkagJ7Gi0qjmFOEgoTc+ljFkR2Hvun70CLdz8I7fTXSWTinYZSPoLLVL6UpcYyxn4Ia08
-	vSWVusgjEN/aHhQI6WB4YIZPUvFwhFYBg37aylPCJz/E5DXf02RxDYzqwBnf4MxHEy3R0TZETvR
-	XpWNFwlyay4tsht
-X-Received: by 2002:a17:906:d54a:b0:c2e:8eb7:53df with SMTP id a640c23a62f3a-c31a9ff6379mr1582638466b.44.1791999253765;
-        Wed, 14 Oct 2026 10:34:13 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1791999255; x=1792604055;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=XBS27E8nAsA1v/XdjrYHK0evNjP09PVvsY7+Bln2L+4=;
+        b=crvgAdioEXACBk8hSGS6CWr/Nge51kmT436QtHAeRWXCpL8xpjibV12JpBOxBpOut3
+         4QsR7nvlPD8MFwOHrhlDW2Fg5dZlbRMppP1Il/TD/FDi+YTAtJ3nF5u6aR/JVlzumA9p
+         Yk9KBTADTvNpvsoKU0D7ETRtz5L9ZhlepDBvw1AK4wkRC+LE7pEJb5TFZu60WhvWZ25B
+         0Jrfo7xl3c7PJTPc0mObhwR0DCdTXBILZOKvVCy/CqzdIlpgrguBeo/zTsxEyfhK742Y
+         1vy+P5HRf3MsutuXslwGXhjJ/oSMSD7BGR8QKS0bb7AERD1lTdA0d/lCqW2XPtW39T4B
+         0G1A==
+X-Gm-Message-State: AFq9FYKnkfLddM6adh5QNqdTqmeumWvklhAp/8deN2XmlgHf92lo+/un
+	4fzQnRfQ4FTkEZBDDtwSLs1I1F+jmTIXR6trw/oTsDQPJ1kyC8cUfRjQ
+X-Gm-Gg: AYBFou1XSxrskBCk+1YyPJy4ph+T68bNdRH4D6SHDSkksuvVTgNLATAlZNW0fdNYMfn
+	dFmh/03y0oPWy0ZU6jGQBQ/4KCS5QLuU2a6KOzsAzqtImDL5EcoGivDST+2vxJTdrEUAi3vIrue
+	EHG7NATOPeAcMCud0Ivc3QI93M8Wx2b8sn7D8OKky03t5hVHGtb67MYQHYtBc2SNAadOuej8J7D
+	Gz2VBKdiC/X77SQ/znMvnzsSuUb1gIe9FL8hhc81HMnxzb3r4BNTNvgANCHIO1uftQgKGlsM14b
+	iJuKT59p8y2UC9npQ+sE4et6G70+c6TG/GvidpdEnn3ZF2Nkmcy5hNURcQSBQImJraKHTSOhTkD
+	g3GfMZuweq1vSK4XfDvtdl/FWP4Q5pGXOjcgRm4JS4DKgqtCQXBuRoe+TWp2fNW+pk8b2W10TFk
+	BL9e7U8HhjhRnj9/Q0y7aCtl7NxDyRECXfv9iLXrJe24KA+F7xhOi9/hgaQ+vg/WUUIfVt4ePqF
+	sQgVAmB8BXHKEnd
+X-Received: by 2002:a17:907:c611:10b0:c3e:e677:563a with SMTP id a640c23a62f3a-c3ee6775af2mr9419266b.47.1791999255183;
+        Wed, 14 Oct 2026 10:34:15 -0700 (PDT)
 Received: from [127.0.1.1] ([2001:4bb8:148:f08c:65a8:f8e5:f310:5a71])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c3ed963cecesm9381366b.21.2026.10.14.10.34.12
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c3ed963cecesm9381366b.21.2026.10.14.10.34.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 10:34:13 -0700 (PDT)
+        Wed, 14 Oct 2026 10:34:14 -0700 (PDT)
 From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Subject: [PATCH v3 00/11] hwmon: chipcap2: various bug fixes
-Date: Wed, 14 Oct 2026 19:33:59 +0200
-Message-Id: <20261014-chipcap2_locks-v3-0-27ebfc2c5b9e@gmail.com>
+Date: Wed, 14 Oct 2026 19:34:00 +0200
+Subject: [PATCH v3 01/11] hwmon: chipcap2: fix command error diagnostics
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,113 +70,58 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAe9z2oC/2WM0QqCQBBFf0XmuY3dMcR66j8iYh1HHdJWdmMpx
- H9vFQIp7tO5cM4Egb1wgFM2gecoQdwjQb7LgDr7aFlJnRhQY6FL1Io6GcmOeOsd3YMibbTJLR6
- sJkjS6LmR1xq8XBN3Ep7Ov9d+NMv7TZnfVDQqrS6JbNWQqfDcDlb6PbkBllTErZ7/6ai0KiwWV
- PKRsaGtPs/zB9kuNFnrAAAA
+Message-Id: <20261014-chipcap2_locks-v3-1-27ebfc2c5b9e@gmail.com>
+References: <20261014-chipcap2_locks-v3-0-27ebfc2c5b9e@gmail.com>
+In-Reply-To: <20261014-chipcap2_locks-v3-0-27ebfc2c5b9e@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>, stable@vger.kernel.org
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1791999251; l=4477;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791999251; l=1483;
  i=javier.carrasco.cruz@gmail.com; s=20260924; h=from:subject:message-id;
- bh=nL8AKCXv4wFFNZr4gsMPaVgnqddBtHtqnb8fOUCJWV4=;
- b=Z2vaocdnoERSYZk+VRbiKEsTnZJS19GA4AL/1aPoJHqCxJXIIhYIiFEuK+70eo172PTVAwjCd
- v5WaI88OFsOAzy8z1dsSkfCJZLK1+ei8PF9JsxHp//2wdDBHAeBofY6
+ bh=wYvYZooxr0D1eXxyAs7RyhlSeI5pKL4CUGAokR/iUDg=;
+ b=W3cZt9Sh8KFwjVGXwR1flSOtWOTHFmIVMNX6I2ubqpqua3O9a5Mg9wKacL2nRtmFId2xkL151
+ sjesXFvVNTADlEBGndnR8LpVzGvdu+KCFrog5i5f3A8hnltWiq1OTlM
 X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
  pk=VV+hcMoOj1Sx6xSiY0W/FZNAskGZe2AagSMVj0PsmAs=
 
-The original issue (race condition for the alarms) was found by Sashiko[1]
-when an unrelated patch affected chipcap2.c. The issue is real as the
-access to the variables is not protected by any locking mechanism
-although 2 different sources (threaded interrupts and sysfs) could
-modify them.
+The command response field only contains bits 1:0, while the
+error flags are stored in bits 2:5. The existing diagnostic
+checks test the extracted response field, so they can never report
+an error flag.
 
-In further iterations Sashiko found new issues[2] that have been added to
-the series:
+Test the full status byte for the error flags, and check the
+configuration-load flag instead of RAM parity for the last diagnostic.
 
-- Fix be16 data handling.
-- Defer probe when the IRQs are not available yet.
-- IRQ teardown ordering: split the current implementation to provide the
-  available interrupts before registering the hwmon device, and register
-  the IRQs after the hwmon device has been registered.
-- Disable the device after the hwmon device has been unregistered.
-- Enable IRQ processing when the regulator is already enabled.
-- Balance regulator counter.
-- Do not discard the pending alarms when the device is disabled.
-- Reset the completion to account for counter > 1.
-- IRQ serialization and synchronization.
-
-The last item required a dedicated mutex because the hwmon_lock was not
-suitable to close the gaps where an interrupt might go unnoticed because
-there is some dependency between the data read and the interrupt
-generation, and also in the completion mechanism. I went through the
-different alternatives with a combination of local Sashiko and a second
-AI agent, and discarded some complex solutions to close gaps that are
-more theoretical than practical e.g. the interrupt was fired, but it did
-not reach the controller due to nested GPIO expanders. I added the
-Assisted-by: tags to those patches accordingly, although it seems that
-this requirement will soon vanish.
-
-Additionally, a harmless off-by-one in a for loop has been fixed to save
-~80 ms after the last failed command retry, and the error reporting has
-been fixed to show the right issue. These two ones have not been tagged
-for stable as they are only meant to improve reaction time and logging
-inaccuracies after a command fails. The deferred probe does not have the
-stable tag as it is just a reaction if interrupts were provided but
-still not available. Of course, I can add the tags to all patches
-if required.
-
-The fixes have been validated on real hardware with an Amphenol
-ChipCap 2 CC2D23S sensor.
-
-[1] Link: https://lore.kernel.org/linux-hwmon/20260625162114.417EA1F000E9@smtp.kernel.org/
-[2] Link: https://lore.kernel.org/linux-hwmon/20260821093706.D1EB11F000E9@smtp.kernel.org/
-
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+Fixes: 3af350929e75 ("hwmon: Add support for Amphenol ChipCap 2")
 Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-
-Changes in v3:
-- Use a dedicated mutex instead of the hwmon subsystem lock to serialize
-  the access to the alarm indicators, which no longer blocks the alarm
-  handlers behind a sysfs read.
-- New patch: do not discard the pending alarms on disable.
-- New patch: synchronize the ready IRQ state.
-- Register the data ready IRQ before registering the hwmon device (its
-  handler does not use hwmon).
-- Split the fixes into one patch per issue.
-- Drop the patch to fix the channels in the humidity alarm
-  notifications, which is already applied.
-- Link to v2: https://lore.kernel.org/r/20260823-chipcap2_locks-v2-0-6a26c8e9e2fc@gmail.com
-
-Changes in v2:
-- Add fixes to the new issues reported by Sashiko.
-- Use hwmon subsystem lock.
-- Link to v1: https://lore.kernel.org/r/20260821-chipcap2_locks-v1-1-1d8ccabfc1b2@gmail.com
-
 ---
-Javier Carrasco (11):
-      hwmon: chipcap2: fix command error diagnostics
-      hwmon: chipcap2: fix off-by-one in command mode retry loop
-      hwmon: chipcap2: fix be16 handling
-      hwmon: chipcap2: defer probe when IRQs are unavailable
-      hwmon: chipcap2: fix IRQ teardown ordering
-      hwmon: chipcap2: disable device after hwmon teardown
-      hwmon: chipcap2: enable IRQ processing when regulator is already enabled
-      hwmon: chipcap2: balance regulator state
-      hwmon: chipcap2: do not discard pending alarms on disable
-      hwmon: chipcap2: serialize access to the alarm indicators
-      hwmon: chipcap2: synchronize ready IRQ state
+ drivers/hwmon/chipcap2.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- drivers/hwmon/chipcap2.c | 192 +++++++++++++++++++++++++++++++----------------
- 1 file changed, 128 insertions(+), 64 deletions(-)
----
-base-commit: 3857c2fe5449541e24afc5efdb0f81a8a8f9a3a0
-change-id: 20260820-chipcap2_locks-c01013a24a0c
+diff --git a/drivers/hwmon/chipcap2.c b/drivers/hwmon/chipcap2.c
+index 9bef767b589e..855057892852 100644
+--- a/drivers/hwmon/chipcap2.c
++++ b/drivers/hwmon/chipcap2.c
+@@ -167,13 +167,13 @@ static int cc2_cmd_response_diagnostic(struct device *dev, u8 status)
+ 	case CC2_RESPONSE_BUSY:
+ 		return -EBUSY;
+ 	case CC2_RESPONSE_NACK:
+-		if (resp & CC2_ERR_CORR_EEPROM)
++		if (status & CC2_ERR_CORR_EEPROM)
+ 			dev_dbg(dev, "Command failed: corrected EEPROM\n");
+-		if (resp & CC2_ERR_UNCORR_EEPROM)
++		if (status & CC2_ERR_UNCORR_EEPROM)
+ 			dev_dbg(dev, "Command failed: uncorrected EEPROM\n");
+-		if (resp & CC2_ERR_RAM_PARITY)
++		if (status & CC2_ERR_RAM_PARITY)
+ 			dev_dbg(dev, "Command failed: RAM parity\n");
+-		if (resp & CC2_ERR_RAM_PARITY)
++		if (status & CC2_ERR_CONFIG_LOAD)
+ 			dev_dbg(dev, "Command failed: configuration error\n");
+ 		return -ENODATA;
+ 	default:
 
-Best regards,
 -- 
-Javier Carrasco <javier.carrasco.cruz@gmail.com>
+2.43.0
 
