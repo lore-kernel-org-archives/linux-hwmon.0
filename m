@@ -1,115 +1,153 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9763847ECC8
-	for <linux-hwmon@vger.kernel.org>; Wed, 14 Oct 2026 21:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5D2488DBE
+	for <linux-hwmon@vger.kernel.org>; Wed, 14 Oct 2026 22:22:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792014818; cv=none; b=smletITOfhNQaP9OVd69mOgYUwLh0lQEcLQc+PA+TQ6XOZJY3tnX/jgHmyUnFiluRd7cydfeAoR9uLh0WP7rTxTVgOiUT1FxHuO6PpEdwelJ65Un7yNWzUlQkf+LtyZ8glol7+G5mnOuYnykco5YhzXhiA5I7AM4LJU1cJaZE/8=
+	t=1792016551; cv=none; b=K4TS+dQogdKKK7SxgUWbmN2ui09+ojL/06Z2ot6qAyMaoURyA5Ns3IuX4Xmoq7bjKPJbMI/Ab9AvID71OJTvp7suHhJCebZW0jjV55S0boZcIL3aFleinv9l3At40vnh468ALkbnkgvTEgn3+pFFlbRLdn3DzquE1YbBWobXPfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792014818; c=relaxed/simple;
-	bh=ALXk3gzHSIwRk4gF/Am0OeandAtH8xDhGY9Kah2l8/s=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=XdK4sKDNG4LQmhVWmPUY3MpMNlhJHmtrDthENIgiaWqCCOvjTAYB9qp+OcbyVpJavKMSeLuYPt0bNKt6LS1Sosy3A4rGaXnqDnkkUUGGwsz/e+73rrAkcjP+M2z5uyjZFYtPYdPxYRBomJANWUh+BRTUR7PYrcjJOSpzo+ehXBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QAhjwA5K; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792016551; c=relaxed/simple;
+	bh=xFEmAAT49vOrGlbwyZJCJpFg7gwDK6WlTjnMnrxO8bw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oSgOUgDtVRnCs8PilAc1DXVLuKv9AKWug347Z9bEK8ezsANLRCHqmg1f/guvzGjUOV3s4HtDN4aREflJqTDxp5cWaspgdT3SJ6glpukkfC4eKQz6KPb8fJWwZ17Ag/1E9M/eGarnyA3vGZ+cpZaTCOObX9pX0X8Jb9ya1u58df8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UUjUgw7r; arc=none smtp.client-ip=74.125.82.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QAhjwA5K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEDC71F000C4;
-	Wed, 14 Oct 2026 21:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792014817;
-	bh=KCxsgHPFWa9QejPBKBKeTZubvx7BIuXxhCGNLh87qCU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=QAhjwA5KxWJKYzAGOp4acKarwrdOy9YkZnQFt/Fuis4b352LUb9bHvlT1DyqPi7OK
-	 hEA3LaqMco4aF2WfiuCwztuGiUjQwIYBfSIfxTH7eY0onKOt10uFKYkxozaPvG8hCn
-	 J87Nz3fUV0rQid8vF6OQOhJLs0dZKmADhFNGUlGHWTGvHo+1suphMgT8SsbGc/kKY0
-	 RFSZO8+ADBF+SMHBf+jgR0/F2kEqGH1s1CceHo3NiMWfsq2BU8znQ/mqpTr9rWjR1l
-	 r8XPbvsTTDHr9K6TxOQIfV4xpPiCU4PUxnLdAqmXHFiHMuixLgYWnGIHcE05OPkA+p
-	 GH1T5LeL9mmxQ==
-Message-ID: <sashiko-outbox-171941@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (minisforum-um780xtx) Fix clamp() build failure
- with GCC 11
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?U2ViYXN0acOhbiBQZXlyb3R0?= <speyrott@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261014214522.243253-1-speyrott@gmail.com>
-References: <fda0e59f-20e1-4a94-a714-288940dcdd37@paulmck-laptop>
- <20261014214522.243253-1-speyrott@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 14 Oct 2026 21:53:36 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UUjUgw7r"
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-33bf40b0c8bso2156503eec.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Oct 2026 15:22:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792016550; x=1792621350; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=2b7f1ifOYnCy9LytpiVooR3kRz3vXe1JYmZB2bLzwcY=;
+        b=UUjUgw7rcVdbgL1OES4tTklOrZBQSJKt4SIH6hfwZ2AV9afaf1nG/XNywi6iVdrOLw
+         oTuMEaw+YfXcDoVoPAtX/D1iEr7BQ8I2JreFByfSpFj4mYZX4C/U2XzRvedNvZaGt9/j
+         OUcUEXo9xhXWM3c3l8cFbJ5YkmugLcJE47UM7ngENVXmB9AXrB7zltVZcz9tttA+awgj
+         3zejwZGyY8jIGh46LwQr9PgapKLf24nwqfifL+/43Plwkrg7E4rfi944gMTCc2GqP2f8
+         T5mifXZbdyP62krikIUEvoboEYGuyVdswrvqZ+ROL+JoHy1z1PhSSRy6e2/N08j4AfVe
+         u+Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792016550; x=1792621350;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=2b7f1ifOYnCy9LytpiVooR3kRz3vXe1JYmZB2bLzwcY=;
+        b=qWHHttaUARVeTqgFwk3inJ7wGG7EUbhUAJBYUDbcFPhgToc7niGGqZlPsv0ris0v+w
+         P3fV/zjrrJA6zI1q6KbS5IVS65EvdCrbhtLFxeBX32VuucGXxwquYC24apxbeGRsK5mo
+         iGQqH8NwyvQ8/FngflIXBbUBWcdMRfxTGo6RQMfj3dPEDzMNSMYxOzrJuCbppErjFh9E
+         w4IJUdcjKMHmcxhLRFUvUMtEgHL2wbb01v24bdMYS8pmeu++TiKArztpS/3vCZcnIeb0
+         XD9kXkKr0kymYAYG6DkmVYNIXb2pTSFtwMfAvmN+g0koNqZkQX0E8ywmV6feRgTB4FCb
+         JcBA==
+X-Forwarded-Encrypted: i=1; AKwUvBx+OG3wN4dfWVwHEm5b1KWsvXsTHKbdeb6Mb71gyUR8ZG3SPGbS6mSAbk/+qJYpanrjnMDkKI/mI+1MBg==@vger.kernel.org
+X-Gm-Message-State: AFq9FYIdDB+BLnH4udpuGUdy+RPEagteZwU4p3aUqspFsfUzpdSioSvH
+	5x4NE0Riieh3Kc1af4mUza4iicDzVqQkE2M2lCh48vyMPYaKKdfEQtef
+X-Gm-Gg: AYBFou0fJfEwtzUfnYhmNmqOsmJT0JSn9FvNQAhrKlyqP4GVrNWkul0YvX5j/C1zYjI
+	1B/95kpu08mLNpFMpIdutW3xSAv5G+ZVNnO6B2H+huWF2TC6QjN2TOgZdCuaV65LTMFs0CvYTJB
+	CvD2doJm1DTCGncvmJxRGwXpWB6oRpS7LXMDpn7fROtTbVCXgrxbJ5NS28OIApYYJqqoi9F45fY
+	bXv5KSqVa4LQkZhOOiYs6+6lDl4aK2JVKiICSM0rNVgQoHDyKR1InajBpParwedHX4TxdFHH5TF
+	ZbjHQZjakb2SxWk8BYov/DxLDFpw1XdePG/7RMdpV6pZve6v3EZ/mec6exQ8wIHGCcO1Z+vRuQJ
+	Aq/UjzQ01Syv4VSEf8jEVJZI5BeYl60mPUe1rX6P8c8Z4AeOsLE4H7apLCYuHGJQNue+HyccARC
+	rhWq+Hv9VNw/XiKmwdpF6Mgu5gTW7nAPOwpOvFAw9pQIJvbzspmvG9kindojVapJeXuNzBKHf+c
+	blYmDASyZGk4aokNg==
+X-Received: by 2002:a05:7301:3a84:b0:351:985:e729 with SMTP id 5a478bee46e88-3537e01e8b6mr25315973eec.12.1792016549619;
+        Wed, 14 Oct 2026 15:22:29 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:500::5:7561])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537ca6d202sm54635124eec.13.2026.10.14.15.22.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2026 15:22:29 -0700 (PDT)
+From: Zinc Lim <limzhineng2@gmail.com>
+To: alexanderduyck@fb.com,
+	kuba@kernel.org,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	pabeni@redhat.com,
+	linux@roeck-us.net,
+	horms@kernel.org,
+	hmohsin@meta.com,
+	mike.marciniszyn@gmail.com
+Cc: kernel-team@meta.com,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	zinclim@meta.com,
+	limzhineng2@gmail.com
+Subject: [PATCH net-next v4 0/6] eth: fbnic: expand hwmon sensor support
+Date: Wed, 14 Oct 2026 15:22:18 -0700
+Message-ID: <20261014222225.2803660-1-limzhineng2@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] hwmon: minisforum-um780xtx: integer overflow in DIV_ROUND_CLOSEST
+The firmware capability response carries per-board sensor thresholds,
+and the firmware reports which range a sensor has entered whenever it
+crosses one of them. This series surfaces both to userspace:
+
+ - Move the sensor read logic out of fbnic_mac, closer to its only
+   caller in the hwmon code, and drop the now-unused get_sensor op.
+ - Cache the temperature and voltage readings for the current jiffy so
+   a burst of attribute reads issues a single firmware round-trip.
+ - Parse and expose the temperature (min/max/crit) and voltage
+   (min/max) thresholds. Thresholds the firmware does not report are
+   not exposed.
+ - Parse the range firmware reports, both in the unsolicited threshold
+   event and in the sensor read response, and cache it per sensor.
+ - Expose temp1_alarm and in0_alarm from that cached range, and notify
+   on each crossing through hwmon_notify_event().
+ - Derive the range from the reading carried with the event, on old
+   firmware that predates range reporting.
+
+Changes from v3:
+ - Moved cache seeding to fbnic_mbx_init() in patch 2, so it also runs
+   on resume and AER recovery paths rather than only on probe.
+ - Dropped previous patch exposing all hwmon attributes unconditionally as
+   read-only. Thresholds the firmware does not report are now not visible
+   in sysfs.
+ - Collapsed the five per-threshold alarm attributes
+   (temp1_{min,max,crit}_alarm, in0_{min,max}_alarm) into one alarm per
+   sensor, temp1_alarm and in0_alarm. Firmware reports which range a
+   sensor is in rather than per-limit flags, so a single attribute
+   matches what the hardware reports.
+ - That alarm now comes from the reported range rather than from a
+   driver-side comparison of a live reading against the thresholds.
+ - Split the alarm work into two: patch 4 parses and caches the range,
+   from both the unsolicited event and the sensor read response, and
+   patch 5 exposes the attributes and notifies on each crossing. The
+   previous "firmware notifies hwmon on sensor threshold events" patch 6
+   is now folded into those.
+ - Added patch 6 for firmware that predates range reporting, which
+   flags only that a limit was exceeded.
+
+Changes from v2:
+ - Addressed Jakub's patch 3 feedback on jiffy comparison when
+   checking cache validity.
+
+Changes from v1:
+ - Addressed Jakub's patch 6 feedback on including a
+   if (!IS_REACHABLE(CONFIG_HWMON)) return; guard.
+
+Zinc Lim (6):
+  eth: fbnic: move sensor read logic out of fbnic_mac
+  eth: fbnic: cache hwmon sensor readings
+  eth: fbnic: report temperature and voltage thresholds via hwmon
+  eth: fbnic: parse the alarm range reported by firmware
+  eth: fbnic: report temperature and voltage alarms via hwmon
+  eth: fbnic: derive the alarm range on older firmware
+
+ drivers/net/ethernet/meta/fbnic/fbnic.h       |  11 +
+ drivers/net/ethernet/meta/fbnic/fbnic_fw.c    | 140 +++++++-
+ drivers/net/ethernet/meta/fbnic/fbnic_fw.h    |  44 +++
+ drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c | 332 ++++++++++++++++--
+ drivers/net/ethernet/meta/fbnic/fbnic_mac.c   |  55 ---
+ drivers/net/ethernet/meta/fbnic/fbnic_mac.h   |   2 -
+ 6 files changed, 500 insertions(+), 84 deletions(-)
+
 --
-
-commit 37b4941cfec26b0afeccdcd44aef6f32fe1e9d55
-Author: Sebasti=C3=A1n Peyrott <speyrott@gmail.com>
-
-hwmon: (minisforum-um780xtx) Fix clamp() build failure with GCC 11
-
-This patch fixes a GCC 11 build failure by selecting clamping limits early
-and using a single clamp_val() execution. This prevents GCC jump threading
-from duplicating the limit check and firing an unreachable compile-time
-assertion.
-
-Closes: https://lore.kernel.org/r/fda0e59f-20e1-4a94-a714-288940dcdd37@paul=
-mck-laptop
-
-> diff --git a/drivers/hwmon/minisforum-um780xtx.c b/drivers/hwmon/minisfor=
-um-um780xtx.c
-> index f5d6e18cb651f..962ebf41ffb7f 100644
-> --- a/drivers/hwmon/minisforum-um780xtx.c
-> +++ b/drivers/hwmon/minisforum-um780xtx.c
-
-[ ... ]
-
-> @@ -198,13 +198,15 @@ static ssize_t um780xtx_sys_point_temp_store(struct=
- device *dev,
->  	if (points[0] >=3D points[1] || points[1] >=3D data->sys_point3)
->  		return -EIO;
-> =20
-> +	if (!sattr->index) {
-> +		lo =3D 0;
-> +		hi =3D points[1] - 1;
-> +	} else {
-> +		lo =3D points[0] + 1;
-> +		hi =3D data->sys_point3 - 1;
-> +	}
->  	value =3D DIV_ROUND_CLOSEST(value, 1000);
-> -	if (!sattr->index)
-> -		value =3D clamp_val(value, 0, points[1] - 1);
-> -	else
-> -		value =3D clamp_val(value, points[0] + 1,
-> -				  data->sys_point3 - 1);
-> -	points[sattr->index] =3D value;
-> +	points[sattr->index] =3D clamp_val(value, lo, hi);
-
-[Severity: Low]
-Can this arithmetic result in an integer overflow for extreme inputs?
-
-When a user writes an extremely large value like LONG_MAX to the sysfs file
-in um780xtx_sys_point_temp_store(), the unbounded value is passed directly
-to DIV_ROUND_CLOSEST(value, 1000) before it is clamped.=20
-
-Because DIV_ROUND_CLOSEST adds half the divisor before dividing, an extreme
-positive input can overflow and wrap around to a negative number. This would
-cause the value to incorrectly clamp to the minimum bound (lo) instead of
-the maximum bound (hi). Conversely, an extreme negative input could underfl=
-ow
-and improperly clamp to hi.
-
-Would it be safer to pre-clamp the value before calling DIV_ROUND_CLOSEST
-to prevent this overflow? Many other hwmon drivers clamp the input bounds
-first prior to performing the division to avoid this behavior.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261014214522.2432=
-53-1-speyrott@gmail.com?part=3D1
+2.53.0-Meta
