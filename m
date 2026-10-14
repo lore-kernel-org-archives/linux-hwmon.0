@@ -1,210 +1,143 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27B4D4C14FC
-	for <linux-hwmon@vger.kernel.org>; Wed, 14 Oct 2026 22:22:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3849C309EEB;
+	Wed, 14 Oct 2026 23:03:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792016561; cv=none; b=BSTIgMWNWpVjHo8sosAG5mtBNlh7ZoGdWo8VX9P/ULPYYB/B0X2IWSYzOWVLpYUOn3bW5DzIKZMUyyfAPYg+vuyF2oiOuoCj3Gvr/dX5BJ/y9UGNJg0RlunrJAGlU4DhuvsC0gd4sifeqg/etYrWeArc+Jdd0T3T4ruUprtfjno=
+	t=1792019011; cv=none; b=XdzAtsVp9/4emm+C8tjhVPSvYQbhqHIzEPtZpaDLjhM+joN57rYR7uvH+MFAXoDspfIZ3zX+sDuWMA4QUQK5WJTtOQqd9hJHGZn/sZ5zmrolLXMIwNEA3QIPUreAjyUyia0HZ1n8ZHgAEV5+RDtO7MEtxe/RJhQnE9X1O9U9onQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792016561; c=relaxed/simple;
-	bh=yHLMDM/48dcDq/Dd2thjDfocEkPnBBmEY6ZjqusswBU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ru9WqFVeUI14ybo6z+vWUJj9sGCeHwBlDAkDbSfsQAQVZtgR1DPSJ9gMuPXmNGul/lBOWakK7H0ZOsXgxeZ2SBhT8xwG24Br+51RSFtZA7qeWi4OIj4HOy9UqCSwzqYcrKwJbjHtvic4BK92B8VM4jvEzVrSffmdDAfepk9EvR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eof+hDF4; arc=none smtp.client-ip=74.125.82.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792019011; c=relaxed/simple;
+	bh=pNN7bs+HIFLG/tBJ3Lt1YhOWWAw03qYL46p4fKQYYWI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nVOM0vk/0fRyXHDYQS9GzUsXRL02TiEp0QO4Jxk+x8qwK1ejuUXGCM2IgrQmHzJaB60YyDDRRurpnJEP7MXmT54AIpRyR/ECruGAgdjDoLaH3ZjBrpCnEpq7kHOb6XOJX+Dyc1EI8EtWhJZBC6tHdOzWWBhO2qqK7wl9nzOI/yY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i74D6Dy6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eof+hDF4"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-15ea896ddc8so2152864c88.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Oct 2026 15:22:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792016559; x=1792621359; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=W2+TdeI/FqKLxgmSZUeosOnsLC255UKO2RqcJWHBdyk=;
-        b=eof+hDF4EuNCH+ObZmq77+1Iw9ZNd/zQ+I3oz6w3OVOO1DUI+y+ZOOxjv8wXlC+7Ru
-         7d3Ynnzo8jTHbtV7D0EAH5HrIleBWcLLS5+2qDSEY/Nb4D0I/7bN7yjF+6VhGE83rFpt
-         NjiFX9yZPAMXczZ8VTKUM5AyW5B30wl1yOIVgYaFyTc+uIwBvEgj7NPrAItdfLSOQh+A
-         xOwu0srD9o12u8INwxvKpnQapQ4BZl3mzMaubnjr5Rou+ip9j2vrnp936EXGoj0TLwq+
-         cah0brhJ4OQYCIxo/fgmF614pIRk/mGnX4O6cfzRB+5GJ+QircpcngF2EPx5JU5nxjWy
-         5i7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792016559; x=1792621359;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=W2+TdeI/FqKLxgmSZUeosOnsLC255UKO2RqcJWHBdyk=;
-        b=KNpeaAwIOiu5y+Be1eASs1hQ5oTry5Y2BRJIe4eEwA2R+AJe2XSJgnnXTuy+U8pEn2
-         f8vo7iJ5Rh8xQnOPWpQAqM+QqZbM3gb7Z9uCf+wdZsVtvFcTGs5zZYRoZ7Nut/YSUjCt
-         5iGkp4i9X/ckqy7ZXwllTFAgvIoT6qL5OvbYH82AWxY73g4pdZWs/VSHGFttnC/a7yAM
-         J1DwyfD1obqACKMSsLdvJJa9ylThShlxF4nESkB+zrYTFwR7xJr9a62zvDYgmB+cuVfX
-         lEtgo4RyRtdKClqADRlEBAXFi4rfp+6eiA+Np/za4+5h2nASiRGD2uMvcxcydyIJTfj1
-         QrjQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzaYJxJSzJh0BmUPNwZ8zrccyV5FxCjsqONwc+mQQYXSYtqZmQLqSC0b6jJs4hp+/rSZRcxyfneqiALcA==@vger.kernel.org
-X-Gm-Message-State: AFq9FYIOIheDSPfGnwlO1EGl/JkN+DvTZnAciAVUn3C7ychgzHcbxxpR
-	fZ3u7pjfNkHJ8LoJ7TwFC7ZE/nJjCIs5ZLWfS1lGlZ/O89y3utWCNOFb
-X-Gm-Gg: AYBFou0oBCRkKgVueZmuBW43zadphWqfzVuS9qfNzOB85yhRnYjh2y95R7AxRdSsi7A
-	dWCqUUqPQwnjVQ6t0tbNgzmq/v+GufdpEK72MfemJkwlkkSvrcTMId/AVrSBsActLaN8ha+p6UF
-	Ag32Gq150g0wGik2LPQJGXpNn/Kj0iCMaiF2y6lIGixveTD0GXZ5aFN83WMtPlJXyEDwnjOJuGF
-	EHTZ9lWBR0WVLNJqOPLYAmGcRM6w59slp70XsdPFjZ6tw7tMQZwodoP9tBIdVlLgDsATKdnVoO1
-	fG4rDCkUkgCS53EElW675K1HBbCFQxIUONePn1MPx+607PlNsfmDoST2Y2maX4ivpNw+a3daCAq
-	tceqM/E+xR9DDt4R1YUHHbSIM9wtHH4AJnKFsLpzsyoUjzwVfUiRYI9mtJ+J2pvkC9+gPJqIjt4
-	zKZyWamBAP56bfovyZXIEXmRzceJchweXTQV+lvUh5qiaKR4roivp64W2BskSBQNcwSdJ8UFTx5
-	sy8Ew==
-X-Received: by 2002:a05:7022:eb53:20b0:170:64b:b388 with SMTP id a92af1059eb24-170064bb41amr18274573c88.46.1792016558840;
-        Wed, 14 Oct 2026 15:22:38 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:500::5:7561])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1761ed641ddsm24225058c88.1.2026.10.14.15.22.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 15:22:38 -0700 (PDT)
-From: Zinc Lim <limzhineng2@gmail.com>
-To: alexanderduyck@fb.com,
-	kuba@kernel.org,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	pabeni@redhat.com,
-	linux@roeck-us.net,
-	horms@kernel.org,
-	hmohsin@meta.com,
-	mike.marciniszyn@gmail.com
-Cc: kernel-team@meta.com,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	zinclim@meta.com,
-	limzhineng2@gmail.com
-Subject: [PATCH net-next v4 6/6] eth: fbnic: derive the alarm range on older firmware
-Date: Wed, 14 Oct 2026 15:22:24 -0700
-Message-ID: <20261014222225.2803660-7-limzhineng2@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261014222225.2803660-1-limzhineng2@gmail.com>
-References: <20261014222225.2803660-1-limzhineng2@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i74D6Dy6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB06D1F000C4;
+	Wed, 14 Oct 2026 23:03:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792019009;
+	bh=rFQ+xXBVw2G3dOM+1QoqfL3CKXPuv2twnZR0oxUkiFc=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=i74D6Dy6+ybz9t6qaA2NuhDDS0COBDnrGSk9g3B9Ch+vhqXXXYUyrwB/rXjAh+vGv
+	 sE+Q/+a8+fMVDo1+cuDGl6gYzOy+yBpzI0Zq1ZcuwiNVFgyfsaUsL/BB49lu2ysOKv
+	 2CkBh+OocWzHK5j6FctBg83yrd7xqarWmqkTOiR0agNEWrwuBkiP1Wj3WPbL8b7AJR
+	 Ybbviarn0d+DbOZvvdcBmCTCmuoZovw4gnjllxTg6MOa8Xckqzf2J9rWoZ7htlP3vd
+	 VINfT1Y/1jYak2IozXpvTOuEf0HVFrBICn6AVZkywkl/6KmVkFYmOxGdnxO0lsyJni
+	 F7PuAvzHT3sxw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 76B0DCE0C55; Wed, 14 Oct 2026 16:03:29 -0700 (PDT)
+Date: Wed, 14 Oct 2026 16:03:29 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: =?iso-8859-1?Q?Sebasti=E1n?= Peyrott <speyrott@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
+	linux-hwmon@vger.kernel.org, linux-next@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (minisforum-um780xtx) Fix clamp() build failure
+ with GCC 11
+Message-ID: <be58a022-4f57-4666-b573-81881de4d779@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <fda0e59f-20e1-4a94-a714-288940dcdd37@paulmck-laptop>
+ <20261014214522.243253-1-speyrott@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261014214522.243253-1-speyrott@gmail.com>
 
-Firmware that predates range reporting uses the threshold event to flag
-that a limit was exceeded, with the attribute hardcoded to 1, rather than
-reporting which range the sensor entered. The range enum reserves that
-value as FBNIC_FW_TSENE_ALARM_DEPRECATED. It does not indicate which
-limit was crossed, so it is not cached and the alarm classifies a fresh
-reading on every sysfs read.
+On Wed, Oct 14, 2026 at 06:45:22PM -0300, Sebastián Peyrott wrote:
+> GCC 11 fails to build the driver:
+> 
+>   error: call to '__compiletime_assert_727' declared with attribute error:
+>   clamp() low limit 0 greater than high limit points[1] - 1
+> 
+> The store function returns -EIO unless points[0] < points[1], so
+> points[1] - 1 cannot be negative when the clamp is reached. GCC 11 jump
+> threading, however, duplicates the clamp() limit check and does not prune
+> the copy in which points[1] is zero, so the compile-time check in clamp()
+> fires on an unreachable path. GCC 8 to 10 and 12 to 16 accept the code.
+> 
+> Select both limits first and use a single clamp_val(). This does not
+> change behavior.
+> 
+> Fixes: 9d980da93bbc ("hwmon: Add Minisforum UM780 XTX EC monitoring and fan control")
+> Reported-by: Paul E. McKenney <paulmck@kernel.org>
+> Closes: https://lore.kernel.org/r/fda0e59f-20e1-4a94-a714-288940dcdd37@paulmck-laptop
+> Assisted-by: LLM
+> Signed-off-by: Sebastián Peyrott <speyrott@gmail.com>
 
-Such firmware re-arms the trip points around the range the reading
-landed in, so every crossing interrupts, including the one back to
-normal. The event carries the reading that tripped it, so derive the
-range from that, against the same capability response thresholds and
-boundaries firmware uses. The alarm then tracks crossings there too, and
-wakes anything polling the sysfs attribute.
+Thank you!!!
 
-An event can arrive before the capability response that carries those
-thresholds, since rx messages are parsed while polling for it. There is
-nothing to classify against yet, so the reading would come back as the
-normal range and stick there. Leave the range unknown and let the read
-path derive it once the thresholds are in.
+Tested-by: Paul E. McKenney <paulmck@kernel.org>
 
-Signed-off-by: Zinc Lim <limzhineng2@gmail.com>
----
- drivers/net/ethernet/meta/fbnic/fbnic.h       |  1 +
- drivers/net/ethernet/meta/fbnic/fbnic_fw.c    | 18 +++++++++---
- drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c | 29 +++++++++++++++++++
- 3 files changed, 44 insertions(+), 4 deletions(-)
+Though it would be *way* better to fold this back into the original
+commit to avoid breaking bisection.
 
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic.h b/drivers/net/ethernet/meta/fbnic/fbnic.h
-index 90e54cffe6a9..8180028b20a2 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic.h
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic.h
-@@ -201,6 +201,7 @@ void fbnic_fw_free_mbx(struct fbnic_dev *fbd);
- void fbnic_hwmon_register(struct fbnic_dev *fbd);
- void fbnic_hwmon_unregister(struct fbnic_dev *fbd);
- void fbnic_hwmon_notify_event(struct fbnic_dev *fbd, int id);
-+void fbnic_hwmon_old_notify_event(struct fbnic_dev *fbd, int id, s32 value);
- 
- int fbnic_mac_request_irq(struct fbnic_dev *fbd);
- void fbnic_mac_free_irq(struct fbnic_dev *fbd);
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_fw.c b/drivers/net/ethernet/meta/fbnic/fbnic_fw.c
-index 9485665cba46..cfec30e5cb98 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic_fw.c
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_fw.c
-@@ -1737,8 +1737,13 @@ static int fbnic_fw_parse_threshold_exceeded_resp(void *opaque,
- 			dev_err(fbd->dev, "Thermal alarm %u, temperature is currently %dmC!\n",
- 				alarm, value);
- 
--		/* Old firmware reports no range, leave the cache alone */
--		if (alarm != FBNIC_FW_TSENE_ALARM_DEPRECATED) {
-+		if (alarm == FBNIC_FW_TSENE_ALARM_DEPRECATED) {
-+			/* Nothing to derive the range from, so do not guess */
-+			if (have_temp)
-+				fbnic_hwmon_old_notify_event(fbd,
-+							     FBNIC_SENSOR_TEMP,
-+							     value);
-+		} else {
- 			WRITE_ONCE(fbd->hwmon_cache.temp_alarm, alarm);
- 			fbnic_hwmon_notify_event(fbd, FBNIC_SENSOR_TEMP);
- 		}
-@@ -1757,8 +1762,13 @@ static int fbnic_fw_parse_threshold_exceeded_resp(void *opaque,
- 			dev_err(fbd->dev, "Voltage alarm %u, voltage is currently %dmV!\n",
- 				alarm, value);
- 
--		/* Old firmware reports no range, leave the cache alone */
--		if (alarm != FBNIC_FW_TSENE_ALARM_DEPRECATED) {
-+		if (alarm == FBNIC_FW_TSENE_ALARM_DEPRECATED) {
-+			/* Nothing to derive the range from, so do not guess */
-+			if (have_volt)
-+				fbnic_hwmon_old_notify_event(fbd,
-+							     FBNIC_SENSOR_VOLTAGE,
-+							     value);
-+		} else {
- 			WRITE_ONCE(fbd->hwmon_cache.volt_alarm, alarm);
- 			fbnic_hwmon_notify_event(fbd, FBNIC_SENSOR_VOLTAGE);
- 		}
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-index 310a2c52bb4d..9fa9eb843c68 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-@@ -302,6 +302,35 @@ void fbnic_hwmon_unregister(struct fbnic_dev *fbd)
- 	hwmon_device_unregister(hwmon);
- }
- 
-+void fbnic_hwmon_old_notify_event(struct fbnic_dev *fbd, int id, s32 value)
-+{
-+	const struct fbnic_threshold *thr;
-+	u8 *cached;
-+
-+	switch (id) {
-+	case FBNIC_SENSOR_TEMP:
-+		thr = &fbd->fw_cap.temp;
-+		cached = &fbd->hwmon_cache.temp_alarm;
-+		break;
-+	case FBNIC_SENSOR_VOLTAGE:
-+		thr = &fbd->fw_cap.volt;
-+		cached = &fbd->hwmon_cache.volt_alarm;
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	/* Event arrived before the capability response containing
-+	 * the thresholds.
-+	 */
-+	if (thr->min == FBNIC_SENSOR_NO_DATA ||
-+	    thr->max == FBNIC_SENSOR_NO_DATA)
-+		return;
-+
-+	WRITE_ONCE(*cached, fbnic_hwmon_classify(thr, value));
-+	fbnic_hwmon_notify_event(fbd, id);
-+}
-+
- void fbnic_hwmon_notify_event(struct fbnic_dev *fbd, int id)
- {
- 	enum hwmon_sensor_types type;
--- 
-2.53.0-Meta
+							Thanx, Paul
 
+> ---
+> Reproduced on next-20261014 (x86_64) with GCC 11.5.0, both with
+> allmodconfig and with defconfig plus this driver; GCC 8.5, 9.5, 10.5,
+> 12.4, 13.4, 14.4, 15.3 and 16.1 build the unmodified driver. With this
+> change, the driver builds without warnings with W=1 using GCC 11, 13, 14,
+> 15 and 16 (x86_64 allmodconfig) and GCC 16 (i386 allmodconfig). A small
+> standalone reproducer of the clamp() pattern fails only with GCC 11, and
+> the patched form builds with GCC 8 through 16.
+> 
+> Tested on the UM780 XTX: the installed driver and this version produce
+> identical rounding and clamping results for both system fan thresholds,
+> with every value verified against the EC registers and the original
+> thresholds restored afterwards. Module load and unload are also clean.
+> 
+> An LLM-based coding assistant helped reproduce and analyse the failure
+> and prepare this patch. I reviewed the change and the test results.
+> 
+>  drivers/hwmon/minisforum-um780xtx.c | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/hwmon/minisforum-um780xtx.c b/drivers/hwmon/minisforum-um780xtx.c
+> index f5d6e18cb651..962ebf41ffb7 100644
+> --- a/drivers/hwmon/minisforum-um780xtx.c
+> +++ b/drivers/hwmon/minisforum-um780xtx.c
+> @@ -180,7 +180,7 @@ static ssize_t um780xtx_sys_point_temp_store(struct device *dev,
+>  	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
+>  	u8 points[2];
+>  	u8 readback;
+> -	long value;
+> +	long value, lo, hi;
+>  	int ret;
+>  
+>  	ret = kstrtol(buf, 10, &value);
+> @@ -198,13 +198,15 @@ static ssize_t um780xtx_sys_point_temp_store(struct device *dev,
+>  	if (points[0] >= points[1] || points[1] >= data->sys_point3)
+>  		return -EIO;
+>  
+> +	if (!sattr->index) {
+> +		lo = 0;
+> +		hi = points[1] - 1;
+> +	} else {
+> +		lo = points[0] + 1;
+> +		hi = data->sys_point3 - 1;
+> +	}
+>  	value = DIV_ROUND_CLOSEST(value, 1000);
+> -	if (!sattr->index)
+> -		value = clamp_val(value, 0, points[1] - 1);
+> -	else
+> -		value = clamp_val(value, points[0] + 1,
+> -				  data->sys_point3 - 1);
+> -	points[sattr->index] = value;
+> +	points[sattr->index] = clamp_val(value, lo, hi);
+>  
+>  	ret = ec_write(um780xtx_sys_point_offsets[sattr->index],
+>  		       points[sattr->index]);
+> 
+> base-commit: 4781ca52761e666cf18b591e6bb0478396c90320
+> -- 
+> 2.54.0
+> 
