@@ -1,50 +1,50 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5E7485CD8;
-	Wed, 14 Oct 2026 08:00:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C3A4A1E04;
+	Wed, 14 Oct 2026 08:08:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791964802; cv=none; b=JMYXYWrZTz5NEQZmflRRFbgIMcVbFJLAd4AxHHnMaXlHVKKX4tFYgN2+SSeNAWnl6s5962bt05v2V1pG/6JtfogTZvoDAT3HN1eP4xPMJoYihz3QXQotZsOEfI5nPqwqPqTbsQP2cu5F5d3D6mn5aLr49v5XCyLUdmV6NRDIHTM=
+	t=1791965343; cv=none; b=KXpSiliAkJsATDb2QGmO2O+srcvhMDASdLdkF7a2ydvCVpHd+G/nhD2oofCkR/gFXxhA500Hkjkk3m/M4T86QBrzOl9lTcYt5Sz+S7+hPz2yVIZj6h4n7zORDi05gWQ4iD3ZpHxKoSv34DwGhi/d8WnVPeRm0QfGZlR4YZYJD2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791964802; c=relaxed/simple;
-	bh=JcsNyUTum3gght6MaxO8G0xouWm3pIf9cr4IOEwyQ1Q=;
+	s=arc-20240116; t=1791965343; c=relaxed/simple;
+	bh=FMCnP/Bt6vWYrgRPyZ/1cUDHYAvHo+tWYI7paomheD8=;
 	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=N/t89zQR9qEr0naMB6KbSiquGRIoj/msyqCQIbkR/QiBn95M/HeMhRACUvWx2Kv9zaLTX4VYH1EGAC7Hgzsev2pSx8J/xxKlVc2NFkACEDp3TIEJVhlAAJ4v4RBf1qqwVIvoAfEDV7fFdZjWkIRuYqrXHRUgaHy0SMgVtH2B5MY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WXrUse8R; arc=none smtp.client-ip=192.198.163.9
+	 MIME-Version:Content-Type; b=UJVOuXIQXeuoquwrc9rljlUqmrNbuMkPcTPPhAntQmKB3chpLhbIiY5F27lVNcOBc5FX5Eatfv8sE6sMaIxGFteauu71p/a8zv4tcyIIerXlRaECfWxx8WQ1E3/9qJD8AY0Z0lIIQswieM9u92lV0TyU0QrYyihwUNwD4e2fSqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PtDlEKC7; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WXrUse8R"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PtDlEKC7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791964802; x=1823500802;
+  t=1791965341; x=1823501341;
   h=from:date:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=JcsNyUTum3gght6MaxO8G0xouWm3pIf9cr4IOEwyQ1Q=;
-  b=WXrUse8RdTE6Zohsf01qxq3zpYk012i/PpSSvq49hZCrEJngXQsNvXpK
-   buPYDtm9hY3VhVywQIA9m0MZnUbGa6aW1pGAmvC9aRy+D5ztyalAQRnaA
-   PhfMObmltXcgUDtKGVEi6H58cNrEolEhdYvA+2NhQrxrUZjCU3N6Gf4lX
-   1pvjNWrINWwWiYt9BC+e4CtkqnaI81/SFbQ2Qcs2Gqvr9h1vMHi1SAsY9
-   y5qxjyILuhTlkrdNCGRU8yQJ+tLjOwRA4pttzoSt8e96CNBp2v/Q+Sxky
-   2X1i4P7eJyieXQGlyYjd8GVuCZIkFc2O8z0HiVPVeMwR2m52tlyHea2li
-   w==;
-X-CSE-ConnectionGUID: teLw6qtkSlCU2Vf8H6KKxg==
-X-CSE-MsgGUID: CE1vQVodRYSHFD6Ih2MKuQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11934"; a="601674"
+  bh=FMCnP/Bt6vWYrgRPyZ/1cUDHYAvHo+tWYI7paomheD8=;
+  b=PtDlEKC7CJWTFt1bVrcLrGZcB0WqJKZ2PgNIHZlpdJZP1MumJpi7ncJU
+   dxgvIpfYn9Gdr12jinrN7gBBBDADgGxrfJR82fQiWIytyce5UbtUkVXQI
+   LFr1ORGg1YULCzTmOnoSF8gBtJSxnB0ByspxK6dTUHpOciuG2YoKNO1a+
+   HfxycmDbhM3f4CJI2bILfTV0/bWt2++U4ULdhYGhduYCrpmkqCtuOg/wn
+   S8iBQl6ho+LQH8s1Mei4xRbNk/FYm53X+zMjVz0OLnBs+lu/g7flRWG71
+   PUpA2o4mx5jOx2j3a1oBJwLqIK9+Zz4iUfCr2RgahxdmTxvNX+wEpK9SE
+   A==;
+X-CSE-ConnectionGUID: 9hqU/sexTty17QykyF9DeA==
+X-CSE-MsgGUID: 8bsp6C6aRamiqbcMJ3951w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11934"; a="715431"
 X-IronPort-AV: E=Sophos;i="6.27,157,1787036400"; 
-   d="scan'208";a="601674"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2026 01:00:00 -0700
-X-CSE-ConnectionGUID: V6PuobAWQ3qRvYQCNF5cAA==
-X-CSE-MsgGUID: cL0AOjnJS8SPbtnvhJD09g==
+   d="scan'208";a="715431"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2026 01:08:59 -0700
+X-CSE-ConnectionGUID: b1YosQc3TdyCdwflI5hOUA==
+X-CSE-MsgGUID: eJy5EuBFQ1C/HQLkJJILAw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,157,1787036400"; 
-   d="scan'208";a="1378690"
+   d="scan'208";a="1444910"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.234])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2026 00:59:54 -0700
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2026 01:08:54 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 14 Oct 2026 10:59:50 +0300 (EEST)
+Date: Wed, 14 Oct 2026 11:08:50 +0300 (EEST)
 To: Birk Skyum <birk.skyum@pm.me>
 cc: Anvesh Jain P <anvesh.p@oss.qualcomm.com>, 
     Sibi Sankar <sibi.sankar@oss.qualcomm.com>, 
@@ -56,11 +56,11 @@ cc: Anvesh Jain P <anvesh.p@oss.qualcomm.com>,
     Maya Matuszczyk <maccraft123mc@gmail.com>, linux-arm-msm@vger.kernel.org, 
     platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
     linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 2/2] platform: arm64: qcom-hamoa-ec: test sensor
- and variant handling
-In-Reply-To: <20260908135801.81436-3-birk.skyum@pm.me>
-Message-ID: <77c05024-1742-7106-eb83-a4776f76d397@linux.intel.com>
-References: <20260908135801.81436-1-birk.skyum@pm.me> <20260908135801.81436-3-birk.skyum@pm.me>
+Subject: Re: [RFC PATCH v2 1/2] platform: arm64: qcom-hamoa-ec: monitor Slim
+ 7x legacy sensors
+In-Reply-To: <20260908135801.81436-2-birk.skyum@pm.me>
+Message-ID: <847772fa-4b09-75e7-704d-eccaf35879da@linux.intel.com>
+References: <20260908135801.81436-1-birk.skyum@pm.me> <20260908135801.81436-2-birk.skyum@pm.me>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,376 +71,383 @@ Content-Type: text/plain; charset=US-ASCII
 
 On Tue, 8 Sep 2026, Birk Skyum wrote:
 
-> Exercise the sensor callbacks against a simulated I2C adapter. Check
-> little-endian RPM decoding, short transfers, malformed byte counts,
-> the unavailable-temperature sentinel and propagation of bus errors.
+> The Yoga Slim 7x EC returns an all-zero response to the reference-board
+> thermal capability command. Probe fails even though its legacy RPM and
+> thermistor queries work and firmware controls the fan automatically.
 > 
-> Check that the Lenovo compatible takes precedence over its reference-
-> board fallback, that its sensor attributes are read-only, and that its
-> probe and PM/remove callbacks do not issue control writes. Keep coverage
-> of the strict reference-board capability-response validation.
+> Select a read-only path for the Lenovo compatible. Expose its first RPM
+> channel and thermistor through hwmon, validating the transfer length and
+> RPM payload count and treating the thermistor's 0xff sentinel as ENODATA.
+> Do not enable SCI, register manual cooling controls or send standby
+> commands on this path. Keep the reference-board behavior and strict
+> capability validation unchanged.
 > 
-> The tests use KUnit and never access a physical EC.
+> The transactions are documented by the Yoga's FC22 and FC29/TZ39 DSDT
+> methods and Maya Matuszczyk's EC protocol notes. Anvesh Jain P's pending
+> fan-profile series also documents the RPM query. This change does not
+> include its calibration, LUT programming or temperature reporting.
 > 
+> Link: https://github.com/aarch64-laptops/build/blob/2e58842f5fa2f87771c2df017ae4d8c65225ef10/misc/lenovo-yoga-slim-7x/acpi/dsdt.dsl
+> Link: https://lkml.iu.edu/hypermail/linux/kernel/2607.3/08806.html
 > Signed-off-by: Birk Skyum <birk.skyum@pm.me>
 > ---
->  MAINTAINERS                                 |   1 +
->  drivers/platform/arm64/Kconfig              |  12 +
->  drivers/platform/arm64/qcom-hamoa-ec-test.c | 294 ++++++++++++++++++++
->  drivers/platform/arm64/qcom-hamoa-ec.c      |   4 +
->  4 files changed, 311 insertions(+)
->  create mode 100644 drivers/platform/arm64/qcom-hamoa-ec-test.c
+> Changes in v2:
+> - Move the platform-driver documentation to the laptop-driver guide and
+>   update its index and MAINTAINERS entry, following Guenter's review.
+> - No driver code changes.
 > 
+>  Documentation/admin-guide/laptops/index.rst   |   1 +
+>  Documentation/admin-guide/laptops/qcom-ec.rst |  40 +++++
+>  MAINTAINERS                                   |   1 +
+>  drivers/platform/arm64/Kconfig                |   4 +-
+>  drivers/platform/arm64/qcom-hamoa-ec.c        | 153 +++++++++++++++++-
+>  5 files changed, 194 insertions(+), 5 deletions(-)
+>  create mode 100644 Documentation/admin-guide/laptops/qcom-ec.rst
+> 
+> diff --git a/Documentation/admin-guide/laptops/index.rst b/Documentation/admin-guide/laptops/index.rst
+> index c0b911d05..44c9c7c08 100644
+> --- a/Documentation/admin-guide/laptops/index.rst
+> +++ b/Documentation/admin-guide/laptops/index.rst
+> @@ -11,6 +11,7 @@ Laptop Drivers
+>     asus-laptop
+>     disk-shock-protection
+>     lg-laptop
+> +   qcom-ec
+>     samsung-galaxybook
+>     sony-laptop
+>     sonypi
+> diff --git a/Documentation/admin-guide/laptops/qcom-ec.rst b/Documentation/admin-guide/laptops/qcom-ec.rst
+> new file mode 100644
+> index 000000000..11f9f2347
+> --- /dev/null
+> +++ b/Documentation/admin-guide/laptops/qcom-ec.rst
+> @@ -0,0 +1,40 @@
+> +.. SPDX-License-Identifier: GPL-2.0-only
+> +
+> +Kernel driver qcom-hamoa-ec
+> +==========================
+> +
+> +Supported systems:
+> +
+> +  * Lenovo Yoga Slim 7x (14Q8X9)
+> +
+> +    Prefix: 'qcom_ec'
+> +
+> +    I2C address: 0x76, instantiated from the device tree. No scanning.
+> +
+> +Description
+> +-----------
+> +
+> +The Yoga Slim 7x embedded controller provides a fan speed channel and a
+> +thermistor through a legacy interface. It does not provide the thermal
+> +capability response used by the Qualcomm reference-board interface.
+> +
+> +On this system the driver only reads sensors. Cooling remains under firmware
+> +control, including when the driver is unloaded. The driver does not change
+> +fan curves, fan profiles, PWM settings, SCI events or EC standby state.
+> +The exposed RPM channel does not establish the number of physical fans.
+> +
+> +The hwmon interface is selected by the ``lenovo,yoga-slim7x-ec`` compatible.
+> +It is not exposed on Qualcomm reference boards by this driver.
+> +
+> +Sysfs attributes
+> +----------------
+> +
+> +All attributes below are read-only.
+> +
+> +=============== ======================================================
+> +fan1_input      Fan speed in RPM. Zero is valid when the fan is stopped.
+> +temp1_input     EC thermistor temperature in millidegrees Celsius.
+> +=============== ======================================================
+> +
+> +An unavailable thermistor reading returns ``ENODATA``. A malformed fan
+
+Is this a temporary condition? If not, it should be hidden with 
+.is_visible.
+
+> +response or an incomplete bus transfer returns an error, not a zero speed.
 > diff --git a/MAINTAINERS b/MAINTAINERS
-> index c3c208602..53ad3ca48 100644
+> index 6215fcb07..c3c208602 100644
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -22442,6 +22442,7 @@ L:	linux-arm-msm@vger.kernel.org
+> @@ -22440,6 +22440,7 @@ M:	Anvesh Jain P <anvesh.p@oss.qualcomm.com>
+>  M:	Sibi Sankar <sibi.sankar@oss.qualcomm.com>
+>  L:	linux-arm-msm@vger.kernel.org
 >  S:	Maintained
->  F:	Documentation/admin-guide/laptops/qcom-ec.rst
+> +F:	Documentation/admin-guide/laptops/qcom-ec.rst
 >  F:	Documentation/devicetree/bindings/embedded-controller/qcom,hamoa-crd-ec.yaml
-> +F:	drivers/platform/arm64/qcom-hamoa-ec-test.c
 >  F:	drivers/platform/arm64/qcom-hamoa-ec.c
 >  
->  QUALCOMM HEXAGON ARCHITECTURE
 > diff --git a/drivers/platform/arm64/Kconfig b/drivers/platform/arm64/Kconfig
-> index 4f338c715..d940973be 100644
+> index e32e01b2a..4f338c715 100644
 > --- a/drivers/platform/arm64/Kconfig
 > +++ b/drivers/platform/arm64/Kconfig
-> @@ -105,4 +105,16 @@ config EC_QCOM_HAMOA
->  	  This driver supports Hamoa/Purwa/Glymur reference devices and read-only
->  	  fan speed and temperature monitoring on the Lenovo Yoga Slim 7x.
+> @@ -94,6 +94,7 @@ config EC_QCOM_HAMOA
+>  	tristate "Embedded Controller driver for Qualcomm Hamoa/Glymur reference devices"
+>  	depends on ARCH_QCOM || COMPILE_TEST
+>  	depends on I2C
+> +	depends on HWMON
+>  	depends on THERMAL || THERMAL=n
+>  	help
+>  	  Say M or Y here to enable the Embedded Controller driver for Qualcomm
+> @@ -101,6 +102,7 @@ config EC_QCOM_HAMOA
+>  	  control, temperature sensors, access to EC state changes and supports
+>  	  reporting suspend entry/exit to the EC.
 >  
-> +config EC_QCOM_HAMOA_KUNIT_TEST
-> +	bool "Tests for the Qualcomm EC driver" if !KUNIT_ALL_TESTS
-> +	depends on EC_QCOM_HAMOA && KUNIT && OF
-> +	depends on EC_QCOM_HAMOA=m || KUNIT=y
-> +	default KUNIT_ALL_TESTS
-> +	help
-> +	  Test the Qualcomm EC driver's sensor transactions and read-only
-> +	  callbacks using a simulated I2C adapter. No physical EC is accessed.
-> +	  Run these tests in a disposable test kernel, for example under QEMU.
-> +
-> +	  If unsure, say N.
-> +
+> -	  This driver currently supports Hamoa/Purwa/Glymur reference devices.
+> +	  This driver supports Hamoa/Purwa/Glymur reference devices and read-only
+> +	  fan speed and temperature monitoring on the Lenovo Yoga Slim 7x.
+>  
 >  endif # ARM64_PLATFORM_DEVICES
-> diff --git a/drivers/platform/arm64/qcom-hamoa-ec-test.c b/drivers/platform/arm64/qcom-hamoa-ec-test.c
-> new file mode 100644
-> index 000000000..68868ef76
-> --- /dev/null
-> +++ b/drivers/platform/arm64/qcom-hamoa-ec-test.c
-> @@ -0,0 +1,294 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* Included by qcom-hamoa-ec.c to test its private transport and callbacks. */
-> +
-> +#include <kunit/resource.h>
-> +#include <kunit/test.h>
-> +#include <linux/of.h>
-> +
-> +struct qcom_ec_test_context {
-> +	struct i2c_adapter adapter;
-> +	struct qcom_ec ec;
-> +	u32 functionality;
-> +	int transfer_result;
-> +	int byte_result;
-> +	u8 reply[4];
-> +	u8 block_length;
-> +	unsigned int transactions;
-> +	unsigned int writes;
+> diff --git a/drivers/platform/arm64/qcom-hamoa-ec.c b/drivers/platform/arm64/qcom-hamoa-ec.c
+> index 4d2ad042a..3a4ca8a0d 100644
+> --- a/drivers/platform/arm64/qcom-hamoa-ec.c
+> +++ b/drivers/platform/arm64/qcom-hamoa-ec.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/device.h>
+>  #include <linux/dev_printk.h>
+>  #include <linux/err.h>
+> +#include <linux/hwmon.h>
+>  #include <linux/i2c.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/kernel.h>
+> @@ -16,10 +17,13 @@
+>  #include <linux/pm.h>
+>  #include <linux/slab.h>
+>  #include <linux/thermal.h>
+> +#include <linux/unaligned.h>
+>  
+>  #define EC_SCI_EVT_READ_CMD	0x05
+>  #define EC_FW_VERSION_CMD	0x0e
+> +#define EC_FAN_RPM_QUERY_CMD	0x22
+>  #define EC_MODERN_STANDBY_CMD	0x23
+> +#define EC_THERMISTOR1_CMD	0x29
+>  #define EC_FAN_DBG_CONTROL_CMD	0x30
+>  #define EC_SCI_EVT_CONTROL_CMD	0x35
+>  #define EC_THERMAL_CAP_CMD	0x42
+> @@ -76,13 +80,126 @@ struct qcom_ec_cooling_dev {
+>  	u8 state;
+>  };
+>  
+> +struct qcom_ec_variant {
+> +	bool monitor_only;
 > +};
 > +
-> +static int qcom_ec_test_transfer(struct i2c_adapter *adapter,
-> +				 struct i2c_msg *messages, int count)
+>  struct qcom_ec {
+> +	const struct qcom_ec_variant *variant;
+>  	struct qcom_ec_cooling_dev *ec_cdev;
+>  	struct qcom_ec_thermal_cap thermal_cap;
+>  	struct qcom_ec_version version;
+>  	struct i2c_client *client;
+>  };
+>  
+> +/* FC22 in the Slim 7x DSDT: command, fan ID; count, little-endian RPM. */
+> +static int qcom_ec_read_fan_rpm(struct qcom_ec *ec, long *val)
 > +{
-> +	struct qcom_ec_test_context *ctx = i2c_get_adapdata(adapter);
-> +
-> +	ctx->transactions++;
-> +	/* Only the RPM query's combined write/read transaction is allowed. */
-> +	if (count != 2 || messages[0].addr != 0x76 || messages[1].addr != 0x76 ||
-> +	    messages[0].flags || messages[1].flags != I2C_M_RD ||
-> +	    messages[0].len != 2 || messages[1].len != 3 ||
-> +	    messages[0].buf[0] != 0x22 || messages[0].buf[1] != 1) {
-
-Why are you using literals for things that are named on the driver side 
-(e.g. that 0x22)?
-
--- 
- i.
-
-> +		ctx->writes++;
-> +		return -EPROTO;
-> +	}
-> +
-> +	if (ctx->transfer_result == 2)
-> +		memcpy(messages[1].buf, ctx->reply, messages[1].len);
-> +
-> +	return ctx->transfer_result;
-> +}
-> +
-> +static s32 qcom_ec_test_smbus(struct i2c_adapter *adapter, u16 address,
-> +			      unsigned short flags, char read_write, u8 command,
-> +			      int size, union i2c_smbus_data *data)
-> +{
-> +	struct qcom_ec_test_context *ctx = i2c_get_adapdata(adapter);
-> +
-> +	ctx->transactions++;
-> +	if (read_write != I2C_SMBUS_READ) {
-> +		ctx->writes++;
-> +		return -EPROTO;
-> +	}
-> +	if (address != 0x76 || flags)
-> +		return -EPROTO;
-> +
-> +	if (command == 0x29 && size == I2C_SMBUS_BYTE_DATA) {
-> +		if (ctx->byte_result < 0)
-> +			return ctx->byte_result;
-> +		data->byte = ctx->byte_result;
-> +		return 0;
-> +	}
-> +
-> +	if ((command == 0x0e || command == 0x42) && size == I2C_SMBUS_I2C_BLOCK_DATA) {
-> +		data->block[0] = ctx->block_length;
-> +		memcpy(&data->block[1], ctx->reply, ctx->block_length);
-> +		return 0;
-> +	}
-> +
-> +	return -EPROTO;
-> +}
-> +
-> +static u32 qcom_ec_test_functionality(struct i2c_adapter *adapter)
-> +{
-> +	struct qcom_ec_test_context *ctx = i2c_get_adapdata(adapter);
-> +
-> +	return ctx->functionality;
-> +}
-> +
-> +static const struct i2c_algorithm qcom_ec_test_algorithm = {
-> +	.master_xfer = qcom_ec_test_transfer,
-> +	.smbus_xfer = qcom_ec_test_smbus,
-> +	.functionality = qcom_ec_test_functionality,
-> +};
-> +
-> +static void qcom_ec_test_delete_adapter(void *data)
-> +{
-> +	i2c_del_adapter(data);
-> +}
-> +
-> +static void qcom_ec_test_unregister_client(void *data)
-> +{
-> +	i2c_unregister_device(data);
-> +}
-> +
-> +static int qcom_ec_test_init(struct kunit *test)
-> +{
-> +	struct qcom_ec_test_context *ctx;
+> +	struct i2c_client *client = ec->client;
+> +	u8 request[] = { EC_FAN_RPM_QUERY_CMD, 1 };
+> +	u8 response[3];
+> +	struct i2c_msg messages[] = {
+> +		{
+> +			.addr = client->addr,
+> +			.len = sizeof(request),
+> +			.buf = request,
+> +		}, {
+> +			.addr = client->addr,
+> +			.flags = I2C_M_RD,
+> +			.len = sizeof(response),
+> +			.buf = response,
+> +		},
+> +	};
 > +	int ret;
 > +
-> +	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
-> +	KUNIT_ASSERT_NOT_NULL(test, ctx);
-> +	test->priv = ctx;
-> +	ctx->functionality = I2C_FUNC_I2C | I2C_FUNC_SMBUS_READ_BYTE_DATA |
-> +			     I2C_FUNC_SMBUS_READ_I2C_BLOCK;
-> +	ctx->transfer_result = 2;
-> +	ctx->reply[0] = 2;
-> +	ctx->byte_result = 36;
-> +	ctx->adapter.owner = THIS_MODULE;
-> +	ctx->adapter.algo = &qcom_ec_test_algorithm;
-> +	strscpy(ctx->adapter.name, "qcom-ec-kunit", sizeof(ctx->adapter.name));
-> +	i2c_set_adapdata(&ctx->adapter, ctx);
-> +	ret = i2c_add_adapter(&ctx->adapter);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +	ret = kunit_add_action_or_reset(test, qcom_ec_test_delete_adapter, &ctx->adapter);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +	ret = i2c_transfer(client->adapter, messages, ARRAY_SIZE(messages));
+> +	if (ret < 0)
+> +		return ret;
+> +	if (ret != ARRAY_SIZE(messages))
+
+Add include.
+
+> +		return -EIO;
+> +	if (response[0] != sizeof(response) - 1)
+> +		return -EPROTO;
 > +
-> +	ctx->ec.client = i2c_new_dummy_device(&ctx->adapter, 0x76);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->ec.client);
-> +	ret = kunit_add_action_or_reset(test, qcom_ec_test_unregister_client, ctx->ec.client);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +	ctx->ec.variant = &qcom_ec_slim7x;
-> +	i2c_set_clientdata(ctx->ec.client, &ctx->ec);
+> +	*val = get_unaligned_le16(&response[1]);
+
+Please use proper endianness type. I think the way you currently do this 
+would also trigger a warning in sparse's endianness checking.
+
 > +
 > +	return 0;
 > +}
 > +
-> +static void qcom_ec_rpm_test(struct kunit *test)
+> +static umode_t qcom_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
+> +					u32 attr, int channel)
 > +{
-> +	struct qcom_ec_test_context *ctx = test->priv;
-> +	static const struct {
-> +		int transfer_result;
-> +		u8 count;
-> +		int error;
-> +	} failures[] = {
-> +		{ 0, 2, -EIO },
-> +		{ 1, 2, -EIO },
-> +		{ -EREMOTEIO, 2, -EREMOTEIO },
-> +		{ -ETIMEDOUT, 2, -ETIMEDOUT },
-> +		{ 2, 0, -EPROTO },
-> +		{ 2, 1, -EPROTO },
-> +		{ 2, 3, -EPROTO },
-> +		{ 2, 0xff, -EPROTO },
-> +	};
-> +	long value = -1;
-> +	int i;
+> +	if (channel)
+> +		return 0;
+> +	if ((type == hwmon_fan && attr == hwmon_fan_input) ||
+> +	    (type == hwmon_temp && attr == hwmon_temp_input))
+> +		return 0444;
 > +
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_read_fan_rpm(&ctx->ec, &value), 0);
-> +	KUNIT_EXPECT_EQ(test, value, 0);
-> +	ctx->reply[1] = 0xef;
-> +	ctx->reply[2] = 0xbe;
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_read_fan_rpm(&ctx->ec, &value), 0);
-> +	KUNIT_EXPECT_EQ(test, value, 0xbeef);
-> +
-> +	for (i = 0; i < ARRAY_SIZE(failures); i++) {
-> +		value = -1;
-> +		ctx->transfer_result = failures[i].transfer_result;
-> +		ctx->reply[0] = failures[i].count;
-> +		KUNIT_EXPECT_EQ_MSG(test, qcom_ec_read_fan_rpm(&ctx->ec, &value),
-> +				    failures[i].error, "case %d", i);
-> +		KUNIT_EXPECT_EQ(test, value, -1);
-> +	}
-> +	KUNIT_EXPECT_EQ(test, ctx->writes, 0);
+> +	return 0;
 > +}
 > +
-> +static void qcom_ec_temperature_test(struct kunit *test)
+> +static int qcom_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+> +			      u32 attr, int channel, long *val)
 > +{
-> +	struct qcom_ec_test_context *ctx = test->priv;
-> +	static const int temperatures[] = { 0, 36, 254, 255, -EREMOTEIO };
-> +	long value;
-> +	int i, ret;
+> +	struct qcom_ec *ec = dev_get_drvdata(dev);
+> +	int ret;
 > +
-> +	for (i = 0; i < ARRAY_SIZE(temperatures); i++) {
-> +		value = -1;
-> +		ctx->byte_result = temperatures[i];
-> +		ret = qcom_ec_hwmon_read(&ctx->ec.client->dev, hwmon_temp,
-> +					 hwmon_temp_input, 0, &value);
-> +		if (temperatures[i] < 0) {
-> +			KUNIT_EXPECT_EQ(test, ret, temperatures[i]);
-> +			KUNIT_EXPECT_EQ(test, value, -1);
-> +		} else if (temperatures[i] == 255) {
-> +			KUNIT_EXPECT_EQ(test, ret, -ENODATA);
-> +			KUNIT_EXPECT_EQ(test, value, -1);
-> +		} else {
-> +			KUNIT_EXPECT_EQ(test, ret, 0);
-> +			KUNIT_EXPECT_EQ(test, value, temperatures[i] * 1000);
-> +		}
-> +	}
-> +	KUNIT_EXPECT_EQ(test, ctx->writes, 0);
+> +	if (channel)
+> +		return -EOPNOTSUPP;
+> +
+> +	if (type == hwmon_fan && attr == hwmon_fan_input)
+> +		return qcom_ec_read_fan_rpm(ec, val);
+> +
+> +	if (type != hwmon_temp || attr != hwmon_temp_input)
+> +		return -EOPNOTSUPP;
+> +
+> +	/* FC29/TZ39 report degrees Celsius, or 0xff if unavailable. */
+> +	ret = i2c_smbus_read_byte_data(ec->client, EC_THERMISTOR1_CMD);
+> +	if (ret < 0)
+> +		return ret;
+> +	if (ret == 0xff)
+> +		return -ENODATA;
+> +
+> +	*val = ret * 1000;
+
+You can probably replace that 1000 with a define from units.h. Don't 
+forget to add also the include if you use something from there.
+
+> +
+> +	return 0;
 > +}
 > +
-> +static void qcom_ec_read_only_test(struct kunit *test)
-> +{
-> +	struct qcom_ec_test_context *ctx = test->priv;
-> +	struct device *dev = &ctx->ec.client->dev;
-> +	long value = -1;
-> +
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_hwmon_is_visible(NULL, hwmon_fan, hwmon_fan_input, 0),
-> +			0444);
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_hwmon_is_visible(NULL, hwmon_temp, hwmon_temp_input, 0),
-> +			0444);
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_hwmon_is_visible(NULL, hwmon_fan, hwmon_fan_input, 1), 0);
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_hwmon_is_visible(NULL, hwmon_pwm, hwmon_pwm_input, 0), 0);
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_hwmon_read(dev, hwmon_fan, hwmon_fan_input, 1, &value),
-> +			-EOPNOTSUPP);
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_hwmon_read(dev, hwmon_pwm, hwmon_pwm_input, 0, &value),
-> +			-EOPNOTSUPP);
-> +	KUNIT_EXPECT_EQ(test, value, -1);
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_suspend(dev), 0);
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_resume(dev), 0);
-> +	qcom_ec_remove(ctx->ec.client);
-> +	KUNIT_EXPECT_EQ(test, ctx->transactions, 0);
-> +}
-> +
-> +static void qcom_ec_probe_transport_test(struct kunit *test)
-> +{
-> +	struct qcom_ec_test_context *ctx = test->priv;
-> +
-> +	ctx->functionality = I2C_FUNC_I2C;
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_hwmon_probe(&ctx->ec), -EOPNOTSUPP);
-> +	ctx->functionality = I2C_FUNC_SMBUS_READ_BYTE_DATA;
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_hwmon_probe(&ctx->ec), -EOPNOTSUPP);
-> +	KUNIT_EXPECT_EQ(test, ctx->transactions, 0);
-> +}
-> +
-> +static void qcom_ec_probe_sensor_test(struct kunit *test)
-> +{
-> +	struct qcom_ec_test_context *ctx = test->priv;
-> +
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_hwmon_probe(&ctx->ec), 0);
-> +	KUNIT_EXPECT_EQ(test, ctx->transactions, 1);
-> +	KUNIT_EXPECT_EQ(test, ctx->writes, 0);
-> +	ctx->reply[0] = 0;
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_hwmon_probe(&ctx->ec), -EPROTO);
-> +	KUNIT_EXPECT_EQ(test, ctx->writes, 0);
-> +}
-> +
-> +static void qcom_ec_reference_validation_test(struct kunit *test)
-> +{
-> +	struct qcom_ec_test_context *ctx = test->priv;
-> +	u8 response[3];
-> +
-> +	ctx->block_length = 3;
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_read(&ctx->ec, EC_THERMAL_CAP_CMD, 3, response), 0);
-> +	ctx->block_length = 2;
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_read(&ctx->ec, EC_THERMAL_CAP_CMD, 3, response), -EIO);
-> +	ctx->block_length = 0;
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_read(&ctx->ec, EC_THERMAL_CAP_CMD, 3, response),
-> +			-EOPNOTSUPP);
-> +	ctx->block_length = 3;
-> +	ctx->reply[0] = 0;
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_read(&ctx->ec, EC_THERMAL_CAP_CMD, 3, response), -EINVAL);
-> +	ctx->reply[0] = 1;
-> +	KUNIT_EXPECT_EQ(test, qcom_ec_read(&ctx->ec, EC_THERMAL_CAP_CMD, 3, response), -EINVAL);
-> +	KUNIT_EXPECT_EQ(test, ctx->writes, 0);
-> +}
-> +
-> +static void qcom_ec_variant_test(struct kunit *test)
-> +{
-> +	static const char compatible[] = "lenovo,yoga-slim7x-ec\0qcom,hamoa-crd-ec";
-> +	struct property property = {
-> +		.name = "compatible",
-> +		.length = sizeof(compatible),
-> +		.value = (void *)compatible,
-> +	};
-> +	struct device_node node = { .properties = &property };
-> +	const struct of_device_id *match;
-> +
-> +	match = of_match_node(qcom_ec_of_match, &node);
-> +	KUNIT_ASSERT_NOT_NULL(test, match);
-> +	KUNIT_EXPECT_PTR_EQ(test, match->data, &qcom_ec_slim7x);
-> +	property.value = "qcom,hamoa-crd-ec";
-> +	property.length = sizeof("qcom,hamoa-crd-ec");
-> +	match = of_match_node(qcom_ec_of_match, &node);
-> +	KUNIT_ASSERT_NOT_NULL(test, match);
-> +	KUNIT_EXPECT_PTR_EQ(test, match->data, &qcom_ec_reference);
-> +}
-> +
-> +static struct kunit_case qcom_ec_test_cases[] = {
-> +	KUNIT_CASE(qcom_ec_rpm_test),
-> +	KUNIT_CASE(qcom_ec_temperature_test),
-> +	KUNIT_CASE(qcom_ec_read_only_test),
-> +	KUNIT_CASE(qcom_ec_probe_transport_test),
-> +	KUNIT_CASE(qcom_ec_probe_sensor_test),
-> +	KUNIT_CASE(qcom_ec_reference_validation_test),
-> +	KUNIT_CASE(qcom_ec_variant_test),
-> +	{}
+> +static const struct hwmon_ops qcom_ec_hwmon_ops = {
+> +	.is_visible = qcom_ec_hwmon_is_visible,
+> +	.read = qcom_ec_hwmon_read,
 > +};
 > +
-> +static struct kunit_suite qcom_ec_test_suite = {
-> +	.name = "qcom-hamoa-ec",
-> +	.init = qcom_ec_test_init,
-> +	.test_cases = qcom_ec_test_cases,
+> +static const struct hwmon_channel_info * const qcom_ec_hwmon_info[] = {
+> +	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT),
+> +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
+> +	NULL,
 > +};
 > +
-> +kunit_test_suite(qcom_ec_test_suite);
-> diff --git a/drivers/platform/arm64/qcom-hamoa-ec.c b/drivers/platform/arm64/qcom-hamoa-ec.c
-> index 3a4ca8a0d..043f6ab7e 100644
-> --- a/drivers/platform/arm64/qcom-hamoa-ec.c
-> +++ b/drivers/platform/arm64/qcom-hamoa-ec.c
-> @@ -596,3 +596,7 @@ module_i2c_driver(qcom_ec_i2c_driver);
+> +static const struct hwmon_chip_info qcom_ec_hwmon_chip_info = {
+> +	.ops = &qcom_ec_hwmon_ops,
+> +	.info = qcom_ec_hwmon_info,
+> +};
+> +
+> +static int qcom_ec_hwmon_probe(struct qcom_ec *ec)
+> +{
+> +	struct device *dev = &ec->client->dev;
+> +	struct device *hwmon;
+> +	long rpm;
+> +	int ret;
+> +
+> +	if (!i2c_check_functionality(ec->client->adapter,
+> +				     I2C_FUNC_I2C | I2C_FUNC_SMBUS_READ_BYTE_DATA))
+> +		return -EOPNOTSUPP;
+> +
+> +	ret = qcom_ec_read_fan_rpm(ec, &rpm);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to read fan RPM\n");
+> +
+> +	hwmon = devm_hwmon_device_register_with_info(dev, "qcom_ec", ec,
+> +						     &qcom_ec_hwmon_chip_info, NULL);
+> +	return PTR_ERR_OR_ZERO(hwmon);
+> +}
+> +
+>  static int qcom_ec_read(struct qcom_ec *ec, u8 cmd, u8 resp_len, u8 *resp)
+>  {
+>  	int ret;
+> @@ -331,6 +448,10 @@ static const struct thermal_cooling_device_ops qcom_ec_thermal_ops = {
+>  static int qcom_ec_resume(struct device *dev)
+>  {
+>  	struct i2c_client *client = to_i2c_client(dev);
+> +	struct qcom_ec *ec = i2c_get_clientdata(client);
+> +
+> +	if (ec->variant->monitor_only)
+> +		return 0;
 >  
->  MODULE_DESCRIPTION("QCOM Hamoa Embedded Controller");
->  MODULE_LICENSE("GPL");
+>  	return i2c_smbus_write_byte_data(client, EC_MODERN_STANDBY_CMD,
+>  					 EC_MODERN_STANDBY_EXIT);
+> @@ -339,6 +460,10 @@ static int qcom_ec_resume(struct device *dev)
+>  static int qcom_ec_suspend(struct device *dev)
+>  {
+>  	struct i2c_client *client = to_i2c_client(dev);
+> +	struct qcom_ec *ec = i2c_get_clientdata(client);
 > +
-> +#if IS_ENABLED(CONFIG_EC_QCOM_HAMOA_KUNIT_TEST)
-> +#include "qcom-hamoa-ec-test.c"
-> +#endif
+> +	if (ec->variant->monitor_only)
+> +		return 0;
+>  
+>  	return i2c_smbus_write_byte_data(client, EC_MODERN_STANDBY_CMD,
+>  					 EC_MODERN_STANDBY_ENTER);
+> @@ -356,14 +481,24 @@ static int qcom_ec_probe(struct i2c_client *client)
+>  		return -ENOMEM;
+>  
+>  	ec->client = client;
+> +	ec->variant = i2c_get_match_data(client);
+> +	if (!ec->variant)
+> +		return -ENODEV;
+> +	i2c_set_clientdata(client, ec);
+> +
+> +	/*
+> +	 * The Slim 7x does not implement the reference-board capability command.
+> +	 * Its firmware controls cooling autonomously. Only expose its legacy
+> +	 * sensors; do not enable SCI, fan debug control or standby notifications.
+> +	 */
+> +	if (ec->variant->monitor_only)
+> +		return qcom_ec_hwmon_probe(ec);
+>  
+>  	ret = devm_request_threaded_irq(dev, client->irq, NULL, qcom_ec_irq,
+>  					IRQF_ONESHOT, "qcom_ec", ec);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	i2c_set_clientdata(client, ec);
+> -
+>  	ret = qcom_ec_read_fw_version(dev);
+>  	if (ret < 0)
+>  		return dev_err_probe(dev, ret, "Failed to read EC firmware version\n");
+> @@ -410,6 +545,9 @@ static void qcom_ec_remove(struct i2c_client *client)
+>  	struct device *dev = &client->dev;
+>  	int ret;
+>  
+> +	if (ec->variant->monitor_only)
+> +		return;
+> +
+>  	ret = qcom_ec_sci_evt_control(dev, false);
+>  	if (ret < 0)
+>  		dev_err(dev, "Failed to disable SCI events: %d\n", ret);
+> @@ -421,14 +559,21 @@ static void qcom_ec_remove(struct i2c_client *client)
+>  	}
+>  }
+>  
+> +static const struct qcom_ec_variant qcom_ec_reference = {};
+> +
+> +static const struct qcom_ec_variant qcom_ec_slim7x = {
+> +	.monitor_only = true,
+> +};
+> +
+>  static const struct of_device_id qcom_ec_of_match[] = {
+> -	{ .compatible = "qcom,hamoa-crd-ec" },
+> +	{ .compatible = "lenovo,yoga-slim7x-ec", .data = &qcom_ec_slim7x },
+> +	{ .compatible = "qcom,hamoa-crd-ec", .data = &qcom_ec_reference },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, qcom_ec_of_match);
+>  
+>  static const struct i2c_device_id qcom_ec_i2c_id_table[] = {
+> -	{ "qcom-hamoa-ec", },
+> +	{ "qcom-hamoa-ec", (kernel_ulong_t)&qcom_ec_reference },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(i2c, qcom_ec_i2c_id_table);
 > 
+
+-- 
+ i.
+
