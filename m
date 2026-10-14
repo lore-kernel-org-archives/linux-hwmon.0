@@ -1,143 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3849C309EEB;
-	Wed, 14 Oct 2026 23:03:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C748B488764
+	for <linux-hwmon@vger.kernel.org>; Wed, 14 Oct 2026 23:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792019011; cv=none; b=XdzAtsVp9/4emm+C8tjhVPSvYQbhqHIzEPtZpaDLjhM+joN57rYR7uvH+MFAXoDspfIZ3zX+sDuWMA4QUQK5WJTtOQqd9hJHGZn/sZ5zmrolLXMIwNEA3QIPUreAjyUyia0HZ1n8ZHgAEV5+RDtO7MEtxe/RJhQnE9X1O9U9onQ=
+	t=1792020813; cv=none; b=Wat5eotb+72P0zPx0FwT0FnNzQb3nW245RGrFXOE0I2ET2DSEbhg2LgFkHzdtZ9UseGW7ITmuXBhAxSKZibfgYfbwYCR8IkpOZ6jpdoVP90DiR3TmjTzl6RneM1Ai8iFYZXyUL84aHno+LRO5wl8pzK15pgc9xVumEtXoH4j1wE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792019011; c=relaxed/simple;
-	bh=pNN7bs+HIFLG/tBJ3Lt1YhOWWAw03qYL46p4fKQYYWI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nVOM0vk/0fRyXHDYQS9GzUsXRL02TiEp0QO4Jxk+x8qwK1ejuUXGCM2IgrQmHzJaB60YyDDRRurpnJEP7MXmT54AIpRyR/ECruGAgdjDoLaH3ZjBrpCnEpq7kHOb6XOJX+Dyc1EI8EtWhJZBC6tHdOzWWBhO2qqK7wl9nzOI/yY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i74D6Dy6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792020813; c=relaxed/simple;
+	bh=K/I5NWhUXJWrp1nXqlraN8PsJJyLvjB7tRO6oqNPmAI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=es08Og45/BsMsBVlmZGMWc2zhAZW0YyfsFlP28SFDLyv25guc85WDeqKPMP02QdBqfxK4zL+GnvmauicNPTTyVk6Mqxac2ByoGkwQY5i9AGE70g4n2JRLU59Msmwvnb2N5MGEF5XRxMJBW9vN9BgpN/EBhYu2SCZSOG/MnQTfHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YE0otQ8+; arc=none smtp.client-ip=74.125.82.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i74D6Dy6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB06D1F000C4;
-	Wed, 14 Oct 2026 23:03:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792019009;
-	bh=rFQ+xXBVw2G3dOM+1QoqfL3CKXPuv2twnZR0oxUkiFc=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=i74D6Dy6+ybz9t6qaA2NuhDDS0COBDnrGSk9g3B9Ch+vhqXXXYUyrwB/rXjAh+vGv
-	 sE+Q/+a8+fMVDo1+cuDGl6gYzOy+yBpzI0Zq1ZcuwiNVFgyfsaUsL/BB49lu2ysOKv
-	 2CkBh+OocWzHK5j6FctBg83yrd7xqarWmqkTOiR0agNEWrwuBkiP1Wj3WPbL8b7AJR
-	 Ybbviarn0d+DbOZvvdcBmCTCmuoZovw4gnjllxTg6MOa8Xckqzf2J9rWoZ7htlP3vd
-	 VINfT1Y/1jYak2IozXpvTOuEf0HVFrBICn6AVZkywkl/6KmVkFYmOxGdnxO0lsyJni
-	 F7PuAvzHT3sxw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 76B0DCE0C55; Wed, 14 Oct 2026 16:03:29 -0700 (PDT)
-Date: Wed, 14 Oct 2026 16:03:29 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: =?iso-8859-1?Q?Sebasti=E1n?= Peyrott <speyrott@gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
-	linux-hwmon@vger.kernel.org, linux-next@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (minisforum-um780xtx) Fix clamp() build failure
- with GCC 11
-Message-ID: <be58a022-4f57-4666-b573-81881de4d779@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <fda0e59f-20e1-4a94-a714-288940dcdd37@paulmck-laptop>
- <20261014214522.243253-1-speyrott@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YE0otQ8+"
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-35cd4e8bdbdso4839429eec.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Oct 2026 16:33:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792020811; x=1792625611; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Pp4bcKUtEGOnHoHIpBPONEdiUWw24ATuUwzAiK0GuAA=;
+        b=YE0otQ8+YR+aAOr7TZdlJPwCt8/AA85xw1LPmjvlkmxaako8VDjbXYeScbB1AixJM7
+         daEiE0XpuzkLnC3pms4rf0DpRHLTflZDZhbC2QhEc2N9JIZ/6l6PiCB+dwK0QK7ElR1d
+         groLWROxccx7Tsh89DuDtVXMc8pAS6FOEqX7hGi4rf0DA6uB6DpfYj1Pm4g6xtfuS0sX
+         qNzfDRXaHtQ9zXAqoZuJDykYi5PRUZkptti9CEvcaAKMpf04utW4SA1YPSeW5u6nLpeJ
+         81lc9kA4B4eE4tTExcoMedw8KszG7zFwbCgCuuWEh3SI0YJmJsNDScbCYiUQtZrYvKys
+         X0dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792020811; x=1792625611;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Pp4bcKUtEGOnHoHIpBPONEdiUWw24ATuUwzAiK0GuAA=;
+        b=im0+7RNCqNHklmBJaFC9GtaESEy4OyzN+bA2+jukdISrnBcJCDlM544hqtTh90A3DR
+         K3wOTpqfhkwXeQg/VEGqKyKeCW/X02XcoCL7KEqjVbCQibotClrz8pkccScU1wmoouY5
+         vqJpmzw/+l78rI6rMmSd9yNHWuOEtrRVUgMnfG8HcPQQ4DZJB4hK1GDQd507R0iP52at
+         nRsOULVsDCTitSfeCKC3Vg9Wq/elIxyi9eqOcaY446kZx9kjthVTtZlglIwYZMmHfqAU
+         RoIqxqjNxWWEA86j3UV1ShNZGo2phumdlz0HyhVWUoC4U4xpOu1xV1wxWjxWq46SgzbM
+         Gn9g==
+X-Forwarded-Encrypted: i=1; AKwUvBzal54etzaTG8VFZp3us7jcuHgtDlh28xR9tmiZB+5u2wx47QUsJsHIOFxNpTHb8oF1BE05nkNpVBHYNA==@vger.kernel.org
+X-Gm-Message-State: AFq9FYL61yne3B5GSu8FZ2KTpTbir3OlwN6B2CGkOSeOTlMnkrO09QzG
+	MuxLGkLdKjzhGcW7LQ4PRPW7fkaUhNdakJQu/SLFwdloS04Xw+ZGEF6L
+X-Gm-Gg: AYBFou1F0sKyJ0rEdGZhI4kt8HUGLpzKkhrkJeXdvmY8hPK4IjF3k913novZ3+wID1B
+	XpCDFdJaqUs88CYGr9RhnWHhQOVFlbnpwoLRS3tAAdbAkMtbEpKAJ7NQcpErPFVfBsH71CgZ8Od
+	umBmR920eVqdyJEHwFP7ALNCpKdx/OsQldCovaz2cJFWpmcAeH3Y0OFkq9PqaHVUOclfLoMKIBT
+	noaff/FCSHg+Yp3gpvOU1ecG62elBsFeBX2gIILYWMp28mD82kqmQ3dL00KItPcbRp/5Zm3g4aW
+	0RAlDDiVNUVmZMmJt2pspDEFpIjV7CZUoX86XFUs/iii2J8TuZKT3TS/siXKuTtwjaqXAOPOYv0
+	0Dg6zmSHyqTr8Q3SWlBQkEqzT8GJN9pufxMP3LbMMl6aZMv2IOifqH0XjWljxtypyCNbqRU9Th6
+	n7zdNYARX2kHZfa6eJebu58rP8Y4BvZdTTP9Ue+XNpQK/frpQPQLLfluGx8038UyLzrTC05UEDn
+	US5nW8C++fF1hNSbK6FVOD1YSCOdEzFE4iDwleHzZ/+/YEcPFPcHiwa
+X-Received: by 2002:a05:693c:820b:b0:35f:b0f:d15c with SMTP id 5a478bee46e88-35f0b0fd614mr877238eec.39.1792020810741;
+        Wed, 14 Oct 2026 16:33:30 -0700 (PDT)
+Received: from dev-oss-0.tail8d7c7c.ts.net (c-73-70-201-200.hsd1.ca.comcast.net. [73.70.201.200])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537c61eaa0sm62110502eec.0.2026.10.14.16.33.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2026 16:33:30 -0700 (PDT)
+From: Qian Xiao <heyheyco@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Ed Brindley <kernel@maidavale.org>,
+	Denis Pauk <pauk.denis@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Qian Xiao <heyheyco@gmail.com>
+Subject: [PATCH] hwmon: (asus_wmi_sensors) Drop misleading BIOS upgrade advice
+Date: Wed, 14 Oct 2026 16:33:18 -0700
+Message-ID: <20261014233318.34567-1-heyheyco@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261014214522.243253-1-speyrott@gmail.com>
 
-On Wed, Oct 14, 2026 at 06:45:22PM -0300, Sebastián Peyrott wrote:
-> GCC 11 fails to build the driver:
-> 
->   error: call to '__compiletime_assert_727' declared with attribute error:
->   clamp() low limit 0 greater than high limit points[1] - 1
-> 
-> The store function returns -EIO unless points[0] < points[1], so
-> points[1] - 1 cannot be negative when the clamp is reached. GCC 11 jump
-> threading, however, duplicates the clamp() limit check and does not prune
-> the copy in which points[1] is zero, so the compile-time check in clamp()
-> fires on an unreachable path. GCC 8 to 10 and 12 to 16 accept the code.
-> 
-> Select both limits first and use a single clamp_val(). This does not
-> change behavior.
-> 
-> Fixes: 9d980da93bbc ("hwmon: Add Minisforum UM780 XTX EC monitoring and fan control")
-> Reported-by: Paul E. McKenney <paulmck@kernel.org>
-> Closes: https://lore.kernel.org/r/fda0e59f-20e1-4a94-a714-288940dcdd37@paulmck-laptop
-> Assisted-by: LLM
-> Signed-off-by: Sebastián Peyrott <speyrott@gmail.com>
+The Known Issues section suggests that upgrading to a BIOS with WMI
+method version two or greater should rectify the problem. However, the
+driver refuses to bind when the BIOS reports a version below two, so
+every system using the driver already meets that condition and the
+advice does not help.
 
-Thank you!!!
+Remove the sentence. While at it, fix a typo in the preceding sentence.
 
-Tested-by: Paul E. McKenney <paulmck@kernel.org>
+Link: https://lore.kernel.org/linux-hwmon/CAFGXJCm6ZWK0NsFhZ1_ycgYtTTT3nhqj9mose60t+Rrry1aPvw@mail.gmail.com/
+Signed-off-by: Qian Xiao <heyheyco@gmail.com>
+---
+For context, the fan issue has continued to be reported with the in-tree
+driver (which implies method version >= 2), e.g.:
+https://www.reddit.com/r/archlinux/comments/tunnvb/psa_if_youre_experiencing_weird_fan_behaviour_on/
+https://forums.unraid.net/topic/131340-semi-solved-611x612x-bug-system-fans-stopped-after-a-few-hours-asus-mainboard-linux-517-driver-asus-wmi-driver-issue/
 
-Though it would be *way* better to fold this back into the original
-commit to avoid breaking bisection.
+ Documentation/hwmon/asus_wmi_sensors.rst | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-							Thanx, Paul
+diff --git a/Documentation/hwmon/asus_wmi_sensors.rst b/Documentation/hwmon/asus_wmi_sensors.rst
+index 8f2096c..f6fa66f 100644
+--- a/Documentation/hwmon/asus_wmi_sensors.rst
++++ b/Documentation/hwmon/asus_wmi_sensors.rst
+@@ -72,7 +72,5 @@ Known Issues:
+    X470 Pro seems particularly bad for this. The more frequently the WMI
+    interface is polled the greater the potential for this to happen. Until you
+    have subjected your computer to an extended soak test while polling the
+-   sensors frequently, don't leave you computer unattended. Upgrading to new
+-   BIOS version with method version greater than or equal to two should
+-   rectify the issue.
++   sensors frequently, don't leave your computer unattended.
+  * A few boards report 12v voltages to be ~10v.
+-- 
+2.53.0
 
-> ---
-> Reproduced on next-20261014 (x86_64) with GCC 11.5.0, both with
-> allmodconfig and with defconfig plus this driver; GCC 8.5, 9.5, 10.5,
-> 12.4, 13.4, 14.4, 15.3 and 16.1 build the unmodified driver. With this
-> change, the driver builds without warnings with W=1 using GCC 11, 13, 14,
-> 15 and 16 (x86_64 allmodconfig) and GCC 16 (i386 allmodconfig). A small
-> standalone reproducer of the clamp() pattern fails only with GCC 11, and
-> the patched form builds with GCC 8 through 16.
-> 
-> Tested on the UM780 XTX: the installed driver and this version produce
-> identical rounding and clamping results for both system fan thresholds,
-> with every value verified against the EC registers and the original
-> thresholds restored afterwards. Module load and unload are also clean.
-> 
-> An LLM-based coding assistant helped reproduce and analyse the failure
-> and prepare this patch. I reviewed the change and the test results.
-> 
->  drivers/hwmon/minisforum-um780xtx.c | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/hwmon/minisforum-um780xtx.c b/drivers/hwmon/minisforum-um780xtx.c
-> index f5d6e18cb651..962ebf41ffb7 100644
-> --- a/drivers/hwmon/minisforum-um780xtx.c
-> +++ b/drivers/hwmon/minisforum-um780xtx.c
-> @@ -180,7 +180,7 @@ static ssize_t um780xtx_sys_point_temp_store(struct device *dev,
->  	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
->  	u8 points[2];
->  	u8 readback;
-> -	long value;
-> +	long value, lo, hi;
->  	int ret;
->  
->  	ret = kstrtol(buf, 10, &value);
-> @@ -198,13 +198,15 @@ static ssize_t um780xtx_sys_point_temp_store(struct device *dev,
->  	if (points[0] >= points[1] || points[1] >= data->sys_point3)
->  		return -EIO;
->  
-> +	if (!sattr->index) {
-> +		lo = 0;
-> +		hi = points[1] - 1;
-> +	} else {
-> +		lo = points[0] + 1;
-> +		hi = data->sys_point3 - 1;
-> +	}
->  	value = DIV_ROUND_CLOSEST(value, 1000);
-> -	if (!sattr->index)
-> -		value = clamp_val(value, 0, points[1] - 1);
-> -	else
-> -		value = clamp_val(value, points[0] + 1,
-> -				  data->sys_point3 - 1);
-> -	points[sattr->index] = value;
-> +	points[sattr->index] = clamp_val(value, lo, hi);
->  
->  	ret = ec_write(um780xtx_sys_point_offsets[sattr->index],
->  		       points[sattr->index]);
-> 
-> base-commit: 4781ca52761e666cf18b591e6bb0478396c90320
-> -- 
-> 2.54.0
-> 
