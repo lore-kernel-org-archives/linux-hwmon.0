@@ -1,778 +1,203 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7127F4ED182;
-	Wed, 14 Oct 2026 11:32:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24B354D17B9
+	for <linux-hwmon@vger.kernel.org>; Wed, 14 Oct 2026 11:52:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791977575; cv=none; b=qedRA26q2RtgjqihfnMfa8QScSW/6ZUoPr8xABz5VFvg5e6ACCEIPg657yvV+DrL43TPtac4P+aGFfyHE9tmEEhfm/Ri7vpF8Fo82rwgJmucCHS3LSDuCoruaIqCSuLs7a/eyDihxu3fU8/C4V1N5wjghK9eFQXqs0zjiXAnzk8=
+	t=1791978757; cv=none; b=gZPj5P+a8QIYT9ahohPOATd12O+P6rZ/TRSz0sL4OS9KWD71yILUX7vNjlXW9B/g2952ApotmqSugyKIcdURX/WLPMGnSISIjBTCV2FZ3+aYy0xjEeHY0wwFkV/zzE1wd4zG+9FWfamMlrx5NflsKLyTTnFMDepu6rX3z6OTtfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791977575; c=relaxed/simple;
-	bh=JgL0ClifhWzeZw5xGNMf8jf5gMh/4PCz9dozdoKiH3o=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=pqha6HEOEJ6ZddHvZaQ/7W9Tavt/SZSoKA3oITa6o4S8IavzTPPnsNB1KC9Edys4Sq2h37cDHZ5T5V/iWT1yhRkR2yYDSBXWfhJdV4/RGRAxHJieoU6v9j0kgOPI9Y0FSgB1sgrPsl5bK8tQCTwZ1i2kMSfpp9/lEoAo3i4evBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O/j2X7c8; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1791978757; c=relaxed/simple;
+	bh=YHkNh+k1uYUdhN/GX2GoXGxLYEYQZpiM737GZ/FheL8=;
+	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID; b=O2slDvXCW1SIlrKvPMai662xgtO56NsXQVJttfQHGoHJ+m7Nya87rhCHwLPPT1Dy4gDDUg1UFtTB/Dig7oQDXw3iqYkaakQ7fJJn+dmCMr+9Z73tLXo7pyAxjt5R9fM8xO9kCXgSNU3mfgFsNs+OSL+rsktYbtE38vQ/ld78llI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20251104.gappssmtp.com header.i=@dabbelt-com.20251104.gappssmtp.com header.b=DQpj1y+p; arc=none smtp.client-ip=74.125.82.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O/j2X7c8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791977571; x=1823513571;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=JgL0ClifhWzeZw5xGNMf8jf5gMh/4PCz9dozdoKiH3o=;
-  b=O/j2X7c8//oDdJV4+qcSgTogL5u8OZ8arm+5IOeCE4Be717JfYaZDLLj
-   q7XuAcLYoKm1QCJfmlOZ8lU+ykFgq7Wf8pJXUOnxgntUfEtAcuoLciKpX
-   50mJUwmZib8aBAUgyfCZSzjQR8civ1H3pCrRUXVchnCaEWY35a7OGJHYR
-   ObC0DeUnIEIcyuoEaZGH7Ai2gYRPDRg0Uc4jsigQ4AeBVDCNJ6ANdshIt
-   KyeU7ABbtfj4vp8bEkoi8w+l4t5+ce5irNCvYaUf/zZuKniZK0BF3rJiJ
-   2JoQeinwvRP2wW5VMFYC+OQcQCY6OG5Sz3ICbeCnlMCmnus3JDYNo9GUq
-   w==;
-X-CSE-ConnectionGUID: ZEesX7Q5QkCe7G9eEgPdwg==
-X-CSE-MsgGUID: R5rYs0SrQHGt6nIJdXimXg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11934"; a="607353"
-X-IronPort-AV: E=Sophos;i="6.27,157,1787036400"; 
-   d="scan'208";a="607353"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2026 04:32:50 -0700
-X-CSE-ConnectionGUID: NtaTOkjpQFi+arNDSpBAIQ==
-X-CSE-MsgGUID: iucbEzg8QTqJUHtTHuf19A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,157,1787036400"; 
-   d="scan'208";a="1499985"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.234])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2026 04:32:45 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 14 Oct 2026 14:32:41 +0300 (EEST)
-To: Oleg Keri <okerixx@gmail.com>
-cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-    Conor Dooley <conor+dt@kernel.org>, Hans de Goede <hansg@kernel.org>, 
-    Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
-    Guenter Roeck <linux@roeck-us.net>, Bjorn Andersson <andersson@kernel.org>, 
-    Konrad Dybcio <konradybcio@kernel.org>, Abel Vesa <abelvesa@kernel.org>, 
-    linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>, platform-driver-x86@vger.kernel.org, 
-    linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v5 2/3] platform/arm64: add Lenovo Yoga Slim 7x Gen 11
- EC driver
-In-Reply-To: <20261003202143.4697-3-okerixx@gmail.com>
-Message-ID: <32061ef6-99d4-8a1f-ad4b-e413d30f261f@linux.intel.com>
-References: <20261003202143.4697-1-okerixx@gmail.com> <20261003202143.4697-3-okerixx@gmail.com>
+	dkim=pass (2048-bit key) header.d=dabbelt-com.20251104.gappssmtp.com header.i=@dabbelt-com.20251104.gappssmtp.com header.b="DQpj1y+p"
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-33fb4680717so2461706eec.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Oct 2026 04:52:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20251104.gappssmtp.com; s=20251104; t=1791978751; x=1792583551; darn=vger.kernel.org;
+        h=message-id:to:from:cc:in-reply-to:subject:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=yAV+C6S/vBnhLrjCXwEiKS2AZjZdz8SQL6UJRh8bA3A=;
+        b=DQpj1y+p/3qiq+sSYYq3iG1cWsbOzkkIFXpXJ69W3Gh50mQXMi/VCWgRjrKenRKNYz
+         kiJz6VW6YH5NboubWsWsM1aNKAHEdY1R1sTiNox+jJLHk2Dr4pKYtq5x42jKpV/aREwk
+         8wA+1qOMBV9GIjW5gHOq4pniYD5yjCYH6YdDay651Hswkh1CBYEztWVEmqTu62b2wGli
+         taZSO0Z957GRIS/wSnU4Oqt2eyAIYdBmE0B/pxvfXpbagr25QlRPMy0X/mgJ4qegN2wb
+         rUJEowdYUeIHxy6BhhLI6e6F7u4j293jJtNJEfOWk+kqnnFpU9PxlTQiDvPOXyXj1Olw
+         OoUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791978751; x=1792583551;
+        h=message-id:to:from:cc:in-reply-to:subject:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=yAV+C6S/vBnhLrjCXwEiKS2AZjZdz8SQL6UJRh8bA3A=;
+        b=mroXPwL41Xf0nuiq62eHvURKIQ5FFegwaCFfV9remM2hobYD9v8AyAEcGEfLjSBYJj
+         Y2JZ/bDb+XwCR1q+BawAYVV7EztY3CL3iimIfQ+Ee2FtjJN/i2Jil35Z40yP9pe0jEx5
+         1K1WAWr4vn8nrZoc4uwLVLyHsM2LsJIf8cth7Smina0ngH2WKPy2yf5ZMpZrz+f1yOaH
+         KU2EbPSCT+JCWCz0GVb7BiDDX3BlewwevvHQh0aoSrDWUH6rDYb65xZ2dCImTCXF6LyX
+         fPEF7P6FK8pi++usGlczOfBlAml+foWUxssl2xn6jt08TliXCTJf+ymsQIa7fyHJ+NDS
+         nk+g==
+X-Forwarded-Encrypted: i=1; AKwUvBwbOrU923y0fuJskWkSsUVmMftWbGewI9zpF2qW9N1/64FpgXdTLw4RiLfgXGi7qhxcFDxBKYQL5+B7Ag==@vger.kernel.org
+X-Gm-Message-State: AFq9FYL+/u09DNfWrib7d7WBA4ZvqCRFA4lhJdwNsiOtfQaQQbRpcdMB
+	PNqhHAZjIeWpsQOdTEe7EVU2TeSRr71hk8xkSi8YB2470EsRTlIv0JD41/Hp1NhuoJs=
+X-Gm-Gg: AYBFou19wFcbpnKiVCitkQKIPNRhojIUa5EFGxH6pbuR3jB1OV/ioc2gJ5QdbsxZt7D
+	BqyriP92SrlyDJzzxdC8cdGPYCGfjXpca/8C5QYR790kcPcTdBTaXHahvD0VTbCqHKD4BXwZqhZ
+	q9cV58jPDg7VvgEWo5dfkF3B2HFI1ujmxRnGXTG4O4tQMl0AV2zca+FO15eA6dSHKk9XKpqDTNs
+	fNWXWLjIPdEun3x9d1OP/z42emfT0HyWZeYrpP5oAMDkzt6RXBqaEwZn/bCwLa1a2nGXDfXqg6W
+	u9gZA7WhYzTXflUCiEw82gS20ZaLIzZMWUSXPTH58rLkBNyx0KCv/Fwit3v8JPNsdSLdrfTvxYK
+	CITW4JKW9Er/0e8nwnnFV7BfhpdPEeTX8ll6eAQSqd29bXabdyp7ivwQLTIFwBxxCe3nwTUWKz0
+	NUjEcMvS+B7MTpkX0hpMnnGP5TPbjrbY9bMdfXhOMyznBiOA6GWIW33OwBSHBM9ZBiI1nDdgjwM
+	JMkAzipHlckUA7xWpbyQYdzlcojaCBI+ghXq4LL
+X-Received: by 2002:a05:693c:810e:b0:359:861:7cbd with SMTP id 5a478bee46e88-35908617e44mr16791919eec.10.1791978750686;
+        Wed, 14 Oct 2026 04:52:30 -0700 (PDT)
+Received: from localhost ([2001:5a8:4687:d600:c5e7:8e91:8246:979c])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-35c89429484sm15935072eec.23.2026.10.14.04.52.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2026 04:52:29 -0700 (PDT)
+Date: Wed, 14 Oct 2026 04:52:29 -0700 (PDT)
+X-Google-Original-Date: Wed, 14 Oct 2026 04:52:25 PDT (-0700)
+Subject:     Re: [RFC PATCH] firmware: scmi: Make SCMI arch independent
+In-Reply-To: <20260710-romantic-dashing-gecko-e31a98@sudeepholla>
+CC: michal.simek@amd.com, cristian.marussi@arm.com, sudeep.holla@kernel.org,
+  linux-kernel@vger.kernel.org, monstr@monstr.eu, git@amd.com, vincent.guittot@linaro.org,
+  Souvik.Chakravarty@arm.com, alexs@kernel.org, andy@kernel.org, brgl@kernel.org, bmasney@redhat.com,
+  dlechner@baylibre.com, dzm91@hust.edu.cn, festevam@gmail.com, Frank.Li@nxp.com, linux@roeck-us.net,
+  jic23@kernel.org, corbet@lwn.net, lenb@kernel.org, lgirdwood@gmail.com, linusw@kernel.org,
+  lukasz.luba@arm.com, broonie@kernel.org, mturquette@baylibre.com, nuno.sa@analog.com,
+  pavel@kernel.org, peng.fan@nxp.com, kernel@pengutronix.de, p.zabel@pengutronix.de,
+  rafael@kernel.org, s.hauer@pengutronix.de, skhan@linuxfoundation.org, sboyd@kernel.org,
+  ulfh@kernel.org, viresh.kumar@linaro.org, si.yanteng@linux.dev, arm-scmi@vger.kernel.org,
+  imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+  linux-doc@vger.kernel.org, linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+  linux-iio@vger.kernel.org, linux-pm@vger.kernel.org
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: sudeep.holla@kernel.org
+Message-ID: <mhng-8AE63289-05A8-49D5-B38A-F5AA1D56C2E8@Palmers-Mini.rwc.dabbelt.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 
-On Sat, 3 Oct 2026, Oleg Keri wrote:
+On Fri, 10 Jul 2026 01:59:04 PDT (-0700), sudeep.holla@kernel.org wrote:
+> On Fri, Jul 10, 2026 at 10:46:15AM +0200, Michal Simek wrote:
+>>
+>>
+>> On 7/10/26 10:38, Sudeep Holla wrote:
+>> > On Fri, Jul 10, 2026 at 09:42:09AM +0200, Michal Simek wrote:
+>> > >
+>> > >
+>> > > On 7/10/26 09:35, Sudeep Holla wrote:
+>> > > > On Fri, Jul 10, 2026 at 09:03:32AM +0200, Michal Simek wrote:
+>> > > > >
+>> > > > >
+>> > > > > On 7/9/26 17:56, Cristian Marussi wrote:
+>> > > > > > On Thu, Jul 09, 2026 at 03:27:00PM +0200, Michal Simek wrote:
+>> > > > > > > On heterogenious systems like AMD/Xilinx FPGA there is a need to talk to
+>> > > > > > > SCMI server from different architectures than ARM that's why remove
+>> > > > > > > ARM/ARM64 Kconfig dependency with also remove ARM from description and
+>> > > > > > > rename folder to reflect it.
+>> > > > > >
+>> > > > > > While I understand dropping the dependency on ARM (I always wanted to do
+>> > > > > > that and test if it worked at all on some otehr archs with QEMU), I am
+>> > > > > > not sure about the whole renaming party ? why is needed just for
+>> > > > > > cosmetic reasons ? it is at the end an arm originated protocol so I dont
+>> > > > > > see it as a being wrong to be named as such even though used by other
+>> > > > > > archs...I have not really strong opinion on this...
+>> > > > >
+>> > > > > I have been in CC on U-Boot RPMI patches which got to my attention because
+>> > > > > I don't want to have another interface for MB-V(riscv-) running in
+>> > > > > programmable logic and have another server in the system doing the same
+>> > > > > thing.
+>> > > > >
+>> > > >
+>> > > > Ah that's interesting. I wasn't aware of that. I still agree with the move
+>> > > > in principle, but how does that align with these:
+>> > > >
+>> > > > drivers/clk/clk-rpmi.c
+>> > > > drivers/irqchip/irq-riscv-rpmi-sysmsi.c
+>> > > > include/linux/mailbox/riscv-rpmi-message.h
+>> > > > drivers/mailbox/riscv-sbi-mpxy-mbox.c(Should be fine as it is just transport)
+>> > >
+>> > > I am having separate discussion on u-boot mailing list about RPMI and it's
+>> > > usage on non riscv architectures because one raised argument was that it is
+>> > > community driver spec compare to SCMI which is owned by ARM. But IMHO only
+>> > > for riscv.
+>> > >
+>> >
+>> > IIRC in LPC 2024, we did discuss opening up SCMI so that RISCV could use it as
+>> > is instead of copying quite a lot from SCMI for RPMI in some closed groups.
+>> >
+>> > Here is the summary we got from couple of RISC-V vendors at the time:
+>> > "
+>> > RPMI is comparable to Arm SCMI, but it includes RISC-V-specific services such
+>> > as HART State Management, CPPC, Management Mode, and RAS Agent. The SBI MPXY
+>> > extension enables secure and non-secure system partitions to exchange RPMI
+>> > messages, allows an M-mode RPMI transport to be shared with S-mode, and lets
+>> > hypervisors virtualize RPMI for guests or VMs.
+>> >
+>> > RPMI development is already well advanced, with much of the client-driver work
+>> > implemented in OpenSBI. Supervisor software can access selected RPMI services
+>> > through SBI MPXY. A permissively licensed reference implementation, librpmi,
+>> > is also available for platform vendors.
+>> >
+>> > RPMI was created after evaluating Arm SCMI, mainly to support RISC-V-specific
+>> > requirements.
+>> > "
+>> >
+>> > I didn't pursue it any further following some of these followup discussions
+>> > post LPC 2024.
+>>
+>> interesting. It looks like that they even didn't try to ARM about it.
+>>
+>> >
+>> > > >
+>> > > > Now I feel we need some alignment before making $subject move.
+>> > > >
+>> > > > > Based on that we had discussed about it with Vincent and Souvik (we missed
+>> > > > > you there) about using SCMI on non ARM platform and both of them didn't see
+>> > > > > the concern to be marked as ARM only protocol.
+>> > > > > Truth is that some of protocols have ARM in description, file names, etc but
+>> > > > > some of them not. That's why I think it is good time to sync it up and
+>> > > > > enable
+>> > > > > running this protocol on other SOCs.
+>> > > > >
+>> > > > > > ... my concern really is ... wont this full scale rename simply generate
+>> > > > > > a lot of un-needed churn for future fixes and/or backporting ?
+>> > > > > I don't think it is going to be a big problem because it is just git mv
+>> > > > > which git is able to gracefully handle.
+>> > > > >
+>> > > >
+>> > > > Otherwise it may end up being unnecessary churn though I completely agree
+>> > > > with the git/backporting aspects. Just don't want to churn things up until
+>> > > > we have some plan and further changes/users of this move.
+>> > >
+>> > > As I wrote above AMD/Xilinx platform with SCMI server where ARM RPU/APUs
+>> > > (with multiple VMs) and Microblaze-V in programmable logic acting as
+>> > > separate agents is going to be the first user. And for being able to run
+>> > > SCMI on Linux running on Microblaze-V I need enable SCMI on non ARM
+>> > > architecture.
+>> > >
+>> >
+>> > Ah OK, if the plan is to just use SCMI as is and having "ARM/arm" name is
+>> > a blocker, then sure we can get that done. Hope you are aware of and already
+>> > considered some of the RISC-V specifics listed above and ruled out any of
+>> > those as concerns to use SCMI on RISC-V platforms.
+>>
+>> I know that we can't maintain SCMI and RPMI servers running on the same chip
+>> doing the same things. We don't have space for it and make no sense to
+>> duplicate testing on it too.
+>>
+>
+> That is very valid and compelling reason to re-use and agree with your
+> assessment. If you can make it work, go for it 😉.
 
-> The Lenovo Yoga Slim 7x Gen 11 (Qualcomm glymur / Snapdragon X2 Elite)
-> carries a Compal EF06 embedded controller on I2C at address 0x70. The
-> platform firmware describes it as an ACPI GenericSerialBus region, but the
-> machine boots from device tree, so nothing otherwise talks to it.
-> 
-> Commands are exchanged with two raw I2C block transfers: a 7 byte write to
-> register 0x02 carrying the command and up to six arguments, then a 6 byte
-> read of register 0x01 for the result, with a short delay in between before
-> the result register is valid. The EC offers no way to match a result to
-> its command; the delay is the one the vendor ACPI code uses.
-> 
-> Expose what the EC offers that the rest of the kernel does not already
-> provide:
-> 
->   - five board thermistors as hwmon temperature channels. These are
->     charger, CPU voltage regulator, 5 V rail and ambient sensors, not die
->     sensors, and read considerably cooler than tsens
->   - CPU fan speed in RPM
->   - the keyboard backlight as an LED, off/low/high
->   - Fn-lock as a read/write sysfs attribute, matching the ideapad-laptop
->     interface. The EC reports Fn+Esc as an event but keeps no state of its
->     own, so the driver owns the bit and toggles it on the key
->   - the mic-mute and airplane-mode keys as KEY_MICMUTE and KEY_RFKILL.
->     These reach the host only as EC events; they are not on the keyboard's
->     HID interface and have no GPIO of their own
-> 
-> The EC signals pending events on a dedicated line, and keeps pulsing it
-> until they are read - so the queue must be drained completely on every
-> interrupt, including codes this driver ignores. Leaving one behind makes
-> the controller pulse indefinitely.
-> 
-> Fan speed is reported but not controlled. The EC accepts a manual setpoint,
-> however it enforces no thermal floor over it: with the fan pinned at
-> roughly 2000 RPM under full load the SoC rose from 69 to 91 degrees in 30
-> seconds without the EC ever overriding. Exposing pwm1_enable or fan1_target
-> would therefore let userspace overheat the machine, so neither is
-> implemented.
-> 
-> Note this is the Gen 11 machine specifically. Its EC differs from the
-> Qualcomm reference EC that the reference designs place at address 0x76,
-> which is not populated here, and so EC_QCOM_HAMOA does not drive it.
-> 
-> Signed-off-by: Oleg Keri <okerixx@gmail.com>
+Ya, it'd be great if we could stop duplicating specs in RISC-V land, 
+it's just a big time sink.  So
 
-Hi,
+Acked-by: Palmer Dabbelt <palmer@dabbelt.com>
 
-A few style nits below.
-
-> ---
->  .../sysfs-driver-lenovo-yoga-slim7x-gen11-ec  |  22 +
->  drivers/platform/arm64/Kconfig                |  23 +
->  drivers/platform/arm64/Makefile               |   1 +
->  .../arm64/lenovo-yoga-slim7x-gen11-ec.c       | 547 ++++++++++++++++++
->  4 files changed, 593 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-driver-lenovo-yoga-slim7x-gen11-ec
->  create mode 100644 drivers/platform/arm64/lenovo-yoga-slim7x-gen11-ec.c
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-lenovo-yoga-slim7x-gen11-ec b/Documentation/ABI/testing/sysfs-driver-lenovo-yoga-slim7x-gen11-ec
-> new file mode 100644
-> index 000000000000..80d01fc32abb
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-driver-lenovo-yoga-slim7x-gen11-ec
-> @@ -0,0 +1,22 @@
-> +What:		/sys/bus/i2c/devices/*/fn_lock
-> +Date:		October 2026
-> +KernelVersion:	7.5
-> +Contact:	Oleg Keri <okerixx@gmail.com>
-> +Description:
-> +		Control fn-lock mode.
-> +
-> +			* 1 -> Switched On
-> +			* 0 -> Switched Off
-> +
-> +		When switched on, the function keys act as F1..F12 and the
-> +		multimedia functions require the Fn modifier.
-> +
-> +		The embedded controller reports the Fn+Esc key as an event but
-> +		keeps no state of its own, so this attribute is the state: the
-> +		driver toggles it when the key is pressed, and writing it takes
-> +		effect immediately. A toggle from the key is signalled with
-> +		sysfs_notify(), so the attribute can be polled.
-> +
-> +		For example::
-> +
-> +		  # echo "0" > /sys/bus/i2c/devices/9-0070/fn_lock
-> diff --git a/drivers/platform/arm64/Kconfig b/drivers/platform/arm64/Kconfig
-> index e32e01b2a9bd..a04573749e94 100644
-> --- a/drivers/platform/arm64/Kconfig
-> +++ b/drivers/platform/arm64/Kconfig
-> @@ -90,6 +90,29 @@ config EC_LENOVO_THINKPAD_T14S
->  
->  	  Say M or Y here to include this support.
->  
-> +config EC_LENOVO_YOGA_SLIM7X_GEN11
-> +	tristate "Lenovo Yoga Slim 7x Gen 11 Embedded Controller driver"
-> +	depends on ARCH_QCOM || COMPILE_TEST
-> +	depends on I2C
-> +	depends on INPUT
-> +	depends on HWMON
-> +	select NEW_LEDS
-> +	select LEDS_CLASS
-> +	help
-> +	  Say Y here to enable the EC driver for the (Snapdragon X2 Elite,
-> +	  glymur-based) Lenovo Yoga Slim 7x Gen 11 laptop. The EC provides
-> +	  thermistors and CPU fan speed as hwmon channels, and the keyboard
-> +	  backlight as an LED.
-> +
-> +	  This is the Gen 11 (glymur) machine specifically. Its EC is a Compal
-> +	  design at i2c address 0x70 and speaks a different protocol from the
-> +	  Qualcomm reference EC that the reference designs place at 0x76, so
-> +	  EC_QCOM_HAMOA does not drive it - and conversely this driver does not
-> +	  cover the X1E-based Yoga Slim 7x Gen 9.
-> +
-> +	  To compile this driver as a module, choose M here: the module will
-> +	  be called lenovo-yoga-slim7x-gen11-ec.
-> +
->  config EC_QCOM_HAMOA
->  	tristate "Embedded Controller driver for Qualcomm Hamoa/Glymur reference devices"
->  	depends on ARCH_QCOM || COMPILE_TEST
-> diff --git a/drivers/platform/arm64/Makefile b/drivers/platform/arm64/Makefile
-> index 7681be4a46e9..605cca4d42a9 100644
-> --- a/drivers/platform/arm64/Makefile
-> +++ b/drivers/platform/arm64/Makefile
-> @@ -9,4 +9,5 @@ obj-$(CONFIG_EC_ACER_ASPIRE1)	+= acer-aspire1-ec.o
->  obj-$(CONFIG_EC_HUAWEI_GAOKUN)	+= huawei-gaokun-ec.o
->  obj-$(CONFIG_EC_LENOVO_YOGA_C630) += lenovo-yoga-c630.o
->  obj-$(CONFIG_EC_LENOVO_THINKPAD_T14S) += lenovo-thinkpad-t14s.o
-> +obj-$(CONFIG_EC_LENOVO_YOGA_SLIM7X_GEN11) += lenovo-yoga-slim7x-gen11-ec.o
->  obj-$(CONFIG_EC_QCOM_HAMOA) += qcom-hamoa-ec.o
-> diff --git a/drivers/platform/arm64/lenovo-yoga-slim7x-gen11-ec.c b/drivers/platform/arm64/lenovo-yoga-slim7x-gen11-ec.c
-> new file mode 100644
-> index 000000000000..1ef11b9eeffa
-> --- /dev/null
-> +++ b/drivers/platform/arm64/lenovo-yoga-slim7x-gen11-ec.c
-> @@ -0,0 +1,547 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/bits.h>
-> +#include <linux/cleanup.h>
-> +#include <linux/container_of.h>
-> +#include <linux/delay.h>
-> +#include <linux/dev_printk.h>
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/errno.h>
-> +#include <linux/gfp_types.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/i2c.h>
-> +#include <linux/input.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/kstrtox.h>
-> +#include <linux/leds.h>
-> +#include <linux/lockdep.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/pm.h>
-> +#include <linux/sysfs.h>
-> +#include <linux/types.h>
-> +#include <linux/units.h>
-> +
-> +#define SLIM7X11_EC_BLOCK_READ	0x01
-> +#define SLIM7X11_EC_BLOCK_WRITE	0x02
-> +#define SLIM7X11_EC_RESP_LEN	6
-> +#define SLIM7X11_EC_REQ_LEN	7
-> +
-> +#define SLIM7X11_EC_CMD_RAM_READ	0xb0
-> +#define SLIM7X11_EC_CMD_RAM_WRITE	0xb1
-> +#define SLIM7X11_EC_CMD_FAN		0x46
-> +#define SLIM7X11_EC_FAN_GET_SPEED	0x81
-> +
-> +#define SLIM7X11_EC_CMD_EVENT	0x84
-> +#define SLIM7X11_EC_EVT_MAX_DRAIN	64
-> +#define SLIM7X11_EC_EVT_FN_LOCK	0x0f
-> +#define SLIM7X11_EC_EVT_MIC_MUTE	0x18
-> +#define SLIM7X11_EC_EVT_FLIGHT_MODE	0x19
-> +
-> +#define SLIM7X11_EC_SCUK		0x1c
-> +#define SLIM7X11_EC_SCUK_MEDIA	BIT(7)
-> +#define SLIM7X11_EC_SCUK_LED_OFF	BIT(5)
-> +#define SLIM7X11_EC_SCUK_MEDIA_MASK	(SLIM7X11_EC_SCUK_MEDIA | SLIM7X11_EC_SCUK_LED_OFF)
-> +
-> +#define SLIM7X11_EC_KBLT		0x03
-> +#define SLIM7X11_EC_KBLT_LEVEL	GENMASK(1, 0)
-> +#define SLIM7X11_EC_KBLT_AUTO	3
-> +#define SLIM7X11_EC_KBLT_MAX	2
-> +
-> +#define SLIM7X11_EC_TEMP_FIRST	0x12
-> +#define SLIM7X11_EC_NUM_TEMP	6
-> +#define SLIM7X11_EC_TEMP_MAX	120
-> +
-> +struct slim7x11_ec {
-> +	struct i2c_client *client;
-> +	/* serializes all EC access */
-> +	struct mutex lock;
-> +	unsigned long temp_present;
-> +	struct led_classdev kbd_led;
-> +	u8 kblt_level;
-> +	bool kblt_restore;
-> +	struct input_dev *keys;
-> +};
-> +
-> +static int slim7x11_ec_command(struct slim7x11_ec *ec, u8 cmd, u8 arg0, u8 arg1,
-> +			       u8 resp[SLIM7X11_EC_RESP_LEN])
-> +{
-> +	u8 req[SLIM7X11_EC_REQ_LEN] = { cmd, arg0, arg1 };
-> +	int ret;
-> +
-> +	lockdep_assert_held(&ec->lock);
-> +
-> +	ret = i2c_smbus_write_i2c_block_data(ec->client, SLIM7X11_EC_BLOCK_WRITE,
-> +					     sizeof(req), req);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	usleep_range(2000, 3000);
-> +
-> +	ret = i2c_smbus_read_i2c_block_data(ec->client, SLIM7X11_EC_BLOCK_READ,
-> +					    SLIM7X11_EC_RESP_LEN, resp);
-> +	if (ret < 0)
-> +		return ret;
-> +	if (ret != SLIM7X11_EC_RESP_LEN)
-> +		return -EIO;
-> +
-> +	return 0;
-> +}
-> +
-> +static int slim7x11_ec_ram_read(struct slim7x11_ec *ec, u8 addr, u8 *val)
-> +{
-> +	u8 resp[SLIM7X11_EC_RESP_LEN];
-> +	int ret;
-> +
-> +	ret = slim7x11_ec_command(ec, SLIM7X11_EC_CMD_RAM_READ, addr, 0, resp);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*val = resp[0];
-> +	return 0;
-> +}
-> +
-> +static int slim7x11_ec_ram_write(struct slim7x11_ec *ec, u8 addr, u8 val)
-> +{
-> +	u8 resp[SLIM7X11_EC_RESP_LEN];
-> +
-> +	return slim7x11_ec_command(ec, SLIM7X11_EC_CMD_RAM_WRITE, addr, val, resp);
-> +}
-> +
-> +static int slim7x11_ec_fan_read(struct slim7x11_ec *ec, long *rpm)
-> +{
-> +	u8 resp[SLIM7X11_EC_RESP_LEN];
-> +	int ret;
-> +
-> +	ret = slim7x11_ec_command(ec, SLIM7X11_EC_CMD_FAN, SLIM7X11_EC_FAN_GET_SPEED, 0,
-> +				  resp);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*rpm = resp[0] * 100;
-> +	return 0;
-> +}
-> +
-> +static umode_t slim7x11_ec_is_visible(const void *drvdata,
-> +				      enum hwmon_sensor_types type,
-> +				      u32 attr, int channel)
-> +{
-> +	const struct slim7x11_ec *ec = drvdata;
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		if (!(ec->temp_present & BIT(channel)))
-> +			return 0;
-> +		return 0444;
-> +	case hwmon_fan:
-> +		return 0444;
-> +	default:
-> +		return 0;
-> +	}
-> +}
-> +
-> +static int slim7x11_ec_read(struct device *dev, enum hwmon_sensor_types type,
-> +			    u32 attr, int channel, long *val)
-> +{
-> +	struct slim7x11_ec *ec = dev_get_drvdata(dev);
-> +	int ret;
-> +	u8 raw;
-> +
-> +	guard(mutex)(&ec->lock);
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		ret = slim7x11_ec_ram_read(ec, SLIM7X11_EC_TEMP_FIRST + channel, &raw);
-> +		if (ret)
-> +			return ret;
-> +		if (!raw)
-> +			return -ENODATA;
-> +		if (raw > SLIM7X11_EC_TEMP_MAX)
-> +			return -EIO;
-> +		*val = raw * MILLIDEGREE_PER_DEGREE;
-> +		return 0;
-> +	case hwmon_fan:
-> +		return slim7x11_ec_fan_read(ec, val);
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static const char * const slim7x11_ec_temp_labels[SLIM7X11_EC_NUM_TEMP] = {
-> +	"Charger A",
-> +	"CPU VR",
-> +	"5V rail",
-> +	"Ambient",
-> +	"Charger B",
-> +	"Thermistor 6",
-> +};
-> +
-> +static int slim7x11_ec_read_string(struct device *dev, enum hwmon_sensor_types type,
-> +				   u32 attr, int channel, const char **str)
-> +{
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		*str = slim7x11_ec_temp_labels[channel];
-> +		return 0;
-> +	case hwmon_fan:
-> +		*str = "CPU fan";
-> +		return 0;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static enum led_brightness slim7x11_ec_kbd_led_get(struct led_classdev *led)
-> +{
-> +	struct slim7x11_ec *ec = container_of(led, struct slim7x11_ec, kbd_led);
-> +	u8 raw;
-> +
-> +	guard(mutex)(&ec->lock);
-> +
-> +	if (slim7x11_ec_ram_read(ec, SLIM7X11_EC_KBLT, &raw))
-> +		return 0;
-> +
-> +	raw = FIELD_GET(SLIM7X11_EC_KBLT_LEVEL, raw);
-> +
-> +	if (raw == SLIM7X11_EC_KBLT_AUTO)
-> +		return SLIM7X11_EC_KBLT_MAX;
-> +
-> +	return raw;
-> +}
-> +
-> +static int slim7x11_ec_kbd_led_level(struct slim7x11_ec *ec, u8 level, u8 *old)
-> +{
-> +	u8 raw;
-> +	int ret;
-> +
-> +	ret = slim7x11_ec_ram_read(ec, SLIM7X11_EC_KBLT, &raw);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (old)
-> +		*old = FIELD_GET(SLIM7X11_EC_KBLT_LEVEL, raw);
-> +
-> +	FIELD_MODIFY(SLIM7X11_EC_KBLT_LEVEL, &raw, level);
-> +
-> +	return slim7x11_ec_ram_write(ec, SLIM7X11_EC_KBLT, raw);
-> +}
-> +
-> +static int slim7x11_ec_kbd_led_set(struct led_classdev *led,
-> +				   enum led_brightness brightness)
-> +{
-> +	struct slim7x11_ec *ec = container_of(led, struct slim7x11_ec, kbd_led);
-> +
-> +	guard(mutex)(&ec->lock);
-> +
-> +	return slim7x11_ec_kbd_led_level(ec, brightness, NULL);
-> +}
-> +
-> +static const struct hwmon_ops slim7x11_ec_hwmon_ops = {
-> +	.is_visible = slim7x11_ec_is_visible,
-> +	.read = slim7x11_ec_read,
-> +	.read_string = slim7x11_ec_read_string,
-> +};
-> +
-> +static const struct hwmon_channel_info * const slim7x11_ec_hwmon_info[] = {
-> +	HWMON_CHANNEL_INFO(temp,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL),
-> +	HWMON_CHANNEL_INFO(fan,
-> +			   HWMON_F_INPUT | HWMON_F_LABEL),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_chip_info slim7x11_ec_chip_info = {
-> +	.ops = &slim7x11_ec_hwmon_ops,
-> +	.info = slim7x11_ec_hwmon_info,
-> +};
-> +
-> +static int slim7x11_ec_fn_lock_toggle(struct slim7x11_ec *ec)
-> +{
-> +	u8 raw;
-> +	int ret;
-> +
-> +	ret = slim7x11_ec_ram_read(ec, SLIM7X11_EC_SCUK, &raw);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (raw & SLIM7X11_EC_SCUK_MEDIA)
-> +		raw &= ~SLIM7X11_EC_SCUK_MEDIA_MASK;
-> +	else
-> +		raw |= SLIM7X11_EC_SCUK_MEDIA_MASK;
-> +
-> +	return slim7x11_ec_ram_write(ec, SLIM7X11_EC_SCUK, raw);
-> +}
-> +
-> +static void slim7x11_ec_report_key(struct slim7x11_ec *ec, unsigned int code)
-> +{
-> +	if (!ec->keys)
-> +		return;
-> +
-> +	input_report_key(ec->keys, code, 1);
-> +	input_sync(ec->keys);
-> +	input_report_key(ec->keys, code, 0);
-> +	input_sync(ec->keys);
-> +}
-> +
-> +static irqreturn_t slim7x11_ec_irq(int irq, void *data)
-> +{
-> +	struct slim7x11_ec *ec = data;
-> +	unsigned int i;
-> +
-> +	guard(mutex)(&ec->lock);
-> +
-> +	for (i = 0; i < SLIM7X11_EC_EVT_MAX_DRAIN; i++) {
-> +		u8 resp[SLIM7X11_EC_RESP_LEN];
-> +
-> +		if (slim7x11_ec_command(ec, SLIM7X11_EC_CMD_EVENT, 0, 0, resp))
-> +			break;
-> +		if (!resp[0])
-> +			break;
-> +
-> +		switch (resp[0]) {
-> +		case SLIM7X11_EC_EVT_FN_LOCK:
-> +			if (!slim7x11_ec_fn_lock_toggle(ec))
-> +				sysfs_notify(&ec->client->dev.kobj, NULL, "fn_lock");
-> +			break;
-> +		case SLIM7X11_EC_EVT_MIC_MUTE:
-> +			slim7x11_ec_report_key(ec, KEY_MICMUTE);
-> +			break;
-> +		case SLIM7X11_EC_EVT_FLIGHT_MODE:
-> +			slim7x11_ec_report_key(ec, KEY_RFKILL);
-> +			break;
-> +		default:
-> +			break;
-> +		}
-> +	}
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static void slim7x11_ec_register_keys(struct slim7x11_ec *ec)
-> +{
-> +	struct device *dev = &ec->client->dev;
-> +	struct input_dev *input;
-> +	int ret;
-> +
-> +	input = devm_input_allocate_device(dev);
-> +	if (!input) {
-> +		dev_warn(dev, "no memory for the hotkey device\n");
-> +		return;
-> +	}
-> +
-> +	input->name = "Lenovo Yoga Slim 7x hotkeys";
-> +	input->phys = "lenovo-yoga-slim7x-gen11-ec/input0";
-> +	input->id.bustype = BUS_I2C;
-> +	input_set_capability(input, EV_KEY, KEY_MICMUTE);
-> +	input_set_capability(input, EV_KEY, KEY_RFKILL);
-> +
-> +	ret = input_register_device(input);
-> +	if (ret) {
-> +		dev_warn(dev, "cannot register the hotkey device: %d\n", ret);
-> +		return;
-> +	}
-> +
-> +	ec->keys = input;
-> +}
-> +
-> +static ssize_t fn_lock_show(struct device *dev, struct device_attribute *attr,
-> +			    char *buf)
-> +{
-> +	struct slim7x11_ec *ec = dev_get_drvdata(dev);
-> +	u8 raw;
-> +	int ret;
-> +
-> +	scoped_guard(mutex, &ec->lock)
-> +		ret = slim7x11_ec_ram_read(ec, SLIM7X11_EC_SCUK, &raw);
-> +
-> +	if (ret)
-> +		return ret;
-
-Please put this inside scoped_guard(). There's little reason to do 
-"optimization" like this at the cost of error handling clarity.
-
-> +
-> +	return sysfs_emit(buf, "%u\n", !(raw & SLIM7X11_EC_SCUK_MEDIA));
-> +}
-> +
-> +static ssize_t fn_lock_store(struct device *dev, struct device_attribute *attr,
-> +			     const char *buf, size_t count)
-> +{
-> +	struct slim7x11_ec *ec = dev_get_drvdata(dev);
-> +	bool enable;
-> +	u8 raw;
-> +	int ret;
-> +
-> +	ret = kstrtobool(buf, &enable);
-> +	if (ret)
-> +		return ret;
-> +
-> +	guard(mutex)(&ec->lock);
-> +
-> +	ret = slim7x11_ec_ram_read(ec, SLIM7X11_EC_SCUK, &raw);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (enable)
-> +		raw &= ~SLIM7X11_EC_SCUK_MEDIA_MASK;
-> +	else
-> +		raw |= SLIM7X11_EC_SCUK_MEDIA_MASK;
-> +
-> +	ret = slim7x11_ec_ram_write(ec, SLIM7X11_EC_SCUK, raw);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return count;
-> +}
-> +static DEVICE_ATTR_RW(fn_lock);
-> +
-> +static struct attribute *slim7x11_ec_attrs[] = {
-> +	&dev_attr_fn_lock.attr,
-> +	NULL
-> +};
-> +ATTRIBUTE_GROUPS(slim7x11_ec);
-> +
-> +static int slim7x11_ec_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct device *hwmon;
-> +	struct slim7x11_ec *ec;
-> +	unsigned int i;
-> +	int ret;
-> +
-> +	if (!i2c_check_functionality(client->adapter,
-> +				     I2C_FUNC_SMBUS_I2C_BLOCK)) {
-
-Use just one line?
-
-> +		return dev_err_probe(dev, -ENODEV,
-> +				     "adapter does not support SMBus block transfers\n");
-> +	}
-> +
-> +	ec = devm_kzalloc(dev, sizeof(*ec), GFP_KERNEL);
-> +	if (!ec)
-> +		return -ENOMEM;
-> +
-> +	ec->client = client;
-> +	i2c_set_clientdata(client, ec);
-> +
-> +	ret = devm_mutex_init(dev, &ec->lock);
-> +	if (ret)
-> +		return ret;
-> +
-> +	scoped_guard(mutex, &ec->lock) {
-> +		for (i = 0; i < SLIM7X11_EC_NUM_TEMP; i++) {
-> +			u8 raw;
-> +
-> +			ret = slim7x11_ec_ram_read(ec, SLIM7X11_EC_TEMP_FIRST + i,
-> +						   &raw);
-
-I don't know why this line in particular is split at this point, you have 
-much longer code lines below.
-
-It's generally okay to have code lines go up to 100 chars as long as one 
-doesn't hide key logic to the very end of a line. Taking advantage of that 
-is most useful to avoid breaking function calls with many args excessively 
-and other boilerplatey stuff.
-
-> +			if (ret) {
-> +				return dev_err_probe(dev, ret,
-> +						     "failed to read thermistor %u\n",
-> +						     i);
-> +			}
-> +
-> +			if (raw > 0 && raw <= SLIM7X11_EC_TEMP_MAX)
-> +				ec->temp_present |= BIT(i);
-> +		}
-> +	}
-> +
-> +	if (!ec->temp_present) {
-> +		return dev_err_probe(dev, -ENODEV,
-> +				     "no thermistor reported a usable value\n");
-> +	}
-> +
-> +	dev_dbg(dev, "thermistors present: %#lx\n", ec->temp_present);
-> +
-> +	hwmon = devm_hwmon_device_register_with_info(dev, "yoga_slim7x_ec", ec,
-> +						     &slim7x11_ec_chip_info, NULL);
-> +	if (IS_ERR(hwmon))
-> +		return PTR_ERR(hwmon);
-> +
-> +	ec->kbd_led.name = "platform::kbd_backlight";
-> +	ec->kbd_led.max_brightness = SLIM7X11_EC_KBLT_MAX;
-> +	ec->kbd_led.brightness_get = slim7x11_ec_kbd_led_get;
-> +	ec->kbd_led.brightness_set_blocking = slim7x11_ec_kbd_led_set;
-> +
-> +	ret = devm_led_classdev_register(dev, &ec->kbd_led);
-> +	if (ret) {
-> +		return dev_err_probe(dev, ret,
-> +				     "failed to register keyboard backlight\n");
-
-I don't get why you split this, you've a longer dev_err_probe() line 
-below.
-
-> +	}
-> +
-> +	if (client->irq) {
-> +		slim7x11_ec_register_keys(ec);
-> +
-> +		ret = devm_request_threaded_irq(dev, client->irq, NULL,
-> +						slim7x11_ec_irq, IRQF_ONESHOT,
-> +						"lenovo-yoga-slim7x-gen11-ec", ec);
-> +		if (ret)
-> +			return dev_err_probe(dev, ret, "cannot request the EC interrupt\n");
-> +
-> +		scoped_guard(mutex, &ec->lock) {
-> +			for (i = 0; i < SLIM7X11_EC_EVT_MAX_DRAIN; i++) {
-> +				u8 resp[SLIM7X11_EC_RESP_LEN];
-> +
-> +				if (slim7x11_ec_command(ec, SLIM7X11_EC_CMD_EVENT, 0, 0, resp))
-> +					break;
-> +				if (!resp[0])
-> +					break;
-> +			}
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int slim7x11_ec_suspend(struct device *dev)
-> +{
-> +	struct slim7x11_ec *ec = dev_get_drvdata(dev);
-> +
-> +	guard(mutex)(&ec->lock);
-> +	ec->kblt_restore = !slim7x11_ec_kbd_led_level(ec, 0, &ec->kblt_level);
-> +
-> +	return 0;
-> +}
-> +
-> +static int slim7x11_ec_resume(struct device *dev)
-> +{
-> +	struct slim7x11_ec *ec = dev_get_drvdata(dev);
-> +
-> +	guard(mutex)(&ec->lock);
-> +	if (ec->kblt_restore) {
-> +		ec->kblt_restore = false;
-> +		slim7x11_ec_kbd_led_level(ec, ec->kblt_level, NULL);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static DEFINE_SIMPLE_DEV_PM_OPS(slim7x11_ec_pm_ops, slim7x11_ec_suspend, slim7x11_ec_resume);
-> +
-> +static const struct of_device_id slim7x11_ec_of_match[] = {
-> +	{ .compatible = "lenovo,yoga-slim7x-gen11-ec" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, slim7x11_ec_of_match);
-> +
-> +static const struct i2c_device_id slim7x11_ec_i2c_id[] = {
-> +	{ "slim7x-gen11-ec" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, slim7x11_ec_i2c_id);
-> +
-> +static struct i2c_driver slim7x11_ec_driver = {
-> +	.driver = {
-> +		.name = "lenovo-yoga-slim7x-gen11-ec",
-> +		.of_match_table = slim7x11_ec_of_match,
-> +		.dev_groups = slim7x11_ec_groups,
-> +		.pm = pm_sleep_ptr(&slim7x11_ec_pm_ops),
-> +	},
-> +	.probe = slim7x11_ec_probe,
-> +	.id_table = slim7x11_ec_i2c_id,
-> +};
-> +module_i2c_driver(slim7x11_ec_driver);
-> +
-> +MODULE_AUTHOR("Oleg Keri <okerixx@gmail.com>");
-> +MODULE_DESCRIPTION("Lenovo Yoga Slim 7x Gen 11 embedded controller");
-> +MODULE_LICENSE("GPL");
-> 
-
--- 
- i.
-
+if that helps any.
