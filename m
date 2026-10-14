@@ -1,67 +1,68 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37137565105
-	for <linux-hwmon@vger.kernel.org>; Wed, 14 Oct 2026 17:34:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD10656510E
+	for <linux-hwmon@vger.kernel.org>; Wed, 14 Oct 2026 17:34:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791999261; cv=none; b=Lpn92wAc61BcFRUXA8aFs3rg7CZUfpF0X7g4wbSfu1S+nzyEebsRWQEmofd6CfXxuepcMFz+RXx5qKWyJ5oCc5U7prP9Ms5eSO56czomL/VikknN5mfYw2dw5r8N4T4qLkqThB6nafr0nr/M6qFdCBr5yq+asLYys+/8mLSKkcc=
+	t=1791999263; cv=none; b=dQZyeV+n0UXQkutAnOj5+KVKEzc7K6uFwJ9zVxtmfAygiGrxZG6IRFM4fnkksApKMXzq4GbTnviKjBctlQRtPfs5Ts7s7au+4VBzdzU8FPX1lqX477UNojk3Uf6z79e8P8EKaOomKYpi2mD4NyVL3iIKssSqSRD7KGCAYicHU6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791999261; c=relaxed/simple;
-	bh=wYvYZooxr0D1eXxyAs7RyhlSeI5pKL4CUGAokR/iUDg=;
+	s=arc-20240116; t=1791999263; c=relaxed/simple;
+	bh=HCCwccNtMSECrm+qSwkwcmxAaGpiINoZ+NAiQVr2tpE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TKGIEGrDniuMlOwd/t9Y4SbmbfWX8QxcwGrg2tE8V7XQUaAvtzW2y2zuPOQpG4DQGhD5ekZZhTvPYo40Q7eqsYNjbVhk98Oa8HgCPwhWyYMimNmz2s67bUU0ObXtPyHjhi71pxuftepq8LZ3Hnc2HbVVyOIavu+s0+NWAv9vrSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q8jPRoKc; arc=none smtp.client-ip=209.85.218.44
+	 In-Reply-To:To:Cc; b=bUw8zm8XFB8ZjUJaEAPENEFneKxRBL8nSHMHMikr+mFnTvCS+spcqrKc5szv94LLlWZ4C9T31AFhdx+IYn3rcXsnTf8nUg3HsBI6PWgIEjfjiw2XMs+yeffEhHs08xktmtphxjsuVz9vP6BwDtJJ4ayQ5fVJziAIlrtaip6Gw0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BHtNqHWp; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q8jPRoKc"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c2afa22e1dcso637175966b.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Oct 2026 10:34:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BHtNqHWp"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-c3ee49054ecso10645966b.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Oct 2026 10:34:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791999255; x=1792604055; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791999257; x=1792604057; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=XBS27E8nAsA1v/XdjrYHK0evNjP09PVvsY7+Bln2L+4=;
-        b=q8jPRoKcFssfJ2HTRJ5epil3rJ+0kV6rz0Oy/wwIiwyQyDSJIkcaZrlS2OuncqHDTP
-         rckpmHu5lA8jwe4yPG5qiKY8mUN9/F5Uhu3zxbszc0nMXK9R2yQNASkF/HHMVsBAJ5Lu
-         9TLj9Fp3li6Lo0GkingmFvclt+YkRXRmrNB6a95+rBna97HI6k7BmMaN938noPoFVbuI
-         uPsFRyXVP7AmVsn3rG+mQaQDNOXKZrrnpD2ZPOi1XG3pqfh3RTg98G5pU48wsYxl14nR
-         XWCFzTPftzfGrrNWTIvnNCqH6DulNxS2YU/oa4WAcO2D0Kj6FTCbkkslBQiv4bBvCx9y
-         zKpg==
+        bh=NA2euEzeRdMqsgpTzmLVhgxwMW/bnldVdN9i+bZJu5Q=;
+        b=BHtNqHWpGAe5rH0lbkmum0ZWkNmpqDGDmQ5K0PA53CP+pLwsPeLCSVHZNhGPfGQdNA
+         7WkM/8mRRPDUlrJDxb0KAQ+eeFuk70vftn4izvQ0BlDLXwcPH5WpuIHFfllnYqN8rViM
+         XzvvK8C9ETDxOHMWMM8s3W9ULbmhC1eWs5rqdzA35Mp+7bAa9kRg6WWhTTauxOtijEoE
+         UeMiTeSvA1Rm7T/i2CE5uIoIRoKZbhYv1iRObBLTnmk8xUV8uQuk9HmGUrgsDGZtRPKi
+         o3mjwGCu2DmaNAhS8aKWOFDeEpWn6IC1Q2b5g/DpgiJ6RPE08jvqinYq1Uw4Qm9LrkvH
+         cFeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791999255; x=1792604055;
+        d=1e100.net; s=20260707; t=1791999257; x=1792604057;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=XBS27E8nAsA1v/XdjrYHK0evNjP09PVvsY7+Bln2L+4=;
-        b=crvgAdioEXACBk8hSGS6CWr/Nge51kmT436QtHAeRWXCpL8xpjibV12JpBOxBpOut3
-         4QsR7nvlPD8MFwOHrhlDW2Fg5dZlbRMppP1Il/TD/FDi+YTAtJ3nF5u6aR/JVlzumA9p
-         Yk9KBTADTvNpvsoKU0D7ETRtz5L9ZhlepDBvw1AK4wkRC+LE7pEJb5TFZu60WhvWZ25B
-         0Jrfo7xl3c7PJTPc0mObhwR0DCdTXBILZOKvVCy/CqzdIlpgrguBeo/zTsxEyfhK742Y
-         1vy+P5HRf3MsutuXslwGXhjJ/oSMSD7BGR8QKS0bb7AERD1lTdA0d/lCqW2XPtW39T4B
-         0G1A==
-X-Gm-Message-State: AFq9FYKnkfLddM6adh5QNqdTqmeumWvklhAp/8deN2XmlgHf92lo+/un
-	4fzQnRfQ4FTkEZBDDtwSLs1I1F+jmTIXR6trw/oTsDQPJ1kyC8cUfRjQ
-X-Gm-Gg: AYBFou1XSxrskBCk+1YyPJy4ph+T68bNdRH4D6SHDSkksuvVTgNLATAlZNW0fdNYMfn
-	dFmh/03y0oPWy0ZU6jGQBQ/4KCS5QLuU2a6KOzsAzqtImDL5EcoGivDST+2vxJTdrEUAi3vIrue
-	EHG7NATOPeAcMCud0Ivc3QI93M8Wx2b8sn7D8OKky03t5hVHGtb67MYQHYtBc2SNAadOuej8J7D
-	Gz2VBKdiC/X77SQ/znMvnzsSuUb1gIe9FL8hhc81HMnxzb3r4BNTNvgANCHIO1uftQgKGlsM14b
-	iJuKT59p8y2UC9npQ+sE4et6G70+c6TG/GvidpdEnn3ZF2Nkmcy5hNURcQSBQImJraKHTSOhTkD
-	g3GfMZuweq1vSK4XfDvtdl/FWP4Q5pGXOjcgRm4JS4DKgqtCQXBuRoe+TWp2fNW+pk8b2W10TFk
-	BL9e7U8HhjhRnj9/Q0y7aCtl7NxDyRECXfv9iLXrJe24KA+F7xhOi9/hgaQ+vg/WUUIfVt4ePqF
-	sQgVAmB8BXHKEnd
-X-Received: by 2002:a17:907:c611:10b0:c3e:e677:563a with SMTP id a640c23a62f3a-c3ee6775af2mr9419266b.47.1791999255183;
-        Wed, 14 Oct 2026 10:34:15 -0700 (PDT)
+        bh=NA2euEzeRdMqsgpTzmLVhgxwMW/bnldVdN9i+bZJu5Q=;
+        b=LNjWCy6wqCkyofEuBnz55fdpIt2rU9hpLYl0Z01GkNKsq4vqdl5Vq1HDWwVmGt0Tfz
+         DrJvB2GjDOt0NGPzs9RL+Jhzr9Ng/BmBlpVzCHH0/nIPSnAzQfx7+m9D1qCJU+5q1Qke
+         4JhVfODvqzhIKEFI+PzJFdqMaowYueENfookyvkv53JzL7wxeMAMHmhfnYsitGOADNYn
+         HZmjasotM/33XQQBuHxMv3m0oYZVDBb01y0TVAnKLq4JPXhZyD2LtzPr1YZGq3rhtSCj
+         3Wltms5Z0tsmoSycUcRvfBTRuEsvgfmHnkc34OM3w6IhUYnsCkMXe7jEuUgs3VlSMmZI
+         DmBg==
+X-Gm-Message-State: AFq9FYJXRB72eaeqf8kOa9qzgEj+prsfQRU0IDDwhtYqWGNhbe2L1zHO
+	0K+HKhiIUMGqxj4V9NMeuLu/AB+ZyS251zGEH6fil6Q6CL72VbmIwh5A
+X-Gm-Gg: AYBFou2PnrKroEu32ohA+AcixlDPG623drYUeTzSPJNnEJ7b2RQZ1uQncxVbNh14sgt
+	tda8fxHYDASQKZjdgrKy2HSe/4e8EgyJN2O+OUhUqUbvX7MoIyymf+0b7iq6gR+8gzDFShMIQS2
+	5423XVVE+J/Olod/F/vZz1eCLyEM9wRoeblnofnW/tSADkdfQJpTAqQBJDYRu6jQiYN41D0hO3n
+	hs0kw12OukAiJjTAtdKWmhxSxN0rfmxSYBXpHn9meiF6EmjW0WjKKBUWtMYamPm4O/EJ6GQHZPX
+	xynLaECv88ZBMPMpOyA068/1iIradLXpLTqztr4VDlut1NaEV2PgW9RlKawpwdK/d2SNMYzVtqI
+	uRqlBOLyq4dWYdVl1cSUiwS3oLX1pR+BtMrtrU/Zc1B77DA6UzTip3XLjp9MgWtx5aQKk80g6Xj
+	Fwr+pvoyIZKX/EVqWfvZC+I/IV3AHsCtVC2J/hKtct5y43jNwutWyAHmJI8YyZuopXaldIjJ0mq
+	pHwMPuIc+712LH1
+X-Received: by 2002:a17:907:c613:20b0:c31:be58:5dde with SMTP id a640c23a62f3a-c31be5860ccmr996157966b.40.1791999256915;
+        Wed, 14 Oct 2026 10:34:16 -0700 (PDT)
 Received: from [127.0.1.1] ([2001:4bb8:148:f08c:65a8:f8e5:f310:5a71])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c3ed963cecesm9381366b.21.2026.10.14.10.34.13
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c3ed963cecesm9381366b.21.2026.10.14.10.34.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 10:34:14 -0700 (PDT)
+        Wed, 14 Oct 2026 10:34:16 -0700 (PDT)
 From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Wed, 14 Oct 2026 19:34:00 +0200
-Subject: [PATCH v3 01/11] hwmon: chipcap2: fix command error diagnostics
+Date: Wed, 14 Oct 2026 19:34:01 +0200
+Subject: [PATCH v3 02/11] hwmon: chipcap2: fix off-by-one in command mode
+ retry loop
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,57 +71,46 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261014-chipcap2_locks-v3-1-27ebfc2c5b9e@gmail.com>
+Message-Id: <20261014-chipcap2_locks-v3-2-27ebfc2c5b9e@gmail.com>
 References: <20261014-chipcap2_locks-v3-0-27ebfc2c5b9e@gmail.com>
 In-Reply-To: <20261014-chipcap2_locks-v3-0-27ebfc2c5b9e@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Javier Carrasco <javier.carrasco.cruz@gmail.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1791999251; l=1483;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791999252; l=1031;
  i=javier.carrasco.cruz@gmail.com; s=20260924; h=from:subject:message-id;
- bh=wYvYZooxr0D1eXxyAs7RyhlSeI5pKL4CUGAokR/iUDg=;
- b=W3cZt9Sh8KFwjVGXwR1flSOtWOTHFmIVMNX6I2ubqpqua3O9a5Mg9wKacL2nRtmFId2xkL151
- sjesXFvVNTADlEBGndnR8LpVzGvdu+KCFrog5i5f3A8hnltWiq1OTlM
+ bh=HCCwccNtMSECrm+qSwkwcmxAaGpiINoZ+NAiQVr2tpE=;
+ b=RsuuwGFjZjAk86aU3zR+Su6CJq9A+d9YVxs5nxpy2IuZ7mTpx8NWpC3NRaXYhm2iBTd/+HIra
+ Ewht0SziE/dAF+3iSsIK6/BV12qi++CnXirSFkbLJhf/8FK4xAx4xx1
 X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
  pk=VV+hcMoOj1Sx6xSiY0W/FZNAskGZe2AagSMVj0PsmAs=
 
-The command response field only contains bits 1:0, while the
-error flags are stored in bits 2:5. The existing diagnostic
-checks test the extracted response field, so they can never report
-an error flag.
-
-Test the full status byte for the error flags, and check the
-configuration-load flag instead of RAM parity for the last diagnostic.
+i == CC2_CM_RETRIES can never be true inside the loop, since it
+only runs while i < CC2_CM_RETRIES. Use CC2_CM_RETRIES - 1 so the
+last failed retry breaks out immediately instead of doing a useless
+disable + 80 ms power-cycle delay before the loop condition ends it
+anyway.
 
 Fixes: 3af350929e75 ("hwmon: Add support for Amphenol ChipCap 2")
 Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 ---
- drivers/hwmon/chipcap2.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/hwmon/chipcap2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/chipcap2.c b/drivers/hwmon/chipcap2.c
-index 9bef767b589e..855057892852 100644
+index 855057892852..8102b6851d3d 100644
 --- a/drivers/hwmon/chipcap2.c
 +++ b/drivers/hwmon/chipcap2.c
-@@ -167,13 +167,13 @@ static int cc2_cmd_response_diagnostic(struct device *dev, u8 status)
- 	case CC2_RESPONSE_BUSY:
- 		return -EBUSY;
- 	case CC2_RESPONSE_NACK:
--		if (resp & CC2_ERR_CORR_EEPROM)
-+		if (status & CC2_ERR_CORR_EEPROM)
- 			dev_dbg(dev, "Command failed: corrected EEPROM\n");
--		if (resp & CC2_ERR_UNCORR_EEPROM)
-+		if (status & CC2_ERR_UNCORR_EEPROM)
- 			dev_dbg(dev, "Command failed: uncorrected EEPROM\n");
--		if (resp & CC2_ERR_RAM_PARITY)
-+		if (status & CC2_ERR_RAM_PARITY)
- 			dev_dbg(dev, "Command failed: RAM parity\n");
--		if (resp & CC2_ERR_RAM_PARITY)
-+		if (status & CC2_ERR_CONFIG_LOAD)
- 			dev_dbg(dev, "Command failed: configuration error\n");
- 		return -ENODATA;
- 	default:
+@@ -226,7 +226,7 @@ static int cc2_command_mode_start(struct cc2_data *data)
+ 				     2 * CC2_RESP_START_CM_US);
+ 		}
+ 		ret = cc2_read_command_status(data->client);
+-		if (ret != -ETIMEDOUT || i == CC2_CM_RETRIES)
++		if (ret != -ETIMEDOUT || i == CC2_CM_RETRIES - 1)
+ 			break;
+ 
+ 		/* command window missed, prepare for a retry */
 
 -- 
 2.43.0
