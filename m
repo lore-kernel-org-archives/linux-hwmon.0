@@ -1,72 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6EAF38944E
-	for <linux-hwmon@vger.kernel.org>; Thu, 15 Oct 2026 03:46:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2564ADD9B
+	for <linux-hwmon@vger.kernel.org>; Thu, 15 Oct 2026 08:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792035972; cv=none; b=vBxwPSUChhJLYPTX7RJa8zyUnW5V4HFsE0q57pBs0zQRvAj1I219maN2yy7nf8KzsnxviXo3y9hq2Smkp0SacoitAiGmhS6V7rr/R+WaqGpo6J6V/ivzmrjbstdouxIVDzpttlUaGTEN/pNOKD6Hj21ekesDiTl/NaTlHbm/xLU=
+	t=1792052729; cv=none; b=AVG7+W9FQr3eUvdRnn0X8tRjhkH/gLOKf+6Qg9y1e/fixqaqBVBX1ikoEvS9kDSYQST4oZCnYoobW7qMttaVm+7OKE38pAeGYXIi2lV4dJxp7JBVVnS+4qOsZ7ZKgU/36cjpqDWqVCqZ8avKSijDX/j2mY/lDeYHKltmKrsft60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792035972; c=relaxed/simple;
-	bh=0LuMvyH6AWssTl8j4YQjDy+O7cpNJwqGLS4Y61YYrY8=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=gZ5ezgD8fQCqt2npz/fB08LjAF4cymOL0/JO6RuC+El5xBTgojuoQc5FnqjVhXynBHEvlF6A9ofxF5qaHGhpJd56ECLlG2D6z6e+Nh6o28aDxTwea6xZKFbNZl/85bis1d7azOAJN+f3eZAeYtSkVCX0IkaeaP7tAsXVCMEQFs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y/9E0wDy; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792052729; c=relaxed/simple;
+	bh=MjGHXq0yR9Gpo3xrFudvRWYYUefJtXK6z7zXZk3zLic=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Rv+aPQdTjuYAkBMWXuqD46Iu0XyQMbrkawWdMwtTMhzVTRUyemUqr7jL8lK9wjGVYzX6yX8uwDwXhB6ILKYJozJ8Gj7PTaTd4tOKo2BWT10ver5gbMLkbq6ZeV8O99jjXdCaotuTxznsqib+Ge0dTHtGzTEen9FUg7ZK/7jr3TE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iJlVG0Ro; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y/9E0wDy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D40DC1F000C4;
-	Thu, 15 Oct 2026 03:46:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792035968;
-	bh=0LuMvyH6AWssTl8j4YQjDy+O7cpNJwqGLS4Y61YYrY8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Y/9E0wDyJrh+ymYSZLV3gdWtmt8CkCqVrU9Zq+mpPIPgmBmY2ZGKAzpWrhfUB69Vk
-	 OYhCe6znMqDQEMpA26/eoBI22yA4iyO5/LklWavo1/UYx0Du1Gyu7n/h95r/C0k6Hq
-	 +ic1jyJ2ov8GHeqIvK8IMKhASjogeRg3jl3z3I+IDlw+zDfZEoz+ZOQ9sB+QjCg0mW
-	 G4WdaM9okBNXmLkP4jz3PjPG602ETfsJUwcBBWb5xboNtUEcTiUy6gf5gghkSQkqa9
-	 I7k/iGybgYXT44bWsNdy4Sb6W1WaPKH6a+rlwXVKo9zL4VNkSQHlgF4iMcV1blhxbW
-	 yd/6upP0ZVlSw==
-Message-ID: <sashiko-outbox-172226@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (minisforum-um780xtx) Avoid overflow when
- rounding threshold input
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?U2ViYXN0acOhbiBQZXlyb3R0?= <speyrott@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261015033841.390615-1-speyrott@gmail.com>
-References: <20261015033841.390615-1-speyrott@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 15 Oct 2026 03:46:07 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iJlVG0Ro"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a16aaf2067so22351285e9.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 15 Oct 2026 01:25:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792052726; x=1792657526; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=MjGHXq0yR9Gpo3xrFudvRWYYUefJtXK6z7zXZk3zLic=;
+        b=iJlVG0RoylsmHtfdnUUWKj3ZTp0HL7VhAFwbyCK/A8NqXZSaAYs3+rd5DUUEYAKzfk
+         s1rCdOa1OoRa/OkSQbCBaA0AdDdIRTwQ5k0SzdOdYzLWfflpSLbhihu56idctutqAdZY
+         PB+3vwZ/b1rsGRwAbEP3PRsLQ/7Ic2LlJ+8pmd4LyX5uDXInz7vEYKJMctDkvAndkdVD
+         b9CcfMZXyGLymW9mfrhFQIi8sX5Pfvm0IdXBFA5WwOGC11hCpXQfpM8+xP6rBvwUrdMc
+         G+qCanUGqUFpFIukNdgIchl7MDp/ROmPd626gsEIhoWGxamsilSfzPzq83y5LjfbK7Qc
+         KOjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792052726; x=1792657526;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=MjGHXq0yR9Gpo3xrFudvRWYYUefJtXK6z7zXZk3zLic=;
+        b=EV+no1a3TD2IM15NZ4GDTF9n6TaDalzj4AkXu5e56GK0b2Z5ka6vjM6hkcqNeBwb++
+         IyoYaypjb7b3Fp7bUHs4GLA//KoTOSxyMdGHMxWaJ0VgFuF9ICIG1b+N+sNKEwXRsANY
+         pj2oKHmZXQXgwu56OZAQ/8Z1PQ1PKkZ5GMQ/55VxVmfLpzURIsHxqwIeb/l/8ZQArKjW
+         p1WnrRMjs4XFMPMN/aY4yY7rWtqDEQreVDTA1x+KtwV5OqAd+sNFxd9z+qYQwUgLqqZI
+         vo4Eo8Oy/QIZlVQkBZ5rcyaatLmRepqGZFpPrB/BKrjXZaltc1Kq1ySJE9kC1q3VIQri
+         3qag==
+X-Forwarded-Encrypted: i=1; AKwUvBxbPW3Zj/0Lbe7a7Q3YwQQE6OZPnarS1TPJyxAFfMUuN6hSAX3gvSt9UVJrkAg3b5AN/6a2siNQMVxawQ==@vger.kernel.org
+X-Gm-Message-State: AFq9FYKDkggzlKkbDqbx6/GiCa+0TU0jLDSjUwcUrz5Mje3e8enydiOU
+	vgRWxRUwP4FpiBheO/FQorOIs19Aw2Jb660FI/NQ167Y5OYXdFHOcROH
+X-Gm-Gg: AYBFou0sbC0YPyhOyI+24pWcVmeyi93tUYMLDD2Mp6znswjpEc104BCrE/LThY/BtLF
+	tXXG4kpzMoJrkjdsjaMlEcsRh2FQ1W2QOP6xpeYcXAYBpHeayBudr8II9pgQt/Rgcjhyc22o6nd
+	1owaPpYJJIfw/HZmGIJI+KNrPQYtJ5dbbifILCVyQTDraonOq789cVc3jZ2pb4MdUxyEr3ndcvf
+	8cCP1BrLgQi9wCKyKpJryDfQ1gGXkS+obRDD0y5x1euCJN/ql/RdfyenNITtmhap5tMx3u2KG67
+	IhiY33xJ/z6w10A+WT9Hg4sDeHXkwdoZgEuYPzbTKLK5XEVDuh+0up0t4DBalAIoliQpU/ACVgS
+	kouJA40+6hVmhIBv9Y7OEeGu28nWibQQxGj3EmMxvtbPbLPRi/D7qzdeBC7ZHmXBGhPdBXZuseA
+	essbTLtYlaZ9BgxCqjS+ZIKydcN4iWd+Y463v7OG3NbmPltRXKEeUeiwW/9EyHCickYGstDRYJf
+	uQPEpWv
+X-Received: by 2002:a05:600c:4ec9:b0:4a1:7739:f9ab with SMTP id 5b1f17b1804b1-4a18e4ca953mr370896815e9.20.1792052725437;
+        Thu, 15 Oct 2026 01:25:25 -0700 (PDT)
+Received: from localhost.localdomain ([94.252.74.55])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4a1bd67a080sm51822765e9.3.2026.10.15.01.25.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Oct 2026 01:25:24 -0700 (PDT)
+From: Oleg Keri <okerixx@gmail.com>
+To: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Hans de Goede <hansg@kernel.org>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Abel Vesa <abelvesa@kernel.org>,
+	linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	platform-driver-x86@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v6 2/3] platform/arm64: add Lenovo Yoga Slim 7x Gen 11 EC driver
+Date: Thu, 15 Oct 2026 10:25:16 +0200
+Message-ID: <179205271598.452373.17818636318443679532@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <3df5fce1-509b-1362-3b78-8f79337ebc05@linux.intel.com>
+References: <3df5fce1-509b-1362-3b78-8f79337ebc05@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-> The SYS fan threshold store path rounds the user-supplied millidegree val=
-ue
-> with DIV_ROUND_CLOSEST() before clamping it. DIV_ROUND_CLOSEST() adds or
-> subtracts half the divisor first, so inputs within 500 of LONG_MAX or
-> LONG_MIN overflow and change sign. Writing LONG_MAX then selects the lower
-> limit instead of the upper one, and LONG_MIN the upper limit instead of t=
-he
-> lower one.
->=20
-> Clamp the input to the representable 0..255000 range before rounding. The
-> result is unchanged for all other inputs, because the subsequent clamp
-> already limits the threshold to 0..254 degrees.
->=20
-> Fixes: 9d980da93bbc ("hwmon: Add Minisforum UM780 XTX EC monitoring and f=
-an control")
-> Reported-by: Sashiko AI review <sashiko-bot@kernel.org>
-> Closes: https://lore.kernel.org/r/sashiko-outbox-171941@kernel.org
-> Assisted-by: LLM
-> Signed-off-by: Sebasti=C3=A1n Peyrott <speyrott@gmail.com>
+On Wed, 14 Oct 2026, Ilpo Järvinen wrote:
 
-Sashiko has reviewed this patch and found no issues. It looks great!
+> Thanks for the update. I've applied patch 2 to the review-ilpo-next branch
+> in the platform drivers (pdx86) tree.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261015033841.3906=
-15-1-speyrott@gmail.com?part=3D1
+Thanks!
 
+Oleg
