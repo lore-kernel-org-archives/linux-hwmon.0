@@ -1,190 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD8C44C50F;
-	Fri, 16 Oct 2026 08:36:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12AD640F724;
+	Fri, 16 Oct 2026 08:42:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792139806; cv=none; b=MGCw7QfGwaVsYAxVMETwdJOoaRjXNVvnAs7gAOfwFUrBPGOKW3euldJzuVcbeVZegFCfRqy5ngUd5b/qFmve+0tc9Vr3ILPlTlh6+GHgmo3L2ZEO6njY494mq75NjaBXVzeNs7UVWJZxtGm11HzKDlj2pNmYVf8MHo4h/r96RFk=
+	t=1792140175; cv=none; b=MdLHYQi7OTw4K4Ho8NCcjHy4QHrBFllZFWfGfP4Iclz6elBBm9QViubwuiiDCQ8Hawjh0T3eUouleRxchzLAVYGxxPm2ap8Tt6Eh4AGiFB8mSSwOv1HkQIHqHWbHnXSfxL6e8Q5ZmXYwIMrQf3rdOsLVj913RmhpcJtKu3p9gZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792139806; c=relaxed/simple;
-	bh=SOiHFG723eaxvpMQN5VJTwnVuVzoucvmSGg5/Da08lY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=TRzVXJMy+rHgGgjkyrxjks5RDya/4S/yIFczYkABfwy1DJ6aCUyr08yi4f+BPrWYXwxeXtBh4/F2kabnLS6YQpX+JhdZt80SjJWwzAUSIXa/SVCYVVfSYDMxjaa5uyznpwslQfbuCFmd+ugdi0hVxRnJ7kK/mW3D3TTjy93IOoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DUKxGyGU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1792140175; c=relaxed/simple;
+	bh=3rbOJU1iFVVApKsSPtz/G7fuEZPLRtV/KP/+IGlxAIs=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=m06kyny+OU1ypDnZIEPtINAmGBJN22MEk/CsoF2sAvtjjmoXLvt+rT0psHmuAfRf27lGcX39eZUl5bTzK38KCzuIAfGsygu3Poq2/3gbkhXYk+rWVi/8xjWHlS0Ao3W7mJL/W+6sMnD0TjV2kI8PQCwP0/RfyqAPHnAjgY0pj/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=faR1OGUI; arc=none smtp.client-ip=43.163.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DUKxGyGU"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 42D63C2BCF5;
-	Fri, 16 Oct 2026 08:36:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1792139805;
-	bh=SOiHFG723eaxvpMQN5VJTwnVuVzoucvmSGg5/Da08lY=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=DUKxGyGU8cIOHfpt14ljq2lTDPcTtCG1erBHre6ujMldOtsRDNoskLcuwljRc2RMp
-	 sOwnIW/a4O+m78F8swQj8VJK2o/inT83guu4OzUUtYlQ7w8vnZgGr46LtUlJmHzA3h
-	 ZhU9nbc5r6YftNPlR/Y8YcJZaNGRsR5i2t+Wx6BGCfNCfN1mJT8mUYMjSxooU0RHRg
-	 kXlft6oIjIqofFBkOLo06nC9M3CreXlsgC4VfLn+Bc8hdLfj5MYyUkv2TN7ChdoGfX
-	 HnSnKd963hgxHdJt77jCCxAgTGPCDcOVRCLXbtv8ejKRpJl4tDbT/hm4qeo6Ys5dOH
-	 vhxvSw4lEdRqg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15FD0CCA464;
-	Fri, 16 Oct 2026 08:36:45 +0000 (UTC)
-From: Ximing Zhang via B4 Relay <devnull+xzhangjr.gmail.com@kernel.org>
-Date: Fri, 16 Oct 2026 12:36:37 +0400
-Subject: [PATCH] hwmon: (coretemp) Fix handling of isolated SMT siblings
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="faR1OGUI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1792140168; bh=3rbOJU1iFVVApKsSPtz/G7fuEZPLRtV/KP/+IGlxAIs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=faR1OGUIEXqyudze+/rlXhjJOm9SouE9CAzMUCOfVVYQfrJ+HeCID4Ymx2wwJwuyc
+	 o+k4gXNkD08P9h2gFOLZ2SganIhqtwrA2DOTo+tKQhk8ucGH5IwNPlT4/Ej1lxb8ea
+	 K9W94jSj+Rq/18omhjCcXJYfPqXq/pqfWiSn+THg=
+Received: from [172.24.48.1] ([2409:8951:a22:b25:d1a1:62d3:eb69:e679])
+	by newxmesmtplogicsvrszb51-1.qq.com (NewEsmtp) with SMTP
+	id AAD22012; Fri, 16 Oct 2026 16:42:45 +0800
+X-QQ-mid: xmsmtpt1792140165tdx1v56y9
+Message-ID: <tencent_4F803EA6BD452898DAAF75EE74A20EF07F05@qq.com>
+X-QQ-XMAILINFO: OVFdYp27KdlJfwZITd6fr7SnRvjrd9me4hJGfU0DLueOQ9LmSLDg7GZv8O25uU
+	 XfbwJ2nYms+kEoWJEgpBC9XaxzNW5canrgt4aJ4hXBJP0ZJL6iHW9xRb/PPg29Ng+8U6luqTb9Py
+	 kTE8+OOly1DlVzfrojmzjkYOk7TtukcP3XjkRXf8ScxLQkUFG2miyWQY5/ZgH6/CL6ki9JAy7qSi
+	 Y5NOsw0l3U/xICoQACUfnwLTyCLUXIBZrJqBaNtOPBzdUWqQKq9M6+AhzAa2LqWJ6s42zM538EUh
+	 62S08zXFLmYD+nmf3/73MVoQRwEVMNnhB3UWfdEP5FV8viFrRBj/rSEkD+bAG3MsXKphOofgTE8J
+	 zOqR8auNeNNyTAKXjT+ueUstpd3V1/ctOJMhAWBGlUi9bQdf9cigac+8ZwSzdQdNssqr8Dyapgrm
+	 xLCtFGivbqKOfs+3PrAdeaXYpG89FxJCartwGYh0AWbQDZzNhb4vIYV2HPn8ba4jwATNoJRxFiFr
+	 w2yGM8vOiunNwgIdGX3SVZKvUCCcDOTEQvRdvbIfBWwLLQA9FOcVIWVEXAg6nsrABxsHpoZxzfY6
+	 Jc4j5hBAEVpmqO7d5WyPO6e3nfvK1z/9XnJuigM4HBrAO6uXf7iKCCl8DqUQChGWof1L9P2n0Ioz
+	 fBQvGkse4Js+MXPpuyvE1OnyPpht3lK/G5dnmb4XANqiZOfnfVOFYgApj7L5+BjLE7l61uv3S/NU
+	 I+1uxs0MPvGFaci0KF5XnJi96WxrwX+bHnVA2qOd7cVD2ErVXKyGDLeJ9VNXCZD65u0IsPebvHKI
+	 uoeAZle2eSi+tyTOwxAVeLtEiHXByHej68h1dOBit1xLrCvbRn2NHLJ7xJ9WoveSgP6NV31ldZp4
+	 RDtqDUgDBZ0nMXw/JbcKduNRmTMzAomEgpsQfsuMi6uIh0YxHQl33+WRVOUlCKTFZBUbXkfoQxwo
+	 iflH+sv/7qsRinDjWfRcTVMiBTjQ17M1zaKjlqvq/0jdY1iUZ15X+rOaIEjCuxp/sRaRYr9jRO0X
+	 w6NmviBKi+rItApyjqgSznb+ot8xY=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+From: skxby <2374604267@qq.com>
+To: Donjuanplatinum <donplat@barrensea.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
+Subject:
+ Re: [PATCH 0/2] rust: hwmon: rework hwmon abstractions, add TMP108 driver
+Date: Fri, 16 Oct 2026 16:42:45 +0800
+X-OQ-MSGID: <179214016501.15268.642738678844764524@qq.com>
+In-Reply-To: <87se26dpzf.fsf@barrensea.org>
+References: <20260512155747.10136-1-donplat@barrensea.org>
+ <9c2fa543-525a-4e43-9f73-7caf13b98039@roeck-us.net>
+ <tencent_576573331343805F032731492D63C12D7E08@qq.com>
+ <87se26dpzf.fsf@barrensea.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261016-codex-coretemp-housekeeping-v1-1-96618c5676b2@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQqDMBBG4avIrBswERV6ldJFmvzVUZqEjBZBv
- Ltp3Tz4Nm8nQWYI3audMr4sHEOBvlXkRhsGKPbFZGrT6Vq3ykWPrTRjwSepMa6CGUgcBoXe6s6
- 0jfWwVA4p483b//54Xpb1NcEtvyUdxwmtEmKJfwAAAA==
-X-Change-ID: 20261015-codex-coretemp-housekeeping-e7a16253adea
-To: Guenter Roeck <linux@roeck-us.net>, 
- Marcelo Tosatti <mtosatti@redhat.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- stable@vger.kernel.org, Ximing Zhang <xzhangjr@gmail.com>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1792139803; l=4894;
- i=xzhangjr@gmail.com; s=20261015; h=from:subject:message-id;
- bh=a7LWa8R3yo5Y4Z1fjwmBO/zzVRbt+TmG7jDh9X78M1Q=;
- b=S9UcLvI4Te5rSCy03+KQz53dbkWX8qjV+QIiTtKF/D/LGFzFNX52mH8WNkre7ZvhkOGS3thOT
- Jm8aM/26tt8DI+XFWRbhQWLUEQ4A0IdCCvKac8bH8J4V0QB2f/WuExT
-X-Developer-Key: i=xzhangjr@gmail.com; a=ed25519;
- pk=C7VXFeUl3Bjjb638l0w1D5vm9qSpdbzEYql77XoYqTQ=
-X-Endpoint-Received: by B4 Relay for xzhangjr@gmail.com/20261015 with
- auth_id=1207
-X-Original-From: Ximing Zhang <xzhangjr@gmail.com>
-Reply-To: xzhangjr@gmail.com
 
-From: Ximing Zhang <xzhangjr@gmail.com>
+Hi Donjuanplatinum,
 
-Commit 0f8b916bc5b5 ("hwmon: (coretemp) avoid RDMSR interrupts to
-isolated CPUs") prevents create_core_data() from creating temperature
-data for an isolated CPU. coretemp_cpu_online(), however, still adds
-that CPU to pdata->cpumask.
+Thank you for taking the time to look at this - and for replying at all.
+Let me answer each point.
 
-When an isolated SMT thread is processed before a housekeeping sibling,
-the mask makes coretemp_cpu_online() believe that the core is already
-represented. The housekeeping sibling then gets no temperature
-attributes. Package attributes are similarly not retried when the first
-CPU processed in a die is isolated.
+1. AI involvement
 
-The mask is also used to select a replacement CPU when a sensor target
-goes offline. Including isolated CPUs permits the driver to retarget a
-sensor to one, causing subsequent sysfs reads to send an RDMSR IPI to an
-isolated CPU.
+Fair question, and I should have stated it up front. The work was
+developed with AI assistance: I run a multi-agent setup (a scheduler
+plus several model-backed agents) that produced code drafts, ran the
+build/regression/stress-test cycles and drafted the commit messages and
+cover letter. Every patch was reviewed by me, and I built and tested
+each change myself; the two bugs we found during this round (an i2c
+client leak on the registration error path, and a missing null
+terminator in chip_config) were both found by the lifecycle stress tests
+I ran and reproduced before fixing. I signed off on the series and I
+take responsibility for it.
 
-Keep isolated CPUs out of pdata->cpumask by moving the housekeeping check
-to coretemp_cpu_online(). Sensor creation is then deferred to an eligible
-CPU, and hotplug replacement targets remain on housekeeping CPUs.
+For v2 I will add an "Assisted-by: LLM" tag as described in
+Documentation/process/coding-assistants.html. Please tell me if you want
+the tool names listed there as well.
 
-Tested on an Intel Core i7-10510U running 6.18.50-3-cachyos-lts, with
-nohz_full=1 on CPU 1 and its housekeeping SMT sibling on CPU 5. The stock
-driver omitted Core 1 after module load and retained its readable sensor
-after CPU 5 was offlined. The patched driver exposed Core 1, removed it
-when CPU 5 went offline, and restored it when CPU 5 returned.
+2. Cc Rust-for-Linux
 
-Fixes: 0f8b916bc5b5 ("hwmon: (coretemp) avoid RDMSR interrupts to isolated CPUs")
-Cc: stable@vger.kernel.org
-Cc: Marcelo Tosatti <mtosatti@redhat.com>
-Signed-off-by: Ximing Zhang <xzhangjr@gmail.com>
----
-The patch was tested on an Intel Core i7-10510U running
-6.18.50-3-cachyos-lts with CPU 1 isolated using nohz_full=1 and
-housekeeping SMT sibling CPU 5.
+Agreed - I did not Cc rust-for-linux on v1, and I should have. v2 will
+Cc rust-for-linux@vger.kernel.org.
 
-The stock driver omitted Core 1 after module load and retained its
-readable sensor after CPU 5 was offlined. The patched driver exposed
-Core 1, removed it when CPU 5 went offline, and restored it when CPU 5
-returned.
----
- drivers/hwmon/coretemp.c | 26 ++++++++++++++++----------
- 1 file changed, 16 insertions(+), 10 deletions(-)
+3. "?"
 
-diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index 0ab6bbff5637..ad9cadd99dc8 100644
---- a/drivers/hwmon/coretemp.c
-+++ b/drivers/hwmon/coretemp.c
-@@ -559,9 +559,6 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
- 	u64 val;
- 	int err;
- 
--	if (!housekeeping_cpu(cpu, HK_TYPE_MISC))
--		return 0;
--
- 	tdata = init_temp_data(pdata, cpu, pkg_flag);
- 	if (!tdata)
- 		return -ENOMEM;
-@@ -681,6 +678,14 @@ static int coretemp_cpu_online(unsigned int cpu)
- 	if (!cpu_has(c, X86_FEATURE_DTHERM))
- 		return -ENODEV;
- 
-+	/*
-+	 * Keep isolated CPUs out of pdata->cpumask. Besides tracking the CPUs
-+	 * available to this driver, the mask is used to select the CPU on which
-+	 * to read the temperature MSRs.
-+	 */
-+	if (!housekeeping_cpu(cpu, HK_TYPE_MISC))
-+		return 0;
-+
- 	pdata = platform_get_drvdata(pdev);
- 	if (!pdata->hwmon_dev) {
- 		struct device *hwmon;
-@@ -710,8 +715,8 @@ static int coretemp_cpu_online(unsigned int cpu)
- 	}
- 
- 	/*
--	 * Check whether a thread sibling is already online. If not add the
--	 * interface for this CPU core.
-+	 * Check whether a housekeeping thread sibling is already online. If
-+	 * not, add the interface for this CPU core.
- 	 */
- 	if (!cpumask_intersects(&pdata->cpumask, topology_sibling_cpumask(cpu)))
- 		coretemp_add_core(pdev, cpu, 0);
-@@ -741,9 +746,9 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	cpumask_clear_cpu(cpu, &pd->cpumask);
- 
- 	/*
--	 * If this is the last thread sibling, remove the CPU core
--	 * interface, If there is still a sibling online, transfer the
--	 * target cpu of that core interface to it.
-+	 * If this is the last housekeeping thread sibling, remove the CPU core
-+	 * interface. If there is still a housekeeping sibling online, transfer
-+	 * the target CPU of that core interface to it.
- 	 */
- 	target = cpumask_any_and(&pd->cpumask, topology_sibling_cpumask(cpu));
- 	if (target >= nr_cpu_ids) {
-@@ -755,7 +760,8 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	}
- 
- 	/*
--	 * If all cores in this pkg are offline, remove the interface.
-+	 * If all housekeeping cores in this pkg are offline, remove the
-+	 * interface.
- 	 */
- 	tdata = get_temp_data(pd, -1);
- 	if (cpumask_empty(&pd->cpumask)) {
-@@ -768,7 +774,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 
- 	/*
- 	 * Check whether this core is the target for the package
--	 * interface. We need to assign it to some other cpu.
-+	 * interface. We need to assign it to some other housekeeping CPU.
- 	 */
- 	if (tdata && tdata->cpu == cpu) {
- 		target = cpumask_first(&pd->cpumask);
+I am not sure what this referred to - could you say a little more about
+what you were questioning there? I would rather ask than guess.
 
----
-base-commit: 4781ca52761e666cf18b591e6bb0478396c90320
-change-id: 20261015-codex-coretemp-housekeeping-e7a16253adea
+4. Legal name in sign-off
 
-Best regards,
---  
-Ximing Zhang <xzhangjr@gmail.com>
+You are right that "skxby <2374604267@qq.com>" is not a legal name.
+The series will be re-signed with my real name and address in v2.
 
+5. Maintainership and interest
+
+I am not asking anyone to take this over, and I am not claiming
+maintainership. The point of posting was to have the shape of the
+abstraction and one real driver on top of it looked at, and to find out
+whether that shape is the right one at all - which your reply and the
+review have already started to do.
+
+On that note: Sashiko's review of patch 1 found issues that are real,
+and I agree with the ones I have checked so far. In particular it
+flagged the missing null terminator in chip_config - which we had
+already found and fixed ourselves through stress testing, and which is a
+good sign the review is looking at the right things - and it flagged
+that chip_read/chip_write are called unconditionally in the read/write
+callbacks, which would break any driver that does not implement those
+optional methods. That second one is a genuine design flaw in the
+abstraction, not in the driver, and I am fixing it in v2 along with the
+name lifetime issue and the locking documentation.
+
+So: is there enough interest to keep going? That is exactly what I am
+trying to establish too, and your answer - either way - is the most
+useful input available. If the answer is "not yet", I would rather hear
+it now than keep posting revisions.
+
+Thanks again for looking.
+
+<SENDER REAL NAME>
 
