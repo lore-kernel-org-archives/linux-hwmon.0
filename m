@@ -1,132 +1,74 @@
-Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.54])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12AD640F724;
-	Fri, 16 Oct 2026 08:42:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E233DA5A0
+	for <linux-hwmon@vger.kernel.org>; Fri, 16 Oct 2026 08:46:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792140175; cv=none; b=MdLHYQi7OTw4K4Ho8NCcjHy4QHrBFllZFWfGfP4Iclz6elBBm9QViubwuiiDCQ8Hawjh0T3eUouleRxchzLAVYGxxPm2ap8Tt6Eh4AGiFB8mSSwOv1HkQIHqHWbHnXSfxL6e8Q5ZmXYwIMrQf3rdOsLVj913RmhpcJtKu3p9gZc=
+	t=1792140390; cv=none; b=s2cW8vsikH8WjMBN/GfYNx+q4DRMLe+7WGReupLdH7+tNfdhwoZrjX6okYJR0dAAl+pYHOMMIr8r/xqNP3BuGBrCHDWefPyivaG/7vXVSFoLUxHwMfWIBV2k53k4HtQ894iV+NImn/1UH3eKgPnrfKyai9i7kcL/wyVyswKIFs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792140175; c=relaxed/simple;
-	bh=3rbOJU1iFVVApKsSPtz/G7fuEZPLRtV/KP/+IGlxAIs=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=m06kyny+OU1ypDnZIEPtINAmGBJN22MEk/CsoF2sAvtjjmoXLvt+rT0psHmuAfRf27lGcX39eZUl5bTzK38KCzuIAfGsygu3Poq2/3gbkhXYk+rWVi/8xjWHlS0Ao3W7mJL/W+6sMnD0TjV2kI8PQCwP0/RfyqAPHnAjgY0pj/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=faR1OGUI; arc=none smtp.client-ip=43.163.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	s=arc-20240116; t=1792140390; c=relaxed/simple;
+	bh=KbWZN3t5bEm3rgNhmXHSzd1LXLf/RNYjIKN2B/gJbp0=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=AMFcvT92fWUO/aJAHSIQbFl3MVk/qeNY9fFPQhbDN5ueoIyIV2P6IdRIPsWSUP7Z+NfcAUxdPrzvDB4tkmPvozJoW/BDNsGlVlLkmvb2whFY7KVChldR93dJGUlQ7XuX2+0fpocPUOybhJvJ0dsSNLalpff0vHywc7DJ9nw9/vY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AqcTcCyW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="faR1OGUI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1792140168; bh=3rbOJU1iFVVApKsSPtz/G7fuEZPLRtV/KP/+IGlxAIs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=faR1OGUIEXqyudze+/rlXhjJOm9SouE9CAzMUCOfVVYQfrJ+HeCID4Ymx2wwJwuyc
-	 o+k4gXNkD08P9h2gFOLZ2SganIhqtwrA2DOTo+tKQhk8ucGH5IwNPlT4/Ej1lxb8ea
-	 K9W94jSj+Rq/18omhjCcXJYfPqXq/pqfWiSn+THg=
-Received: from [172.24.48.1] ([2409:8951:a22:b25:d1a1:62d3:eb69:e679])
-	by newxmesmtplogicsvrszb51-1.qq.com (NewEsmtp) with SMTP
-	id AAD22012; Fri, 16 Oct 2026 16:42:45 +0800
-X-QQ-mid: xmsmtpt1792140165tdx1v56y9
-Message-ID: <tencent_4F803EA6BD452898DAAF75EE74A20EF07F05@qq.com>
-X-QQ-XMAILINFO: OVFdYp27KdlJfwZITd6fr7SnRvjrd9me4hJGfU0DLueOQ9LmSLDg7GZv8O25uU
-	 XfbwJ2nYms+kEoWJEgpBC9XaxzNW5canrgt4aJ4hXBJP0ZJL6iHW9xRb/PPg29Ng+8U6luqTb9Py
-	 kTE8+OOly1DlVzfrojmzjkYOk7TtukcP3XjkRXf8ScxLQkUFG2miyWQY5/ZgH6/CL6ki9JAy7qSi
-	 Y5NOsw0l3U/xICoQACUfnwLTyCLUXIBZrJqBaNtOPBzdUWqQKq9M6+AhzAa2LqWJ6s42zM538EUh
-	 62S08zXFLmYD+nmf3/73MVoQRwEVMNnhB3UWfdEP5FV8viFrRBj/rSEkD+bAG3MsXKphOofgTE8J
-	 zOqR8auNeNNyTAKXjT+ueUstpd3V1/ctOJMhAWBGlUi9bQdf9cigac+8ZwSzdQdNssqr8Dyapgrm
-	 xLCtFGivbqKOfs+3PrAdeaXYpG89FxJCartwGYh0AWbQDZzNhb4vIYV2HPn8ba4jwATNoJRxFiFr
-	 w2yGM8vOiunNwgIdGX3SVZKvUCCcDOTEQvRdvbIfBWwLLQA9FOcVIWVEXAg6nsrABxsHpoZxzfY6
-	 Jc4j5hBAEVpmqO7d5WyPO6e3nfvK1z/9XnJuigM4HBrAO6uXf7iKCCl8DqUQChGWof1L9P2n0Ioz
-	 fBQvGkse4Js+MXPpuyvE1OnyPpht3lK/G5dnmb4XANqiZOfnfVOFYgApj7L5+BjLE7l61uv3S/NU
-	 I+1uxs0MPvGFaci0KF5XnJi96WxrwX+bHnVA2qOd7cVD2ErVXKyGDLeJ9VNXCZD65u0IsPebvHKI
-	 uoeAZle2eSi+tyTOwxAVeLtEiHXByHej68h1dOBit1xLrCvbRn2NHLJ7xJ9WoveSgP6NV31ldZp4
-	 RDtqDUgDBZ0nMXw/JbcKduNRmTMzAomEgpsQfsuMi6uIh0YxHQl33+WRVOUlCKTFZBUbXkfoQxwo
-	 iflH+sv/7qsRinDjWfRcTVMiBTjQ17M1zaKjlqvq/0jdY1iUZ15X+rOaIEjCuxp/sRaRYr9jRO0X
-	 w6NmviBKi+rItApyjqgSznb+ot8xY=
-X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
-From: skxby <2374604267@qq.com>
-To: Donjuanplatinum <donplat@barrensea.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
-Subject:
- Re: [PATCH 0/2] rust: hwmon: rework hwmon abstractions, add TMP108 driver
-Date: Fri, 16 Oct 2026 16:42:45 +0800
-X-OQ-MSGID: <179214016501.15268.642738678844764524@qq.com>
-In-Reply-To: <87se26dpzf.fsf@barrensea.org>
-References: <20260512155747.10136-1-donplat@barrensea.org>
- <9c2fa543-525a-4e43-9f73-7caf13b98039@roeck-us.net>
- <tencent_576573331343805F032731492D63C12D7E08@qq.com>
- <87se26dpzf.fsf@barrensea.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AqcTcCyW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76E011F000C4;
+	Fri, 16 Oct 2026 08:46:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792140386;
+	bh=KbWZN3t5bEm3rgNhmXHSzd1LXLf/RNYjIKN2B/gJbp0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=AqcTcCyW8dtZbq7t6R51uCyVCLccl1YPmZHWgUFDybGuodzMuhpnlAL2NaR9rPy2G
+	 daoy3cHthTC31Mie2N0mE0uCOHOXhSVIjApaEt6A0IHkw/3BbRL+MWw2P2DwX9Ge+5
+	 u//O3Py1o9jitO5OQ3IhwVP3psHu7I1K+4O4VxKWWi+9BJTA4w61FtNyNofVTECMBA
+	 /Zw6VjFScNi1l836Sk2RCoCEQG3pyy+OP++Uy+8gDR9Gmq5Av1ZhW5SbRbJ9NEtWfD
+	 mZbGcRrylBN5q/h3lDoLHrcVBi2DM2ofPPn0Tq6DBkD/sxgyx08ltMFjVb+8hA3fE9
+	 YP1Zo7S3MUnKg==
+Message-ID: <sashiko-outbox-174032@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (coretemp) Fix handling of isolated SMT siblings
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ximing Zhang" <xzhangjr@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20261016-codex-coretemp-housekeeping-v1-1-96618c5676b2@gmail.com>
+References: <20261016-codex-coretemp-housekeeping-v1-1-96618c5676b2@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 16 Oct 2026 08:46:26 +0000
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-Hi Donjuanplatinum,
+> From: Ximing Zhang <xzhangjr@gmail.com>
+>=20
+> Commit 0f8b916bc5b5 ("hwmon: (coretemp) avoid RDMSR interrupts to
+> isolated CPUs") prevents create_core_data() from creating temperature
+> data for an isolated CPU. coretemp_cpu_online(), however, still adds
+> that CPU to pdata->cpumask.
+>=20
+> When an isolated SMT thread is processed before a housekeeping sibling,
+> the mask makes coretemp_cpu_online() believe that the core is already
+> represented. The housekeeping sibling then gets no temperature
+> attributes. Package attributes are similarly not retried when the first
+> CPU processed in a die is isolated.
+>=20
+> The mask is also used to select a replacement CPU when a sensor target
+> goes offline. Including isolated CPUs permits the driver to retarget a
+> [ ... ]
+>=20
+> Fixes: 0f8b916bc5b5 ("hwmon: (coretemp) avoid RDMSR interrupts to isolate=
+d CPUs")
+> Cc: stable@vger.kernel.org
+> Cc: Marcelo Tosatti <mtosatti@redhat.com>
+> Signed-off-by: Ximing Zhang <xzhangjr@gmail.com>
 
-Thank you for taking the time to look at this - and for replying at all.
-Let me answer each point.
+Sashiko has reviewed this patch and found no issues. It looks great!
 
-1. AI involvement
-
-Fair question, and I should have stated it up front. The work was
-developed with AI assistance: I run a multi-agent setup (a scheduler
-plus several model-backed agents) that produced code drafts, ran the
-build/regression/stress-test cycles and drafted the commit messages and
-cover letter. Every patch was reviewed by me, and I built and tested
-each change myself; the two bugs we found during this round (an i2c
-client leak on the registration error path, and a missing null
-terminator in chip_config) were both found by the lifecycle stress tests
-I ran and reproduced before fixing. I signed off on the series and I
-take responsibility for it.
-
-For v2 I will add an "Assisted-by: LLM" tag as described in
-Documentation/process/coding-assistants.html. Please tell me if you want
-the tool names listed there as well.
-
-2. Cc Rust-for-Linux
-
-Agreed - I did not Cc rust-for-linux on v1, and I should have. v2 will
-Cc rust-for-linux@vger.kernel.org.
-
-3. "?"
-
-I am not sure what this referred to - could you say a little more about
-what you were questioning there? I would rather ask than guess.
-
-4. Legal name in sign-off
-
-You are right that "skxby <2374604267@qq.com>" is not a legal name.
-The series will be re-signed with my real name and address in v2.
-
-5. Maintainership and interest
-
-I am not asking anyone to take this over, and I am not claiming
-maintainership. The point of posting was to have the shape of the
-abstraction and one real driver on top of it looked at, and to find out
-whether that shape is the right one at all - which your reply and the
-review have already started to do.
-
-On that note: Sashiko's review of patch 1 found issues that are real,
-and I agree with the ones I have checked so far. In particular it
-flagged the missing null terminator in chip_config - which we had
-already found and fixed ourselves through stress testing, and which is a
-good sign the review is looking at the right things - and it flagged
-that chip_read/chip_write are called unconditionally in the read/write
-callbacks, which would break any driver that does not implement those
-optional methods. That second one is a genuine design flaw in the
-abstraction, not in the driver, and I am fixing it in v2 along with the
-name lifetime issue and the locking documentation.
-
-So: is there enough interest to keep going? That is exactly what I am
-trying to establish too, and your answer - either way - is the most
-useful input available. If the answer is "not yet", I would rather hear
-it now than keep posting revisions.
-
-Thanks again for looking.
-
-<SENDER REAL NAME>
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261016-codex-core=
+temp-housekeeping-v1-1-96618c5676b2@gmail.com?part=3D1
 
