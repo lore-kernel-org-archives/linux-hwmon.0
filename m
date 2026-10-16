@@ -1,251 +1,274 @@
-Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EC1B41DEF4;
-	Fri, 16 Oct 2026 07:24:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48475419FC5
+	for <linux-hwmon@vger.kernel.org>; Fri, 16 Oct 2026 07:33:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792135494; cv=none; b=ZP3gH8PHe28ta6/PifBZk5B8XTDTmg95YP5B/b3IvsoZjgo+iMaBvwqYh+X7LW0nSyskQ4IyLKPHt/sDRM0Xxk0T+UZ1jIXzzefBvm7SweJNL9UwjdnVoKSF9FyelKSfLztAguc8fe1uoPG+yuebiWZucljGFIiuURR++zSnvT0=
+	t=1792135997; cv=none; b=CziQzet5Y+OCS5EGtSCWs321V0ZtUAMWtYE4uVYqR3LlbzDTFhmx7DPOs1HbC6o/dTZS8Whe+e6vb1aBxnw0pX9lIKfnHLHfIvNYyMerLzt+rOJYi3ZHrEicKTEHPdJwdqtGNxLwn8fLUETUqVntqgQ2Ie6uQWhwnBTNi6ZE4a4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792135494; c=relaxed/simple;
-	bh=cvrGbmZH6DQrmf8GrZ7C+XpiH8J+M3O0XMergNvOTB0=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bxNGwGKOFH2L5XM260h/Y16DFOapFfzU6zjx1SKxw0VmXSksya+4FYAOp+4e5VzwimjlaDU7C+I1PswnCl4luTdYY9mNzAqvLMRx/KzOIhLznwPtVm3tWpuYNtHj15+4Jg2BFV4MWHSS7ZylKko2dCm0hxduvucjebIRc/dlFBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=KZewl/Bw; arc=none smtp.client-ip=162.62.57.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	s=arc-20240116; t=1792135997; c=relaxed/simple;
+	bh=naz0B5V/6SddpZgX2SYN/55XvoQduRcEbrniiKH0RvU=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=YXzQNK8bTOjyJRA9JFflNv5+PqhspmrWEeQQwEX9eLsII9C2yIlJn1RQzIBJQ6UyucYEJI2/t61jOExgrCixUxdxPv3yH8lb7yNDrP1Z76h6wiimrhm8thNM55Y0pTok61xBHm2pj8j4Ty1DUePpDL0djmLsEKORaWzgl9r0V+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TJzUP3nW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="KZewl/Bw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1792135465; bh=EQfea610ZCPV9X5LfzvpHLBmDIAceLkugL2AgDpwMgw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=KZewl/BwLwzafVrKILcd0xreTHLnK+sAcn/Znnzkd5/zNbhfZ1IQBWWPQcwca83Ka
-	 ZCDXvKGlss5fsX9oT1b+4xWesHOeBrByHCjwXzuPsYbNJZQynPr00w53hcOH7sBKTO
-	 6n/XmI4F6xviIcvpCbMJL2R84tvj4e4SlH0Jm6Pk=
-Received: from [172.24.48.1] ([2409:8951:a22:b25:d1a1:62d3:eb69:e679])
-	by newxmesmtplogicsvrszc43-0.qq.com (NewEsmtp) with SMTP
-	id 6171AA01; Fri, 16 Oct 2026 15:24:23 +0800
-X-QQ-mid: xmsmtpt1792135463tz4on925x
-Message-ID: <tencent_576573331343805F032731492D63C12D7E08@qq.com>
-X-QQ-XMAILINFO: MMiYYMZfA8EXVYAFw0VuapiIPwNd82PETT7MpDL+DK8nwabLk9O4pakOlCCxrI
-	 7Nipp9h44cWRotIS7ctnDt7RpOY0kZffYJc6DCI3drw0B0+JZZ1GJgu8o1kRPsfawNZmne9ITLeX
-	 54M1o2EKpYFF7NOuw8P4YuUm6sdMvYo6MklCNe0zMHKgJc5SpHqz+OqcizAIuoGvP/nPQVgzUNOX
-	 KIA2tOHAkQMPMyYllKQbChnJUeDIMfMkpA/g81HIjyJ2V3SsxTB19HkWgw3DMkxwpYh/EIHeM2Qr
-	 PC4LnE9d1kUfpTp8kF4kXpr3DVW72S7FesvLNBe9jvsS4wiJCCsLb2UOiiF3orQeBBbivqZlAeKl
-	 dtTk6RmAm4kLr8lYaSqvfyyZpRIAa7DY274o0DqbpZ1vLIUP5iUHQdpR2De0NMRsTYg3y/0JVaxL
-	 yQ6rrpmG0J+5zB7qRL3+Fi7fcyLChqiETFQIIAf2KnLi1duLo9J6Toqrwk9XOq28z/RVM61PpMvX
-	 l+B/lYlDkvd4tlRUH+wmGSNyd4nEVaVkYqBItzQEzpiM6TDo9IkHf9h02c4IZZE85py3LPsNKY2h
-	 QIrVrBsSbW6m8avJrmUsk65Sr+Z3vbrwSuRKUo8poXBMGRGbAYWBGOmDnhPmfziuQGs9k8LNwdtX
-	 3xLRYWKeiGQRKFu8ihgXUhag5Y0J+640vDfl19qgYltwlNVqtHslNpDyHF3Pq/VQGYaCyeHAnmWL
-	 BD2CYuu7WSYMNwCj++HogJ8xs3UokImt2rNtKW3iOrbrM//Y42TPfOXUePNAv8UY5DS5J7iAKn77
-	 jW1fvoBLeL0GBoqbA+A7imG/fcFg1FEihH91Tig2yHlFPPjXclVTt5UrTJzL0rwpBne5Pc9/9Wmv
-	 trTYwOuiKOd1Sy+y/N4/pI/oUOLOWldThwNXLDoeIfD+3azIGDndYBjmi3KWoyWhc0lYlbFmXSA7
-	 MtyGKIR6T4brq2o9OZ/f8v4EAsm4ditvZ/tYrLAdPcJtbrS0yhjW9qtaO7LjZ/se18tC9nOWU=
-X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
-From: skxby <2374604267@qq.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Donjuanplatinum <donplat@barrensea.org>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] rust: hwmon: rework hwmon abstractions, add TMP108 driver
-Date: Fri, 16 Oct 2026 15:24:15 +0800
-X-OQ-MSGID: <179213545522.40444.8748988877722946371@qq.com>
-In-Reply-To: <9c2fa543-525a-4e43-9f73-7caf13b98039@roeck-us.net>
-References: <20260512155747.10136-1-donplat@barrensea.org>
- <9c2fa543-525a-4e43-9f73-7caf13b98039@roeck-us.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TJzUP3nW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABF061F000C4;
+	Fri, 16 Oct 2026 07:33:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792135995;
+	bh=3iC8YO/QVk2Pbvkjuw142gZeQ8FTD+/dtE7876zaFX4=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=TJzUP3nWZ12Ny0KqdW6AnT1sIaOCqE47M5nj+GAo+hYEfPLo5FUR2y3Widx7DAsvR
+	 hDvND4DOhWnrAMNMKzYBcAUz4Lb1Cz05jpQ1vrp8ILAU6TsH5Hb6ja66iJnWb4Lz3L
+	 rLjY8C5sZi4dx1SsSCiTxhzYWwH3oK5cos0YLSUsN9UlYE41qNS5+5lGR+dH5d7Afi
+	 zD+Y7K9PqQeE1da+xF9iZDiV+R3xEltCEbdXwMR4CzI8HfgJ+U8VC3cqyWEie4NVDm
+	 l9jj4z7td7ng1TdSRuSwt9EKqZ2Ma98Mm575ra+tmF9MOkX2z+9w7a6xJU++YrCqAV
+	 anPzyAFhM2fKQ==
+Message-ID: <sashiko-outbox-173934@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 1/2] rust: hwmon: add hwmon abstractions
+Reply-To: sashiko-reviews@lists.linux.dev
+To: skxby <2374604267@qq.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <tencent_95E7F9B5CE294CA4027A0CD4C550B454050A@qq.com>
+References: <179213545522.40444.8748988877722946371@qq.com>
+ <tencent_95E7F9B5CE294CA4027A0CD4C550B454050A@qq.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 16 Oct 2026 07:33:15 +0000
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-Hi Guenter,
+Thank you for your contribution! Sashiko AI review found 7 potential issue(=
+s) to consider:
+- [High] hwmon: use-after-free of hwdev->name due to unconstrained &CStr li=
+fetime
+- [High] hwmon: out-of-bounds read due to missing null-terminator in chip_c=
+onfig
+- [High] hwmon: linker error for drivers omitting #[optional] chip_read/wri=
+te
+- [Medium] hwmon: missing hwmon_lock() API and incorrect locking documentat=
+ion
+- [Medium] hwmon: manual pointer wiring bypasses required pin-init API
+- [Low] hwmon: abstraction limits drivers to a single temperature channel
+- [Low] hwmon: missing #[inline] attribute on Registration drop method
+--
 
-[1] Positioning
+commit a2d95b04547e27fa736c176ee2cb6a3c7255a3eb
+Author: skxby <2374604267@qq.com>
+Date:   Fri Oct 16 15:12:27 2026 +0800
 
-This series follows up on Donjuanplatinum's RFC [1], which proposed basic
-Rust abstractions for the hwmon subsystem. Your reply [2] noted that Rust
-support in hwmon would have to wait for someone else to pick up
-maintainership, and the thread has been quiet since. I am not re-litigating
-that decision here. I have taken the proposed abstractions, reworked them
-against the current rust tree, and written a real driver on top of them
-(TMP108, mirroring drivers/hwmon/tmp108.c). I am posting the result so the
-work itself - the shape of the abstraction and the driver built on it - can
-be looked at on its own merits, whenever and by whoever takes the
-maintainership question up.
+rust: hwmon: add hwmon abstractions
+   =20
+Add Rust abstractions for the hwmon subsystem, supporting temp[1-*]
+attributes and chip-level attributes. Registration owns its inner state
+and uses a Driver trait for callbacks.
 
-[2] What this series contains
+Link: https://lore.kernel.org/all/20260512155747.10136-1-donplat@barrensea.=
+org/
 
-  Patch 1 - rust: hwmon: add hwmon abstractions (rework of the RFC layer)
-    rust/kernel/hwmon.rs: generic hwmon registration with pinning and a
-    self-referential Registration<T> type; attribute callback dispatch for
-    two sensor types (chip and temp); a Driver trait with three required
-    temp methods (read/write/is_visible) and three chip methods marked
-    #[optional] (chip_read/chip_write/chip_is_visible), following the
-    existing #[vtable] idiom in rust/kernel/miscdevice.rs. Attribute
-    channel masks are derived from the modeled attribute enums rather than
-    a hardcoded table. No driver-specific logic lives in this file.
+> diff --git a/rust/kernel/hwmon.rs b/rust/kernel/hwmon.rs
+> new file mode 100644
+> index 0000000000000..d7e3fd683b862
+> --- /dev/null
+> +++ b/rust/kernel/hwmon.rs
+[ ... ]
+> +/// The hwmon driver trait.
+> +///
+> +/// # Concurrency and Driver Responsibilities
+> +///
+> +/// The hwmon C core provides **no internal locking** for attribute acce=
+ss. When user-space
+                                     ^^^^^^^^^^^^^^^^^^^^^^
+[Severity: Medium]
+This isn't a bug, but is this statement accurate?
 
-  Patch 2 - hwmon: (tmp108) add Rust TMP108 driver
-    A Rust driver for the TI TMP108, exposing 8 sysfs attributes:
-    temp1_input, temp1_min, temp1_max, temp1_min_hyst, temp1_max_hyst,
-    temp1_min_alarm, temp1_max_alarm, and update_interval (chip channel,
-    four conversion-rate buckets, via a Rust-side port of
-    find_closest_descending). Numeric and error semantics follow the C
-    driver (millidegree truncation, write clamping, absolute-value
-    hysteresis ABI, EAGAIN for one-shot conversion not ready).
+The documentation incorrectly claims that the 'hwmon C core provides no
+internal locking for attribute access'. The C core uses a per-device mutex
+(guard(mutex)(&hwdev->lock)) during sysfs attribute reads and writes.
 
-[3] Scope statement
+Furthermore, the hwmon subsystem guidelines explicitly state that drivers
+should use hwmon_lock() and hwmon_unlock() to implement locking required
+for interrupt handling. This abstraction fails to expose or wrap these
+functions, making it impossible for Rust drivers to comply with this
+official rule.
 
-The abstraction deliberately covers a subset of hwmon, and the cut is made
-by a single rule: an attribute family is included if its shape can be
-reused unchanged by a second, different sensor type; it is left out if it
-would have to be re-cut per driver. Under that rule the temp attribute set
-is the 7 entries shared by TMP108 and the hwmon temp templates
-(input/min/max/*_hyst/*_alarm); the crit family is left out of the enum
-entirely (TMP108 has no crit registers, so keeping it would force a
-per-driver re-cut), and update_interval lives in a separate ChipAttr
-because it cannot be reused on the temp type at all. Everything else
-(label strings, in/curr/power/fan channels, multi-channel config, the
-remaining 16 chip attributes) is left for follow-up work.
+> +/// reads or writes `/sys/class/hwmon/hwmon*/temp*_*`, the core directly=
+ invokes the
+> +/// registered callbacks with a **shared `&self` reference** to `HwmonIn=
+ner<T>`.
+[ ... ]
+> +    unsafe extern "C" fn read_callback(
+> +        dev: *mut bindings::device,
+> +        type_: u32,
+> +        attr: u32,
+> +        channel: c_int,
+> +        val: *mut c_long,
+> +    ) -> c_int {
+> +        from_result(|| {
+[ ... ]
+> +            let result =3D match SensorType::try_from(type_)? {
+> +                SensorType::Chip =3D> T::chip_read(&inner.driver, ChipAt=
+tr::try_from(attr)?)?,
+                                       ^^^^^^^^^^^
+[Severity: High]
+Does this code cause a compilation failure for drivers that do not implement
+the optional chip methods?
 
-On the driver side, update_interval was originally a known gap relative to
-the C driver; it is implemented in this series, so patch 2 now matches the
-C driver's attribute surface item for item.
+The Driver trait marks chip_read and chip_write as #[optional]. The
+#[vtable] macro replaces missing optional methods with a build_error!()
+call. Here, the calls to T::chip_read and T::chip_write are unconditional
+within the dynamically evaluated SensorType::Chip branch.
 
-[4] Testing
+Because the compiler cannot prove this branch is dead at compile time, the
+build_error!() call is retained in the binary, causing a fatal linker error
+for any driver that chooses not to implement these methods.
 
-Evidence is stated per level, and the wording matches the level:
+Should the calls be guarded by if T::HAS_CHIP_READ and
+if T::HAS_CHIP_WRITE?
 
-  - Both patches apply and compile against the 7.3.0-rc5 source tree
-    (kernel tarball, rustc 1.85.0, bindgen 0.73.2). A forced rebuild of
-    the driver reports zero warnings and zero errors; CLIPPY=1 reports
-    zero warnings, and a build with RUSTDOCFLAGS="-D warnings" reports
-    none either. checkpatch reports 0 errors / 0 warnings on both files
-    of the series (491 and 573 lines checked, "ready for submission").
+> +                // C core guarantees `channel >=3D 0`.
+> +                SensorType::Temp =3D> {
+> +                    T::read(&inner.driver, TempAttr::try_from(attr)?, ch=
+annel as u32)?
+> +                }
+> +            };
+[ ... ]
+> +    fn new_placeholder(driver: T) -> Self {
+> +        // A driver that exposes no chip attribute must not advertise th=
+e chip channel
+> +        // either: leaving `chip_config` zeroed makes the channel carry =
+no attributes, and
+> +        // `is_visible` would not be consulted for it in the first place.
+> +        let chip_config =3D if T::HAS_CHIP_IS_VISIBLE {
+> +            [CHIP_ATTR_MASK]
+             ^^^^^^^^^^^^^^^^
+[Severity: High]
+Can this out-of-bounds read adjacent memory when the C core reads the
+configuration?
 
-  - The driver is boot-tested and exercised end-to-end on i2c-stub in a
-    VM. A 22-case regression suite over update_interval (four rate
-    buckets, write-then-read-back, out-of-range clamping including
-    midpoints, cross-chip table isolation, bit-exact register checks)
-    passes 22/22 on the frozen build.
+The C hwmon core strictly requires the hwmon_channel_info.config array to
+be null-terminated (ending with a 0). Here, chip_config is defined as
+[u32; 1] and initialized to [CHIP_ATTR_MASK]. It lacks a trailing 0
+terminator.
 
-  - The full 8-attribute sysfs surface was diffed attribute by attribute
-    against the C driver under i2c-stub; read and write values match on
-    every attribute. One environment-dependent difference is documented
-    in [5]: update_interval's power-on default reads 4000 ms on i2c-stub
-    vs 1000 ms for the C driver, because the C driver sets the rate in
-    probe and this driver does not yet replicate that probe-time
-    initialization.
+When hwmon_device_register_with_info reads the channel configuration, it
+will fail to stop at the end of chip_config and read past the array bounds
+into adjacent memory, which can cause the C core to misinterpret memory as
+attribute masks.
 
-  - Lifecycle stress: 500 register/unregister cycles completed with no
-    failures and no residue (fails=0, duplicate-attribute=0, kmemleak
-    clean). Concurrent access against module removal was exercised too:
-    8 concurrent readers across 200 removal cycles, and 4 readers plus 4
-    writers across 50 removal cycles, both completed with no faults
-    observed in dmesg, no sysfs residue, and kmemleak clean.
+> +        } else {
+> +            [0]
+> +        };
+> +
+> +        Self {
+> +            driver,
+> +            ops: bindings::hwmon_ops {
+> +                is_visible: Some(Adapter::<T>::is_visible_callback),
+> +                visible: 0,
+> +                read: Some(Adapter::<T>::read_callback),
+> +                read_string: None,
+> +                write: Some(Adapter::<T>::write_callback),
+> +            },
+> +            chip_config,
+> +            temp_config: [TEMP_ATTR_MASK, 0],
+                            ^^^^^^^^^^^^^^^^^
+[Severity: Low]
+Does this hardcoded array strictly limit the abstraction to a single
+temperature channel?
 
-    Those concurrent runs were made on a kernel built without KASAN or
-    KCSAN. "no faults observed" means exactly that - no observable fault
-    under this configuration - and not that a use-after-free or a
-    time-of-check/time-of-use window is absent. The structural argument
-    for the unregister path is separate, and is stated in [8]: when
-    hwmon_device_unregister returns, in-flight sysfs callbacks have
-    drained (kernfs_drain in fs/kernfs/dir.c), which is what makes
-    dropping the self-referential state safe.
+The commit message asserts that the abstraction supports registering
+temperature sensors with the full standard temp[1-*] attribute set.
+However, this single configuration mask means the C core will only create
+attributes for temp1_* and will never query channel > 0, preventing drivers
+from registering multiple temperature sensors.
 
-  - The lifecycle stress also surfaced a real defect in this series, and
-    this revision fixes it. On the hwmon registration error path, module
-    init returned early and left the i2c client it had created
-    unregistered, so a failed registration could keep that client
-    attached and hold its address until reboot. The error path now
-    unregisters the client it created before returning. Before the fix
-    the stress loop failed 924/1000 operations; after the fix the frozen
-    build completed 500/500 cycles clean. The defect was in the driver's
-    module-init error path (samples/rust/tmp108.rs); the abstraction's own
-    Registration/Drop path was not implicated.
+> +            chip_channel: bindings::hwmon_channel_info {
+> +                type_: 0,
+> +                config: core::ptr::null(),
+> +            },
+[ ... ]
+> +    pub fn new(parent: &Device<Bound>, name: &CStr, data: T) -> Result<S=
+elf> {
+> +        let mut boxed =3D KBox::new(HwmonInner::new_placeholder(data), G=
+FP_KERNEL)?;
+> +
+> +        // Wire self-referential pointers before pinning. We obtain a mu=
+table raw pointer
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Severity: Medium]
+Does this manual pointer wiring bypass the required pin-init API?
 
-[5] Known gaps
+The Rust subsystem guidelines require that try_pin_init! or pin_init! be
+used to initialize structs that require pinning. The abstraction bypasses
+this safe pin-init framework by allocating a KBox, acquiring a raw pointer,
+mutating fields unsafely to wire self-referential pointers, and manually
+calling Pin::new_unchecked.
 
-  - HWMON_C_REGISTER_TZ: The Rust version does not set HWMON_C_REGISTER_TZ,
-    so no thermal zone device is registered (the C driver registers one
-    per visible temp channel when CONFIG_THERMAL_OF is enabled). Thermal
-    integration is left for a follow-up.
-  - One-shot mode interaction with system suspend/resume is not modeled
-    yet; the EAGAIN path exists but its PM interaction is deferred.
-  - The p3t1035 compatible chip (hysteresis bits differ, max/min
-    visibility differs) is not handled; the driver is TMP108-only for now.
-  - update_interval's power-on default differs from the C driver (4000 ms
-    on i2c-stub vs 1000 ms); see [4]. This is a probe-time initialization
-    gap in the driver, not an ABI difference.
-  - This series is built and exercised against a 7.3.0-rc5 source tarball
-    (no git tree). That shows the patches are self-consistent with that
-    tree; it does not by itself show they apply unchanged to the current
-    rust-next or hwmon-next tip, whose rust/kernel/ APIs may have drifted.
-  - All end-to-end evidence comes from i2c-stub in a VM. No physical
-    TMP108 hardware was exercised; real-device behavior (in particular
-    alarm timing and conversion latency) is unverified.
+> +        // from the uniquely-owned `KBox` -- no intermediate `&mut` refe=
+rence is created,
+> +        // so no aliasing rules are violated.
+> +        let inner_ptr: *mut HwmonInner<T> =3D &raw mut *boxed;
+[ ... ]
+> +        // SAFETY: `chip_info` and all nested pointers target memory wit=
+hin the same
+> +        // allocation, which remains valid until `hwmon_device_unregiste=
+r` in `Drop`.
+> +        // `parent.as_raw()` and `name.as_char_ptr()` are valid. The nam=
+e is copied by
+> +        // the kernel (via `dev_set_name` -> `kvasprintf_const`), so no =
+lifetime issue.
+> +        let hwmon_dev =3D from_err_ptr(unsafe {
+> +            bindings::hwmon_device_register_with_info(
+> +                parent.as_raw(),
+> +                name.as_char_ptr(),
+                 ^^^^^^^^^^^^^^^^^^
+[Severity: High]
+Can this cause a use-after-free of hwdev->name?
 
-[6] Open questions
+The Registration::new function accepts a name: &CStr parameter without a
+lifetime constraint tying it to the Registration object. The C core stores
+this pointer directly in hwdev->name (which is returned by the sysfs
+name_show attribute) without copying the string.
 
-  1. Does the chip-channel shape (ChipAttr + #[optional]
-     chip_read/chip_write/chip_is_visible, no default bodies, macro-injected
-     build_error!) match what a hwmon Rust abstraction should look like, or
-     would you prefer a different split (e.g. a single read/write with an
-     enum over both types)?
-  2. Is deriving the channel config masks from the attribute enums
-     (instead of hardcoding a table) acceptable for the abstraction, or is
-     an explicit per-driver config table preferred?
-  3. Should the crit family be re-added to the temp attribute enum for
-     completeness (drivers that have crit registers would then not need to
-     extend the enum), at the cost of a wider enum that most drivers partially
-     use?
-  4. Is a TMP108 driver useful as the first in-tree consumer of the
-     abstraction, or would a different driver (or a sample under samples/)
-     serve better?
+If a caller passes a temporary string (e.g., a short-lived CString), the
+string will be freed after registration. When userspace later reads
+/sys/class/hwmon/hwmon*/name, the C core will dereference the freed memory.
 
-[7] Baseline
+> +                drvdata,
+> +                &raw const (*inner_ptr).chip_info,
+> +                core::ptr::null_mut(),
+> +            )
+> +        })?;
+> +
+> +        Ok(Self { hwmon_dev, inner })
+> +    }
+> +}
+> +
+> +impl<T: Driver> Drop for Registration<T> {
+> +    fn drop(&mut self) {
+       ^^^^^^^
+[Severity: Low]
+This isn't a bug, but should this method have an #[inline] attribute?
 
-Both patches apply and compile against the 7.3.0-rc5 mainline source
-tarball (no git tree; commit identity = the 7.3.0-rc5 release), with the
-rust toolchain versions listed in [4].
+According to the Rust subsystem guidelines, small functions or functions
+forwarding to a C binding call in abstractions should be annotated with
+#[inline]. This method forwards directly to bindings::hwmon_device_unregist=
+er
+but lacks this required annotation.
 
-[8] Differences from the RFC v0.1 abstraction
+> +        // SAFETY: `hwmon_dev` was returned by a successful registration=
+. This call waits for
+> +        // all in-flight callbacks before returning.
+> +        unsafe { bindings::hwmon_device_unregister(self.hwmon_dev) };
+> +    }
+> +}
 
-Relative to Donjuanplatinum's original RFC layer, this series changes:
-
-  - Registration: the RFC used devm-based registration; here a
-    self-referential Registration<T> owns its inner state, pins it, and
-    unregisters in Drop. hwmon_device_unregister returning guarantees all
-    in-flight sysfs callbacks have drained (kernfs_drain waits for active
-    references in fs/kernfs/dir.c), which is what makes dropping the
-    self-referential state safe.
-  - Channel info: the channel info array now carries a chip channel in
-    addition to two temp channels (3 entries + NULL terminator), and the
-    chip config mask is included.
-  - Optional methods: chip callbacks use #[optional] with no default
-    bodies (per rust/macros/vtable.rs, which rejects #[optional] methods
-    with bodies); the adapter layer registers hwmon_ops callbacks only
-    when the driver implements them.
-  - Error-path cleanup: the RFC layer relied on devm; here the driver's
-    module-init error path releases what it created explicitly. If hwmon
-    registration fails, the i2c client that init created is unregistered
-    before init returns, so a failed registration does not leave the
-    client attached. SAFETY: that client pointer is created in this
-    function (non-null, not ERR_PTR) and, on the failure branch, has not
-    been handed to hwmon and no in-flight callback can reach it, so the
-    explicit i2c_unregister_device is sound.
-
-[9] Closing
-
-I am not expecting a merge decision with this posting. My aim is to put a
-concrete, working series in front of the subsystem so the abstraction
-design can be reviewed on its own merits. I am awaiting guidance on the
-maintainership question and on the open questions above, and will revise
-the series accordingly.
-
-Thanks,
-<SENDER NAME>
-
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/tencent_95E7F9B5CE2=
+94CA4027A0CD4C550B454050A@qq.com?part=3D1
