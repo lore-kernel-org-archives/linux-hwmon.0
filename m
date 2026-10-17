@@ -1,124 +1,140 @@
-Received: from mail-lr2-f9.google.com (mail-lr2-f9.google.com [74.125.230.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B71637EFE3
-	for <linux-hwmon@vger.kernel.org>; Sat, 17 Oct 2026 04:24:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.73
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792211060; cv=pass; b=GSiWC0IYVsBrmbWydNvVTuBOI6lLB3FaESyZh/I8H2Sg4YNQez34gDeXQuCon7oaFtvQoJm/IHBhmrEecmbEK2LN6cn+4UdimxQ9h3tSD07/sb8T3g6hSGrw02ztWyYwBwAPuWkk+4DwCC1yA8v1jlNEAQojczGFxABjYulst0M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792211060; c=relaxed/simple;
-	bh=1oRJgE0/OpJYlTlzynaBwOuxLl8TXrQObIb4bOmb95g=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=G3nvHpUWJDtNiaZlloy8U6d37/wVqDpvQQU1eAuj+dQgndiW+XtikxTyNNSIuO/0zmSPHfkAgQrOJPVAUbb1Z98MsecGAkLTLwn4mD4oOz7F1SKLRP4px6u2u6kPtDXf9s6qa3yGLj8goCy471EKLdlBamccA8n08YwusDruWeM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N933h72A; arc=pass smtp.client-ip=74.125.230.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2E523A7D82;
+	Sat, 17 Oct 2026 20:51:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792270285; cv=none; b=ul7zU7yS8W+pc8u6o3k3pWw3fjUoLKeMVLKs5fZRLB57qr0BWbSgpVZfEZBOZsj7J2zvrDQGpBKgyAuzkplkoaPv5w/XS6no74pJ7vFhXbMsDDWpKNA8Drs006SyB8R5LS4C6Olsp9kP7wznNxE98/WyIUHPJWE/DnzTfFq+D0A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792270285; c=relaxed/simple;
+	bh=f/2H68jyAXF/ZWGlq4jQZmINjqhRrwiilOtA63DlJ7g=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=l+3BjA99es1QElEwuPcxsNzYlc1BjhMOWhQ0uwzgnVVHDXsRTx/bSTejti3bbhjWw6f9SMWeE2H7b0gXK8DIwxa9OB2cFp95X9w6wDg8PmiC8PjVfZ6vD6Cd4Too202ydyjm5pvsOGH/aphDIr2kKp29F30ZBEc8rF4DCc+oGYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZqN6iZpg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N933h72A"
-Received: by mail-lr2-f9.google.com with SMTP id 38308e7fff4ca-3a9e5838f09so2605071fa.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 16 Oct 2026 21:24:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792211056; cv=none;
-        d=google.com; s=arc-20260327;
-        b=lcRaOVYZ1WJge+sVTZAdEvRvo/99UZ08mWuz0a5jH8PIJfn62l4ka53+fHSVmDCBkA
-         heS+krR6AyPh1MwI7waQyMO2tMvgqfqisn/Dz6z6G4j45Yf6uf17lanZMEBTx/YPoeJA
-         lKGacNuPwFZtKaCBCfBwl93hmVdwmwd1TbLXKUC1C18oMbq3aq7ZCEdrJAvoOdQC3Bbd
-         PWEwCft5vZLu4OpMfTlulNIpfv0XqUfUE4WeXmC+ZKkqokh1YF5ry/PldNA8nIwwR+nk
-         ighQbESXNP2ALHoYlY5b1xKzRz2QB5GFk81ndnDwsBMG4tdwIG9L6prOrixjwuLxt76d
-         xV9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=Pk8KkEEG59veQ4YrCFinnmzhounrCAj7LNBdzBMoOzw=;
-        fh=KpZJX0iMHGMttG19AyeEzF+fNwzq946ZCq0iyz+GP6I=;
-        b=kMHdyFL7+tKLew/6IOwY/nbF9j/wvUMXgKIOzyO6vk1QYNr4wKPXEfenh3yLgigmSY
-         gcZG3ue1+tfLtBaI13xpPszYcw+bmgifYNY34OQV025Fh8nLwkTvdo0O1OTuEtIDmvpy
-         gLL9GJWPCOsBUfAJjnqXLmCA6qF4NzAujM176ELIq01CaFfrPpWFoirURANBP+e8Uq9Y
-         qyTspoiJ5vXVJA8G+zuY/2dMJkOk8/wzroyue5RXy4ZjLi5hhMqHTCUA5yXo/kkG9nus
-         feSJgzbwmx7OqD1QW++WqU89MAMvk6veffLT1fj+HWyK15nI/UME8CLjn7zmCT3yKCuR
-         YWAA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792211056; x=1792815856; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Pk8KkEEG59veQ4YrCFinnmzhounrCAj7LNBdzBMoOzw=;
-        b=N933h72AZKE7rkG6iYbR3ciiuOMAlVcD4Jx5qL/WzLwNMTZu3SkNSnCCCFfVGmBnnq
-         LGJEuDsv6EJwIO/rkUE4t9ILlk4Aj9fqLOiGjURbFj7HCaGFVU1iTFBKWJUu/wBhcJFh
-         4gA4xIY0el94pcG34/+NLLp5Ki99PduL2kHnHE9PEC9GgEta95kHs9kA93+wdyDgooLe
-         zAqvjpZw/FhnHSj2N33+FiXAwPVb3iSLHag/K9KiXjHlK4kgyakmTIfcxI7Dv70pQC7Y
-         D+Ug01gyuhpz08zKEyj9TlC45Ch4ah9Z79lKAhZhkOuCKyjpcv0yuKZkYUHe3GvrrVt6
-         kHJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792211056; x=1792815856;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=Pk8KkEEG59veQ4YrCFinnmzhounrCAj7LNBdzBMoOzw=;
-        b=1B/Eodgd2hZ7z/M9ozBchh0FoqUGekupQ8br4Q6PDiVvuLip8UuPlnldzJwrCeqRGd
-         ZiIhKMzlRrGfD/hStvuW02XTaaZTXemlyERecRRErxr3jqxlEPMOm34GV/YBWfq2XWto
-         PdAVm+GYnYdapbfOm/xIC8EBX7kdQIIHyFsY/y/AQWfXFp8/RQzUhV/Q7c35VA1PMv74
-         uGYOh9YLodb7YH6GWuVL/NXu05vYnIIyLUbkL5a28hwRLbo0rixShnigEcx6Oq+MXvbv
-         A1fr8Tj3irQFYdCK5XwXG0fT4MCzkAM9R+x9Yv2MnmduDKvtNjaNIwnM20elPyU7Mv3h
-         pq3w==
-X-Gm-Message-State: AFq9FYJVzkuFCeDnp1bbRS0jULPEOETLngEQmlfJROTM+hUngOHNOgAY
-	u1R1H1Ddk8SoSq+QlyQUysOw4uzZ4Vkx0wpcJiEo1ygnN5MKO8Rj/Usw+coE/vtTnV1/S3d1FVH
-	bQx9w0nwlW1pdtGIUvdf9zsIhzV3jZ05jOFWs16o=
-X-Gm-Gg: AYBFou011G3Rnmaw2hHwe2fG6qL0dBSvsval0pBtee9Jhm4Lm7qrQVSsaUe3+MZrl9e
-	azEQzpXrH6Hmp4j+7GeKVsLN3+31YJcamunGcJUAE7BWT+zwXklyMATQERQXF2Q6PeW3TWsychn
-	MN4CUzpDkld6VLWBI4c3DHy73e5l5xkyCIZA1NI/HdeoUAW0gXOc4SDVD2XDDFv6KuQ9uAV8cCz
-	E5kdCcVKVtOlqx1KCN8Pe/iiZ3zgNPjkS1sa7qmgvRC847pNeepV1jaJCZnwIvUzkD/piOPmj44
-	aKD+gjbTRlSixGCgvUTsoHe33NI1ZhHsAYTDVEStwhbqzcmsMqFzT7EegJ44XH7kZA==
-X-Received: by 2002:a05:651c:144c:b0:3a9:d22d:a793 with SMTP id
- 38308e7fff4ca-3ab292e4e8cmr3912141fa.23.1792211056363; Fri, 16 Oct 2026
- 21:24:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZqN6iZpg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF3F51F000C4;
+	Sat, 17 Oct 2026 20:51:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792270284;
+	bh=7CRXe0R1sqRRc088500Ygp7wvqRKIksgHaSrDu77SwI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=ZqN6iZpgOxIJ4xTzOxwOp/qpO5YpG/ryTakacM/wvlMev7MbEiR98mhTlotCvTU1k
+	 YL2OnnjXAQyWv2ziEx7VyEetHVwo/aI7ShWe0s+yZeNWND6x4O/qwFj3PcxS0C0Hj/
+	 r4tt0FRJpSZQGrTFA296NEmd4YmvWsYfPmySv0mepbfHGh7a1TVPnMamXDV0s7HiIq
+	 nbuIgH4wfZmI9QIq6j37taJrsuoz9GzQLkRAuJZqrk0ReNABFLKlj4g51fb9RgOTuX
+	 tEYJRO9ejB++APU8xY6JHX5TOEkp+3jCly2wpGrnBpyrzeCG0m2AzWI0eDrn5Cnm+t
+	 L5fCJqOhbmn+A==
+Date: Sat, 17 Oct 2026 21:51:17 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>
+Cc: <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <krzk+dt@kernel.org>, <dlechner@baylibre.com>, <nuno.sa@analog.com>,
+ <Michael.Hennerich@analog.com>, <andy@kernel.org>, <robh@kernel.org>,
+ <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+ linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v4 0/2] Add support for Analog Devices MAX30210
+Message-ID: <20261017215117.56980dc4@jic23-hlaptop>
+In-Reply-To: <20261015012159.44-1-johnerasmusmari.geronimo@analog.com>
+References: <20261015012159.44-1-johnerasmusmari.geronimo@analog.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Martin <martinvancoden@gmail.com>
-Date: Sat, 17 Oct 2026 00:24:03 -0400
-X-Gm-Features: AclHuK9bX8NU4txV_Z7YjChy3oMvwP40sA7eu6_QCX1ihFdfiDd-RSZNBs5uLGk
-Message-ID: <CAB+4TXvUg==zX4nh=KKTZdpW7khYCHVUzaPkBdjrQ2NT5MahBA@mail.gmail.com>
-Subject: [PATCH] hwmon: (asus-ec-sensors) expose T_Sensor (alt1) on ROG STRIX
- B650E-I GAMING WIFI
-To: linux-hwmon@vger.kernel.org
-Cc: eugene.shalygin@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-hwmon: (asus-ec-sensors) expose T_Sensor (alt1) on ROG STRIX B650E-I GAMING WIFI
+On Thu, 15 Oct 2026 09:21:57 +0800
+John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com> wrote:
 
-On the ROG STRIX B650E-I GAMING WIFI the inlet probe plugged into the board's
-Thermal Sensor header is served by the EC's alternate T_Sensor register (0x37,
-"T_Sensor alt1" in the AMD 600-series family map). The board's .sensors mask
-only enables the primary 0x36 "T_Sensor", which reads a constant 0.0 degC on
-this board, so the probe is currently invisible to the in-tree driver.
+> This series adds support for the Analog Devices MAX30210 I2C
+> temperature sensor.
+> 
+> The device provides a 16-bit temperature output and includes
+> features such as a hardware FIFO, programmable sampling rate,
+> threshold alarms, and interrupt support. These capabilities map
+> naturally to the IIO subsystem, particularly the buffered interface
+> and event framework -- hwmon has no equivalent buffered-capture
+> framework, and its alarm attributes are polled rather than
+> interrupt-driven, so there is no path to supporting the FIFO or the
+> autonomous threshold comparators there.
+> 
 
-Add SENSOR_TEMP_T_SENSOR_ALT1 to the board's mask so 0x37 is exposed as a
-hwmon temperature channel. Because ec_sensor_temp_t_sensor_alt1 is already a
-member of environment_temp_sensors, the read path returns -ENODATA when no
-probe is connected, so boards without a water-cooling loop are unaffected.
-
-Verified on a ROG STRIX B650E-I GAMING WIFI (BIOS 38.54) running a custom
-water-cooling loop: register 0x37 tracks the coolant temperature with the
-expected slow thermal time constant (steadily rising under sustained GPU
-load) and is clearly distinct from the 0x32 board-ambient sensor, matching
-the behavior of a loop inlet probe.
-
-Signed-off-by: Martin <martinvancoden@gmail.com>
+Thanks for the explanation.  Just to make sure
++CC Guenter and hwmon list.
 
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index e43645e..c4cc0f3 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -683,6 +683,7 @@ static const struct ec_board_info
-board_info_strix_b650e_e_gaming = {
+> Although the MAX30210 belongs to the same device family as the
+> MAX30208, it is implemented as a separate driver. The MAX30210 has
+> a significantly different feature set, including a 64-sample hardware
+> FIFO with configurable watermark interrupts, programmable sampling
+> rates, and event support. These features require buffered operation
+> and IRQ-driven data handling which are not present in the MAX30208
+> driver (which talks to the device directly via i2c_smbus_*() calls
+> with no regmap, and has no IIO buffer or event interface at all).
+> 
+> In addition, the MAX30210 uses a different register map and a more
+> flexible I2C address selection scheme. Supporting both devices in a
+> single driver would introduce substantial conditional logic, so a
+> separate driver keeps the implementation simpler and easier to
+> maintain.
+> 
+> Patch 1 adds the devicetree binding.
+> Patch 2 adds the IIO driver implementation.
+> 
+> Changes since v3:
+> https://lore.kernel.org/all/cover.1789032019.git.johnerasmusmari.geronimo@analog.com/
+> - regmap_noinc_read() for FIFO reads instead of regmap_bulk_read(),
+>   which (combined with regmap caching) could silently return stale
+>   cached values of unrelated registers instead of real FIFO data.
+> - Mark both bytes of TEMP_DATA_REG volatile for the same reason.
+> - Decouple threshold events from the buffer via a refcounted
+>   autoconv_get()/autoconv_put() pair, so either can be used
+>   independently or concurrently.
+> - Don't let a single-shot direct-mode read race with/clobber
+>   autonomous conversion mode if a threshold event or the buffer is
+>   already using it -- return -EBUSY instead.
+> - Don't hard-fail probe when there is no interrupt; fall back to
+>   direct-mode-only operation.
+> - Fix devm teardown ordering so an in-flight interrupt can't use a
+>   freed event interface on removal.
+> - Re-assert the powerdown GPIO on removal so the device reaches
+>   standby instead of staying powered indefinitely.
+> - Style/API fixes from review (register/field grouping, _MASK
+>   naming, FIELD_PREP/regmap_assign_bits usage, C99 initializers,
+>   dropped redundant i2c_check_functionality() check, comment
+>   cleanup).
+> 
+> All of the above have been verified on real MAX30210 hardware
+> (Raspberry Pi 4 test rig), including the no-IRQ fallback, buffer and
+> event refcounting (independently and concurrently), rmmod/insmod
+> under live interrupts, powerdown GPIO assertion on removal, and FIFO
+> flush correctness.
+> 
+> Changes since v2:
+> https://lore.kernel.org/all/20260304122509.67931-1-johnerasmusmari.geronimo@analog.com/
+> - Fix FIFO byte-count handling and sample decoding.
+> - Fix IIO debug register read/write access.
+> - Validate event threshold values and sampling-frequency register values.
+> - Return the correct sampling-frequency format and reject direct reads
+>   while buffered capture is enabled.
+> - Clean up the Kconfig entry and device-tree supply declaration.
+> 
+> John Erasmus Mari Geronimo (2):
+>   dt-bindings: iio: temperature: add ADI MAX30210
+>   iio: temperature: add support for Analog Devices MAX30210
+> 
+>  .../iio/temperature/adi,max30210.yaml         |  61 ++
+>  MAINTAINERS                                   |   8 +
+>  drivers/iio/temperature/Kconfig               |  13 +
+>  drivers/iio/temperature/Makefile              |   1 +
+>  drivers/iio/temperature/max30210.c            | 788 ++++++++++++++++++
+>  5 files changed, 871 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/temperature/adi,max30210.yaml
+>  create mode 100644 drivers/iio/temperature/max30210.c
+> 
 
- static const struct ec_board_info board_info_strix_b650e_i_gaming = {
-  .sensors = SENSOR_TEMP_VRM | SENSOR_TEMP_T_SENSOR |
-+ SENSOR_TEMP_T_SENSOR_ALT1 |
-  SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_IN_CPU_CORE,
-  .mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
-  .family = family_amd_600_series,
