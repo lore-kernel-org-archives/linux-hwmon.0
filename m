@@ -1,140 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2E523A7D82;
-	Sat, 17 Oct 2026 20:51:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3BBC30EF91
+	for <linux-hwmon@vger.kernel.org>; Sat, 17 Oct 2026 20:52:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792270285; cv=none; b=ul7zU7yS8W+pc8u6o3k3pWw3fjUoLKeMVLKs5fZRLB57qr0BWbSgpVZfEZBOZsj7J2zvrDQGpBKgyAuzkplkoaPv5w/XS6no74pJ7vFhXbMsDDWpKNA8Drs006SyB8R5LS4C6Olsp9kP7wznNxE98/WyIUHPJWE/DnzTfFq+D0A=
+	t=1792270361; cv=none; b=rvs5PdMzdgwidp3DBSQxsaGCkHNhVE//fUSo8yGQiJoyKRPRmbk258oj0oKuDQ3UXDk/0ENHfeqpccqC13xeV4hoINouwukm2+NihRvUfqwAK1fvXgeoRNS17rHC3bKAZxMNvbmjh3A5Igs5PSdYsSxXsuDz+ioT3WqJlRpOz4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792270285; c=relaxed/simple;
-	bh=f/2H68jyAXF/ZWGlq4jQZmINjqhRrwiilOtA63DlJ7g=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=l+3BjA99es1QElEwuPcxsNzYlc1BjhMOWhQ0uwzgnVVHDXsRTx/bSTejti3bbhjWw6f9SMWeE2H7b0gXK8DIwxa9OB2cFp95X9w6wDg8PmiC8PjVfZ6vD6Cd4Too202ydyjm5pvsOGH/aphDIr2kKp29F30ZBEc8rF4DCc+oGYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZqN6iZpg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792270361; c=relaxed/simple;
+	bh=7bdSjD4gwsCJoWA6QPSigC009vO7jVqQkp3Tp2a7H1o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iJBZ7tEnm108LpQKCTIfS26CjA/PhaJMB+AwySr/j/xEKRI2ND8wuK9xsbWh6X+E4RbjTYlPGBchWSPikzvL1nYfuv3/SzZdQyCc7Tq/VWbKCjQN0p4SOSGsUxt+8jwJoAs+LeJ0SucSYaHXdNwKb3PyrAEEL4jFo0J+moZ9164=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KFMkRKPK; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZqN6iZpg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF3F51F000C4;
-	Sat, 17 Oct 2026 20:51:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792270284;
-	bh=7CRXe0R1sqRRc088500Ygp7wvqRKIksgHaSrDu77SwI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=ZqN6iZpgOxIJ4xTzOxwOp/qpO5YpG/ryTakacM/wvlMev7MbEiR98mhTlotCvTU1k
-	 YL2OnnjXAQyWv2ziEx7VyEetHVwo/aI7ShWe0s+yZeNWND6x4O/qwFj3PcxS0C0Hj/
-	 r4tt0FRJpSZQGrTFA296NEmd4YmvWsYfPmySv0mepbfHGh7a1TVPnMamXDV0s7HiIq
-	 nbuIgH4wfZmI9QIq6j37taJrsuoz9GzQLkRAuJZqrk0ReNABFLKlj4g51fb9RgOTuX
-	 tEYJRO9ejB++APU8xY6JHX5TOEkp+3jCly2wpGrnBpyrzeCG0m2AzWI0eDrn5Cnm+t
-	 L5fCJqOhbmn+A==
-Date: Sat, 17 Oct 2026 21:51:17 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>
-Cc: <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <krzk+dt@kernel.org>, <dlechner@baylibre.com>, <nuno.sa@analog.com>,
- <Michael.Hennerich@analog.com>, <andy@kernel.org>, <robh@kernel.org>,
- <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
- linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] Add support for Analog Devices MAX30210
-Message-ID: <20261017215117.56980dc4@jic23-hlaptop>
-In-Reply-To: <20261015012159.44-1-johnerasmusmari.geronimo@analog.com>
-References: <20261015012159.44-1-johnerasmusmari.geronimo@analog.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KFMkRKPK"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-398a4dcf289so520972a91.2
+        for <linux-hwmon@vger.kernel.org>; Sat, 17 Oct 2026 13:52:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792270359; x=1792875159; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=9CcMWlmXFcivfr2U5My+Uh1aVT0DIK+Y+H5HexutNao=;
+        b=KFMkRKPKDXJ9syjceIjBf16YcFraILfhVtyYTjrFSo9aBRUDaU82znIrmK4+kT3Msl
+         D4YNeogjBEvowUHOBljnEwCMVMzPuHwBgIBg18g+WWFI7fvsTAn+a5AI7ebvka0lH9DF
+         DQ1TjW9Pnu24PoIqbZWGLw2lMUJTHmaCvtu0k783I/axrrHpehMWDr1wyNxEnzVSPZaI
+         cx2W9JA1mop1eY9x6IDl1YuDcRvbjGsDdN0XC5MwTS97T50jxvmUyHQIUm3mgJKXWJt+
+         Cs4T6SECsaKp2D6u9xMIJlddtA1IJwcMb8EIGGvXgaDFHtq/Ll9Kwu9F9Ej8ZTerrwJu
+         /G2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792270359; x=1792875159;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9CcMWlmXFcivfr2U5My+Uh1aVT0DIK+Y+H5HexutNao=;
+        b=r6IPwMIlVSvfkDvK1lTPgJG5RLRVSywExRhl+fvc9IQOl8Y0IC6z7OamiT7laNVMnx
+         WKvJLPPqyYQdKSCXhb2JXkoM9Fl3Urhni/Mz6YvZxYPhglp4y2dHUmp1BFWsVrPaXIPx
+         Ofg5w0fh52X/jJ7sUstdWvSeG/MQPx9+k+z3Qf3hvlZOYvbjP3HvFDGLcvm3/R+MUflw
+         gaAz6GHUzq9LRWa48XXJdAAF9PgnJvZXAqfWoSWb/5Rrn2SIdYNEBYe4R2BRTzn9TYOp
+         +Ik2+kCeLkP/9SqtOKqyn4zidV2f7sXI9iH8hCcSYFFmZ8hb/cIfhALUFG/Dsli3smup
+         Qk7g==
+X-Gm-Message-State: AFq9FYJibE4Kz2+s0dhjiU8PdNxGMSmJw1VNZedk8t5wHmrubtRz//hd
+	25FegyKdkJbseobA+e2IhpNoqJiHkuewTSkspFAidSFjzqjQBMS/3OO1
+X-Gm-Gg: AYBFou38xd8eykialLExmApIRxB8s27gYEn4fndmMz8LsndU7Z9fdwTnTahqjHY8ix0
+	vQzCasXPVlaITyQ/xMskOgZGGpEEaK+b8vI/w8Ne/6m+q7U7XSjHyka3jM/j0UyFZEUuydeyZ+B
+	qKKpIxg58asUb/8DCYsAhUaucVE2Wp/xDXGShPMkTEWnEaz0Ay6o3uY2o0ZB5y1KcPJmWCpEN35
+	ZPBCdQ/pszJJ3tifrrd6kCHREcqoWtmcNtImP3Jacl2dxSbIAuitbRwVVdAxVo+6YnvO/Y/x+Ke
+	spdDKmfMGTs6G7LLySO3Bnpnz9NaIsAt3d0aX/WQaaCJCtz4cBtyKb/3h6ZoQ0nZFm1EV2XaJym
+	XpSnOOZEQog1suI/yszNeeQG9MH1ixINY+40V4XgN4YQPn+/WbKCEIDxk/iCNJ8hhyr03EWdoEJ
+	arCui3g4TW1UMU4UjfwTZjksCNPtfKsEZTmdjPXpLrbyw2sai/IdZdy4Do3fBgDoSznd0dMnbZY
+	mV6f5Ahuc4kQQKhWULMxaE9dg==
+X-Received: by 2002:a17:90b:2c90:b0:3ac:b7b9:6484 with SMTP id 98e67ed59e1d1-3acef0fe32cmr2898931a91.45.1792270359012;
+        Sat, 17 Oct 2026 13:52:39 -0700 (PDT)
+Received: from asahi.tail4da9e3.ts.net ([218.48.198.193])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac947cf9a5sm14288430a91.15.2026.10.17.13.52.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Oct 2026 13:52:38 -0700 (PDT)
+From: "Baek Kyu, Kim" <pocj8ur4in@gmail.com>
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Baek Kyu, Kim" <pocj8ur4in@gmail.com>
+Subject: [PATCH] hwmon: (sht4x) Reject incomplete heater command transfers
+Date: Sun, 18 Oct 2026 05:52:34 +0900
+Message-ID: <20261017205234.1084949-1-pocj8ur4in@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Thu, 15 Oct 2026 09:21:57 +0800
-John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com> wrote:
+heater_enable_store() treats a zero return from i2c_master_send() as
+success. It updates the heater state and returns count, so another
+attempt to enable the heater fails with -EBUSY.
 
-> This series adds support for the Analog Devices MAX30210 I2C
-> temperature sensor.
-> 
-> The device provides a 16-bit temperature output and includes
-> features such as a hardware FIFO, programmable sampling rate,
-> threshold alarms, and interrupt support. These capabilities map
-> naturally to the IIO subsystem, particularly the buffered interface
-> and event framework -- hwmon has no equivalent buffered-capture
-> framework, and its alarm attributes are polled rather than
-> interrupt-driven, so there is no path to supporting the FIFO or the
-> autonomous threshold comparators there.
-> 
+i2c-virtio can return zero when the first message fails. Require
+SHT4X_CMD_LEN before updating the heater state, as sht4x_probe()
+already does for the reset command.
 
-Thanks for the explanation.  Just to make sure
-+CC Guenter and hwmon list.
+Fixes: 0eed6fc3d2b9 ("hwmon: (sht4x): add heater support")
+Signed-off-by: Baek Kyu, Kim <pocj8ur4in@gmail.com>
+---
+Tested with an emulated I2C adapter under ARM64 QEMU. A zero return
+reproduces the false success and -EBUSY on retry; both are fixed by
+this change. No physical sensor was tested.
 
+ drivers/hwmon/sht4x.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Although the MAX30210 belongs to the same device family as the
-> MAX30208, it is implemented as a separate driver. The MAX30210 has
-> a significantly different feature set, including a 64-sample hardware
-> FIFO with configurable watermark interrupts, programmable sampling
-> rates, and event support. These features require buffered operation
-> and IRQ-driven data handling which are not present in the MAX30208
-> driver (which talks to the device directly via i2c_smbus_*() calls
-> with no regmap, and has no IIO buffer or event interface at all).
-> 
-> In addition, the MAX30210 uses a different register map and a more
-> flexible I2C address selection scheme. Supporting both devices in a
-> single driver would introduce substantial conditional logic, so a
-> separate driver keeps the implementation simpler and easier to
-> maintain.
-> 
-> Patch 1 adds the devicetree binding.
-> Patch 2 adds the IIO driver implementation.
-> 
-> Changes since v3:
-> https://lore.kernel.org/all/cover.1789032019.git.johnerasmusmari.geronimo@analog.com/
-> - regmap_noinc_read() for FIFO reads instead of regmap_bulk_read(),
->   which (combined with regmap caching) could silently return stale
->   cached values of unrelated registers instead of real FIFO data.
-> - Mark both bytes of TEMP_DATA_REG volatile for the same reason.
-> - Decouple threshold events from the buffer via a refcounted
->   autoconv_get()/autoconv_put() pair, so either can be used
->   independently or concurrently.
-> - Don't let a single-shot direct-mode read race with/clobber
->   autonomous conversion mode if a threshold event or the buffer is
->   already using it -- return -EBUSY instead.
-> - Don't hard-fail probe when there is no interrupt; fall back to
->   direct-mode-only operation.
-> - Fix devm teardown ordering so an in-flight interrupt can't use a
->   freed event interface on removal.
-> - Re-assert the powerdown GPIO on removal so the device reaches
->   standby instead of staying powered indefinitely.
-> - Style/API fixes from review (register/field grouping, _MASK
->   naming, FIELD_PREP/regmap_assign_bits usage, C99 initializers,
->   dropped redundant i2c_check_functionality() check, comment
->   cleanup).
-> 
-> All of the above have been verified on real MAX30210 hardware
-> (Raspberry Pi 4 test rig), including the no-IRQ fallback, buffer and
-> event refcounting (independently and concurrently), rmmod/insmod
-> under live interrupts, powerdown GPIO assertion on removal, and FIFO
-> flush correctness.
-> 
-> Changes since v2:
-> https://lore.kernel.org/all/20260304122509.67931-1-johnerasmusmari.geronimo@analog.com/
-> - Fix FIFO byte-count handling and sample decoding.
-> - Fix IIO debug register read/write access.
-> - Validate event threshold values and sampling-frequency register values.
-> - Return the correct sampling-frequency format and reject direct reads
->   while buffered capture is enabled.
-> - Clean up the Kconfig entry and device-tree supply declaration.
-> 
-> John Erasmus Mari Geronimo (2):
->   dt-bindings: iio: temperature: add ADI MAX30210
->   iio: temperature: add support for Analog Devices MAX30210
-> 
->  .../iio/temperature/adi,max30210.yaml         |  61 ++
->  MAINTAINERS                                   |   8 +
->  drivers/iio/temperature/Kconfig               |  13 +
->  drivers/iio/temperature/Makefile              |   1 +
->  drivers/iio/temperature/max30210.c            | 788 ++++++++++++++++++
->  5 files changed, 871 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/temperature/adi,max30210.yaml
->  create mode 100644 drivers/iio/temperature/max30210.c
-> 
+diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
+index a97dda9e92dc..c4b3db55de8b 100644
+--- a/drivers/hwmon/sht4x.c
++++ b/drivers/hwmon/sht4x.c
+@@ -287,2 +287,4 @@ static ssize_t heater_enable_store(struct device *dev,
+ 		return ret;
++	if (ret != SHT4X_CMD_LEN)
++		return -EIO;
+ 
+
+base-commit: 58161ead29e50d70a317ea26b472e0c7508e69da
+-- 
+2.55.0
 
