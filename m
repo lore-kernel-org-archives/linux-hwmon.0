@@ -1,97 +1,124 @@
-Received: from out203-205-221-242.mail.qq.com (out203-205-221-242.mail.qq.com [203.205.221.242])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lr2-f9.google.com (mail-lr2-f9.google.com [74.125.230.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DBE837A844;
-	Sat, 17 Oct 2026 01:38:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.242
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792201114; cv=none; b=YzecYn2TniYB0TjJgBORby+jCNiK5Vb2TlcRgT1lNHBZPxjZLMwzq9+B8dgXhetpxsFP8sho6QueAzRvTxxkuAKgulE90XqkjgMeL+HKKC6PdtZ4eWLP/h6rwGid8JwZnsW9weajL/E4wbxaF9miImdfqiVXHeOjt6SSr9CyKdg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792201114; c=relaxed/simple;
-	bh=nhxZw5A5qxAznYentzn20vtaOKditdgoWk5VJ9PoAys=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=C0GLX+MvI/vR9bd9OqoDLU+h+t46UF1G/LZysOET9yXkYEj5GpnnJd3r18zPZWijfcs81rQA09iTKtCUSZFGTZfxTA08JJ1votDlLKe4XRwc6PIEvjID7J4byR+9Ej58DHoJRLrmxzRwY85ttEYx6jPTFyPJWgeQNoRnQjqLR1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=OZsltyiK; arc=none smtp.client-ip=203.205.221.242
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B71637EFE3
+	for <linux-hwmon@vger.kernel.org>; Sat, 17 Oct 2026 04:24:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.73
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792211060; cv=pass; b=GSiWC0IYVsBrmbWydNvVTuBOI6lLB3FaESyZh/I8H2Sg4YNQez34gDeXQuCon7oaFtvQoJm/IHBhmrEecmbEK2LN6cn+4UdimxQ9h3tSD07/sb8T3g6hSGrw02ztWyYwBwAPuWkk+4DwCC1yA8v1jlNEAQojczGFxABjYulst0M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792211060; c=relaxed/simple;
+	bh=1oRJgE0/OpJYlTlzynaBwOuxLl8TXrQObIb4bOmb95g=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=G3nvHpUWJDtNiaZlloy8U6d37/wVqDpvQQU1eAuj+dQgndiW+XtikxTyNNSIuO/0zmSPHfkAgQrOJPVAUbb1Z98MsecGAkLTLwn4mD4oOz7F1SKLRP4px6u2u6kPtDXf9s6qa3yGLj8goCy471EKLdlBamccA8n08YwusDruWeM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N933h72A; arc=pass smtp.client-ip=74.125.230.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="OZsltyiK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1792201107; bh=nhxZw5A5qxAznYentzn20vtaOKditdgoWk5VJ9PoAys=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=OZsltyiK3OFWrT/JuNoHPz81TwTZquA5szRnYm7PP7ymS0WoWQ3DYBo1oii0kD2T3
-	 JbzF+76bohzX/TX0O8Qiwy5H+0PBZrehrckbHM5S9LWQT2FE4Y2AAFRCYR1A+cFXNG
-	 4uJqWDY4sweBM3lSEMaVAsk2qDxFcyIJB65OEHww=
-Received: from [192.168.30.1] ([2408:8452:a80:146f:11d2:bd8e:de50:4c99])
-	by newxmesmtplogicsvrsza73-0.qq.com (NewEsmtp) with SMTP
-	id 996326FE; Sat, 17 Oct 2026 09:38:22 +0800
-X-QQ-mid: xmsmtpt1792201102tgjl4kcjs
-Message-ID: <tencent_3A4DA800AA0FC8C76CB748048FFA0DCC210A@qq.com>
-X-QQ-XMAILINFO: MDbayGdXPuoe4GWJEEkHbDNRxtytg3T4/qnjYXQGpxmzvdSV8fR0iIqAJNk05R
-	 NBDUYebg4+pX4+QtSE7tEksDEDVyCIyLsUhQafCyOgDLOVx9Mpkz1zV8xK+Vbrj7yOlOfxO6PALF
-	 sDVyF7FLeA6/XQjWl/VI+tZMQIEZLE5TXLn0h5PYjMpMj9KJDX/GLFOR1zLyrD3qowsisFspauym
-	 ZafcTSx3LnoqevCvJQmgztoGz9f62wXcFSUP/xvslQAvezOXB/IOSkLFfoo/KEAAbE00CgcBIBXq
-	 PDaPY7N/cC4fL98K2g5mmCH/cquNMTQHVvosfkhgMqwP1idvyKh+fcAeZHjLNFSSz/2CMQ5NqnOQ
-	 rRGuUa1a2fBGH06DccJfCYgc0wAwzhVB87zPVMZ7CGoqft8t+wIDrhMnElTignoMXvl+kNVOp3gG
-	 lM7YesLon1I+FokY7NlaIAORW+f9wUmgak126uhbaNqEbnhBB26egysx6e3iT6E/AKwLd4AENOeu
-	 Ah64ERWMTXeosycWzW4Jcl7i1vZM5PTPczDCW6/BfJduuB9TdTie0bqxO3veC+8P9PowvOO4chRZ
-	 NLa+Rr2mxuDXTe+aQ+jxyqA6XUHFDKdKtdipQOsaY1HMLH7sE/DtggvLcxJ89F7FNoV0xzRjXiB1
-	 oqEc124sjmHEC3Df2k12/7OdF6dzvV0T5fhtW2SE3zYc/wAaZJqTD1h33fapiMvfQWZakvUwHMrn
-	 0BG9CAE8ZMEnswAMtgkI+ye9w13ymHWXjtrTnKCGlOKoINuslxWOYWFTbWTaMTJHk3cc5bcqI0Nr
-	 vZncxITlDDjRu+7O5Z7dACVgUICLUlTTcwsHCeAeSVD1szC4WpS0SkcD247NPznkWr0nG6PpQPBO
-	 DPgPKKaI+c5HTkfWdmjUz+EOiQnO5g73HHxd/26L8LHdwhb/16OJgtRYy/t914P325zcy9PTDbcD
-	 0V152SJQLNbVunk/rymBPAFagGIIoDAvckzl7dX60UuTVvZ/5qc98EiG7RQpSLitBPkXGex2rW5Z
-	 fQMLI2qifsnOFjyPD2
-X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
-From: skxby <2374604267@qq.com>
-To: Donjuanplatinum <donplat@barrensea.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
-Subject:
- Re: [PATCH 0/2] rust: hwmon: rework hwmon abstractions, add TMP108 driver
-Date: Sat, 17 Oct 2026 09:38:20 +0800
-X-OQ-MSGID: <179220110051.19044.14406267695678410421@qq.com>
-In-Reply-To: <818d5dd7-4b8f-488d-ad99-3ce114027262@roeck-us.net>
-References: <20260512155747.10136-1-donplat@barrensea.org>
- <9c2fa543-525a-4e43-9f73-7caf13b98039@roeck-us.net>
- <tencent_576573331343805F032731492D63C12D7E08@qq.com>
- <87se26dpzf.fsf@barrensea.org>
- <179214016501.15268.642738678844764524@qq.com>
- <121A8A5C-E782-4959-B1EF-F6F09E5842D5@barrensea.org>
- <818d5dd7-4b8f-488d-ad99-3ce114027262@roeck-us.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N933h72A"
+Received: by mail-lr2-f9.google.com with SMTP id 38308e7fff4ca-3a9e5838f09so2605071fa.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 16 Oct 2026 21:24:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792211056; cv=none;
+        d=google.com; s=arc-20260327;
+        b=lcRaOVYZ1WJge+sVTZAdEvRvo/99UZ08mWuz0a5jH8PIJfn62l4ka53+fHSVmDCBkA
+         heS+krR6AyPh1MwI7waQyMO2tMvgqfqisn/Dz6z6G4j45Yf6uf17lanZMEBTx/YPoeJA
+         lKGacNuPwFZtKaCBCfBwl93hmVdwmwd1TbLXKUC1C18oMbq3aq7ZCEdrJAvoOdQC3Bbd
+         PWEwCft5vZLu4OpMfTlulNIpfv0XqUfUE4WeXmC+ZKkqokh1YF5ry/PldNA8nIwwR+nk
+         ighQbESXNP2ALHoYlY5b1xKzRz2QB5GFk81ndnDwsBMG4tdwIG9L6prOrixjwuLxt76d
+         xV9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=Pk8KkEEG59veQ4YrCFinnmzhounrCAj7LNBdzBMoOzw=;
+        fh=KpZJX0iMHGMttG19AyeEzF+fNwzq946ZCq0iyz+GP6I=;
+        b=kMHdyFL7+tKLew/6IOwY/nbF9j/wvUMXgKIOzyO6vk1QYNr4wKPXEfenh3yLgigmSY
+         gcZG3ue1+tfLtBaI13xpPszYcw+bmgifYNY34OQV025Fh8nLwkTvdo0O1OTuEtIDmvpy
+         gLL9GJWPCOsBUfAJjnqXLmCA6qF4NzAujM176ELIq01CaFfrPpWFoirURANBP+e8Uq9Y
+         qyTspoiJ5vXVJA8G+zuY/2dMJkOk8/wzroyue5RXy4ZjLi5hhMqHTCUA5yXo/kkG9nus
+         feSJgzbwmx7OqD1QW++WqU89MAMvk6veffLT1fj+HWyK15nI/UME8CLjn7zmCT3yKCuR
+         YWAA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792211056; x=1792815856; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Pk8KkEEG59veQ4YrCFinnmzhounrCAj7LNBdzBMoOzw=;
+        b=N933h72AZKE7rkG6iYbR3ciiuOMAlVcD4Jx5qL/WzLwNMTZu3SkNSnCCCFfVGmBnnq
+         LGJEuDsv6EJwIO/rkUE4t9ILlk4Aj9fqLOiGjURbFj7HCaGFVU1iTFBKWJUu/wBhcJFh
+         4gA4xIY0el94pcG34/+NLLp5Ki99PduL2kHnHE9PEC9GgEta95kHs9kA93+wdyDgooLe
+         zAqvjpZw/FhnHSj2N33+FiXAwPVb3iSLHag/K9KiXjHlK4kgyakmTIfcxI7Dv70pQC7Y
+         D+Ug01gyuhpz08zKEyj9TlC45Ch4ah9Z79lKAhZhkOuCKyjpcv0yuKZkYUHe3GvrrVt6
+         kHJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792211056; x=1792815856;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=Pk8KkEEG59veQ4YrCFinnmzhounrCAj7LNBdzBMoOzw=;
+        b=1B/Eodgd2hZ7z/M9ozBchh0FoqUGekupQ8br4Q6PDiVvuLip8UuPlnldzJwrCeqRGd
+         ZiIhKMzlRrGfD/hStvuW02XTaaZTXemlyERecRRErxr3jqxlEPMOm34GV/YBWfq2XWto
+         PdAVm+GYnYdapbfOm/xIC8EBX7kdQIIHyFsY/y/AQWfXFp8/RQzUhV/Q7c35VA1PMv74
+         uGYOh9YLodb7YH6GWuVL/NXu05vYnIIyLUbkL5a28hwRLbo0rixShnigEcx6Oq+MXvbv
+         A1fr8Tj3irQFYdCK5XwXG0fT4MCzkAM9R+x9Yv2MnmduDKvtNjaNIwnM20elPyU7Mv3h
+         pq3w==
+X-Gm-Message-State: AFq9FYJVzkuFCeDnp1bbRS0jULPEOETLngEQmlfJROTM+hUngOHNOgAY
+	u1R1H1Ddk8SoSq+QlyQUysOw4uzZ4Vkx0wpcJiEo1ygnN5MKO8Rj/Usw+coE/vtTnV1/S3d1FVH
+	bQx9w0nwlW1pdtGIUvdf9zsIhzV3jZ05jOFWs16o=
+X-Gm-Gg: AYBFou011G3Rnmaw2hHwe2fG6qL0dBSvsval0pBtee9Jhm4Lm7qrQVSsaUe3+MZrl9e
+	azEQzpXrH6Hmp4j+7GeKVsLN3+31YJcamunGcJUAE7BWT+zwXklyMATQERQXF2Q6PeW3TWsychn
+	MN4CUzpDkld6VLWBI4c3DHy73e5l5xkyCIZA1NI/HdeoUAW0gXOc4SDVD2XDDFv6KuQ9uAV8cCz
+	E5kdCcVKVtOlqx1KCN8Pe/iiZ3zgNPjkS1sa7qmgvRC847pNeepV1jaJCZnwIvUzkD/piOPmj44
+	aKD+gjbTRlSixGCgvUTsoHe33NI1ZhHsAYTDVEStwhbqzcmsMqFzT7EegJ44XH7kZA==
+X-Received: by 2002:a05:651c:144c:b0:3a9:d22d:a793 with SMTP id
+ 38308e7fff4ca-3ab292e4e8cmr3912141fa.23.1792211056363; Fri, 16 Oct 2026
+ 21:24:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+From: Martin <martinvancoden@gmail.com>
+Date: Sat, 17 Oct 2026 00:24:03 -0400
+X-Gm-Features: AclHuK9bX8NU4txV_Z7YjChy3oMvwP40sA7eu6_QCX1ihFdfiDd-RSZNBs5uLGk
+Message-ID: <CAB+4TXvUg==zX4nh=KKTZdpW7khYCHVUzaPkBdjrQ2NT5MahBA@mail.gmail.com>
+Subject: [PATCH] hwmon: (asus-ec-sensors) expose T_Sensor (alt1) on ROG STRIX
+ B650E-I GAMING WIFI
+To: linux-hwmon@vger.kernel.org
+Cc: eugene.shalygin@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Donjuanplatinum, hi Guenter,
+hwmon: (asus-ec-sensors) expose T_Sensor (alt1) on ROG STRIX B650E-I GAMING WIFI
 
-An apology first: the AI-written reply in this thread was sent without my
-review. That was a mistake, and I am sorry. Nothing further goes out from
-here without going through me first.
+On the ROG STRIX B650E-I GAMING WIFI the inlet probe plugged into the board's
+Thermal Sensor header is served by the EC's alternate T_Sensor register (0x37,
+"T_Sensor alt1" in the AMD 600-series family map). The board's .sensors mask
+only enables the primary 0x36 "T_Sensor", which reads a constant 0.0 degC on
+this board, so the probe is currently invisible to the in-tree driver.
 
-Your "?" was about the "<SENDER NAME>" line at the end of our cover letter.
-That was a placeholder in our sending template that should have been
-replaced before posting -- there is nothing hidden behind it.
+Add SENSOR_TEMP_T_SENSOR_ALT1 to the board's mask so 0x37 is exposed as a
+hwmon temperature channel. Because ec_sensor_temp_t_sensor_alt1 is already a
+member of environment_temp_sensors, the read path returns -ENODATA when no
+probe is connected, so boards without a water-cooling loop are unaffected.
 
-Guenter, on runtime testing: every patch in this series was built and run.
-The lifecycle stress tests (100x load/unload cycles), a 22-case sysfs
-regression, and extreme-value writes were part of the work from the start;
-they are how the chip_config terminator and the i2c client leak on the
-registration error path were pinned down, and they were used to reproduce
-and verify every fix. The defects the review raised that the tests had not
-caught were handled the same way: reproduce first, then fix, then re-run.
+Verified on a ROG STRIX B650E-I GAMING WIFI (BIOS 38.54) running a custom
+water-cooling loop: register 0x37 tracks the coolant temperature with the
+expected slow thermal time constant (steadily rising under sustained GPU
+load) and is clearly distinct from the 0x32 board-ambient sensor, matching
+the behavior of a loop inlet probe.
 
-v2 is being finalized: it addresses all review findings, will Cc
-rust-for-linux, and carries an "Assisted-by: LLM" tag per
-Documentation/process/coding-assistants.html.
+Signed-off-by: Martin <martinvancoden@gmail.com>
 
-Before posting it: are the two of you still willing to take a look? If the
-answer is no, I would rather hear that now.
 
-skxby
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index e43645e..c4cc0f3 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -683,6 +683,7 @@ static const struct ec_board_info
+board_info_strix_b650e_e_gaming = {
 
+ static const struct ec_board_info board_info_strix_b650e_i_gaming = {
+  .sensors = SENSOR_TEMP_VRM | SENSOR_TEMP_T_SENSOR |
++ SENSOR_TEMP_T_SENSOR_ALT1 |
+  SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_IN_CPU_CORE,
+  .mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
+  .family = family_amd_600_series,
