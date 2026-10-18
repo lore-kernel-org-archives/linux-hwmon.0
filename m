@@ -1,104 +1,117 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33853F1AC0
-	for <linux-hwmon@vger.kernel.org>; Sun, 18 Oct 2026 16:38:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4803B14D6
+	for <linux-hwmon@vger.kernel.org>; Sun, 18 Oct 2026 17:30:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792341492; cv=none; b=hVxPuJww382T5Syn+GksLvcoSLJxc7OuklSc53hb3RhVfTTaZJF9KK1UjudWtvXQlJGdiTVD+i8CwnJIEaejCBynICOYaUGMguoPuxRaBIAVbQjH3LqHWcaNk1uBIeWv7aXI+UmpCrY5e4qM/mDilCt2qMVpFhWGPKePuq+M44U=
+	t=1792344645; cv=none; b=FbYvFupgQfKXom4ioN7m8pTIh9kvyFl5FIex8zap0BKo8g1o4UOkYHALvqcU5hQkO1SvumqFGr7cSb4DopWHju/p/L6QeQ0HFBqM3U0Th7OqXUWaaa2mHdumsBD52VSvdBFyI/QK31/r7cNtJ4iJRa3LNKuRQvynp4NCmrrAxbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792341492; c=relaxed/simple;
-	bh=cWbrnQSlLPZR13S2XvAfyai9aYQ6B1FO4xtNhX/Qx4M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TqajxeauLo3e2V40syP0FI0qVdpWd3lpTbRA5pRWvi6tEffIeyCsigzP87DCDNZ22gwyepINY2usSckft6RIW/EVj04V3sNOxBh+RmP5dVCK0S7rNUP2Xl5N/JNiH3NVUPKjb5vFeOadib1f/fxQv2uFvxk9ZoVWM+uQNY8NEgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iUr1RGgJ; arc=none smtp.client-ip=209.85.128.45
+	s=arc-20240116; t=1792344645; c=relaxed/simple;
+	bh=74zW7bX+zhXYnzIJmFSSuGPDBD3IIhvKVExVvMEfcu0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KQA+8pIlE6ChyTipD26MnXT4UF1MUN725zk3D1n/V26na1EAhVAstzSo5XFbf1jB/sV9JGdJX23t7X/2ERQ5MgR9j0qAs/jlXI84ThEyPAZyJjMPjwSq3GXWxGPLwym0cNLkMTBNT6aXLPy72IrIuQ6VZiemT8qOGNYElnW2r2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mzen8RkI; arc=none smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iUr1RGgJ"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4a1e477fe16so2426435e9.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 18 Oct 2026 09:38:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mzen8RkI"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3ace9e6e1a5so925461a91.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 18 Oct 2026 10:30:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792341487; x=1792946287; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=TUsjSvWYWV+jMep3Ewn28rSL6gnhBkjB2DvYwQ5XLq4=;
-        b=iUr1RGgJrvWVubQmNgV6Brv5RxQCXzHv27D49TgZTx5jctorfkH9t10V7X6CoI8GIe
-         3Z4YKok8jtpRQ4CE546T+9b/2BuMOxpxFCs2a2Gjappoj5BqF9SRHJsi/yjbPFv+2fVD
-         ycj652tN7XbZckRChijHBlVI6A0kZP9bRwrRhf97kkh6+Jldsdj+AW16Y8VWdKwz5d12
-         eQncEQQpE7WQ1vzFTivEATMXgFmAayd+FrHfI1aCr3FcxFe0F9nJRJDMTktbvSmGdg7e
-         Ub5FefKrlH63LV7HhvipTIeRARZg9CAEIM+A1BuuugaDHbxBYE8Z4sSxhjb0nBwB5sQn
-         srxg==
+        d=gmail.com; s=20251104; t=1792344642; x=1792949442; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=3ixHYsvcVa+4o7T8DatH23CM41eHYBblIhIu3k33z0A=;
+        b=mzen8RkIKqMI7TjU1lIdnHbzS7VzH+7+3587M2lrbdmQbKevP+rQ6AnGB41fZrMe7H
+         1L12pFORyigwSzHMcv2PE80bQmuGJ8CXRC4/4pe8rQHzq9wUU4AYn6xhZp8J32UCTSsc
+         3LnuDlph8caZC9YJdYoPVg/B+NC3l1mURD5MZOSV9aJKlLs5joZyl2PWh1wM8t5ibB8q
+         tTYZQ+aKW4D1ZtAjQizYm5t63YwJ8lk6/ez9t4kz9MbpWgjAA2yaxzKBB422iL+5DJ5I
+         n7mI+UF/yJPCgK/FEzHTvIwrawJ/d4yGcO+v1YGlca/rn05AmwHZIPDHZX2qknYMwdfa
+         bgRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792341487; x=1792946287;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=TUsjSvWYWV+jMep3Ewn28rSL6gnhBkjB2DvYwQ5XLq4=;
-        b=lMl+AYLeo+353j607nmPPT9kAFhcjkAENlHdv8D4eaEhI/Pmr1YvZ5jwyE8lJGvBWS
-         ZEm3lAyAdBDIY4vHdmh/d/yYB4h815E20uSsaF8KWqF7qtf/RwXhh7sy454kwfhPQ773
-         6XMnwU6XC3WtairMrd91/jEnR87emR9UDUoArovmi2qCxCgJvdYTIXsS/8aXobphhDBL
-         ITFf5M/tf3LddGrkVgpVvr8kZuknZAFIi10HEV7r+ayXG0py2LH1aJGLfUK1vb99eKVH
-         5j4fkfcXD4GW4A17FFEqwNzor1DLjkXpZ4W/jZIY7kuWgnZA+h+e3Ks02m0ROsZ2ha9u
-         wwoA==
-X-Forwarded-Encrypted: i=1; AKwUvBxApqs2Q3xS5YZGAhuI7lbpWKc7T8g/yxkaxQj9fKqyzw5gWcQFknA1EeShxUwXE4a3THZmlNcwY/Ubuw==@vger.kernel.org
-X-Gm-Message-State: AFq9FYKLFb3C79OEsl5qYhl2XKc3dNi7zXIjXGWEDcPBPz0HAhVsB0QO
-	3WBoUYv8xcEGHwv2diMJHi8gtliVskKZU9Z26A8PNWB92bR2Om7LmFJ3
-X-Gm-Gg: AYBFou0wl0AgTDTc4lnnZaYkr3effwNeyTOoCpOBd4OSU5Ynes5lKjWaNPcSBk5UMuP
-	phPurkIZj2kPWmsU6XqMVRwl0iUTsgnPAHO6b1kFEg4JVJlyOISUAdxDPc9CCKg35Q/I9uO3HB+
-	fZ6iBz7YBiUPl6yR2mFCVlgCjORBmdoWnLoQK9S7NYl37CY4xu4Cg1eU2HglqYCQ8NAbKN4M50I
-	wQOD0HLJH2PRoZCi4Ipr21yeBdQ/Bwx8LcU/BjtHJncY8w2654cROrnwcu+B2p6MrAhld3cxQ5o
-	kWqK2LQCfqAP40IwWLxTneiKqSaeLC8ui7FauSckzSjL5Qax1IMHQStxQ6+xkGmQYpjN9+/aPnb
-	m5QX7vk+cS02y1jHJcCWxAxRoK7wNAXkueNnCwr5mIt3bg+FE4Owm0fkIz1KpFFI+TEL4jr/0Hk
-	IVnE1dO9tKAAgTDt54/spXKK24a7FS79SsUCQXwVtZ3L9HR5uNqMxkZGcUGQBY6trZqTjrbRKzc
-	sq3YvRsL4uVN6KBln5+eVNgqVxJK1F02iryMfUoorjeZ3A2w9PSQzlStlc8F3Q/Ew==
-X-Received: by 2002:a05:600c:1d05:b0:4a1:bd69:526f with SMTP id 5b1f17b1804b1-4a1d75ab235mr106971665e9.4.1792341486776;
-        Sun, 18 Oct 2026 09:38:06 -0700 (PDT)
-Received: from localhost.localdomain (bba-217-164-203-125.alshamil.net.ae. [217.164.203.125])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48dfd47104csm19824339f8f.8.2026.10.18.09.38.05
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 18 Oct 2026 09:38:06 -0700 (PDT)
-From: Ximing Zhang <xzhangjr@gmail.com>
-To: ycistak@gmail.com
-Cc: linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	rdunlap@infradead.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (coretemp) Document sysfs numbering and label meaning
-Date: Sun, 18 Oct 2026 20:36:54 +0400
-Message-ID: <20261018163654.45358-1-xzhangjr@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261015171759.704526-1-ycistak@gmail.com>
-References: <20261015171759.704526-1-ycistak@gmail.com>
+        d=1e100.net; s=20260707; t=1792344642; x=1792949442;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=3ixHYsvcVa+4o7T8DatH23CM41eHYBblIhIu3k33z0A=;
+        b=h62ZsUbvbAyIL6mlYJxmYOzaTAfrtdiJnGBADR9ste4UuvpAAXK3tYRtoXcmUe7tyi
+         aPzJqaMzX0J01L1l0gKSfLd34QTUsQ57p7aOgRhoR5vTq3x4KVjhX8rQxkOlbO2ziqEV
+         6MWrULFfTUu3xgkTumrHX+4z3e1DZrultIE9x7vnMiDvFMbFSz+MbannvCnkbW14XOtA
+         UgOP0OQsPrITMt65FxP1YUeBelBuT1MvH6aGBEJ0XKYEP8CQIcRGsn78IqwhOyhKxzdx
+         FQKrBXKZklCisHTtADAn0NeW+mJ4XynJ8i1goGuH/FlXCsaulFkPvn4HEDzH0HlaZ8jU
+         L0hw==
+X-Gm-Message-State: AFq9FYJY5jRv/3zsOAg1rl0vEkiteE/T7hkBT4UUQV44a8/xggQwgmaP
+	KCmrVmwLDSLt2j0sElAvnP17m/VNCy2jQlKmihndQDP2rDK9ATernGoH
+X-Gm-Gg: AYBFou0H+SZv9Ia/xM/IWhZ+NVYTpRcjQ2k556XgmpUzYh9k+pEazO5OkEMvZDDI1HF
+	oBF+ASH2odPIXMk1yrWuZfI48K/h3fTHCILoJ/bVqCgVl3XSHldWClJBFa7cELzccu+FGRawX1l
+	SFYqPteDirDQ30akXFG59HO8rVNzyj9mlTCfJIgH9grZm0Q2r0xhb4SThIg1ycIhs8+RvPCycHW
+	HTXRRSnxsIwIWyDf4KvFZSv0RJSgJxCh9muDvaixiFFPjYF0WIfRetf2qn9LaN7fpDTdB+aRVVS
+	KXcFXuhmzzeYRD1sbZ+/Y7cYpfxNdwWZxGnrslbDYjDkde1ZAcr6/KfdZovHsIHxdvvCmlhUSmN
+	RRWxURRFkE6DEfqJpr2K+8+lV870DbzKwfynh5mg+hv6IMi+t/DNvzbdJQJOjTbJAk0kggI3z8S
+	p2l2cngC2QV7dR1z9siWywCooaMzp4NT1SWs0t/BdAoeZ+m+w4oi+Cpi5dxH9nq2nwjTGvsS5s5
+	joVYA==
+X-Received: by 2002:a17:90a:da87:b0:3a7:9ec3:ea0e with SMTP id 98e67ed59e1d1-3acef144e3emr3623867a91.22.1792344642433;
+        Sun, 18 Oct 2026 10:30:42 -0700 (PDT)
+Received: from [192.168.89.2] ([14.67.155.18])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acddc37958sm10649439a91.14.2026.10.18.10.30.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 18 Oct 2026 10:30:41 -0700 (PDT)
+Message-ID: <fe746c04-391e-4b7e-a5c9-7dfd3cd07913@gmail.com>
+Date: Mon, 19 Oct 2026 02:30:39 +0900
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/5] docs: hwmon: Document the uhwmon userspace interface
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, linux-api@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1791531025.git.hurryman2212@gmail.com>
+ <c02aeee5b7e7a5d159d4df5baabe925e16814e94.1791559095.git.hurryman2212@gmail.com>
+ <e77719ee-c813-400e-b49a-9f8a3b0e2e91@roeck-us.net>
+Content-Language: en-US
+From: Jihong Min <hurryman2212@gmail.com>
+In-Reply-To: <e77719ee-c813-400e-b49a-9f8a3b0e2e91@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-I tested the documented sysfs numbering on an Intel Core i7-10510U
-running 7.2.5-1-cachyos, with all eight logical CPUs online.
+Ok. Then I will withdraw these patch series.
 
-coretemp exposed the package sensor as temp1 with label "Package id 0".
-The four per-core sensors were exposed as temp2 through temp5 with
-labels "Core 0" through "Core 3", respectively.
+But then let me ask you the initial question that brought this patch
+series: Do you think it is at least OK to add kernel drivers for
+network-based sensors? Or do you think those are also to be subjected to
+be rejected (or remained in DKMS projects)?
 
-The topology files reported the following SMT sibling pairs:
 
-  cpu0/cpu4: core_id 0
-  cpu1/cpu5: core_id 1
-  cpu2/cpu6: core_id 2
-  cpu3/cpu7: core_id 3
+Sincerely,
+Jihong Min
 
-This confirms that the per-core attribute number is core_id + 2 and
-that the label identifies the core_id rather than the logical CPU
-number.
+On 10/19/26 01:06, Guenter Roeck wrote:
+> On Sat, Oct 10, 2026 at 12:38:44AM +0900, Jihong Min wrote:
+>> Document the uhwmon UAPI for developers implementing userspace hwmon
+>> drivers. Cover device registration, request handling, notifications
+>> and device lifetime.
+>>
+>> Assisted-by: Codex:gpt-6-astra
+>> Signed-off-by: Jihong Min <hurryman2212@gmail.com>
+> 
+> I am not going to review, much less apply, this series.
+> Exposing subsystem internals to userspace is a bad idea and would limit
+> future improvements of the hardware monitoring subsystem. User space file
+> systems are bad enough and cause all kinds of trouble. I don't want to have
+> to deal with the same kind of issues in the hardware monitoring subsystem.
+> 
+> Interested parties should implement kernel hardware monitoring
+> drivers instead.
+> 
+> Guenter
 
-Tested-by: Ximing Zhang <xzhangjr@gmail.com>
-Reviewed-by: Ximing Zhang <xzhangjr@gmail.com>
