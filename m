@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A45013CFF6B;
-	Sun, 18 Oct 2026 22:50:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C45AC27703;
+	Sun, 18 Oct 2026 22:50:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792363846; cv=none; b=ldMm7KODofjtzQyBUljlHVAhbHjKAsi6XohWXIgioUA/zXCFtqexHMENkQc2zmZGR6TgVffswt5i0Rgf1tB52sqHHbwKBj83NPjkiwEga20tce2XYF1V6WHaE1WzCrCf+AvFbtMBppTWSdSbcZBjVC461+2mGQO1NuQ0pYB5sMQ=
+	t=1792363848; cv=none; b=FJdLLVuX6yPA4J46gD9F0C//XYbFyNEZMKHDGQCFEnsmCwEF7Y5jajOnUh+WsIEblXwWLy5sKLTut1jH6uDubYoDROTKMwI8gcLaRWPdEIa837J/RSXhXAn4JdZoYqjSX7TqEcQuwPLZcFF/VtpBGmjOeJG42gR+OQ9ZbflEgEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792363846; c=relaxed/simple;
-	bh=h+0k/Ph5f5AGx5NpU2UXs/+kuI2LeYtW1keBOczx2rE=;
+	s=arc-20240116; t=1792363848; c=relaxed/simple;
+	bh=2WmoBGXT5Zv1Vfx4ThS05D7UPTnCzpy+A8Cln6IZDvg=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=f9HQ1hPTP3D4eUuIWzrbRzlvYGvuir0qQ1CCks6NG74/8dS0t8HS72mJszXLdUKjLVkjwMNtCotUYQwqf+9ZqidwRXD+Zb+B4kly71BKlw4RhMYNRnbVuII3/XIQyw5xbR0zttJwHKD5B2BxuSCyS6EOnv8OxV/6qcM271CJ4pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZR2+WEND; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=Z+JkHe91sak6bClo+xwZQeIqeyUyVlZzUBXcgVlkVT5ZRG4IDrh4NMDTirtqyO2LBqI+cnKEe5VkA8PY/adzoCSVgp68JRfuRaIHBZ0HmHWopiBwM6nEVU/cZS00UHzd//C2kAu8bV7xeNwjm6Ko/qnzJb6gis3Ak2xPIxgi5hU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dv0jVm5D; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZR2+WEND"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7867F1F000C6;
-	Sun, 18 Oct 2026 22:50:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dv0jVm5D"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1E7C1F000C4;
+	Sun, 18 Oct 2026 22:50:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792363845;
-	bh=Aj+FHwR0kJmbqJQIWLMCSbEfxgTGw/Jq283nwGKP/WY=;
+	s=k20260515; t=1792363846;
+	bh=8IMZdp5aTozJX/hGZevvohpK3mLzY53mYlNqMGgV6mM=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ZR2+WENDlrkG6fIcoU+MhuSUuqXqgqrz9JduasPs0wMNuPv/rVj/YN+V5W249Hvx3
-	 rKJ4eZkEYt7ROWaCUjninpyg0CB0VPQ09j4Y7lPDyiMHnB//4CJwbVgD4Kts5Votba
-	 Z20HYLCaaxcF/rWKoBDMcx7dktoSBa/Kui4SP1i0ZNWc+omqry0iEFDDsBFmmRBmMC
-	 +T/jb+uUJIUM+16xr/+rxETsKfyjzbk1E0APd5f5zbjJbPgTN/j8whAQyWHEcWCNbm
-	 z2TuzLOGcjr0iVo2ExV/4ebXKU+M6ZQ/kck7LrCta0q7YOgoVGSm23R65En8ABK2kC
-	 BAILjuXq7qQlw==
-Subject: Re: [PATCH net-next v4 3/6] eth: fbnic: report temperature and
- voltage thresholds via hwmon
+	b=Dv0jVm5DOpB4cJCicAmjuUEM/1kOBRCEkGqriB2ITJEMnDILWp4DaOs60U5cKCd1k
+	 i41eH09Po+TNU67b9H+pAazLDh1Qmst1eB/k0HunHoJWu8e+ZTo1uSvQvVOt0vXDFi
+	 7+dMNN4CGE5pZyeYkAjmVWRhykpPR8UiYe9W6GHL3mC4q7ITN3lMzIeEg2s92w3vK0
+	 t+3KKclX11PdbY8dq5h2OYHQN6W2Ix2k+uJvSOo0EtThQoDbLmFOKbnmfiJBnl49y4
+	 eHmXejCZes9xLQLqW4Nc/FRA7njd7cLlxf37YM6KgmSgA2OAXvHh8c3xkTim89LgrA
+	 ivKmG7o7ZocuA==
+Subject: Re: [PATCH net-next v4 4/6] eth: fbnic: parse the alarm range
+ reported by firmware
 From: netdev-bot+sashiko@kernel.org
 To: limzhineng2@gmail.com
 Cc: alexanderduyck@fb.com, kuba@kernel.org, andrew+netdev@lunn.ch,
@@ -35,10 +35,10 @@ Cc: alexanderduyck@fb.com, kuba@kernel.org, andrew+netdev@lunn.ch,
  linux@roeck-us.net, horms@kernel.org, hmohsin@meta.com,
  mike.marciniszyn@gmail.com, kernel-team@meta.com, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, zinclim@meta.com
-Date: Sun, 18 Oct 2026 22:50:44 +0000
-Message-ID: <179236384403.3135.8309519042594471612@kernel.org>
-In-Reply-To: <20261014222225.2803660-4-limzhineng2@gmail.com>
-References: <20261014222225.2803660-4-limzhineng2@gmail.com>
+Date: Sun, 18 Oct 2026 22:50:45 +0000
+Message-ID: <179236384550.3135.7080387933674561626@kernel.org>
+In-Reply-To: <20261014222225.2803660-5-limzhineng2@gmail.com>
+References: <20261014222225.2803660-5-limzhineng2@gmail.com>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,186 +55,100 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] fbnic_hwmon_is_visible() decides whether temp1_{min,max,crit} and
-  in0_{min,max} exist based on fbd->fw_cap.temp/volt.
-- [Low] In fbnic_fw_parse_cap_resp(), the new threshold assignments come
-  after fbnic_fw_parse_bmc_cap(), and that call returns early on error.
-- [Low] The new threshold fields fbd->fw_cap.temp.{min,max,crit} and
-  fbd->fw_cap.volt.{min,max} are read and written concurrently with…
+- [Low] The firmware alarm range is a U32 TLV attribute, but
+  fbnic_fw_parse_tsene_read_resp() and…
 
 --
 
-eth: fbnic: report temperature and voltage thresholds via hwmon
+eth: fbnic: parse the alarm range reported by firmware
 
-This patch parses temperature (min/max/crit) and voltage (min/max)
-thresholds from the firmware capability response and stores them in
-fbnic_fw_cap. It then exposes them through hwmon as temp1_{min,max,crit}
-and in0_{min,max}. Fields that firmware does not report are seeded with
-FBNIC_SENSOR_NO_DATA and are hidden by is_visible.
+This commit parses the per-sensor alarm range that firmware reports in
+two places: the TSENE read response and a new unsolicited
+SENSOR_THRESHOLD_EXCEEDED event. It caches the range in u8 fields in
+hwmon_cache. Both fields are seeded with FBNIC_FW_TSENE_ALARM_UNKNOWN
+in fbnic_mbx_init().
+
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic.h b/drivers/net/ethernet/meta/fbnic/fbnic.h
+> index 857a64b518f38..93bf7004b67d9 100644
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic.h
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic.h
+> @@ -26,6 +26,8 @@ struct fbnic_hwmon_cache {
+>  	unsigned long last_read;
+>  	s32 temp_mdeg;
+>  	s32 volt_mv;
+> +	u8 temp_alarm;
+> +	u8 volt_alarm;
+>  };
+
+[ ... ]
 
 > diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_fw.c b/drivers/net/ethernet/meta/fbnic/fbnic_fw.c
-> index 82307f212f583..d9a00a2ef34da 100644
+> index d9a00a2ef34da..7863f6ba1e7da 100644
 > --- a/drivers/net/ethernet/meta/fbnic/fbnic_fw.c
 > +++ b/drivers/net/ethernet/meta/fbnic/fbnic_fw.c
 
 [ ... ]
 
-> @@ -742,6 +757,22 @@ static int fbnic_fw_parse_cap_resp(void *opaque, struct fbnic_tlv_msg **results)
->  	fbd->fw_cap.anti_rollback_version =
->  		fta_get_uint(results, FBNIC_FW_CAP_RESP_ANTI_ROLLBACK_VERSION);
+> @@ -1466,6 +1468,8 @@ static const struct fbnic_tlv_index fbnic_tsene_read_resp_index[] = {
+>  	FBNIC_TLV_ATTR_S32(FBNIC_FW_TSENE_THERM),
+>  	FBNIC_TLV_ATTR_S32(FBNIC_FW_TSENE_VOLT),
+>  	FBNIC_TLV_ATTR_S32(FBNIC_FW_TSENE_ERROR),
+> +	FBNIC_TLV_ATTR_U32(FBNIC_FW_TSENE_THERM_ALARM_STATE),
+> +	FBNIC_TLV_ATTR_U32(FBNIC_FW_TSENE_VOLT_ALARM_STATE),
+>  	FBNIC_TLV_ATTR_LAST
+>  };
+
+[ ... ]
+
+> @@ -1497,6 +1502,20 @@ static int fbnic_fw_parse_tsene_read_resp(void *opaque,
+>  	cmpl_data->u.tsene.millivolts =
+>  		fta_get_sint(results, FBNIC_FW_TSENE_VOLT);
 >  
-> +	fbd->fw_cap.temp.min =
-> +		fbnic_tlv_attr_get_signed(results[FBNIC_FW_CAP_RESP_TEMP_MIN],
-> +					  FBNIC_SENSOR_NO_DATA);
+> +	/* Cache here so that it and the threshold event land in the order firmware
+> +	 * sent them. Firmware predating alarm state reporting sends neither
+> +	 * attribute.
+> +	 */
+> +	alarm = fbnic_tlv_attr_get_unsigned(results[FBNIC_FW_TSENE_THERM_ALARM_STATE],
+> +					    FBNIC_FW_TSENE_ALARM_UNKNOWN);
+> +	if (alarm != FBNIC_FW_TSENE_ALARM_UNKNOWN)
+> +		WRITE_ONCE(fbd->hwmon_cache.temp_alarm, alarm);
+> +
+> +	alarm = fbnic_tlv_attr_get_unsigned(results[FBNIC_FW_TSENE_VOLT_ALARM_STATE],
+> +					    FBNIC_FW_TSENE_ALARM_UNKNOWN);
+> +	if (alarm != FBNIC_FW_TSENE_ALARM_UNKNOWN)
+> +		WRITE_ONCE(fbd->hwmon_cache.volt_alarm, alarm);
 
 [Severity: Low]
-Should these threshold assignments come before the BMC parsing step? Just
-above them in fbnic_fw_parse_cap_resp() there is an early return:
 
-	err = fbnic_fw_parse_bmc_cap(fbd, results);
-	if (err)
-		return err;
+The alarm state is parsed as a U32 attribute but stored in the u8
+fields hwmon_cache.temp_alarm and volt_alarm. The only check here is
+against FBNIC_FW_TSENE_ALARM_UNKNOWN, and it runs on the u32 before
+the value is narrowed.
 
-If the response carries a malformed BMC MAC array, for example a bad
-attribute id, a bad length, or more than 4 entries,
-fbnic_fw_parse_bmc_addrs()->fbnic_tlv_attr_parse_array() returns -EINVAL
-or -ENOSPC. The thresholds are then never stored and stay at the
-FBNIC_SENSOR_NO_DATA value seeded by fbnic_mbx_init().
+What happens if firmware sends a value that does not fit in a u8? 0x100
+would be cached as 0 (FBNIC_FW_TSENE_ALARM_NORMAL), 0x101 as
+FBNIC_FW_TSENE_ALARM_DEPRECATED, and 0x1ff as
+FBNIC_FW_TSENE_ALARM_UNKNOWN.
 
-Probe still goes ahead in that case. mgmt.version was already stored at
-the top of the function, so fbnic_mbx_poll_tx_ready() leaves its loop
-here:
+fbnic_fw_parse_threshold_exceeded_resp() has the same pattern. There,
+only DEPRECATED is filtered before the store:
 
-	if (fbd->fw_cap.running.mgmt.version >= MIN_FW_VER_CODE)
-		break;
+		if (alarm != FBNIC_FW_TSENE_ALARM_DEPRECATED)
+			WRITE_ONCE(fbd->hwmon_cache.temp_alarm, alarm);
 
-fbnic_probe() then calls fbnic_hwmon_register(). is_visible sees NO_DATA,
-so none of the threshold attributes are created for the life of the hwmon
-device. In the final series, temp1_alarm and in0_alarm are hidden too.
+The volt_alarm store in that function works the same way.
 
-The commit message says fbnic_fw_parse_cap_resp() "can return before it
-reaches the threshold assignments", but only to explain the sentinel.
-Would it be better to parse the thresholds before the fallible BMC step,
-so valid limits are not lost because an unrelated field failed to parse?
+This only happens if firmware sends a value outside its documented set
+(NORMAL, BELOW_MIN, ABOVE_MAX, CRIT). The worst case looks like a
+wrong hwmon alarm value, since the cached byte is only compared and
+never used as an index.
 
-> +	fbd->fw_cap.temp.max =
-> +		fbnic_tlv_attr_get_signed(results[FBNIC_FW_CAP_RESP_TEMP_MAX],
-> +					  FBNIC_SENSOR_NO_DATA);
+Should the value be range checked before it is narrowed into the u8
+cache in both parsers?
 
-[ ... ]
-
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-> index 0c3fe2a372275..4df808f850cf8 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-
-[ ... ]
-
->  static umode_t fbnic_hwmon_is_visible(const void *drvdata,
->  				      enum hwmon_sensor_types type,
->  				      u32 attr, int channel)
->  {
-> -	if (type == hwmon_temp && attr == hwmon_temp_input)
-> -		return 0444;
-> -	if (type == hwmon_in && attr == hwmon_in_input)
-> -		return 0444;
-> +	const struct fbnic_dev *fbd = drvdata;
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_input:
-> +			return 0444;
-> +		case hwmon_temp_min:
-> +			return fbnic_hwmon_thr_visible(fbd->fw_cap.temp.min);
-
-[Severity: Low]
-The hwmon core calls is_visible only once, from
-hwmon_device_register_with_info(). That happens when fbnic_probe() calls
-fbnic_hwmon_register(). Can the attribute set get out of sync with
-fw_cap after that?
-
-On resume, hibernation restore and AER slot reset, the mailbox is
-reinitialized while the hwmon device stays registered:
-
-  __fbnic_pm_resume()
-    fbnic_fw_request_mbx()
-      __fbnic_fw_enable_mbx()
-        fbnic_mbx_init()   /* thresholds reset to NO_DATA */
-
-The next capability response then fills the thresholds again.
-
-The patch handles thresholds that go away (reads return -ENODATA). What
-about thresholds that show up after probe? They are stored in fw_cap but
-never become sysfs attributes until the driver is re-probed.
-
-That could happen if the capability parse at probe failed early, as
-described for fbnic_fw_parse_cap_resp() above, and a later resume parses
-cleanly. It could also happen if new firmware flashed through devlink
-starts running after a hibernation restore or slot reset without a
-re-probe.
-
-In the final series the same probe-time snapshot also decides whether
-temp1_alarm and in0_alarm exist.
-
-> +		case hwmon_temp_max:
-> +			return fbnic_hwmon_thr_visible(fbd->fw_cap.temp.max);
-
-[ ... ]
-
-> @@ -92,14 +111,58 @@ static int fbnic_hwmon_sensor_read(struct fbnic_dev *fbd, int id, long *val)
->  	return err;
->  }
->  
-> +static int fbnic_hwmon_read_threshold(long thr, long *val)
-> +{
-> +	if (thr == FBNIC_SENSOR_NO_DATA)
-> +		return -ENODATA;
-> +
-> +	*val = thr;
-> +	return 0;
-> +}
-
-[Severity: Low]
-Are these threshold reads safe against the mailbox writers? The reads of
-fbd->fw_cap.temp.* and fbd->fw_cap.volt.* in fbnic_hwmon_temp_read() and
-fbnic_hwmon_in_read() are plain loads, and readers hold only the hwmon
-core lock.
-
-The writers are fbnic_mbx_init(), which does a whole-struct copy:
-
-	fbd->fw_cap = fw_cap_reset;
-
-and fbnic_fw_parse_cap_resp(), which uses plain scalar stores.
-
-Both run from __fbnic_pm_resume(). fbnic_err_slot_reset() calls that
-during AER recovery while userspace is running and the hwmon sysfs files
-still exist. That path holds only the devlink lock, which hwmon readers
-never take.
-
-The commit message says reads "reject the sentinel with -ENODATA rather
-than reporting it as a value". That relies on each read being a single,
-untorn load.
-
-Without READ_ONCE()/WRITE_ONCE(), after inlining the compiler may load
-the field once for the thr == FBNIC_SENSOR_NO_DATA test and again for
-*val = thr. A memcpy-based struct copy also gives no per-s32 atomicity.
-Could a reader then report S32_MIN or a torn value? KCSAN would likely
-flag this pair of accesses.
-
-Later patches in the series annotate the lockless alarm cache with
-READ_ONCE()/WRITE_ONCE() ("Paired with WRITE_ONCE() on the mailbox
-thread"). The threshold fields are still unannotated at the end of the
-series.
-
-> +
-> +static int fbnic_hwmon_temp_read(struct fbnic_dev *fbd, u32 attr, long *val)
-> +{
-> +	switch (attr) {
-> +	case hwmon_temp_input:
-> +		return fbnic_hwmon_sensor_read(fbd, FBNIC_SENSOR_TEMP, val);
-> +	case hwmon_temp_min:
-> +		return fbnic_hwmon_read_threshold(fbd->fw_cap.temp.min, val);
+>  msg_err:
+>  	cmpl_data->result = err_resp ? : err;
+>  	complete(&cmpl_data->done);
 
 [ ... ]
 
