@@ -1,117 +1,77 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4803B14D6
-	for <linux-hwmon@vger.kernel.org>; Sun, 18 Oct 2026 17:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9785D388E58;
+	Sun, 18 Oct 2026 18:43:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792344645; cv=none; b=FbYvFupgQfKXom4ioN7m8pTIh9kvyFl5FIex8zap0BKo8g1o4UOkYHALvqcU5hQkO1SvumqFGr7cSb4DopWHju/p/L6QeQ0HFBqM3U0Th7OqXUWaaa2mHdumsBD52VSvdBFyI/QK31/r7cNtJ4iJRa3LNKuRQvynp4NCmrrAxbA=
+	t=1792349011; cv=none; b=WMIkL7o7Hlq+fANbDSgc5h5N0WqFguOi2mPCie7qfJn+U3yHFqHpr6wP3k5qWpnpYVX3JPr1AYMVV6zZboIygd2ZA/nGoZR1suWrF/r5/uTbiFwWv4nR8u4HDOfiopUWK5lTt896q2T/LjIce9DwUvoOTGSgLIYimltHt8ClFcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792344645; c=relaxed/simple;
-	bh=74zW7bX+zhXYnzIJmFSSuGPDBD3IIhvKVExVvMEfcu0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KQA+8pIlE6ChyTipD26MnXT4UF1MUN725zk3D1n/V26na1EAhVAstzSo5XFbf1jB/sV9JGdJX23t7X/2ERQ5MgR9j0qAs/jlXI84ThEyPAZyJjMPjwSq3GXWxGPLwym0cNLkMTBNT6aXLPy72IrIuQ6VZiemT8qOGNYElnW2r2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mzen8RkI; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792349011; c=relaxed/simple;
+	bh=b/mCOFAvVzM4HbmD+iL8o44VhpJfqZxQbnUrBbgDGU0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gxWDRYhQiFOQRiv7TYbOguo5nnq36a1a6Q1tqIchqf7CNzbspPTKpjxUQgm08us8/oLVV2ccxmDCuvn5WzdOOCVfubdCLBWmbo0gS0QfCLfvf/cpu+7/UdGxIDGWxVixUgG1rivvzjE2v0gtYsrYnVcC0whLEX2cuiT0kEmPXkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S0/pMrZv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mzen8RkI"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3ace9e6e1a5so925461a91.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 18 Oct 2026 10:30:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792344642; x=1792949442; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3ixHYsvcVa+4o7T8DatH23CM41eHYBblIhIu3k33z0A=;
-        b=mzen8RkIKqMI7TjU1lIdnHbzS7VzH+7+3587M2lrbdmQbKevP+rQ6AnGB41fZrMe7H
-         1L12pFORyigwSzHMcv2PE80bQmuGJ8CXRC4/4pe8rQHzq9wUU4AYn6xhZp8J32UCTSsc
-         3LnuDlph8caZC9YJdYoPVg/B+NC3l1mURD5MZOSV9aJKlLs5joZyl2PWh1wM8t5ibB8q
-         tTYZQ+aKW4D1ZtAjQizYm5t63YwJ8lk6/ez9t4kz9MbpWgjAA2yaxzKBB422iL+5DJ5I
-         n7mI+UF/yJPCgK/FEzHTvIwrawJ/d4yGcO+v1YGlca/rn05AmwHZIPDHZX2qknYMwdfa
-         bgRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792344642; x=1792949442;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=3ixHYsvcVa+4o7T8DatH23CM41eHYBblIhIu3k33z0A=;
-        b=h62ZsUbvbAyIL6mlYJxmYOzaTAfrtdiJnGBADR9ste4UuvpAAXK3tYRtoXcmUe7tyi
-         aPzJqaMzX0J01L1l0gKSfLd34QTUsQ57p7aOgRhoR5vTq3x4KVjhX8rQxkOlbO2ziqEV
-         6MWrULFfTUu3xgkTumrHX+4z3e1DZrultIE9x7vnMiDvFMbFSz+MbannvCnkbW14XOtA
-         UgOP0OQsPrITMt65FxP1YUeBelBuT1MvH6aGBEJ0XKYEP8CQIcRGsn78IqwhOyhKxzdx
-         FQKrBXKZklCisHTtADAn0NeW+mJ4XynJ8i1goGuH/FlXCsaulFkPvn4HEDzH0HlaZ8jU
-         L0hw==
-X-Gm-Message-State: AFq9FYJY5jRv/3zsOAg1rl0vEkiteE/T7hkBT4UUQV44a8/xggQwgmaP
-	KCmrVmwLDSLt2j0sElAvnP17m/VNCy2jQlKmihndQDP2rDK9ATernGoH
-X-Gm-Gg: AYBFou0H+SZv9Ia/xM/IWhZ+NVYTpRcjQ2k556XgmpUzYh9k+pEazO5OkEMvZDDI1HF
-	oBF+ASH2odPIXMk1yrWuZfI48K/h3fTHCILoJ/bVqCgVl3XSHldWClJBFa7cELzccu+FGRawX1l
-	SFYqPteDirDQ30akXFG59HO8rVNzyj9mlTCfJIgH9grZm0Q2r0xhb4SThIg1ycIhs8+RvPCycHW
-	HTXRRSnxsIwIWyDf4KvFZSv0RJSgJxCh9muDvaixiFFPjYF0WIfRetf2qn9LaN7fpDTdB+aRVVS
-	KXcFXuhmzzeYRD1sbZ+/Y7cYpfxNdwWZxGnrslbDYjDkde1ZAcr6/KfdZovHsIHxdvvCmlhUSmN
-	RRWxURRFkE6DEfqJpr2K+8+lV870DbzKwfynh5mg+hv6IMi+t/DNvzbdJQJOjTbJAk0kggI3z8S
-	p2l2cngC2QV7dR1z9siWywCooaMzp4NT1SWs0t/BdAoeZ+m+w4oi+Cpi5dxH9nq2nwjTGvsS5s5
-	joVYA==
-X-Received: by 2002:a17:90a:da87:b0:3a7:9ec3:ea0e with SMTP id 98e67ed59e1d1-3acef144e3emr3623867a91.22.1792344642433;
-        Sun, 18 Oct 2026 10:30:42 -0700 (PDT)
-Received: from [192.168.89.2] ([14.67.155.18])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acddc37958sm10649439a91.14.2026.10.18.10.30.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Oct 2026 10:30:41 -0700 (PDT)
-Message-ID: <fe746c04-391e-4b7e-a5c9-7dfd3cd07913@gmail.com>
-Date: Mon, 19 Oct 2026 02:30:39 +0900
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S0/pMrZv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D377E1F000C4;
+	Sun, 18 Oct 2026 18:43:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792349010;
+	bh=qiOERPCTQiGVFgwfZLglWEV6akVIWi2rX3u7+KbZC3I=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=S0/pMrZvfE+oKfHNSjqsarg79YYCAUFYpYzLR77bM2i2Zh47WHatPZU1MggM2Km5c
+	 fhlbURllt5N1hl0PrERey7XFvnYqEgJ6lIAollpBlgfIAJvMSKz5ihOmiSqeL2x2CF
+	 pVvXNx7+ReZHJpUj1nyCb5EPV4NkTTJZgjJmSBHUaDJcB0eqZoPcK1T7C0BEwfwhEV
+	 CldAq+IJxnbNPPNULSYHru4stMUg5o1VXBPMaFuJcR3N8KSQFAaQRmMrKvvV9FonLG
+	 pOe+j0ZxfNKLPYXz0VLi249D9n69eXmu4AxeAyeM1xw7ZBsPM4MchQHgQWxA6JJkqx
+	 5HDpcCuS2udfQ==
+Date: Sun, 18 Oct 2026 19:43:24 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Ariana Lazar <ariana.lazar@microchip.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, David Lechner
+ <dlechner@baylibre.com>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Andy
+ Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH v4 0/3] Add support for Microchip PAC1711 Power Monitor
+Message-ID: <20261018194324.22e726ed@jic23-hlaptop>
+In-Reply-To: <20261007-pac1711-v4-0-6ef34d7a7947@microchip.com>
+References: <20261007-pac1711-v4-0-6ef34d7a7947@microchip.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/5] docs: hwmon: Document the uhwmon userspace interface
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, linux-api@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1791531025.git.hurryman2212@gmail.com>
- <c02aeee5b7e7a5d159d4df5baabe925e16814e94.1791559095.git.hurryman2212@gmail.com>
- <e77719ee-c813-400e-b49a-9f8a3b0e2e91@roeck-us.net>
-Content-Language: en-US
-From: Jihong Min <hurryman2212@gmail.com>
-In-Reply-To: <e77719ee-c813-400e-b49a-9f8a3b0e2e91@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-Ok. Then I will withdraw these patch series.
+On Wed, 7 Oct 2026 17:41:52 +0300
+Ariana Lazar <ariana.lazar@microchip.com> wrote:
 
-But then let me ask you the initial question that brought this patch
-series: Do you think it is at least OK to add kernel drivers for
-network-based sensors? Or do you think those are also to be subjected to
-be rejected (or remained in DKMS projects)?
-
-
-Sincerely,
-Jihong Min
-
-On 10/19/26 01:06, Guenter Roeck wrote:
-> On Sat, Oct 10, 2026 at 12:38:44AM +0900, Jihong Min wrote:
->> Document the uhwmon UAPI for developers implementing userspace hwmon
->> drivers. Cover device registration, request handling, notifications
->> and device lifetime.
->>
->> Assisted-by: Codex:gpt-6-astra
->> Signed-off-by: Jihong Min <hurryman2212@gmail.com>
+> The PAC1711, PAC1721, PAC1811 and PAC1821 products are single-channel power
+> monitors with accumulator. The PAC1711 and PAC1721 devices use 12-bit
+> resolution for voltage and current measurements and 24 bits for power
+> calculations, while PAC1811 and PAC1821 have 16-bit resolution and use 32
+> bits for power calculations. The 56-bit accumulator register accumulates
+> power (energy) or current (Coulomb counter).
 > 
-> I am not going to review, much less apply, this series.
-> Exposing subsystem internals to userspace is a bad idea and would limit
-> future improvements of the hardware monitoring subsystem. User space file
-> systems are bad enough and cause all kinds of trouble. I don't want to have
-> to deal with the same kind of issues in the hardware monitoring subsystem.
-> 
-> Interested parties should implement kernel hardware monitoring
-> drivers instead.
-> 
-> Guenter
+> PAC1711 and PAC1811 measure up to 42V Full-Scale Range, respectively 9V for
+> PAC1721 and PAC1821.
 
+I think the sashiko comments for this one are a mixed back but the
+one about intermediate unsigned state in particular looks like a good spot.
+I didn't look closely at all of them.
+
+https://sashiko.dev/#/patchset/20261007-pac1711-v4-0-6ef34d7a7947%40microchip.com
+
+Whilst I do plan to enable sashiko emails for IIO fairly soon (subject
+perhaps to more discussions) in the meantime, if you want to speed up
+review of your patches, you can reply to the thread addressing what sashiko
+has found.  That way you save reviewers from trying to figure out what
+is true and what is a false positive.
+
+Jonathan
