@@ -1,372 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5D03C345C;
-	Sun, 18 Oct 2026 22:50:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6813DB983
+	for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 11:40:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792363853; cv=none; b=sNRP302H37It/uiuCKtdojziPKzYVK21JdxcPzsf3LywSukCKL5yO+Lo/1I55mptNhp2igXo+mYFQgqr+THtb+DP8CxY+sLkBoKVuad3nMY4dukzt81lAh1vzhhxq1TafIzxXB7E6+qnDP69sxn5lu5MhPk21Hij/HObYNSMBgg=
+	t=1792410023; cv=none; b=B/SZKpBoFaOyRE2h3b6ZShnEQg2Bf/CvAuLT52pSzI4ohFBjgPxyyD06YRgD3QDFTN2PcsdKiDoYyHlqkpfGigEFoss6R5Udii5BwQUDPcfH4tlJfsIUUly39r7LVGxsvaIBtoxihYHNGuWjvvb2eFg8W1JldGcIFtPBcctSA1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792363853; c=relaxed/simple;
-	bh=56ph6YUmmDdJUJ4J4H27XwjPGATI/dmF9kemybCKWSs=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=m/5F/UlZ+JTdpDTMna18EcD4AhzyFmfYwrvw1YDp4PhMI3f4dt+jsGdRQliiXPSfgq3DHBei4B4SRJo2VxDWgQRbTYr1gjLVtCkNH8blhspmMmbM9CJEAi/gpYoxBXJ4caH81va/yYNQN8EOVfU4cdlfFN3iyrN1ArRaq8bdoPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ABvenEW2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792410023; c=relaxed/simple;
+	bh=zNa6hjnbJsZirNp2D6itt1WLH37BdWd7BIdoXDU6qOY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hJL7vPLqz4BQlcgqy+1EBw9Fi3llDVnVYBeKKcugVyKkl+qpAOMlubCHH15I9s8A/2tjKU5FRC8WCVhTdEB1mNEOOE5cEwEdh4EksZQespfcWVzjXOe7jLomPQVCdilVF9XM/NPPumrgwHcrQcOGBlo1MyFVJi2X8TeG6d/1nUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=b0qske6Y; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=cC3k5TOy; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ABvenEW2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CB991F000C5;
-	Sun, 18 Oct 2026 22:50:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792363848;
-	bh=p332EuKxIA2IxEfH2iz9HPbsFb9O2w7VObiKnnHPMTM=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ABvenEW27XHlrr3XGdaEOPoiweujbKXFUnnv4hbKuV1Ow1yMy+w8PBogPEOt3naQf
-	 mVs9JCHut0v7hl3D1NzfcrDjwHjRRwJ/unyrvCgEA6mrifsRB7rsu8X6pYzP+N+bCU
-	 iM2gLKqdsFI6mU6/rT9hfJiE57Bdzn/OgjvVMiooVSi3B28lYkPh/JI/0Wc7ND6Plh
-	 x3iePWzqyurWA+5gxsBIVk1zjbzXvP35iCU9Ajtly3CdN0LiSV/eJT1p2c0yedkiRq
-	 Jj+Si8qHcS9S2izDEEcCZwU9VeQGx5VtGVSTzhN/fyro2S+U0PDX2vTC6wKQJoye6z
-	 timg6mU906suw==
-Subject: Re: [PATCH net-next v4 5/6] eth: fbnic: report temperature and
- voltage alarms via hwmon
-From: netdev-bot+sashiko@kernel.org
-To: limzhineng2@gmail.com
-Cc: alexanderduyck@fb.com, kuba@kernel.org, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@kernel.org, pabeni@redhat.com,
- linux@roeck-us.net, horms@kernel.org, hmohsin@meta.com,
- mike.marciniszyn@gmail.com, kernel-team@meta.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, zinclim@meta.com
-Date: Sun, 18 Oct 2026 22:50:46 +0000
-Message-ID: <179236384686.3135.5949938608549155286@kernel.org>
-In-Reply-To: <20261014222225.2803660-6-limzhineng2@gmail.com>
-References: <20261014222225.2803660-6-limzhineng2@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="b0qske6Y";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="cC3k5TOy"
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69J8P7wo1896627
+	for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 11:40:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=IqIT7unUNeDVbUGIwzQRnFuw
+	+MAaKeTUmeCgf8MNO6I=; b=b0qske6YXg+7km4y82nPrdnSjk/9jGB8dE2zAfS2
+	aLdB2rwbp9/1KnLBds4r2l+TrTfOr0U2KAQr2xmzeLUMdUyF2/jWc/jzV2W/Kzk1
+	MtUZqw//2uZv88Ml9ugxhsStIbmxF22YsG21P7WFiHCPcXOx5sKcKQgO+9SZqewA
+	Nn9U5MxRg+2/s3jR73PD5JiMN7wGp5myf7+uj7UvOlcx+8Jine2wHPRi1OIIzv5o
+	HDwZfAfu8RHnZTzOeU/78hxlJnQnc9tUb76eQE7DRNM3yaeO6PY6HP03SIfEdORN
+	Z0W+8/fHeQ3IvKkWvCw1PCqKIIktBR/PKTyWevAi2Ib5rg==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hdbvr9nv2-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 11:40:21 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-93f33438950so462451085a.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 04:40:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1792410021; x=1793014821; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=IqIT7unUNeDVbUGIwzQRnFuw+MAaKeTUmeCgf8MNO6I=;
+        b=cC3k5TOyM5dcAip93qkeqyyqzx90FfPf8KQ8MdrOwwRAG/hCGdGHfvzZgbMHfNM993
+         qzWPRlAZT/AKRHeIdYHOqpKBvOCiNxJbi1thbk+xJBBKHNdAQwoQG2BgtryyaNt3/MGR
+         DylStc7srKfPAYHPrFPa3NFyUdB4Yodpleu6K3fewcTWcfvTsgRpJN+JN3u4a7Q9NZ4u
+         spa8Yf6wM4FYMKOFS4s84LXedLMkU96aYXZd2e4clxBErVVHioH1iOeAVqQyGVixcPDb
+         I0+FM/4TYrlxihKY8Vxikf6fqnup7ra8mmZzbtr6rMihbDA+7pa6dU3AFuILpYhkWFgt
+         gMAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792410021; x=1793014821;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=IqIT7unUNeDVbUGIwzQRnFuw+MAaKeTUmeCgf8MNO6I=;
+        b=RgHlkBEaPgJGKrwhE2/byMPDAoQ4txMNlO+xVJe46Hlf8vh7gG7l3yNShd8LLkpNd6
+         2oRty4TCjSUswwFApOYp2HyTu3JhIdlSo+4BijgPwo7pkf8BzpnTfFaqVe5LToGxlCGq
+         ON/q0Srehnk9/9xfl48Nmmzko04TTEWNQ5vmZ1fSzVAoK2baspnZ03NU5zVLy7EOd+b2
+         k4SJTQgKcTVamgba7tsc22IhY/abK8AGVWXkLS4VqmV3cidlR6AwHzSw1efTOL/ohgow
+         pEA9QP1c2WbAO9gIGkiZz9EyXbAHQ36UkW6ZIYScxR6vus//CdNRjvsHosllHlLAi9Rq
+         hNdQ==
+X-Forwarded-Encrypted: i=1; AKwUvByHcv6fnaBJTi34Hx6pGnPWhKTBVPE1gfqCowj1H3if5/+zOGeuuW41g1TwE8JsS8ZzA5ACupCZhC5J6w==@vger.kernel.org
+X-Gm-Message-State: AFq9FYKawKMB/DHddVMgYqlFvlPvWm2fs1nR6kjHRIJonItcqzJM9u0v
+	0lPlspuOuzWusyFhzCUUEbaRJwThZZLNcRd1A4pyiIv9EgIPu71vChTm/AGQXw6OZHjdmlmJGOg
+	4TCzGyeNp4MCJMsGDj+9zyDENt4EFRsuaXXLJbGoLB0zM8JqKTI9ELcNrJvWcVbBHMQ==
+X-Gm-Gg: AYBFou2ujG3AZCrLwBDFY2DWYNoBSbw8l695eotUJL+86r+zY3tc1C7HCpLTB+5CwZK
+	BOGY/9VAu1l7mK0DhuGU3sevEPm51a1tY9SlOGkZEaPNPqjtcPmmKHeUXOhm39DjJLAqsDZfGtT
+	fThyByyuSTAUtBYsdeNxFr1vfKSZqpx0hgl80fWuUH9RBitEtSrB2GOaw7G9mUeXG94bu/PsaoG
+	YrY/yXFfehd58swUrYnjUpZevhEkgbZjcjIW4qWY1LFks119C6XKw39rFWbintzHFODpcKgA2Lb
+	IrFINH/mTKkho0lxGBkxnkIR4FjdjazDRKSRMr5gFq3qyI2NMopss5RIMzlycYazQI2lmqtLga6
+	0G2oYa32VfHKlIk9C
+X-Received: by 2002:a05:620a:258d:b0:939:6dea:374d with SMTP id af79cd13be357-93f29d813camr1251144585a.49.1792410019022;
+        Mon, 19 Oct 2026 04:40:19 -0700 (PDT)
+X-Received: by 2002:a05:620a:258d:b0:939:6dea:374d with SMTP id af79cd13be357-93f29d813camr1251139485a.49.1792410018424;
+        Mon, 19 Oct 2026 04:40:18 -0700 (PDT)
+Received: from oss.qualcomm.com ([188.27.161.187])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1c8a81587sm519633865e9.1.2026.10.19.04.40.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Oct 2026 04:40:17 -0700 (PDT)
+Date: Mon, 19 Oct 2026 14:40:15 +0300
+From: Abel Vesa <abel.vesa@oss.qualcomm.com>
+To: Konrad Dybcio <konradybcio@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Hans de Goede <hansg@kernel.org>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Abel Vesa <abelvesa@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH v4 4/4] arm64: dts: qcom: glymur-zenbook-a14: Add
+ Embedded Controller
+Message-ID: <44vpjtmnwg7wtp6xsqgl54rbpos27fndfru7pmudfvzweyl3zo@r7dxlf74klfl>
+References: <20261015-topic-asus_ec-v4-0-af6305ffcb10@oss.qualcomm.com>
+ <20261015-topic-asus_ec-v4-4-af6305ffcb10@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-
-Thank you for your contribution! Sashiko AI review found 6 potential
-issue(s) to consider.
-
-Critical: 0 · High: 0 · Medium: 4 · Low: 2
-
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] The commit message says that exposing the firmware range as
-  temp1_alarm/in0_alarm means "an excursion that starts and ends between…
-- [Medium] On firmware that does not report a range,
-  fbnic_hwmon_alarm_read() produces temp1_alarm/in0_alarm by comparing a…
-- [Medium] fbnic_hwmon_register() publishes the new hwmon device to the
-  mailbox IRQ thread with a plain WRITE_ONCE(fbd->hwmon, hwmon), which…
-- [Medium] hwmon_cache.temp_alarm/volt_alarm are reset to
-  FBNIC_FW_TSENE_ALARM_UNKNOWN only in fbnic_mbx_init().
-- [Low] fbnic_hwmon_is_visible() hides temp1_alarm unless
-  fw_cap.temp.min, max and crit are all reported, and hides in0_alarm…
-- [Low] The new synchronize_irq(fbd->fw_msix_vector) in
-  fbnic_hwmon_unregister() does not check that the FW mailbox vector is…
-
---
-
-eth: fbnic: report temperature and voltage alarms via hwmon
-
-This adds temp1_alarm and in0_alarm hwmon attributes to fbnic. They are
-backed by the range firmware reports on each threshold crossing. When
-nothing is cached, the driver falls back to a sensor read, or to
-comparing the reading against the thresholds.
-
-Pollers are woken through hwmon_notify_event() from the mailbox IRQ path.
-fbd->hwmon is now published with WRITE_ONCE() and torn down with
-synchronize_irq().
-
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-> index 4df808f850cf8..310a2c52bb4df 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-
-[ ... ]
-
-> @@ -120,6 +127,74 @@ static int fbnic_hwmon_read_threshold(long thr, long *val)
-
-[ ... ]
-
-> +static int fbnic_hwmon_alarm_read(struct fbnic_dev *fbd,
-> +				  enum hwmon_sensor_types type, long *val)
-> +{
-
-[ ... ]
-
-> +	/* Paired with WRITE_ONCE() on the mailbox thread. Firmware only
-> +	 * reports on a threshold crossing, so nothing is cached until the
-> +	 * first one. Read the sensor, whose response carries the range.
-> +	 */
-> +	alarm = READ_ONCE(*cached);
-> +	if (alarm == FBNIC_FW_TSENE_ALARM_UNKNOWN) {
-
-[Severity: Medium]
-Can this return a range that a previous firmware instance reported?
-
-temp_alarm and volt_alarm are only reset to FBNIC_FW_TSENE_ALARM_UNKNOWN in
-fbnic_mbx_init(). That only runs from fbnic_fw_request_mbx(), at probe and
-resume.
-
-A firmware reboot while the host mailbox stays up takes a different path:
-
-fbnic_fw_check_heartbeat()
-    fbd->firmware_time < fbd->prev_firmware_time
-    fw_heartbeat_enabled = false
-fbnic_health_check()
-    fbnic_fw_config_after_crash()
-
-fbnic_fw_config_after_crash() sends the ownership message and reprograms
-the RX filters. It does not touch hwmon_cache.
-
-The commit message says firmware only reports a range when it changes. This
-function only queries firmware while the cache is
-FBNIC_FW_TSENE_ALARM_UNKNOWN.
-
-After a firmware reboot, could temp1_alarm and in0_alarm keep showing an
-alarm that never clears? Or could a stale FBNIC_FW_TSENE_ALARM_NORMAL hide a
-sensor that was already out of range when the new firmware booted?
-
-On firmware that reports ranges, reading temp1_input or in0_input would
-refresh the cache through the TSENE read response. On old firmware, at the
-end of the series, the cache is written by fbnic_hwmon_old_notify_event()
-and read responses never refresh it. The stale value would then stay until
-the next threshold event.
-
-> +		err = fbnic_hwmon_sensor_read(fbd, id, &reading);
-> +		if (err)
-> +			return err;
-> +
-> +		alarm = READ_ONCE(*cached);
-> +
-> +		/* Firmware too old to report a range, derive it instead */
-> +		if (alarm == FBNIC_FW_TSENE_ALARM_UNKNOWN)
-> +			alarm = fbnic_hwmon_classify(thr, reading);
-
-[Severity: Medium]
-Is this fallback allowed by the hwmon ABI? Documentation/hwmon/sysfs-interface.rst
-says:
-
-    Alarms are direct indications read from the chips. The drivers do NOT
-    make comparisons of readings to thresholds. This allows violations
-    between readings to be caught and alarmed.
-
-On firmware that doesn't report a range, the cache stays at
-FBNIC_FW_TSENE_ALARM_UNKNOWN. fbnic_fw_parse_threshold_exceeded_resp() does
-not cache FBNIC_FW_TSENE_ALARM_DEPRECATED events, and the read response has
-no *_ALARM_STATE attribute. Every read of temp1_alarm or in0_alarm therefore
-ends up in fbnic_hwmon_classify().
-
-fbnic_hwmon_is_visible() still exposes the attribute whenever the thresholds
-are present. Userspace can't tell an alarm the hardware raised from one the
-driver computed. The value adds nothing over comparing temp1_input with
-temp1_min, temp1_max and temp1_crit.
-
-The last patch in the series, "eth: fbnic: derive the alarm range on older
-firmware", keeps this fallback. It also adds a second driver-side
-classification in fbnic_hwmon_old_notify_event().
-
-> +	}
-> +
-> +	*val = alarm != FBNIC_FW_TSENE_ALARM_NORMAL;
-
-[Severity: Medium]
-The commit message says:
-
-    Expose that as temp1_alarm and in0_alarm, so the alarm reflects a
-    condition the hardware raised and an excursion that starts and ends
-    between two sysfs reads is still caught.
-
-Does the code catch that case? Nothing latches the alarm, and reading it
-does not clear anything.
-
-fbnic_fw_parse_threshold_exceeded_resp() overwrites the cache with every
-range it receives, including the crossing back to normal:
-
-		if (alarm != FBNIC_FW_TSENE_ALARM_DEPRECATED) {
-			WRITE_ONCE(fbd->hwmon_cache.temp_alarm, alarm);
-			fbnic_hwmon_notify_event(fbd, FBNIC_SENSOR_TEMP);
-		}
-
-Take this sequence:
-
-    read of temp1_alarm returns 0
-    firmware sends FBNIC_FW_TSENE_ALARM_ABOVE_MAX
-    firmware sends FBNIC_FW_TSENE_ALARM_NORMAL
-    read of temp1_alarm
-
-The second read also returns 0.
-
-The hwmon_notify_event() wakeups don't close this gap either. If both events
-are handled before the woken poller reads the attribute, the poller still
-sees 0. The KOBJ_CHANGE uevent carries only the attribute name, not a value.
-
-The last patch in the series, "eth: fbnic: derive the alarm range on older
-firmware", does not add latching either.
-
-> +
-> +	return 0;
-> +}
-
-[ ... ]
-
-> @@ -186,25 +266,69 @@ static const struct hwmon_chip_info fbnic_chip_info = {
->  
->  void fbnic_hwmon_register(struct fbnic_dev *fbd)
->  {
-
-[ ... ]
-
-> +	hwmon = hwmon_device_register_with_info(fbd->dev, "fbnic",
-> +						fbd, &fbnic_chip_info,
-> +						NULL);
-> +	if (IS_ERR(hwmon)) {
->  		dev_notice(fbd->dev,
->  			   "Failed to register hwmon device %pe\n",
-> -			   fbd->hwmon);
-> -		fbd->hwmon = NULL;
-> +			   hwmon);
-> +		return;
->  	}
-> +
-> +	WRITE_ONCE(fbd->hwmon, hwmon);
->  }
-
-[Severity: Medium]
-Is WRITE_ONCE() enough to publish the device to the mailbox IRQ thread?
-
-fbnic_probe() enables the mailbox IRQ in fbnic_fw_request_mbx() before it
-calls fbnic_hwmon_register(). A threshold event can therefore reach
-fbnic_hwmon_notify_event() on another CPU while registration is still in
-progress.
-
-On this path, __hwmon_device_register() calls
-INIT_LIST_HEAD(&hwdev->tzdata) after device_register() and then returns.
-The HWMON_C_REGISTER_TZ block is skipped because chip->info[0]->type is
-hwmon_temp, not hwmon_chip.
-
-WRITE_ONCE() has no release semantics. Nothing orders the tzdata list head
-stores before the store to fbd->hwmon.
-
-On a weakly ordered CPU such as arm64, with CONFIG_THERMAL_OF enabled, could
-the reader see a non-NULL fbd->hwmon and still walk a list head that is
-zero from kzalloc()?
-
-fbnic_hwmon_notify_event()
-    hwmon_notify_event()
-        hwmon_thermal_notify()
-            list_for_each_entry(tzdata, &hwdev->tzdata, node)
-
-The window is very narrow, but the commit message relies on this pairing to
-make registration safe. Would smp_store_release() with smp_load_acquire(),
-or rcu_assign_pointer() with rcu_dereference(), give the ordering it
-describes? The code is unchanged at the end of the series.
-
->  
->  void fbnic_hwmon_unregister(struct fbnic_dev *fbd)
->  {
-> +	struct device *hwmon;
-> +
->  	if (!IS_REACHABLE(CONFIG_HWMON) || !fbd->hwmon)
->  		return;
->  
-> -	hwmon_device_unregister(fbd->hwmon);
-> -	fbd->hwmon = NULL;
-> +	hwmon = fbd->hwmon;
-> +	/* Pair with READ_ONCE() in fbnic_hwmon_notify_event(). Publish NULL
-> +	 * and wait for any in-flight FW mailbox IRQ handler to finish so it
-> +	 * cannot dereference the hwmon device after we unregister it.
-> +	 */
-> +	WRITE_ONCE(fbd->hwmon, NULL);
-> +	synchronize_irq(fbd->fw_msix_vector);
-
-[Severity: Low]
-Can fw_msix_vector be 0, or stale, by the time this runs?
-
-hwmon stays registered across suspend and resume. It is only unregistered
-from fbnic_remove(). If __fbnic_pm_resume() fails, a later remove can see
-one of two values.
-
-The first is 0. fbnic_pm_suspend() calls fbnic_fw_free_mbx(), which sets
-0. It stays 0 if fbnic_alloc_irqs() then fails during resume. The
-err_free_mbx path also leaves it at 0.
-
-The second is a stale vector, when __fbnic_fw_enable_mbx() fails.
-fbnic_fw_request_mbx() frees the IRQ and still stores the vector:
-
-	if (err)
-		free_irq(vector, fbd);
-
-	fbd->fw_msix_vector = vector;
-
-fbnic_free_irqs() then releases the PCI vectors.
-
-A later fbnic_remove()->fbnic_hwmon_unregister() would then call
-synchronize_irq(0), or synchronize_irq() on a virq that may since belong to
-another device.
-
-free_irq() has already drained the fbnic mailbox handler, so this does not
-look like a use-after-free, only a wait on an unrelated IRQ. Should the call
-be guarded with if (fbd->fw_msix_vector)?
-
-The stale assignment in fbnic_fw_request_mbx() itself predates this patch.
-
-> +
-> +	hwmon_device_unregister(hwmon);
-> +}
-> +
-> +void fbnic_hwmon_notify_event(struct fbnic_dev *fbd, int id)
-> +{
-
-[ ... ]
-
-> +	/* Pair with WRITE_ONCE() in fbnic_hwmon_unregister(). Skip the
-> +	 * notification if hwmon failed to register or has already been torn
-> +	 * down.
-> +	 */
-> +	hwmon = READ_ONCE(fbd->hwmon);
-> +	if (hwmon)
-> +		hwmon_notify_event(hwmon, type, attr, 0);
-
-[Severity: Low]
-Can this send a uevent for an attribute that does not exist?
-
-fbnic_hwmon_is_visible() hides temp1_alarm unless the temperature min, max
-and crit thresholds are all reported. It hides in0_alarm unless the voltage
-min and max are both reported.
-
-fbnic_fw_parse_cap_resp() parses each threshold as an optional TLV on its
-own:
-
-	fbd->fw_cap.temp.crit =
-		fbnic_tlv_attr_get_signed(results[FBNIC_FW_CAP_RESP_TEMP_CRIT],
-					  FBNIC_SENSOR_NO_DATA);
-
-fbnic_fw_parse_threshold_exceeded_resp() calls fbnic_hwmon_notify_event()
-for every range other than FBNIC_FW_TSENE_ALARM_DEPRECATED. It does not
-check visibility first.
-
-hwmon_notify_event() calls sysfs_notify(), which does nothing for a missing
-attribute. It then always emits KOBJ_CHANGE with NAME=temp1_alarm or
-NAME=in0_alarm.
-
-So firmware that reports ranges but omits, say, the TEMP_CRIT TLV would
-produce change uevents for a sysfs attribute that isn't there.
-
-The mismatch remains at the end of the series.
-fbnic_hwmon_old_notify_event() checks only min and max, while temp1_alarm
-visibility also requires crit.
-
->  }
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261014222225.2803660-1-limzhineng2%40gmail.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261015-topic-asus_ec-v4-4-af6305ffcb10@oss.qualcomm.com>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDE5MDA0NiBTYWx0ZWRfXyNuAmSyPnc39
+ 8oZlDeyhS/l1tEEsn++KK1wgGORzhj7FslRrauyi52mhJDRClnq2OJk56st+x0mwCvP+MXOzFys
+ 1klx9dYRrZKJcuFuaXWe1Mm9FYqiOERD/E5BE9qwKoSaL7Pn+NYh0SSewtEq+rgu49YOPhmwGOU
+ i6pw8ytrQHF570DC8yyfGn22kfWRIalCHWlSpPfplWPrZA41bdQgo+Hz1DOiXDk4b22g7Jhp6oU
+ o07kUt/VH6dClGuHUNUr6SMqcH6ynKvuhV5IV3+b0Pe0C66dy61g0G+baRyb5sWvgrPLci4LEK1
+ RQl6Ci2WPtgtpa8mjwtophB/cvB0O46BZVLmBQ79mNSDNcOjtPfa7iWzE5z9pnR2mTDXCBsIfbi
+ LCYLJN7+vwr125JjzbFp8GugWGKfv1/H+CUtNeOFoYyoxYifIwGXwcuM9IuMxC9P1I/jiHloLzo
+ Rs+nbvWgiU46gb8kF7Q==
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDE5MDA0NiBTYWx0ZWRfX7Ap0GWv2ELHx
+ K9fp3IlYC6vWQQhFJDMzEj7E4+4oIh5bisD0f5rn9UkGIBxFcM+OF2rFRIUcgKuTjv3pdzPG4Rd
+ gTqvFlpm1vcHMaY/UQ/52yagqhI16+c=
+X-Proofpoint-GUID: yzaSlw6RsTyaFfJa30do7Pi8yFkbQY9T
+X-Authority-Analysis: v=2.4 cv=K/+3jCWI c=1 sm=1 tr=0 ts=6ad601a5 cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=Qvngrl3H0rQgGg+94q4QgA==:17
+ a=kj9zAlcOel0A:10 a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=ZpdpYltYx_vBUK5n70dp:22
+ a=EUspDBNiAAAA:8 a=-FifcBtKAQNI-ioUATQA:9 a=CjuIK1q_8ugA:10
+ a=PEH46H7Ffwr30OY-TuGO:22
+X-Proofpoint-ORIG-GUID: yzaSlw6RsTyaFfJa30do7Pi8yFkbQY9T
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-10-19_03,2026-10-14_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 phishscore=0 spamscore=0 suspectscore=0 adultscore=0
+ impostorscore=0 clxscore=1015 bulkscore=0 lowpriorityscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2610080000 definitions=main-2610190046
+
+On 26-10-15 10:55:32, Konrad Dybcio wrote:
+> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> 
+> The Glymur-based Zenbook A14 features an Embedded Controller running
+> custom ASUS firmware (which is loosely based on the reference Qualcomm
+> Hamoa EC one with a lot of modifications). It provides keyboard
+> backlight control, additional temperature sensor readouts, fan speed
+> monitoring and a number of miscellaneous functions.
+> 
+> Describe it.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+
+Reviewed-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
