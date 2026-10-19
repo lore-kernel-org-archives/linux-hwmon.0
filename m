@@ -1,56 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792426487;
-	b=GPVBBj/33pZMLNKwKioEVqDyAIuJ6ohI6cs2AAEfnP0lmw8h8F1ftfIRsAfOdAZQQ8kE
-	 mjHMXfvQSbfDV4QgLXLRTWdkIUHKKHkHwnC3KlEWGmuIFZnd3Kw7+nk8JdfYz8QsBuBjK
-	 wX9ShBhGfE5dhSI0sqLtYVu4J7ME5moVou7T5M+gmE2Tvog5Pc98CQqEjEoMfn1wOjrSB
-	 At79HqRNT8BbSUMLHZEYg3YqtyLzOxUTq6bMb3TgXt8t0PVdVL534lkrdBqtStg55f1Dr
-	 K3fPPLjOHSgifeuajQAT2lh0Egj/YcgHnTkWdp7hjLPC8hCxANdiPzFzUHLNSgPH7ow==
+	t=1792428887;
+	b=Lynx58SzDKpLLaeET/vFcExu8YTRtwtlivGi3W+R731WyQSBsleYWNHyjY9D6dejlQug
+	 zKLbiXjmhlck3PgobEyMDMHNwHJ0QzjlxBTyVmJSyp0WE15Kl/SfEBcisls3nRt6EMynr
+	 3WJxjb73fihJa/XLDmCoMi+r4SUffEiKymey2WPhvubznl4QUMB05yHejpWBTwsK7CR5W
+	 XtImny0cB8l2yAm+8vPfRQ35ABkIQaC07C93wz3FgDiQ1KDrGH/wk2KwsnmPhS7+F1igB
+	 1oyuF1pi5kRH7VTezOoUp24BLfZL4FLhV8u2/9N2sQAGlW0UnrBkETILQyuaK5ZSW8A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792426487;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=VbTjWsWCAhPHdsr+fOAnTbmENy1jTt7HkluSNhFKAyk=;
-	b=QC7omck73hTaRoe+IPDnffcdqVOxz+WwuxefTs0jFxxw0DWkvYMy5cE2+rFbOqPMCbR8
-	 fyuOPCxyFKBJdQiYvZLlWllqApvak5JSn1nj5b3Np7eCmgF5ZgtXxjJwGHBIu/cZKANhe
-	 hZW4wGKyDoFdQQAsMKNqioRz0PcxmxDjknGont1+NaqlJOOMQ/aadiugWsYbJlHKp7JLC
-	 eDmLy39uFSlIIqPJfpd6vNghDw2UGfZb2z2+WZGomBoFCZeBD1cQwn1Y0ige8po2PKXL8
-	 HmLbMDiHVuXGcDaDgo6bPn1DO4UrGq3LFKfaBRI4AN3/3VyhSyVH7qWdV1QRLBGsQdQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792428887;
+	h=Received:DKIM-Signature:Received:Date:From:To:Cc:Subject:Message-ID:
+	 Reply-To:References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=F8z8y09+jVKBbKZimDHdTs8APxEMDZ3eZWZtEqP2bQg=;
+	b=bvumkwgReM0aBb8oGEXF6H2JSEShcJOGAZREjXf2Je744WVuxGAf+IjlShAHdS+DnSg/
+	 ZIacTsQIfi2QqK+7bPizz8e8xbSXZMyt8ijcZuzLQ2IrSAX5tGcaHgVI89DGg2Q1n+Uuj
+	 9HQ+13MYB5T0yZypJFScAp3MRXb2KDgi4WTF76nrgAfR5EHxNuq2MCXZcWzagFfY9VDUV
+	 r6eEOJplxVsVromxTH1EsMF+3dI8vy4ozxTnwEPMjDxPGELvl+ftus2vtMFFQ470bG4nR
+	 xsTs2hNCAAtANz04eK3qVkhGHiOVRDanpudwNCo+NKsxYfTr2M067YvDaUSCOCcHdaQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eZVNJWuR;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iNfrCfF2;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C031E606A325
-	for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 16:14:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC5A606A324;
+	Mon, 19 Oct 2026 16:54:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eZVNJWuR
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F3D71F000C8;
-	Mon, 19 Oct 2026 16:14:46 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iNfrCfF2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CC121F000C8;
+	Mon, 19 Oct 2026 16:54:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792426486;
-	bh=VbTjWsWCAhPHdsr+fOAnTbmENy1jTt7HkluSNhFKAyk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=eZVNJWuRhgXcEVSRGuixePSm2L/JKXNmqqivimt1qt8u4x3Xc+xgGA/6sztCZLa/F
-	 lcnLcS5z7OayS+dlIdJHh7hQtRcudYV0oAmmZ/Jhf/VQ/vQoybjHpJTi+8RT+IFwpx
-	 PayApSuFN9Gyyr07+k6gq5ZPlKBqygighOjz3Ic23k5TxnQ1j+gqPbNZC2SCGjPKUB
-	 lk+e231oYI3Nl64rtPQArk6u2FIaZWPoebpNqpQl4yWVP51J9/XrCNqBnvTKw6WcFx
-	 O+5UmbQ5qGXs31g8Le3vDxnB3RRQILIK0dqbDkL1E5JEJQXiDSslbA2L+asZQy8UM5
-	 +TB4574AFjxwQ==
-Message-ID: <sashiko-outbox-177848@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (sht3x) Return the consumed count for heater
- writes
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?QmFlayBLeXUsIEtpbQ==?= <pocj8ur4in@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261019154718.2328055-1-pocj8ur4in@gmail.com>
-References: <20261019154718.2328055-1-pocj8ur4in@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 19 Oct 2026 16:14:46 +0000
+	s=k20260515; t=1792428886;
+	bh=F8z8y09+jVKBbKZimDHdTs8APxEMDZ3eZWZtEqP2bQg=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=iNfrCfF22qt69ASu4DIy5bvfZGH2R+H/cN1fb+j0aBwNaUWdKBqb4S82vM8qqwVhq
+	 fJJi85A6fAd2Wxrqj/PTAGLl8eSGPWVqXc118mzfdJZFS1JiTFvRxk8GT1a0yuST/t
+	 Uw5OhjxPpMrp2rncy9sM9SBMQrJKZq5lHwhQR+pTJCeXzmDDWPE5KLUh5FD5ezSAkO
+	 BFX2Uxr9XzpDjn1cP/pJe6S50qpYIaj9KqZgT9Z2z8oLJCOD+g9G/IjuB6+8kEjBmi
+	 KFZ5w042d4cImFxL3KZWxYisdEY6cTQUZN/GFvIOgldipVsL7pTIy6lnLGO7Yd4Bzz
+	 UuWVHYto7Ku6g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 42293CE09FC; Mon, 19 Oct 2026 09:54:46 -0700 (PDT)
+Date: Mon, 19 Oct 2026 09:54:46 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: =?iso-8859-1?Q?Sebasti=E1n?= Peyrott <speyrott@gmail.com>,
+	Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
+	linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (minisforum-um780xtx) Fix clamp() build failure
+ with GCC 11
+Message-ID: <04a379a5-f2ab-48b4-96dd-9c6d611224b5@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <fda0e59f-20e1-4a94-a714-288940dcdd37@paulmck-laptop>
+ <20261014214522.243253-1-speyrott@gmail.com>
+ <2bffbd3b-391d-492f-959c-fb9128bce49b@roeck-us.net>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -59,26 +63,37 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2bffbd3b-391d-492f-959c-fb9128bce49b@roeck-us.net>
 
-> heater_enable_store() returns the result of i2c_master_send(), which is
-> the two-byte command length on success rather than the sysfs input
-> count. This can report more bytes than were supplied, or a partial write
-> for a fully processed input. For example, writing "on\n" returns two
-> instead of three, so a caller retrying the remaining newline gets
-> -EINVAL even though the heater command succeeded. Retrying the remainder
-> of "off\n" can also send the heater-off command twice.
->=20
-> Return count after a complete command transfer. Preserve negative I2C
-> errors and return -EIO for nonnegative incomplete transfers, so a
-> zero-message transfer is not reported as a successful zero-byte write.
-> Keep the existing boolean parsing, command selection and locking.
->=20
-> Fixes: 50c22cd154e5 ("hwmon: (sht3x) add humidity heater element control")
-> Signed-off-by: Baek Kyu, Kim <pocj8ur4in@gmail.com>
+On Sun, Oct 18, 2026 at 09:16:44AM -0700, Guenter Roeck wrote:
+> On Wed, Oct 14, 2026 at 06:45:22PM -0300, Sebastián Peyrott wrote:
+> > GCC 11 fails to build the driver:
+> > 
+> >   error: call to '__compiletime_assert_727' declared with attribute error:
+> >   clamp() low limit 0 greater than high limit points[1] - 1
+> > 
+> > The store function returns -EIO unless points[0] < points[1], so
+> > points[1] - 1 cannot be negative when the clamp is reached. GCC 11 jump
+> > threading, however, duplicates the clamp() limit check and does not prune
+> > the copy in which points[1] is zero, so the compile-time check in clamp()
+> > fires on an unreachable path. GCC 8 to 10 and 12 to 16 accept the code.
+> > 
+> > Select both limits first and use a single clamp_val(). This does not
+> > change behavior.
+> > 
+> > Fixes: 9d980da93bbc ("hwmon: Add Minisforum UM780 XTX EC monitoring and fan control")
+> > Reported-by: Paul E. McKenney <paulmck@kernel.org>
+> > Closes: https://lore.kernel.org/r/fda0e59f-20e1-4a94-a714-288940dcdd37@paulmck-laptop
+> > Assisted-by: LLM
+> > Signed-off-by: Sebastián Peyrott <speyrott@gmail.com>
+> > Tested-by: Paul E. McKenney <paulmck@kernel.org>
+> 
+> Folded into original patch, as suggested.
 
-Sashiko has reviewed this patch and found no issues.
+Thank you both!
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261019154718.2328=
-055-1-pocj8ur4in@gmail.com?part=3D1
-
+							Thanx, Paul
