@@ -1,133 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A45F4E5341;
-	Mon, 19 Oct 2026 11:58:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 664FC4E1C89
+	for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 12:45:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792411111; cv=none; b=XF79x2fPcPokpMQkQ3mS8AcaLKe1znxlg4wzkp6ZHK61nvavUZz0hulMYtowfrSmpMjxEoaMZItt/mccvk+wwbBL4lKmtB8G8OhX0hKWX8aykm4yfGqYOqa5L22PsJG6TZyS30lMcpCDuzDZsAcNnf0MzpKUp58VAmOYkoDLUj0=
+	t=1792413929; cv=none; b=p8HJfY6o6ZoYmF4QMJlRliFvKXsMldu49KdGCkktT/nJqkW3wKQnqL5v9uH9cFwe3l1CqT6uWhgzKcu4EIELeXciWZ6SlpVDPJ7t9xV1YXLHX7n+cOpPCySfhtiWN+S2l2snup8prLNBr1xzPZaZ69MRqGDG9cbCWyews2n7CLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792411111; c=relaxed/simple;
-	bh=cHIFotOLP+ROw61qDJefg+IYCNKivhosYztbis8JYQU=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=FXyYPPQXsiAmP/lyOHQOlxEulfLlZb/ldc+CMv1LPrkxO4xqaJ0VdSr7wJU00aCHYjw/T7+zXLbOeSRTBnzBbmMFzTWT9Ry6m0LTvfhug+oKoRDhXtt4fA2zN67W6pSyJL0bW4zBbPvn64aoqbJWKZFIiRqLZ/KIaFP8kkPI21c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DwgtAJpg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792413929; c=relaxed/simple;
+	bh=CxFwB3NB1ukGlnP0K4LvgyQtIKLtXdStrK1ZRzGD03M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PjRR66LgH9Pk65+1aExKTxHCoE2/o9zucPn2dNZFSDV+gP/RUznnuQwOS9UiA4c7aeX1vSlyJIqG2LJTgF4d/0PeImFWVd8q7z9L8rpMrRX9zV51TuZEzRjXUrJf/5UbpuR4Op/4MAmI6x52B1BUGG9vMKsGBkqtIOFC4yLvczQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FPht6Xb6; arc=none smtp.client-ip=74.125.82.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DwgtAJpg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A051F000C4;
-	Mon, 19 Oct 2026 11:58:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792411109;
-	bh=XXkiyHmxPpKgXcdDYmFrzlcV0nO6TkiWZPL1rL6OSg4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=DwgtAJpgBj70c/7kErysWDVz07y5wfrShA1yT8y2wryrAmIXaegpc9zwWIm+kLh5Q
-	 afNc/Ja+zhmtlnUj6hwTMhKSQZwNePmOR5b7ENedb5jFotEzw9mJWOc3jnAECD+LT1
-	 b7J/35xCBD+XTB+4U9jCFMb8cP4W+Oq1GkxsjizdgvsiSy2erWsXnRkOFIm79H8nYR
-	 niHdLExe1mReiWsHmdgEnFoBFD96w3M/zyAVzL0XkxSAYBa0hsFPVaLFNy8IYXHZb4
-	 w+QJ4yNL1MdMQ2eBFxhb1qSPJqsuZJnvtE54sm8HF7VxnxZ6cOB+2n/0f/2Zw8hh6H
-	 XpZYJk5JM9yqA==
-Message-ID: <sashiko-outbox-177057@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 2/6] peci: controller: Add StarFive JHB100 PECI
- driver
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Changhuang Liang" <changhuang.liang@starfivetech.com>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org
-In-Reply-To: <20261019114502.55307-3-changhuang.liang@starfivetech.com>
-References: <20261019114502.55307-1-changhuang.liang@starfivetech.com>
- <20261019114502.55307-3-changhuang.liang@starfivetech.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 19 Oct 2026 11:58:29 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FPht6Xb6"
+Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-33bf40b0c8bso6008937eec.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 05:45:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792413926; x=1793018726; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Oo5b+mGdxcUtc+pXMAzRoUpMwm26Steg70hnsQp65WY=;
+        b=FPht6Xb6VGL80aGbNPAdBRfg/sudz7zEXFdn/maPQyhp1O+KKMxdmAQbjJwcqeLNZg
+         o4mALJTQy8LB1Dz1FO0sQ4Cx0RadQfRWF+Jgv7KpUQMQ3aPyvpmVSKz85GbQEuguxWSb
+         2J/v1VHU4AXTGFy+9XBJqqCGZagvOpfxPtSyyFRfArrkvgALgeZTCi4IowJ20HA5Md67
+         4Okr4Amtr1U24fm+cN5HpP2o1B2c82coZ1luUpQzeFZ1vadFoXjHSy5qW7R/EGHJKcqH
+         Y/Mywd5+EKryOLUh9ji0lgVjI6FywcLU6/NIThxrngY0zd0bbzQkH+R1qlZMVsJha9Uq
+         NY0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792413926; x=1793018726;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Oo5b+mGdxcUtc+pXMAzRoUpMwm26Steg70hnsQp65WY=;
+        b=rVbcJfJBzpgyA0Zu3tvM6bMQh+vkW7VllzvVt6HmhpdEP5snt/bwYNT7isDGpvA1UD
+         dE/PqiikAGisAD5ixdXB1Bfco2ehhmxB3g4kG6fAiguYeNUr7KZwmk77S/V/IEzP51Xs
+         vX7iQqPc5BZvSuEGQgirFXvk45iEeXWsCJ0qzrduljm+evX3xS+5XspuB7kC5i1z1dSU
+         ljSZyMJAJiOZUXgFseI1CpxyWKgVUhbsXkc+cxgQEIBJkXQf8CgE+816SD1K8M35x9Y8
+         hJXD8AJr6aHfhLdc3hnaOcq6ec5i6x0Bs05N4pvBdj0kDdZA+WJg5Vujy2RR7kUXHErG
+         G1NQ==
+X-Gm-Message-State: AFq9FYIj/5xhgmy5qgv2b1w4SlO25lWV8Qj0La9pGtel2sm1kF7OkGWX
+	5Hlp5co8jV0YF1HHoGMRxsKo93qirxmu3pvUsXrah6DPtCOXat7elTpqAPApNA==
+X-Gm-Gg: AYBFou0pgfiniXJdSI0UDFn9N5GWKqu8s7wm864iiP0e8I4cPrVwhYHHmC98dRGrsqZ
+	in63sH7MSqyebA8f1T/et/lzv+v/E7nLwSM1C6owZ1unYAH6GmZIbobvoDy8IBuWAWg3FyFFZQH
+	AtTrfXYbCqJ5HoYGhbIwofJ4LjFoTeb4DN7KjM7iAyabEBmjiyhBNazowT0g+krGwdlsU7UUd5Q
+	m9VaTc+d9PKzbfyj15GhEvYwZ1C3cY8rgOC+o8MNJXzLBRLyvXzyTtM4y+iKZl8LsNxyC117f0Q
+	HaebX01gyjsCBt+4Y3qlzLx9/AX4QsjDVP4aEyF+ni+FX2dFNldOdY0tJn+uxV210LTHDZNi5WD
+	HkWLT9zHSKCfgU7C6rHrfJaH2bCAGOmUhhwrkUaDmy28XawMOX1fvQnuvp9Wk+Mf+gnO8y/JpDv
+	+zVmZdDHoPilXV6D2eQLMkJOvDjvHagcijk4OjXaqEEwQTtkmRUqS44TldFuxz5yjCetK0Qgc1R
+	+aJLDRHNGua
+X-Received: by 2002:a05:693c:8107:b0:358:1f59:48c9 with SMTP id 5a478bee46e88-361a1f4a9bcmr12517584eec.24.1792413926068;
+        Mon, 19 Oct 2026 05:45:26 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36082a7b33bsm59496695eec.24.2026.10.19.05.45.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Oct 2026 05:45:25 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 19 Oct 2026 05:45:24 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Asaf Nuri =?utf-8?Q?Bertizlio=C4=9Flu?= <ycistak@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, corbet@lwn.net, skhan@linuxfoundation.org,
+	rdunlap@infradead.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (coretemp) Document sysfs numbering and label
+ meaning
+Message-ID: <57ef30df-052a-4189-9000-deccaba6c117@roeck-us.net>
+References: <20261015171759.704526-1-ycistak@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261015171759.704526-1-ycistak@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] peci: starfive: missing reg_stride in starfive_peci_regmap_config
---
+On Thu, Oct 15, 2026 at 08:17:59PM +0300, Asaf Nuri Bertizlioğlu wrote:
+> The documentation says that all sysfs entries are named with their
+> core_id, and that the "Core X" label contains the processor number.
+> Neither is accurate. create_core_attrs() numbers the per-core
+> attributes core_id + 2 and always uses temp1 for the package sensor,
+> and show_label() prints topology_core_id(), not the logical CPU
+> number.
+> 
+> The difference is easy to see on hybrid CPUs. On an i7-14700F, the
+> "Core 4" label is on temp6 and belongs to CPUs 2 and 3, and the
+> E-cores report core IDs 32 to 43.
+> 
+> Describe the actual numbering.
+> 
+> The mismatch was found by an LLM comparing the documentation with the
+> code, and verified on the i7-14700F above.
+> 
+> Assisted-by: LLM
+> Signed-off-by: Asaf Nuri Bertizlioğlu <ycistak@gmail.com>
+> Tested-by: Ximing Zhang <xzhangjr@gmail.com>
+> Reviewed-by: Ximing Zhang <xzhangjr@gmail.com>
 
-commit 2951f13eb5d64c12334f96bb237dfd0078d838b2
-Author: Changhuang Liang <changhuang.liang@starfivetech.com>
+Applied.
 
-peci: controller: Add StarFive JHB100 PECI driver
-
-This commit adds a PECI controller driver for the StarFive JHB100 SoC to
-support PECI protocol communication for CPU thermal management.
-
-> diff --git a/drivers/peci/controller/peci-starfive.c b/drivers/peci/contr=
-oller/peci-starfive.c
-> new file mode 100644
-> index 0000000000000..9f59721b891df
-> --- /dev/null
-> +++ b/drivers/peci/controller/peci-starfive.c
-> @@ -0,0 +1,367 @@
-
-[ ... ]
-
-> +static const struct regmap_config starfive_peci_regmap_config =3D {
-> +	.reg_bits =3D 32,
-> +	.val_bits =3D 32,
-> +	.max_register =3D STARFIVE_PECI_MAX_REG,
-> +	.fast_io =3D true,
-> +};
-
-[Severity: Medium]
-Should starfive_peci_regmap_config also set .reg_stride =3D 4?
-
-When starfive_peci_probe() calls devm_regmap_init_mmio() with
-config->reg_stride left at 0, __regmap_init() defaults map->reg_stride to 1:
-
-drivers/base/regmap/regmap.c:__regmap_init() {
-	...
-	if (config->reg_stride)
-		map->reg_stride =3D config->reg_stride;
-	else
-		map->reg_stride =3D 1;
-	...
-}
-
-Because .max_register is set to STARFIVE_PECI_MAX_REG (0x100), reading the
-regmap debugfs registers file (/sys/kernel/debug/regmap/<dev>/registers) wi=
-ll
-cause regmap_debugfs_get_dump_start() and regmap_read_debugfs() to iterate
-across registers in 1-byte increments and issue unaligned 32-bit readl() MM=
-IO
-accesses via regmap_mmio_read32le(), which can trigger misaligned MMIO acce=
-ss
-traps or bus errors on RISC-V and return corrupted dump data.
-
-[ ... ]
-
-> +static int starfive_peci_probe(struct platform_device *pdev)
-> +{
-> +	struct peci_controller *controller;
-> +	struct starfive_peci *priv;
-> +	void __iomem *base;
-> +	int ret;
-> +
-> +	priv =3D devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->dev =3D &pdev->dev;
-> +	dev_set_drvdata(&pdev->dev, priv);
-> +
-> +	base =3D devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(base))
-> +		return PTR_ERR(base);
-> +
-> +	priv->regmap =3D devm_regmap_init_mmio(&pdev->dev, base,
-> +					     &starfive_peci_regmap_config);
-
-[ ... ]
-
-> --=20
-> 2.34.1
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261019114502.5530=
-7-1-changhuang.liang@starfivetech.com?part=3D2
+Thanks,
+Guenter
