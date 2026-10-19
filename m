@@ -1,86 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.227.15.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792449529;
-	b=IsaQeo5667+tFiCSQsxT/3KBXuVRHs8bmOvZRVTr3f+g0B61/ylFoOzbGFkAPnUl8ax1
-	 akJhwLUT5BQmVPq0+B15oFIAfo7i7R5H0D3kRIhC2qMsv4AW9Dx1x0YD1ZeGE5beOySBc
-	 +LU8MX084GBBnLU8Rp0etGtoymqVGchAwwFUUv7mDXiuIDV/N52KWoZu2oT0Vo1QSWErB
-	 x+33kuSEAFlrM3brqIq7AiKz/qP096O9AdaiVdqvtXhh74E6xWpqP4MA5jMRSK2+5jO74
-	 o7jBeKobdYY1gJERn165p/xiuV11+1ay1HFNleUW494XTnb3P8ZZ3oG2nEaFKdMJ7JQ==
+	t=1792450145;
+	b=sQIjCYdfuY00mxlPY6m93P14rPsO+AOZjU/+ZispUqkgrC8Bw3dGYgXRA2cowNekvgu1
+	 feSDG5ffezXOmFQPe3chmPtVtNUD3+9NdXZeWWxrCoYeK0BZtXH2SZUaMFTz9H2OxIe4P
+	 azncs6glswaIISUgM2uzrCCUbVpGLZpO12jI3YhRAM7DkOyuvbmH2Nd/gv7eRVHOw8L6L
+	 3ohcAfHB3Wmo3LpG6XrS3J/0BxKY4/7WJFR18/pHycbGmt0udo3TiXGQ4RuEgLvQ4CtiT
+	 agvwu/6AQCDEU/5CsARPF2JM8ovNyq9XOHyrAKZH5ptjTfm2cKZBe4TjNOrKj3gSWUA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792449529;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Sender:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:Autocrypt:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=43K4aQKligxqq/vuFO+T8e4jf0Zsw4MIuMv9mG5KIHk=;
-	b=TWzqHaTzwaUS0dpJJSLLvSJgy4TFtMovfduM5cSGyPipbeWQq32ZnxI68dV5HAQjd/f8
-	 DsQPD2N7VZnSlceKQ5vd0Z9y8iODVbHKI1kvo/O7dV+/Qf/q5XdMeWeXmzWwAjgqsr1ZO
-	 BikLAgWkzx6JUeGh+QZPdDTzs/LG94KoApAwlUHNBht4+xwAJ9BB6rZjG+LgJXSlhIsmT
-	 YJEwcEq64xvoIWcWOho9FiMnkyD5w/ckSN391fdvlshFWU3Hjzl1L5EkcKCjiZQhP5yg3
-	 VqeqwjaRswvISSwBf9wHWviA9puYcYPeXI3ofMGZkBiAKWa28rWQplvgn6nyI6V+QbQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792450145;
+	h=DMARC-Filter:DKIM-Signature:X-UI-Sender-Class:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
+	bh=vsZ4ZiEuFO3Q85v59nTceyK42q7BJhnrb+QW70Q5OgU=;
+	b=M1aA0Vqj7j6P83tvVTwvkRWQSBaqd2XK9sQi6g7pxg7RSNygA7FDxrQwpsX88Fi2Diz+
+	 Dbjc3Yu9D6l8VjJJTQcX6DiNUgncWXuKE4DGYbb5bMYNejyVr5aAgg/FpMpd9VfOIm6/N
+	 VhOu6V+zZsxEU/Q9AQf8Y9XdCs5xiUa0blNodYafNVPwWMDwPDo8TkVbyqhutoXKtY114
+	 OWcjJO+aOIgsSWdf4J1jOd8VS9RSh0dMd8hVjvhInqXqQmHOebzNImjuwTi0XenYzMUOK
+	 L/4d1SSYflj9ddMiOpgsyOQD9WsN94tqRSTk1aWFmsZ5HPA+FMCDZ0XG9vxevxMLCdg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=UUs+0Rzc;
-	arc=none smtp.remote-ip=209.85.216.54
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=gmx.de;
+	spf=pass smtp.mailfrom=gmx.de;
+	dkim=pass header.d=gmx.de header.i=w_armin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=ZVHCFi5V;
+	arc=none smtp.remote-ip=212.227.15.18
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33A2F606A31C
-	for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 22:38:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 33A2F606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D1B5606A319;
+	Mon, 19 Oct 2026 22:49:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2D1B5606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=UUs+0Rzc
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ab868eb9cfso1416371a91.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 15:38:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792449528; x=1793054328; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=43K4aQKligxqq/vuFO+T8e4jf0Zsw4MIuMv9mG5KIHk=;
-        b=UUs+0Rzcflurmt8UXhJYofzLWPIeoSGahP+pbpa6TFBcyi7FvfRdfRnKwInxcyvp8m
-         zzGsfKoh6sJ87QXbHusLssoSJiVcQg+Z83TE3Hxp9s7S9PL7QHBYm3vVhoCEVNoXT2LI
-         o/dEbz38pzS8v3GrN8xWYieFzOT/pzVAFFVgq8I9Ma4oI14eejAhRC5CcxUmNHhAIiYI
-         GG/BsRLGnhg6LL7AHbX1T3l2ncIv24y7wxdzT+j9Cj+DRGMHz/Sj9jfp904a1tZOMlht
-         i0vbkuMunNqHzGCTA3+qV8wltGjdJsJgX8UTDufFctuqRzB3EJ3vofGbjs8u9UO63SUX
-         phlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792449528; x=1793054328;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=43K4aQKligxqq/vuFO+T8e4jf0Zsw4MIuMv9mG5KIHk=;
-        b=uxhJloSijw+KqdccWGUFG6X1k737OmW/j088RMFu+LnDwEFHtbgTsQ4QAzZYgdvjMX
-         L9l3uzwrh6kNS/KnrQqGNAW6hhhrLny1ytbU1KWYGytW3F2WWvYiROShr0ZBJ5zTgUfO
-         VKw+B22vQ+QY77WgxNGnjXiYodk5cLImNJGjMEHnXmajfB0W/p3gdUSaNE6WMUW+99Jc
-         mjdek9IPyLe59iIlUbePU5H+70kq6CxXe7NFzL+d9CVpqhOO204sh+J+9aGh8QUXYhUJ
-         b43gXedonS9q+UVZT+KcoOJShEQAPJDmiJVh/7oca4d32h0yXBGZBBjtaAJZgfgf/1gr
-         8Uzw==
-X-Gm-Message-State: AFq9FYK/OK1wAKDdb6QYvH3P4VRp9MzJQsPmFisrzThnM7rLZ7xs1KWd
-	eoIN+OqUEoI1+kIKFmp2Fo7y687CsvpyUHenmp802LqFaKQtyRrhrfUccWrcWA==
-X-Gm-Gg: AYBFou2B5hQwVAE7H1rSkdKNM1+tB5/4gfG6pY0lz/XUbsGHz4ftkMyBK8udXrxVfXF
-	a2P91KY5BZMiZM3XzuIfoQEjhIFqt9huDuFyFvubzDOPgRnwS7vnwEiboos40rcXGooGIxwLE5i
-	87YOEx1OqSMgw+Mx3YXvkJoOx42S6CCGLtlYAhXKZha62+no1BLcvR8FVQ+IAR15H/p1NgSniYB
-	aVSGBf8uvd99bTypOV9wnwx2dA+a92HTFBljzGNDk6K7XPKXgVaLyKTNq2vX1XZkG756i6qaJCS
-	51XeHCMejMD4vDJjcm/g6UIeO8pi6kHFWzZ5OwkyAT8SAt/CT7KVjnnzVMAh+Q182XiGmkM3of2
-	nXg1dscB8leGNsjMtVKCHwxkzPq+zpdnncUK7Ua59NQy/e8yk36Et9AYF1L3k35VnXkhvKlgFy4
-	AIQRr6DPMELH+w2a0K4+O6CKgEYsvxVNK0uF/dwqyAWH3RLrbnT18RGBVLIE1Uk3pcCxae+qoXQ
-	14iY2jO4sgbW+Pg4gzTtPww6nyTepgTPPkdYoA5OUd9pAHkRlWw5/RQeIQD
-X-Received: by 2002:a17:90b:5111:b0:3a8:7242:e8d3 with SMTP id 98e67ed59e1d1-3acee293023mr7943932a91.7.1792449528378;
-        Mon, 19 Oct 2026 15:38:48 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ad5d4004cbsm1270090a91.3.2026.10.19.15.38.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Oct 2026 15:38:47 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4cb23fc0-2939-4ac7-ba0d-c7e0906434d8@roeck-us.net>
-Date: Mon, 19 Oct 2026 15:38:46 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=gmx.de header.i=w_armin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=ZVHCFi5V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1792450142; x=1793054942; i=w_armin@gmx.de;
+	bh=vsZ4ZiEuFO3Q85v59nTceyK42q7BJhnrb+QW70Q5OgU=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=ZVHCFi5V3ttd1lj+OUuvj/IqIByl/s8BKOrGri54Nwf7aYiz/wtZruGIt3wUI9AM
+	 R04mOljEVMUZpvItJfpP+bV7POY1uK4e1TP1iQfviZ+81sgp5Z95wYHpcHmec1TSE
+	 MXKTfgsXo0ewk2pyWcEzFdYB8L34QWHjYvgKG0WWexjIHVmr5Yk6XTjFruw+yjlQo
+	 dEv2I6d5UbmOBdKYHPnwhsWph9NfER7nw8H+oHk7OGsOZe7cGtuVtVvqhgiSYBJqI
+	 erUSYVgAFKWL6R67FJfAlD2gWpHxQ7lqPoeyIfO0p0r6Y3FibEpyztNeHiavIkMG0
+	 LvC6MBtCiNOra/Yg2A==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MNKhs-1wyd3H3CkU-00XnmL; Tue, 20
+ Oct 2026 00:49:01 +0200
+Message-ID: <0dddd5bf-520d-4d20-b21c-a3891632c499@gmx.de>
+Date: Tue, 20 Oct 2026 00:49:00 +0200
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -91,129 +64,138 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/5] docs: hwmon: Document the uhwmon userspace interface
-To: Jihong Min <hurryman2212@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, linux-api@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1791531025.git.hurryman2212@gmail.com>
- <c02aeee5b7e7a5d159d4df5baabe925e16814e94.1791559095.git.hurryman2212@gmail.com>
- <e77719ee-c813-400e-b49a-9f8a3b0e2e91@roeck-us.net>
- <CAAwencqEVCjtnJfmnut2zXXPvuwju5T89FDSpHN3wPfrrJnRdQ@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (acpi_power_meter) Fix 18.45 TW bug
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: github@firefishy.com, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20261006234618.10943-1-W_Armin@gmx.de>
+ <86b3c644-544d-4c23-8e7a-4478f4094058@roeck-us.net>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
- oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
- VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
- 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
- onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
- DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
- rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
- WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
- qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
- 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
- qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
- H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
- njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
- dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
- j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
- scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
- zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
- RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
- F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
- FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <CAAwencqEVCjtnJfmnut2zXXPvuwju5T89FDSpHN3wPfrrJnRdQ@mail.gmail.com>
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <86b3c644-544d-4c23-8e7a-4478f4094058@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:ehkXxIbwk3OQm7IrcUd7HnOZRm4//aXABxXM79l0BrPMcg3poc0
+ 6wjLZ//hC1qRZYhhsAsJQUmvGXSVXoHWrnd/MNnwU1/1gFmucYCeXJiaTtRFJKlz3U+u2AP
+ qiXZsmBPnWPADn8wcngl5gTjhKF/+/ss+DU/hzUWtbwaomSuyO/niUkYD9Cq+ISRBWQOIs4
+ MwMFfUJgmb6l9A0Uq9G5A==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:XJAxwvt6cos=;MWIfXMyMe/ZrkYwt3iUVhNAsley
+ 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
+ =
 
-On 10/18/26 10:27, Jihong Min wrote:
-> Ok. Then I will withdraw these patch series.
-> 
-> But then let me ask you the initial question that brought this patch series: Do you think it is at least OK to add kernel drivers for network-based sensors? Or do you think those are also to be subjected to be rejected (or remained in DKMS projects)?
-> 
+Am 19.10.26 um 22:53 schrieb Guenter Roeck:
 
-What is a "network-based sensor" ?
+> On Wed, Oct 07, 2026 at 01:45:34AM +0200, Armin Wolf wrote:
+>> The ACPI specification says:
+>>
+>> "If an error occurs while obtaining the meter reading or if the value
+>> is not available then an Integer with all bits set is returned"
+>>
+>> This integer can also be 64-bit wide on ACPI 2.0 and later systems,
+>> so we have to check for that too.
+>>
+>> Compile-tested only.
+>>
+>> Reported-by: Grant Slater <github@firefishy.com>
+>> Closes: https://github.com/lm-sensors/lm-sensors/issues/460
+>> Fixes: 1fefca6c57fb ("hwmon: (acpi_power_meter) Fix 4.29 MW bug")
+>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> Applied.
+>
+> Thanks,
+> Guenter
 
-Regarding the references, wireview has a USB interface, and I am
-quite sure that it should be possible to write a kernel driver for it.
-There are several hwmon kernel drivers implementing access through USB,
-so the same should be possible here.
-
-The Tapo API reference points to an "Unofficial Tapo API client",
-written in AI-guided Rust. Google tells me:
-
-"
-There is no official public API documentation released by TP-Link for
-Tapo smart devices. Because Tapo uses a cloud-centric and encrypted
-local communication protocol, developers rely entirely on
-reverse-engineered, community-driven API clients to interact with
-these devices locally or via the cloud.
-"
-
-I have no idea if it is possible to implement a kernel driver for
-this. There are various hwmon drivers with reverse engineered APIs
-(such as the Corsair power supply drivers), so relying on reverse
-engineering is not a problem. I am, however, not going to dig through
-the above mentioned clients to figure out what the API actually is
-and how to use it. The guidance provided by Google suggests that
-it requires per-client credentials (account email and password),
-which would be problematic.
-
-Either case, it appears that this would be about monitoring remote
-devices. That is really out of scope for the hardware monitoring
-subsystem. The hardware monitoring subsystem is monitoring _this_
-system. Adding support for monitoring remote devices would be
-a stretch.
-
-Guenter
-
-> 
-> Sincerely,
-> Jihong Min
-> 
-> On Mon, Oct 19, 2026 at 01:06 Guenter Roeck <linux@roeck-us.net <mailto:linux@roeck-us.net>> wrote:
-> 
->     On Sat, Oct 10, 2026 at 12:38:44AM +0900, Jihong Min wrote:
->      > Document the uhwmon UAPI for developers implementing userspace hwmon
->      > drivers. Cover device registration, request handling, notifications
->      > and device lifetime.
->      >
->      > Assisted-by: Codex:gpt-6-astra
->      > Signed-off-by: Jihong Min <hurryman2212@gmail.com <mailto:hurryman2212@gmail.com>>
-> 
->     I am not going to review, much less apply, this series.
->     Exposing subsystem internals to userspace is a bad idea and would limit
->     future improvements of the hardware monitoring subsystem. User space file
->     systems are bad enough and cause all kinds of trouble. I don't want to have
->     to deal with the same kind of issues in the hardware monitoring subsystem.
-> 
->     Interested parties should implement kernel hardware monitoring
->     drivers instead.
-> 
->     Guenter
-> 
+Thank you :)
 
