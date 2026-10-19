@@ -1,76 +1,75 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 664FC4E1C89
-	for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 12:45:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8215F48877F
+	for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 12:46:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792413929; cv=none; b=p8HJfY6o6ZoYmF4QMJlRliFvKXsMldu49KdGCkktT/nJqkW3wKQnqL5v9uH9cFwe3l1CqT6uWhgzKcu4EIELeXciWZ6SlpVDPJ7t9xV1YXLHX7n+cOpPCySfhtiWN+S2l2snup8prLNBr1xzPZaZ69MRqGDG9cbCWyews2n7CLY=
+	t=1792413976; cv=none; b=hL2jGGrezbHmNDEVK8c9CuRmhXwLNqHsv/r4CqATP+FBd/JCvrqPCKz68Rjn4jr6dOBcDsswDqTEDs7UzZtRVeI0SJPmB3TFa+oOkW1IIu5v1uvLOPwiF4ctY4O3/KL1in1EHexv8f+gGmxc9+12NuvMPv0WRcp3dL6LNnpCiPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792413929; c=relaxed/simple;
-	bh=CxFwB3NB1ukGlnP0K4LvgyQtIKLtXdStrK1ZRzGD03M=;
+	s=arc-20240116; t=1792413976; c=relaxed/simple;
+	bh=xp+A0hKQQq1H22UYXD4AcfOE21QDOyZZTRzwG+3a2Ug=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PjRR66LgH9Pk65+1aExKTxHCoE2/o9zucPn2dNZFSDV+gP/RUznnuQwOS9UiA4c7aeX1vSlyJIqG2LJTgF4d/0PeImFWVd8q7z9L8rpMrRX9zV51TuZEzRjXUrJf/5UbpuR4Op/4MAmI6x52B1BUGG9vMKsGBkqtIOFC4yLvczQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FPht6Xb6; arc=none smtp.client-ip=74.125.82.173
+	 Content-Type:Content-Disposition:In-Reply-To; b=RgsQ1mmOZLmMti9HK81rf7nc5USuqq/NjxfEEhO1WLrWwuCljIPTKy6xXpRRPRDSpyqwP5GspMmAtn4yCelHoSVHpINCEsk65cQ/nEdLuChNfH/AFZD7UIb5d3Dqgu8hZuOj6R/RHBYyXV36el7Rw/YQJHWNn/vExszVfGKQJ8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CVQV2mMC; arc=none smtp.client-ip=74.125.82.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FPht6Xb6"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-33bf40b0c8bso6008937eec.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 05:45:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CVQV2mMC"
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-14fd9dafb0dso216917c88.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 05:46:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792413926; x=1793018726; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792413974; x=1793018774; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Oo5b+mGdxcUtc+pXMAzRoUpMwm26Steg70hnsQp65WY=;
-        b=FPht6Xb6VGL80aGbNPAdBRfg/sudz7zEXFdn/maPQyhp1O+KKMxdmAQbjJwcqeLNZg
-         o4mALJTQy8LB1Dz1FO0sQ4Cx0RadQfRWF+Jgv7KpUQMQ3aPyvpmVSKz85GbQEuguxWSb
-         2J/v1VHU4AXTGFy+9XBJqqCGZagvOpfxPtSyyFRfArrkvgALgeZTCi4IowJ20HA5Md67
-         4Okr4Amtr1U24fm+cN5HpP2o1B2c82coZ1luUpQzeFZ1vadFoXjHSy5qW7R/EGHJKcqH
-         Y/Mywd5+EKryOLUh9ji0lgVjI6FywcLU6/NIThxrngY0zd0bbzQkH+R1qlZMVsJha9Uq
-         NY0w==
+        bh=ucqImzYK4TndSlhXSWzG/Thctz6staWsP5DajBsvrOg=;
+        b=CVQV2mMCXKl92EJaX/fW4ZHE6QUrVtOXkhA/GHdGi2IWovUF0190v8M9d0KGdeZGHB
+         eekmpm8AEuRdDw6xqp/uSU+phHXCpoENQZErq68hm3nzFbEqRe4VM1bvxRFmyVy1+zUu
+         1FRX1pQ5BNj9uD84giznYCgaXMkC1p4KSqRxGpV7D1GnJJlmDca9G6OW6OoMKHoBHI7d
+         nOhYxSaF79ZghbIU8dhpPXV9C7winPJYX51s1SRJcixd14K5n6PyqZgxB0rAT00WIedi
+         ZSOFvs2W3B3jf0DCKK+E59W/divgwKks6Gbleg02+nq9AzC3MwfZeau1nLndORls+eu0
+         QQXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792413926; x=1793018726;
+        d=1e100.net; s=20260707; t=1792413974; x=1793018774;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Oo5b+mGdxcUtc+pXMAzRoUpMwm26Steg70hnsQp65WY=;
-        b=rVbcJfJBzpgyA0Zu3tvM6bMQh+vkW7VllzvVt6HmhpdEP5snt/bwYNT7isDGpvA1UD
-         dE/PqiikAGisAD5ixdXB1Bfco2ehhmxB3g4kG6fAiguYeNUr7KZwmk77S/V/IEzP51Xs
-         vX7iQqPc5BZvSuEGQgirFXvk45iEeXWsCJ0qzrduljm+evX3xS+5XspuB7kC5i1z1dSU
-         ljSZyMJAJiOZUXgFseI1CpxyWKgVUhbsXkc+cxgQEIBJkXQf8CgE+816SD1K8M35x9Y8
-         hJXD8AJr6aHfhLdc3hnaOcq6ec5i6x0Bs05N4pvBdj0kDdZA+WJg5Vujy2RR7kUXHErG
-         G1NQ==
-X-Gm-Message-State: AFq9FYIj/5xhgmy5qgv2b1w4SlO25lWV8Qj0La9pGtel2sm1kF7OkGWX
-	5Hlp5co8jV0YF1HHoGMRxsKo93qirxmu3pvUsXrah6DPtCOXat7elTpqAPApNA==
-X-Gm-Gg: AYBFou0pgfiniXJdSI0UDFn9N5GWKqu8s7wm864iiP0e8I4cPrVwhYHHmC98dRGrsqZ
-	in63sH7MSqyebA8f1T/et/lzv+v/E7nLwSM1C6owZ1unYAH6GmZIbobvoDy8IBuWAWg3FyFFZQH
-	AtTrfXYbCqJ5HoYGhbIwofJ4LjFoTeb4DN7KjM7iAyabEBmjiyhBNazowT0g+krGwdlsU7UUd5Q
-	m9VaTc+d9PKzbfyj15GhEvYwZ1C3cY8rgOC+o8MNJXzLBRLyvXzyTtM4y+iKZl8LsNxyC117f0Q
-	HaebX01gyjsCBt+4Y3qlzLx9/AX4QsjDVP4aEyF+ni+FX2dFNldOdY0tJn+uxV210LTHDZNi5WD
-	HkWLT9zHSKCfgU7C6rHrfJaH2bCAGOmUhhwrkUaDmy28XawMOX1fvQnuvp9Wk+Mf+gnO8y/JpDv
-	+zVmZdDHoPilXV6D2eQLMkJOvDjvHagcijk4OjXaqEEwQTtkmRUqS44TldFuxz5yjCetK0Qgc1R
-	+aJLDRHNGua
-X-Received: by 2002:a05:693c:8107:b0:358:1f59:48c9 with SMTP id 5a478bee46e88-361a1f4a9bcmr12517584eec.24.1792413926068;
-        Mon, 19 Oct 2026 05:45:26 -0700 (PDT)
+        bh=ucqImzYK4TndSlhXSWzG/Thctz6staWsP5DajBsvrOg=;
+        b=PUs0Fud4SS885zKWIjHZG0KhHS228Jk6q0+JzS6iSfKxAGl2Ld810hyHPpXogdzpC4
+         qOn2xIZTB+JmjmcfilkH3PyacS5AgFNoG4xWV9c+UjJN7EoeTI2n+TKuhn05Qx/7Sw7j
+         G9ue5k8V+xrIOwMeuJdK6xqJ12LZaifjbW9OS2kLqq4Ejbdmt4m2FyZBrePI8gzrTHd2
+         CDqgDYLkgykai4ea0e7j/CSEXCmwuhJ7vpl0CWSOt45k5TOJCC4vYnZPuUKtYN+rEUms
+         q6OBUfVCR5DzWcg4PAxwpeYrSKeRY3PvmPRSpvf0BLQ2I4JKvt3AV3y79fpeaUdCEHTp
+         UrYg==
+X-Forwarded-Encrypted: i=1; AKwUvBz/zS0B4aeJQdyYFoIH1gXAmNIr+p5ObY27IdslrafCm23o7iq83hYSeODO8Z7saQjeEuuruh5gdGicNA==@vger.kernel.org
+X-Gm-Message-State: AFq9FYIwAHK3bNisE64T/EhjmpHs9ycwWFRzwvef4pZePSAAazKW/Xe/
+	F1NH4rdw2xpQZdjM+rrdaGF7Mryxue1asceeiI727GLz93xsSszKwWZ2YOKnVw==
+X-Gm-Gg: AYBFou3w5XX4/EFhSoZ889ncgTZJ8E2OFE1xz4zyyP5Wvtyf6THKwYfuY1g76BS3aQX
+	xDOKP9CmJJbWwe7xzFHunJ9ZmDalD7aipexrBlYCsc3kco5TZF1TI/asKj2gYZdXjY6/6ZymJUY
+	r+IExlMkodL4Jf7sQgjYtfCJci3A3P1ZyiizXhCV6/yCJegUTSD1ko9tcwBJ5Gze1z2fA4hCk7V
+	iMHnCll3HYmrVpozHSCDX2T5kP9EK713we2UCDq6YeqADyLRQvJ5yERY3ZruDGnR21IfxHVuNFB
+	p9kQzywSv8JAn8BN4QyA5TLvH/fMiuWAhuLziktsHRZrL3W0DV9PSsPlwYqw8EYjscnyM+VUtQG
+	S6PbDopLez2e1UxVndE/WNhh3m+Y7AdKacTqJvUbwOkiW/QaIkEN+WdPyhpXxAfhy9eqD+WrcG4
+	a0mPkZm56zGEqM1YkumdPIVJBDZsgZnuGmK1jJApopjSV3+5JM3NbOP2Q9JNwj294j7oGd+2Rko
+	AH+q8P0L/Iy
+X-Received: by 2002:a05:701b:2906:b0:141:4a06:ad6f with SMTP id a92af1059eb24-1851238b5f2mr11785078c88.8.1792413974419;
+        Mon, 19 Oct 2026 05:46:14 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36082a7b33bsm59496695eec.24.2026.10.19.05.45.25
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-183190aa3ebsm25845295c88.8.2026.10.19.05.46.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2026 05:45:25 -0700 (PDT)
+        Mon, 19 Oct 2026 05:46:13 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 19 Oct 2026 05:45:24 -0700
+Date: Mon, 19 Oct 2026 05:46:12 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Asaf Nuri =?utf-8?Q?Bertizlio=C4=9Flu?= <ycistak@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, corbet@lwn.net, skhan@linuxfoundation.org,
-	rdunlap@infradead.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (coretemp) Document sysfs numbering and label
- meaning
-Message-ID: <57ef30df-052a-4189-9000-deccaba6c117@roeck-us.net>
-References: <20261015171759.704526-1-ycistak@gmail.com>
+To: Ximing Zhang <xzhangjr@gmail.com>
+Cc: Marcelo Tosatti <mtosatti@redhat.com>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (coretemp) Fix handling of isolated SMT siblings
+Message-ID: <cfcbef9e-82bd-4685-85cb-25d17f2483e4@roeck-us.net>
+References: <20261016-codex-coretemp-housekeeping-v1-1-96618c5676b2@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -80,29 +79,42 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261015171759.704526-1-ycistak@gmail.com>
+In-Reply-To: <20261016-codex-coretemp-housekeeping-v1-1-96618c5676b2@gmail.com>
 
-On Thu, Oct 15, 2026 at 08:17:59PM +0300, Asaf Nuri Bertizlioğlu wrote:
-> The documentation says that all sysfs entries are named with their
-> core_id, and that the "Core X" label contains the processor number.
-> Neither is accurate. create_core_attrs() numbers the per-core
-> attributes core_id + 2 and always uses temp1 for the package sensor,
-> and show_label() prints topology_core_id(), not the logical CPU
-> number.
+On Fri, Oct 16, 2026 at 12:36:37PM +0400, Ximing Zhang wrote:
+> From: Ximing Zhang <xzhangjr@gmail.com>
 > 
-> The difference is easy to see on hybrid CPUs. On an i7-14700F, the
-> "Core 4" label is on temp6 and belongs to CPUs 2 and 3, and the
-> E-cores report core IDs 32 to 43.
+> Commit 0f8b916bc5b5 ("hwmon: (coretemp) avoid RDMSR interrupts to
+> isolated CPUs") prevents create_core_data() from creating temperature
+> data for an isolated CPU. coretemp_cpu_online(), however, still adds
+> that CPU to pdata->cpumask.
 > 
-> Describe the actual numbering.
+> When an isolated SMT thread is processed before a housekeeping sibling,
+> the mask makes coretemp_cpu_online() believe that the core is already
+> represented. The housekeeping sibling then gets no temperature
+> attributes. Package attributes are similarly not retried when the first
+> CPU processed in a die is isolated.
 > 
-> The mismatch was found by an LLM comparing the documentation with the
-> code, and verified on the i7-14700F above.
+> The mask is also used to select a replacement CPU when a sensor target
+> goes offline. Including isolated CPUs permits the driver to retarget a
+> sensor to one, causing subsequent sysfs reads to send an RDMSR IPI to an
+> isolated CPU.
 > 
-> Assisted-by: LLM
-> Signed-off-by: Asaf Nuri Bertizlioğlu <ycistak@gmail.com>
-> Tested-by: Ximing Zhang <xzhangjr@gmail.com>
-> Reviewed-by: Ximing Zhang <xzhangjr@gmail.com>
+> Keep isolated CPUs out of pdata->cpumask by moving the housekeeping check
+> to coretemp_cpu_online(). Sensor creation is then deferred to an eligible
+> CPU, and hotplug replacement targets remain on housekeeping CPUs.
+> 
+> Tested on an Intel Core i7-10510U running 6.18.50-3-cachyos-lts, with
+> nohz_full=1 on CPU 1 and its housekeeping SMT sibling on CPU 5. The stock
+> driver omitted Core 1 after module load and retained its readable sensor
+> after CPU 5 was offlined. The patched driver exposed Core 1, removed it
+> when CPU 5 went offline, and restored it when CPU 5 returned.
+> 
+> Fixes: 0f8b916bc5b5 ("hwmon: (coretemp) avoid RDMSR interrupts to isolated CPUs")
+> Cc: stable@vger.kernel.org
+> Cc: Marcelo Tosatti <mtosatti@redhat.com>
+> Signed-off-by: Ximing Zhang <xzhangjr@gmail.com>
+> Tested-by: Asaf Nuri Bertizlioğlu <ycistak@gmail.com>
 
 Applied.
 
