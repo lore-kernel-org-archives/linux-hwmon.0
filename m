@@ -1,60 +1,65 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46DAB4DA9B4
-	for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 11:48:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22F63033E1
+	for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 11:49:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792410529; cv=none; b=SZkijuH5CBrband003/i8eL3xiy25kerel7FHj7Ge77tfBBAhrnq+BJoO2W8MRky3p+NTwMtcRdIF+FdjVq31I+ZWppMwEKcPXRRBMQNsLpnxjhlMwJ1+WFxnyetM9kctFu68+mes4rZkKO+3HVw3zhQxkqf+0CbajWDA1sVhXo=
+	t=1792410570; cv=none; b=UMYb09TgAosEjRmFjSbXyoVV+/jWJRiI8NkQ2Nm9yL3cGc1vLZIyoB5qsPFiMCTwQOzFTeS/tW2sqWoPl2dIFF4UmIG18rviLvdHZHn9bKIgUU9HvRAf1HXIpw7zY4FC+GOpg9UKjIG2AR4hc1BQiReJ6GX3GZTKZtEToPpYLDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792410529; c=relaxed/simple;
-	bh=7nKBWdksxq4Y8mxign7W3TiaVGEE6jJTfpJcmUE1GZs=;
+	s=arc-20240116; t=1792410570; c=relaxed/simple;
+	bh=thd+1XJ8kyNMSLBPLYaFxRuVZKRXvzKI3Nbq8BUhcxo=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=f5jc9kW/zitaEYWsXY5/bhemxqxZp0qnwjNPJWx+vvbILNPddTUneBuYlEAUQWE0X3HQdD0JNLf++FDT+HnTinXWLsq+3rR0IJP25e2HkmW0xIb8KnVeSzGAIBvwlw/RMi9uq/8en6DUUS0r7NrvmuiwKpjW/oLRWyxIzAVTRdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lz9TmLWg; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=O/n2wsVF9OoKVM+LlVtmXCi13s+EwUyV8IemXqI8PQf9yxKBuSfgxsaj2qffrtCP6OBdESW4rWTSeuP3dwzEfBG6XKyvJCgEbaw4wHFPluiO16b/bV207QlCoI36QbzuX75PKE4rm/mJxrjMdqP6S288VJdbTokm2aotLm6txPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GuhECrlc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lz9TmLWg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEA0E1F000C4;
-	Mon, 19 Oct 2026 11:48:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GuhECrlc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E4BA1F000C4;
+	Mon, 19 Oct 2026 11:49:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792410528;
-	bh=7nKBWdksxq4Y8mxign7W3TiaVGEE6jJTfpJcmUE1GZs=;
+	s=k20260515; t=1792410569;
+	bh=thd+1XJ8kyNMSLBPLYaFxRuVZKRXvzKI3Nbq8BUhcxo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Lz9TmLWgcJRH5Rj7YvxgvYp8At47CV7bojIN3a9jbBpofbcf57TXFXry0Qlg+VtyC
-	 vbTR8jTugV481LF8OUKlnT7aSqeeTvMUxRAqeutteCxx6PlUFonXYDQ3HRgZZwOiwr
-	 9ABCHARKzOeNYSF4qrbvoNBUAQOsvZGzMvDs2k17uEXpX1giDXT7NuUHaO2/BFlSXJ
-	 vrccAF/OKW/65kA+4I341jCLlo7rPM1JIDr87gJQ0KzIFypASxiV30F3/6PPM2wHx5
-	 6vyN4p6ETX/IVZESnvi/hU1a6lWQcpg37vpfsEFAencAo2dezQT96o0zxhj7hsvACv
-	 ffoOCfCoxEFWA==
-Message-ID: <sashiko-outbox-177051@kernel.org>
+	b=GuhECrlcxelMVk9/XaBNqf6yg+qYarqP9zcil3y+tl/YcEh+QX73gqJzay0O66hYi
+	 FFbz2HGVleAAcw6TTIB3IR6/YQw7lFu4vhgorbD1NfFIfYKsPwWmlajAxvwP9Ir0BM
+	 KOtONM+m6yeE2CdDnFAtuyLqpmcb+xVjZb+oRlcDy/vElLZ3XKdPD9BWBnHVSADwLY
+	 RiK3+x6BfckCpuZ5xE6VMZ1eC0R54ScG/PpFe4lA9jV9KyC1aAnY2Pb4bTNrQYnxlF
+	 nvT/1iGWxmsbozUL5/3e8pjOTYO5LWV/1LjAhJXbvA7BYjhk9UWiDEvBrpZ16uV6Ry
+	 qp6lptIyoCMcw==
+Message-ID: <sashiko-outbox-177052@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 1/6] dt-bindings: peci: Add StarFive JHB100 PECI
- controller
+Subject: Re: [PATCH v4 5/6] hwmon: (peci/cputemp) Add support for Granite
+ Rapids (GNR)
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Changhuang Liang" <changhuang.liang@starfivetech.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261019114502.55307-2-changhuang.liang@starfivetech.com>
+In-Reply-To: <20261019114502.55307-6-changhuang.liang@starfivetech.com>
 References: <20261019114502.55307-1-changhuang.liang@starfivetech.com>
- <20261019114502.55307-2-changhuang.liang@starfivetech.com>
+ <20261019114502.55307-6-changhuang.liang@starfivetech.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 19 Oct 2026 11:48:47 +0000
+Date: Mon, 19 Oct 2026 11:49:28 +0000
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-> Add device tree bindings for the Platform Environment Control Interface
-> (PECI) controller found on StarFive JHB100 SoC.
+> Add Granite Rapids (GNR) CPU support to the PECI cputemp driver.
 >=20
-> Co-developed-by: Mason Huo <mason.huo@starfivetech.com>
-> Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
+> For Granite Rapids, the resolved cores mask must be collected from each
+> compute core. This implementation is relatively complex. Since we do not
+> use the resolved cores information for these CPUs, we can explicitly
+> state in the driver that the core mask is not supported for this model.
+>=20
+> Define new cpu_info structure for GNR with minimum PECI revision 0x42 and
+> the thermal margin conversion function dts_ten_dot_six_to_millidegree().
+>=20
 > Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
 
 Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261019114502.5530=
-7-1-changhuang.liang@starfivetech.com?part=3D1
+7-1-changhuang.liang@starfivetech.com?part=3D5
 
