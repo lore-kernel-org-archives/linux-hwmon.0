@@ -1,92 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792443223;
-	b=KtH9l0w/tly0wkJ7hXpA6m1rcvlO5J0XfNn3t4TkQW5mGrGWGm0KZA2vZcR/Int5VMFZ
-	 dzk6Auy3FJI3XEEJ7dleIqm1x7xDbXtk9krxlQzoWqan2vMgyp3HuiuOBDwEF+ESbrTuj
-	 tHohB1NMiiFKqnOopqolOUGdMMG7X+ZRSd19gDhhhiClXeNQTX6g3+rZkT9o2SHN+fOqJ
-	 THUOtSVPldr4kwFJmiRwX2tXGkI2xJUPYKZP31cMVR1BO8xg+znQ1vnZOX4RXojQWVM1W
-	 NTamPwuxdHClP098AxuSC/jfsWHbn6bGFgr9P32HCWAWPAfTc35lq3/q9hDQPmKllrA==
+	t=1792449529;
+	b=IsaQeo5667+tFiCSQsxT/3KBXuVRHs8bmOvZRVTr3f+g0B61/ylFoOzbGFkAPnUl8ax1
+	 akJhwLUT5BQmVPq0+B15oFIAfo7i7R5H0D3kRIhC2qMsv4AW9Dx1x0YD1ZeGE5beOySBc
+	 +LU8MX084GBBnLU8Rp0etGtoymqVGchAwwFUUv7mDXiuIDV/N52KWoZu2oT0Vo1QSWErB
+	 x+33kuSEAFlrM3brqIq7AiKz/qP096O9AdaiVdqvtXhh74E6xWpqP4MA5jMRSK2+5jO74
+	 o7jBeKobdYY1gJERn165p/xiuV11+1ay1HFNleUW494XTnb3P8ZZ3oG2nEaFKdMJ7JQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792443223;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792449529;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Sender:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=eQ7btiBcp3eDTgLhx/ibMINfBWMqVGu1dC3mx3tEGz0=;
-	b=bCAvcoZDp+pIdqfIw0Gfm8NVt/mGT9f0jJts5SjuVaIZ4IOKXpF3tMeSD232SF0DnNXh
-	 sIy/XNga6MzP9IwZnWhXSiwKZ6ge7yIfYapGN78nxJi4aBskZACnwnbt2x5bF5J9F4bwB
-	 qjijP3cNPFK5ihmVvrPemksqm2i4ySmSBOWLSE66meyA9PHsdOfj3O5DAmx4XLXI7SBhU
-	 WLjPW/iB1m8q/MypFWUgeDefjzk23RFiVx5EvK7QDUKGsRVcnoamDhblO13ZYChVsPdj1
-	 9s0JKvtLW0KV8RmIVw5tOn3VzRJ8sTTicZCluq0GzASS37FK+R7MIfP7SYbosV45QSQ==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Sender:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:Autocrypt:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=43K4aQKligxqq/vuFO+T8e4jf0Zsw4MIuMv9mG5KIHk=;
+	b=TWzqHaTzwaUS0dpJJSLLvSJgy4TFtMovfduM5cSGyPipbeWQq32ZnxI68dV5HAQjd/f8
+	 DsQPD2N7VZnSlceKQ5vd0Z9y8iODVbHKI1kvo/O7dV+/Qf/q5XdMeWeXmzWwAjgqsr1ZO
+	 BikLAgWkzx6JUeGh+QZPdDTzs/LG94KoApAwlUHNBht4+xwAJ9BB6rZjG+LgJXSlhIsmT
+	 YJEwcEq64xvoIWcWOho9FiMnkyD5w/ckSN391fdvlshFWU3Hjzl1L5EkcKCjiZQhP5yg3
+	 VqeqwjaRswvISSwBf9wHWviA9puYcYPeXI3ofMGZkBiAKWa28rWQplvgn6nyI6V+QbQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=sVlY+y6s;
-	arc=none smtp.remote-ip=74.125.82.179
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=UUs+0Rzc;
+	arc=none smtp.remote-ip=209.85.216.54
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD493606A31A
-	for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 20:53:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BD493606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33A2F606A31C
+	for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 22:38:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 33A2F606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=sVlY+y6s
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-35943f55c06so121395eec.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 13:53:42 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=UUs+0Rzc
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ab868eb9cfso1416371a91.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2026 15:38:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792443222; x=1793048022; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=eQ7btiBcp3eDTgLhx/ibMINfBWMqVGu1dC3mx3tEGz0=;
-        b=sVlY+y6snCjEyok2OxXlhW7JqE2aCHv2dt9r24qcl3pkp92skH2ZPKNiRTXiX8C2bM
-         4EnafOF/sbC4VBWTaqIck6qCxbJfLRnV66YW/KiWKMd294EK9vAGk4Iarj+TQPCnuNce
-         tlgg8d5EQIieck8VBH6mfEkG1DuWBpgfVw4VnutAdbGqQWA6Kdd3Woq+iABFPNYMtiBg
-         sDydMlLl/n6tajuYoyMnMCEsKsFjhSzHG4bqtDYarcnPc51nXYyTjSdfLF+BDM7FOMS+
-         Yv2QkohREQUVSy1gg1pYcPZ+SG27bfvaF/MT1TY0++/5k36jtPX75Hx4CQ2gCwGvSJps
-         gvIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792443222; x=1793048022;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1792449528; x=1793054328; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=eQ7btiBcp3eDTgLhx/ibMINfBWMqVGu1dC3mx3tEGz0=;
-        b=DiSFwkV1BVy0M4MWbQymPEeGYjHIJZVwTl+9tNmcwyblrayCEY/lMJGZKQUMWOk6C/
-         Bt8NDNL7KogWfPQBtV5ZihR0163e8K+3DOf6IADCCWRfxuqDAXcuclZso4a66kdGheYC
-         GoN6YxgNhrRjlg1coVqLazmfTHnTGIDDGzD3RspOglqFnsxWLLpsmpdr2Z3DOmOl6ONN
-         OIOUfP6OYjClHAJWXotZ/Lx+YT3/BbuTYSsyglt3z+RrzWm9xYZtkW71hr9sk4TiDkR/
-         jw0c8S/BP/bQoVsS9ZfsZtQ7XzGy4riZfEybU/Rhdv17q0SbrgbTmC1ZVOCsjJRD2GLD
-         vv9A==
-X-Forwarded-Encrypted: i=1; AKwUvBziF2fBcVAMBp19POMnsiT4J3us5A2ZaGa/Gza+zf5Geiz89BKWw45dwY5Rf2Ml9ezpFZVTOs/r7cqL5w==@vger.kernel.org
-X-Gm-Message-State: AFq9FYLBLZzrdeu+jEYO2eO58JLvH+e+0ShQTtQVnZD6nIic+D0HHCag
-	bzp74jOAkvTnFiWUkGrGSwHJE4R2GD3cbse9HXnmg5Gixbdxz2GqX+EF
-X-Gm-Gg: AYBFou1dBRRtZHrlfVfFU8JRs8uGuvUJxiwWej/sJG6AAw+ax5WO3/MAyhr8J150aX0
-	oBg33Pj3hE3YmoGEFdQvuldnYc3V9aRGjB7j9emWvZTNj+CLMnR9m4dvL8wmGXk+KkR7hV6/4mq
-	neqxCPeUYT2IRWvAOi21enTCSyWSAEpe/2vxO/eFmX/sgxYroNNCDO9lS8V6S4UvmUQ0rgn979C
-	BdzOD7VgiRaBguAFtA2lUN4E2M+Pbto54ZmuiFrQiBJXQf7DoaSPLHuW6Sl+TW3G/4t9muvyBPG
-	z0CgjDK9byKi2/6x4SO16ZO1lGKvRvc/NLHjhEWorJe6YzDsQranf1v0ACb5c/61qK2/zPDyYH6
-	TCftQFqY1ShESrgh0XRh3YbTBaVKK4a7HMQTnTXg3TAl0qiogk27p02R0p6LvSNiDfjGF9om8gK
-	BHXBnlVfcp6MFcv7zXxt5TW96vlfsofXgXwU8hWBZqal95SCAe/HqjsP+bhTX5Ip3yYBbX2G1+c
-	tW2HzfEX5f1
-X-Received: by 2002:a05:7300:f193:b0:351:2f0a:cb2a with SMTP id 5a478bee46e88-365f829953cmr487552eec.2.1792443221795;
-        Mon, 19 Oct 2026 13:53:41 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36081bafa7asm33939258eec.14.2026.10.19.13.53.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2026 13:53:41 -0700 (PDT)
+        bh=43K4aQKligxqq/vuFO+T8e4jf0Zsw4MIuMv9mG5KIHk=;
+        b=UUs+0Rzcflurmt8UXhJYofzLWPIeoSGahP+pbpa6TFBcyi7FvfRdfRnKwInxcyvp8m
+         zzGsfKoh6sJ87QXbHusLssoSJiVcQg+Z83TE3Hxp9s7S9PL7QHBYm3vVhoCEVNoXT2LI
+         o/dEbz38pzS8v3GrN8xWYieFzOT/pzVAFFVgq8I9Ma4oI14eejAhRC5CcxUmNHhAIiYI
+         GG/BsRLGnhg6LL7AHbX1T3l2ncIv24y7wxdzT+j9Cj+DRGMHz/Sj9jfp904a1tZOMlht
+         i0vbkuMunNqHzGCTA3+qV8wltGjdJsJgX8UTDufFctuqRzB3EJ3vofGbjs8u9UO63SUX
+         phlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792449528; x=1793054328;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=43K4aQKligxqq/vuFO+T8e4jf0Zsw4MIuMv9mG5KIHk=;
+        b=uxhJloSijw+KqdccWGUFG6X1k737OmW/j088RMFu+LnDwEFHtbgTsQ4QAzZYgdvjMX
+         L9l3uzwrh6kNS/KnrQqGNAW6hhhrLny1ytbU1KWYGytW3F2WWvYiROShr0ZBJ5zTgUfO
+         VKw+B22vQ+QY77WgxNGnjXiYodk5cLImNJGjMEHnXmajfB0W/p3gdUSaNE6WMUW+99Jc
+         mjdek9IPyLe59iIlUbePU5H+70kq6CxXe7NFzL+d9CVpqhOO204sh+J+9aGh8QUXYhUJ
+         b43gXedonS9q+UVZT+KcoOJShEQAPJDmiJVh/7oca4d32h0yXBGZBBjtaAJZgfgf/1gr
+         8Uzw==
+X-Gm-Message-State: AFq9FYK/OK1wAKDdb6QYvH3P4VRp9MzJQsPmFisrzThnM7rLZ7xs1KWd
+	eoIN+OqUEoI1+kIKFmp2Fo7y687CsvpyUHenmp802LqFaKQtyRrhrfUccWrcWA==
+X-Gm-Gg: AYBFou2B5hQwVAE7H1rSkdKNM1+tB5/4gfG6pY0lz/XUbsGHz4ftkMyBK8udXrxVfXF
+	a2P91KY5BZMiZM3XzuIfoQEjhIFqt9huDuFyFvubzDOPgRnwS7vnwEiboos40rcXGooGIxwLE5i
+	87YOEx1OqSMgw+Mx3YXvkJoOx42S6CCGLtlYAhXKZha62+no1BLcvR8FVQ+IAR15H/p1NgSniYB
+	aVSGBf8uvd99bTypOV9wnwx2dA+a92HTFBljzGNDk6K7XPKXgVaLyKTNq2vX1XZkG756i6qaJCS
+	51XeHCMejMD4vDJjcm/g6UIeO8pi6kHFWzZ5OwkyAT8SAt/CT7KVjnnzVMAh+Q182XiGmkM3of2
+	nXg1dscB8leGNsjMtVKCHwxkzPq+zpdnncUK7Ua59NQy/e8yk36Et9AYF1L3k35VnXkhvKlgFy4
+	AIQRr6DPMELH+w2a0K4+O6CKgEYsvxVNK0uF/dwqyAWH3RLrbnT18RGBVLIE1Uk3pcCxae+qoXQ
+	14iY2jO4sgbW+Pg4gzTtPww6nyTepgTPPkdYoA5OUd9pAHkRlWw5/RQeIQD
+X-Received: by 2002:a17:90b:5111:b0:3a8:7242:e8d3 with SMTP id 98e67ed59e1d1-3acee293023mr7943932a91.7.1792449528378;
+        Mon, 19 Oct 2026 15:38:48 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ad5d4004cbsm1270090a91.3.2026.10.19.15.38.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Oct 2026 15:38:47 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 19 Oct 2026 13:53:36 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: github@firefishy.com, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (acpi_power_meter) Fix 18.45 TW bug
-Message-ID: <86b3c644-544d-4c23-8e7a-4478f4094058@roeck-us.net>
-References: <20261006234618.10943-1-W_Armin@gmx.de>
+Message-ID: <4cb23fc0-2939-4ac7-ba0d-c7e0906434d8@roeck-us.net>
+Date: Mon, 19 Oct 2026 15:38:46 -0700
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -96,27 +90,130 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261006234618.10943-1-W_Armin@gmx.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/5] docs: hwmon: Document the uhwmon userspace interface
+To: Jihong Min <hurryman2212@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, linux-api@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1791531025.git.hurryman2212@gmail.com>
+ <c02aeee5b7e7a5d159d4df5baabe925e16814e94.1791559095.git.hurryman2212@gmail.com>
+ <e77719ee-c813-400e-b49a-9f8a3b0e2e91@roeck-us.net>
+ <CAAwencqEVCjtnJfmnut2zXXPvuwju5T89FDSpHN3wPfrrJnRdQ@mail.gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <CAAwencqEVCjtnJfmnut2zXXPvuwju5T89FDSpHN3wPfrrJnRdQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 07, 2026 at 01:45:34AM +0200, Armin Wolf wrote:
-> The ACPI specification says:
+On 10/18/26 10:27, Jihong Min wrote:
+> Ok. Then I will withdraw these patch series.
 > 
-> "If an error occurs while obtaining the meter reading or if the value
-> is not available then an Integer with all bits set is returned"
+> But then let me ask you the initial question that brought this patch series: Do you think it is at least OK to add kernel drivers for network-based sensors? Or do you think those are also to be subjected to be rejected (or remained in DKMS projects)?
 > 
-> This integer can also be 64-bit wide on ACPI 2.0 and later systems,
-> so we have to check for that too.
-> 
-> Compile-tested only.
-> 
-> Reported-by: Grant Slater <github@firefishy.com>
-> Closes: https://github.com/lm-sensors/lm-sensors/issues/460
-> Fixes: 1fefca6c57fb ("hwmon: (acpi_power_meter) Fix 4.29 MW bug")
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-Applied.
+What is a "network-based sensor" ?
 
-Thanks,
+Regarding the references, wireview has a USB interface, and I am
+quite sure that it should be possible to write a kernel driver for it.
+There are several hwmon kernel drivers implementing access through USB,
+so the same should be possible here.
+
+The Tapo API reference points to an "Unofficial Tapo API client",
+written in AI-guided Rust. Google tells me:
+
+"
+There is no official public API documentation released by TP-Link for
+Tapo smart devices. Because Tapo uses a cloud-centric and encrypted
+local communication protocol, developers rely entirely on
+reverse-engineered, community-driven API clients to interact with
+these devices locally or via the cloud.
+"
+
+I have no idea if it is possible to implement a kernel driver for
+this. There are various hwmon drivers with reverse engineered APIs
+(such as the Corsair power supply drivers), so relying on reverse
+engineering is not a problem. I am, however, not going to dig through
+the above mentioned clients to figure out what the API actually is
+and how to use it. The guidance provided by Google suggests that
+it requires per-client credentials (account email and password),
+which would be problematic.
+
+Either case, it appears that this would be about monitoring remote
+devices. That is really out of scope for the hardware monitoring
+subsystem. The hardware monitoring subsystem is monitoring _this_
+system. Adding support for monitoring remote devices would be
+a stretch.
+
 Guenter
+
+> 
+> Sincerely,
+> Jihong Min
+> 
+> On Mon, Oct 19, 2026 at 01:06 Guenter Roeck <linux@roeck-us.net <mailto:linux@roeck-us.net>> wrote:
+> 
+>     On Sat, Oct 10, 2026 at 12:38:44AM +0900, Jihong Min wrote:
+>      > Document the uhwmon UAPI for developers implementing userspace hwmon
+>      > drivers. Cover device registration, request handling, notifications
+>      > and device lifetime.
+>      >
+>      > Assisted-by: Codex:gpt-6-astra
+>      > Signed-off-by: Jihong Min <hurryman2212@gmail.com <mailto:hurryman2212@gmail.com>>
+> 
+>     I am not going to review, much less apply, this series.
+>     Exposing subsystem internals to userspace is a bad idea and would limit
+>     future improvements of the hardware monitoring subsystem. User space file
+>     systems are bad enough and cause all kinds of trouble. I don't want to have
+>     to deal with the same kind of issues in the hardware monitoring subsystem.
+> 
+>     Interested parties should implement kernel hardware monitoring
+>     drivers instead.
+> 
+>     Guenter
+> 
+
