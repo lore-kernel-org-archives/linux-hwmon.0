@@ -1,11 +1,11 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1792533941;
-	b=HHDIyptJTqC/GZB/CpeeaCfwyJsA6n9HopvxYZ/fVuKvMiw2CuMR9RtASko4x8scUkzv
-	 pdUEOveeApb3PAu7YbLpGPMcpd5UmDdcW1aMeIjxrdl/XOYT00qIhhdiovU9Kh4LkUfaJ
-	 QLjWG73i62aLFm1QoogIpNuUysRapRFj4Cs+E/Lcn1JpIQyJcYtNGVIOpBT9+EMY/OMpJ
-	 u61APxIJE0+Yw1vpH3Vyz5VXlvbV3FY1ZRwUOPpoAu1p7uY3/4VtMLMM/Tz69PIJlxiVp
-	 JdLVjHepTz0o60mgMbwU0xi008KmF0PMUWK6lqz9wbp2SqjqllymYi6rxxvQvYR+r2Q==
+	b=M1bUEfvUev8aOelmGUGOXaym6QvDRqo8jbi9NAB7ejB4srfzRfHhrhOf52RXA1JQHUpp
+	 lVY7w4Adzq98gyETejnMp7b+ewifPKNH5LBri3Ns/S22mI9uSCTtGG9Y1EYszXakzGxAY
+	 3WNausUdo3jPeK8ZkAq1vxmCm+LyevahQNcYbDhymlhq0X6LhTMTgpPc+OsvtYtqOru51
+	 HgskABZE0zqN6ZBln2iU3Xv9aFK8KSlsPMLZlk2ijWDJLaMf2UolCIdWyXGAEDc71opjA
+	 6DCQz7DszM5EZ5PoiIgYEIOGXIloeFQMoZJyCWqZktSTxKS1Kbne3ZrmCnohB0ZgD2w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1792533941;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
@@ -13,77 +13,76 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key;
-	bh=yZ39aCFixpSTZFGQ4SyE0mi7Ka5uq2M19eCM+WRt9eE=;
-	b=qutnO1cm80OIUzfMel7POn11c1JxR9hyTqzu9IbqKxQ6Yvz3TYEUdzjSikeWzw/968/K
-	 N3lmTRFX7Gon0HIMVrJvoNe7Nw8WB8os9CNabI6bT4uJDLU/GYjmtCyRi6nCH5SVvzb8/
-	 1fqLocNWT3+pr9N2xMu9EgMiMAsuXSI/v6A6nSjAYurVsQCroPzszNC+B7EXp/WwNqL20
-	 xWazysb724rSXB+6R2hTYpnBMQEgNUlPp0lhI3YO51cx908edco8A51OJm4JyBM6BAo++
-	 Y47/uiWKtJluKC71TFqKJfvrUjsnB00yihEMfFbSVv52E1SBTF5a+J3th2Pr84cjVtA==
+	bh=8henHE9/qdCt8Nlu46oWUg4no6BP9dhaZWHwMjUANPc=;
+	b=RLTnULJqxkCWVFhY9KWVAKA+VKNQ+4yhHPZBY4uk4bRIabEM9zrhM4T5uF7Pxm8nVv5g
+	 gcn5CcZZEZvxIaNjGjoXjzHQKZs2vf+AN/FrkjzIzmCGgaoEJNqKonXGgQX3ChkTVvMY2
+	 z0X7iFT8XtM9KhREoUwhIdVSJfUBvIxkUtRur32sACNkIkcSG3MhARa6unZwUR31y/1cu
+	 AmHEUj6nX658JMpohWGSnKcP3ej1UEdpYX8qrEm+lPVdF0brG+s+ZnxeQkvtAF1g3QbQF
+	 DkfT+FvJkguis+VRf9cBWYZBuYhMunDchjlKg2nSSHyWIoegowZsTtMogQV2XrNQ2FQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=nexthop.ai;
 	spf=pass smtp.mailfrom=nexthop.ai;
-	dkim=pass header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b=iaRstdeD;
-	arc=none smtp.remote-ip=74.125.82.170
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+	dkim=pass header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b=HXHsAGAh;
+	arc=none smtp.remote-ip=74.125.82.174
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03889606A323
-	for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 22:05:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 03889606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9667606A332
+	for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 22:05:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C9667606A332
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b=iaRstdeD
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-33fb4680717so95972eec.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 15:05:39 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b=HXHsAGAh
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-33fb4680717so95998eec.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 15:05:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexthop.ai; s=google; t=1792533939; x=1793138739; darn=vger.kernel.org;
+        d=nexthop.ai; s=google; t=1792533940; x=1793138740; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=yZ39aCFixpSTZFGQ4SyE0mi7Ka5uq2M19eCM+WRt9eE=;
-        b=iaRstdeDw2c+2k14O6mSGgoy1U1ILT4SOdXMwA42aeRm85N5MKrtKD6NZ4sm2fAu2u
-         6HeQ5qCulrwAfLoOHgYl8EnyMzJBqJccQyXx2SVjn+PvqxstJYTU7iFFK+bZbikLZtDm
-         mTZD7mG5ZTKvoHJslGV5JBeDEDBRFns3TcaTTbpQ08UZ83WvgJkv15EGadm5JuBIvSUv
-         EBC1axJS7BEp+fiRr+6VnkkEC1d7+Knni+ClqGDkFMOeNdy82pD4NQ78fiuYj0qMvOic
-         xBPbNf4vADm6/EMubqwWLH6LDIEAFivUFZICd29i+xC/MV1stAiaz2RlSwJwMUbmVUup
-         6Q8w==
+        bh=8henHE9/qdCt8Nlu46oWUg4no6BP9dhaZWHwMjUANPc=;
+        b=HXHsAGAhPf1TyF87XcZts1giKnO+byL82XrdQhth6FlMziXUeuMww2u+nr+OG52oek
+         jHfj2M7AByJ70GJxs+2h3VKBdvM7JiWcHdrDjzMUqh4BdJDZvMMbFibkjUlMu2WnICs1
+         B5J3GmmcNy8SxgtQOSIa+yotBYR++iJch8msd4YpDez2qE6giCGWegU1mWYG9NWJnJD3
+         9bIzxwoLLKQSt4xIJJAXa0xXwfGWq/xIwcS3185scDfvBV1/FjmcpM/pHZUHW2Dbj+7X
+         C1G/grtiIoOkykUIcv0W0Q09Q4VmkO07hHsH+6NjdCBErvhCDnY8RBv/sEEaqA3YvDmF
+         eS0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792533939; x=1793138739;
+        d=1e100.net; s=20260707; t=1792533940; x=1793138740;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=yZ39aCFixpSTZFGQ4SyE0mi7Ka5uq2M19eCM+WRt9eE=;
-        b=mafv4c+PwIajaUPJRx0dboIXUrbQELQeQs5q/5HAoMN8RgSTjGaVujL2Kb/8gZBZH0
-         UBL70qtVCjUzJF48NO8U1pjfDRsh5lYDbMOU1h1ctq5pH+IGxlt+xn43if4Iu2fmj98H
-         TJ8CPuo0it4G0sW3oGsZ/T1rHWVJtAkUbNDUmTjjQhC1a7x69fsq1N2bNUqQPSg6/e2x
-         JulaHpGjNmQmUMwCnoG37qbo1prMSfwOxVysb81lau8c+6GlpWXiYK0l4ujD6j322EnT
-         wz2O+6BfCTpHstlKQjSlmU/C0zw70CKUE21eR/BYVfJ+szPEQZXeVR31YDySi2Nu/q8z
-         +CuQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwhBo90TE6T9PSsdbhrlJo7bovPVmhF5oY5hwUcWgps1fr14lQwPAbdAFGlZ7GESLpBRWXPxlVoxWTCyg==@vger.kernel.org
-X-Gm-Message-State: AFq9FYKyW+H3+wkQjTqiIker0BRcYCA2d02zJlUhohKo0ZszzmxJD4L7
-	S2QLu1rjh6SV0xDTMBsIEG90+4YIHiRT/HVrk+OG3ue/SsUbMWHmm1W1mxuzgmJ6sUQw/qREkos
-	LFq6mq5A=
-X-Gm-Gg: AYBFou3OKs7jb9Pkq3vQe1XcaxUwQc8jv4fDT9X+W0eNBISB4pkcBuGk4FK+0g5POwz
-	k8JVmI6mmDf5LPXoa/V2VGbu03GkRhOZAKGHgUqMWkcSW2A+iqyxrEPmlGx8InQymBdvclC4QkW
-	BNh03cPlXxXdms2GyjxNm7aK9/43leeq0xZohv1vU0v2w0zC1a/+wfZlqRToRfW2RTFFvGZWJ2Q
-	O1eB4kUntRRCmRqJnL6wRQNN/zj2rahAt9lpE5qf5tQcgERAfyUbmAR5PtdOgOktH18ZQtXeIXj
-	AmF1UPFpbWpMPke3RmG/kSQZ3CrKPAYd0Zh1yhKpyAhfvTrxCCgca4ZKZNM5h6rnWAhO2XxrNga
-	blks6W/6os5aWzC50t8jAvhEzGUlKfEy5ZP0CiDUY+mBWaqUSp8jqguLp6a45gcEfQYIQMl4gAC
-	7ZWasLBEhJmPREsfPLMJ/SU5tbGrYwx/bhEbCAc7Hlccp+iMLUCeyRmefPX6MYKm/VR1ZqS2QAw
-	w==
-X-Received: by 2002:a05:7300:72d0:b0:353:5cf0:df09 with SMTP id 5a478bee46e88-3674c93add6mr1023621eec.8.1792533938356;
-        Tue, 20 Oct 2026 15:05:38 -0700 (PDT)
+        bh=8henHE9/qdCt8Nlu46oWUg4no6BP9dhaZWHwMjUANPc=;
+        b=SmWRWMLY/UokIWcKIcuxe8BnxkK4lHm1kcVQzsbCG6baQoYH+PKxeyFIvD3itHbRF+
+         wdZbbQzYmi94VbtDGhylZpsa3xB1mOYViIBeE2RvalwDn3GoV2P0ZzRGt8LOiJqDdK45
+         7WjawV7I6VPnZLQRyJ7dirqf9n8ADQ8b2o8ol76/JgHjdhdTJI3LpMOaqdDJWPIqNs/O
+         SwvtT+4HqlooWEwhCzggbak872xFrsPYeOTHFKA/eUBxPDrvsOzWD5PB1Q68ZJXgfWWZ
+         SRlqHt7nPhI6TOm8DPJlijud+UwBwZh/4tXwbEO8LPJ40JUDm2B/LimOR+ggzB8Pjyl0
+         ZRKA==
+X-Forwarded-Encrypted: i=1; AKwUvBzzfD5y3NwJvDj5iTXl6xOlzayn8KGvZVarSAeeVzVYRE36Z9s6vlnsB3TjiMeyHmkfvAGX8AAOks77NQ==@vger.kernel.org
+X-Gm-Message-State: AFq9FYJzeazWuzV9+VrVR+w6f8THMnOUe/WnmdzAHuUXflcgYjxhfYYu
+	l4K38NcPOgOLhG+8IOEsKxqr4PJ6fGRNXli6FR+2vuBnaaYGI5ey1jdxej3eB5iB5yI=
+X-Gm-Gg: AYBFou3y4xD/ieFPvx2zJUJ3F/vB5xM1PHpVpONw8S4EKAcM61H6lTREB/eNMkwPdvQ
+	l/eTdEZ349RQGSjJ+dSCm9+jmEH6RkqTTvifG4ybVjjF1kRsWTWlySlUNUSka4RiEr7+/dQaeTj
+	lbb5Dj4psNKhMlQzSCa9BwBFpoSmuFSudiGnxCQklgYx0C3bk9BqxlNQ5BoOqFZEWTImwq05nFa
+	R/dMmHG9l8MYcCuvtAFqtXK5nWFvHlx03UJSFpEeQ2+BqDKY5/DtGzCKMNe25d0fYjxVMETg441
+	7lfALbcB44Ljsx2xBCZIHJY/RkT4DyxlTtQ6KDwNd3vUH6RMWqCO5AwhTShb+TTLPjtz8/3rINr
+	3fjKSMUxE2pBH4Rwa4a4kjiu57bQF4w1EoPTDmhedQSvEgBo1S/Gj6FBvkGwXTSOzSpTkTxRbsz
+	9NdLU0J5mWF3U8uVNgCsJ7CSqbmsBo6IVHAe8GdcgJODYzKkkSgn/hliZ9K882waTu656yeVmD7
+	g==
+X-Received: by 2002:a05:7300:e9d9:20b0:366:eda6:8dae with SMTP id 5a478bee46e88-3674d0454f8mr801619eec.18.1792533939989;
+        Tue, 20 Oct 2026 15:05:39 -0700 (PDT)
 Received: from [127.0.0.2] ([50.145.100.174])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3674198f1d8sm1917021eec.24.2026.10.20.15.05.37
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3674198f1d8sm1917021eec.24.2026.10.20.15.05.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 15:05:37 -0700 (PDT)
+        Tue, 20 Oct 2026 15:05:39 -0700 (PDT)
 From: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-Date: Tue, 20 Oct 2026 15:05:31 -0700
-Subject: [PATCH v3 3/4] hwmon: (pmbus_core) Support relative encoding of
- vout related commands
+Date: Tue, 20 Oct 2026 15:05:32 -0700
+Subject: [PATCH v3 4/4] hwmon: (pmbus/fs1412) Add TDK FS1412 and FS1525
+ driver
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -95,7 +94,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261020-hwmon-pmbus-fs1412-v3-3-51df629e13d7@nexthop.ai>
+Message-Id: <20261020-hwmon-pmbus-fs1412-v3-4-51df629e13d7@nexthop.ai>
 References: <20261020-hwmon-pmbus-fs1412-v3-0-51df629e13d7@nexthop.ai>
 In-Reply-To: <20261020-hwmon-pmbus-fs1412-v3-0-51df629e13d7@nexthop.ai>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -107,255 +106,421 @@ Cc: Lars Petter Mostad <lars.petter.mostad@appear.net>,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1792533934; l=8091;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792533934; l=14547;
  i=abdurrahman@nexthop.ai; s=20260510; h=from:subject:message-id;
- bh=16feJ0AbL7XUqQo4236hGEk2nT9cJIWj6VzNFzo5YIM=;
- b=83jNrC2tQrjwyFupjxGyVWTTSMvY/E1x2A6tjlRkuMSZpfrj1FeNy3GNdQ3jmUlAVK+0FVAlW
- IBqs8UD7XRxDJngQ+SYDfHdBi4x8awxA8XAGTheCYZGvlM71r/IKbrl
+ bh=wZvLMQuH89Zfy6d10xvpZvNTOsM7iJs3bh5N4dYTTA8=;
+ b=VaqzN+8nrr4v4zAvp9eu2ut3ViUuh9Pp+YUPhJcUAk9tghxemfr/Pbjn3Pvbs+CRICulo8hVe
+ OjkNrYvJT6UBnyVqJLezjOdG9pq7y4ZTdraop2K4v0vd2FQZdO+TT45
 X-Developer-Key: i=abdurrahman@nexthop.ai; a=ed25519;
  pk=omTm9cCAbO0ZhS32aKfJDKue0W3sQGpG9ub5eYHif8I=
 
-From: Lars Petter Mostad <lars.petter.mostad@appear.net>
+The TDK FS1412 and FS1525 are 12A and 25A uPOL regulators with PMBus
+telemetry for input voltage, output voltage and temperature, plus the
+matching status registers. The FS1525 also reports output current and
+has an over-temperature warning limit. The FS1412 has neither:
+READ_IOUT and OT_WARN_LIMIT are not in its command table. Both read
+"KDT" from MFR_ID, which the driver checks before binding, and are
+told apart by IC_DEVICE_ID (0x0c for the FS1412, 0x19 for the FS1525).
 
-PMBus 1.3 allows for relative encoding of voltages in certain output
-voltage related commands. These commands are encoded relative to
-VOUT_COMMAND. Support this when encoding/decoding commands.
+VOUT_MODE is read-only and has bit 7 set on both: 0x98 on the FS1412
+(exponent -8) and 0x96 on the FS1525 (exponent -10). Their output
+voltage limits are relative to VOUT_COMMAND, so 0x0133 against a 0.6V
+command is a 120% over-voltage limit on the FS1412. The PMBus core
+converts them now that it supports relative VOUT encoding.
 
-Signed-off-by: Lars Petter Mostad <lars.petter.mostad@appear.net>
-[abdurrahman: rebased; check VOUT_MODE for 0xff before testing the
- relative bit; use signed division and clamp the user value before
- scaling; reject a zero VOUT_COMMAND at probe and from the regulator;
- update the cached VOUT_COMMAND only after a successful write; decode
- the regulator margins with the register they were read from, and in
- relative mode bound the output voltage only by MFR_VOUT_MIN/MAX,
- since VOUT_MARGIN_LOW/HIGH move with VOUT_COMMAND]
+On the FS1412, OT_WARN_LIMIT answers although it is not in the command
+table, but the part reports OT_WARNING at room temperature, so the
+driver hides the register from the core and only the OT_FAULT_LIMIT
+based attributes are provided.
+
+When the output is set with an external divider, the FS1412 reports
+READ_VOUT at the feedback pin, so in2_input and its limits all scale
+with the divider in user space. The FS1525 reports READ_VOUT as the
+output voltage and compares it against its warning and under-voltage
+limits as they are, relative to VOUT_COMMAND. Its over-voltage fault
+is an analog comparison at the feedback pin, which would read below
+in2_input on such boards, so the driver hides VOUT_OV_FAULT_LIMIT on
+the FS1525.
+
 Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 ---
- drivers/hwmon/pmbus/pmbus.c      |   2 +-
- drivers/hwmon/pmbus/pmbus_core.c | 121 ++++++++++++++++++++++++++++++++++++---
- 2 files changed, 114 insertions(+), 9 deletions(-)
+ Documentation/hwmon/fs1412.rst | 124 ++++++++++++++++++++++++++++++
+ Documentation/hwmon/index.rst  |   1 +
+ MAINTAINERS                    |   7 ++
+ drivers/hwmon/pmbus/Kconfig    |   9 +++
+ drivers/hwmon/pmbus/Makefile   |   1 +
+ drivers/hwmon/pmbus/fs1412.c   | 171 +++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 313 insertions(+)
 
-diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
-index 7a7eac90d62e..dff1ef9c27f9 100644
---- a/drivers/hwmon/pmbus/pmbus.c
-+++ b/drivers/hwmon/pmbus/pmbus.c
-@@ -121,7 +121,7 @@ static int pmbus_identify(struct i2c_client *client,
- 
- 		vout_mode = pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
- 		if (vout_mode >= 0 && vout_mode != 0xff) {
--			switch (vout_mode >> 5) {
-+			switch ((vout_mode & 0x60) >> 5) {
- 			case 0:
- 				break;
- 			case 1:
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 5f69c1420b4e..ab91438b0c26 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -101,6 +101,9 @@ struct pmbus_data {
- 
- 	int exponent[PMBUS_PAGES];
- 				/* linear mode: exponent for output voltages */
-+	bool vout_mode_relative[PMBUS_PAGES];
-+				/* VOUT limits relative to VOUT_COMMAND */
-+	int vout_command[PMBUS_PAGES];	/* VOUT_COMMAND in mV, relative mode */
- 
- 	const struct pmbus_driver_info *info;
- 
-@@ -803,6 +806,26 @@ static void pmbus_update_sensor_data(struct i2c_client *client, struct pmbus_sen
- 						     sensor->phase, sensor->reg);
- }
- 
-+static bool pmbus_sensor_is_vout_relative(struct pmbus_data *data,
-+					  struct pmbus_sensor *sensor)
-+{
-+	if (sensor->class != PSC_VOLTAGE_OUT ||
-+	    !data->vout_mode_relative[sensor->page])
-+		return false;
+diff --git a/Documentation/hwmon/fs1412.rst b/Documentation/hwmon/fs1412.rst
+new file mode 100644
+index 000000000000..b9fb083b7569
+--- /dev/null
++++ b/Documentation/hwmon/fs1412.rst
+@@ -0,0 +1,124 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
 +
-+	switch (sensor->reg) {
-+	case PMBUS_VOUT_MARGIN_HIGH:
-+	case PMBUS_VOUT_MARGIN_LOW:
-+	case PMBUS_VOUT_OV_FAULT_LIMIT:
-+	case PMBUS_VOUT_OV_WARN_LIMIT:
-+	case PMBUS_VOUT_UV_WARN_LIMIT:
-+	case PMBUS_VOUT_UV_FAULT_LIMIT:
-+		return true;
-+	default:
-+		return false;
-+	}
++Kernel driver fs1412
++====================
++
++Supported chips:
++
++  * TDK FS1412
++
++    Prefix: 'fs1412'
++
++    Addresses scanned: -
++
++    Datasheet: https://product.tdk.com/system/files/dam/doc/product/power/switching-power/micro-pol/data_sheet/fs1412_datasheet.pdf
++
++  * TDK FS1525
++
++    Prefix: 'fs1525'
++
++    Addresses scanned: -
++
++    Datasheet: Publicly available at the TDK website
++
++Authors:
++    Abdurrahman Hussain <abdurrahman@nexthop.ai>
++
++
++Description
++-----------
++
++This driver implements support for the TDK FS1412 and FS1525 uPOL DC/DC
++regulators.
++
++The FS1412 is a 12A part with PMBus monitoring of its input voltage, output
++voltage and temperature. It has over-current and over-temperature protection
++with programmable fault limits but no current telemetry, so no current
++attributes are provided.
++
++The FS1525 is a 25A part that adds output current telemetry and an
++over-temperature warning limit.
++
++Both parts read "KDT" from MFR_ID. The driver tells them apart by
++IC_DEVICE_ID and warns if the detected part does not match the one it was
++instantiated as.
++
++The FS1412 answers on two I2C addresses: a register interface at the I2C
++base address (0x08 by default) and the PMBus interface at the PMBus base
++address (0x70 by default), each plus the offset strapped on the ADDR pin.
++This driver binds to the PMBus address.
++
++The driver is a client driver to the core PMBus driver.
++Please see Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
++
++
++Usage Notes
++-----------
++
++This driver does not auto-detect devices. You will have to instantiate the
++devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
++details.
++
++Both parts store their output voltage limits relative to VOUT_COMMAND
++(VOUT_MODE bit 7 set). The PMBus core converts them to and from absolute
++voltages, so the output voltage limits read and write in volts. A written
++limit is stored as a fraction of VOUT_COMMAND in the resolution of VOUT_MODE
++(1/256 on the FS1412, 1/1024 on the FS1525), so it may read back rounded. The
++over-voltage protection itself engages at one of four thresholds the device
++rounds the fault limit to; see the datasheet.
++
++When the output voltage is set with an external resistor divider,
++VOUT_COMMAND holds the feedback pin target rather than the output voltage,
++and the two parts differ:
++
++- The FS1412 reports READ_VOUT at the feedback pin, so in2_input and the in2
++  limits are all in the feedback domain. Scale them by the divider ratio in
++  user space.
++
++- The FS1525 reports READ_VOUT as the output voltage. Its warning and
++  under-voltage limits are compared by the device against READ_VOUT but are
++  still relative to VOUT_COMMAND, so in2_max, in2_min and in2_lcrit are the
++  thresholds the device actually applies to in2_input. Its over-voltage
++  fault is an analog comparison at the feedback pin, which would read below
++  in2_input on such boards, so in2_crit is not provided for the FS1525.
++
++The FS1412 reports an over-temperature warning at room temperature and has
++no OT_WARN_LIMIT in its command table, so temp1_max and its alarm are not
++provided for it; temp1_crit comes from OT_FAULT_LIMIT.
++
++
++Sysfs entries
++-------------
++
++======================= ======================================================
++in1_label		"vin"
++in1_input		Measured input voltage
++in1_min			Minimum input voltage
++in1_min_alarm		Input voltage low alarm
++in1_crit		Critical high input voltage
++in1_crit_alarm		Input voltage critical high alarm
++
++in2_label		"vout1"
++in2_input		Measured output voltage (FS1412: at the feedback pin)
++in2_min			Minimum output voltage
++in2_min_alarm		Output voltage low alarm
++in2_max			Maximum output voltage
++in2_max_alarm		Output voltage high alarm
++in2_lcrit		Critical low output voltage
++in2_lcrit_alarm		Output voltage critical low alarm
++in2_crit		Critical high output voltage (FS1412 only)
++in2_crit_alarm		Output voltage critical high alarm (FS1412 only)
++
++curr1_label		"iout1" (FS1525 only)
++curr1_input		Measured output current (FS1525 only)
++curr1_max		Maximum output current (FS1525 only)
++curr1_max_alarm		Output current high alarm (FS1525 only)
++curr1_crit		Critical high output current (FS1525 only)
++curr1_crit_alarm	Output current critical high alarm (FS1525 only)
++
++temp1_input		Measured temperature
++temp1_max		Maximum temperature (FS1525 only)
++temp1_max_alarm		Temperature high alarm (FS1525 only)
++temp1_crit		Critical high temperature
++temp1_crit_alarm	Temperature critical high alarm
++======================= ======================================================
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 9955a525436a..625833374c94 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -79,6 +79,7 @@ Hardware Monitoring Kernel Drivers
+    f71805f
+    f71882fg
+    fam15h_power
++   fs1412
+    fsp-3y
+    ftsteutates
+    g760a
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 65e8a4b5c90b..73b5a120517e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -26778,6 +26778,13 @@ W:	https://linuxtv.org
+ T:	git git://linuxtv.org/media.git
+ F:	drivers/media/i2c/tda9840*
+ 
++TDK FS1412 AND FS1525 MICRO POL DRIVER
++M:	Abdurrahman Hussain <abdurrahman@nexthop.ai>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/hwmon/fs1412.rst
++F:	drivers/hwmon/pmbus/fs1412.c
++
+ TEA5761 TUNER DRIVER
+ M:	Mauro Carvalho Chehab <mchehab@kernel.org>
+ L:	linux-media@vger.kernel.org
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index eb71a0ac044b..67bbc87710ee 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -132,6 +132,15 @@ config SENSORS_DELTA_AHE50DC_FAN
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called delta-ahe50dc-fan.
+ 
++config SENSORS_FS1412
++	tristate "TDK FS1412 and FS1525"
++	help
++	  If you say yes here you get hardware monitoring support for the TDK
++	  FS1412 and FS1525 uPOL regulators.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called fs1412.
++
+ config SENSORS_FSP_3Y
+ 	tristate "FSP/3Y-Power power supplies"
+ 	help
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index e288fe72a437..7bbc0d02bfad 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -13,6 +13,7 @@ obj-$(CONFIG_SENSORS_APS_379)	+= aps-379.o
+ obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
+ obj-$(CONFIG_SENSORS_BPA_RS600)	+= bpa-rs600.o
+ obj-$(CONFIG_SENSORS_DELTA_AHE50DC_FAN) += delta-ahe50dc-fan.o
++obj-$(CONFIG_SENSORS_FS1412)	+= fs1412.o
+ obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
+ obj-$(CONFIG_SENSORS_HAC300S)	+= hac300s.o
+ obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
+diff --git a/drivers/hwmon/pmbus/fs1412.c b/drivers/hwmon/pmbus/fs1412.c
+new file mode 100644
+index 000000000000..de69116c43f5
+--- /dev/null
++++ b/drivers/hwmon/pmbus/fs1412.c
+@@ -0,0 +1,171 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Hardware monitoring driver for the TDK FS1412 and FS1525 uPOL regulators
++ *
++ * Copyright 2026 Nexthop Systems.
++ */
++
++#include <linux/array_size.h>
++#include <linux/i2c.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/pmbus.h>
++#include <linux/string.h>
++
++#include "pmbus.h"
++
++#define FS1412_MFR_ID		"KDT"
++#define FS1412_MFR_ID_LEN	(sizeof(FS1412_MFR_ID) - 1)
++
++/*
++ * OT_WARN_LIMIT is not in the FS1412 command table. The register answers,
++ * but the part has no warning threshold and reports OT_WARNING at room
++ * temperature, so keep the core from exposing either.
++ */
++static int fs1412_read_word_data(struct i2c_client *client, int page,
++				 int phase, int reg)
++{
++	if (reg == PMBUS_OT_WARN_LIMIT)
++		return -ENXIO;
++
++	return -ENODATA;
 +}
 +
- /*
-  * Convert ieee754 sensor values to milli- or micro-units
-  * depending on sensor type.
-@@ -1005,6 +1028,12 @@ static s64 pmbus_reg2data(struct pmbus_data *data, struct pmbus_sensor *sensor)
- 		val = pmbus_reg2data_linear(data, sensor);
- 		break;
- 	}
-+
-+	/* In relative mode, val is a permillage of VOUT_COMMAND */
-+	if (pmbus_sensor_is_vout_relative(data, sensor))
-+		val = DIV_S64_ROUND_CLOSEST(val * data->vout_command[sensor->page],
-+					    1000);
-+
- 	return val;
- }
- 
-@@ -1209,6 +1238,12 @@ static u16 pmbus_data2reg(struct pmbus_data *data,
- 	if (!sensor->convert)
- 		return val;
- 
-+	if (pmbus_sensor_is_vout_relative(data, sensor)) {
-+		val = clamp_val(val, -INT_MAX, INT_MAX);
-+		val = DIV_S64_ROUND_CLOSEST(val * 1000,
-+					    data->vout_command[sensor->page]);
-+	}
-+
- 	switch (data->info->format[sensor->class]) {
- 	case direct:
- 		regval = pmbus_data2reg_direct(data, sensor, val);
-@@ -2736,6 +2771,21 @@ static int pmbus_init_coefficients(struct i2c_client *client,
- 	return 0;
- }
- 
-+/* Decode a raw VOUT_COMMAND value to mV */
-+static s64 pmbus_vout_command_mv(struct pmbus_data *data, int page,
-+				 int vout_command_raw)
++static int fs1412_write_word_data(struct i2c_client *client, int page,
++				  int reg, u16 word)
 +{
-+	struct pmbus_sensor s = {
-+		.page = page,
-+		.reg = PMBUS_VOUT_COMMAND,
-+		.class = PSC_VOLTAGE_OUT,
-+		.convert = true,
-+		.data = vout_command_raw,
-+	};
++	if (reg == PMBUS_OT_WARN_LIMIT)
++		return -ENXIO;
 +
-+	return pmbus_reg2data(data, &s);
++	return -ENODATA;
 +}
 +
- /*
-  * Identify chip parameters.
-  * This function is called for all chips.
-@@ -2753,6 +2803,10 @@ static int pmbus_identify_common(struct i2c_client *client,
- 		 * Not all chips support the VOUT_MODE command,
- 		 * so a failure to read it is not an error.
- 		 */
-+		if (vout_mode & 0x80) {
-+			data->vout_mode_relative[page] = true;
-+			vout_mode &= 0x7f;
-+		}
- 		switch (vout_mode >> 5) {
- 		case 0:	/* linear mode      */
- 			if (data->info->format[PSC_VOLTAGE_OUT] != linear)
-@@ -2979,6 +3033,22 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
- 			return ret;
- 	}
- 
-+	for (page = 0; page < info->pages; page++) {
-+		if (data->vout_mode_relative[page]) {
-+			ret = _pmbus_read_word_data(client, page, 0xff,
-+						    PMBUS_VOUT_COMMAND);
-+			if (ret < 0)
-+				return ret;
-+			data->vout_command[page] =
-+				pmbus_vout_command_mv(data, page, ret);
-+			if (data->vout_command[page] <= 0) {
-+				dev_err(dev, "Invalid VOUT_COMMAND 0x%04x for relative VOUT mode\n",
-+					ret);
-+				return -ENODEV;
-+			}
-+		}
-+	}
++/*
++ * The FS1525 compares READ_VOUT, the output voltage, against its warning and
++ * under-voltage limits, but its over-voltage fault is an analog comparison at
++ * the feedback pin. With an external divider VOUT_OV_FAULT_LIMIT would read in
++ * feedback-pin volts, below in2_input, and the part cannot report the divider,
++ * so do not expose it.
++ */
++static int fs1525_read_word_data(struct i2c_client *client, int page,
++				 int phase, int reg)
++{
++	if (reg == PMBUS_VOUT_OV_FAULT_LIMIT)
++		return -ENXIO;
 +
- 	if (client->flags & I2C_CLIENT_PEC) {
- 		/*
- 		 * If I2C_CLIENT_PEC is set here, both the I2C adapter and the
-@@ -3275,12 +3345,22 @@ static int pmbus_regulator_get_low_margin(struct i2c_client *client, int page)
- 	};
- 
- 	if (data->vout_low[page] < 0) {
--		if (pmbus_check_word_register(client, page, PMBUS_MFR_VOUT_MIN))
-+		s.reg = PMBUS_MFR_VOUT_MIN;
-+		if (pmbus_check_word_register(client, page, s.reg))
- 			s.data = _pmbus_read_word_data(client, page, 0xff,
--						       PMBUS_MFR_VOUT_MIN);
-+						       s.reg);
- 		if (s.data < 0) {
-+			/*
-+			 * In relative mode the margin moves with VOUT_COMMAND,
-+			 * so it does not bound the output voltage.
-+			 */
-+			if (data->vout_mode_relative[page]) {
-+				data->vout_low[page] = 0;
-+				return data->vout_low[page];
-+			}
-+			s.reg = PMBUS_VOUT_MARGIN_LOW;
- 			s.data = _pmbus_read_word_data(client, page, 0xff,
--						       PMBUS_VOUT_MARGIN_LOW);
-+						       s.reg);
- 			if (s.data < 0)
- 				return s.data;
- 		}
-@@ -3301,12 +3381,22 @@ static int pmbus_regulator_get_high_margin(struct i2c_client *client, int page)
- 	};
- 
- 	if (data->vout_high[page] < 0) {
--		if (pmbus_check_word_register(client, page, PMBUS_MFR_VOUT_MAX))
-+		s.reg = PMBUS_MFR_VOUT_MAX;
-+		if (pmbus_check_word_register(client, page, s.reg))
- 			s.data = _pmbus_read_word_data(client, page, 0xff,
--						       PMBUS_MFR_VOUT_MAX);
-+						       s.reg);
- 		if (s.data < 0) {
-+			/*
-+			 * In relative mode the margin moves with VOUT_COMMAND,
-+			 * so it does not bound the output voltage.
-+			 */
-+			if (data->vout_mode_relative[page]) {
-+				data->vout_high[page] = INT_MAX;
-+				return data->vout_high[page];
-+			}
-+			s.reg = PMBUS_VOUT_MARGIN_HIGH;
- 			s.data = _pmbus_read_word_data(client, page, 0xff,
--						       PMBUS_VOUT_MARGIN_HIGH);
-+						       s.reg);
- 			if (s.data < 0)
- 				return s.data;
- 		}
-@@ -3351,7 +3441,8 @@ static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
- 		.data = -1,
- 	};
- 	int val = DIV_ROUND_CLOSEST(min_uv, 1000); /* convert to mV */
--	int low, high;
-+	int low, high, ret;
-+	s64 vout_mv = 0;
- 
- 	*selector = 0;
- 
-@@ -3373,7 +3464,21 @@ static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
- 
- 	val = pmbus_data2reg(data, &s, val);
- 
--	return _pmbus_write_word_data(client, s.page, PMBUS_VOUT_COMMAND, (u16)val);
-+	/* Relative limits are scaled by VOUT_COMMAND, which must stay positive */
-+	if (data->vout_mode_relative[s.page]) {
-+		vout_mv = pmbus_vout_command_mv(data, s.page, val);
-+		if (vout_mv <= 0)
-+			return -EINVAL;
-+	}
++	return -ENODATA;
++}
 +
-+	ret = _pmbus_write_word_data(client, s.page, PMBUS_VOUT_COMMAND, (u16)val);
++static int fs1525_write_word_data(struct i2c_client *client, int page,
++				  int reg, u16 word)
++{
++	if (reg == PMBUS_VOUT_OV_FAULT_LIMIT)
++		return -ENXIO;
++
++	return -ENODATA;
++}
++
++enum chips { fs1412, fs1525 };
++
++/* IC_DEVICE_ID, a one byte block */
++static const u8 fs1412_device_id[] = {
++	[fs1412] = 0x0c,
++	[fs1525] = 0x19,
++};
++
++static struct pmbus_driver_info fs1412_info[] = {
++	[fs1412] = {
++		.pages = 1,
++		.format[PSC_VOLTAGE_IN] = linear,
++		.format[PSC_VOLTAGE_OUT] = linear,
++		.format[PSC_TEMPERATURE] = linear,
++		.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT |
++			   PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
++			   PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
++		.read_word_data = fs1412_read_word_data,
++		.write_word_data = fs1412_write_word_data,
++	},
++	[fs1525] = {
++		.pages = 1,
++		.format[PSC_VOLTAGE_IN] = linear,
++		.format[PSC_VOLTAGE_OUT] = linear,
++		.format[PSC_CURRENT_OUT] = linear,
++		.format[PSC_TEMPERATURE] = linear,
++		.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT |
++			   PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
++			   PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
++			   PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
++		.read_word_data = fs1525_read_word_data,
++		.write_word_data = fs1525_write_word_data,
++	},
++};
++
++static const struct i2c_device_id fs1412_id[] = {
++	{ .name = "fs1412", .driver_data = fs1412 },
++	{ .name = "fs1525", .driver_data = fs1525 },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, fs1412_id);
++
++static int fs1412_probe(struct i2c_client *client)
++{
++	char buf[I2C_SMBUS_BLOCK_MAX + 1] = { 0 };
++	struct device *dev = &client->dev;
++	enum chips chip, detected;
++	int ret;
++
++	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
 +	if (ret < 0)
-+		return ret;
++		return dev_err_probe(dev, ret, "Failed to read PMBUS_MFR_ID\n");
 +
-+	if (data->vout_mode_relative[s.page])
-+		data->vout_command[s.page] = vout_mv;
++	if (ret != FS1412_MFR_ID_LEN ||
++	    strncmp(buf, FS1412_MFR_ID, FS1412_MFR_ID_LEN))
++		return dev_err_probe(dev, -ENODEV,
++				     "Unsupported Manufacturer ID '%s'\n", buf);
 +
-+	return 0;
- }
- 
- static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
++	ret = i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf);
++	if (ret < 0)
++		return dev_err_probe(dev, ret,
++				     "Failed to read PMBUS_IC_DEVICE_ID\n");
++	if (ret != 1)
++		return dev_err_probe(dev, -ENODEV,
++				     "Unexpected IC_DEVICE_ID length %d\n", ret);
++
++	for (detected = 0; detected < ARRAY_SIZE(fs1412_device_id); detected++)
++		if (fs1412_device_id[detected] == (u8)buf[0])
++			break;
++	if (detected == ARRAY_SIZE(fs1412_device_id))
++		return dev_err_probe(dev, -ENODEV,
++				     "Unsupported IC_DEVICE_ID 0x%02x\n",
++				     (u8)buf[0]);
++
++	chip = (uintptr_t)i2c_get_match_data(client);
++	if (chip != detected)
++		dev_warn(dev, "Device mismatch: Configured %s, detected %s\n",
++			 client->name, fs1412_id[detected].name);
++
++	return pmbus_do_probe(client, &fs1412_info[detected]);
++}
++
++static const struct of_device_id fs1412_of_match[] = {
++	{ .compatible = "tdk,fs1412", .data = (void *)fs1412 },
++	{ .compatible = "tdk,fs1525", .data = (void *)fs1525 },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, fs1412_of_match);
++
++static struct i2c_driver fs1412_driver = {
++	.driver = {
++		.name = "fs1412",
++		.of_match_table = fs1412_of_match,
++	},
++	.probe = fs1412_probe,
++	.id_table = fs1412_id,
++};
++
++module_i2c_driver(fs1412_driver);
++
++MODULE_AUTHOR("Abdurrahman Hussain <abdurrahman@nexthop.ai>");
++MODULE_DESCRIPTION("PMBus driver for the TDK FS1412 and FS1525 uPOL regulators");
++MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS("PMBUS");
 
 -- 
 2.54.0
