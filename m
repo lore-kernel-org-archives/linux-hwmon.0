@@ -1,56 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792497293;
-	b=yki7Zoj/HMfvbxIFohuM6y1/tdCqjpkHlhvffoRf03Mx/HapGYFvRqpA/HKDEATQj8nb
-	 bO47t0xAncbkuXFDjcsv3oSDZCka6hTPoMuO9/reiWX3ed4WlmEKefHRTHVloz4cx9eHj
-	 YlF4pe4KDNnNg7GwNL3UDcrYOxlaq3iSzvfHMWtzLiU9U8R+slRjYsYNrVT0oiaFrkxTm
-	 YNzd5bKc7GUKwDARhvveWySxxJzqMCGV9w+Zh0vWVoXxL+TKzMZv358y+GVarCVzGHNkE
-	 xwr2Xz8kCRcBn+j4CcsxM+y1Ta7dYI58Q3+WB4M6eji5Zn7VmTZz9zsiEYDPqCASb6w==
+	t=1792497662;
+	b=a8NUFW+aDR6IOOkYfMfLWuTl7LhXEVCi1BkOQDpAUw5niOrxVFJJo549DUrVLXm9QUNg
+	 X6WeyZMDjczurPATozXx+3L3HDJeZNtVVZX4HJMt8+jtcrlL9lXrF26Yf9Jth3rj1mYiJ
+	 yQ7dUiy498RcreD+MqQr9EhBf31GdPxusLCbGYiqWgjIYWwe0VRv0ex3oHwUeq7bN/FGY
+	 JFHWpYwrrEIEK1I8B49+DD5/nyOQ2sJcNhbgUhK++82X5LJ9e7EkncHdPVgmDmTGi7Mhe
+	 W6AaxGAvwz/zrCxOlqS9Z1C/hD1qvApMEYVrZnewVihwtHrY4ESagNd83QNax+0/BMQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792497293;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792497662;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=xfRwG8X+ykUW8NNjFRur+IdHQGPwptgNmDIzfO/YArU=;
-	b=xuTkOSiN55CO+VXA3fL+9aJihvD8P96VjYZBSH4R4Ja7dYL47QCCOInRjh/KevYBR+qP
-	 wLzqwdPzheZIidUyuDI9ZRoWPq3nXN0zndK42vaICBRpVruThYDmkwrSbJlKvAWJWW+ya
-	 bF/PoLF3NU+itSxlFNmQyG7GOCc0R69c8YSuAeoDIZenj4oHMi3euyNTnWH4V+BjMwE3I
-	 dz8XhvpQJnZ1fI5cvVqu4KKFonFwqhAj6A3tTbNaVGCYH1wa1ZbzkfYFFC2m0OSx2NpxF
-	 H+jRodd4pmTbcgnhC+/vt7Bdq64tknMp/gEII20nRKGFPE5GW04NdhHfKBEYGpoRgDg==
+	bh=KXg39mHdTsetgdPucEjKGeP2zUPOX/PjWq1Ui18mlHY=;
+	b=DQAvTUV2+6GCTL0BfVAWxvvFdUlq8w0T9fq+6aQLatCFaCMJ0HXmwzSp6MaGDoQxxDSC
+	 BK4D7dX9G8OOd6BpNfC698qV971d5v2SPOlDHk+Xjw/3uhHjMvW+t/csvpI4jU/A6nVRS
+	 fYGtfwccf5F+HMK0QEalV70CMo4mqm1oe3ZhPIyjCCDuuxJ4p3TFR6PE2qEKCYEpJsexP
+	 jEPYH0uDMsGwW47X4Mzlb0K8oxJ1SxvXLXKtlokvYQPvyXNT+eV4gxrKNj7RtZMYkP53B
+	 dNevbS2itYToY0VXwa9EP/nwlCd7Svsr/LaoZGtxIuxtSBzlK91yp/Xj/jNsGFjjG6A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AFoAmWWG;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="IQNj7t/w";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B162C606A31C;
-	Tue, 20 Oct 2026 11:54:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A828606A31D;
+	Tue, 20 Oct 2026 12:01:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AFoAmWWG
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E313D1F000C4;
-	Tue, 20 Oct 2026 11:54:51 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IQNj7t/w
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 933671F000C5;
+	Tue, 20 Oct 2026 12:01:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792497292;
-	bh=xfRwG8X+ykUW8NNjFRur+IdHQGPwptgNmDIzfO/YArU=;
+	s=k20260515; t=1792497661;
+	bh=KXg39mHdTsetgdPucEjKGeP2zUPOX/PjWq1Ui18mlHY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=AFoAmWWGhU3ygcZ03TkaiePrO3W2Ap7Q7Mg/qxyHIBlBPH8IFd1X6bYd4tEeJToyR
-	 114etl/bgwMJkCNxprNm+4xEozV7xda7qO1pinaF1EbBt6ZPDTOpGDlNElGARg2Z8U
-	 TkN9lIbwHOUIZDgMTUUZu5+lSaE3EwBbSte1UI4YM5utfndytYA5LNIXqaDk0PE5qn
-	 Tso7MDpyD5L2uEBf8q6k+/3SETJ6ddkMqbDBxne00G7NDAZVqlFxJUu1S53KwSB3Tj
-	 uO8xgzoq/DPbjJdV6+15UsnOgTQzn/YDAEeOB8BQ/0R2ZVhsB60IoeCMNh7o+HviKS
-	 AW5M7YHubzlgQ==
-Message-ID: <sashiko-outbox-178910@kernel.org>
+	b=IQNj7t/wO8XHL5bqaL4l2qNSaVohn28nll/PuQDuRURxaKZZ0BkA7qpw1+KSYBEdx
+	 eae6eqSf9GGfHGRWV/m/qcdX3tSJ6pY85wZLLJumjqO188Gur5CgTU3W7AjBS4+XIE
+	 6jZvvmcEKiSZoeYdFHRwdvRYfr+ePlBKMmeA6ZlNEr5/T4VMja4G1hF0UdCAE5KJRR
+	 ARM+QiKOQ3zmMNziUaJR7bId9+3Bl6xt1pqWTnkAJo4vR2NS6AA0H/vhtKY3tlCivh
+	 vMpDoBDZ2FgASsc+9FKMMjar2E2xBh2NpMcqzRfsz09LrvLMV0ZFokWT2z9ZXLB7jQ
+	 ZU5lKgxlJ1NnA==
+Message-ID: <sashiko-outbox-178914@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 3/3] hwmon: ltc2978: Document LT7175 and LT7176P support
+Subject: Re: [PATCH 2/3] hwmon: (pmbus/ltc2978) Add support for LT7175 and
+ LT7176P
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Christopher de Guzman" <christopher.deguzman@analog.com>
 Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org
-In-Reply-To: <20261020-upstream-lt7175-lt7176p-v1-3-86b9b728b95d@analog.com>
+In-Reply-To: <20261020-upstream-lt7175-lt7176p-v1-2-86b9b728b95d@analog.com>
 References: <20261020-upstream-lt7175-lt7176p-v1-0-86b9b728b95d@analog.com>
- <20261020-upstream-lt7175-lt7176p-v1-3-86b9b728b95d@analog.com>
+ <20261020-upstream-lt7175-lt7176p-v1-2-86b9b728b95d@analog.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 20 Oct 2026 11:54:51 +0000
+Date: Tue, 20 Oct 2026 12:01:01 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -62,128 +63,125 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] hwmon: (pmbus/ltc2978) uninitialized stack read in ltc2978_get_i=
-d()
-- [Low] hwmon: ltc2978: incorrect curr1_label documentation for LT7175 and =
-LT7176P
+- [Medium] hwmon: (ltc2978) uninitialized stack read in ltc2978_get_id() fo=
+r LT7176P
+- [Medium] hwmon: (pmbus/ltc2978) IEEE754 peak values compared as LINEAR11 =
+in ltc_get_max()
 --
 
-commit 920a8e47ce82192a2f0425722db911c23eb2b4ca
+commit 51707b0225138ad0d3a2b0dd58f194120d060f5a
 Author: Christopher de Guzman <christopher.deguzman@analog.com>
 
-hwmon: ltc2978: Document LT7175 and LT7176P support
+hwmon: (pmbus/ltc2978) Add support for LT7175 and LT7176P
 
-This commit documents support for the LT7175/LT7175-1 and LT7176P/LT7176P-1
-PMBus buck regulators in the ltc2978 hwmon driver documentation, which were
-added in commit 51707b022513 ("hwmon: (pmbus/ltc2978) Add support for LT7175
-and LT7176P").
+This commit adds support for the LT7175/LT7175-1 and LT7176P/LT7176P-1 PMBus
+buck regulators to the ltc2978 driver, distinguishing them via the
+PMBUS_IC_DEVICE_ID string and configuring them with IEEE754 telemetry forma=
+t.
 
-> diff --git a/Documentation/hwmon/ltc2978.rst b/Documentation/hwmon/ltc297=
-8.rst
-> index 0b72d566cac70..3d30ce5cac95d 100644
-> --- a/Documentation/hwmon/ltc2978.rst
-> +++ b/Documentation/hwmon/ltc2978.rst
-> @@ -21,6 +21,22 @@ Supported chips:
-> =20
->      Datasheet: https://www.analog.com/en/products/lt7171.html
-> =20
-> +  * Analog Devices LT7175, LT7175-1
-> +
-> +    Prefix: 'lt7175'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet: https://www.analog.com/en/products/lt7175
-> +
-> +  * Analog Devices LT7176P, LT7176P-1
-> +
-> +    Prefix: 'lt7176p'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet: https://www.analog.com/en/products/lt7176p
-> +
-
-[Severity: Medium]
-In the preceding commit 51707b022513 ("hwmon: (pmbus/ltc2978) Add support
-for LT7175 and LT7176P"), can ltc2978_probe() -> ltc2978_get_id() in
-drivers/hwmon/pmbus/ltc2978.c read an uninitialized byte from buf[6] on the
-stack when checking for "LT7176P"?
-
-In drivers/hwmon/pmbus/ltc2978.c:ltc2978_get_id():
-
-	if ((chip_id & LTC2978_ID_MASK) =3D=3D LT7170_ID) {
-		u8 buf[I2C_SMBUS_BLOCK_MAX];
-
-		ret =3D pmbus_read_smbus_i2c_block_data(client, PMBUS_IC_DEVICE_ID, buf);
-		if (ret < 0)
-			return ret;
-		if (ret < 6)
-			return -ENODEV;
-
-		if (!strncmp(buf, "LT7170", 6))
-			return lt7170;
-		if (!strncmp(buf, "LT7171", 6))
-			return lt7171;
-		if (!strncmp(buf, "LT7175", 6))
-			return lt7175;
-		if (!strncmp(buf, "LT7176P", 7))
-			return lt7176p;
-
-pmbus_read_smbus_i2c_block_data() in drivers/hwmon/pmbus/pmbus_core.c copies
-only ret bytes into buf without NUL-terminating it or initializing remaining
-bytes.
-
-Since the length check only enforces ret >=3D 6, if a device returns 6 bytes
-with buf[0..5] containing "LT7176", strncmp(buf, "LT7176P", 7) will read the
-uninitialized 7th byte at buf[6]. Should the "LT7176P" check verify ret >=
-=3D 7
-first?
+> diff --git a/drivers/hwmon/pmbus/ltc2978.c b/drivers/hwmon/pmbus/ltc2978.c
+> index aea7b6c93e74b..a42cdc1fe1246 100644
+> --- a/drivers/hwmon/pmbus/ltc2978.c
+> +++ b/drivers/hwmon/pmbus/ltc2978.c
 
 [ ... ]
 
-> @@ -432,9 +450,9 @@ power[N]_input		Measured output power.
-> =20
->  curr1_label		"iin".
-> =20
-> -			LT7170, LT7171, LTC3880, LTC3883, LTC3884, LTC3886,
-> -			LTC3887, LTC3889, LTM4644, LTM4675, LTM4676, LTM4677,
-> -			LTM4678, LTM4680, and LTM4700 only.
-> +			LT7170, LT7171, LT7175, LT7176P, LTC3880, LTC3883,
-> +			LTC3884, LTC3886, LTC3887, LTC3889, LTM4644, LTM4675,
-> +			LTM4676, LTM4677, LTM4678, LTM4680, and LTM4700 only.
-> =20
->  curr1_input		Measured input current.
-> =20
-> @@ -452,7 +470,7 @@ curr1_reset_history	Reset input current history.
-> =20
->  curr[N]_label		"iout[1-4]".
-> =20
-> -			- LT7170, LT7171: N=3D1
-> +			- LT7170, LT7171, LT7175, LT7176P: N=3D1
+> @@ -645,6 +649,10 @@ static int ltc2978_get_id(struct i2c_client *client)
+>  			return lt7170;
+>  		if (!strncmp(buf, "LT7171", 6))
+>  			return lt7171;
+> +		if (!strncmp(buf, "LT7175", 6))
+> +			return lt7175;
+> +		if (!strncmp(buf, "LT7176P", 7))
+> +			return lt7176p;
 
-[Severity: Low]
-Should LT7175 and LT7176P be omitted from the curr1_label "iin" list above?
+[Severity: Medium]
+Can strncmp() read uninitialized stack memory in buf[6] here?
 
-In drivers/hwmon/pmbus/ltc2978.c:ltc2978_probe(), the lt7175 and lt7176p
-configuration sets:
+In drivers/hwmon/pmbus/ltc2978.c, ltc2978_get_id() reads PMBUS_IC_DEVICE_ID
+into an uninitialized stack buffer via pmbus_read_smbus_i2c_block_data(),
+which copies ret bytes without NUL-terminating buf, and then checks only
+for ret < 6:
 
-	case lt7175:
-	case lt7176p:
-		...
-		info->func[0] =3D PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
-		  | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
-		  | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
-		break;
+	if (chip_id =3D=3D LT7170_ID) {
+		u8 buf[I2C_SMBUS_BLOCK_MAX];
+		int ret;
 
-Because PMBUS_HAVE_IIN is not enabled for these chips, curr1 is "iout1" (as
-documented in the curr[N]_label N=3D1 entry) rather than "iin".
+		ret =3D pmbus_read_smbus_i2c_block_data(client, PMBUS_IC_DEVICE_ID,
+						      buf);
+		if (ret < 0)
+			return ret;
 
->  			- LTC2972: N-1-2
->  			- LTC2974, LTC2975: N=3D1-4
->  			- LTC2977, LTC2979, LTC2980, LTM2987: not supported
+		if (ret < 6)
+			return -ENODEV;
+
+If a device returns a 6-byte PMBUS_IC_DEVICE_ID starting with "LT7176"
+(where ret =3D=3D 6), calling strncmp(buf, "LT7176P", 7) without checking
+ret >=3D 7 will read buf[6] from the uninitialized stack buffer and falsely
+match lt7176p if that byte happens to be 'P'.
+
+> =20
+>  		return -ENODEV;
+>  	}
+> @@ -774,6 +782,20 @@ static int ltc2978_probe(struct i2c_client *client)
+>  		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+>  		  | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+>  		break;
+> +	case lt7175:
+> +	case lt7176p:
+> +		data->features |=3D FEAT_CLEAR_PEAKS | FEAT_NEEDS_POLLING;
+> +		info->read_word_data =3D ltc3883_read_word_data;
+> +		info->pages =3D LTC3883_NUM_PAGES;
+> +		info->format[PSC_VOLTAGE_IN] =3D ieee754;
+> +		info->format[PSC_VOLTAGE_OUT] =3D ieee754;
+> +		info->format[PSC_CURRENT_OUT] =3D ieee754;
+> +		info->format[PSC_TEMPERATURE] =3D ieee754;
+> +		info->func[0] =3D PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
+> +		  | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+> +		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+> +		  | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+> +		break;
+
+[Severity: Medium]
+Will wiring info->read_word_data to ltc3883_read_word_data cause corrupted
+peak readings when the sensor formats are set to ieee754?
+
+For lt7175 and lt7176p, virtual peak reads for PMBUS_VIRT_READ_VIN_MAX,
+PMBUS_VIRT_READ_IOUT_MAX, and PMBUS_VIRT_READ_TEMP_MAX go through
+ltc3883_read_word_data() -> ltc3880_read_word_data() ->
+ltc2978_read_word_data_common() -> ltc_get_max():
+
+static int ltc_get_max(struct ltc2978_data *data, struct i2c_client *client,
+		       int page, int reg, u16 *pmax)
+{
+	int ret;
+
+	ret =3D ltc_read_word_data(client, page, 0xff, reg);
+	if (ret >=3D 0) {
+		if (lin11_to_val(ret) > lin11_to_val(*pmax))
+			*pmax =3D ret;
+		ret =3D *pmax;
+	}
+	return ret;
+}
+
+Because lin11_to_val() treats bit 10 as the sign bit of an 11-bit two's
+complement mantissa, whereas in IEEE754 binary16 bit 10 is the least
+significant bit of the 5-bit biased exponent, any positive IEEE754 value wi=
+th
+an odd biased exponent (e.g. [1, 2), [4, 8), [16, 32), [64, 128)) has bit 10
+set and is decoded by lin11_to_val() as negative.
+
+As a result, when a peak reading increases from an even biased exponent into
+an odd biased exponent (such as temperature rising from 40 C to 75 C, or IO=
+UT
+rising from 2.5 A to 6.0 A), ltc_get_max() will treat the new higher reading
+as negative and fail to update *pmax, or overwrite a higher odd-exponent pe=
+ak
+with a lower even-exponent reading.
+
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261020-upstream-l=
-t7175-lt7176p-v1-0-86b9b728b95d@analog.com?part=3D3
+t7175-lt7176p-v1-0-86b9b728b95d@analog.com?part=3D2
