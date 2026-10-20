@@ -1,44 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792515081;
-	b=guTkNfigIMx84W9gMDWd+ADE8YBsFuF0gHh/Ck1uUMHOpJmZnyxzDYE3/UXQpeGL0vMS
-	 QWFXjnI9f9GDMRMZr5pGT5Oc/SWbr1ms2eEBzKlWCootU696tifZyUmf2kNDHe9gQo86o
-	 0q8P0NZ3dPjVpd/eQxUvil1/nqrjWqjVJW+nUpsGyBjR4OysJ2B5lnpe8T+0U/ebjVeci
-	 vspiViPcqjsSvivhA/w3/aS5Jj5l2l+PPpEbl6bj5dIYUTNIufYj55xI0e4Tp+QprU32N
-	 Tfc8QjcBC6m5zqZTKjCyQJlstImSecqrcrvgBD04ks/50zZRAcT+Xj0EM2iItIyidLg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792515081;
-	h=Received:Message-ID:From:Subject:Reply-To:To:Cc:In-Reply-To:
-	 References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=4jPtC44fG9ZGpdMlQn7VoARy2dfSXgShqorH1pq3mDs=;
-	b=pBkG8E8Viinlw0BBbLy9VpzlFxJSj0IWRx04SvudD4FRKmihxuTfewMpMJA/DicgFPiv
-	 Ko8ZVZW7pIUpx5r6k6HfNWRWAF+pKlKmXjokxk4cwMvXm0FlFvgiNlY0THovboRftm+5a
-	 C67IypEzX+6fvJXaxPweLfJaEDyACMw3S7x04/oOYI6oIQJ704oqz39M8mX4LtsYVTbBN
-	 KRPmNn0iBDLdl/cR1NMBALuL1Cc5aKavFR+BVY1+CcaCmsUQvsPKDI/GBSsPH2UfpIrTo
-	 M7g6vbTlSlmIGz8Ci3+7Rvlq/IQndH4sYya7NDhhPuDk08oiFyJ7UNvBRdthEkmuh8Q==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792518008;
+	b=07DjVJt1qKJCdjX3Ih24XmKA7GxxKPCu/Gtc6JIGF+lWQbOmOeaGSWo55Mv3DIx5gE+v
+	 CI5mYz3OU0zspamZiKJHT0+I4XF3pdAIiGT6C709J6aaeNgcXdV8TXjS6nHCJafDTg5JS
+	 tSkEBAwmZ7QrPvwk3VgXmFhIe77F6cblBV6VPySmidgXPRLWamuQM0CKRdc5ef5dG5KlO
+	 9OwzjYUiKpnJuEAFGmVPeESEG42mLx6JiQdEIc1zVSsXiiO0esfye8H4NUv2CFXbkbLr+
+	 uJsBduGZ4j1HpUHRLKUyD3cgFeHinJQfkv0jfy0JldkJTWT7S3UK+CJJODYqB2RWsxw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792518008;
+	h=Received:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=QFuKDc/12bMTQ7N0UCuWts6YlsGbG6+Qtuk7PJSX6is=;
+	b=kP28cc+OSiVjjLiCnNCunGnPxZHDmB5fQ7waQcCrqcrR3CuU9VS8odwJoR+uidZdhS3h
+	 Nmc05A9tgSCbeNYf8fpJL3RpCll0WphTABdkRbz5c4H+x8PTNy8gi1qhi5N5BJ+Btyoqt
+	 q5zQWDtFcgTVfioZiWOgaM54cydrUDcmsvxBBTs+ejxSnmlITMgYDsHPtqfdKQSMVlmIn
+	 qyTyYQoZ0bjU8i/bTLL86u19nMldHwe3vIvTd/9SxPtPiNC9QybVe7X9uGdkQ2xKT3lOM
+	 58nCoo0RHzzQlpP314GS8gvUJHfkKByZf1GdcSvq6HXUTzW2yQ24F6UzfFDFMoAHqEg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31067606A31A
-	for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 16:51:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA0651F000CA;
-	Tue, 20 Oct 2026 16:51:20 +0000 (UTC)
-Message-ID: <sashiko-outbox-179381@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 3/3] hwmon: (fs1603) Add driver for TDK FS160x and
- FS1006 uPOL converters
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kevin Jia" <kjia@nexthop.ai>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261020-fs1603-v2-3-0986107a5cd2@nexthop.ai>
-References: <20261020-fs1603-v2-0-0986107a5cd2@nexthop.ai>
- <20261020-fs1603-v2-3-0986107a5cd2@nexthop.ai>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 20 Oct 2026 16:50:49 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F18E606A31E;
+	Tue, 20 Oct 2026 17:40:08 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1792518007;
+	b=bDr2G5Y6ZZj6RLSQwzUBz1/tdR+08d4Hx5ciPNPgUkaKQyfYSS8PDg8okiQEyXNrmMLJ
+	 f4aQW8IOkJTwgzBB28L2aewM/jduxppKoZzedLXTdZSl7jmNUQIttXSwo6eGn2221ICSA
+	 bS4UqfFHKrbXIMAjScyZZuwz++LIe0I8nzqSGyDxiL2Pu4aSsF9y5zqxJe9sPj0mevs6T
+	 wjSv0QPNJWwStoIWQv9e7c5Ru+69QC8nSvi1n3cMVSigX+I6chqihVqePMa+YbEhjocvl
+	 nh0pZyVtOczGGVvaQGYLSEPH/3xnuknCks1XaWnEyaDxe5Y/boCsIoVtcBUziK28Z1g==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792518007;
+	h=Received:From:Date:Subject:MIME-Version:Content-Type:Message-Id:
+	 X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:
+	 X-Developer-Key:X-Endpoint-Received:X-Original-From:Reply-To:
+	 Content-Transfer-Encoding;
+	bh=QFuKDc/12bMTQ7N0UCuWts6YlsGbG6+Qtuk7PJSX6is=;
+	b=B1WVTVzP5w0xJnAcyipovBsy5hsG2kJUMwMbHtge0F9GdwoHm1ExyusORBs9PHZZz2Vf
+	 xdm/BV6lrqhmZfinzks8ffxzPxNjTCnfsNE2ZoHyUydx/LsGZR+ftK6zsCuwzqzYaKv4V
+	 0oxgUPSZ6n5i6Gmw1GwLz393VuUc6lEdIH1+dj5XtCE+rUr6aZt7ZxVQEpHcrTHia5Xzp
+	 9OQ3tXJQdtfGdvzfJAEV9YazIJOwxD5JkHAY3ztLkwPGAluTEYXv8g/TUs10ca6qTDAd5
+	 GKSZ/29Swuv1WLQKozDdg3rFH8BdKYbNIvS4zY45QBgCTm8BqtTN7szoiTW1oVRAcfw==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 66AB41F000C9;
+	Tue, 20 Oct 2026 17:40:07 +0000 (UTC)
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id D876543181;
+	Tue, 20 Oct 2026 17:39:36 +0000 (UTC)
+From: Ximing Zhang via B4 Relay <devnull+xzhangjr.gmail.com@kernel.org>
+Date: Tue, 20 Oct 2026 21:39:35 +0400
+Subject: [PATCH] hwmon: (coretemp) Retry failed sensor creation
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -47,32 +68,161 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261020-coretemp-retry-sensor-creation-v1-1-7dd4851a34dc@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWNywrCQAxFf6VkbWA6SH38irgY01QjOFOSqSil/
+ 25qV5ezuOfMYKzCBudmBuW3mJTs0O4aoEfKd0bpnSGG2LUhBqSiXPk1oo9+0ThbUSTlVP2K/bA
+ /UTikSMcOXDIqD/L5By7XjW26PZnqaoVl+QEDUwdJggAAAA==
+X-Change-ID: 20261020-coretemp-retry-sensor-creation-df49c07a2c86
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Ximing Zhang <xzhangjr@gmail.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792517975; l=5089;
+ i=xzhangjr@gmail.com; s=20261015; h=from:subject:message-id;
+ bh=MYBfcW2pD2/t3BIjxPJYWT5sIWj6owKm2KcGLQr+EfI=;
+ b=9wpgk/F+Ccrk+9gWDW7q2I+eYgh0MGAs2XePYIoW0Wb910cbEglW8DF1IIADWTGlT+zNclZ6w
+ R9hokX2V7INAo1VmvuswKKkG+4VWWiYEog/aKia79eXimyMopZyqXrK
+X-Developer-Key: i=xzhangjr@gmail.com; a=ed25519;
+ pk=C7VXFeUl3Bjjb638l0w1D5vm9qSpdbzEYql77XoYqTQ=
+X-Endpoint-Received: by B4 Relay for xzhangjr@gmail.com/20261015 with
+ auth_id=1207
+X-Original-From: Ximing Zhang <xzhangjr@gmail.com>
+Reply-To: xzhangjr@gmail.com
+Content-Transfer-Encoding: 7bit
 
-> The TDK FS1603, FS1604, FS1606 and FS1006 are uPOL DC-DC converters with
-> an integrated inductor. They report input voltage, output voltage, output
-> current and temperature, plus over-voltage, over-current and
-> over-temperature status, over a proprietary I2C register map. They are
-> not PMBus devices, and their register numbers collide with PMBus command
-> codes: 0x21 is a status byte here where PMBus defines VOUT_COMMAND.
->=20
-> The parts have no ID register, and the FS1606-0600 and FS1606-2500
-> presets change how telemetry is encoded: the -2500 uses the 20mV steps
-> of the higher voltage parts, and the -0600 needs a current correction
-> derived from the IOUT_GAIN register and the output voltage. The model is
-> therefore taken from the device name or compatible. OCSet[2:0], the
-> programmable over-current protection level, ships with a different
-> default on each family member, so probe warns if it does not match the
-> declared part, which usually catches a wrong device name.
-> [ ... ]
-> reads within four steps of the output keeps a ratio of one.
->=20
-> Co-developed-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-> Signed-off-by: Kevin Jia <kjia@nexthop.ai>
+From: Ximing Zhang <xzhangjr@gmail.com>
 
-Sashiko has reviewed this patch and found no issues.
+coretemp_add_core() only logs create_core_data() failures, but
+coretemp_cpu_online() still records the CPU in pdata->cpumask. When an
+SMT sibling is processed later, the mask makes the driver skip sensor
+creation. The core interface then remains absent until all siblings are
+cycled or the module is reloaded.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261020-fs1603-v2-=
-0-0986107a5cd2@nexthop.ai?part=3D3
+Package sensor creation is similarly attempted only when the hwmon
+device is first registered. A failure leaves the package interface
+absent for the lifetime of that device.
+
+Retry missing package and core sensors whenever an eligible CPU comes
+online. Determine whether a core sensor exists from its temperature data
+instead of the CPU mask, which continues to track CPUs available for MSR
+reads and hotplug retargeting.
+
+A package retry might fail after per-core data exists. Keep the core_data
+array alive until the hwmon device is unregistered so failure cleanup
+cannot discard live per-core pointers. Publish nr_cores only after that
+array is allocated successfully, and rate-limit errors because a
+permanent failure can now be retried.
+
+Tested on an Intel Core i7-10510U running 7.2.5-1-cachyos. With
+test-only fault injection, two package creation failures and one Core 0
+creation failure left the unpatched driver without both interfaces. The
+patched driver retried and exposed all five readable sensors. SMT sibling
+hotplug and 20 module unload/load cycles also retained the expected
+sensors.
+
+Signed-off-by: Ximing Zhang <xzhangjr@gmail.com>
+---
+coretemp currently treats a failed package or per-core sensor creation as
+permanent for the lifetime of the hwmon device. This change retries missing
+sensors as eligible CPUs come online while keeping the CPU mask available for
+MSR targeting and hotplug handling.
+
+Tested on an Intel Core i7-10510U running 7.2.5-1-cachyos. Test-only fault
+injection reproduced missing package and Core 0 interfaces with the current
+driver. The patched driver recovered both interfaces after two package
+creation failures and one core creation failure. SMT sibling hotplug and 20
+module unload/load cycles also completed with the expected readable sensors.
+---
+ drivers/hwmon/coretemp.c | 30 ++++++++++++++----------------
+ 1 file changed, 14 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+index 3836beade59f..fa3b04d0e041 100644
+--- a/drivers/hwmon/coretemp.c
++++ b/drivers/hwmon/coretemp.c
+@@ -489,13 +489,15 @@ static struct temp_data *
+ init_temp_data(struct platform_data *pdata, unsigned int cpu, int pkg_flag)
+ {
+ 	struct temp_data *tdata;
++	int nr_cores;
+ 
+ 	if (!pdata->core_data) {
+-		pdata->nr_cores = topology_num_cores_per_package();
++		nr_cores = topology_num_cores_per_package();
+ 		pdata->core_data = kzalloc_objs(struct temp_data *,
+-						pdata->nr_cores);
++						nr_cores);
+ 		if (!pdata->core_data)
+ 			return NULL;
++		pdata->nr_cores = nr_cores;
+ 	}
+ 
+ 	tdata = kzalloc_obj(struct temp_data);
+@@ -533,9 +535,6 @@ static void destroy_temp_data(struct platform_data *pdata, struct temp_data *tda
+ {
+ 	if (is_pkg_temp_data(tdata)) {
+ 		pdata->pkg_data = NULL;
+-		kfree(pdata->core_data);
+-		pdata->core_data = NULL;
+-		pdata->nr_cores = 0;
+ 	} else {
+ 		pdata->core_data[tdata->index] = NULL;
+ 		ida_free(&pdata->ida, tdata->index);
+@@ -605,7 +604,7 @@ static void
+ coretemp_add_core(struct platform_device *pdev, unsigned int cpu, int pkg_flag)
+ {
+ 	if (create_core_data(pdev, cpu, pkg_flag))
+-		dev_err(&pdev->dev, "Adding Core %u failed\n", cpu);
++		dev_err_ratelimited(&pdev->dev, "Adding Core %u failed\n", cpu);
+ }
+ 
+ static void coretemp_remove_core(struct platform_data *pdata, struct temp_data *tdata)
+@@ -714,20 +713,16 @@ static int coretemp_cpu_online(unsigned int cpu)
+ 		if (IS_ERR(hwmon))
+ 			return PTR_ERR(hwmon);
+ 		pdata->hwmon_dev = hwmon;
+-
+-		/*
+-		 * Check whether pkgtemp support is available.
+-		 * If so, add interfaces for pkgtemp.
+-		 */
+-		if (cpu_has(c, X86_FEATURE_PTS))
+-			coretemp_add_core(pdev, cpu, 1);
+ 	}
+ 
+ 	/*
+-	 * Check whether a housekeeping thread sibling is already online. If
+-	 * not, add the interface for this CPU core.
++	 * Add missing package and core interfaces. Besides handling the first
++	 * CPU in the zone, this retries an earlier failed creation attempt.
+ 	 */
+-	if (!cpumask_intersects(&pdata->cpumask, topology_sibling_cpumask(cpu)))
++	if (cpu_has(c, X86_FEATURE_PTS) && !pdata->pkg_data)
++		coretemp_add_core(pdev, cpu, 1);
++
++	if (!get_temp_data(pdata, cpu))
+ 		coretemp_add_core(pdev, cpu, 0);
+ 
+ 	cpumask_set_cpu(cpu, &pdata->cpumask);
+@@ -778,6 +773,9 @@ static int coretemp_cpu_offline(unsigned int cpu)
+ 			coretemp_remove_core(pd, tdata);
+ 		hwmon_device_unregister(pd->hwmon_dev);
+ 		pd->hwmon_dev = NULL;
++		kfree(pd->core_data);
++		pd->core_data = NULL;
++		pd->nr_cores = 0;
+ 		return 0;
+ 	}
+ 
+
+---
+base-commit: 0b6eda22f9ab67ddb2a872b0c3fc578ad9f4e27e
+change-id: 20261020-coretemp-retry-sensor-creation-df49c07a2c86
+
+Best regards,
+--  
+Ximing Zhang <xzhangjr@gmail.com>
+
 
