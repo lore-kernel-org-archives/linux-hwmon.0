@@ -1,100 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792510049;
-	b=hvSmn1ezGcNBnShkuOVNqC5AS0V7bdHoF10ZiZK3AxzGZ9T9sChvWGewx4LYZn7dQpQd
-	 aSdSMO60A8b29hCFuUmtFyQ3kep/Zu3HcWCJPlIPGsDsziz9RL07pvjftNlmtGnvbTk/I
-	 6BdTzOOj4OqAlSQEfjcQbRqtzG/X54+c4CrBhrWdOL7xvWtNcgv9uFigmQo/cdDE94ajU
-	 79QaY2glHhPeClBQwluEcGDY35W+L5hxQDRAcKhb9NptPogjDNX7fxFeaAB0Gv0Pz/REB
-	 TUbaBX2tBX/81Xdi8D4ItlxMQ/Zo8GmGK8mUxROrr9o3j5ayYg4gJeaxjeJ4Tcm6pOQ==
+	t=1792510635;
+	b=VrbXhRRVK8LQAYkGxummnmHIMbqBfOuWP7G4zF49NvYVp0uNTathmvxAIY1WevY+ucP8
+	 0TgUUhETQv6Yh8a6Ct5piDplT3eibQK7D/m+1bhwdN6DZm0J4BQldgYgPF6w/57CRWfQE
+	 olY6I2tslmVdcULugZ37DmwTVkWMg9nQqtBb7n30yMzG4Ax5qRgX4zisC47FtoQw+EsFm
+	 1Efh5vPBXwYEqDqA2uzRgObdMpJj6LKWHDPJrAv3z0/VIfMkzRWzGhb+mOGBTJ24MZVM8
+	 L4LksYkvQqj5/6KHCDfIeyYQsqbyjQRUSIDf1+hZFKXG4vshS1z2A3fMpdagxjRxBOw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792510049;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792510635;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Sender:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=PCcv4OBN0VPh1W63f9TMAAgG+ReJR6ejwfKM3zkBC4c=;
-	b=bJoH5r7DKO6fkx0enozg7nD3IPd3Oa4j6xIQ22mPMMAMSuXRANAH0WGcQyZ4i9ejBhle
-	 BmS4TuoAW4ovsG5N66QT8rMyHCrlKEPoGFI3YA5UPo88d0DhoGpcKCVvmaAPGWHmAh8s0
-	 orKz2q0kwOR4LQtVUShF8eFa9eLO5jkSSVhTTJ9TYvd7k6IIQPcOwMFWTDGJz0YKQMAum
-	 Gt2YePt8YzQu48TwW5k8KGaFzjgAG4D5LIH/s4lUFU2xZ8zkAp3lAw5u4iDwwABaPMghN
-	 Uy4+oolnD/m7tQpqxF9u5gzmygPBn72HdbOfZWbt434QIjXHqJrOX7YL8ScMjLGaMUQ==
+	 Sender:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=5G1bYmk4Cp+xcym+d9Gb+XVS8ngnxpeYifWGIoNpktY=;
+	b=vOYXF15CaZ+n9eWCGZX+eHXftFikhgduS0Gm2YOQuBqri1XKPyc6qbIKzvy5VPOYEgPX
+	 aXXRhRRiBVxG/2nUp9gh8uwb57q4GQ3qcmVoFCUGoxq0y5bwwt6ALPIsAe6AJCrtdfUwI
+	 ImKWnt2ohqlwfyFCS/SB+fLfeMP4mzzbs40P05iZKiaCFxTP9M6zYOrhZ5o+wWIfUV57K
+	 VVr4kPPeVzHilycmUB8TWFG3ehjLZXQu33hkFGCMUmO1I70AfpssDUr1NMrBHzE8aDdUE
+	 bsO8AwHrfWD6SmMwNnGq9GqUlMuNBnTryUenUHI5WZeXegFmR2KbkjxvyPUz0tGU/UQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=eau4oVYG;
-	arc=none smtp.remote-ip=74.125.82.177
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=XsAvxCDq;
+	arc=none smtp.remote-ip=74.125.82.52
+Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74FA6606A31D
-	for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 15:27:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 74FA6606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F04E606A324
+	for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 15:37:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4F04E606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=eau4oVYG
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-3514b90bb89so9089073eec.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 08:27:29 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=XsAvxCDq
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-15756f82e8aso312139c88.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 08:37:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792510048; x=1793114848; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=PCcv4OBN0VPh1W63f9TMAAgG+ReJR6ejwfKM3zkBC4c=;
-        b=eau4oVYGuhZ5lRwDnrXyWr27q9OM46W4f1Djd6/Od6qA7AlIeZfXtwpRhsDzfFk5Di
-         Mr9BDhRf9/l/asfO2WWs75Yz9pm9o2MMHlFs4+cxKwKG7QSMKPcfJuO6y6SmskwxcwrK
-         xHrQ0Je4mrLjAhsdCRlnXje2omZ2yhAUvMNdBIunacihg3uBZOkZBMZpxTtk35W3qzwE
-         lkN/rcYPfIJZsYrm0onZw9XVmzOw9oVFcp3FO1pGUo2LyLkln9J/0JHu4kbxrlSn6HvJ
-         2YN7WwFcoDbnN7dxGvrOZZUOlDyM2DYhUOnyYgLjQ/NymaZeStaT5tsZI2YCruYLF/77
-         TeBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792510048; x=1793114848;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1792510629; x=1793115429; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=PCcv4OBN0VPh1W63f9TMAAgG+ReJR6ejwfKM3zkBC4c=;
-        b=RIe/SvRwTVR6nxRwlMnt+vh6AME5l8IvYNIuJPCL2eX0aRFg8g4laf4mtjbWd/eso2
-         BweKTD+fSZjt4w8lUzKaPF2/ctKCfM+8Q7czw4JB/O8gv05JYCSbxQD/OVGwg2tksqE1
-         wT/Sy3tiH9Fx8+pCMhscxe2T87TjycXgcMSYqcViArMSdVnXrD7kjIP2RDUQmAQNSunP
-         Cr/VP+crVwAW+Hj5UZMabJPkJTNpvmjsHw7vnT6Qm2uXKfDjjj3FguSscQz9p6Nd4Gnv
-         77xS+r4zJw/OE3cyy4+Cmea75EOzWElJO8urmko9IhfDLZu2S2uew+1j96qFDnOD4JCY
-         lOpg==
-X-Forwarded-Encrypted: i=1; AKwUvBxQZirw1lrMljgi7ukngW+f35voi1pXCJwKG4hkvpT2h8LdzhziN4Wbg9RsvErQQxP7PzTwqdu/PoIVAg==@vger.kernel.org
-X-Gm-Message-State: AFq9FYJM8ifq84I23W48AFIn/7ZSTaWehemnAeq+U+hHtFygOUqH/s73
-	1TbOvkX9zGuh3jmBINg2uFbko2e+OAqcgmT04HwjzNMIFRHzMb4Bk+db
-X-Gm-Gg: AYBFou3qkTa9WPrzmi7cZTZoS05jT65wvWM72IRVPGFaR87w7yiTuboSYg2k1HDBI+t
-	YxxQFcVGy89J7EvAqwwjP34O5b0bB1wxZEHDzP7Qw0HJPlB3oVhXkRzTh0cw/Md4TV06H1vS+6x
-	7jh9KZfUncUQaUEKQEu9qGN1dSJtiAvPZEBLdo3OWR26BMa+G7lyb2rwsV6vKGi/3J28aRWmiC+
-	AgcZhRcKEZ8XeIMHyG9A9+0G/KEkm+JH957nchMQmwTeWxV2tKzyjsDr/66BNcVRB50Bif/nnSL
-	22Hire/A9dgbwK5MxsI4kEluvjsThtGbwBa6oC5l28tu2oMJq8TJ2G4YRnUjLYEOyDX6nGnUckB
-	do52cXGNCtMSOPJBtdUZzAjgqQDgQ/uND3ox9yLLfmwXipZSpdCE2/wJYLh3Jif2uk2Hbp7tVgk
-	YfHZ7Twx80X14q0rGGf8LBkbW82jqH+qfM82V5n9Rp/ps0Zugw7rFC1eQie70FsVwGeu97tYrZE
-	qg7J8/MVxGR
-X-Received: by 2002:a05:693c:6395:10b0:35e:60ca:81e9 with SMTP id 5a478bee46e88-361a1f53a9emr17584684eec.21.1792510048243;
-        Tue, 20 Oct 2026 08:27:28 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36081bafa7asm41307392eec.14.2026.10.20.08.27.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 08:27:27 -0700 (PDT)
+        bh=5G1bYmk4Cp+xcym+d9Gb+XVS8ngnxpeYifWGIoNpktY=;
+        b=XsAvxCDquVq7G8gFiyZ830gAwxvp2AtfbMJEdcgoHT9yHmZBI6htdhoCChU60dzG3u
+         tp5GsgcbegL3nisvPlkMvYdkGrhg8oJg6yC6R+HSHtLNRDBDwAEbA/Q1ZIloFtr0U34t
+         gi2SUfYGcAU6SF0tTIG/9KE3FsD0dcGK4qdMkq9YDVGoZqDMjj23FChp8yMCrdlXP6xN
+         gY0Yp23sySiYbGZ+kqzSwq7zSpKhfxu16z9AsFcFtQAgRRlg7b9UI4JVK5R2NjRjYy93
+         6kmiVEhNCKkvSNIL6aaOuD9F5FqHMF1pcn7d5d4dI8+mSD94IFU3BTtGi9OnBKVf5f6k
+         hBCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792510629; x=1793115429;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=5G1bYmk4Cp+xcym+d9Gb+XVS8ngnxpeYifWGIoNpktY=;
+        b=JW2jkbDyAAKUL++qkcvXZC9B7r9JVKzeEvx68xaGnQX8kwtR9ZE1S2vkP3qs9ZDjgf
+         +Zz9/HLyHDDdq+PuIVDxIDVOChw1hbV0vHDmm1R2lhVaa39awB5TlqmPtkquzf2IcmH/
+         fqv+euUKyHj9slRcGuF1+eSKYJYuixLffLxJ5mGSjwwVfq3Jw4tx2xpt1Cg78vpjxqWI
+         p77u/HQteBIDV/BYeDFoqsht4C6q36Wk2lWZPYolXvZaXiviCwKi26D086TOFpAIKgnI
+         sc5YVCxYrgnpAmHsz0gMk6ieXLDltKgG6e6tqicgVPbbgp3pcWMc32lX8hEWtZVjxe1o
+         9MHQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzZO1fbJqdDYOqZF6UUqXmhhuH+RYAe5SA2WBtjLviMcNQ3TIwaMxvsjMSjeTAQdIT+UPoJjHR/lrlMlg==@vger.kernel.org
+X-Gm-Message-State: AFq9FYIiU3lUJnjX29WiwCXVzQ7MfJ3lCxaUHiVJaBwhmBKWCJpujfYJ
+	D70aLJulOzngRD9bU43Z3ZFFbK2v1mxxaKTPk8aNz7fWmgnov2ZaModx
+X-Gm-Gg: AYBFou03RarzGINiNpyU2scEmka7h87NwBOMnhCuDM9FPHlclbeVU5mKst+HjqPYfV+
+	dyw1EnQ4pilYBsBXnDH8AiTYSSvgk2g6GnS8SAKyM+WsZJfO3RhtxLMk+5OCs+BsKHtSYiOI7dV
+	x9kZgd96gXSUnZMIr64SI4thAQKQt0Vgye0EMjpLaBS9Y8eEEdSXVu7zUxN0nxpmwGmjxQtQAqK
+	bGfPNJFCda7TtIh03fkWgqeqUk/tXdvin69AIVQP1tO8HlowUcUnjKagTClU6m5mMiVwdJMXePJ
+	hwl6YtomiSYFHcolDw4TuaBwbFDwUAVymmsl6gRda0u2RuV/sJfbWmNeod9AtCizBivnQRBG22z
+	XfKCNBe1T8Hz3D7aNxoP9VowtjctVsBINXrjdngXn4JOGcmsi1C7pK0FlOZhjC1XFZBuocKCE9S
+	YuL6dqF+76OjLGLUe68yjaJahsQDpX91Kfgw7qdbiNSHKyPU06kZJQEnVn/HKFNNIGDmx0sOy+7
+	QxzQGWah96aBuiXrTerRDKF1Ahx6smt0gMihai5A9/vIk6hLteFUY4xQkhOC2bTlFnPgAMvG3XL
+	ir/lN/K+wd6BDcLdxGOpivYqHC0oZ1U=
+X-Received: by 2002:a05:701b:4210:20b0:159:f192:5290 with SMTP id a92af1059eb24-18dbf218391mr3054617c88.13.1792510629124;
+        Tue, 20 Oct 2026 08:37:09 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1831a6f5a13sm44116282c88.12.2026.10.20.08.37.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Oct 2026 08:37:07 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 20 Oct 2026 08:27:26 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 3/3] hwmon: (pmbus/fs1412) Add TDK FS1412 driver
-Message-ID: <04519e94-3616-48c5-9db0-dceb90f3fd56@roeck-us.net>
-References: <20261008-hwmon-pmbus-fs1412-v1-0-0ae7e5ee4e41@nexthop.ai>
- <20261008-hwmon-pmbus-fs1412-v1-3-0ae7e5ee4e41@nexthop.ai>
- <a3ccc85b-aab6-44b4-9695-ecd78401102c@roeck-us.net>
- <DM9HNFZ26I2H.348U7TRUKBLST@nexthop.ai>
+Message-ID: <dd1781b2-4637-4997-bdfd-d71fc35837b0@roeck-us.net>
+Date: Tue, 20 Oct 2026 08:37:06 -0700
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -104,126 +93,266 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM9HNFZ26I2H.348U7TRUKBLST@nexthop.ai>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/4] hwmon: (pmbus_core) Support relative encoding of
+ vout related commands
+To: sashiko-reviews@lists.linux.dev,
+ Abdurrahman Hussain <abdurrahman@nexthop.ai>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org,
+ conor+dt@kernel.org
+References: <20261020-hwmon-pmbus-fs1412-v2-0-3396c3a08251@nexthop.ai>
+ <20261020-hwmon-pmbus-fs1412-v2-3-3396c3a08251@nexthop.ai>
+ <sashiko-outbox-178650@kernel.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <sashiko-outbox-178650@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 20, 2026 at 12:31:11AM -0700, Abdurrahman Hussain wrote:
-> On Mon Oct 19, 2026 at 1:25 PM PDT, Guenter Roeck wrote:
-> > This implementation is wrong. Support for relative mode should instead
-> > be added to the PMBus core. Or, rather, this driver should be tested with
-> > https://patchwork.kernel.org/project/linux-hwmon/patch/20240315151855.377627-2-lars.petter.mostad@appear.net/
-> > in place (with appropriate fixes for that patch if necessary), and the
-> > patches should be applied together.
-> 
-> Thanks! That is exactly what I was looking for, but my search for
-> fs1412 on lore didn't turn it up anything.
-> 
-> v2 will carry Lars' patch (Cc'd), rebased, with the driver reduced to
-> the MFR_ID check and hiding OT_WARN_LIMIT. v2 also adds the FS1525, a
-> 25A part from the same family that is relative-only as well, so the
-> core change has two users. Fixes on top of Lars' version:
-> 
->  - check VOUT_MODE for 0xff before testing the relative bit; as posted,
->    a chip that does not support VOUT_MODE (reads 0xff) is marked
->    relative and gets a bogus exponent
->  - signed division, and clamp the user value before scaling it
->  - fail probe if VOUT_COMMAND reads 0 rather than divide by it later
->  - only update the cached VOUT_COMMAND after the write succeeded
-> 
-> We have a board with four FS1412 and one FS1525, so I could test both
-> parts with these patches on 7.2.10. Since your concerns in the 2024
-> thread were about how these parts actually behave, here is what they
+On 10/20/26 01:55, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [High] hwmon: (pmbus_core) divide-by-zero after pmbus_regulator_set_voltage()
+> - [Medium] hwmon: (pmbus_core) broken relative VOUT margin handling in regulator ops
+> --
 
-Not that I recall that ;-)
-
-> do:
-> 
-> VOUT_MODE is read-only and relative-only. Both datasheets mark it
-> read-only. FS1412 returns 0x98 (exponent -8), FS1525 returns 0x96
-> (exponent -10). Writing 0x18 to VOUT_MODE on all four FS1412 is NACKed,
-> STATUS_CML reports invalid data (0x40), and VOUT_MODE stays 0x98.
-> 
-> Which commands are relative. The FS1525 command table marks
-> VOUT_MARGIN_HIGH/LOW, VOUT_OV_FAULT_LIMIT, VOUT_OV_WARN_LIMIT,
-> VOUT_UV_WARN_LIMIT, VOUT_UV_FAULT_LIMIT and POWER_GOOD_ON as "L16, 1.3
-> relative format". VOUT_COMMAND, VOUT_MAX and READ_VOUT are absolute.
-> That matches the list in Lars' patch; POWER_GOOD_ON is relative too,
-> but the core does not use it. The FS1412 datasheet says the same for
-> the limits it describes. Raw defaults, as a fraction of VOUT_COMMAND:
-> 
->                      FS1412 (0x98)   FS1525 (0x96)
->   VOUT_COMMAND       0x009a  0.602V  0x0266  0.600V
->   VOUT_OV_FAULT      0x0133  1.199   0x04cc  1.199
->   VOUT_OV_WARN       0x0126  1.148   0x1000  4.000
->   VOUT_UV_WARN       0x00d9  0.848   0x0366  0.850
->   VOUT_UV_FAULT      0x00cc  0.797   0x0333  0.800
->   POWER_GOOD_ON      0x00e6  0.898   0x0365  0.849
->   VOUT_MARGIN_HIGH   0x0119  1.098   0x0466  1.100
->   VOUT_MARGIN_LOW    0x00e6  0.898   0x0399  0.899
-> 
-> With the patches the FS1412 reports in2_crit/max/min/lcrit as
-> 721/690/509/478 mV against an in2_input of ~560-580 mV. Writing
-> in2_max and in2_min stores 0x012e / 0x00d0 and reads back within one
-> 1/256 step. On the FS1525, writing 600 to in2_min stores 0x0402 and
-> writing 509 restores the original 0x0366. I did not exercise the
-> regulator path; the driver does not register a regulator.
-> 
-> Paging. Neither part implements PAGE. A PAGE read is NACKed and sets
-> STATUS_CML INVALID_CMD (0x80), so on these parts relative mode can only
-> be per chip. The patch tracks it per page, which also covers a
-> multi-page chip that sets the bit on every page.
-> 
-> Vendors getting it wrong. You were right to worry. Some things I ran
-> into:
-> 
->  - The OV fault limit is rounded internally to one of four settings
->    (105-120% in 5% steps on the FS1525), so only some values written
->    to it take effect.
->  - The parts are only partly consistent with their own command tables:
->    OT_WARN_LIMIT and READ_IOUT are not listed for the FS1412, but both
->    answer without a CML error, and OT_WARNING sets at room temperature.
->  - The factory programming varies between parts on the same board: one
->    FS1412 has VOUT_MAX 0xa500 and VOUT_MARGIN_HIGH 0xa400, the others
->    0x0300 and 0x0119; another has VOUT_MARGIN_LOW 0x0000. The core does
->    not touch these for hwmon.
->  - The VOUT domain differs between the two parts. FS1412 reports
->    READ_VOUT at the feedback pin, so it is in the same domain as
->    VOUT_COMMAND and the converted limits. TDK told us that the FS1525
->    reports READ_VOUT as the actual output regardless of an external
->    divider. On our board that is 1.094V against a VOUT_COMMAND of 0.600V
->    (a divider for a 1.1V rail).
-> 
->    I checked what the FS1525 compares READ_VOUT against. Setting
->    VOUT_OV_WARN_LIMIT to 1.5 sets VOUT_OV_WARNING; setting
->    VOUT_UV_WARN_LIMIT to 1.5 does not. So the part compares the
->    output-domain READ_VOUT against limit * VOUT_COMMAND (0.9V), which
->    is exactly the value the core reports. That is presumably why this
->    board's OV warn limit defaults to 400%.
-> 
-> One question before v2. The FS1525 over-voltage fault is the exception:
-> the datasheet says it is an analog comparison at the FB pin, at the
-> VOUT_OV_FAULT_LIMIT fraction of VOUT_COMMAND. So on a board with an
-> external divider in2_crit is in feedback-pin volts while in2_input is
-> the rail. On our board's FS1525 that is in2_crit 718 mV against
-> in2_input 1093 mV, with no alarm, and the actual trip point is about
-> 1.31V on the rail. The chip has no way to report the divider. Which
-> would you prefer?
-> 
->  a) Hide VOUT_OV_FAULT_LIMIT on the FS1525, so there is no in2_crit.
->     Nothing misleading, but boards without a divider lose a correct
->     in2_crit too.
->  b) Scale in2_crit by READ_VOUT / VOUT_COMMAND measured at probe.
->     Right while the rail regulates, wrong if it is off, ramping or
->     margined at probe time.
->  c) Describe the divider in DT and scale in2_crit by it. The FS1525
->     would then need its own binding instead of a trivial-devices entry.
-> 
-> I lean towards a).
-> 
-Either a) or c), your call. We already have a vout-voltage-divider
-property, but it looks like that won't work here (it sounds like only
-the limit is affected ?), so something new/similar would be required.
+Good that I did not just apply this patch. Do you have time to look into
+those issues and fix them ?
 
 Thanks,
 Guenter
+> 
+> commit 8ccb177073557cf9644c419b791da4a5cf494d3e
+> Author: Lars Petter Mostad <lars.petter.mostad@appear.net>
+> 
+> hwmon: (pmbus_core) Support relative encoding of vout related commands
+> 
+> This patch adds support for PMBus 1.3 relative encoding of output voltage
+> related commands, scaling limits relative to VOUT_COMMAND in
+> pmbus_reg2data() and pmbus_data2reg() and updating the cached VOUT_COMMAND
+> when setting regulator voltage.
+> 
+>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+>> index 5f69c1420b4e1..47dff264d28bf 100644
+>> --- a/drivers/hwmon/pmbus/pmbus_core.c
+>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> 
+> [ ... ]
+> 
+>> @@ -803,6 +806,26 @@ static void pmbus_update_sensor_data(struct i2c_client *client, struct pmbus_sen
+>>   						     sensor->phase, sensor->reg);
+>>   }
+>>   
+>> +static bool pmbus_sensor_is_vout_relative(struct pmbus_data *data,
+>> +					  struct pmbus_sensor *sensor)
+>> +{
+>> +	if (sensor->class != PSC_VOLTAGE_OUT ||
+>> +	    !data->vout_mode_relative[sensor->page])
+>> +		return false;
+>> +
+>> +	switch (sensor->reg) {
+>> +	case PMBUS_VOUT_MARGIN_HIGH:
+>> +	case PMBUS_VOUT_MARGIN_LOW:
+>> +	case PMBUS_VOUT_OV_FAULT_LIMIT:
+>> +	case PMBUS_VOUT_OV_WARN_LIMIT:
+>> +	case PMBUS_VOUT_UV_WARN_LIMIT:
+>> +	case PMBUS_VOUT_UV_FAULT_LIMIT:
+>> +		return true;
+>> +	default:
+>> +		return false;
+>> +	}
+>> +}
+> 
+> [Severity: Medium]
+> Can the PMBUS_VOUT_MARGIN_HIGH and PMBUS_VOUT_MARGIN_LOW cases in
+> pmbus_sensor_is_vout_relative() ever match, and how does
+> pmbus_regulator_list_voltage() behave in relative mode?
+> 
+> No hwmon sensor attributes are registered for PMBUS_VOUT_MARGIN_LOW or
+> PMBUS_VOUT_MARGIN_HIGH. The only callers in drivers/hwmon/pmbus/pmbus_core.c
+> that read these registers and pass them to pmbus_reg2data() are
+> pmbus_regulator_get_low_margin() and pmbus_regulator_get_high_margin():
+> 
+> static int pmbus_regulator_get_low_margin(struct i2c_client *client, int page)
+> {
+> 	struct pmbus_data *data = i2c_get_clientdata(client);
+> 	struct pmbus_sensor s = {
+> 		.page = page,
+> 		.class = PSC_VOLTAGE_OUT,
+> 		.convert = true,
+> 		.data = -1,
+> 	};
+> 
+> 	if (data->vout_low[page] < 0) {
+> 		if (pmbus_check_word_register(client, page, PMBUS_MFR_VOUT_MIN))
+> 			s.data = _pmbus_read_word_data(client, page, 0xff,
+> 						       PMBUS_MFR_VOUT_MIN);
+> 		if (s.data < 0) {
+> 			s.data = _pmbus_read_word_data(client, page, 0xff,
+> 						       PMBUS_VOUT_MARGIN_LOW);
+> 			if (s.data < 0)
+> 				return s.data;
+> 		}
+> 		data->vout_low[page] = pmbus_reg2data(data, &s);
+> 	}
+> 
+> 	return data->vout_low[page];
+> }
+> 
+> Neither pmbus_regulator_get_low_margin() nor
+> pmbus_regulator_get_high_margin() initializes s.reg (leaving it as 0), so
+> when they fall back to PMBUS_VOUT_MARGIN_LOW or PMBUS_VOUT_MARGIN_HIGH,
+> pmbus_reg2data() -> pmbus_sensor_is_vout_relative() returns false and caches
+> the unscaled permillage value as mV in data->vout_low[page] and
+> data->vout_high[page].
+> 
+> In addition, while pmbus_regulator_set_voltage() skips checking these margins
+> when data->vout_mode_relative[s.page] is true, pmbus_regulator_list_voltage()
+> still calls pmbus_regulator_get_low_margin() and
+> pmbus_regulator_get_high_margin() unconditionally:
+> 
+> static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
+> 					unsigned int selector)
+> {
+> ...
+> 	low = pmbus_regulator_get_low_margin(client, rdev_get_id(rdev));
+> 	if (low < 0)
+> 		return low;
+> 
+> 	high = pmbus_regulator_get_high_margin(client, rdev_get_id(rdev));
+> 	if (high < 0)
+> 		return high;
+> 
+> 	if (val >= low && val <= high)
+> 		return val * 1000; /* unit is uV */
+> 
+> 	return 0;
+> }
+> 
+> Even if s.reg were populated when reading the margin registers,
+> data->vout_low[page] and data->vout_high[page] are cached once and not
+> updated when pmbus_regulator_set_voltage() changes VOUT_COMMAND. Should
+> pmbus_regulator_get_low_margin(), pmbus_regulator_get_high_margin(), and
+> pmbus_regulator_list_voltage() also account for relative mode?
+> 
+> [ ... ]
+> 
+>> @@ -3351,29 +3419,38 @@ static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
+>>   		.data = -1,
+>>   	};
+>>   	int val = DIV_ROUND_CLOSEST(min_uv, 1000); /* convert to mV */
+>> -	int low, high;
+>> +	int low, high, ret;
+>>   
+>>   	*selector = 0;
+>>   
+>>   	guard(pmbus_lock)(client);
+>>   
+>> -	low = pmbus_regulator_get_low_margin(client, s.page);
+>> -	if (low < 0)
+>> -		return low;
+>> +	if (!data->vout_mode_relative[s.page]) {
+>> +		low = pmbus_regulator_get_low_margin(client, s.page);
+>> +		if (low < 0)
+>> +			return low;
+>>   
+>> -	high = pmbus_regulator_get_high_margin(client, s.page);
+>> -	if (high < 0)
+>> -		return high;
+>> +		high = pmbus_regulator_get_high_margin(client, s.page);
+>> +		if (high < 0)
+>> +			return high;
+>>   
+>> -	/* Make sure we are within margins */
+>> -	if (low > val)
+>> -		val = low;
+>> -	if (high < val)
+>> -		val = high;
+>> +		/* Make sure we are within margins */
+>> +		if (low > val)
+>> +			val = low;
+>> +		if (high < val)
+>> +			val = high;
+>> +	}
+>>   
+>>   	val = pmbus_data2reg(data, &s, val);
+>>   
+>> -	return _pmbus_write_word_data(client, s.page, PMBUS_VOUT_COMMAND, (u16)val);
+>> +	ret = _pmbus_write_word_data(client, s.page, PMBUS_VOUT_COMMAND, (u16)val);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	if (data->vout_mode_relative[s.page])
+>> +		pmbus_init_vout_relative(data, s.page, val);
+>> +
+>> +	return 0;
+>>   }
+> 
+> [Severity: High]
+> Could updating data->vout_command[s.page] in pmbus_regulator_set_voltage()
+> lead to a division by zero in pmbus_data2reg()?
+> 
+> At probe time, pmbus_init_common() rejects non-positive values in
+> data->vout_command[page] after calling pmbus_init_vout_relative(). However,
+> in pmbus_regulator_set_voltage(), when data->vout_mode_relative[s.page] is
+> true, margin clamping is skipped and pmbus_init_vout_relative(data, s.page,
+> val) updates data->vout_command[s.page] without checking whether the decoded
+> voltage is <= 0.
+> 
+> If a consumer requests a small voltage (for example min_uv < 500 uV, or a
+> value that rounds to 0 in pmbus_data2reg()), data->vout_command[s.page]
+> becomes 0. A subsequent write to a relative VOUT limit attribute in sysfs
+> will then call pmbus_set_sensor() -> pmbus_data2reg() and divide by zero:
+> 
+> 	if (pmbus_sensor_is_vout_relative(data, sensor)) {
+> 		val = clamp_val(val, -INT_MAX, INT_MAX);
+> 		val = DIV_S64_ROUND_CLOSEST(val * 1000,
+> 					    data->vout_command[sensor->page]);
+> 	}
+> 
+> Should pmbus_regulator_set_voltage() or pmbus_data2reg() guard against a
+> non-positive vout_command?
+> 
+
