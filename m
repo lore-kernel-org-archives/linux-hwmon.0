@@ -1,111 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792504894;
-	b=TrsOGc/t4NlKe94NsMkop5drP/4JW5CbBxq8MLhbOE1/NejvOOV9TeC+hMtorTTcU+1/
-	 mGCnbKbhSg1yS1v85KazV5Spi9wBdjQMhHo6xFdHAbK3Q5MAmpMnb9c2IKlpbyim92frw
-	 9uIXvMoTxmzuI6wdXTB4VWom4ia6VT3Vl8XEHNx8wPVRh1CM4IHwAOlGb/5Ghzdv/jZIW
-	 ojCEfOJWNR3g8N+wS9AcxcNkl74hY5uGZo1C84hlDm32TZ2y7xYWp/jXaWvc0yDgIOJCE
-	 Pyxw3020A4+Yfg18Pw+VgKagc2lRgjLlKE0eecdCwle+GmKHnF+myasRQ5MCtuRpvpg==
+	t=1792509244;
+	b=DXKJboNYkl20iaufA3V8U6m4awIgy0fW3ZuvvnLZ86tycpa16kMQBLitpNqCh8UyYS/S
+	 NRKPGjmdhS8p9nTzwBuCBhzMc0Y+H6u31fROFjvgIoMuAWZ6dWdU9n7T7myyIOxZB8nDx
+	 UwNWClguRY97fZ50nAyLvVoVZoOpJnf5FNSnJ15Prx6Z5vg70Hq6NOoHFxrRzgDuBplae
+	 6LMf9rsQtkTvUr3UTwHuAbdpWzxZ6GmFUBHk0cLYLebo8m6QZ+vfjItIU+dZVFyHOt1L3
+	 5RcQHas1VnXs7Ub4+6RbnvoNjX87YIJAFp9FH+/cwFE5+byuFho7Z4fL1j/nnlFOrBw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792504894;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Proofpoint-GUID:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=H/IoJEoYhSTAQbIuolZNm4zMxhN1TVHU0cu+DfJKWZ8=;
-	b=QjfVSTX8ofv3ZmqHqeE+8f6TzgoVr7yPrsLIChs1V3K8UsDeyhJZ/DcFRSVH63asTu1y
-	 PDzU4Cml/JMb8EEyL6//Gge70szNZm9PXlW+mZvf5VOtGnqWbt6wBdBAvG1JMe8tQVbyr
-	 4oS6CytYoSMAmZraBBzue58rOVbbte/LVTpi1PKBEHwBMqVA8I9mOBu3KsAFyVeD4YnK3
-	 AZGJhozK4SS6liTc9nCovvbyF2WVoCuwsPcA2pKy75+2J0XXFk3+fl+1vzKBUQB/MN0/3
-	 zlRsmwyguUeO5vAqUkX0lqQ6rRwbhJxLkVlIp2IyLI/83Wq461PTb285FjBvEdcVFPQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792509244;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Sender:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:Autocrypt:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=4zrIfO2j5f1V0AGayWITQAFNyhl7js8bpZF+l1m8f4U=;
+	b=uHwx6gDvcYNjUlhKtzL/I9mdz58NEqg9Wp/eDTTBh3tiua5c3mgz215RCL27/EYwDcXr
+	 pOOn3UJhpBkgG1qVlJcU6TZZvZTGeV/ptKWK7m3+D1I75/KzQstQ5UKuV+N633MLwIFGu
+	 Dh8myHi1qBHVoF7raBuPscDn/49MlJ/xXNWmdRQ7gLjq4BmPPyby2HZfu0z6fTaZyIb9w
+	 cTrDNkUrF4Doej6THDRzZ/ETbRO2rtgywfVGpLH8ss7FZztyndyeKKFDfLw09Ro0cDAyV
+	 K4epkJpN0zWV2ac3PZCtny+zhQAi71sqnxBMchYKOf93d6ZzcM/CyvDsaP0lOP8dTAw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=oss.qualcomm.com;
-	spf=pass smtp.mailfrom=oss.qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=QqNYPlK3;
-	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=eWXuOFTH;
-	arc=none smtp.remote-ip=205.220.180.131
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=none header.from=roeck-us.net;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Mep1HLEV;
+	arc=none smtp.remote-ip=209.85.216.52
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D00606A331
-	for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 14:01:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 86D00606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B0D460A2600
+	for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 15:14:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5B0D460A2600
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=QqNYPlK3;
-	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=eWXuOFTH
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69KDp8in1820653
-	for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 14:01:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	H/IoJEoYhSTAQbIuolZNm4zMxhN1TVHU0cu+DfJKWZ8=; b=QqNYPlK3iN0DZizd
-	jG0edZTjx7AzM9Os37g5vfDpBPvpa8eoDAlkhL1XjwDuuhMIqcNii/gyGtdwC/dQ
-	Duk9HhdRrssaJfnje4WOWusbTT6Zmdui7At6OMP33f8My2X8pf+YHPvjyHHMu74p
-	0D9kZah66xD02sxC6KjzHY+DSYSj+h/9IX/WxZ8+5w5WXQ68LdBo9WW3O++6WJLL
-	v0lxxwZGQ3j5cdgIESu2jNP0/qPscJ+UR5AZMgQMVl/HOK+Pt59CEaJLeeaVOY1n
-	P0q7/AsDmIO+thg9Ozh8C5zEQYCap0qgnY9K9CHb5Wh8k3uUrZs/fWPCInw5aVBG
-	7L/tDQ==
-Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com [209.85.222.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hdw5n2sr6-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 14:01:32 +0000 (GMT)
-Received: by mail-ua1-f72.google.com with SMTP id a1e0cc1a2514c-9906ce36960so37850241.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 07:01:32 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Mep1HLEV
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3ac7842c17dso2013283a91.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 08:14:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1792504892; x=1793109692; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
+        d=gmail.com; s=20251104; t=1792509243; x=1793114043; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=H/IoJEoYhSTAQbIuolZNm4zMxhN1TVHU0cu+DfJKWZ8=;
-        b=eWXuOFTH9gwLK32AkTvKsJuo9V7cDGAYgyGKQ00xh1wJdTEiAfus3K0axYJutAV9Ie
-         hGxtQZRxJ6/zdnupA+Xka4DTNPNB97VaRDio8YdostNxZjvNreMCYM6aelKigwTlesfQ
-         TRBQfbcRbAelvfpLCpORoLP14A+MhKOmVjB9WEcy+ncgESzNl2ZShqIKodvZXhEfFZFy
-         iB6XQirSl5zycpHW+s+id6JzqcRs/J8zjI7cLjCjAJlUb9oOZj33aAByr/XJ7kLnuI87
-         9NxQP9Fh3q05knPTfUc/THHqaBVI5tl5Rhb5BrwT6zBFw2IoIshgfPIL22SQ66XY6r1F
-         XYUA==
+        bh=4zrIfO2j5f1V0AGayWITQAFNyhl7js8bpZF+l1m8f4U=;
+        b=Mep1HLEVIl9xVF2HMLTgkvOHjnBmwfBms7wzWTijsyCiiVnpuam6zgeyJ+xSGYSkJH
+         N9arguJbSH/sF6o06PLe7WxfdSiROvJf9pvaG0/b7YuTM0c82wMr+LZLxbcOTebMnIOL
+         SPMRXXLuX9Wlxgek+7y9i1bX+Mz2CgHTrP9gDjh5CdzseLXP2Oor5rPaUIcZcGzkBOgg
+         6xExXc9ilXTeYijd3NMNxbIUrvf5KmiI4r8ieIC7KhHx3pXNjoz4sXWu05QD6N6eEGa8
+         sbf8M72rtBSN0aOSaK1NwZZ3D1nxRmdMI2RNJHTbWf1KqtpQfChY+8j+58Jrf0u9PQrt
+         QG7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792504892; x=1793109692;
-        h=content-transfer-encoding:content-type:in-reply-to:from
+        d=1e100.net; s=20260707; t=1792509243; x=1793114043;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=H/IoJEoYhSTAQbIuolZNm4zMxhN1TVHU0cu+DfJKWZ8=;
-        b=Jzni68Qx2aVvO8rHT/8eaZQKUDOzfhqAEFDRzLlSutt1VsnrVNrCaqDinlohNImBSM
-         koEUjpZtfIBv0dPtcz02HeI70ekO7SVsHDj/5oDNao1rBDHAb3MIbzVw8lyyk1Jk4D2O
-         w7SZrnjaQjF105CKJVydRK/iCjqEZarASFCsEaqxyjai4qadXboOls3ittxVHerxDLpL
-         RKDw7Q7UPveEbIza9wm5Tzo+sqkEfBkOoZ4eRIX+itFSXRCSWjcKgE9pp+PHOZPTo/rE
-         P2JxYkysn6+lrngtGQmN0OnJtwPM+K55nl2mxxEta0ntWwXt4jBzg49D4X8gkcyJsTTA
-         elcQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzU394/Qv8qXGh2SJTEcJ5QeYU4r8WJafTKNlkK1rq0fVxYxfbDLQv8m+MPD7gLvemRhlXRKNJjmPeM8g==@vger.kernel.org
-X-Gm-Message-State: AFq9FYIvB0FdEULlM0y34/baKSCW20nUD8sgPk9GvWGR4RQMDDFGy85X
-	1c8GM1Iv/tO1CSuyhilKivpvMMY6wzldct5p+GVcNs6laDSL1yQWImXyvumYyXsWpiU5ZgPJjD/
-	ttUO+X709jTsd75LwjQ1sKotB/0R3XzEgaZhRCiUT+KJJPWle+K9oc4OVbKiL/n3wWA==
-X-Gm-Gg: AYBFou3/S+zw0onjMCPzxy7R36ofqvYYqYEJYJWApFdtsv3DcGQhJikkB2RAwZl2Pc5
-	GNo3STQmhoLs7kuKguah9wxaD2+HJ0uFntyKTo7rS66fQft9ndxwQ2rM2mTnmuSlk1/7CmwbEI/
-	fyYylk+XYHuyYSB5N+OdjkRHzVN9JvPERPP5If1ON5gYlb3X+eUgzH/v1Iq5gShUzneHXxG6bdm
-	q7butv5LMueSbzPVCaIkI0CRIzt1D/3hj30oo4CdV7StlAZqY0DTOmCYouyUx2YMrzAq5K6GVf6
-	iYhIW9Z35XBYNBVX2VM4PdJO0LHi1XrZH8WNpXKnJfd1XnBczlBtE3m5uLEth4iTAOURoj64C8l
-	93xyb4J47kDKUWnPmUb+6sQ==
-X-Received: by 2002:a05:6102:2907:b0:7c8:3b8c:82ae with SMTP id ada2fe7eead31-7cc368e81e9mr1651124137.2.1792504889496;
-        Tue, 20 Oct 2026 07:01:29 -0700 (PDT)
-X-Received: by 2002:a05:6102:2907:b0:7c8:3b8c:82ae with SMTP id ada2fe7eead31-7cc368e81e9mr1651074137.2.1792504888917;
-        Tue, 20 Oct 2026 07:01:28 -0700 (PDT)
-Received: from [192.168.226.26] ([178.235.128.140])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b38a1b0f75sm5333722a12.13.2026.10.20.07.01.24
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=4zrIfO2j5f1V0AGayWITQAFNyhl7js8bpZF+l1m8f4U=;
+        b=rdOZ8boTuXe2l/SCGOoOXa4dlSZ7NoHbw2bhYlsk3jFKt6bptr5Ec+aYDpDFi01bd0
+         0O2q/0HGo2fg9gmqEHd8l8S5hs7jZOQ1u0BUJc0nWV8Etkg8RIsuDMbtP3FQqZ+ZjSoh
+         avjNyuS/pwZA8M++ZIiE+KWG4R3Iz2YZg1FPttpFPOP7168noE/JZt4LCcroR09PUmEd
+         fIF0EMnkuT7wjoeUNP0VMkfeabgfIpoHyvHmeYAqkXHQ0dmZDsGTwocL+8gsWvuc09Jd
+         Tj8tjoSPmkeOhjwQJbI5VPZ3/FgMEu/VKycZg3GNnAhCzbDzW1Ka4LdSotdphP4yzlW1
+         smZw==
+X-Gm-Message-State: AFq9FYLZAVFtPWa2zcxBSFk+6Yce5eFhWHar+K+ooYKvbOXUeOQWWV/H
+	8FQHHQuaNY3x/iXl6vD+1bPvLmPplf2TR3rF9rnSzJ5jo1lDAAW+GQnw
+X-Gm-Gg: AYBFou3tuRfUv4qKFE85507ENOfMG8cMlQzVApdmnn6KxDbAT/zdozAX0+DiB38O7L4
+	oFookEWq+4aRafkgvyzt7l35hfkJCAjUOV1zppQc49hp8KXpXT9H3lVnackwkG0/8uWKU68q8cf
+	bC1+7jFtzKK/I+mjSARrazH591I9OqqU4c3BKgEdefklqhkggh2PfnXFAoj0FMTgdOM8XViN4tz
+	hGmx40vqxmXD0xJxIUwHEccBpfs2wpv6AdgKkx3air5Pgz6hLW7Vs/4NmDUgDJF7BpguDqK7zGh
+	Q6cSlxGge3gWcljOHb5RFE/D/Q+dTPL5sReVdqSsO6q/IZG6eAEpurimjj1ocx6cyFchKMDb5S4
+	CHERZW+2YUe3f1hHwmAZsdQUkhHFCBvMPvmoGcd2AWoS7hWXp9ax9IUVdUF9dE7wMWFt7Fs9gNW
+	Muv18cv+jmiaaYKbJ2fiY9A1pYUjqHKS3jMcBBkF+hJC2RmL8zU5AyhFTeJ0GJ6kX0IHSkaPIqC
+	4stAJwHop9JsFBzT+pYwaa1ru+uMGgMFXhI7yMa7fSYjWtw
+X-Received: by 2002:a17:90b:1dc3:b0:3ac:9e76:aa76 with SMTP id 98e67ed59e1d1-3aceefb0116mr10395555a91.13.1792509242546;
+        Tue, 20 Oct 2026 08:14:02 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ad80214aefsm54820a91.3.2026.10.20.08.14.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Oct 2026 07:01:27 -0700 (PDT)
-Message-ID: <ad849e0a-5ee8-4df6-a679-ffd44c2972b3@oss.qualcomm.com>
-Date: Tue, 20 Oct 2026 16:01:23 +0200
+        Tue, 20 Oct 2026 08:14:01 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <62872394-e64e-4ed1-9d73-ccae1336d7bd@roeck-us.net>
+Date: Tue, 20 Oct 2026 08:13:59 -0700
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -116,84 +91,187 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/4] platform: arm64: Add a driver for the EC found on
- ASUS Glymur machines
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>, Hans de Goede <hansg@kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Abel Vesa <abelvesa@kernel.org>, devicetree@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20261015-topic-asus_ec-v4-0-af6305ffcb10@oss.qualcomm.com>
- <20261015-topic-asus_ec-v4-2-af6305ffcb10@oss.qualcomm.com>
- <ba7830c7-9ad8-6695-f543-c4c419aa9133@linux.intel.com>
- <e4cec04d-2c66-4900-940c-d7d3d245cc64@oss.qualcomm.com>
- <f97000c4-496d-0ce1-318a-1df5c0de804b@linux.intel.com>
- <3fecb67c-81b2-6e6f-889c-01425090321f@linux.intel.com>
+Subject: Re: [PATCH 2/3] hwmon: (pmbus/ltc2978) Add support for LT7175 and
+ LT7176P
+To: Christopher de Guzman <christopher.deguzman@analog.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20261020-upstream-lt7175-lt7176p-v1-0-86b9b728b95d@analog.com>
+ <20261020-upstream-lt7175-lt7176p-v1-2-86b9b728b95d@analog.com>
 Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <3fecb67c-81b2-6e6f-889c-01425090321f@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: S34UwJRh0iE745x_4xw3CoT4kWjeT0qr
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDIwMDA1NSBTYWx0ZWRfX9+hKHNy5XeBK
- j+dGNmLuBtxipwv+RIxCXe324E7usG2Tetr0eYbqbKSH0zpsooPTbVFnoGIKDah4rAaIGG1rEnF
- W/KmUsHXNGYT+ZyEnXP2uTnWr1O2tfE=
-X-Proofpoint-ORIG-GUID: S34UwJRh0iE745x_4xw3CoT4kWjeT0qr
-X-Authority-Analysis: v=2.4 cv=A5z5rKWG c=1 sm=1 tr=0 ts=6ad7743c cx=c_pps
- a=ULNsgckmlI/WJG3HAyAuOQ==:117 a=PRfkaYvzSr8QmIIGAkY2Sg==:17
- a=WnbzyOWOUeW_Ihyr:21 a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=gowsoOTTUOVcmtlkKump:22
- a=SB7vGQqGIbRnJ8eduEoA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=1WsBpfsz9X-RYQiigVTh:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDIwMDA1NSBTYWx0ZWRfX9Ns8HKRx8kcG
- GDqX4jvLytxhKJ7aJJyx4nF0n3Puap4dT4B6R2IvvAyURvGVqd/5uqdFoIYDAVj5UnzMVY/ZWWU
- gG8qfZV4AdEwW3FaO8CxzztNgwLhNY5ogopZc5pPo2tYh6fQq0W+MCHrmp2MHjciFS4ZebxQvbu
- 22JYPeT6Lx1xsKrgS3l1OG0lPJUHFLLRUqRanclDLQTmwXVqcKM7269Zkqr0TdCxMRajk82FQap
- 3uh7uutQFa5Po83fazvdwTP7FANqnm/3XXMVcCWJqQcuAznMbaxUWpd/KRStmW1d0kMbrN3fXJn
- rDHO8HEbgv7O1Ktk4rNNOCJF8tnciFFr5DdNQ0Sxk2jIU8D8jpoTLSdQkUEIp0njqi8mGQO9R4M
- jyTZZCJgNazzaDaDO4WLylxr3WIRsGAoDLh73/Wn5qyFKBqUiNNOu9ai6VP/Ytg0OLDX4hvowKk
- 2d41rHCpWh+imgC/JWA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-10-20_02,2026-10-19_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 malwarescore=0 adultscore=0 priorityscore=1501 suspectscore=0
- phishscore=0 spamscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2610190000 definitions=main-2610200055
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20261020-upstream-lt7175-lt7176p-v1-2-86b9b728b95d@analog.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 10/20/26 4:00 PM, Ilpo Järvinen wrote:
-> On Fri, 16 Oct 2026, Ilpo Järvinen wrote:
+On 10/20/26 04:45, Christopher de Guzman wrote:
+> Add support for LT7175/LT7175-1 and LT7176P/LT7176P-1 PMBus buck
+> regulators. These parts share the LT7170 family MFR_SPECIAL_ID
+> (0x1C1D masked to 0x1C10) and use the same PMBus register layout,
+> so they reuse the existing lt7170/lt7171 probe path. Variants are
+> distinguished by reading the PMBUS_IC_DEVICE_ID ASCII string.
 > 
->> On Thu, 15 Oct 2026, Konrad Dybcio wrote:
->>
->>> On 10/15/26 4:24 PM, Ilpo Järvinen wrote:
->>>> On Thu, 15 Oct 2026, Konrad Dybcio wrote:
-
-[...]
-
->>> Yeah I know. I still left it in deliberately so that in case anyone
->>> wants to audit the format here and compare it to the DSDT it's more
->>> obvious that this wasn't an oversight. Do you still prefer I resend
->>> (or maybe you'd like to fix that up while applying, which I don't
->>> mind either)?
->>
->> We can keep the member there but I'll change it to {}.
->>
->> I can try to remember to fix these while applying (I'm good in 
->> forgetting though :-)). But I at least try to check all the comments made 
->> to the last version.
+> Signed-off-by: Christopher de Guzman <christopher.deguzman@analog.com>
+> ---
+>   drivers/hwmon/pmbus/Kconfig   |  6 +++---
+>   drivers/hwmon/pmbus/ltc2978.c | 28 +++++++++++++++++++++++++++-
+>   2 files changed, 30 insertions(+), 4 deletions(-)
 > 
-> This patch 2 has been applied to the review-ilpo-next branch. The rest of 
-> series will have to go through some other tree.
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index fd6641316454..63fb4d5dd87d 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -306,9 +306,9 @@ config SENSORS_LTC2978_REGULATOR
+>   	depends on SENSORS_LTC2978 && REGULATOR
+>   	help
+>   	  If you say yes here you get regulator support for Linear Technology
+> -	  LT7170, LT7171, LTC3880, LTC3883, LTC3884, LTC3886, LTC3887, LTC3889,
+> -	  LTC7841, LTC7880, LTM4644, LTM4673, LTM4675, LTM4676, LTM4677,
+> -	  LTM4678, LTM4680, LTM4686, and LTM4700.
+> +	  LT7170, LT7171, LT7175, LT7176P, LTC3880, LTC3883, LTC3884, LTC3886,
+> +	  LTC3887, LTC3889, LTC7841, LTC7880, LTM4644, LTM4673, LTM4675, LTM4676,
+> +	  LTM4677, LTM4678, LTM4680, LTM4686, and LTM4700.
+>   
+>   config SENSORS_LTC3815
+>   	tristate "Linear Technologies LTC3815"
+> diff --git a/drivers/hwmon/pmbus/ltc2978.c b/drivers/hwmon/pmbus/ltc2978.c
+> index aea7b6c93e74..a42cdc1fe124 100644
+> --- a/drivers/hwmon/pmbus/ltc2978.c
+> +++ b/drivers/hwmon/pmbus/ltc2978.c
+> @@ -23,7 +23,7 @@ enum chips {
+>   	/* Managers */
+>   	ltc2972, ltc2974, ltc2975, ltc2977, ltc2978, ltc2979, ltc2980,
+>   	/* Controllers */
+> -	lt7170, lt7171, ltc3880, ltc3882, ltc3883, ltc3884, ltc3886, ltc3887,
+> +	lt7170, lt7171, lt7175, lt7176p, ltc3880, ltc3882, ltc3883, ltc3884, ltc3886, ltc3887,
+>   	ltc3889, ltc7132, ltc7841, ltc7880,
+>   	/* Modules */
+>   	ltm2987, ltm4664, ltm4673, ltm4675, ltm4676, ltm4677, ltm4678, ltm4680,
+> @@ -540,6 +540,10 @@ static int ltc2978_write_word_data(struct i2c_client *client, int page,
+>   static const struct i2c_device_id ltc2978_id[] = {
+>   	{ .name = "lt7170", .driver_data = lt7170 },
+>   	{ .name = "lt7171", .driver_data = lt7171 },
+> +	{ .name = "lt7175", .driver_data = lt7175 },
+> +	{ .name = "lt7175-1", .driver_data = lt7175 },
+> +	{ .name = "lt7176p", .driver_data = lt7176p },
+> +	{ .name = "lt7176p-1", .driver_data = lt7176p },
 
-Thank you!
+We don't usually add -x variants unless really needed.
+Let's not start this here.
 
-Konrad
+>   	{ .name = "ltc2972", .driver_data = ltc2972 },
+>   	{ .name = "ltc2974", .driver_data = ltc2974 },
+>   	{ .name = "ltc2975", .driver_data = ltc2975 },
+> @@ -645,6 +649,10 @@ static int ltc2978_get_id(struct i2c_client *client)
+>   			return lt7170;
+>   		if (!strncmp(buf, "LT7171", 6))
+>   			return lt7171;
+> +		if (!strncmp(buf, "LT7175", 6))
+> +			return lt7175;
+> +		if (!strncmp(buf, "LT7176P", 7))
+> +			return lt7176p;
+
+Sashiko has a point. It may be better to start using
+the same approach used for chips with no chip ID, which would
+be something like
+
+		for (id = &ltc2978_id[0]; strlen(id->name); id++) {
+                         if (ret >= strlen(id->name) &&
+			    !strncasecmp(id->name, buf, strlen(id->name)))
+                                 return (int)id->driver_data;
+                 }
+
+>   
+>   		return -ENODEV;
+>   	}
+> @@ -774,6 +782,20 @@ static int ltc2978_probe(struct i2c_client *client)
+>   		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+>   		  | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+>   		break;
+> +	case lt7175:
+> +	case lt7176p:
+> +		data->features |= FEAT_CLEAR_PEAKS | FEAT_NEEDS_POLLING;
+> +		info->read_word_data = ltc3883_read_word_data;
+> +		info->pages = LTC3883_NUM_PAGES;
+> +		info->format[PSC_VOLTAGE_IN] = ieee754;
+> +		info->format[PSC_VOLTAGE_OUT] = ieee754;
+> +		info->format[PSC_CURRENT_OUT] = ieee754;
+> +		info->format[PSC_TEMPERATURE] = ieee754;
+> +		info->func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
+> +		  | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+> +		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+> +		  | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+
+Unless I am missing something, this is identical to lt7170 / lt71751.
+No need to duplicate the code, just add the case statements.
+
+> +		break;
+>   	case ltc2972:
+>   		info->read_word_data = ltc2975_read_word_data;
+>   		info->pages = LTC2972_NUM_PAGES;
+> @@ -962,6 +984,10 @@ static int ltc2978_probe(struct i2c_client *client)
+>   static const struct of_device_id ltc2978_of_match[] = {
+>   	{ .compatible = "lltc,lt7170" },
+>   	{ .compatible = "lltc,lt7171" },
+> +	{ .compatible = "lltc,lt7175" },
+> +	{ .compatible = "lltc,lt7175-1" },
+> +	{ .compatible = "lltc,lt7176p" },
+> +	{ .compatible = "lltc,lt7176p-1" },
+
+Same as above. Please do not add -1 variants.
+
+Thanks,
+Guenter
+
+>   	{ .compatible = "lltc,ltc2972" },
+>   	{ .compatible = "lltc,ltc2974" },
+>   	{ .compatible = "lltc,ltc2975" },
+> 
+
