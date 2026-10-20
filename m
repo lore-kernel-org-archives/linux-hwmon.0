@@ -1,90 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792521348;
-	b=3s+lruD4CYkpzeGdiV8LYjmIFz1bghDjhbEeBt68v3zwx85hSkmzlYtNtDA2ZvQyUqe+
-	 y2kf1K2nM53ALeB6JGxCothtrQ2BLiTR/baqzNwwoycqZBsaiQYPIeB8fv6Nd/jq8T9XB
-	 QHgXplUL0WSwgVRXh/HwRm6prg+46pmr91rtMuks5UCIrrnn8gJhodVMqQ+bYpaZQeFpo
-	 qBfVqL84TpA2Bz8rkNY3RtSUJEa9CvDWQj8Z9D0eoBJv2cQIkARIWyD9gfyazILGKFMq9
-	 0m3T/ApAOBN4Sd5BfR2c6ZmZT6PKPDED8MMIHo3ZV7DaQZDQmnfKjDCtHt8wqvVfl7Q==
+	t=1792522721;
+	b=pDWoctF5rjVZGW5E3RMKTaPWlhtzwFuJVAFkWEwOlw+B5huYgzebb4ZwZASis4eVp/bJ
+	 kHrPU6J3evQqx+1KGdUAAvfXjNeVXq93CtGZHkdvr3oY3YDZw3xQv+LMnYflbQZkzY1hn
+	 YuXAUPkPmEV/qlxCIHAw659CazJY06E2D5f1RyU6PovtUHX9S+qD2i61Ds5Sn8zN4uDD8
+	 hzrcTDIgDLiSZ1j/TRDIIFFGV4tB523y2nRqwcxSTRwyVb7m5XTU4DzPMoXUT9+HESM38
+	 +kzUpmzjgkEuiu4Mw8avNIMBWWdNv43CIOUCOUF9Zi+Lr1wgzIjVa011/ut9MjySr0w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792521348;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792522721;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Sender:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=DGOTzV020qB20GCiRn0PGx2SM2yjPltO8CpsAfbbpWg=;
-	b=3cpCM1DtwJWSvnJrVlIfaz1WSDw2KJ3vWqpwiLeD2StWB2FL47ayewzTre1HMBU3cgwG
-	 Y642tPyJ9vGNcoMxdw8PEZXgd6cV9JWK8f+Ir5zIhkly+pUB71faFg0581GqTlvCM6Ren
-	 D7s8leEtmWQcDXsF61oCrmvK19iBXka50JgobzP7CT9CByQRa+4RAP1UlA4sTvnB1CBoR
-	 mjzJ7PiM4cLwUqblP03NXAGSuBgReIzCYj31NYn5294lT4dNALuAOBiQrjWFQwnG0I8zq
-	 e281919nWlh5eT/hM0HH4l4dcHLRDZFfXsXz/Q1vIwkxAL0AwU1YnacVyIGoAwunQcg==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Subject:From:To:Cc:X-Mailer:References:In-Reply-To;
+	bh=mawDnWzs4fnqEe3LjDzISKgGdBwKvLiWqFhvrvd71LE=;
+	b=WyxKBx8COPgEpZRkvbE+EIGe0d2OHuk+SYVHxkcIdAlaS31asBkMU8hH1gBjbsIpIvD7
+	 COqWtm85wl2eqDZVYrFDk17FNVghrs3m5XzusxqaWJrYePq3qh76tM12cd1hyZUJ1SmvH
+	 8yXR1Bjgk02SWkkGG779eSLCALjMHg5dD3ELtKUe0RmB2O3g9kK8EP++TWjGq0QvRwMob
+	 yYFEYXGzbOnvOjXzpLeCGiJ6XgXAjImYrR6BATHXveMXmJgGvV++imdubJqfp4pMjSc9m
+	 iBTraHcRSV0Eg68gXOTb1Pv2n1tzhxwkrIc+4MiiUBRGR8D9NaXaoH6SefgTHbOqJDw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=JhnTFu1T;
-	arc=none smtp.remote-ip=209.85.215.176
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	dmarc=pass header.from=nexthop.ai;
+	spf=pass smtp.mailfrom=nexthop.ai;
+	dkim=pass header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b=c25yAxJX;
+	arc=none smtp.remote-ip=74.125.82.175
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31857606A319
-	for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 18:35:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 31857606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457D4606A319
+	for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 18:58:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 457D4606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=JhnTFu1T
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cd6a7b62ce8so61597a12.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 11:35:48 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b=c25yAxJX
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-36661f953e4so1568557eec.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 11:58:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792521347; x=1793126147; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
+        d=nexthop.ai; s=google; t=1792522720; x=1793127520; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=DGOTzV020qB20GCiRn0PGx2SM2yjPltO8CpsAfbbpWg=;
-        b=JhnTFu1TeDRkBXHoYIsw9ulmTkE+fbuH5mj2ByzKgPZZuwEJN/jXbxBSpvJTzytQyF
-         HdVubb57dUKpj51ldO1W4slgCsC/UjO7nkFqzX7NCwhaF/vzPf7wQP8LwesnNKLE9O2B
-         gE/Uh08g/4Pt9DLWR10xxJZW2GPqqBpzoNzVd3FXxiueKf1P7/aa1mjRxpQPrwBxo/p7
-         LA9ZLMwfNmJ4gCPpffcEquJPNQlMCkCVl+xWOIfCjPo34d1kcx0JYgTJTsHeVuYkuH6X
-         hgmJuWiCL0KuCCYWmidVlE/CtxJBjVOLNcvvP63BpUmavIYF8hOxXpSq4Gewl6lS65l4
-         6IqA==
+        bh=mawDnWzs4fnqEe3LjDzISKgGdBwKvLiWqFhvrvd71LE=;
+        b=c25yAxJXnLGbZbe0H/IIYhi4952TrJ5/lFAnKapG+ZYVl2WYsfqGDERXe6GOYk+OKd
+         LMpTqEtOJiZ26u4BS8SMfrqcpCZg51KHNo5gxleGWgg/p/ZfO8qTMDlAPnAuV6CZJrlG
+         iTX65EIpY+srQNZp+/5rvEjJxVj63mCPTus3AryQS3FbqHpyp0qImaYyFyjLQRQGHEY2
+         6BwnC5t8vNPtJfN6wbhOP3mpfciYF+esIex/lejtyMtMPqyx9SwdaY4IN94QNZGY8NUz
+         NIQDrJJ5P9CssQTgfAqVXqerPmtiudz54SPXzhMf8WqIYi1RDUVKOoLNvTHjvEeUZuVM
+         5dNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792521347; x=1793126147;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
+        d=1e100.net; s=20260707; t=1792522720; x=1793127520;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=DGOTzV020qB20GCiRn0PGx2SM2yjPltO8CpsAfbbpWg=;
-        b=X/MHTKeWb6cKEoJfCVhJIodV5sAMRbXQX1oyLPywt30qWOmpt1UlLofuKAuwCuQGgl
-         bBp9fZmV6liXK+twbeFcNyiTMcwddLc1VHdibk1t1yGpQvXQGynSKk7aj4poA4A+YFL4
-         9Ed4Kg7nK7VzGqz+wD/FS1eTA0X/pTWg6EbSV5dmBb6TmIDfCILocjoyRmCG1Yl0M5sv
-         UgTLPzIxO3H2wY+dIcZ9fdFSPsrss583lcDQXkzgBCo3Nn/AkI5P4UZJYVIvQRfFBNIG
-         mb94Z6FuA/7tqpobAw1jX2eJNm9b3MCNSIfADGm5b5Fg2Isq+t8kwE7hHZHp9LnYuzrC
-         VJ6A==
-X-Gm-Message-State: AFq9FYLVgLTna4bWPxu36s8ieYNuXf0S561vWF/8K0v0BvFJbmg+JUIA
-	3ugZ7rsfGiDbmMbWoC/bYiaYNXuCfERtLASbUnpFgfdrLjvzs1Vr1cIF
-X-Gm-Gg: AYBFou0n8Rgk0evnGXL1EwQ7bhnh3A4r+xoQ56fgf6vOBBo7iKhqBo4BZ4s5qNS6Yhm
-	MQ40TTiuA4GqWWdeHxuWp8P4fBYpW6Qtzn0Iu212yMAFZrOxPzBQ3IXS3wQKkB/rib5qe+J/puK
-	4XYE25yD9sBE+PKosEfJaFDILtFylm4FgzGZlEt6ICTnwmjZDJqMUN7VqEjWSJTvO6QwUO4+Awr
-	vXW+JwSaphWaV1V19y+zDhdot54LQQACMZk9ReXeE3G8FwEiGrg8asSThKcfH6s57bBdGd0PvaD
-	FtKVLAjIlAN4QCFApJjvyRVa1bdmPgz0g+kOEk0L+686THCRsHR+Vs6odgQGO3Vuh7IyIkUUayT
-	CIuFs6g70CehWcj42ISqlfaqDy7FTeE1YxvQQ8croybf91ZjQq/5EHp/X3fDEfw3ATI7u+WSuGt
-	zdEuYlbKrJJ80uy5kYr2BkzBSi8zHQ7xvhovWjp+dU+xnBwxD96A078Z9HX93WibNGZd0w39BcY
-	cFePL/orcHk1E1gJecLxEs=
-X-Received: by 2002:a17:90b:2d06:b0:3ac:d19e:85f1 with SMTP id 98e67ed59e1d1-3acef1792f7mr8928974a91.53.1792521347516;
-        Tue, 20 Oct 2026 11:35:47 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ad8035a117sm701396a91.16.2026.10.20.11.35.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 11:35:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 20 Oct 2026 11:35:45 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: xzhangjr@gmail.com
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (coretemp) Retry failed sensor creation
-Message-ID: <42ee0ffb-c0f0-4426-a568-28be267e4a93@roeck-us.net>
-References: <20261020-coretemp-retry-sensor-creation-v1-1-7dd4851a34dc@gmail.com>
+        bh=mawDnWzs4fnqEe3LjDzISKgGdBwKvLiWqFhvrvd71LE=;
+        b=JnOT/MpJylpfeXdtAVsit8vdPS6ui3ak2RGkqkHa83doAsOS9YYj4JW5iL2mH/68+0
+         XgngtaBGBj7MY6zbteD5mjFQ7XJTZppU1HiYHuyx7d0qvxqMFkg/0EaPmfAZg1VjzgKX
+         n6ZAb1vNt6NHMXGuTwNkf7nKNXaI1t6+GZliUu7R/yaB/vjb7Gt5IcPloACDNvObPazB
+         Hb06PRqrnk2StuLKcrHH8sSI83HDw+H29WNytCtbuiF4xteFvbnUNiUkpapCayKConbU
+         78+yLELbtVwkJMeYqkx9NYMge08zAqo6aFv3yEv2/Lllb3OxH8zkvjGVGPjjJiOkuO5J
+         MK3g==
+X-Forwarded-Encrypted: i=1; AKwUvBwaQdNjeWifXGIPOS9tiE1Spvaq5vbZ3qRNp+RQO7+zfWnBcuTK8Ln51bdOUPqA0uuVl192dOLPBDTr3w==@vger.kernel.org
+X-Gm-Message-State: AFq9FYL4u2qOa6FECM5MLRGTbEfU+NyxYl9poNrGNfY63Go1G5Men5hj
+	p3s/GlgaQhQDLtiVamPChrzn3XYI8EB1D7UEveSKIkIH0ABKaAf8PnlVxhhH6ad2hOg=
+X-Gm-Gg: AYBFou3D3Z0uoxLaFnfyfveFVyO5HiZhmvXUa2Eraz3JBzmrcM/UJxoWE8oCTnoeLmN
+	Al94VWYpMpBcKFf2Q1D1/T0AmccetU7GacP2K3o6KsCKtaOG71Pie9tonpBgko3qb54wU7KLyh7
+	hA7ekLIY2w5VgA+Bgjq6A4q/G3p6Ba1BGfu01TGwT/v4O4xUjrpc+CDTBMNmO0PW/DYm0DCJ49f
+	MyMmCwJgDoUeOKwDx4plxebvtxgz1lp3Pqh/uB+TG5yKvZzA5rmvgtenJdDQ4fmqtWdtcpQIOne
+	S6LPmeJZgIs4y6vsvfLYLndwuh9HwMeiJ5q12DI1Tm7EV4haukfzgKJNJoxoufNDFdvBCYuIoSC
+	iuQxB/gr1TtrqRxJkMkJKcNQCfkaoTvhVkscM4LLdtlG8geT62w+h2fx2DTxzuRPCLLl/zqgTrh
+	PmQYQ46SZX9W9v3om6nCyvf5vUhik3Dxcr6s8cOcNN/fK9vGC5RCRTf+noDnaFsk4KEYUneKQ=
+X-Received: by 2002:a05:7300:4627:b0:35e:da0a:75b0 with SMTP id 5a478bee46e88-3674e164a78mr171066eec.25.1792522720294;
+        Tue, 20 Oct 2026 11:58:40 -0700 (PDT)
+Received: from localhost ([50.145.100.174])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-367417a2fadsm454400eec.21.2026.10.20.11.58.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Oct 2026 11:58:39 -0700 (PDT)
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -93,55 +85,41 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261020-coretemp-retry-sensor-creation-v1-1-7dd4851a34dc@gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 20 Oct 2026 11:58:39 -0700
+Message-Id: <DM9W9SZZV7OK.33TH12KSMSBQS@nexthop.ai>
+Subject: Re: [PATCH v2 3/4] hwmon: (pmbus_core) Support relative encoding of
+ vout related commands
+From: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
+To: "Guenter Roeck" <linux@roeck-us.net>, <sashiko-reviews@lists.linux.dev>,
+ "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
+Cc: <devicetree@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+ <robh@kernel.org>, <conor+dt@kernel.org>, "Guenter Roeck"
+ <groeck7@gmail.com>
+X-Mailer: aerc 0.22.0
+References: <20261020-hwmon-pmbus-fs1412-v2-0-3396c3a08251@nexthop.ai>
+ <20261020-hwmon-pmbus-fs1412-v2-3-3396c3a08251@nexthop.ai>
+ <sashiko-outbox-178650@kernel.org>
+ <dd1781b2-4637-4997-bdfd-d71fc35837b0@roeck-us.net>
+In-Reply-To: <dd1781b2-4637-4997-bdfd-d71fc35837b0@roeck-us.net>
 
-On Tue, Oct 20, 2026 at 09:39:35PM +0400, Ximing Zhang via B4 Relay wrote:
-> From: Ximing Zhang <xzhangjr@gmail.com>
-> 
-> coretemp_add_core() only logs create_core_data() failures, but
-> coretemp_cpu_online() still records the CPU in pdata->cpumask. When an
-> SMT sibling is processed later, the mask makes the driver skip sensor
-> creation. The core interface then remains absent until all siblings are
-> cycled or the module is reloaded.
-> 
-> Package sensor creation is similarly attempted only when the hwmon
-> device is first registered. A failure leaves the package interface
-> absent for the lifetime of that device.
-> 
-> Retry missing package and core sensors whenever an eligible CPU comes
-> online. Determine whether a core sensor exists from its temperature data
-> instead of the CPU mask, which continues to track CPUs available for MSR
-> reads and hotplug retargeting.
-> 
-> A package retry might fail after per-core data exists. Keep the core_data
-> array alive until the hwmon device is unregistered so failure cleanup
-> cannot discard live per-core pointers. Publish nr_cores only after that
-> array is allocated successfully, and rate-limit errors because a
-> permanent failure can now be retried.
-> 
-> Tested on an Intel Core i7-10510U running 7.2.5-1-cachyos. With
-> test-only fault injection, two package creation failures and one Core 0
-> creation failure left the unpatched driver without both interfaces. The
-> patched driver retried and exposed all five readable sensors. SMT sibling
-> hotplug and 20 module unload/load cycles also retained the expected
-> sensors.
-> 
-> Signed-off-by: Ximing Zhang <xzhangjr@gmail.com>
-> ---
-> coretemp currently treats a failed package or per-core sensor creation as
-> permanent for the lifetime of the hwmon device. This change retries missing
-> sensors as eligible CPUs come online while keeping the CPU mask available for
-> MSR targeting and hotplug handling.
-> 
-> Tested on an Intel Core i7-10510U running 7.2.5-1-cachyos. Test-only fault
-> injection reproduced missing package and Core 0 interfaces with the current
+On Tue Oct 20, 2026 at 8:37 AM PDT, Guenter Roeck wrote:
+> On 10/20/26 01:55, sashiko-bot@kernel.org wrote:
+>> Thank you for your contribution! Sashiko AI review found 2 potential iss=
+ue(s) to consider:
+>> - [High] hwmon: (pmbus_core) divide-by-zero after pmbus_regulator_set_vo=
+ltage()
+>> - [Medium] hwmon: (pmbus_core) broken relative VOUT margin handling in r=
+egulator ops
+>> --
+>
+> Good that I did not just apply this patch. Do you have time to look into
+> those issues and fix them ?
+>
 
-Is that a theoretic or a real problem ? "Test-only fault injection" very
-much suggests that it is a theoretic problem. Have you observed it on
-a real system (without artificial fault injection) ?
+Looking into it,
 
 Thanks,
-Guenter
+Abdurrahman
