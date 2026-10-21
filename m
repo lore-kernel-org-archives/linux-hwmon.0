@@ -1,99 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.218.46
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1792539449;
-	b=VMfgLKcrffTftSWkmyUIOIYdJyKb+Rr99ZWi0f6vVryXLrXmuQ4T33y/JM7GoU1Q1zhZ
-	 b+NsoWrhrFkaxnHHGdmMRl1E42M/IhFkjC5G0HT8CXaCTwb+weaE0aQem2u8MgXyPlz3W
-	 mGmkCRRN9knKAYeVfrytnluRJZLZ8xeZFa+6nt4Pw7mjvMYkMSHn5XFokA9+BkhciwNpd
-	 v8LJZuBSBitZqX1ZKyd9ezi8hksipT8X+W4TLm/bIqXLTa4dsdQ1OBQH7kfC5+KijnlLO
-	 nrZPcHID3hmImMp1JEiD6FBqYbnPro5Fs4fe2i9916zxZ9mg6h7+mL8NaP4ZP4cvNWw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792539449;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.169
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792551731;
+	b=cHfR/MwYWIdgXIvLQ2Hn3c1+oEN4uWPiyaMr55uCsq4HnOmh4OPT5lUfsaA8vgppSAwj
+	 tTZRkhqg2L9rC+8NTQuZ/mcc7I4XE5e6dfDqYy3HAomQGmxAV3kV/J8BcU18VgRSIv+qu
+	 a1FCqYH+5AGDnqblaJ9Ku1vOuIh9ZxS4ywhG8hzGc0azL4gWGz1WEtii8Bh/tVO1GwI3A
+	 pvBUIJigrpWW5QAQ3SoXaSZIqEGKZxx6kgJL4BjAZKsMBwltIfcO+kYqA0XYvlTjnIOo8
+	 5CQycdEamCTIG4MwsOJ3JvfvGFAgqZiuKfFJoFKlkK3PZ5eu4MQ7sG3+pA78+uNt3lg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792551731;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=PMi+PnFccvaD8+yCUa0N3gNkTUvskvlBPr4LLDyPhEg=;
-	b=LkrId/m0OsGNa1gMA8vegaRi7w0CUMKF06cj3MRdJrF5Rc9qJxK6SwPla+Q+Q+QExfku
-	 j1DwVLUDbyylzTDYCGDawVg+y2edTAY+7ICq3jQ549l9PKMRob6JMon0pHInG3ZPs+5ZV
-	 kVl++m+JVk8IwWxVld5j/3kduJGIoe4IsXwH+wvMWvUn53kVUKaJFYRi5m0RW0Oc3aZ2z
-	 RlSS5Yi4gtOvp8ckU5CGOQJLyV2BofwMxpqdFmcp0FNUOUv7LQiVn98p61Ux6fM6YybnR
-	 3eNU9cCtqD2B3348909b1lJrTSwsWhatBb+MfsYmFDeQeHgOGrpA7DYdoHEX1MYZNAg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="Fn/kkC7j";
-	arc=fail smtp.remote-ip=209.85.218.46
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key;
+	bh=ttCQgnuTfkTRykr2I2ffC9sly05P32gI/ZHKSArbVBw=;
+	b=qOW2xQz1ny/4qmMHSsjpRkLLK/mddRmyPdpa58+xFqUPa2zhnxhnel1mPOm4Ckp1bGaZ
+	 EIIgHFg6O8+R3tsbmzl8srUTE+X7mYePRAp9YqaDeNzZTfvp5IVlEriUWEWQEE01wcOOu
+	 CkDYdzb7tpvugOwtAkzAVUAbUuH16XdenstAeGvE+AoPCmYgVFIfmlbAMbqX1w5oClJGW
+	 QqTR2Wk9MtcboE0PjJeCQvn7cgbVW88iP0xVmy35s32jSwDEso+Z+WMeXjk67HKh1og6z
+	 Z80RclilIApCLGoaQir9vq726EsErJ4NO9+G+K3clgIWuxgH7o1YsYIxnOp263GLZGQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=nexthop.ai;
+	spf=pass smtp.mailfrom=nexthop.ai;
+	dkim=pass header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b=NkSIyIey;
+	arc=none smtp.remote-ip=74.125.82.169
+Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED713606A31A
-	for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 23:37:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ED713606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EBBA606A31C
+	for <linux-hwmon@vger.kernel.org>; Wed, 21 Oct 2026 03:02:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6EBBA606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Fn/kkC7j
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c45551fa84eso10381966b.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 16:37:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792539447; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Lb6TQe9p57zkwT0sfgSzGa8bQHHD4/zbwathtzG1OnXGBU4VxKft/zFLzESqWQa1cK
-         gzgap/eGwlHODcLqCwneB+o+Zz0JARy39W5Oil9+7p//R7fRo+n8P1v+OKCseqyzsaxC
-         HHnVtBTCb+rVKP6MfDbB1WOGgLhb0rTs3n6xKuGZVHodvEHLoWQ9Mc72KkbEuA+QvWZO
-         Pksmzh6SLtq9ki5ze2yjmUziAB4PSjI3rpcXRA/ZXpfc0179g0geFeRkaemfxcanctWc
-         BWZXX+QCrNFur3KIUeickFdcsDM2XoPgz5bdcOc331fHYYLR9YWaiqpLgVRKIi0nstvD
-         aAsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=PMi+PnFccvaD8+yCUa0N3gNkTUvskvlBPr4LLDyPhEg=;
-        fh=WV73kIzIiGI40XmxDNJD7p9IVX4Y5FWUgEwEC0jRq40=;
-        b=hW73cXsmjED7uiqeR/2aHSvB4SdDoCnzLPAek4vO66n9ZcdZY5+fPgZneyJg7fReTs
-         MIWpJde7NaJjKx0PApr5w0CW1bt1XLmrKYs9B/RhVqLSYqspwoyLVVFLMdF5nYLAKTan
-         jHyavud8lUlUo74/+w9DwjqsmtK8pkIXYEYZlkqKe/bZcMmRbWQLvnNnWYRrr7LZxRDd
-         D/CwHHuyBt7XOitPjB8chlgbuwTJafhHxmrxkOR+8DEdsH0YxQ51n0S+kLC3ztbc+TMX
-         krOMDDbedEU5860OCRN6ov2npPNBAccEtw+HHRjCCaavBKe7JBDT8ozTHjPcRTIvG3qe
-         +j5A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b=NkSIyIey
+Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-3535bf8b3e0so453902eec.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 20:02:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792539447; x=1793144247; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=PMi+PnFccvaD8+yCUa0N3gNkTUvskvlBPr4LLDyPhEg=;
-        b=Fn/kkC7jilFMh3hObGap6hKFVeaZdwAT/S0wkVhlugZvayllm0CzCFpB2QZd+CRVBp
-         b3YCQbGvhbkZcwZ5Lu54P5tTj3+f9CSdETfDD0gxQh0SqWfL1NZUvJ9jwCfTQED3TyNT
-         JuTACtnABg9mmSIKiRbr3NZFqxLlqj4rgq3Ld2DoA3cUImyezxrMfpqFyukHc5mS6cvh
-         GOqCuvvXtLD8bFt+9QYxEA/68skY0Tsg89Hw6IJZQblEvP/mz3TBm8OkGpg3JqVTvEhK
-         923OAaxQttUQYGvJqCo5NFcviVtpsKC9SbWxfAJpln6QDgynzrRyV0Jll1FkvPApaALA
-         Yj4g==
+        d=nexthop.ai; s=google; t=1792551730; x=1793156530; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=ttCQgnuTfkTRykr2I2ffC9sly05P32gI/ZHKSArbVBw=;
+        b=NkSIyIeyj+gr2HD0pvtuTwcvM7iM0lcHLgdMm5mEm0JXvSg3/dCqqiw2MWrIdxHcgu
+         iqn8f/NvDNrkyHqf0OLJNNmqD0RW4tpExkxHc3iZZsWDlwKiHkUsT0Vtw/n+22Qezyuh
+         wa9Seo4Vj7E5OJBbeUGEU8RyqcelCQV1864dI2iCDGgI2Rhtb1068cl3CZjefwifbFbC
+         FvCwB/E9PG8DPzb9unPRzB+EYN8U5IK5LfcXreR2+voJYEqqN6IAy3Etct4lt8PeF73W
+         FTN3IeQeA7JDYyaAOy+LjWoZXjCF0HWNmQ8IdNL3te2KgHuKGQKHXSSQ/+2PebfTs0kC
+         DFDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792539447; x=1793144247;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PMi+PnFccvaD8+yCUa0N3gNkTUvskvlBPr4LLDyPhEg=;
-        b=0RzLY/l0/43F7yWHIBhVFzJy2g/AQjCp4VoKpenABxfhTv3JlVp9udQca5CAGPF7Mz
-         Fk+dlAz2VDWKQ5xOqX8scDgDiCU4zVWVPVKdYxA8XD6q8L5sVisWar+o6lZlYI6MyoVB
-         m63WTDKr8+B1sBcYxxkdEpDNlT86uc6WRVcqUFXLBMchvJsw6l8wfR3ZENUJN3uu6jVN
-         NP/OQwIgZ2p2EYmYnn4oaelO+YCg4/m8VNd2nBuy/FC8XA3GVABe3XZS4g+beD4JKX5A
-         MuxVeE+5QB2O/W4wEvxxD5RVgdizChsdk8U2LEeZ8L1jdpSDDz2NNhatbT/PTY2bvThB
-         k/AA==
-X-Gm-Message-State: AFq9FYLaTvZVxZMHpKxnsyOr9CrwEA1C58Qa12Kc/FKXIXjhRTzZUolk
-	1Y71VFfJadsvpVjl9/CiiKnRUjupQMe+xo4Vg14BdMsIRFwTbBg3aJPa+ZJgv6e4KARyUp7VPWn
-	JgwIIHq0MQJgDIp/djYWAn80RNwvRsQ==
-X-Gm-Gg: AYBFou3xcao/gGE2nNdgV82C397eVaxlL3MllnuiY2y+L/HjS72vb6vfEUlYIPdwksI
-	IpDQYORr9yRQp6mrtvOgKP/2VPppYyjAzDRPM+QU/YgfNNDEBtf51NfjVFT7cTckIk+V2LzBNDC
-	aelF7fpyCqk51NSou4naxjxffatcwT4bAY0AQsO027pldAT7g5OesTjIEDjAoc+ZVH5ngxHUiAG
-	oNGxPx71mzbWrM2rnZgY/Z+e27RgDeQwDIEIBSd+x6Faa+thrNpjlCrUvv3Q2sbvxN2CKh7Vp+b
-	XXwvGkMJ03/WqPZLjhs3I93sE8Y5ul8S6iKFNeAxZh/6I/lStoDsJeRDzA2gjDzeJVuuM6YklSe
-	GPWt++x6tIycQZ91bPXIk+XFWwvKVCjbK3jFd2W7nNsqA6wUdEBQNV539Eul9sgi4UF0p
-X-Received: by 2002:a17:907:6d27:b0:c40:dead:7466 with SMTP id
- a640c23a62f3a-c4679597fd2mr47255966b.20.1792539447062; Tue, 20 Oct 2026
- 16:37:27 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1792551730; x=1793156530;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=ttCQgnuTfkTRykr2I2ffC9sly05P32gI/ZHKSArbVBw=;
+        b=zJYT960IvxuIvjaPaXMcw4+GOQfI40CchaFNVH071/8aU1EksL1QmrWeqYIbxbX7CM
+         dFfthbUnhSwqO5JvJPMPjXt+ItFsImuOLrfj6MHbczaQ61l6P/hAlVsJLYdFPf/oIw72
+         bt8cIkT5K9VOF1N23gSvQGx4K6Qm0/F9MybqlDpoJWj6/0bc+ZPcNvSbcJVMl8hBWMLe
+         1d9Epb190o4vFfessW6w0nym4jLsj6PnlWMi1FgFuANY0SiWJtEMEdgr4VHp5Rl0GATb
+         IYRyDB75qVOPVqdOl0ocMLQVBmptplMF/QTYjR6pIo6sn9ALXfcfhKuoZbbX/ZoxJL+l
+         Jupg==
+X-Forwarded-Encrypted: i=1; AKwUvBwyNRuONJr7SmGk5tQBKtFwhPJAAhaPqbhILbHno0lYVKcU482owrJkunXx9nSK9qAgl1PnDjChgiUelA==@vger.kernel.org
+X-Gm-Message-State: AFq9FYKhXlgSe3cgtu+Cx/hgzRS/7gaujq/io36rTpsULhDJFHMHxVNh
+	wxDf6uuEYatGv8MvU0TkhdArIOR++zRRE6xK9+dtTjOHIHTUrpjD1JudhBKxif+b6wX8QWZ5nvE
+	mw6w/UBI=
+X-Gm-Gg: AYBFou35Y64Id4ti296RqMvLDEZHXLug3oaI13opSk/40IXIYyGLyFj5Mt8T28D1eNO
+	GIAe/pijL/naW0KghINIhLVwL5bP1yoPw1hSgZrVU3mJtWUeiXj53Zq1oL9Cus6zyIwrx1aTkJs
+	61C8BPfdkIM907McjM65HzkfSzA1fdRIeVAGaSWKOYFHBcHqSM8luMuRXz6Xe/j8tu4ZtTF/6tr
+	5RdPaDbKBB/d2M/3DwfJHxeLidmGkhuG+Q3prxKk88Ouno9LGHWwRliq6FZwJ+v6//ppBh7EZ8V
+	jxK/0PjG08krEDDuaj3YJvc/Bzb99WtbOFF9IYHTeYzD+qxcMFvEF98+HP0P7cxUQcrR12hrMvp
+	3T/lBSWVUoEZs9jNn/gBcaoT9tHlbtJP5aEeWXpzW52wgTJtDwY0qGv0KGTfiPTLT0lsYLUW9T6
+	jyrhhVymVJhNtpGEgLTd28i4ZL5Fa/wTtR7RAj80Csdsb3NGIfonjraciEwLaX/RIH08QG/FuZL
+	tz5W8dLu/qyZ1EpL7eeqbsWsooeC/ysWaRf5pRyDRznu78rS0nnnKaqJTA=
+X-Received: by 2002:a05:693c:42c9:b0:35c:e696:2d4a with SMTP id 5a478bee46e88-3674d347be7mr1062638eec.24.1792551730166;
+        Tue, 20 Oct 2026 20:02:10 -0700 (PDT)
+Received: from [127.0.0.2] ([50.145.100.174])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3673e15353csm4436294eec.2.2026.10.20.20.02.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Oct 2026 20:02:09 -0700 (PDT)
+From: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+Subject: [PATCH v4 0/4] hwmon: (pmbus) Support relative VOUT mode, add TDK
+ FS1412 and FS1525
+Date: Tue, 20 Oct 2026 20:02:04 -0700
+Message-Id: <20261020-hwmon-pmbus-fs1412-v4-0-27ece4e43d04@nexthop.ai>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -103,227 +93,151 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261019234402.805759-1-mhun512@gmail.com> <1fe09bc6-2341-48f3-80b5-0d9dc02796a9@roeck-us.net>
-In-Reply-To: <1fe09bc6-2341-48f3-80b5-0d9dc02796a9@roeck-us.net>
-From: Myeonghun Pak <mhun512@gmail.com>
-Date: Tue, 20 Oct 2026 19:37:14 -0400
-X-Gm-Features: AclHuK-n7HXTrGRNTLUJKxTldJMnq9XQIWZa_22ydo7BcJ8gXvzDr2Dnbozk5vY
-Message-ID: <CAGEsz8EtusjcLXrUV7AP+5DvXAY42g8xnCQHSTR6sz8xkrWHHg@mail.gmail.com>
-Subject: Re: [PATCH v2] hwmon: (sht15) Stop deferred work before releasing its resources
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4XNTQ6CMBQE4KuQrq3pawsFV97DuODnVWoCJS0gh
+ nB3C240Gl1OMvPNTDw6g54copk4HI03tg1B7iJS1nl7QWqqkAlnPAHGUlrfGtvSrikGT7UHCZz
+ qSkohFagSMhKGnUNtpg09nZ/ZD8UVy36V1kZtfG/dfXsdYe39PBiBMspyVBgjSpRwbHHqa9vtc
+ 0PWh5G/GJx9NXgwhMiSUuQs5fGnIf4bIhgxVDrhGYKo1JuxLMsD7uddT08BAAA=
+X-Change-ID: 20261008-hwmon-pmbus-fs1412-fd4434717c19
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
+ Abdurrahman Hussain <abdurrahman@nexthop.ai>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>
+Cc: Lars Petter Mostad <lars.petter.mostad@appear.net>, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792551729; l=6068;
+ i=abdurrahman@nexthop.ai; s=20260510; h=from:subject:message-id;
+ bh=P635YMoH6bcSwkiW3N5b1e+xtcoxXztYjq+04Gb4V/I=;
+ b=XuCBz2zBUSKUoFlpM3baIQQGX6rPiS62ng0fT0DhXGULDWjrrfyLUU+zI8aTKeGO/rfc95aXF
+ hT4Tk2cp4QzCU1fzInufGyn9MHsE+kVGR7ob2ekGIeZmaS/idUDnY+x
+X-Developer-Key: i=abdurrahman@nexthop.ai; a=ed25519;
+ pk=omTm9cCAbO0ZhS32aKfJDKue0W3sQGpG9ub5eYHif8I=
+
+The TDK FS1412 and FS1525 are 12A and 25A uPOL regulators with PMBus
+telemetry. Their VOUT_MODE is read-only with bit 7 set, the PMBus 1.3
+relative mode: the VOUT margin, warning and fault limits and
+POWER_GOOD_ON are stored as fractions of VOUT_COMMAND. The PMBus core
+takes bits [7:5] as the mode and rejects both parts.
+
+v1 worked around this in the driver. As Guenter asked, v2 instead
+carries Lars Petter Mostad's 2024 patch adding relative mode to the
+PMBus core, rebased and fixed up, and the driver only adds what is
+specific to these parts.
+
+Patch 1 adds the TDK vendor prefix, patch 2 documents both parts as
+trivial devices, patch 3 is the PMBus core change and patch 4 adds the
+driver.
+
+Tested on 7.2.10 on a board with four FS1412 and one FS1525:
+
+- VOUT_MODE reads 0x98 (FS1412) and 0x96 (FS1525). Writing it is
+  NACKed with STATUS_CML invalid data, and it keeps its value.
+- Neither part implements PAGE; reading it sets STATUS_CML INVALID_CMD.
+- The output voltage limits read as the raw fraction times VOUT_COMMAND,
+  and writing them through hwmon stores the expected raw values.
+- With VOUT_OV_WARN_LIMIT at 1.5 the FS1525 sets VOUT_OV_WARNING
+  against its 1.094V READ_VOUT with a 0.600V VOUT_COMMAND, so it
+  compares READ_VOUT against the same limit the core reports.
+
+The PMBus core change was also run against the board's other PMBus
+devices (ISL68225, ADM1266, XDPE1A2G5B), which bind as before and whose
+regulators still register.
+
+The driver registers no regulator, so the relative-mode regulator path
+was tested in a VM instead, with i2c-stub emulating an FS1412 and a
+test-only regulator: set_voltage clamps to MFR_VOUT_MIN/MAX when the
+chip has them and is unbounded otherwise, list_voltage agrees, a
+voltage that encodes to 0 is rejected with -EINVAL and leaves
+VOUT_COMMAND and the limits intact, the limits follow a new
+VOUT_COMMAND, a non-relative chip still clamps to its margins, a
+VOUT_MODE of 0xff is not treated as relative, a VOUT_COMMAND of 0 or
+one that decodes above INT_MAX mV fails probe, and a limit whose product
+with VOUT_COMMAND would exceed 64 bits saturates instead of wrapping.
+
+The FS1525 over-voltage fault is an analog comparison at the feedback
+pin, so with an external divider it would read in feedback-pin volts,
+below in2_input. The part cannot report the divider, so the driver does
+not expose it as in2_crit on the FS1525, as discussed in the v1 thread.
+
+---
+Changes in v4:
+- PMBus core: reject a VOUT_COMMAND that decodes above INT_MAX mV, which
+  was truncated into the int cache and could wrap to 0 or less, at probe
+  and from the regulator (Sashiko)
+- PMBus core: clamp a relative limit to +/-INT_MAX before scaling it by
+  VOUT_COMMAND, as the reverse conversion already does, so the product
+  cannot overflow s64 (Sashiko)
+- Link to v3: https://patch.msgid.link/20261020-hwmon-pmbus-fs1412-v3-0-51df629e13d7@nexthop.ai
+
+Changes in v3:
+- PMBus core: reject a regulator voltage whose VOUT_COMMAND decodes to
+  0 or less, which would later be divided by (Sashiko)
+- PMBus core: decode the regulator margins with the register they were
+  read from, and in relative mode bound the output voltage only by
+  MFR_VOUT_MIN/MAX, since VOUT_MARGIN_LOW/HIGH move with VOUT_COMMAND
+  (Sashiko)
+- FS1525: hide VOUT_OV_FAULT_LIMIT, so there is no in2_crit (Guenter)
+- Link to v2: https://patch.msgid.link/20261020-hwmon-pmbus-fs1412-v2-0-3396c3a08251@nexthop.ai
+
+Changes in v2:
+- Add relative VOUT mode to the PMBus core (Lars Petter Mostad's patch,
+  rebased) instead of handling it in the driver (Guenter)
+- PMBus core patch, on top of Lars' version: check VOUT_MODE for 0xff
+  before testing the relative bit, use signed division and clamp the
+  written value before scaling, reject a VOUT_COMMAND of 0 at probe,
+  update the cached VOUT_COMMAND only after a successful write
+- Driver: drop the VOUT_MODE and limit conversion code, keep the MFR_ID
+  check and hiding OT_WARN_LIMIT on the FS1412
+- Add the FS1525 (driver, trivial-devices, documentation); the parts
+  are told apart by IC_DEVICE_ID
+- trivial-devices: dropped Krzysztof's Reviewed-by, since the patch now
+  also adds tdk,fs1525
+- Picked up Krzysztof's Acked-by on the vendor prefix
+- Link to v1: https://patch.msgid.link/20261008-hwmon-pmbus-fs1412-v1-0-0ae7e5ee4e41@nexthop.ai
+
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
 To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Ijae Kim <ae878000@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+To: Jonathan Corbet <corbet@lwn.net>
+To: Shuah Khan <skhan@linuxfoundation.org>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
 
-Hi Guenter,
+---
+Abdurrahman Hussain (3):
+      dt-bindings: vendor-prefixes: Add TDK Corporation
+      dt-bindings: trivial-devices: Add TDK FS1412 and FS1525
+      hwmon: (pmbus/fs1412) Add TDK FS1412 and FS1525 driver
 
-The original issue is that read_work can remain pending after a
-measurement timeout, while unregistering the regulator notifier does
-not drain previously queued update_supply_work. Both may access
-resources after they are released.
+Lars Petter Mostad (1):
+      hwmon: (pmbus_core) Support relative encoding of vout related commands
 
-You're right that v2 is unnecessarily complex. I'll remove
-IRQF_NO_AUTOEN and the IRQ caching changes, and keep only the explicit
-IRQ teardown and work synchronization in v3.
-
-Thanks for the review.
+ .../devicetree/bindings/trivial-devices.yaml       |   4 +
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ Documentation/hwmon/fs1412.rst                     | 124 +++++++++++++++
+ Documentation/hwmon/index.rst                      |   1 +
+ MAINTAINERS                                        |   7 +
+ drivers/hwmon/pmbus/Kconfig                        |   9 ++
+ drivers/hwmon/pmbus/Makefile                       |   1 +
+ drivers/hwmon/pmbus/fs1412.c                       | 171 +++++++++++++++++++++
+ drivers/hwmon/pmbus/pmbus.c                        |   2 +-
+ drivers/hwmon/pmbus/pmbus_core.c                   | 141 +++++++++++++++--
+ 10 files changed, 452 insertions(+), 10 deletions(-)
+---
+base-commit: a90ee4305c4a5df72c11b31dacfdc76e00fcf78a
+change-id: 20261008-hwmon-pmbus-fs1412-fd4434717c19
 
 Best regards,
-Myeonghun Pak
+--  
+Abdurrahman Hussain <abdurrahman@nexthop.ai>
 
-2026=EB=85=84 10=EC=9B=94 19=EC=9D=BC (=EC=9B=94) =EC=98=A4=ED=9B=84 8:37, =
-Guenter Roeck <linux@roeck-us.net>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> On 10/19/26 16:44, Myeonghun Pak wrote:
-> > The IRQ handler can queue read_work, which accesses GPIOs and may re-en=
-able
-> > that same IRQ.  A measurement can return while read_work is still pendi=
-ng
-> > or running.  The regulator notifier can also queue update_supply_work,
-> > which accesses the regulator.  Neither work item was drained on removal
-> > or on all probe failure paths before the managed resources were release=
-d.
-> >
-> > Use request_irq() and free_irq() since the IRQ must be released at an
-> > explicit point in the teardown sequence.  Disable and drain read_work
-> > before freeing the IRQ.  Unregister the regulator notifier before drain=
-ing
-> > update_supply_work and disabling the regulator.
-> >
-> > Use IRQF_NO_AUTOEN to ensure that the IRQ stays disabled until the firs=
-t
-> > measurement, rather than enabling it briefly between request_irq() and
-> > disable_irq_nosync().  Cache the IRQ number and check errors from
-> > gpiod_to_irq().
-> >
-> > Fixes: 251eb40f5ccd ("hwmon: sht15 humidity sensor driver")
-> > Assisted-by: LLM
-> > Co-developed-by: Ijae Kim <ae878000@gmail.com>
-> > Signed-off-by: Ijae Kim <ae878000@gmail.com>
-> > Signed-off-by: Myeonghun Pak <mhun512@gmail.com>
-> > ---
-> > Compile-tested (W=3D1). No runtime testing.
-> >
-> > Changes in v2:
-> > - Replace managed IRQ request/free with request_irq()/free_irq().
-> > - Use IRQF_NO_AUTOEN and cache the data GPIO IRQ.
->
-> That replaces a relatively simple patch with a much more complex
-> one, and Sashiko takes offense with it. What is the problem with
-> the original code ?
->
-> Guenter
->
-> > - Preserve asynchronous work drain ordering on probe failure and remove=
-.
-> >
-> >   drivers/hwmon/sht15.c | 47 +++++++++++++++++++++++++++++++++---------=
------
-> >   1 file changed, 33 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
-> > index 7bb2105d1ae223e7131ba4cc0523e4e074e01302..c95acec7ae2f8f57a10bd72=
-f65a2905e64c3c58c 100644
-> > --- a/drivers/hwmon/sht15.c
-> > +++ b/drivers/hwmon/sht15.c
-> > @@ -31,6 +31,7 @@
-> >   #include <linux/bitrev.h>
-> >   #include <linux/gpio/consumer.h>
-> >   #include <linux/of.h>
-> > +#include <linux/workqueue.h>
-> >
-> >   /* Commands */
-> >   #define SHT15_MEASURE_TEMP          0x03
-> > @@ -120,6 +121,7 @@ static const u8 sht15_crc8_table[] =3D {
-> >    * struct sht15_data - device instance specific data
-> >    * @sck:            clock GPIO line
-> >    * @data:           data GPIO line
-> > + * @irq:             interrupt number for the data GPIO line.
-> >    * @read_work:              bh of interrupt handler.
-> >    * @wait_queue:             wait queue for getting values from device=
-.
-> >    * @val_temp:               last temperature value read from device.
-> > @@ -149,6 +151,7 @@ static const u8 sht15_crc8_table[] =3D {
-> >   struct sht15_data {
-> >       struct gpio_desc                *sck;
-> >       struct gpio_desc                *data;
-> > +     int                             irq;
-> >       struct work_struct              read_work;
-> >       wait_queue_head_t               wait_queue;
-> >       uint16_t                        val_temp;
-> > @@ -532,9 +535,9 @@ static int sht15_measurement(struct sht15_data *dat=
-a,
-> >               return ret;
-> >       atomic_set(&data->interrupt_handled, 0);
-> >
-> > -     enable_irq(gpiod_to_irq(data->data));
-> > +     enable_irq(data->irq);
-> >       if (gpiod_get_value(data->data) =3D=3D 0) {
-> > -             disable_irq_nosync(gpiod_to_irq(data->data));
-> > +             disable_irq_nosync(data->irq);
-> >               /* Only relevant if the interrupt hasn't occurred. */
-> >               if (!atomic_read(&data->interrupt_handled))
-> >                       schedule_work(&data->read_work);
-> > @@ -546,7 +549,7 @@ static int sht15_measurement(struct sht15_data *dat=
-a,
-> >               data->state =3D SHT15_READING_NOTHING;
-> >               return -EIO;
-> >       } else if (ret =3D=3D 0) { /* timeout occurred */
-> > -             disable_irq_nosync(gpiod_to_irq(data->data));
-> > +             disable_irq_nosync(data->irq);
-> >               ret =3D sht15_connection_reset(data);
-> >               if (ret)
-> >                       return ret;
-> > @@ -825,7 +828,7 @@ static void sht15_bh_read_data(struct work_struct *=
-work_s)
-> >                * have gone low in meantime so verify it hasn't!
-> >                */
-> >               atomic_set(&data->interrupt_handled, 0);
-> > -             enable_irq(gpiod_to_irq(data->data));
-> > +             enable_irq(data->irq);
-> >               /* If still not occurred or another handler was scheduled=
- */
-> >               if (gpiod_get_value(data->data)
-> >                   || atomic_read(&data->interrupt_handled))
-> > @@ -976,25 +979,31 @@ static int sht15_probe(struct platform_device *pd=
-ev)
-> >               goto err_release_reg;
-> >       }
-> >
-> > -     ret =3D devm_request_irq(&pdev->dev, gpiod_to_irq(data->data),
-> > -                            sht15_interrupt_fired,
-> > -                            IRQF_TRIGGER_FALLING,
-> > -                            "sht15 data",
-> > -                            data);
-> > -     if (ret)
-> > +     data->irq =3D gpiod_to_irq(data->data);
-> > +     if (data->irq < 0) {
-> > +             ret =3D data->irq;
-> > +             goto err_release_reg;
-> > +     }
-> > +
-> > +     ret =3D request_irq(data->irq, sht15_interrupt_fired,
-> > +                       IRQF_TRIGGER_FALLING | IRQF_NO_AUTOEN,
-> > +                       "sht15 data", data);
-> > +     if (ret) {
-> > +             dev_err(&pdev->dev, "failed to get irq for data line\n");
-> >               goto err_release_reg;
-> > -     disable_irq_nosync(gpiod_to_irq(data->data));
-> > +     }
-> > +     /* IRQ remains disabled until a measurement starts. */
-> >       ret =3D sht15_connection_reset(data);
-> >       if (ret)
-> > -             goto err_release_reg;
-> > +             goto err_free_irq;
-> >       ret =3D sht15_soft_reset(data);
-> >       if (ret)
-> > -             goto err_release_reg;
-> > +             goto err_free_irq;
-> >
-> >       ret =3D sysfs_create_group(&pdev->dev.kobj, &sht15_attr_group);
-> >       if (ret) {
-> >               dev_err(&pdev->dev, "sysfs create failed\n");
-> > -             goto err_release_reg;
-> > +             goto err_free_irq;
-> >       }
-> >
-> >       data->hwmon_dev =3D hwmon_device_register(data->dev);
-> > @@ -1007,9 +1016,14 @@ static int sht15_probe(struct platform_device *p=
-dev)
-> >
-> >   err_release_sysfs_group:
-> >       sysfs_remove_group(&pdev->dev.kobj, &sht15_attr_group);
-> > +err_free_irq:
-> > +     /* The read worker can re-enable the IRQ, so drain it first. */
-> > +     disable_work_sync(&data->read_work);
-> > +     free_irq(data->irq, data);
-> >   err_release_reg:
-> >       if (!IS_ERR(data->reg)) {
-> >               regulator_unregister_notifier(data->reg, &data->nb);
-> > +             cancel_work_sync(&data->update_supply_work);
-> >               regulator_disable(data->reg);
-> >       }
-> >       return ret;
-> > @@ -1023,12 +1037,17 @@ static void sht15_remove(struct platform_device=
- *pdev)
-> >       hwmon_device_unregister(data->hwmon_dev);
-> >       sysfs_remove_group(&pdev->dev.kobj, &sht15_attr_group);
-> >
-> > +     /* The worker can re-enable the IRQ, so stop it before free_irq()=
-. */
-> > +     disable_work_sync(&data->read_work);
-> > +     free_irq(data->irq, data);
-> > +
-> >       ret =3D sht15_soft_reset(data);
-> >       if (ret)
-> >               dev_err(&pdev->dev, "Failed to reset device (%pe)\n", ERR=
-_PTR(ret));
-> >
-> >       if (!IS_ERR(data->reg)) {
-> >               regulator_unregister_notifier(data->reg, &data->nb);
-> > +             cancel_work_sync(&data->update_supply_work);
-> >               regulator_disable(data->reg);
-> >       }
-> >   }
->
