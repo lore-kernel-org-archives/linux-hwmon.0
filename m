@@ -1,95 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792613080;
-	b=KELcgIg1VxLMxi7eN/IaFwWV+VNZhAvrCXAxjBV06KrZoSmpN2XC8vFkbC+JmVZx992v
-	 ikXSVQ6KDjleaENb03hm3bWsMzPSn0Qws2z7oTX/ki6oAkckuk8sdpH603wvQbxayG2NN
-	 MvcrY6UnF6Za+hLNABR1ZouXPDOYl3XOeNl4M4Hb+tvZYt4psDjq8R0kU4wQEqzTs+VPl
-	 mshygtWJWM2n+mk4yJxZvOAhbBWgMtEWI0yXIIF6M+TgbP7wX1akm1Y0VUPzx6EX+pptj
-	 YqHQ3rbV98El8i+fBbv5lfownUUiS5idOTlAQnfiGYTfqJtAXsFdR6GTo+tZSPqWrPw==
+	t=1792618920;
+	b=MZokmP4HQ96FmbbHL/Ru2vguRvS/kTv4cVlHSaltmVlE8oBKd/qFLNUXFCUaQanq58qT
+	 swjiPeRIyY/Tl7JnZpxQ04y/KWqdkrH69bt1XQnMSeSvaz072mzEtEVHZO4nFK6hmqSuk
+	 ieTTM6fF57cpPIfZ0nYgQ4dY0VFYHnMnj3lC9bKszlD/vNOElALpszcE8xaILYdqRgfq/
+	 sMNm6mI8EkdGd9QNY+7VbQUqyrHtq2EpLlPY4gV7i72guBcglHhS+6B7z437HIUyH3GgO
+	 YVpnm9RCJ6ome1hneK5ucK8wfPY2W5UWe2rxmZ5RI0XynxwzAlbrxOh8lw6QM9hQiJg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792613080;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792618920;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:Mime-Version:
-	 Content-Transfer-Encoding:X-Mailer:References:In-Reply-To;
-	bh=Oxuzt3tx2zzrVlPN9LeqR2EJEXH3nO1HmXie8iUqGdY=;
-	b=vVZc/t3OJtTPjyZ5ccqykqofBq9uvj3BpYIezB3E2mOmPDckxhWz1nMqy8W+5l8F9Q1K
-	 U6JYwxhItGoCYKzbvqzYzQtJwPfBndEcY6Aequxd7xbnued9Ll9LYoXrsjIiIhefEHbSM
-	 n5Mh/tSdWUEMuegyMV4Jxg+rvuMrMF7i6OaYWW7sURHY63TxkgnRUOT/m9BJBvDgIwPWj
-	 tKrbxfxK/sGUdxq8UzOyRVdZ5l2T7AL4pWL55nZeJ6aEVDmCkjrE5TAPVzSJsj/IRGREm
-	 MRsuoeXiM82oj7mNlJDpwWwp9JP5HtGGUQk6ioS5VtRyRPMWM3R/jema+UvgZZyMYbA==
+	 Sender:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 References:Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=cdf3QpdJWB/0HDVyOxy8t0UFwHwVO9ns70PxKiQyY/U=;
+	b=lfrOSOliPeJZDcSAZQnQaY5WcIovDCDH6MAz+Y0mcTeSP2YIlbSWTp1SULYc5abfHTab
+	 DrDMLcv609rGB+92Wet3HKn0Y6D0GTWIl9FVFhiYlVbAa5XZtO3Qnk5wcDWrGnsayQlqI
+	 MImbsUAvfAw1BYoOAynvu43T1IzSbT/9E8fxYhA3EnzmcH7TCIgWb4tdTCYqczJFYtig2
+	 iMrTxDPypYVnKODBD6BYnqZ01HhwVvdy8F3Qlrvej7ozu/SEC9wkqOl9UzQA5drKjnwk6
+	 D9HlmTHOgKyuDGLpCE8baGdVebUCCa6JXrN7nYxJEBvTuYM7vqA+Dk/ZioFSUkItcjw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nexthop.ai;
-	spf=pass smtp.mailfrom=nexthop.ai;
-	dkim=pass header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b=JAW4VnXH;
-	arc=none smtp.remote-ip=74.125.82.179
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+	dmarc=none header.from=roeck-us.net;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=APWtFxd6;
+	arc=none smtp.remote-ip=74.125.82.169
+Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14991606A322
-	for <linux-hwmon@vger.kernel.org>; Wed, 21 Oct 2026 20:04:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 14991606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124B5606A323
+	for <linux-hwmon@vger.kernel.org>; Wed, 21 Oct 2026 21:41:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 124B5606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b=JAW4VnXH
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-36661f953e4so2138188eec.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 21 Oct 2026 13:04:39 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=APWtFxd6
+Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-35943f55c06so370242eec.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 21 Oct 2026 14:41:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexthop.ai; s=google; t=1792613079; x=1793217879; darn=vger.kernel.org;
-        h=in-reply-to:references:content-transfer-encoding:mime-version:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Oxuzt3tx2zzrVlPN9LeqR2EJEXH3nO1HmXie8iUqGdY=;
-        b=JAW4VnXHkBtVnCvV8amF5BuEGUgtPcES+Q4STI3sixNMY6bHHx/ByD7IeV2pe/YaQU
-         FbxPlYzVrqngyBqiK9m+Ix3aCCancLJSBNp2JDRUb0yiHk38u3dAhnh5kO4wMV2pzt/2
-         31Mati6Y3BbkrFNMO33S7VA8h9BvPQ3dYOEKw5A0gj/JK4sDK+YlfQ9EAHI77SKZy/KA
-         lUn44EyAJlITyqm2wvCfHEcSwYQ3d4Is/V0cNobM+UQHrdURpyi0eZcGauSP3yBctOU8
-         Tmwd0Wr30n8cGvWc/N9ZMVI/JdNBOQxfCFGJVfl4qV6cVOcV5btTe5EX5rFnRdGj0Op7
-         TF1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792613079; x=1793217879;
-        h=in-reply-to:references:content-transfer-encoding:mime-version:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1792618919; x=1793223719; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Oxuzt3tx2zzrVlPN9LeqR2EJEXH3nO1HmXie8iUqGdY=;
-        b=C+V9wDmcOU43GYt7tzqf4swmuQMZv97Np/oxLldZAvwVuH5vK9JeUQ2kBJ63v7RSJP
-         vb2p6Cnx836AQrEQZvO9gcROfJSbK/rsB0wnBQRM8XjxxLS3WjKxXLJimCdsnjtfeUDa
-         Sd+lKJekBHLOUlZMBqyPJYEh7w26XJTS3/nSyixKLbYO+qj6nOFlZwJhxzsgLSzdc69r
-         TTMPDZ4u26gQgu0RgXwzT9zrAnO0T60nZLqjQk1+6Z5Rk8QTbbH+xq48yCGlWNJ6khwA
-         TOAsMSr3PA+U7we8lyZ/AAs221mjluHA/1+tLQaGFl5OWfcp3ha3bGDMsT9K/w/oPDpo
-         u7/Q==
-X-Forwarded-Encrypted: i=1; AKwUvBwti95Yqx5H1NKje9KZhRDrjfrJ1sRvdb1gIubYrLY+rxgoiubDuBBMPTMlSUtHS6bHW+EwT5ttVi9Nbg==@vger.kernel.org
-X-Gm-Message-State: AFq9FYIL+hgQbJ+t57LQ86aYPQUvSnT4FjkqcHY5vYHJjh38xBt20IPC
-	cPlPJ2lwUbAxDP2x6GDPip2VjFikR5ZxaToZJC3EZi9cq3E4/9hISRV/ZwweMjvyig9dKQFZzAl
-	lhZkDslE=
-X-Gm-Gg: AYBFou2XNma2Pm8eZJi31v1vHpfJMTqIG44hVWHfkq95wTo/Jd3E6xD1xNd8qiML4xl
-	qZ3ecT0qh8p8q1khJVxCrvJzlhP7vfySyIyNXcR+UePBLGzVMjH7OJJ3JvcyB7D0huQEzGyt9v+
-	AfJ7eSZddGgE3gNvbY0qbKI4atpYbMSIBkM0H3FFJYvCDJSYFH3RO1MufT4rhROgsTKkpi/j93G
-	fzgcyNg770zEje18fMaNNhP+oc47a32Mpv0N8bN0p4rz6KJQVb14lc172riCKyzJbyR+1NQnGIX
-	WckRXY2zBk1D3HtK7DiaSSmAm1VkL0TO3IOxQXj7geU65ovqPHMvsnmhTyuTgzw1qGTmZSnD0NU
-	OapI/VhDXu6XgrYvVAF5NfoNUMSsZnl9iyPT1thX9LpdDFKRqww/JjqmO4Ici2tfa3cSlt1THec
-	L2ueuSDEzRJ3AkQUeyX61mXa3MblycFEzEz5FENoMnhmHyQ/BPX/XqkHjp+YlXf3XKNCAkhemc0
-	doxEpqIseP6L0zifyad8TLR6a8WoFBMoTPz1DgXcz0p/qS4qcAi+uQ2
-X-Received: by 2002:a05:701b:290b:b0:14a:8df8:56b1 with SMTP id a92af1059eb24-1933bb42675mr16108c88.22.1792613078967;
-        Wed, 21 Oct 2026 13:04:38 -0700 (PDT)
-Received: from localhost ([50.145.100.174])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1903bf5d61csm8694937c88.15.2026.10.21.13.04.38
+        bh=cdf3QpdJWB/0HDVyOxy8t0UFwHwVO9ns70PxKiQyY/U=;
+        b=APWtFxd6tsDHcsvtGIEJLxjzQrjUDtB/TGBRRdI9SCU1Vf9Cv0ho6bdDochbsJsFJa
+         6YfvMf8A/nSP+14qATm48kQoFOG1ByuAB3rbVQdwZO2TfuHcvxFiBKR4b5ut9TN9/fbH
+         yjAoYMraPnA+gHvtp+zuq1YzI3peJw7SFb8J9/0m6D8h9UOuySeend2KQW2JQPXnq2po
+         Q6V457vdylOlsNUhaQlncRmq8Pn37Z2294HN8hlMSfZBPe7brhJnG0bZBgN4CUX+dZD/
+         m+n1yU5ya1ug0OmKJO54G/kFInmAi90awd6tcB2dGOYXl0Hs7l7mlwZBKGT3SFE0lgE/
+         Ue9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792618919; x=1793223719;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=cdf3QpdJWB/0HDVyOxy8t0UFwHwVO9ns70PxKiQyY/U=;
+        b=TDV0QV7ohpkiWDDD3A53Ui9UF5i93gqOARPAPq14vSdO9kvwDUv3NVLicdeFv6mr93
+         fAPr5dduNku4fS9LzeNoWC46P+Y9zHuJdLuZXynRIFrdgukTfdbgNhpJIDoz6EJ3jxJ7
+         3jYDwCZUvgHLW22CwC+7V5qZcBlXpjqSnBOVfVdqBQhfJpGYRZR/t4SkFNGp/+lUTZna
+         ffNXr6tXjthd2hEJtRI8IC4WpNkoTPSXUnWqKfVxsW1zB0jyNPbPXf/Sb1HJzC9Nd3FS
+         G7zMy4c5rEhqPlOpa1xjY5CG158+CkyRuRRQ4qhZz9fgwERPU+wzbZxn1ivGtRTDF/Y3
+         OlVw==
+X-Forwarded-Encrypted: i=1; AKwUvBx7V7GwmMbfIOWnlgPm4hnRrTAcFFbc8wD3S1NhhfPf3181p5oU3mwsrqjTfoeRLvRJ1WseBOTzQIdjUg==@vger.kernel.org
+X-Gm-Message-State: AFq9FYLH7OfDcp/qDyoFnwS1Coyne+9da0AFqBa/DtNWnyY1/35aj5rM
+	PPSuz3Hb2e9F79zTs5b0lQqoGDeDRu5Lc26t3GD2ErMrNA1kUsQHodvn
+X-Gm-Gg: AYBFou2uVlSnET9ewKh6Yw9OhhSvzFxf+QLG9QbyZ2tRUJckeDA4Tt2ka/KXRslZDTF
+	A7HhmGfEnoDDlhg5lUr0aEKWsLY9lDR3GkCbhBn0MffK7iOL3F4t55CVlbDgpKThYfZoAamBTJH
+	tvinnAPWTESf3/bz9AtGSVp0sCTNxVeBGJNZ59GGAd304VYzn8F1S6hIhrzlt6sRmHF0+OvtEj9
+	AL/w2pyTgXh7mVILGoKTsGoUAIzMXmGIqTrlPm/IURQmP6E3wfROUB0+g/8fpMp274G/gKrLrUV
+	c0+zDkfCx7VSjejeI57+S0RHH3qftm6nEO5qqkRXPk7Iq5dBGB81Trn4a5/VPYBA7ThcBg9J8pv
+	BhQkFxNFXGJKUmehVS598rHuhKl3YLnohnrzo5YXAsB1kDXOMMtHXTiHo9CrqtbLhChj+91l+By
+	wXHLqqoGP4nHo6iBiy9HHY6dYEOzjy8Po6nZUb78VXDywvoT8MutgkYF6gxia3vBwYWvXq0Gflw
+	Zw3L7i8ftVKa45dPlyuJXY+/m3vV3+TUU3GPFadefhAg2KTcykTXJBFwKPDr7W+Eibt+xEy5Ook
+	rntXQb9+fXN+3NMpPBNpFDH3nC7rLY79
+X-Received: by 2002:a05:7301:7e17:b0:366:6c79:212b with SMTP id 5a478bee46e88-368b122ff22mr622562eec.25.1792618918940;
+        Wed, 21 Oct 2026 14:41:58 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36740cc8439sm10773723eec.11.2026.10.21.14.41.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Oct 2026 13:04:38 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 21 Oct 2026 13:04:37 -0700
-Message-Id: <DMASAV68R9CA.GRPDV6UG4MEU@nexthop.ai>
-Cc: <devicetree@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
- <robh@kernel.org>, <conor+dt@kernel.org>, "Guenter Roeck"
- <groeck7@gmail.com>
-Subject: Re: [PATCH v2 3/4] hwmon: (pmbus_core) Support relative encoding of
- vout related commands
-From: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
-To: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>, "Guenter Roeck"
- <linux@roeck-us.net>, <sashiko-reviews@lists.linux.dev>
+        Wed, 21 Oct 2026 14:41:58 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <599f18f1-7ef5-475f-9ea2-9a2059299751@roeck-us.net>
+Date: Wed, 21 Oct 2026 14:41:55 -0700
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -98,37 +92,47 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: aerc 0.22.0
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/4] hwmon: (pmbus_core) Support relative encoding of
+ vout related commands
+To: Abdurrahman Hussain <abdurrahman@nexthop.ai>,
+ Guenter Roeck <linux@roeck-us.net>, sashiko-reviews@lists.linux.dev
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org,
+ conor+dt@kernel.org, Guenter Roeck <groeck7@gmail.com>
 References: <20261020-hwmon-pmbus-fs1412-v2-0-3396c3a08251@nexthop.ai>
  <20261020-hwmon-pmbus-fs1412-v2-3-3396c3a08251@nexthop.ai>
  <sashiko-outbox-178650@kernel.org>
  <dd1781b2-4637-4997-bdfd-d71fc35837b0@roeck-us.net>
  <DM9W9SZZV7OK.33TH12KSMSBQS@nexthop.ai>
-In-Reply-To: <DM9W9SZZV7OK.33TH12KSMSBQS@nexthop.ai>
+ <DMASAV68R9CA.GRPDV6UG4MEU@nexthop.ai>
+Content-Language: en-US
+From: Guenter Roeck <guenter@roeck-us.net>
+In-Reply-To: <DMASAV68R9CA.GRPDV6UG4MEU@nexthop.ai>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue Oct 20, 2026 at 11:58 AM PDT, Abdurrahman Hussain wrote:
-> On Tue Oct 20, 2026 at 8:37 AM PDT, Guenter Roeck wrote:
->> On 10/20/26 01:55, sashiko-bot@kernel.org wrote:
->>> Thank you for your contribution! Sashiko AI review found 2 potential is=
-sue(s) to consider:
->>> - [High] hwmon: (pmbus_core) divide-by-zero after pmbus_regulator_set_v=
-oltage()
->>> - [Medium] hwmon: (pmbus_core) broken relative VOUT margin handling in =
-regulator ops
->>> --
+On 10/21/26 13:04, Abdurrahman Hussain wrote:
+> On Tue Oct 20, 2026 at 11:58 AM PDT, Abdurrahman Hussain wrote:
+>> On Tue Oct 20, 2026 at 8:37 AM PDT, Guenter Roeck wrote:
+>>> On 10/20/26 01:55, sashiko-bot@kernel.org wrote:
+>>>> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+>>>> - [High] hwmon: (pmbus_core) divide-by-zero after pmbus_regulator_set_voltage()
+>>>> - [Medium] hwmon: (pmbus_core) broken relative VOUT margin handling in regulator ops
+>>>> --
+>>> Good that I did not just apply this patch. Do you have time to look into
+>>> those issues and fix them ?
+>>>
+>> Looking into it,
 >>
->> Good that I did not just apply this patch. Do you have time to look into
->> those issues and fix them ?
->>
+>> Thanks,
+>> Abdurrahman
+> Addressed all sashiko comments in v4.
 >
-> Looking into it,
->
-> Thanks,
-> Abdurrahman
-
-Addressed all sashiko comments in v4.
+Yes, series looks good. I'll have to wait for the commit window to close before applying it.
 
 Thanks,
-Abdurrahman
+
+Guenter
+
+
