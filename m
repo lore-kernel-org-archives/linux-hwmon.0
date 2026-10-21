@@ -1,100 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.54
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792553194;
-	b=rFGOsq8YBBdIJMHzGXEd09mSh3ltpFGSMhQDetmBYH/LlpE6PwkFTtk6wf/y1iB3WT00
-	 Z+BiY0P4RgDKFl7l1Xm/zfsjNJvj6bssjWpCnN42hMXrer28vFOYBAwD6NN4E+JQGbNkL
-	 XsrLO++auSLruKSFnSA+hPdtlBUnXTM0qG/Ovx/OEPWZp4/UKNU4i2IMdYoGf0al9nu80
-	 YSoujhO9dZfEyD3+e+qf/+OCVU1lE6HI+Wv1n1Fzl6Z1G2erNnwvDFkwOKEYHr69BiZt9
-	 JzBENOOC17A4ZZ2AX2pcjeyTacxHybB3dMY6l42fxqxUzXob7+YYgS8LVFl3WemUVlw==
+	t=1792565174;
+	b=pdgO7cPLAtH9DW4aYWCBkpR4sl5g5HpnxNFKqe2wzm2lqf90DNB8qbP8mKcy17iMbWVy
+	 01NK5kqdpGtqPFR1uD7tgw2YzGaIr8OoDYeT4aICZZj4Q091saxjW1HqkBXkLOx91r/g7
+	 uPxKxb+f4Bcld7OBEzOG9BpuGHqyP0UFVtSfCb/OLlDMvBIiIuOTx34lJBANndU818Eg2
+	 MbN3I946muw8o+3r1B2MM7rkMFRmtERVyv7RGSLXEd9A/O0XYEg9L8hJUIW6EMljC2ipB
+	 yEcV6PrKCvsiOTvQvktCK7PJS1YWwMbfP7rtob8I806z8Mq6Gxr/BKf+FmMrMfosgGw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792553194;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792565174;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=Gt9eQr8sy7P6ypBBj7y/ENXtRPX2gFlUutM8nimRFxY=;
-	b=cXBZ1/k7COYhGkyVSTnqLr5SWdEt5TvRFr92oJDVMQ6rpvvCnpAejh8AxuqFsTs20v8d
-	 6aaa+y3j9wFpGX3/Stf9rtHFEeRbAkQ/yqgJQ9zzhXymxiO7Y23tLfBqF43+MWQ7N79ZD
-	 63AHUMQPRy1sX7h6VDA+RJ8AgODnDm+AZ1IDo1GOSnkbB/3WSvA2GLLHmYR4irFVccxxT
-	 pn/AGlTbMh+6kd2+fCcH/FzcOePTi7tdoakvlHtBinpB2U2CzbGa4QZf8+H71eiBYf9pt
-	 /KWnDxXLoyQpBMkINl4NBxi8UoasgpQ454SttMmsM/L6ankNl1WUWaEHYinaWQhHfBA==
+	bh=ijjheEMdAZYOTtTGE4e3W26/a2l3yNs/YuDbeMhOKVg=;
+	b=XfDRrgDxSXWURRfQwHe/imRPSuj18kXw9oR6QQMjQlIIzXhCULH+ZNXhxAFiQZM/mnD+
+	 RSB7oTrg35KA/msW47mKcwcYFPbhlrRqEhgH68jWox9me4E2ExWWqdd8siB+Ojgj9+Uj6
+	 hXRNf9JHlycfoRx1GG9lGsDDn4B+iqEOqClYD5P8VYQ1uuiDUlF1dohu+Ng+/EA4c5zHa
+	 nqcoUzWHHRhji3xOoeLYeIdPKu8UkGo3lj+jyq42f54inQJjfkgQkwyu/yuOVSrkA/DGO
+	 aX6uN21rqHQ/LPNhVdwM4wtwvhTJYj8P9nZE9dTGFQfzzMaSHELOEzvgx/UJbk51rOw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=lOcwEeEx;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.173
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.54
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75986607154A
-	for <linux-hwmon@vger.kernel.org>; Wed, 21 Oct 2026 03:26:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 75986607154A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8B53606A31B
+	for <linux-hwmon@vger.kernel.org>; Wed, 21 Oct 2026 06:46:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E8B53606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=lOcwEeEx
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2e901e114fdso1248795ad.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 20:26:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792553193; cv=none;
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-917aca1aee5so4754036d6.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 20 Oct 2026 23:46:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792565173; cv=none;
         d=google.com; s=arc-20260327;
-        b=VlsBN0xhD4IHBR9aXT3yNKtX4o2kU/H1uItoSXRCuxqKJo/cdxpRQn3ZTnoKiEsfF/
-         EpctwvBieRSZXV8QQ03j/ryFGrJi9t5DCRVIVt6iAZODdPaBn15WC+WfkmGHd43f7emD
-         55p5phwT5dqE2gzTl+FGFpw1vG9KYkEvH2SJdXPsJ+tpWFuadYSGQgMaJm8fe+Ak4y1/
-         3VSaEYWBD5u0WcCwuW7BcEBCFvladkd6sZ78+knojj4tVaR6KezlRq/iwvRPw7bdZucl
-         lbnP+qvySK0CMNtBVzD95WZAQYJX7x2TM8cqc94U0yHc0vrZ2yO7vobmlE1WFBc2Onyp
-         0SDw==
+        b=FTeXFB8QFyUjX+rpsw1fEgAH9LBxOAhVi9ULPxIbDiQskqCQAldeJ5r6v756wIkdoU
+         7Y4u5zvVRXE1xC4GHK8hXGdy0upU/EPRVXEoq7XRN3I7HFvXtFajDxvJoDFTBhnNkd0w
+         3hqu67/ePW8FZV9fWQYL9jcuY6JapcxVigMrY7WEPcmQKG5/1ZuZBey9uEZqIEa1GPZT
+         SLP7fkx1JIQ5KDT8I9ISNYmV/Jkqa5R23DrtCFlNeMECCeao1gSEVNls2ze6w8j27PpJ
+         hmy0XxTDtl96Wyf3tLdiH9qSoYoUrkDpWGdzD3rv1ynlCk8Bs+7BWp5TNdq+wcvd0RCK
+         T5oA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Gt9eQr8sy7P6ypBBj7y/ENXtRPX2gFlUutM8nimRFxY=;
-        fh=MYVK5ugoH2UDB42US036qq3VAcnHe86ntCZ+Xqr1Zbo=;
-        b=HoUrUVe2yVJ7SvE+z/PTPrcQzv0pTPXOJNMsmsQKjddysqH1w7Sf7A+xUGZzBy3SGE
-         WMihFWmzvEoCj0JqJ0rmyfY/xLmCHDMExvAM/sp3r1Z/zyk66xERM4TDRCRMA9LMkToa
-         gMtNvvLnU3UYln69SmthdqQVh/aSHMfkNB+y+2+zE3US30cjFqA2pMy20YIAyu6XCz5C
-         GNVeJBPUG1+U2OccUbn1K08zOZbsEnpH9nsSQHpPpWO+cRXoFp95tAVf3yvkr+TX2JjU
-         cUJAoBU8QYPSU9xhgEpvVm98aFRc2zoouva2nle0hW2d68R7PeerXhSjCSnWSeNLch4Z
-         za1w==;
+        bh=ijjheEMdAZYOTtTGE4e3W26/a2l3yNs/YuDbeMhOKVg=;
+        fh=M24CiqUisfud0I5JkuWBouJ49ohAjC+TvxZcqgAsM/Y=;
+        b=OJnibVh59roXWwV5TrthxdotfLNPYeaTVmFAxvB2nGYivKI5P3udmDs6Vkm5P5xf57
+         2hh9uC/EIp8f3O2bEz9gHvP6VEof5GQELlnS2ksATxkfg6TadN497kQDOTWgX6I2S/NP
+         QDZ69UokhprwHa7YCJk9zcg5KaN1hKZrzHZ+9ts1fQsi+GhsGyCcxm1w0DkBIk3hflwo
+         yJH/E/qiFLXijkT33EtQY/KNyT8siQSEqV7IoMaPMORLPrufvoleKSgWACfN0D27+BEl
+         BU6FEk0JYa8eVTsDLZp26p4+ZsupWF0EHITYJVIBIE3jyJseAUkQchuUG1Wr86U3gjKx
+         qC4w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792553193; x=1793157993; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792565173; x=1793169973; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Gt9eQr8sy7P6ypBBj7y/ENXtRPX2gFlUutM8nimRFxY=;
-        b=lOcwEeExZVAEIy9usLkBIV4yuk0sku3m9Y82hmVTKbhLuOlYNdNr17teoxDu7qO6jB
-         vncGvDKOBjWc5ulwevD8mnmYQ2x8K8t0rq2y6zLbe6kYaiiWMJPeraxA7reUgy6xVaDv
-         xeItrhLgGBJE7C6Poj6JHlXIoHybbwYTvWcdf4HP/SNJcyz57TyuM6+JeAMxLfg6TZ/w
-         zCy82mTslfSCqC3LlbnLdYIshuKwVFTmvLlY3v39amL7q2aJ+XR54vm1Vi6ctJd8rlFU
-         G/zqjdmmL4cK/C03NQ1yAR+lNgSDdkNIQHHLbQ2JSbviH5oApWaqCfRw2CssNQLoR+Qo
-         om0w==
+        bh=ijjheEMdAZYOTtTGE4e3W26/a2l3yNs/YuDbeMhOKVg=;
+        b=N3K8Bbb9tNmHLFt6ZXFDabkPNwYz0MlgUzh0K/zfhr2yAjtdkvQ+atM46OurewOaR1
+         5GpHZ1w3HZLexrrVA23itcwJ6z/A3tv78GFsLEvhUonkAC/73dFWQMqQxs4AzcszUoAg
+         QywB+6q06BHod6vzHnLg7lTEveFPsMcBeMrLr3fmzfBfZu7SyUZlS+rtU0CFP/tt5s8g
+         rXTl04SHDbrB/z7e3KtddFWqAgqZuw1vN7ipKBmLQJ+HhmthCk+mdogVDq20OH2zdFz9
+         er4Y6laPpOvP7dFZUifXCwXVCDWoAe8f6eCGE6CSv2DC0EwRrBbnT+ttWzNfLh3PEE/8
+         ufzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792553193; x=1793157993;
+        d=1e100.net; s=20260707; t=1792565173; x=1793169973;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Gt9eQr8sy7P6ypBBj7y/ENXtRPX2gFlUutM8nimRFxY=;
-        b=bZm59sQXh5iBRvWPrh1jD7Wtftaqll4SBzSL7LDJO+8eONN8o5rkX9R+3tIYz5MOT5
-         no8HTZy1KF+BHNNyE9qqd0f2J5ftQ5Zfpak2wVtDsWVJcS7chZ4x4OADcLNq2lPWXXxf
-         xUQnVkx5aDiZVKOhK9i1nyVjwANX7ohzlz/MvS7g9Von0UwNqBo06lyp+fHraa7F9KF/
-         klYB3F5+t23ZWbgrAU9uNlyiyh+VisdPLgC07qI6rBFk78M7AQOwvh/rxVucb2296i+0
-         pyjOaKSWhyvfUMZsMO5/n0tCJ8p1dQeu+ru/CIq4hYCqxrY7IcmMhU/JwO9/xWcmi8o1
-         Qp8w==
-X-Forwarded-Encrypted: i=1; AKwUvBzutZ1hNhvNAQXoAxVeLhMxfYWoW1eimHlDscQST7Ewv7B7NLj4kYuqLDo4cYv2YsGbWg4/c0wqQd5SXw==@vger.kernel.org
-X-Gm-Message-State: AFq9FYLP1za/Rr+N/16ux+1qYJjO4/YKONAr/4VRVYsoRvmPtJ3NrJ8P
-	yRGp5YZ7FRsSOon4CnzMGKbZ4MJl4hPPE2O/GbwKOxLV0Qzz7RHEtTvJRkTi0aF/nJHyOwCGarI
-	G1+XWIj9ZLdQhg1cBJI/t75R+ZFqY5V0=
-X-Gm-Gg: AYBFou3rfs7/URhT0hYcwYNSnKjzshjUYKq5AVLBLLYOwBXBRuou0IGpvbuTKcRPYjJ
-	khKRAma5xI2aNzL1nL+7r89VtTws42h48Xda2wfFTI7g4uo2QT+CRz2ZzqVyOCdsbLIaOCHnWy3
-	7ar633LISUIN5z+9DbDkemEfN+60/QW+37Hgb6/Honi0cXgDQX3j+AWawYdoI7J/+Ox/lX9vrq4
-	LKMIM+GtIDyeo4VxsH6rFONjd1LrquQtWt61v1rpGfqohR+UBkcGw+gmeFzzqc/fb1UpKP2MzYg
-	0zuDlI3k37fNddaPiZWmwXAgBPOTsal4qMjPH6IXsmK4F0AMmOMnfk/00XKVoO5cZHB1FwhImcx
-	m4e9RYRr9tRApuzo1I5RaTJj4YhLj1tL3kG94CAJAjMzgZWW0mQTYdE4xXKaMTjjc8JDWYPs=
-X-Received: by 2002:a17:902:e74a:b0:2df:4dc5:e12e with SMTP id
- d9443c01a7336-2ea43d88783mr5847285ad.27.1792553192737; Tue, 20 Oct 2026
- 20:26:32 -0700 (PDT)
+        bh=ijjheEMdAZYOTtTGE4e3W26/a2l3yNs/YuDbeMhOKVg=;
+        b=L1ERSa5sjv4DJsODpKPdhDOQNRLotz6hK3vy7tr9yTFzj0EaCOdUdVWCKk5LVvcToU
+         5HWn0U8K6JyUVatgyKu8JUbgVQqMQSE9UBFtuUAVKbnbipOKPKr4+ci5C5UmfFOKDav9
+         OxnNHEi5GfOVqzj5QRPh2tzRxjRcK7T5vg1CyjNcJmcIbJUpj80H37tS9I1miH5YQ5Yf
+         rEOlzbvoB4PQsRzSlA4RKrUe9ZxylgViR/Uh1XMbMWUWU08UGgYPgTSZCT5TCztINntO
+         fsWnjomnLIDwzOA7E+9tBT28axKgpnaaolQGBApYzxhcDpKH9oHVBMUMvzooLONRnCNk
+         EexQ==
+X-Forwarded-Encrypted: i=1; AKwUvBw171trn23Nu/OGyEHuGky5ugYIszUNOrf4WYbApjI9y/oHELOCmyErKmi5dRxTqa9Pq5MCq+krJ+8F+Q==@vger.kernel.org
+X-Gm-Message-State: AFq9FYJTVdYulJ2S2R+xsn68AG0SCUAyhBaxJr0NFZ2cNziON4Bt/9O6
+	pfY7nyymnFd99Ghf8kkmPUXT9fTHAC58vRUnQXExmBGc9Ajyq+J2FydN6Bv5m5RaxfEgIID0mz8
+	KH7kMIGpxOi43vp3L/iQDVpZWOvKYUTs=
+X-Gm-Gg: AYBFou13AGjWQA8R1hq4K85gBHFmLmwub08F7/kSB+sh4B3GYXvAOB0q+8tFKS++XxM
+	xeGxIe7zgWNzGfIlV0c3w7GrBsvaouYlw000J7eQP3/hbqxCXkxWmb+/2U37woTWIjeN5bg8QHV
+	PhMO5KqgUZ3ShS6To1IK1Zm8QGWduS4JjfhpbPWD/S4TP/rittviASYKPsiPUANIv/48vLqnx7H
+	NdL1Nv4canpNKlb/zt7hIFNS8ICg/mL7PaLsLer/luhtuVLg5yeMK8/dGIyU8Sgwdghwz9B+pVd
+	DD7/UZkp4Jk8w7hpofC6eTiD5YAIHU6lUcTQXI/p947eOpfCdbn8SbDqX3FZJf2WgELCYGmd4+6
+	Tn03zaFPczCFodqqk4po2/GAxUePWUXEQIHQytpNri8xPcNtihKjBLL6KkB8=
+X-Received: by 2002:a05:6214:487:b0:91b:cafe:58e2 with SMTP id
+ 6a1803df08f44-91c12eb7b30mr18765456d6.14.1792565172936; Tue, 20 Oct 2026
+ 23:46:12 -0700 (PDT)
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -104,137 +101,64 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20250511204427.327558-1-lkml@antheas.dev> <20260803221614.59324-1-derekjohn.clark@gmail.com>
- <20260803221614.59324-2-derekjohn.clark@gmail.com> <f8b2c85a-2800-c9a3-4e56-7af4c53823e5@linux.intel.com>
- <58a9c644-98c2-47ee-b083-0d5b19fa5053@roeck-us.net> <CAGwozwGdwhE6Sm6oa2uxx_sHfFNQ6fHYnAhYHkEPQcp_Yb=Z6w@mail.gmail.com>
- <CAGwozwFUTagam+dr0SXyziAMz1MJKcYMYUgrogFcmvEaE1X0UQ@mail.gmail.com>
-In-Reply-To: <CAGwozwFUTagam+dr0SXyziAMz1MJKcYMYUgrogFcmvEaE1X0UQ@mail.gmail.com>
-From: Derek John Clark <derekjohn.clark@gmail.com>
-Date: Tue, 20 Oct 2026 20:26:20 -0700
-X-Gm-Features: AclHuK8Xs091-vKVT7bOvhDjoq3_nWge5aBpQnq0586E9aA_45l3eZeGSIpucN0
-Message-ID: <CAFqHKTmQ2R-UAP9rAZzoxe=p-T1_JKPU1NaQ2ijrVg0RXZEHUA@mail.gmail.com>
-Subject: Re: [PATCH 1/6] platform/x86: msi-wmi-platform: Move guard out of
- switch in platform_write()
-To: Antheas Kapenekakis <lkml@antheas.dev>
-Cc: Guenter Roeck <linux@roeck-us.net>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	W_Armin@gmx.de, corbet@lwn.net, jdelvare@suse.com, kuurtb@gmail.com, 
-	linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	LKML <linux-kernel@vger.kernel.org>, platform-driver-x86@vger.kernel.org
+References: <20261013063259.2734757-1-a0282524688@gmail.com>
+ <20261013063259.2734757-6-a0282524688@gmail.com> <sashiko-outbox-169117@kernel.org>
+In-Reply-To: <sashiko-outbox-169117@kernel.org>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Wed, 21 Oct 2026 14:46:01 +0800
+X-Gm-Features: AclHuK_sk3N3reGEV1vFqkhXmWhSRT0CO9e7SvF9FhuKig6lX9RUqvijqALmuJY
+Message-ID: <CAOoeyxWNsBt6nDn82bCv0DUpar3c_K19su87UEbjm4CfCJbbHA@mail.gmail.com>
+Subject: Re: [PATCH v9 05/12] mfd: nct6694: Move module type macros to shared header
+To: sashiko-reviews@lists.linux.dev
+Cc: linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-can@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, mfd@lists.linux.dev, 
+	Marc Kleine-Budde <mkl@pengutronix.de>, Oliver Hartkopp <socketcan@hartkopp.net>, 
+	Vincent Mailhol <mailhol@kernel.org>, Oleksij Rempel <o.rempel@pengutronix.de>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, lee@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 20, 2026 at 2:53=E2=80=AFPM Antheas Kapenekakis <lkml@antheas.d=
-ev> wrote:
+<sashiko-bot@kernel.org> =E6=96=BC 2026=E5=B9=B410=E6=9C=8813=E6=97=A5=E9=
+=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=882:40=E5=AF=AB=E9=81=93=EF=BC=9A
 >
-> On Tue, 18 Aug 2026 at 17:26, Antheas Kapenekakis <lkml@antheas.dev> wrot=
-e:
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [Low] mfd: driver-specific header modified in global include/linux/mfd/
+> --
+...
+> > --- a/include/linux/mfd/nct6694.h
+> > +++ b/include/linux/mfd/nct6694.h
+> > @@ -8,6 +8,15 @@
+> >  #ifndef __MFD_NCT6694_H
+> >  #define __MFD_NCT6694_H
 > >
-> > On Tue, 18 Aug 2026 at 16:42, Guenter Roeck <linux@roeck-us.net> wrote:
-> > >
-> > > On 8/18/26 07:12, Ilpo J=C3=A4rvinen wrote:
-> > > > On Mon, 3 Aug 2026, Derek J. Clark wrote:
-> > > >
-> > > >> The ML patch set uses a guard within a switch case that violates c=
-leanup
-> > > >> rules. Move the guard outside the switch so all return paths are c=
-overed.
-> > > >>
-> > > >> Signed-off-by: Derek J. Clark <derekjohn.clark@gmail.com>
-> > > >> ---
-> > > >>   drivers/platform/x86/msi-wmi-platform.c | 2 +-
-> > > >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >>
-> > > >> diff --git a/drivers/platform/x86/msi-wmi-platform.c b/drivers/pla=
-tform/x86/msi-wmi-platform.c
-> > > >> index dfb65ac8fbf6..33acd448f674 100644
-> > > >> --- a/drivers/platform/x86/msi-wmi-platform.c
-> > > >> +++ b/drivers/platform/x86/msi-wmi-platform.c
-> > > >> @@ -675,11 +675,11 @@ static int msi_wmi_platform_write(struct dev=
-ice *dev, enum hwmon_sensor_types ty
-> > > >>      u8 buffer[32] =3D { };
-> > > >>      int ret;
-> > > >>
-> > > >> +    guard(mutex)(&data->wmi_lock);
-> > > >>      switch (type) {
-> > > >>      case hwmon_pwm:
-> > > >>              switch (attr) {
-> > > >>              case hwmon_pwm_enable:
-> > > >> -                    guard(mutex)(&data->wmi_lock);
-> > > >
-> > > > While I cannot see the code easily, one could also add braces to in=
-side
-> > > > the case to avoid this problem.
-> > > >
-> > >
-> > > I don't see the code either, but wouldn't this be a use case for
-> > > scoped_guard() ?
-> >
-> > Hi, not explicitly stated in the cover letter, but this is essentially
-> > a series on top of the series I sent last year but I did not clean up
-> > due to a variety of issues with MSI firmware that would have made the
-> > driver unsuitable for upstreaming (to my standards at least). These
-> > issues span Intel driver problems, HID controller instability, and
-> > varying WMI implementations esp. in regards to PLx setting between AMD
-> > / Intel variants, shift mode behavior not acting correctly, and fan
-> > curve application / resetting being weird (the fan curve on off bit
-> > does not seem to change whether an automatic curve is used but how
-> > close the device alings to the set curve? requiring us to back up and
-> > restore the original curve? half of the devices keep the curve during
-> > sleep and half don't? but if the fan curve is so finicky do we really
-> > want a resume handler for it? Perhaps we can kick the timing quirks to
-> > userspace)
-> >
-> > For this reason, I focused on other manufacturers such as Ayaneo and
-> > OneXPlayer. I will revisit this series per request from Derek as he
-> > seems to want this for steamos and hid-msi is already queued for 7.3?
-> > Although, to be honest, compared to the controller firmware issues,
-> > the WMI implementation is pristine.
-> >
-> > So I will need to go through these issues 1 by 1 and see which can be
-> > fixed and either drop certain features in the beginning.
-> >
-> > Particularly for the fan curves, if we say that resume handlers are
-> > required to be in the kernel moving forward, I do not know how
-> > realistic it is to make those reliable for this WMI device family.
+> > +#define NCT6694_HWMON_MOD    0x00
+> > +#define NCT6694_PWM_MOD              0x01
+> > +#define NCT6694_I2C_MOD              0x03
+> > +#define NCT6694_CANFD_MOD    0x05
+> > +#define NCT6694_WDT_MOD              0x07
+> > +#define NCT6694_RTC_MOD              0x08
+> > +#define NCT6694_RPT_MOD              0xFF
+> > +#define NCT6694_GPIO_MOD     NCT6694_RPT_MOD
+> > +
 >
-> This driver still needs work. I am getting bug reports about
-> inconsistent TDP application on the EX. A8 is broken as well. Even
-> with your patches Derek. I need to grab a new version of center M and
-> see what they are doing.
+> [Severity: Low]
+> Are these driver-specific module type macros only used by the parent and =
+its
+> immediate children?
 >
-> Does this driver work in your experience? What is that SMT toggle you add=
-ed
+> According to MFD subsystem guidelines, driver-specific header files shoul=
+d not
+> be placed in the global include/linux/mfd/ directory if they are only use=
+d
+> by the parent and its immediate children. They should be kept local to
+> drivers/mfd/ instead.
+>
+> Does this addition of driver-specific macros to the global header violate
+> the subsystem architecture guidelines?
+>
 
-I've got a few reports of some issues, but nothing with much detail. I
-have the 8 AI+, 8 EX AI+, and A8 in hand and all three had effective
-TDP changes in SteamOS with these patches applied and SteamOS Manager.
-I haven't done extensive testing over multiple suspends or longer
-sessions myself. I'm also not aware if there have been BIOS updates
-since my testing.
-
-By SMT toggle i think you mean the STAPM toggle for the A8? It was
-referenced in API_UserScenario.dll (setPowerLimit_AMDSTAMP) which I
-reviewed using ILSpy. After toggling that TDP started reporting
-correctly and being settable.
-
-Hope this helps. LMK if you need anything tested or additional info.
-
-Thanks,
-Derek
-> Antheas
->
-> > Best,
-> > Antheas
-> >
-> >
-> > > Guenter
-> > >
-> > > >>
-> > > >>                      buffer[0] =3D MSI_PLATFORM_AP_SUBFEATURE_FAN_=
-MODE;
-> > > >>                      ret =3D msi_wmi_platform_query_unlocked(
-> > > >>
-> > > >
-> > >
-> > >
->
+The sub-device drivers under gpio, i2c, can, hwmon, rtc, watchdog and
+pwm also use these definitions, so the header needs to stay in
+include/linux/mfd/.
