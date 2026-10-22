@@ -1,39 +1,39 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.28.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.28.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792654959;
-	b=vRUVjEUkVLUmPSLURBEhGopyJqQ3yMbNGK/1+31yQz99BAWm54QUsrh/nRslAn3oIc5e
-	 U54kA9NjCMBKCaJFnta5CeQ6W5miFLMUiD2jEl3o0MB2qBx8LHaJLJCWDPocnqyrIW0Jo
-	 ULcHGkTc7ZCt1ZGgKeTdDHRvmiP33zpabwg8JDRno4WKmY1IPMeF/j740IMx06bnT8y4K
-	 OrxlFPV386baLQZPerNhDdri3x0Dny82lDFQvlHWhIXb18eInnbygOKA+Sihm/Dplw3tT
-	 vR+alq190FxWWUx27v1HvCpecGqZ8chVY2lRkpD2LLCwdowzDPu7mUcMClTViN4DaGQ==
+	t=1792654964;
+	b=kTEq/MiSaNn3UOrl6LHLpwbEbbL3m0xKU000ZuhBoNOVwtgndJitjw5sAT8slcaHlDmB
+	 qr2FALgNtDL/A+MceRtSCOG3hUKBuFLlTHeTJrpjetsiX+4dBMdTMV8amDdVNQG0mMH/2
+	 UjmzwWCmm/pjgHRpt4MyXg1c1IGBit/7hht6fzOnaASv7XHYoH2XiHMYHfqq92o0mHeRR
+	 o3R/6yc83T7+tXQgh7oC1WzD5e0Qt/pwukShoTUpD6gZz6JH3zu6Z9/w4YCbQ4PAhegOU
+	 VzydaBR9l6WOCq82Tz+VZKWVgvtyzNdv0/7GMEnWzNv4gQoO9hsvnu27NLJo9peeh7g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792654959;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792654964;
 	h=DMARC-Filter:X-Alimail-AntiSpam:Received:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=d2K13RWcRE06nwzeDIJTbD96p6W1W8vKVpLl7tYs9Po=;
-	b=O9luuDV3us9KHiqmVSlt6XDV9UYBXxChNkHjTxaj8pWNdFBqUC5FTBRRUOszJOqC+3D2
-	 h5D8UOLmJJzBKzc0zTbyFqok/S35V4asop9c12031UuryzK/WBtsPzO52yEZhjg+YBCBc
-	 USGbq6vyBPAehXgDGZBaXAZe9CvLe/DHjsXY4GKx3WM4CxIieqErrdiq12US93kpoWwnO
-	 BZOgCU0hquyKQTXgkBMSjAzVDD7UnnuzpUv+3MYmllmYQq32cUggJagzfQM9+s66Fq4B6
-	 mu+zTloWIukMrivV9ksE9RRIAsqZAQLmJh8FqhZY0ht99c5MuzGcWlU+ur7ioXPQq1A==
+	bh=LO7kULQbd/RvNyzNlhIL/SC1uMZ4kwTcOMF3Y6R/cmw=;
+	b=uhTUygdK1IM8bbsUk2hSRfZS60QHcYkcNTtTR1W7ve1qyq7fKhT5pKPzt0gC5lcn9n5z
+	 mBhRenPUSGtyaBqIm/Nln1FFZjcNMC3BBTd38Tg7VABomGLYm/E8DS6UuEcNlLfKIq36H
+	 BR6ZKq7kKwinO2NR+1D1Yb1J47ZqODlrf7WeKHU82iSHWRlA8+vrB/CeWPS8IWotpNhwP
+	 eNgCNe/dpch82HN9Xh9k4/4WsU6tO2jSQ5AcrmSVizThI0yR7qi1tXdYjljDkGQLfCpfh
+	 jaADgnVYU5McDTu/R4k0LaBiHdBwKxVNj94FhAhIpnR/0kHhUpWEXnuaGgiONSU5bHQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=open-hieco.net;
 	spf=pass smtp.mailfrom=open-hieco.net;
-	arc=none smtp.remote-ip=115.124.28.172
-Received: from out28-172.mail.aliyun.com (out28-172.mail.aliyun.com [115.124.28.172])
+	arc=none smtp.remote-ip=115.124.28.49
+Received: from out28-49.mail.aliyun.com (out28-49.mail.aliyun.com [115.124.28.49])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF74606A325;
-	Thu, 22 Oct 2026 07:42:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DEF74606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698FE606A31B;
+	Thu, 22 Oct 2026 07:42:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 698FE606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.2085384|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0154444-0.0477482-0.936807;FP=3168551345189373651|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033037034184;MF=wanglin@open-hieco.net;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.jn83zYz_1792654948;
-Received: from localhost.localdomain(mailfrom:wanglin@open-hieco.net fp:SMTPD_---.jn83zYz_1792654948 cluster:ay29)
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.1085944|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.00706148-0.0109065-0.982032;FP=5300217843762596315|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033045038069;MF=wanglin@open-hieco.net;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.jn83zbK_1792654950;
+Received: from localhost.localdomain(mailfrom:wanglin@open-hieco.net fp:SMTPD_---.jn83zbK_1792654950 cluster:ay29)
           by smtp.aliyun-inc.com;
-          Thu, 22 Oct 2026 15:42:29 +0800
+          Thu, 22 Oct 2026 15:42:31 +0800
 From: Lin Wang <wanglin@open-hieco.net>
 To: Borislav Petkov <bp@alien8.de>,
 	Yazen Ghannam <yazen.ghannam@amd.com>,
@@ -49,9 +49,9 @@ Cc: Pu Wen <puwen@hygon.cn>,
 	linux-edac@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v8 3/7] EDAC/amd64: Stop matching Hygon CPUs
-Date: Thu, 22 Oct 2026 15:42:13 +0800
-Message-ID: <20261022074218.667049-4-wanglin@open-hieco.net>
+Subject: [PATCH v8 5/7] x86/amd_nb: Restrict the northbridge framework to AMD CPUs
+Date: Thu, 22 Oct 2026 15:42:15 +0800
+Message-ID: <20261022074218.667049-6-wanglin@open-hieco.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261022074218.667049-1-wanglin@open-hieco.net>
 References: <20261022074218.667049-1-wanglin@open-hieco.net>
@@ -66,45 +66,46 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-amd64_edac gets its node count and DF devices from the AMD northbridge
-cache. Since commit 49b96fc0dddc ("x86/amd_nb: Simplify function 3
-search"), the cache finds function 3 only at the fixed PCI slots
-0x18 + N. Hygon DF devices are not at those slots, so the cache is
-discarded on Hygon and amd64_edac_init() returns -ENODEV at its
-amd_nb_num() check.
+The AMD northbridge cache previously discovered Hygon F3 devices by PCI
+ID. It now derives the node count from CPU topology and locates node
+functions at fixed PCI slots. Hygon DF devices do not follow that
+layout, so the Hygon branch no longer builds a usable cache.
 
-Remove the Hygon match and the empty Family 0x18 case. MCE decoding
-in mce_amd.c is separate and unchanged. Hygon memory controller support
-will use the Hygon node interfaces in a separate series.
+amd64_edac and ATL no longer use this cache on Hygon. Restrict
+northbridge initialization and the early northbridge check to AMD CPUs.
+Keep amd_get_mmconfig_range() available on Hygon because it reads the
+MMCONFIG MSR without using the northbridge cache.
 
 Signed-off-by: Lin Wang <wanglin@open-hieco.net>
 Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
- drivers/edac/amd64_edac.c | 4 ----
- 1 file changed, 4 deletions(-)
+ arch/x86/kernel/amd_nb.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 0c0d11c72925..d10043a2d35f 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -3840,9 +3840,6 @@ static int per_family_init(struct amd64_pvt *pvt)
- 		}
- 		break;
+diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+index 5d364540673d..848ed2ca17c3 100644
+--- a/arch/x86/kernel/amd_nb.c
++++ b/arch/x86/kernel/amd_nb.c
+@@ -125,8 +125,7 @@ bool __init early_is_amd_nb(u32 device)
+ 	const struct pci_device_id *id;
+ 	u32 vendor = device & 0xffff;
  
--	case 0x18:
--		break;
--
- 	case 0x19:
- 		switch (pvt->model) {
- 		case 0x00 ... 0x0f:
-@@ -4120,7 +4117,6 @@ static const struct x86_cpu_id amd64_cpuids[] = {
- 	X86_MATCH_VENDOR_FAM(AMD,	0x15, NULL),
- 	X86_MATCH_VENDOR_FAM(AMD,	0x16, NULL),
- 	X86_MATCH_VENDOR_FAM(AMD,	0x17, NULL),
--	X86_MATCH_VENDOR_FAM(HYGON,	0x18, NULL),
- 	X86_MATCH_VENDOR_FAM(AMD,	0x19, NULL),
- 	X86_MATCH_VENDOR_FAM(AMD,	0x1A, NULL),
- 	{ }
+-	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
+-	    boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
++	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
+ 		return false;
+ 
+ 	if (cpu_feature_enabled(X86_FEATURE_ZEN))
+@@ -315,8 +314,7 @@ static __init void fix_erratum_688(void)
+ 
+ static __init int init_amd_nbs(void)
+ {
+-	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
+-	    boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
++	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
+ 		return 0;
+ 
+ 	amd_cache_northbridges();
 -- 
 2.43.0
 
