@@ -1,83 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.28.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792619897;
-	b=Qb7FCfi+EH7foePfhxij8AQfX4o4ibgFVhCdEDJudCP5vnMs2OpmymRRPLkbsAV53gkk
-	 ZojezSAhA5n+9ICbIIZu/rci/MLtUY1xRLHSy2amcU4OJmA9SgV4tZcZkMAhv6t4PgNQh
-	 NAx+v0NBze6c7NhUq/MDgNg3A1cA09+gyrE+fMnAfoucfhTcUJxCXnNg2PT2i3DKKK9vp
-	 PlZTlByi5mOypEA8gj6ybjwoz5a8BOIOCgIgwyCHZK3auGKDL4afRRAgicrU7W5Xwimuc
-	 rSdIY7mT6sew2ndWNx9k+1qdsUT1Dx6Y/42XYcqaUycAKpaDGvCh+EGRKQRO+k9pbeA==
+	t=1792654959;
+	b=AS4LBN0KcoJhDJy/oDF8X3H5cMmoPWTHtO57sWnpTaljTvkCZjxOvwl0M5Y3+ntqINN+
+	 5ODiEVtyAibQkMVMWB5yemynpGYZsQW05Otr1r3hJ+C6Vmtn6WD4Ti6RN8ir/F20resQE
+	 hub9qc6FUUHmmpvHeesnWy1KYg0kJWw/ST26bLKdL/AUKxlA8O1kW8YALJ7WOm6AxT3Ti
+	 QXs/n/f4y3uONHUYe/ezARLuyfmkdHtm05LG1S+mlQPk2IIRD3z70yQWfEOjQsz8iq+fd
+	 HS/nSQEQCJ78wRQX0wkfuOd6RCy8hQ8/b0f7q3m8p0//CJKA/76Xe8bnOjzGOQCbfTA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792619897;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=vjlrFc8ai6S+8VJ+lvNd8+aoLJdpX9LDqDVung6V/EU=;
-	b=F5c728TTkd7MIW/v3D8sstq4+AvvGinj1CIBM9XtURFWODQeit7tDRUcngq6xQBMSbRh
-	 cjWjel/9M1qVt1r03CWis4JquGfrMzHHQqgPAgT0MhUn3zYkMssrBVa4hZljNOXkaISLq
-	 x9bcPh2PWpbetI/uW0eOjzedhfCr27XF8ppOOpSs7CIutzaa2r7GRrnmA1ptRLOSss3XP
-	 LyWdKtvvxPgpPDZ6ASJJafCGwIh07QqU/EQOU5r1d7eOXU5h2QwilCUU3Sh+8sgHwSrkA
-	 MC4RlU0fcAR4Nu0EOV6TIoP8gZ95oQlSK3zGNbqCd0Wq2tZ4ttRzRqb8RRNZibyTbmQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792654959;
+	h=DMARC-Filter:X-Alimail-AntiSpam:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=3UDEKgZUPckUGfKZJ0o0xSTXDylJXQWn0mYSGDOxAlI=;
+	b=wxN1fG2Lx5fA6lG4jRqlNibK95e53Gf04ajkm3/vJNCaIHVxJCQ0K2tFBCc/rrfecwJ8
+	 SJHE8/tj3Yt+vzQ/JMyEXrbHimtG/D66bdIf+gUQ0l6fYQdX0mz244o4F7PTtKj6rp9Id
+	 iJn0te4NRixG1T31NxTshQeWPn4cintn7Q+cOy6Yx8NlcoS6eAv6J+WJWOrK1F7+fodEz
+	 7vWPvwXlcBi7mfT+HpAE7CjFfGzcn85KfO/HkqgD3QVELfBx+DAby8QNrc9nDjdT7hq6j
+	 gpKzXlkLX1mpuzEWFdS7eiu1qCNs0okq7Nck/Mmm9f3n0SYCJqXp4BbJYSGVrMKsrfw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nexthop.ai;
-	spf=pass smtp.mailfrom=nexthop.ai;
-	dkim=pass header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b=Bv6yuU59;
-	arc=none smtp.remote-ip=74.125.82.170
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=none header.from=open-hieco.net;
+	spf=pass smtp.mailfrom=open-hieco.net;
+	arc=none smtp.remote-ip=115.124.28.5
+Received: from out28-5.mail.aliyun.com (out28-5.mail.aliyun.com [115.124.28.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7020606A328
-	for <linux-hwmon@vger.kernel.org>; Wed, 21 Oct 2026 21:58:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B7020606A328
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b=Bv6yuU59
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-3535a54bed9so1674822eec.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 21 Oct 2026 14:58:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexthop.ai; s=google; t=1792619896; x=1793224696; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=vjlrFc8ai6S+8VJ+lvNd8+aoLJdpX9LDqDVung6V/EU=;
-        b=Bv6yuU59nd+Ut2wBNrms7x2KVr3ltVHDHJ9wPLhZWuAdYIXDzPPijQUJt41to4og+R
-         jhPbJQy8Bt3WMPnwCH71termvOtenXWFlVGmgYa3HgDXbvpBHQVbvetndgcqIP2boZdV
-         PsMkKFLYyn+sw2JrxhPKt6lLodquLrVRsXaQZV8G/YhIlJ8YD40I7vtJ2Hz9LZTz0X5T
-         vQkDNz4X9LkJUGHY3wKYLOqAxfBAbS0WP+USYsoVK//cGczx5os1MliU4u0uz+XQjk+O
-         U+aYNNgj0TJvz4y/VLuEjefu+wGRUxZrZz0aaWGlQeiU3kcqXXEB5h2ZcCO/JKVLOBxr
-         ss3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792619896; x=1793224696;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=vjlrFc8ai6S+8VJ+lvNd8+aoLJdpX9LDqDVung6V/EU=;
-        b=mntgwCiEH1fLhfxx1xUd6bAC+9dHboFjh3awZCYT6ryWi5wx3Tvd44mHAsFCsSjS4c
-         n4b8a7ULGMVwnYpnbttGkwSv0mqJmxbJAsvV+vlTY1aOCi3Oi0clbE9aPecM4dz0DckJ
-         4zaYQ6M39zBT++desQ4r4frP/kQ9vZ/cyY8t4JXKldUnUWSp4vY7KrVjfaf+HObSGjJL
-         FEUa+cAOchlWC5XOp2da3HLaagwcN4ySMKQpJg7B0F0xYXizQsiO48u4FjCNZ3S/4vEo
-         3smy/1YfyxoidIhK2Ww45QXcRvYE5tol4J/oaspAGKkRIVeHsRAeXQ447DOoUDG8dpEl
-         ZDfw==
-X-Forwarded-Encrypted: i=1; AKwUvBwa6RrcT/NrHZOU6siQuF4v7fda3nysqRBB3fgnzr33l+vZUchn+JZkBIvb0c9KMc54kFiPWzHoTIDopA==@vger.kernel.org
-X-Gm-Message-State: AFq9FYK2vublleU0vAtmYx3H0ndWlENyMuZXCSwlmBUxGQWHloK5K8s0
-	C6kEom5aGHROTjFGDZmMj8l4MkSVGKRecnILo1WJ9OWtF3iJgEp+03el9D8kD/cWgk4=
-X-Gm-Gg: AYBFou3jslKOE9W/e5cZUQ7hpNwjFsMD3oERBFmr1JT0aKlnvSlSuEUXzGtLKa0FDPf
-	Vx/4/GDEjDb+Rw8Jh3kkEZG7g4JE6jcdLSXtLHUISun2WbJfQ1wfzk8aTxPqRcA8dMBw6B+W2/2
-	ZJrFf4M/QAvk1LD8fUuFXMcbc1OlN0YGAA67KrSNfNmcTl7A92cjQmcsF137JTI7/v0tmFa7vRh
-	v3fSGbuCf8e5kB0N6QH4NgQy7AICn7l6qiGT61OyMDdVCmjKesn+od1YSdWbJ2ntYMXlR8bf+Nj
-	bgJ4orMFDJ7wtVH5SgWLqmS5Xm7dMPI+R7Hy5Jh5w4A+rB5aZbuBEx+c31N7x2YqQ1KHaSQymCm
-	SC0smJI0RHFv/mydkfdJ27nyTeono5ODHwwhs+5Jp+Qx1WOCZLyeoo18x/QnS5TAF+zFT27BISh
-	8NNIiwn8F65LkCYOcEbpLuGUhwqqco8m9rmEjs3n7ubDWDdemWZs8jJvPVSuLjNGpycj3bjno8H
-	WdtBuPN9FgRdDpZm8aeG7Ed1ZdLycR7wK8cEJ6rdJp6tlakghbMQqeN
-X-Received: by 2002:a05:701b:4283:10b0:15f:28e1:7c7d with SMTP id a92af1059eb24-190a86ade90mr4009050c88.42.1792619895746;
-        Wed, 21 Oct 2026 14:58:15 -0700 (PDT)
-Received: from localhost ([50.145.100.174])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1903bf5d0a1sm8941979c88.14.2026.10.21.14.58.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Oct 2026 14:58:15 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B52C606A31E;
+	Thu, 22 Oct 2026 07:42:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8B52C606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.07469408|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.00447277-0.0011769-0.99435;FP=13836726345535406299|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033037034017;MF=wanglin@open-hieco.net;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.jn83zY._1792654947;
+Received: from localhost.localdomain(mailfrom:wanglin@open-hieco.net fp:SMTPD_---.jn83zY._1792654947 cluster:ay29)
+          by smtp.aliyun-inc.com;
+          Thu, 22 Oct 2026 15:42:28 +0800
+From: Lin Wang <wanglin@open-hieco.net>
+To: Borislav Petkov <bp@alien8.de>,
+	Yazen Ghannam <yazen.ghannam@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Cc: Pu Wen <puwen@hygon.cn>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Tony Luck <tony.luck@intel.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	x86@kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v8 2/7] x86/hygon: Map CPU NodeIds to DF nodes
+Date: Thu, 22 Oct 2026 15:42:12 +0800
+Message-ID: <20261022074218.667049-3-wanglin@open-hieco.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261022074218.667049-1-wanglin@open-hieco.net>
+References: <20261022074218.667049-1-wanglin@open-hieco.net>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -86,60 +63,106 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 21 Oct 2026 14:58:14 -0700
-Message-Id: <DMAUPUPEBZ7W.DB96YQGOYZAI@nexthop.ai>
-Cc: <devicetree@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
- <robh@kernel.org>, <conor+dt@kernel.org>, "Guenter Roeck"
- <groeck7@gmail.com>
-Subject: Re: [PATCH v2 3/4] hwmon: (pmbus_core) Support relative encoding of
- vout related commands
-From: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
-To: "Guenter Roeck" <guenter@roeck-us.net>, "Abdurrahman Hussain"
- <abdurrahman@nexthop.ai>, "Guenter Roeck" <linux@roeck-us.net>,
- <sashiko-reviews@lists.linux.dev>
-X-Mailer: aerc 0.22.0
-References: <20261020-hwmon-pmbus-fs1412-v2-0-3396c3a08251@nexthop.ai>
- <20261020-hwmon-pmbus-fs1412-v2-3-3396c3a08251@nexthop.ai>
- <sashiko-outbox-178650@kernel.org>
- <dd1781b2-4637-4997-bdfd-d71fc35837b0@roeck-us.net>
- <DM9W9SZZV7OK.33TH12KSMSBQS@nexthop.ai>
- <DMASAV68R9CA.GRPDV6UG4MEU@nexthop.ai>
- <599f18f1-7ef5-475f-9ea2-9a2059299751@roeck-us.net>
-In-Reply-To: <599f18f1-7ef5-475f-9ea2-9a2059299751@roeck-us.net>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed Oct 21, 2026 at 2:41 PM PDT, Guenter Roeck wrote:
-> On 10/21/26 13:04, Abdurrahman Hussain wrote:
->> On Tue Oct 20, 2026 at 11:58 AM PDT, Abdurrahman Hussain wrote:
->>> On Tue Oct 20, 2026 at 8:37 AM PDT, Guenter Roeck wrote:
->>>> On 10/20/26 01:55, sashiko-bot@kernel.org wrote:
->>>>> Thank you for your contribution! Sashiko AI review found 2 potential =
-issue(s) to consider:
->>>>> - [High] hwmon: (pmbus_core) divide-by-zero after pmbus_regulator_set=
-_voltage()
->>>>> - [Medium] hwmon: (pmbus_core) broken relative VOUT margin handling i=
-n regulator ops
->>>>> --
->>>> Good that I did not just apply this patch. Do you have time to look in=
-to
->>>> those issues and fix them ?
->>>>
->>> Looking into it,
->>>
->>> Thanks,
->>> Abdurrahman
->> Addressed all sashiko comments in v4.
->>
-> Yes, series looks good. I'll have to wait for the commit window to close =
-before applying it.
->
-> Thanks,
->
-> Guenter
+On bare-metal Hygon systems, CPUID 0x8000001E ECX[7:0] encodes a
+CPU's socket and local CDD ordinal. The value is sparse across sockets
+and cannot directly index the dense DF node cache.
 
-Thank You!
-Abdurrahman
+Resolve the encoded socket and local ordinal against CDD entries in the
+cache, which are ordered by socket and DFID. The NodeId reported by
+CPUID in a guest may not describe the physical DF topology, so return
+-ENODEV in guests or when it does not identify an enumerated CDD.
 
+Hygon EDAC and ATL support will use this mapping. Keep it local until
+that support is added.
+
+Signed-off-by: Lin Wang <wanglin@open-hieco.net>
+Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
+---
+ arch/x86/kernel/hygon_node.c | 54 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+
+diff --git a/arch/x86/kernel/hygon_node.c b/arch/x86/kernel/hygon_node.c
+index 6a5278f8e5ca..03c723aab97e 100644
+--- a/arch/x86/kernel/hygon_node.c
++++ b/arch/x86/kernel/hygon_node.c
+@@ -24,6 +24,7 @@
+ #include <linux/processor.h>
+ #include <linux/slab.h>
+ #include <linux/sort.h>
++#include <linux/topology.h>
+ 
+ #include <asm/cpu_device_id.h>
+ #include <asm/hygon/node.h>
+@@ -481,6 +482,44 @@ static int __init sort_and_classify(struct df_node_cache *cache)
+ 	return 0;
+ }
+ 
++#define NODE_ID_SOCKET	GENMASK(7, 4)
++#define NODE_ID_LOCAL	GENMASK(3, 0)
++
++/*
++ * Translate a Hygon Fam18h phys_node_id (CPUID 8000001E ECX[7:0]) to a
++ * dense DF CDD index. On supported models, CPUID reports this
++ * encoding:
++ *
++ *   phys_node_id = (socket_id << 4) | local_cdd_index_in_dfid_order
++ *
++ * The CDD region of df_cache.nodes[] is sorted by (socket_id, dfid), so
++ * return the index of the CDD whose socket_id matches and whose
++ * socket-local ordinal is @local.
++ *
++ * Return -ENODEV if the cache is unavailable or no CDD matches.
++ */
++static int phys_nid_to_df_node(unsigned int phys_nid)
++{
++	unsigned int socket, local, ordinal = 0;
++	u16 i;
++
++	socket = FIELD_GET(NODE_ID_SOCKET, phys_nid);
++	local  = FIELD_GET(NODE_ID_LOCAL, phys_nid);
++
++	if (!df_cache.nodes)
++		return -ENODEV;
++
++	for (i = 0; i < df_cache.num_cdd; i++) {
++		if (df_cache.nodes[i].socket_id != socket)
++			continue;
++
++		if (ordinal++ == local)
++			return i;
++	}
++
++	return -ENODEV;
++}
++
+ static int __init build_cache(void)
+ {
+ 	struct df_node_cache cache = { };
+@@ -533,6 +572,21 @@ static int __maybe_unused hygon_node_get_info(u16 node, struct hygon_node_info *
+ 	return 0;
+ }
+ 
++static int __maybe_unused cpu_to_df_node(unsigned int cpu)
++{
++	if (cpu >= nr_cpu_ids)
++		return -EINVAL;
++
++	/*
++	 * The NodeId reported by CPUID in a guest may not describe the
++	 * physical DF topology.
++	 */
++	if (cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
++		return -ENODEV;
++
++	return phys_nid_to_df_node(topology_amd_node_id(cpu));
++}
++
+ /* Return a referenced DF device; the caller must call pci_dev_put(). */
+ static __maybe_unused struct pci_dev *hygon_node_get_func(u16 node, u8 func)
+ {
+-- 
+2.43.0
 
