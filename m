@@ -1,99 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.53
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792832763;
-	b=JB8rHMnLZ2ZqvaW+lxtkYKBW+gI7QTMMaUykxbodSvja5ibM51mMSNkli3r1JnMduag5
-	 Na39QMyKWUhxiZ8qKMo57X0xg/u/iY5TxgznmbP61gThzHstbxEr2zMLnZYx/2u/cXFhP
-	 +90zcN4gjBxd0WbIkHyWGdYZj7MrRefBRUOr5lBgDd4S31606FftptFZDvYy7fXNN04Ty
-	 +6Q7ZtgwBrKXE8bwV+TcBPJYpHTmHSUFN/GjFhWNj5F02xxaSWuPhFtykRnDvojKJ0Usg
-	 e8GpZvE4k2I7sSgE8YrMyeNUNTWwxY1IhG7Jp2HM3fTWBZbs+73H/vT/SMlZhhz4D6A==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792832763;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=fehn4L1x+4nWer8Oybpx12dXQG/hAlw09gDAggECqvM=;
-	b=FQIRJgvKk2cVh+H87O1BqoQNc+QoKkYFMU2htw6McjG7NiYjKfTnMSj8BReTBxYdwYGo
-	 QYfxcIMqibTbjWo7i2MsqPo3bAuS+mvhHxCZ5Ou3jza83Kx8KGNzLI4d1Wcz+zcq0UCKD
-	 hgucOqPX3EpDI4vKEsXCn19iAzUGrAIRQN6BuyMcUYHuYGQ+XIWMuZEMi7ocB168BtZG+
-	 +3wdbuO9NoT5bOTe68ozBlcGbptd2a/iQ3wx68gk13AVXFogl8uCMF63uWhdiFGVyjEbt
-	 TqfJTFUQBBiJRei2PbH1DAXyItvVL1OGvCmLYY+/jXWWddWEA/Ijx+FZayns9aSy5MQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Ik6IWooA;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.53
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=178.156.171.147
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792833889;
+	b=nQNv7kZIAHq2y6j0YekRc5aSHskRwYWU86YoZyh+SnBbm9e45Z//PCahO9ROnfTxt+ee
+	 cM9Lk/Yz4M4bGM4+RvLCdI+/XaN9w1EEVTYsNeFKgk+SRT8Pe3vOGM+XtUd2P6vqRXFbt
+	 GOO+Ru/oXgBJ6okoOWFP+54Pd/LppGu+Z5Mv4Kw+JNGxiNbGheMn9HJnyUpZWRpI8O8JB
+	 uE+58maWIisrLEnAXD42xXWEZ1DYz7IqZrAorDqsUabAJoXCJaKaI0gPnyGs/pFyotB6G
+	 USANwoW9AUlGrTEZgSelcgYUr8R7ILhNhO+7KHvOwrOrtXLtc+wnr77LWAfg7lYfasg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792833889;
+	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Received-SPF:
+	 Received:X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:
+	 X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type:Content-Transfer-Encoding:X-PPP-Message-ID:X-PPP-Vhost:
+	 X-Virus-Scanned:X-Virus-Status;
+	bh=UlFh2m38NvlbmdwBn9Ovqim+aU2KYkaeGxqpK8ckbcY=;
+	b=Wzs5/jARKAcCBDqsEN3VWn32SzXGD3KhwAdiH7JixClDKu9jMO/4FEb3zsjn0HXWb/3H
+	 sv6tWABvGac+GCrzLaVKx74P/5vnRw+ATevpRMoK/bqapBq2OLhTmrCWnCYnm7WSZLL2a
+	 4BU0EC+wwlS04kl9a7zorgcOWuRgiGwz2KZDuy6nCgA2lowhYy/D4QhWbJsPq+HWmVJVA
+	 6S+IRq4C/SKkvq+NcM+kkDY83estc94SDmpPsM+8jUPHsk4TFvFDcO7pDLxRWKS4qCOih
+	 j5DKtB7Ebf6HycTYJHZE6pSc+ajFzs0wjGfYZGq3g2X2bt6wq3cHvps+2oIuamgPYyw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=none header.from=antheas.dev;
+	spf=pass smtp.mailfrom=antheas.dev;
+	arc=none smtp.remote-ip=178.156.171.147
+Received: from relay13.grserver.gr (relay13.grserver.gr [178.156.171.147])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F517606A31A
-	for <linux-hwmon@vger.kernel.org>; Sat, 24 Oct 2026 09:06:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1F517606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Ik6IWooA
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4a140e7405dso15706335e9.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 24 Oct 2026 02:06:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792832761; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Zf5Xba1EXATFG5eKQn9ky6QUBTtEXRVpF/oYrBUP4QnvBaPiULK77vZATMuj6O7quT
-         jXQMT90b+iulH4DTihOFSJbUIGdzLZ35Nr7AOjDmsp9z+vbpz0kikuMK82bQnTSmYdFQ
-         I1kRYPhlv/zWOB1Ece4wEJRVRfGZ0fUs7xtPDPvIFigo6LLuEjGBqey29hUJLD6VwAJ0
-         EOOxjk53fjXK7MFMUY76N5oXrhy47FYebiJM5I7gaSNLbbolWVxkCtnQ+PP99wrcGwZ7
-         zPof+WTuegEeLOlUfgaZmNPw5yfebVqUNDAeebANUprF/3favWaPpEG3EmYlI7LXIhLP
-         LDvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=fehn4L1x+4nWer8Oybpx12dXQG/hAlw09gDAggECqvM=;
-        fh=YN43KaIt8anRLIdoiol4EESnR/HKKFaDOwl3s/eeI0o=;
-        b=AtXGY6PVrP+xlXlhFCOKayaZoSei4Vt1L+fSk+vTpTk2rYOvjidma2yBZBzyxaKOgM
-         tS2rotIJgjMYyjp/Mf3t7vEta4rOMP3zsVSHbXOrNdiiJa5DeLCi/DmaG8H4LGbfOZeu
-         fNH9yz0MqDjWdouXXmBe0C/16wuT1B9QZrxc6VyoMrfWPinT4wE+02Kx3D4trQYDZbA+
-         oWmpR3lwwjMz/3N4uwfE1R2nwzi+R0so0QydOafxNgzKlWDx8sst5xNjTCP3tAT4vTyr
-         l3LOMwhraA1ubF6+LOsoR/uth9P4zI8S2B8st1iUQ23KZX86JXGyREv1JIIbTnrPyVY2
-         vd1A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792832761; x=1793437561; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fehn4L1x+4nWer8Oybpx12dXQG/hAlw09gDAggECqvM=;
-        b=Ik6IWooA2WKcrLsnSZS34Bpb7ajRtRtiHPAvQ79V6rHKyFSch+ZKIxbbjKj0VfhDqR
-         ktfx4Yf9+C+S29v4Oj81GOJQt4/NJJxZDr7NmN9ptOZhT9w9zz1agzV9/QXMM+PyLezK
-         uaXQbH96q/g4MMvUgNvtbxm/GepC8TocjOYw2PG0R3rmG5s7a48sxIes+c4td7be5nLg
-         Sdn6E4077lvNtCLr6KUiwyBc26DPo/PePzXVfQvwTvtyyGbuLtPRh8gzWzZ4JnVOyICM
-         3ugPf3PudgaROEA1YVNa6caIRhQ08PR3awv/9bw1hPzD7bM3KyQ6P3Zmo6/1SWCEHhxR
-         F5Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792832761; x=1793437561;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=fehn4L1x+4nWer8Oybpx12dXQG/hAlw09gDAggECqvM=;
-        b=brAkEJVmSfu0Uo+cC6vXt/2+VnxhR4dnz+aQ4xKG5Mx7apNNWw2zaniV0o3YSp+y3u
-         00Y1vC4c6F9Sv/lPPnZ/4GD0usa3y/6Zbs73o/ymF/efvgqT51uyHDo/nmK0jWsW8fap
-         0tY0pRzbBKfEav4hTntSGFehVaTZ5oe6CX+gvwecCMQfPBHnHHtPJM6qak329UdyZrg+
-         TQHAVhcGCSqRhM/4VHJzJedUZLFoFfJkGlrargIkesG4OmVcDet7dNo5+Fj3bK7U2P2c
-         ya0QfG1iy0biLNwkD1xFGSvwScR01w4ntb227jeN7Q9bhY5ADhF7KUVEmxS3DxaP7hjQ
-         SVyg==
-X-Forwarded-Encrypted: i=1; AKwUvBxrio37lZ57e4VHQK0HFxp5+UNG5vDH2sWWTwCYLuUfrO0gjUpCazVXMLLtlQFNNmpUn/KmbJvv+GiN8Q==@vger.kernel.org
-X-Gm-Message-State: AFq9FYK5SH67S7NOCXn4304o38cNLwUC+m0t0pKMuu5jFTttTX0hiqfv
-	9LNZRL9IJdjFKhF4371jwaexwppBG+mCBPHfEjsAWC9R01RiCkZvESdg1hkK0s/PAfWIA0kfJFl
-	gcnO3CHH/nId79w0eNar73ipbvBfAR/+sLmkGF0M=
-X-Gm-Gg: AYBFou0/obFklAHxvZ7bJmw8FiqD2OCmRKyn2XZcxgCoHps+CDYCeqZEUIVdOkiO+/5
-	yEYO0+hDzbULPcC51flccYn7OEo89TIbw2Oy4rXz1A82AdHmWkpQ4cpK536+yQJI/8Frev50Lt1
-	AEZvAMYTVKeZyq5Z3KS/ktisNKIuFQ4cuxNcmNmY/YA/FBFwWXSN6XPiNCM95Sb6lB/AD9XwR2s
-	9liFpPO+2bvQAB8yDhvpRcyATFVNiT9lNIaDFuZlnz+a3b9zL1+xqqP3XofCt8ycCjgY0G5Vc0I
-	AjCpzX93F6SHZxfFXGL/37N9ZzuBL0P14ffC4jyINWRLpJMvL45hO9Nf+ctK5U0ODxrQt16WMLw
-	U8ME1WRdbDdlSKTk88r7hOKsOQ9H+n65dn/a/
-X-Received: by 2002:a05:600c:4f55:b0:4a3:598e:e7a8 with SMTP id
- 5b1f17b1804b1-4a35ac3d022mr24134735e9.4.1792832761474; Sat, 24 Oct 2026
- 02:06:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99137606A31B
+	for <linux-hwmon@vger.kernel.org>; Sat, 24 Oct 2026 09:24:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 99137606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+Received: from relay13 (localhost [127.0.0.1])
+	by relay13.grserver.gr (Proxmox) with ESMTP id 92A805E714
+	for <linux-hwmon@vger.kernel.org>; Sat, 24 Oct 2026 12:24:40 +0300 (EEST)
+Received: from linux3247.grserver.gr (linux3247.grserver.gr [213.158.90.240])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by relay13.grserver.gr (Proxmox) with ESMTPS id 1B6BF5E516
+	for <linux-hwmon@vger.kernel.org>; Sat, 24 Oct 2026 12:24:39 +0300 (EEST)
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	by linux3247.grserver.gr (Postfix) with ESMTPSA id B81A41FEA3A
+	for <linux-hwmon@vger.kernel.org>; Sat, 24 Oct 2026 12:24:36 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
+	s=default; t=1792833878;
+	bh=UlFh2m38NvlbmdwBn9Ovqim+aU2KYkaeGxqpK8ckbcY=;
+	h=Received:From:Subject:To;
+	b=PCUeMa3TinM5NLbb8/42sI7Cb73NtX5QNKX0H2Jo+khS4Q7lM2p3PJv2LiLUkAa7O
+	 a5jS149mNsJAM2DN1ShlUMw19UdMlbBCxfdc7ICB2CTlubqYU5AHjGZJYQX+fhlJqo
+	 xgrNSLqVeDLXEtA3VvtFrCPkcStJEaZvGTdT1fAucjEX7G+iuK2wLb72GWul/UwLRR
+	 gNZlIgexIpR7z+8vY9D84P4TsBRYpATjhNz2ux0Fg41QPvGwKR36EAgLtd6i91lvKD
+	 hlbp20uQooTRPl8+e0o/+arwXwz8WL88qYnyBhq4KJ+X5N5XAwGJCUg2MspSbq/OhR
+	 /X6yOBGRnDtLw==
+Authentication-Results: linux3247.grserver.gr;
+        spf=pass (sender IP is 209.85.215.179) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-pg1-f179.google.com
+Received-SPF: pass (linux3247.grserver.gr: connection is authenticated)
+Received: by mail-pg1-f179.google.com with SMTP id
+ 41be03b00d2f7-cc4be0e5351so610014a12.0
+        for <linux-hwmon@vger.kernel.org>;
+ Sat, 24 Oct 2026 02:24:36 -0700 (PDT)
+X-Forwarded-Encrypted: i=1;
+ AKwUvBx2rg1AelMObMCnwY7nYjHBVq5DttrPGec/ZcCyxo04jgP0BBgG/I3FygACk4g1e+Nq+mJvhP82loJcCg==@vger.kernel.org
+X-Gm-Message-State: AFq9FYLjLYnDbRH2Shk6UfNoGOeoD3tVjjdrjPII1oiFQKIfot8muKnW
+	DXQzAIintqn3esEYi7hGlrXLmWmt5oKojAjLCOT4wp6SSGic6g+hTBrIDqMs69+XSsyLQDWs/jO
+	VB2MN2HCIGl1YdLWXQlC0X8nOXznvXbo=
+X-Received: by 2002:a05:6a21:e587:b0:3e2:117a:62ff with SMTP id
+ adf61e73a8af0-3e7cd5242b8mr1238652637.61.1792833873675; Sat, 24 Oct 2026
+ 02:24:33 -0700 (PDT)
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -103,32 +79,182 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261024035735.6810-1-W_Armin@gmx.de>
-In-Reply-To: <20261024035735.6810-1-W_Armin@gmx.de>
-From: Sergei Migunov <serjo32.games@gmail.com>
-Date: Sat, 24 Oct 2026 12:05:49 +0300
-X-Gm-Features: AclHuK9wUs4scABeMPO80oA4UNOH6XzDoAhXXabC0VuKkF_qGjo0fv9kst0YuFE
-Message-ID: <CAMSNfTgwcpi=XQGpEp-ODLZxeA9wbW5K_erprgfQovPoQhjNoQ@mail.gmail.com>
-Subject: Re: [PATCH v2] hwmon: (dell-smm) Add Dell Pro Micro Plus QBM1250 to
- fan control whitelist
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: pali@kernel.org, linux@roeck-us.net, linux-hwmon@vger.kernel.org
+References: <20250511204427.327558-1-lkml@antheas.dev>
+ <20260803221614.59324-1-derekjohn.clark@gmail.com>
+ <20260803221614.59324-2-derekjohn.clark@gmail.com>
+ <f8b2c85a-2800-c9a3-4e56-7af4c53823e5@linux.intel.com>
+ <58a9c644-98c2-47ee-b083-0d5b19fa5053@roeck-us.net>
+ <CAGwozwGdwhE6Sm6oa2uxx_sHfFNQ6fHYnAhYHkEPQcp_Yb=Z6w@mail.gmail.com>
+ <CAGwozwFUTagam+dr0SXyziAMz1MJKcYMYUgrogFcmvEaE1X0UQ@mail.gmail.com>
+ <CAFqHKTmQ2R-UAP9rAZzoxe=p-T1_JKPU1NaQ2ijrVg0RXZEHUA@mail.gmail.com>
+In-Reply-To: 
+ <CAFqHKTmQ2R-UAP9rAZzoxe=p-T1_JKPU1NaQ2ijrVg0RXZEHUA@mail.gmail.com>
+From: Antheas Kapenekakis <lkml@antheas.dev>
+Date: Sat, 24 Oct 2026 11:24:21 +0200
+X-Gmail-Original-Message-ID: 
+ <CAGwozwGUAEb4Q9pfd_+aXMw2P3qY376F+usPHdUFO5Q6mV_ATQ@mail.gmail.com>
+X-Gm-Features: AclHuK_o5mK-ACNcsN3U3drXfMaNHe5y3JLkY05P_22D7Mibo_FAmTuZvNSEA6Q
+Message-ID: 
+ <CAGwozwGUAEb4Q9pfd_+aXMw2P3qY376F+usPHdUFO5Q6mV_ATQ@mail.gmail.com>
+Subject: Re: [PATCH 1/6] platform/x86: msi-wmi-platform: Move guard out of
+ switch in platform_write()
+To: Derek John Clark <derekjohn.clark@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	W_Armin@gmx.de, corbet@lwn.net, jdelvare@suse.com, kuurtb@gmail.com,
+	linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>, platform-driver-x86@vger.kernel.org,
+	"Limonciello, Mario" <Mario.Limonciello@amd.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-PPP-Message-ID: 
+ <179283387775.2255795.2681702316204123197@linux3247.grserver.gr>
+X-PPP-Vhost: antheas.dev
+X-Virus-Scanned: clamav-milter 1.4.6 at linux3247.grserver.gr
+X-Virus-Status: Clean
 
-On Sat, 24 Oct 2026 at 06:57, Armin Wolf <W_Armin@gmx.de> wrote:
-> A user reported that the Dell Pro Micro Plus QBM1250 needs to be
-> whitelisted for the special SMM calls necessary for globally
-> enabling/disabling BIOS fan control.
+On Wed, 21 Oct 2026 at 05:26, Derek John Clark
+<derekjohn.clark@gmail.com> wrote:
+>
+> On Tue, Oct 20, 2026 at 2:53=E2=80=AFPM Antheas Kapenekakis <lkml@antheas=
+.dev> wrote:
+> >
+> > On Tue, 18 Aug 2026 at 17:26, Antheas Kapenekakis <lkml@antheas.dev> wr=
+ote:
+> > >
+> > > On Tue, 18 Aug 2026 at 16:42, Guenter Roeck <linux@roeck-us.net> wrot=
+e:
+> > > >
+> > > > On 8/18/26 07:12, Ilpo J=C3=A4rvinen wrote:
+> > > > > On Mon, 3 Aug 2026, Derek J. Clark wrote:
+> > > > >
+> > > > >> The ML patch set uses a guard within a switch case that violates=
+ cleanup
+> > > > >> rules. Move the guard outside the switch so all return paths are=
+ covered.
+> > > > >>
+> > > > >> Signed-off-by: Derek J. Clark <derekjohn.clark@gmail.com>
+> > > > >> ---
+> > > > >>   drivers/platform/x86/msi-wmi-platform.c | 2 +-
+> > > > >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > >>
+> > > > >> diff --git a/drivers/platform/x86/msi-wmi-platform.c b/drivers/p=
+latform/x86/msi-wmi-platform.c
+> > > > >> index dfb65ac8fbf6..33acd448f674 100644
+> > > > >> --- a/drivers/platform/x86/msi-wmi-platform.c
+> > > > >> +++ b/drivers/platform/x86/msi-wmi-platform.c
+> > > > >> @@ -675,11 +675,11 @@ static int msi_wmi_platform_write(struct d=
+evice *dev, enum hwmon_sensor_types ty
+> > > > >>      u8 buffer[32] =3D { };
+> > > > >>      int ret;
+> > > > >>
+> > > > >> +    guard(mutex)(&data->wmi_lock);
+> > > > >>      switch (type) {
+> > > > >>      case hwmon_pwm:
+> > > > >>              switch (attr) {
+> > > > >>              case hwmon_pwm_enable:
+> > > > >> -                    guard(mutex)(&data->wmi_lock);
+> > > > >
+> > > > > While I cannot see the code easily, one could also add braces to =
+inside
+> > > > > the case to avoid this problem.
+> > > > >
+> > > >
+> > > > I don't see the code either, but wouldn't this be a use case for
+> > > > scoped_guard() ?
+> > >
+> > > Hi, not explicitly stated in the cover letter, but this is essentiall=
+y
+> > > a series on top of the series I sent last year but I did not clean up
+> > > due to a variety of issues with MSI firmware that would have made the
+> > > driver unsuitable for upstreaming (to my standards at least). These
+> > > issues span Intel driver problems, HID controller instability, and
+> > > varying WMI implementations esp. in regards to PLx setting between AM=
+D
+> > > / Intel variants, shift mode behavior not acting correctly, and fan
+> > > curve application / resetting being weird (the fan curve on off bit
+> > > does not seem to change whether an automatic curve is used but how
+> > > close the device alings to the set curve? requiring us to back up and
+> > > restore the original curve? half of the devices keep the curve during
+> > > sleep and half don't? but if the fan curve is so finicky do we really
+> > > want a resume handler for it? Perhaps we can kick the timing quirks t=
+o
+> > > userspace)
+> > >
+> > > For this reason, I focused on other manufacturers such as Ayaneo and
+> > > OneXPlayer. I will revisit this series per request from Derek as he
+> > > seems to want this for steamos and hid-msi is already queued for 7.3?
+> > > Although, to be honest, compared to the controller firmware issues,
+> > > the WMI implementation is pristine.
+> > >
+> > > So I will need to go through these issues 1 by 1 and see which can be
+> > > fixed and either drop certain features in the beginning.
+> > >
+> > > Particularly for the fan curves, if we say that resume handlers are
+> > > required to be in the kernel moving forward, I do not know how
+> > > realistic it is to make those reliable for this WMI device family.
+> >
+> > This driver still needs work. I am getting bug reports about
+> > inconsistent TDP application on the EX. A8 is broken as well. Even
+> > with your patches Derek. I need to grab a new version of center M and
+> > see what they are doing.
+> >
+> > Does this driver work in your experience? What is that SMT toggle you a=
+dded
+>
+> I've got a few reports of some issues, but nothing with much detail. I
+> have the 8 AI+, 8 EX AI+, and A8 in hand and all three had effective
+> TDP changes in SteamOS with these patches applied and SteamOS Manager.
+> I haven't done extensive testing over multiple suspends or longer
+> sessions myself. I'm also not aware if there have been BIOS updates
+> since my testing.
+>
+> By SMT toggle i think you mean the STAPM toggle for the A8? It was
+> referenced in API_UserScenario.dll (setPowerLimit_AMDSTAMP) which I
+> reviewed using ILSpy. After toggling that TDP started reporting
+> correctly and being settable.
+>
+> Hope this helps. LMK if you need anything tested or additional info.
 
-Thanks, Armin! The Co-developed-by and Signed-off-by tags are fine
-with me.
+Ok, I asked for more feedback. Yes, TDP changes do work, but they are
+not correct. Users AB testing with a Decky plugin called
+SimpleDeckyTDP report major divergence.
 
-I have been running exactly this whitelist entry (same DMI match,
-I8K_FAN_30A3_31A3) on a Dell Pro Micro Plus QBM1250 (BIOS 1.18.2,
-kernel 6.17.0-1033-oem) for two weeks: pwm1_enable appears, manual
-mode takes the fan to full speed (~4000 RPM), and writing 2 hands
-control back to the BIOS.
+SimpleDeckyTDP uses a combination of RyzenAdj for AMD and RAPL for
+Intel. When set to 7W, users report 25W power consumption when using
+the kernel driver and 15W when using simpledeckytdp on A8. 15W is the
+correct value for a 7W envelope on an X840u APU.
 
-Tested-by: Sergei <serjo32.games@gmail.com>
+STAPM should not be required to use or deviate from STT. Both of them
+should have equivalent behavior and match ryzenadj as the underlying
+DPTC hooks are the same, ryzenadj just accesses the mailbox directly.
+Using STAPM is a workaround for buggy vendor firmware that does not
+control boost values correctly (SPPT/FPPT) and is what the first
+generation Lenovo Legion Go did as well before they fixed it.
 
-Sergei
+STAPM as a workaround works because it uses timers to control boost
+values, so they decay after 2-3 minutes to the steady state TDP set by
+the firmware. STT boosts for as long as the device thermal envelope
+allows. STAPM is deprecated by AMD, only STT should be used going
+forward. +CC Mario
+
+This points to a BIOS firmware issue. You should consider getting in
+touch with your MSI contact for feedback and to plan a fix. I do not
+have an MSI contact. And yes, I am not happy my users have to rely on
+third party unvetted plugins for basic power controls.
+
+But we cannot revisit this driver while basic behavior. does not work.
+If MSI does not fix this or there isn't a bug in this driver we can
+fix, the only viable way forward from our side is to move power
+controls to the DPTC RFC driver/RAPL for affected models and only
+retain fan curves on this driver. I do not want to do this, I have
+userspace integration for this driver already, but it is not
+functional to the standard expected by users.
+
+I checked the ACPI firmware and unlike other manufacturers, there is
+no EC independent control of the power envelope. We would still need
+to check a low battery hook in firmware but other than that it is a
+straight translation.
+
+Antheas
+
