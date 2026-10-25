@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792901834;
-	b=izQiIh/o7rLN7rOVDQd4HHC0ZkuPSEK1crhzqlgp1qRYIe1srC9EAFsjPIV2dggoRuFi
-	 fOgIk2OjMxsWRTJUiwfOoVhkEb9wYiH+NavIGMvNgiD8IQkAoXs6D9WqlSxMHB35xVBbM
-	 D6Z/FhDlKdK23ZJ1dZy4R9eFqNWJkXnQYSekfGTYcQLUuKX1J49rgjkOyzNWbYGURaz16
-	 IIN8FBSSxZgVU9ldQAJH4rMd5w6J6UbpXZBjex1gTRLQMErMDEW/wN5imr+SjGss1elRV
-	 q+TsgGCByhWWM0VCJTLXw67ZvTr1k0N5CqmKZgRlObWrC9gniFGlL+n8WCi+8bZWUBw==
+	t=1792901835;
+	b=RKpeSwFOa8ZTBSORejV3TFet0z4XiyFzG3jnwoQI2h1Wn7ovgi4x9tFEiNiv0Gyg7xbW
+	 LxhTjltEHPsVeucxZZIKuUrWHppY6+PfccZ+2I4bK+n4+VLn5miq/fBRLgAloAIledF7S
+	 4qasbiA/PL5VQV7g/PRK800vBETg6ysuRlDBaCjVTZZmxVLq1PemSgqFroNN6/ycAWXNE
+	 fzOV55D/R9ogmKtIn6yh8lhMxBVO4pkED+d/0DBYOQwDQcVHwXF6cVx8A4LKycN7RsZ54
+	 I29IDSzpm/gp1lhxIYpCnQS71QLd4PfnJ8G8ubvQvgZQxoBi8sGd5Tfbo7fweZ0wopg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792901834;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792901835;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=4mjMrvFunIG9KcHofj+k+eAjSVk6+aFLDYdQmXOP6GM=;
-	b=SZAp2laEJgvfUCF0wRA8LhoZXYNgclKnrj+y3oHY52UxEHO1M8VegMKvQJtvOs2++29Q
-	 +DpXTjyDnsbcLaMwQQJRQi5MvomkQuPnTY+tyXMgy81vUX7Ssrxcd1EMfjnNkqSNxk/o2
-	 H3CPIWHTKrKyr0RZ+VOqJ3yknVthSu7AqeS/74RcTEM6Y8kBcT5GYdgYriAt23/nck/Tb
-	 4BZ4diWJ7ORJ9XlBpbjEmQfYLFRoDbuS0viwjC9Uy7NdMa+1eavq7rNTz8CXl6/2/Dc1U
-	 HWjqFqCsbOqHZHf8k5Dc9GPVqAK9Um3r4a/iQwO5flliKiUVn5ikkqD6ZX+QnsIPzRA==
+	bh=YV18JbaTne2ZFoiRnaYj+Ftb3Yc+6MjOnvgjph82hmY=;
+	b=RqLL+Pm87bkflZ8pou8mtHM0T4xeNrRHGSw8IK94yT3B9TYvEulrD9wP7af9IDnxJaeT
+	 u0tifGRdEaKSWy8bvMPYEPWNa3skBMnPVsSwyYpEbrdnTRANa1SMuYw3JnNFMsKATOs2x
+	 KsZH8roj2XHF3Apmr352AA3VneXEGlfBdiGjIb/EITrwYQ6h5NsdrQc92KReOO+sMeBdT
+	 95q2iITxyfPjt/KO2JozDqmuLRzjDK8hdceML3IGbwcdXrQubn53H55runtno77EkuhY8
+	 SKqKT3dr7i+TqddOhdcLwZOuDgcfU/rk/Z50jtMYsujzYgvpe7pEPIdYzTdHkupEd5A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bgTLzGg9;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K78FeY7H;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8555D606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE8DF606A31E
 	for <linux-hwmon@vger.kernel.org>; Sun, 25 Oct 2026 04:17:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bgTLzGg9
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8ABA1F01828;
-	Sun, 25 Oct 2026 04:17:13 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K78FeY7H
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F3F01F01825;
+	Sun, 25 Oct 2026 04:17:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1792901834;
-	bh=4mjMrvFunIG9KcHofj+k+eAjSVk6+aFLDYdQmXOP6GM=;
+	bh=YV18JbaTne2ZFoiRnaYj+Ftb3Yc+6MjOnvgjph82hmY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=bgTLzGg94lfLrPcLNjo4Hp5dz4wII/CyOBKgbXeB3O19I92R3/VdjFxggR0au2NS8
-	 rwuKLWcgHQl2SxLT5wal4cbjuMWJ4KOIj5yrKPceIE56S7zPjCZAFDcHLoVA0oUA+B
-	 MquHG2IVyJkvTt3Rej1Sh9bFBZi4HgnlHG2AdM1n43MXoF3LhhqAqhuHiIrB/dt19K
-	 x0QdJtX/HVG/lI+yjS1H9ZVAPDDokadA6/YFTuJWCsuaI9TBtThGnpcSJ2cbOkSkr6
-	 rdUeG2IWAzx82M6B1PNrcKTqN35d4Aji0J9wC8z7O58Vw5ieUcnFsnQYYsjK6YY20N
-	 2YY5BEMSsoLNA==
-Message-ID: <sashiko-outbox-184043@kernel.org>
+	b=K78FeY7Hp22CP9XYWmU8jzluG3Acztc+Kzk8n5wC5L11NRr8uwi2W/b0QKMt+ZO0o
+	 HLflInNYFsqWcHu2Q5POI5+pukOXz8ngQh7/mAFFuI6c/aaoyiAKQzjpGxJwdsgvDI
+	 m3Vbh6GwcMHOsLRiPD6HEZDQ3C86buJCfBwfwICwqqjIhnE79tf/TBrlKujGQbqIjc
+	 7dAnR4e7O82oy/WW4XR+luvl3JCtIZevjv50cjsaIU6dGGD3Zetdi3PeH8IzaZZZ3n
+	 N/+gxyPkFs4w5a3nQZZDAR69zSkc4IQ2fIrVj+hYBqLBowyHniBP01VBLh1a95zgro
+	 E+tX1hf9nO6CQ==
+Message-ID: <sashiko-outbox-184044@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 13/31] hwmon: (pmbus/ibm-cffps) use 4-argument
+Subject: Re: [PATCH 07/31] hwmon: (pmbus/aps-379) use 4-argument
  i2c_smbus_read_block_data()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Dmitry Torokhov" <dmitry.torokhov@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261024-hwmon-i2c-smbus-read-block-data-v1-13-e81941ad0cd3@gmail.com>
+In-Reply-To: <20261024-hwmon-i2c-smbus-read-block-data-v1-7-e81941ad0cd3@gmail.com>
 References: <20261024-hwmon-i2c-smbus-read-block-data-v1-0-e81941ad0cd3@gmail.com>
- <20261024-hwmon-i2c-smbus-read-block-data-v1-13-e81941ad0cd3@gmail.com>
+ <20261024-hwmon-i2c-smbus-read-block-data-v1-7-e81941ad0cd3@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 25 Oct 2026 04:17:13 +0000
+Date: Sun, 25 Oct 2026 04:17:14 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -61,9 +61,8 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> Pass the buffer capacity reserving space for a trailing NUL byte to
-> i2c_smbus_read_block_data(), and shrink the manufacturer ID buffer
-> to I2C_SMBUS_BLOCK_MAX + 1.
+> Pass sizeof(buf) - 1 to i2c_smbus_read_block_data() in aps_379_probe()
+> to account for the NUL terminator.
 >=20
 > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
@@ -71,5 +70,5 @@ Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261024-hwmon-i2c-=
-smbus-read-block-data-v1-0-e81941ad0cd3@gmail.com?part=3D13
+smbus-read-block-data-v1-0-e81941ad0cd3@gmail.com?part=3D7
 
