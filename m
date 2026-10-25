@@ -1,86 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792897571;
-	b=SAkgtVMLb3GcR3LYwmv41iawILAuXhgh6XAGpWqBvUqlW6ExSfs+IdAcG72AzauVLcUS
-	 3chKV0tltUAwg4wZtKWOsLAoK8pqIHEDZPBOWJTASYXiOvR117WSbE/0QPIm48SIZSzU9
-	 1/32Vt+FBzgXNh0YtIBolIyuIywmlRPsrX6SioV8nfXO8++Sdrxy+US3dT/f6HXes/ETe
-	 KYB3DlrJHVJZRpGWiy0CXYvpc6gY4j0tTemwko7B8fVzRk9GJCMAY5GTZWeqYmWwqTg/w
-	 ghbDguZyWurDCTwf+Sh8w0p5BZKMWX/Zgma+OJx69ok6F3RiMKi/G+3Vm0LWZNP5bIQ==
+	t=1792897573;
+	b=UzphSmJV5Zai1bw2g23mNS3gZWOb26QBV+5fFkIV7XMFrOVRzFPKnY49HbNbWvLy3UU3
+	 xu08JYnhh/IGCp9jLZaQwjexadih1Y8RstYNEiAbMJaw/RlciDJs3Z5AjvhAyf/nUtPoS
+	 oXimAXEUbzE1bB50FikNJeGyG0nMG0p7liL6a6wA8NhS7wBkncx9zMaK9KJADVS+PQRTD
+	 Mt8/tUOFVwnEEUkawCfcVDaLORJmN1TKAvlJwbcjy35If0O/8Y47q2tGqHbtMZKGyp32V
+	 DTK/tyJZuRsxIUT+VZ4nOOXHbev2riXG7pXERCiD4B8+piwgcquJ/r47tRvzpnbIxWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792897571;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792897573;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Date:Subject:
 	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
 	 References:In-Reply-To:To:Cc:X-Mailer;
-	bh=9rXit/G1B2KFGFxKlHMehzgVQ+QaItPOeQnpyECDLVw=;
-	b=nmgdFhGzOhoOHC1c12VO913NH9k5FjJ8o/Gmj7/oTYXvWFNR6UyZ/n54EBONdHEptZoV
-	 2RvlChDztKMdqic/M+Xg/ux5qn98vpLhwRUgIR4jwqlNEO5RWIgUYXxl3XqsSKC89tz4z
-	 Y4C8aqoiB3UN84ich+/E30V11JOC3L03LZ6ii2IEFJnltj1gkvaLpHPzMdVQzKeDeQYVk
-	 GCYYrKSQMA7UO0CJHCC7AilxonBOp6skyfa2Mqiv7IbHSfv5oXgKx3CSpDSOhmJmOR+JE
-	 P/TLucN8Y9iFiL44zpm2eQYKJ851XEcyNdKyUttm7D+d39wseky6rOwkKT0X8L0g+9g==
+	bh=jIsXoLD0V4o6ZxF6ixggOmISmDc85kM+xsblptZ7vmI=;
+	b=dN2d9nWmajpfN23FVTeXEpebNfVl2RR/N9sRljjYhsCOoxIddiqUclDje4AE1nhQkcLG
+	 jgdHmLllsiGYtedygmqE2kj+SqDLJbi/mAnxfNERopGgF+137bF91L5FIE68SQl+WSiTt
+	 YuhAk+RCZcwBITDKNYMRbm9LNZT6BhvfzIRAPAL8X5Kqy+HudRwNbdcVX9j00lajbVLFf
+	 R4orClItvd/8Mkn1o4P+Y0inXP/CeE5IfsQFRWXV58JgKwbQP6MHPP9+08Y7q5H08Ijgw
+	 jc2lVvoEq8b3neYsVa7/idxPnXG8s7aWGWnxzamjZkdsRrgR4y57XdFKU5YMRojmOkg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Jh5Mi3y2;
-	arc=none smtp.remote-ip=74.125.82.182
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=QOo6BMPa;
+	arc=none smtp.remote-ip=74.125.82.181
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C8D606A323
-	for <linux-hwmon@vger.kernel.org>; Sun, 25 Oct 2026 03:06:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 03C8D606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F262606A32C
+	for <linux-hwmon@vger.kernel.org>; Sun, 25 Oct 2026 03:06:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F262606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Jh5Mi3y2
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-35943f55c06so2684032eec.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 24 Oct 2026 20:06:10 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=QOo6BMPa
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-33bf40b0c8bso5363510eec.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 24 Oct 2026 20:06:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792897570; x=1793502370; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792897572; x=1793502372; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=9rXit/G1B2KFGFxKlHMehzgVQ+QaItPOeQnpyECDLVw=;
-        b=Jh5Mi3y25k+JdGKtxRjGi5IoEDsQkk8xyOn8VJeHO10iULHzWLpuv+WHQO0y46alIw
-         hGG8GbRht+xXRgEC5OBARu9iWg0RNnY1SAaGyhnHBUKMo3FW8uEO1QjJn/8RxHGNnt7E
-         ri51o1LxSztP70rsOFWP26ZiqmEU/d+WcoTNSQtG5uX1w1bLEgOqGz/HJS//0TX+drkR
-         dJca+HYhMbNI5uArxUZuhvwAxBB8v7sJIyWGydg+GHs3FYwp3xPf7ToRxyIDiKBGT4gB
-         D5h6XbZ379hc1BizGlhi5cVBl+BPkZ4Jm5NoNPCJyu78OT3EYSKXk1htLVG+nXLaBFnX
-         4eMg==
+        bh=jIsXoLD0V4o6ZxF6ixggOmISmDc85kM+xsblptZ7vmI=;
+        b=QOo6BMPatC5jr7ThNSI3tBYm8oh+BIlOLpbNGLIQuqlUu/ci7WDqrs6w7WmyOpO6sX
+         79kG4YFpk0ELRNWUQ1uJhIa/mxvUw1O80sddaJG66ZKNyb/Z95GuUggbdS68cep5jZag
+         x52rUXulleGyUWdc0mGqxQmmXzGdp/v5lF3/bAoUgUa8sShWpSF6vgvNfTQJhZGHGSm6
+         hYuP+60G+gw9MvSTbV8cq+KjRSRNtDQazN4iaKYS/wTaMi7UO0tuD+IsmZ9pIZl7KV8D
+         gHNHmTBjqfk2TlSwIE8cbIzNED35n005hAOi3ov3V5kz2b+l7xXdHbjDe/eBHrsw1ubm
+         jzaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792897570; x=1793502370;
+        d=1e100.net; s=20260707; t=1792897572; x=1793502372;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=9rXit/G1B2KFGFxKlHMehzgVQ+QaItPOeQnpyECDLVw=;
-        b=n72N5kprQLhDRq2VjTLlJbijMFFes+WLwrfmm9qeo7z9KTxtGuZ3IOTuuxCo7yf3Kn
-         6Qi13BojX3FnRZL605yt8unlPhwcVG5SwTQWGnPzvXKlxtuImJjYLXuecd9FG9UooUD1
-         iU2sZxebKosfMLcY4khoCI0XZC+tIgOwAiYv8sDy4a3Zp82ES6QSw2EVqFw6K0Cyt3NL
-         nLwZEAWya8F3E/qNThT6EFKJTJD+5uatZ6S1lKIKXgbcIYesFmRZYaPld+r+wACd6SBK
-         MSEVzAwHbmZl/SiIlY+BETV+cU/OpJNRDy9bRi8RKDyE/3eEqdz+ksn+jwcpfKItwhc5
-         rdZw==
-X-Gm-Message-State: AFq9FYL/Ppkahp7UbQf5KlNdP+q7IPU/PS2SMgToOsQYc8V1ERx/lzor
-	LdWEFE7PZoyXfDZQkM87pTWt/O51okGvGyHjCa9Ub+34/okKDmmOBmhA
-X-Gm-Gg: AYBFou12ejeHyI6dqectFL8D+KNHfbZuSRJ2B4ibdPLXPk3TTiTgtfYDwQIJNe2GmA1
-	c2H8jq+zVFmRh8H2IqHyNQVyeaMzuHCTnQAZHvEFQx0hENDQP6CEDa6EhCrmr6PbjuxQf3DPtfs
-	+HfK1Yzk0WH5+FyD/pKhFhdT8jrnyRyOSCmN2OJBOcQp9rb5XpQNgiLGrwp8qIKFt3uM8cCVUuJ
-	HaM37rFKdFe7uv1JUAs94ayrqMEK4Kg70OfyCt/pnSf2+G0Qb0RBEgJn5GqXwumyS6gDoFR92nO
-	j2jK9GgToNERAgq7Ji/r5t7pYFlTOUZIedxkKnw9T/hnuLS76CBGxlInGPUkS2SJjpf7E6vTllH
-	8UBMy1DSK11dF6P8tsgtwwoj/AsTH6d1m9quGIuYmcl4mX8O3YO0pehuQUwgoQmSvkOeD700eRk
-	zhG2wzanbdcv3XkXDJo9T2qYciHvyeqEds2XPCH1P8//FOvNV/5NqHZOC1susjidS0v2E+isX6V
-	a7c6FgEHFIG3lYJpFpLv0/KIA/AkF0ktdx1G1CePgAV9KFPgqt5OAc8AWMAa9eVF2UwB4PqDCm2
-	UzVooBL3QzGmkjYbQmL536+xv+R5r5mVPnjTCUhNEX57ju2FaLM549AgVu9pTqn9
-X-Received: by 2002:a05:693c:810b:b0:35a:3b98:b428 with SMTP id 5a478bee46e88-369e87cb951mr4033713eec.12.1792897570056;
-        Sat, 24 Oct 2026 20:06:10 -0700 (PDT)
+        bh=jIsXoLD0V4o6ZxF6ixggOmISmDc85kM+xsblptZ7vmI=;
+        b=2QrN+8EMIDBanw4aceKRB0O3zNDmXX+8PUewYWlwwyuw0bWJiFpyyWvjUccLeYrUjN
+         eEn0feZOY1M+yaINnHXTKS+afAoGXOkL5YW0V8IXgXwkYrx2BviwgcvEOlXeszVdQvGm
+         Z9URweO5tq5r18H1q3FNO9V14dePsRSFD1gyGV81cB8/TGpMw5dP/O3rzMd/MfFBFIfi
+         /Uo5f3Z6I5YdZ1ZCVFhq7EbH0vF7+FVvr5J2GQmQqO0A1QlQDtlU0pfKQDHEKeWcUcLM
+         436Fa6b05QO9n8q7htHSWRtSF8k+vWlW2TM2kYdv02woq9KzjC2Xxdo3CpicXtdEapQF
+         VIyw==
+X-Gm-Message-State: AFq9FYI4CZZUlooHfGZPms50cVu1uplhXBmRFE9XuRSf4Ea8wVZWaKFa
+	9hNZwefGwpMDLbWJfcT2S5naqG0HNyXp2TWDxZYB008Yfm+LqhMZsWCJ
+X-Gm-Gg: AYBFou2KKFfue84OdW/xjamtl9rYPpqOGOQD0SFkq2xco6CMOqPVOL9w9lkk3gJ0Lq2
+	JLqUAAKKLlAhvPtUEhWYDFEySrLzF+hkPyEUrUucKjktsoD2usxtPGknDkDAD5OQAKW08801ouq
+	SXqg285BABy3jLtr1w6eBAcjOvmshpjmWrO+n8N/OUyy6cGWMZugR1+bbdX5d8TvqqxOTM9lCYu
+	WigopHxWBzqj8ojPKJbc4ZfikWGU5fHmXRnHRlwgh5mOv4daAXi/kiGa7O5Sy74/xLDnZ4zR0rh
+	7XGjKsRBEqpswrgod+cOQSRaDm95oSPqvxm3fIrmcL5xYHuy0tCU4TuiGVobh+mSR/6FfqNzii9
+	i0PEulm4esrMBkRPEfpPXyk5+rS5zxjRQYO74wuAt2qG/Sy1w9jIjY1Gfz46V3pYj4uqV8xOaCm
+	2EMJEitJhw3U1xwp+4GDlM5KxAuxqj4S9/W4zK3VtKa4yYZgc/fD39YEgnpcVWXlcxTAq8I1ywS
+	lf+lt9A1+zI7Bfj/O0QdJIMA6tx1DBbUratns51Nvt5forPuM3RQJtbZoVkPeDnqgj82YFGhLBm
+	SIYYsAUanBgK4DE8FyxRQNC6QIJ4vFssYDTiu3ieec8=
+X-Received: by 2002:a05:7300:2442:b0:358:2e30:8e5 with SMTP id 5a478bee46e88-369e836b382mr6015233eec.1.1792897571529;
+        Sat, 24 Oct 2026 20:06:11 -0700 (PDT)
 Received: from dtor-ws.sjc.corp.google.com ([2a00:79e0:2ebe:8:8fe4:693:7158:24de])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-369e8ec9276sm20245992eec.25.2026.10.24.20.06.08
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-369e8ec9276sm20245992eec.25.2026.10.24.20.06.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Oct 2026 20:06:09 -0700 (PDT)
+        Sat, 24 Oct 2026 20:06:10 -0700 (PDT)
 From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Date: Sat, 24 Oct 2026 20:06:04 -0700
-Subject: [PATCH 01/31] hwmon: (lineage-pem) use 4-argument
+Date: Sat, 24 Oct 2026 20:06:05 -0700
+Subject: [PATCH 02/31] hwmon: (lm93) use 4-argument
  i2c_smbus_read_block_data()
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -93,7 +93,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261024-hwmon-i2c-smbus-read-block-data-v1-1-e81941ad0cd3@gmail.com>
+Message-Id: <20261024-hwmon-i2c-smbus-read-block-data-v1-2-e81941ad0cd3@gmail.com>
 References: <20261024-hwmon-i2c-smbus-read-block-data-v1-0-e81941ad0cd3@gmail.com>
 In-Reply-To: <20261024-hwmon-i2c-smbus-read-block-data-v1-0-e81941ad0cd3@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>, 
@@ -106,46 +106,52 @@ To: Guenter Roeck <linux@roeck-us.net>,
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Mailer: b4 0.17-dev-e56a4
 
-Pass the expected data length and destination buffer directly to
-i2c_smbus_read_block_data() instead of copying through an intermediate
-buffer.
+Pass the expected command length and destination buffer directly to
+i2c_smbus_read_block_data() instead of using a static intermediate
+buffer and memcpy.
 
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- drivers/hwmon/lineage-pem.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+ drivers/hwmon/lm93.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/hwmon/lineage-pem.c b/drivers/hwmon/lineage-pem.c
-index 2553e49f8401..75a44b0639dc 100644
---- a/drivers/hwmon/lineage-pem.c
-+++ b/drivers/hwmon/lineage-pem.c
-@@ -130,20 +130,15 @@ struct pem_data {
- static int pem_read_block(struct i2c_client *client, u8 command, u8 *data,
- 			  int data_len)
- {
--	u8 block_buffer[I2C_SMBUS_BLOCK_MAX];
- 	int result;
- 
--	result = i2c_smbus_read_block_data(client, command, block_buffer);
-+	result = i2c_smbus_read_block_data(client, command, data_len, data);
- 	if (unlikely(result < 0))
--		goto abort;
--	if (unlikely(result == 0xff || result != data_len)) {
--		result = -EIO;
--		goto abort;
--	}
--	memcpy(data, block_buffer, data_len);
--	result = 0;
--abort:
--	return result;
-+		return result;
-+	if (unlikely(result == 0xff || result != data_len))
-+		return -EIO;
-+
-+	return 0;
+diff --git a/drivers/hwmon/lm93.c b/drivers/hwmon/lm93.c
+index d58a3c2a8593..2cbf0af22f61 100644
+--- a/drivers/hwmon/lm93.c
++++ b/drivers/hwmon/lm93.c
+@@ -871,8 +871,6 @@ static int lm93_write_word(struct i2c_client *client, u8 reg, u16 value)
+ 	return result;
  }
  
- static struct pem_data *pem_update_device(struct device *dev)
+-static u8 lm93_block_buffer[I2C_SMBUS_BLOCK_MAX];
+-
+ /*
+  * read block data into values, retry if not expected length
+  * fbn => index to lm93_block_read_cmds table
+@@ -884,7 +882,8 @@ static void lm93_read_block(struct i2c_client *client, u8 fbn, u8 *values)
+ 
+ 	for (i = 1; i <= MAX_RETRIES; i++) {
+ 		result = i2c_smbus_read_block_data(client,
+-			lm93_block_read_cmds[fbn].cmd, lm93_block_buffer);
++			lm93_block_read_cmds[fbn].cmd,
++			lm93_block_read_cmds[fbn].len, values);
+ 
+ 		if (result == lm93_block_read_cmds[fbn].len) {
+ 			break;
+@@ -895,13 +894,6 @@ static void lm93_read_block(struct i2c_client *client, u8 fbn, u8 *values)
+ 			mdelay(i + 3);
+ 		}
+ 	}
+-
+-	if (result == lm93_block_read_cmds[fbn].len) {
+-		memcpy(values, lm93_block_buffer,
+-		       lm93_block_read_cmds[fbn].len);
+-	} else {
+-		/* <TODO> what to do in case of error? */
+-	}
+ }
+ 
+ static struct lm93_data *lm93_update_device(struct device *dev)
 
 -- 
 2.56.0.257.gf7497c7d27-goog
