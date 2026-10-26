@@ -1,95 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792974229;
-	b=idyvGj1JCHW9b4TJw63QyBBYjBkRc6JjysKkxFpGDZSer1qAN+djA2J00fQ0E0IKX1mI
-	 6YP2rXWOPsoVF77j2+vuMoAR5eNPCRqrvS5Vu21Sqe4OvDnOY1wIsL29UFX79ehueL62z
-	 ajQD4lhzdL5TJbYJxE03V4Tduo3Ue/PwAgLaJ+j3qRhh44ZcsdJBuRvoR5Pa8EI8AX0HM
-	 qmqcQmcdlrhbcSgVtIq4xQPhEVoxNrZ9w/xe8Riu08i8wLr3kOhGodLHv/90KtZv/Onl/
-	 5AihFk5d1GbazH5cObmNSVDyUEiZFhoSTuXdm+/b/V1QIyF1jAfKtZ1S3pY8QwKVTRg==
+	t=1792974288;
+	b=oO1wr7T1K1GfKPLJ/4tp0x9jceMckheWz7mT+++9evDjYvYItgH1/dhsl+Qka1wInxP2
+	 28Uqft6Jtx5AX5AZvqjCWJiF95Uf/F7IkZe2gjmcJaCIRROiCruu3igUHvBQi7enLhEJ6
+	 aVCkr+gek32nnrXioA4q6fBUQd9vYkeJ9UmdOt0BobUP9d/HdoKthKmMfZzIzlcejILjA
+	 zxNIRbTEFV4oqZKWlLCtXHEu8Y8P79yMdEyztQMgaDByrhlsJalWkgzvb+kOOz2Zgc8wS
+	 3ioskXjwRmXcRR4CvX752vq+6IvY0aqGUaH2KJ1LItuX+xdVuyteeV0rDf6G4AzJTUw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792974229;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792974288;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Sender:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=qOAEuxqxBYmK/0PL/M0euV7RCcXgDliX7E86NGaLuy4=;
-	b=Y1YnxlHkDF8mFaGA/PlAmwMPrj6RlwDWGQdMT0V/WHfJU9ZD1mu4rkVXRdw8cP4Z7NBW
-	 HyLJnOMlou4h2QhV9nnNJbKpGkl9OJiDvzrqVB4aVujMztORJypLzXr+fJ0vETqeSr/qW
-	 2IIcZqPhEMgo94dK8dMfRQFis2YDmOHHuL5Du2/k1uOTTCFjLDgedgC2VQsicWwUqOOiM
-	 oWIklJSvDEoJqNhVF3C9u0SQl+PY5Oap5fwyAfxzicJbpyk5dntaJrQQtnUhchaRUsA2/
-	 JrTZsr1odA2ln/N6BXggESIKimO8WalefRhUQ7L1o+Y9xWW3JX7dNEyjSVu++sX74+w==
+	bh=HV83c2/+fbkcmd4e8V3tUmbhGiJJW07WJQ5LFrvg8bc=;
+	b=oKm+fPqPgOWNurDzim+moUhvpybWsRxmZROu91aMZYh0+AyGOdruzh7B7mK3Nvb+PGXk
+	 1UemyBFNkE81kRHsxF85mew4ZzBUBgpmGKtCGJduarPQwVlnqUsvN5IaMFieBhNnjT6PY
+	 mmXZ9yfShfLd8GwSSFA/WdI0lHtQq03YemTP9OCAjlaDV/hZJXfRVb+tmvKMugXBFBGbd
+	 ZPAQO4nyWnouOeyFiCrAM98d4mt6BjPNuA+NtDosg+81mlyI9nNC0UvPeqJn5tMRaR21r
+	 8EaevzEY/P88LGLifEOFt5UyNJdQoKfrtLGRquqIHNR+gH58IWIHl1WVdXpS+yC9m7w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="c5O6rA/0";
-	arc=none smtp.remote-ip=209.85.216.46
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=QMARMDKn;
+	arc=none smtp.remote-ip=209.85.214.178
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3ACB606A31B
-	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 00:23:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F3ACB606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C296606A31E
+	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 00:24:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C296606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=c5O6rA/0
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3ab752f6244so2246393a91.2
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Oct 2026 17:23:48 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=QMARMDKn
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2e9e53d011eso17459715ad.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Oct 2026 17:24:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792974228; x=1793579028; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792974288; x=1793579088; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=qOAEuxqxBYmK/0PL/M0euV7RCcXgDliX7E86NGaLuy4=;
-        b=c5O6rA/07U3TPiUdjyQl+0E/1QGQKFEd/BuZr146AnkMngEg/j6CBnibvZSqG0Fd/U
-         e4xYnAbkCcJZ1k93qWPPfj5VllNNTSBCgJV5StBfQdExN/DGAdLuzUg0d+8BpiUz+dWF
-         8k8Yh1uPDnH3nRhntCgLGxU/EuI7hZF/CcR4oFQkXMUVcuTWXLK9tsE7bHqwgN19O4Zd
-         Cyeu/xE4r6nEEXj62dltqk3zE19zxhJyrgAJVuQnqGgjnQ/LBWSIkIOro2427PZKPcis
-         CuBDXBzun4bni3YIS0qe8Wr7agcu2YNAB9TuCWvtGR2SX0aXsXlmznXP+M9fy4lE0ZeB
-         LV6A==
+        bh=HV83c2/+fbkcmd4e8V3tUmbhGiJJW07WJQ5LFrvg8bc=;
+        b=QMARMDKnwV949KW4/7O7LSMd6V/YMqHz9ZlzpWPQ+s6TZykn3tcjCrDcHALhy1p1D9
+         zqqj/8P2iA+mT9qEVy+OTO4BJMmNn57xNgP9cUxA94uldrS4V3XktyXb2Npr40PtGPuy
+         km/P3oDXSbst12pKwgiayxeyY4umhESjvW8vcI/lsH8231KYo2AEuYpPYCEs9G9OqRi5
+         ILdIktl2YHjxn/ILB2eQPo/HJLGk1XEysxZ7njT+GgD1zhFE4eCvQVj3jq9AYneT4VqA
+         n4shNZ80DPL984vmHjsFDb6Jg3k0aVHR1+XFwi0SpyargLeisyh4sSxPIXy16x4yeHfU
+         TTEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792974228; x=1793579028;
+        d=1e100.net; s=20260707; t=1792974288; x=1793579088;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=qOAEuxqxBYmK/0PL/M0euV7RCcXgDliX7E86NGaLuy4=;
-        b=LxV3wb0F5KPQ/Pd3fpZdt/p7q2OCZ04QlvwDJmsUexl8Q4gl9gT25YIJb60NONjhqj
-         hi6RHgJu8GgcuSFxTa2rEilwZJQcWOvEOAwuJ97egkxYHwMsWz+JqTHTFD40dSJMTsM5
-         90TZ65vhiu3w1aW+S9F3VYr2XcgaZ3Tccy51rvOS58jQqmuRXr/TAk3/jG4km62bXKHJ
-         A28lx3tp4ZmuxXJvxiYofDO3XsG/w8uGgNffVAGkrw3okr+ALkb0jAoamK5Af0rTPBJu
-         tcnPScXUIH4UMgfke/7TfOgaM+yCiu2nTtscZm+r9G/2zCahyl7PiKNXaHwwOFSM/ncR
-         egQg==
-X-Forwarded-Encrypted: i=1; AKwUvBzGiHMPgp2dKq+s7e+IhFmGcP1Um5h1/ajugqGpWqw8/dyuiszXMDvQkQobhcUoGcx9nQvEjLRRtboUyA==@vger.kernel.org
-X-Gm-Message-State: AFq9FYIotqk5mmRTWXV/EqYcCXtao2613J4KM8UwKcbncD0NeQdyFND+
-	5EMLv9HsN73pr4O8Lr9KY7OP7Q8p+/mQ1r80t5jMn5KRBINidN9bGwq4
-X-Gm-Gg: AYBFou2+fNQRanrKnBtoQk9pabyz9tC1YOXzBFXi7idf9tAKSR9X3c5LAPtASOXd+nh
-	GkyVQVBz6TmXK7KqtNcvaQYBZDG2BUeRpoJeNkQAOCIREGW1Yz1dLfykFbVllxsojzBvTBnBtil
-	VFUvTFb6Qq0X3ybXs8LFutgkxeisGENdzMfbWBVgvNsxmoqloleW47aM4Ib+UHBJjl1CwN42d88
-	Gn7vdaqsLMPwdgjzWMyhJiryuKe9Vg+6DyD+tvAnUTCZw/Jy8hhH6SxlBVMBRxno9482cbyfR2y
-	CIDJ906w6eLF+OeeLSy2/v6StwsLHxMv7QYn0dxfKeHFQrYXB5xUX3EVgrTA24nLLzCMdylRvsx
-	1LWBOXKibLsivJ2HSvUpx9Ms7GohTRXcaCnbzA3UDs1DPXceL0f81/k04N03AeObFDllAVP7QRN
-	0p7W3ZLFhouBDFG9VkhK10pfcGg+NrHUH9rSIe+oXxSZgH2fD14k+tCVtA0fsbttGvTUYmhiMMX
-	721o6KrDcu0Wmsw3apwh1FCSJJY2LNxN8uXfxsNjkTJdSrF80v05INyGaKaWp8bEhJCEQ==
-X-Received: by 2002:a17:90a:e7d1:b0:3ab:1b19:78f4 with SMTP id 98e67ed59e1d1-3ade9b2ed8bmr5091396a91.6.1792974228365;
-        Sun, 25 Oct 2026 17:23:48 -0700 (PDT)
+        bh=HV83c2/+fbkcmd4e8V3tUmbhGiJJW07WJQ5LFrvg8bc=;
+        b=kvcMXzV2UjWjYlfUTKWkuXjiYMoDMhCVP2+KGqEeuOTiTXrMPqdLLb+DJcaQ88BNFX
+         p5qoOrjY+s3D4EDLsoFbyUZK2kYKl20RVyQW1+7CdtD0pnVVPiLGYsEJxQ9ZUpoc9la1
+         gQj0soJ7IEskm2/o92qwYpDBXMgVuWXyKsFxmaxuh058dn65NR4Sf6O+K3ouK5eJjeCw
+         T3/LBkvp1T7/+PsuDFf8CRJavuL5rtdFn8iN6EcGM4yp5qouKBgj7N1af58cYNX4RM1L
+         416hdYdclockiecjRkyn1/SM6e8DLBP/3D4Y0jTcdXu5pkpIJX8Wr7w6SnJmi784DqXI
+         Wsgw==
+X-Forwarded-Encrypted: i=1; AKwUvBxEi9PtryRBsiNuU9f9urJeSSJdAcCKSBGSVZzzFfZMch7uwgPvGELE5LtkCDUuJYkZB/aZ+QY57Mj2mw==@vger.kernel.org
+X-Gm-Message-State: AFq9FYIwTD7M8xenAyygyoIhWhfSQWfTEyYIjUpJyeH3NxzqT6/nysh+
+	2RY1FHrQLCu3zQRtWTbXukkF+JpZfLio/z4oWjardpRqm34oKr3droEv
+X-Gm-Gg: AYBFou2Eu2wcUdsf5eVpj9GbtxV5YlsJXwa4Ju66Y2w1ZG0tqRutvjY2EJdtUlBvnPf
+	y5NNS5gWSP9o5ehQzHicYfQVsb/YMm7f1kV2JgwwD6WzKAkm2RP5Y+ysLS5aV7BCEkoFseIopVV
+	YMGS3HM9kzDDnVfDrjv+fvo7eFWK0cALfoL5pEL+A7ggJ8hsHZRpFTSEr6IwBa8+9OSRUNfg+L9
+	zrt4mCCkHiqSFYkccujGGAWz52xpZCNz6Vpxk2fBusBpYWpHjw46R6Ar828dIoavuVPWsf8VFw+
+	gfIuH6RCp9xCxsd22M22pK52rTNYsB8+PglCmRHWVsP1GZIEtnZqHVGTA6aNMzgze9PcNKhcVs7
+	dLM9kB5WNggr+31L2wqJkVyG8B8sWrLdxqGquv/dLt0Gf/aTrKeV+hnTGqMyojU6l/5+WOyOBUc
+	m0PWoMYUkffrmhWypDrMI2LQ68Akw6gzuCHeazwz28u0YdwyE7fmNPuR5gpnTupTI0sRZmNN/VA
+	Ihkq9Eq66a/6ZHWDFpqkVPvy59UUf7d2beTgTKR4/i7JpxbuAbYIQOAmhjk6k0BH6ixew==
+X-Received: by 2002:a17:902:f705:b0:2e2:c602:2072 with SMTP id d9443c01a7336-2ea9c6c3363mr43122285ad.36.1792974287852;
+        Sun, 25 Oct 2026 17:24:47 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adeba32e38sm6406037a91.2.2026.10.25.17.23.47
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea9b12104csm10407525ad.19.2026.10.25.17.24.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 17:23:47 -0700 (PDT)
+        Sun, 25 Oct 2026 17:24:47 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 25 Oct 2026 17:23:47 -0700
+Date: Sun, 25 Oct 2026 17:24:45 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>
 Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
 	corbet@lwn.net, skhan@linuxfoundation.org, jdelvare@suse.com,
 	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 2/3] hwmon: (lm75) add MAX31875 documentation
-Message-ID: <c5cdf9e3-919c-48c9-9717-8bc801ad207e@roeck-us.net>
+Subject: Re: [PATCH v4 3/3] hwmon: (lm75) add MAX31875 support
+Message-ID: <9977952d-339c-4ca0-b11c-9df45b6c7b65@roeck-us.net>
 References: <20261023091550.1494-1-johnerasmusmari.geronimo@analog.com>
- <20261023091550.1494-3-johnerasmusmari.geronimo@analog.com>
+ <20261023091550.1494-4-johnerasmusmari.geronimo@analog.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -101,15 +101,23 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261023091550.1494-3-johnerasmusmari.geronimo@analog.com>
+In-Reply-To: <20261023091550.1494-4-johnerasmusmari.geronimo@analog.com>
 
-On Fri, Oct 23, 2026 at 05:15:49PM +0800, John Erasmus Mari Geronimo wrote:
-> Document the Maxim MAX31875 I2C temperature sensor as a supported
-> chip in the lm75 driver documentation.
+On Fri, Oct 23, 2026 at 05:15:50PM +0800, John Erasmus Mari Geronimo wrote:
+> Add support for the Maxim MAX31875 I2C temperature sensor by
+> extending the lm75 driver. The MAX31875 features a 16-bit
+> configuration register, configurable resolution (8, 9, 10, or
+> 12 bits), and selectable conversion rates (125ms, 250ms, 1s, 4s).
 > 
+> The MAX31875 has no alert polarity bit, and the bit the driver would
+> use for 16-bit chips is part of its conversion rate field, so skip
+> the polarity configuration for it. Also set the default resolution
+> and conversion rate at probe so the driver state matches the chip.
+> 
+> Suggested-by: Guenter Roeck <linux@roeck-us.net>
 > Signed-off-by: John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>
 
 Applied.
 
-Thanks
+Thanks,
 Guenter
