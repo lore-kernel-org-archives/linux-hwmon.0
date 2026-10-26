@@ -1,79 +1,80 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793005069;
-	b=ZWuF4UVLzVgbMhuoEWI+jzFR+e+hmxoSw+B+7phhUhaVamXcvTcFT7p2DTmRTU9YhVev
-	 sro/11JTH/wXAxX/dm4Xwr/N5MGlgPsGrijQN+vOEipyErxZSqO+/y43xbLkHBBYzJ7MY
-	 0qXSdAocisukx/0jAOQkFfAUejhz7kpQUjBMEPVPBVrW5YWRsIpouR4RHG96bYIrbzVZl
-	 dW74d1e8Ri/qfpDwsDfF/xKc3c/eG/hkmEBScv+AUTDjI/SWKs/KCp1sCZTjbBb7+KS66
-	 A6gUycEoMh7G5Prd6c05lid1msyydsMRR72waREUtTWSWx+XQJZLw78IZskZpVpB8Zw==
+	t=1793005068;
+	b=ag3hE673z4Om9DkqYOPrQ8Wr1GP0kG3OXC4iM4a0lx5luQBeyzs9krWgsWJFC3FlExxX
+	 KnQY2cSP3etfGASpilEPUmPT6foY477MCz2RvA0N18nYVqgTzzwSLjW/Xd8ZcwGDJKvYb
+	 0U7okEfvTTc4wWfIWdghCXxyb6n2kSRBlfyo3NOXHLT7Lto/5TG68fUFQmneFg7qEG26p
+	 VaetXEHtradrs44nd6J/PX26NBhMLmuLgfRfa+Znk3LEK5pcqEjZDF42+yEUDRVyUQKsa
+	 xHPn86IU3qriaVNdApjTtUuOrLI338SeLmqRV57rNiUUP6ZZioGy/RIdHhLjuGHWGsA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793005069;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=/Hsnc7BiPR0knG3GjvJ0ClC71xfjoCpQ62Hn/hnbWp0=;
-	b=3emMZ9fDTcc8wRc9DR7gsrZYdVFwYh64naxxkpzkznNuRcNRboKKtpUpSWowAqDMh31z
-	 rdxZFGEWBTmGy9VSRnl/2mmrokLIjpabJ5S1S5OjYcnX8b5ekyLmPrFNKBehNZbU1UB3B
-	 op/+X7m0Ho4N+AXdGkR+m0eTbAYwdZqhwFJw9ldPeuWCpWOk6LtdOciZ985luErsPtCaK
-	 1FqoF99otcmVlXSU4ieHjpcfOIvgcjQ1aFMswGdBH/N9ygjer30bwLUS8myogyPgxCx+6
-	 Nh6Wrgdjb/G2hZDMK6+4jHQap0d62BtLMx82XAMVU2RRCRhJIRo8FgrUyihH1ZJJn3A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793005068;
+	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Endpoint-Received:X-Original-From:Reply-To;
+	bh=PtcrhzNLRZtn8LcDhHAc+8VmItc/hVjttL6zxWM1wRg=;
+	b=sn+tVh+yyGEgISbwVy9SRVIRMJlzAvAW/rEL/WoOpPnq0P8Mq7mDh/5NDN9GN7Orcrzl
+	 eD3LawYZgL6IxBiF9ZgwrMIMTbEEyXB74qJ4NWhWnKxvAYgryDllZDnwx/dARVEl+SFwO
+	 LvutCh3CkSzvbIjOrsM6EqlmabHsYsxTJILYyZY5IIw1Z0q3GO+gU10TF8JNwmzqk7rBZ
+	 mC2AB8Nklujp18IwKnstXWA03xeTOkaVYNAUbBMUjTCjyztSjs2WvjzAKmot1LTqj4468
+	 hIkG/OHizyZGLoVvg8cLmIw/zSOe8aDTkiMiXZ9t1mprpoUHaGVp4iJnkKDfsDbTsYQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XXiONqs5;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dloRwrIU;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41630606A322;
-	Mon, 26 Oct 2026 08:57:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A4F7606A31A;
+	Mon, 26 Oct 2026 08:57:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XXiONqs5
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dloRwrIU
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
 	t=1793005068;
-	b=orNsIllqBSxuDAup2jszWmscIJcSK3vC+/7fHUCSvWczlZ7g6qhGRSBEhimDN8E8pBaV
-	 c+LkKiRMuhCdJjNGh2WW7lh/kaJ9ZlCZCpoqtDtxYAl9ZVJKVhabo+GpdKEFzAQ0hbbxU
-	 gXkMqZP2or/Nvx9t6XIeZzPXAhrCsEFshYsDyTnAo8oFJ5vtUyXgTgsXRcFK21cGiXXqF
-	 1S72mvOKrzorC3GYAciNl20airtFLpqWwPCBKeXTM5saOCc/Y6F8viMBVGOb17D98+svl
-	 zwdsLC2QwswS/nDBWmKK28FcQnJ3gR2xrPxCCoYTVPQbgx/2QcZjjWOr3XkBAzowTKg==
+	b=r2o2eoPkDg/BBRaCgSVj4SocxehnW6JBTSOO93cjC375xTM59YC0NrMooTIk13ygz5Fd
+	 d7IOkJkrWU1l6kLA1n2s6aQdYAn9UOx9hmaSlcuxdx++UOq0BBqtFynFI994droEP8khP
+	 VIBk2pNf3x/pXnKmbhW5Wp3X10BrFJWjDVs5alz7bFnCbHpJqFtvWuaz9HnLLihLVKeJV
+	 eEbydRDKQRXkq4nlROghi5frDO4CuamdiIbjs/iuH2N/t0twyAtPc2y2cfEI37L/FzE9z
+	 o73AH5K6hJ1Sx/jduqGxGXLyLqb7qFveFSwcCalknx4RsssCx3LZ/He90GdeRy4P//w==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
 	c=relaxed/relaxed; t=1793005068;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=/Hsnc7BiPR0knG3GjvJ0ClC71xfjoCpQ62Hn/hnbWp0=;
-	b=qdD4pjsB9rOjTKshUwhwT4C47kDh90pF5YgnXdtXEV9jvQi3BqmX1lypw4k2r6uInaqO
-	 T/9hD1amoQjdT2I/iZFdCzQ9QfK6rXZ62xyfjG99P1l0j31VCjRw5SZEAjJi3xXnQQmOM
-	 of4nNJHKHq9HgIK7OmyG0mW99t7Y4/+gPYPAadD4pFannwlgiBHSMzT13A+tBD4qdecOi
-	 4HtTmfe/bVW40teXcN8dvg0NFwBtW40yaaUISFdr8zjMaMSsE9DcAnLmaM11ER7GsQ1uY
-	 MfS5Iacp5fJ65E/psZjZ9wvuU2SCfx4BS2m2Zqmomakk2rl7bCjH84ufl/d4U28vqzA==
+	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=PtcrhzNLRZtn8LcDhHAc+8VmItc/hVjttL6zxWM1wRg=;
+	b=oUOssXqJVbEbJy2v5v4t1+cE9PnhuhFDT6I2WNuE/7B5T5gaami8XJFAYY+1V3ghhwrD
+	 fhMV1zco1B5tmoDOi011luYV7szVSh2N5hBeQe5LZTgxMOEf9wsWOReYojZg9Wirlig01
+	 pFMBLo2WP0sSdx8Epmo93VoNkkXVi9bw8quM+iaihaHWdvtK7WESocam17Q6XQERfrvYp
+	 6f7gUoEoTNTW0keMGXDuAxBRsv5VBMgjvl8Geek4fv6YTSeKTG4sT/WxTMpE3+/YpFis6
+	 pib4J/tnCTA7pWbPJ5RaCCvRIW3CKPM51IapRZzZhUJm3iR7rhjEm8YPSJAYCb7Q5wg==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A445C1F01828;
+	by smtp.kernel.org (Postfix) with ESMTPS id A4B0D1F031E0;
 	Mon, 26 Oct 2026 08:57:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1793005068;
-	bh=/Hsnc7BiPR0knG3GjvJ0ClC71xfjoCpQ62Hn/hnbWp0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=XXiONqs5zMSq7eGfA5riCGurvczowPwZhh8GSW6X7aETSOMFXrqM4wDhwPQB7XkCp
-	 sSP+XqlsdrpQr65KoyvFtJ1Oca/301Mej3kXEgrqFB0/2OGsDWMQ7jbthxTKwMCF+K
-	 9bYMAL6t1Vg5Gg7nPlmc4GZORlWtRMrdC+VsEN8ziGIhDHAhFVuvrL2yot0JGVHnEL
-	 yRYYuToSYgPipx6R9bTMJzAv6rNTv828pv7PWr6CM5y5EGa/1SQvs75CK5HDECTuWz
-	 Tp4zN8fVsES7Xz+/vMvevHi0MdYxStSD2Dcs3AMU2i97pl393vljFwLyRkq+bY5D6P
-	 YY4ZwdcIwqXhQ==
+	bh=PtcrhzNLRZtn8LcDhHAc+8VmItc/hVjttL6zxWM1wRg=;
+	h=From:Subject:Date:To:Cc:Reply-To;
+	b=dloRwrIUDpNxGsxubehH/1CjwdxhhFwEjvq48NlHjQ0+QWd9F1YZDobPuGOG9HmCF
+	 lgLSFOuYDPKKsCDAIIWQfw+ASGP7iFvfkqsCkTVKU2H4DUSsGn3GPLAIl5d/mNUt0z
+	 ej8BVd9W5k+Ic3kPBKUZ32kplX8aUP1S0MRpHO24CeCMPVdGHJJQsE0PY4+RDosiCh
+	 LI+HTgnM/qrmHxIcM7HXKI5PAwRdGz7+gKV6NF9V8wshAFL2xA3U3Xv5lnr06DBxHi
+	 lXo0TkGcoberKg9t1o/I198IiUmLWDjQI5Pz5LQ+J3+wfqW3STqwOO6hq28zQ959Ic
+	 yY/WikYk7NOVQ==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 2042644C8B;
-	Mon, 26 Oct 2026 08:57:47 +0000 (UTC)
+	by lkml.kernel.org (Postfix) with ESMTP id F3F4C44C83;
+	Mon, 26 Oct 2026 08:57:46 +0000 (UTC)
 From: Remy Demangeot via B4 Relay <devnull+remy.demangeot.net@kernel.org>
-Date: Mon, 26 Oct 2026 09:57:37 +0100
-Subject: [PATCH 3/3] hwmon: (asus-ec-sensors) add water temperatures for
- MAXIMUS IX EXTREME
+Subject: [PATCH 0/3] hwmon: (asus-ec-sensors) more MAXIMUS IX EXTREME
+ sensors
+Date: Mon, 26 Oct 2026 09:57:34 +0100
+Message-Id: <20261026-b4-m9e-ext-sensors-v1-0-644d389b2de1@demangeot.net>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -84,311 +85,88 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261026-b4-m9e-ext-sensors-v1-3-644d389b2de1@demangeot.net>
-References: <20261026-b4-m9e-ext-sensors-v1-0-644d389b2de1@demangeot.net>
-In-Reply-To: <20261026-b4-m9e-ext-sensors-v1-0-644d389b2de1@demangeot.net>
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAP4V32oC/1WOy27CMBREfyXyurfyI06cCCH+A7HwY2i9cNLaB
+ iEh/h1DNu3iLs5IM+feWUGOKGzu7izjGktclwbio2P+2y5foBgaM8nlINqR6ylNINwqFSxlzYX
+ UxGEUjBmnwFrxJ+Mcb+/R42njjN9L265b+C+hhFLsWzR3u80j9B9PRgJdBQkapAh2kgJK8kNAe
+ v231s8Fdf/yOltAfk0p1rmDcMrLQfGgnXF+1PqM3lkzBMkDN35UPZzmPTs9Hk+IzYzmBgEAAA=
+ =
+X-Change-ID: 20261026-b4-m9e-ext-sensors-390e83e8879d
 To: Eugene Shalygin <eugene.shalygin@gmail.com>, 
  Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Remy Demangeot <remy@demangeot.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793005066; l=10011;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793005066; l=2835;
  i=remy@demangeot.net; s=20261015; h=from:subject:message-id;
- bh=TPAvbhS6jnpAL1X7c9NHXFhPyY3rAbsLBapIyIKDCes=;
- b=zzramXvzY2vlgWbwaPWr/ciBzSHaqesXoVTc+vy2Y5niIPHgRtxjRymK2z47K0SxHT1/EH9Cm
- mwQmZeaVacRAUCgXTNEfe34489dwyn1lmMB7/ciXto/mZwD4OLhQ5i9
+ bh=zn8DXKlaE4UvmTPoDcyez0qpguM1Sh9lNNufMZLHhXU=;
+ b=/If33aB3oe4ancoLuekn6b85La6zjisVvdKxW3O5dP1i/D9Iz7HJ+4t5gok6QzVKJSbcdMCdr
+ Upgx4aayxCwBsQ+ov+wLaiI1V5v1dwnEiqv6/UVtEcq2VzuVpSIwU2n
 X-Developer-Key: i=remy@demangeot.net; a=ed25519;
  pk=h/s5N2ZlgZ0m+8FpMhSaCNJt0jvb9whRBAdJwpC+VAo=
 X-Endpoint-Received: by B4 Relay for remy@demangeot.net/20261015 with
  auth_id=1194
 X-Original-From: Remy Demangeot <remy@demangeot.net>
 Reply-To: remy@demangeot.net
-Content-Transfer-Encoding: 8bit
 
-From: Remy Demangeot <remy@demangeot.net>
+This series adds the remaining sensors of the MAXIMUS IX EXTREME EC
+that HWiNFO reads. It applies on top of "hwmon: (asus-ec-sensors) add
+MAXIMUS IX EXTREME", which Guenter applied:
+https://lore.kernel.org/r/20261015-b4-m9e-extreme-v1-1-621da921e320@demangeot.net
 
-The MAXIMUS IX EXTREME has a second EC (firmware ID "RGE2-Z270-0109"),
-not handled by the ACPI EC driver, at I/O ports 0x68 (data) and 0x6c
-(command/status). It uses the standard EC protocol (0x80 read, 0x81
-write) and the same bank register (0xff). Its bank 1 holds the water
-temperatures: WATER_IN 0x0d, WATER_OUT 0x0b, WATER_IN2 0x13 and
-WATER_OUT2 0x11, as signed degrees Celsius with -60 for an absent
-probe. Water_In and Water_Out are at the same offsets as on the AMD
-400-series boards.
+Guenter asked why I assumed these might not be acceptable. No
+particular reason: two of them need access patterns the driver does
+not have yet (a selector register written before the read, and a
+second EC on its own I/O ports), so I preferred to ask before touching
+the read path.
 
-Describe registers of the second EC by setting ASUS_EC2_BANK_FLAG in
-the sensor bank. Banks are sorted, so such registers are read last;
-the second EC bank is saved and restored like the first one, under the
-same hardware access mutex. The I/O ports are only requested for
-boards using these sensors.
+ 1/3: EXT_Sensor1-3, plain reads at bank 0, 0x60-0x62.
+ 2/3: EXT_FAN1-3 speeds, read after writing the fan number to the
+      selector register 0x43, which is restored afterwards.
+ 3/3: the four water temperatures, on a second EC at I/O ports
+      0x68/0x6c, bank 1.
 
-Add Water_In 2 and Water_Out 2 sensors and enable the four water
-temperatures for the board. Readings match HWiNFO 8.54 on the same
-machine.
+Notes:
+ - After 3/3, enum ec_sensors has 32 entries, which fills the
+   unsigned long sensor mask on 32-bit builds. Any further sensor
+   will need a wider mask (u64 and BIT_ULL()). I can send that as a
+   preparatory patch if you prefer.
+ - asus_ec2_wait() polls with udelay(10). checkpatch suggests
+   usleep_range(), but the EC normally answers within a few
+   microseconds, so I kept udelay(). Happy to change it.
 
-Signed-off-by: Remy Demangeot <remy@demangeot.net>
+A related question, independent of this series. The EC also holds the
+fan curves of the extension card fans: after selecting a fan through
+0x43, registers 0x4a-0x4f hold a 3-point curve (temperature in degrees
+Celsius, duty 0-255) that the BIOS writes at boot. Writing these
+registers changes the fan speed immediately, and writing the same duty
+at the three points gives a fixed speed. My out-of-tree driver uses
+this to expose pwmN and pwmN_enable (1: fixed duty through a flat
+curve, 2: BIOS curve, saved at probe and restored at unload and
+shutdown, and re-applied after resume), so that these fans can be
+driven from userspace like the Super I/O ones.
+
+Would write support like this be acceptable in asus-ec-sensors, or is
+it better kept out of tree or in a separate driver? I understand the
+driver is read-only by design, so "no" is a fine answer.
+
+Tested on the MAXIMUS IX EXTREME (BIOS 1501): readings match HWiNFO
+8.54 and the out-of-tree driver on the same machine.
+
 ---
- drivers/hwmon/asus-ec-sensors.c | 145 +++++++++++++++++++++++++++++++++++++---
- 1 file changed, 136 insertions(+), 9 deletions(-)
+Remy Demangeot (3):
+      hwmon: (asus-ec-sensors) add EXT_Sensor temperatures for MAXIMUS IX EXTREME
+      hwmon: (asus-ec-sensors) add fan extension card fans for MAXIMUS IX EXTREME
+      hwmon: (asus-ec-sensors) add water temperatures for MAXIMUS IX EXTREME
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 11dd7f587530d640b6ccc9b7952dc9da47e11c19..c1969169de6531c11a4c3485eafd54af97874991 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -26,7 +26,10 @@
- #include <linux/dev_printk.h>
- #include <linux/dmi.h>
- #include <linux/hwmon.h>
-+#include <linux/delay.h>
- #include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/ioport.h>
- #include <linux/jiffies.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-@@ -45,6 +48,21 @@ static char *mutex_path_override;
-  * group of registers reports (e.g. one of the fans of the fan extension card).
-  */
- #define ASUS_EC_SELECT_REGISTER	0x43
-+
-+/*
-+ * Some boards have a second EC, not handled by the ACPI EC driver, at these
-+ * I/O ports. It uses the standard EC protocol and the same bank register.
-+ * Its registers are described by sensors whose bank is ASUS_EC2_BANK(n).
-+ */
-+#define ASUS_EC2_DATA_PORT	0x68
-+#define ASUS_EC2_CMD_PORT	0x6c
-+#define ASUS_EC2_BANK_FLAG	0x80
-+#define ASUS_EC2_BANK(bank)	(ASUS_EC2_BANK_FLAG | (bank))
-+#define ASUS_EC2_STATUS_OBF	0x01
-+#define ASUS_EC2_STATUS_IBF	0x02
-+#define ASUS_EC2_CMD_READ	0x80
-+#define ASUS_EC2_CMD_WRITE	0x81
-+#define ASUS_EC2_TIMEOUT_US	20000
- #define SENSOR_LABEL_LEN	16
- 
- /*
-@@ -176,6 +194,10 @@ enum ec_sensors {
- 	ec_sensor_fan_ext_1,
- 	ec_sensor_fan_ext_2,
- 	ec_sensor_fan_ext_3,
-+	/* "Water_In 2" temperature sensor reading [℃] */
-+	ec_sensor_temp_water_in_2,
-+	/* "Water_Out 2" temperature sensor reading [℃] */
-+	ec_sensor_temp_water_out_2,
- };
- 
- #define SENSOR_TEMP_CHIPSET BIT(ec_sensor_temp_chipset)
-@@ -208,6 +230,8 @@ enum ec_sensors {
- #define SENSOR_FAN_EXT_1 BIT(ec_sensor_fan_ext_1)
- #define SENSOR_FAN_EXT_2 BIT(ec_sensor_fan_ext_2)
- #define SENSOR_FAN_EXT_3 BIT(ec_sensor_fan_ext_3)
-+#define SENSOR_TEMP_WATER_IN_2 BIT(ec_sensor_temp_water_in_2)
-+#define SENSOR_TEMP_WATER_OUT_2 BIT(ec_sensor_temp_water_out_2)
- 
- /*
-  * The values for temperature sensor readings without physical sensors connected.
-@@ -221,7 +245,8 @@ static const s32 environment_temp_sensors =
- 	SENSOR_TEMP_WATER_IN | SENSOR_TEMP_WATER_OUT |
- 	SENSOR_TEMP_WATER_BLOCK_IN | SENSOR_TEMP_WATER_BLOCK_OUT |
- 	SENSOR_TEMP_T_SENSOR_2 | SENSOR_TEMP_SENSOR_EXTRA_1 |
--	SENSOR_TEMP_SENSOR_EXTRA_2 | SENSOR_TEMP_SENSOR_EXTRA_3;
-+	SENSOR_TEMP_SENSOR_EXTRA_2 | SENSOR_TEMP_SENSOR_EXTRA_3 |
-+	SENSOR_TEMP_WATER_IN_2 | SENSOR_TEMP_WATER_OUT_2;
- 
- enum board_family {
- 	family_unknown,
-@@ -397,6 +422,14 @@ static const struct ec_sensor_info sensors_family_intel_200[] = {
- 		EC_SENSOR_SELECT("EXT_FAN2", hwmon_fan, 2, 0x00, 0x57, 0x0b),
- 	[ec_sensor_fan_ext_3] =
- 		EC_SENSOR_SELECT("EXT_FAN3", hwmon_fan, 2, 0x00, 0x57, 0x0c),
-+	[ec_sensor_temp_water_out] =
-+		EC_SENSOR("Water_Out", hwmon_temp, 1, ASUS_EC2_BANK(0x01), 0x0b),
-+	[ec_sensor_temp_water_in] =
-+		EC_SENSOR("Water_In", hwmon_temp, 1, ASUS_EC2_BANK(0x01), 0x0d),
-+	[ec_sensor_temp_water_out_2] =
-+		EC_SENSOR("Water_Out 2", hwmon_temp, 1, ASUS_EC2_BANK(0x01), 0x11),
-+	[ec_sensor_temp_water_in_2] =
-+		EC_SENSOR("Water_In 2", hwmon_temp, 1, ASUS_EC2_BANK(0x01), 0x13),
- };
- 
- static const struct ec_sensor_info sensors_family_intel_300[] = {
-@@ -561,7 +594,9 @@ static const struct ec_board_info board_info_maximus_ix_extreme = {
- 	.sensors = SENSOR_TEMP_CHIPSET | SENSOR_TEMP_T_SENSOR |
- 		SENSOR_TEMP_VRM | SENSOR_TEMP_SENSOR_EXTRA_1 |
- 		SENSOR_TEMP_SENSOR_EXTRA_2 | SENSOR_TEMP_SENSOR_EXTRA_3 |
--		SENSOR_FAN_EXT_1 | SENSOR_FAN_EXT_2 | SENSOR_FAN_EXT_3,
-+		SENSOR_FAN_EXT_1 | SENSOR_FAN_EXT_2 | SENSOR_FAN_EXT_3 |
-+		SENSOR_SET_TEMP_WATER | SENSOR_TEMP_WATER_IN_2 |
-+		SENSOR_TEMP_WATER_OUT_2,
- 	.mutex_path = ASUS_HW_ACCESS_MUTEX_SB_PCI0_LPCB_SIO1_MUT0,
- 	.family = family_intel_200_series,
- };
-@@ -1263,15 +1298,84 @@ static int setup_lock_data(struct device *dev)
- 	return 0;
- }
- 
-+static int asus_ec2_wait(bool want_obf)
-+{
-+	unsigned int t;
-+	u8 status;
-+
-+	for (t = 0; t < ASUS_EC2_TIMEOUT_US; t += 10) {
-+		status = inb(ASUS_EC2_CMD_PORT);
-+		if (want_obf ? (status & ASUS_EC2_STATUS_OBF) :
-+			       !(status & ASUS_EC2_STATUS_IBF))
-+			return 0;
-+		udelay(10);
-+	}
-+	return -ETIMEDOUT;
-+}
-+
-+static int asus_ec2_read(u8 index, u8 *val)
-+{
-+	int status;
-+
-+	/* drop a stale byte left in the output buffer */
-+	if (inb(ASUS_EC2_CMD_PORT) & ASUS_EC2_STATUS_OBF)
-+		inb(ASUS_EC2_DATA_PORT);
-+	status = asus_ec2_wait(false);
-+	if (status)
-+		return status;
-+	outb(ASUS_EC2_CMD_READ, ASUS_EC2_CMD_PORT);
-+	status = asus_ec2_wait(false);
-+	if (status)
-+		return status;
-+	outb(index, ASUS_EC2_DATA_PORT);
-+	status = asus_ec2_wait(true);
-+	if (status)
-+		return status;
-+	*val = inb(ASUS_EC2_DATA_PORT);
-+	return 0;
-+}
-+
-+static int asus_ec2_write(u8 index, u8 val)
-+{
-+	int status;
-+
-+	status = asus_ec2_wait(false);
-+	if (status)
-+		return status;
-+	outb(ASUS_EC2_CMD_WRITE, ASUS_EC2_CMD_PORT);
-+	status = asus_ec2_wait(false);
-+	if (status)
-+		return status;
-+	outb(index, ASUS_EC2_DATA_PORT);
-+	status = asus_ec2_wait(false);
-+	if (status)
-+		return status;
-+	outb(val, ASUS_EC2_DATA_PORT);
-+	return asus_ec2_wait(false);
-+}
-+
-+/* @bank may carry ASUS_EC2_BANK_FLAG to address the second EC */
-+static int asus_ec_read_byte(u8 bank, u8 index, u8 *val)
-+{
-+	if (bank & ASUS_EC2_BANK_FLAG)
-+		return asus_ec2_read(index, val);
-+	return ec_read(index, val);
-+}
-+
- static int asus_ec_bank_switch(u8 bank, u8 *old)
- {
- 	int status = 0;
- 
- 	if (old) {
--		status = ec_read(ASUS_EC_BANK_REGISTER, old);
-+		status = asus_ec_read_byte(bank, ASUS_EC_BANK_REGISTER, old);
-+		if (!status)
-+			*old |= bank & ASUS_EC2_BANK_FLAG;
- 	}
- 	if (status || (old && (*old == bank)))
- 		return status;
-+	if (bank & ASUS_EC2_BANK_FLAG)
-+		return asus_ec2_write(ASUS_EC_BANK_REGISTER,
-+				      bank & ~ASUS_EC2_BANK_FLAG);
- 	return ec_write(ASUS_EC_BANK_REGISTER, bank);
- }
- 
-@@ -1279,8 +1383,8 @@ static int asus_ec_block_read(const struct device *dev,
- 			      struct ec_sensors_data *ec)
- {
- 	int ireg, ibank, status;
--	u8 bank, reg_bank, prev_bank, select, prev_select;
--	bool select_saved;
-+	u8 bank, reg_bank, prev_bank, prev_bank2, select, prev_select;
-+	bool select_saved, ec2_used = false;
- 
- 	bank = 0;
- 	status = asus_ec_bank_switch(bank, &prev_bank);
-@@ -1299,7 +1403,14 @@ static int asus_ec_block_read(const struct device *dev,
- 	for (ibank = 0; ibank < ec->nr_banks; ibank++) {
- 		if (bank != ec->banks[ibank]) {
- 			bank = ec->banks[ibank];
--			if (asus_ec_bank_switch(bank, NULL)) {
-+			/* first bank of the second EC: save its bank too */
-+			if ((bank & ASUS_EC2_BANK_FLAG) && !ec2_used) {
-+				if (asus_ec_bank_switch(bank, &prev_bank2)) {
-+					dev_warn(dev, "second EC bank switch failed");
-+					break;
-+				}
-+				ec2_used = true;
-+			} else if (asus_ec_bank_switch(bank, NULL)) {
- 				dev_warn(dev, "EC bank switch to %d failed",
- 					 bank);
- 				break;
-@@ -1312,7 +1423,7 @@ static int asus_ec_block_read(const struct device *dev,
- 				continue;
- 			}
- 			select = register_select(ec->registers[ireg]);
--			if (select) {
-+			if (select && !(bank & ASUS_EC2_BANK_FLAG)) {
- 				if (!select_saved) {
- 					if (ec_read(ASUS_EC_SELECT_REGISTER,
- 						    &prev_select))
-@@ -1322,8 +1433,9 @@ static int asus_ec_block_read(const struct device *dev,
- 				if (ec_write(ASUS_EC_SELECT_REGISTER, select))
- 					continue;
- 			}
--			ec_read(register_index(ec->registers[ireg]),
--				ec->read_buffer + ireg);
-+			asus_ec_read_byte(bank,
-+					  register_index(ec->registers[ireg]),
-+					  ec->read_buffer + ireg);
- 		}
- 		/* restore the selector while still in its bank */
- 		if (select_saved &&
-@@ -1331,6 +1443,9 @@ static int asus_ec_block_read(const struct device *dev,
- 			dev_warn(dev, "EC selector restore failed");
- 	}
- 
-+	if (ec2_used && asus_ec_bank_switch(prev_bank2, NULL))
-+		dev_warn(dev, "second EC bank restore failed");
-+
- 	status = asus_ec_bank_switch(prev_bank, NULL);
- 	return status;
- }
-@@ -1612,6 +1727,18 @@ static int asus_ec_probe(struct platform_device *pdev)
- 	}
- 
- 	setup_sensor_data(ec_data);
-+
-+	/* banks are sorted: the second EC, if used, comes last */
-+	if (ec_data->nr_banks &&
-+	    (ec_data->banks[ec_data->nr_banks - 1] & ASUS_EC2_BANK_FLAG)) {
-+		if (!devm_request_region(dev, ASUS_EC2_DATA_PORT, 1,
-+					 dev_name(dev)) ||
-+		    !devm_request_region(dev, ASUS_EC2_CMD_PORT, 1,
-+					 dev_name(dev))) {
-+			dev_err(dev, "I/O ports of the second EC are busy");
-+			return -EBUSY;
-+		}
-+	}
- 	ec_data->registers = devm_kcalloc(dev, ec_data->nr_registers,
- 					  sizeof(*ec_data->registers), GFP_KERNEL);
- 	ec_data->read_buffer = devm_kcalloc(dev, ec_data->nr_registers,
+ drivers/hwmon/asus-ec-sensors.c | 219 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 205 insertions(+), 14 deletions(-)
+---
+base-commit: e1b3c2630d5b8bc755fe4ba86d20d08c734eb504
+change-id: 20261026-b4-m9e-ext-sensors-390e83e8879d
 
+Best regards,
 -- 
-2.47.3
+Remy Demangeot <remy@demangeot.net>
 
 
