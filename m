@@ -1,98 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792976476;
-	b=wQavrDwcVG6dMuwjU8G5M3oFXHsxCqU28hEdD2v0LcrQjhRtyHzpaWKseozzyicJurWD
-	 5S03NDAQgEvo/HlVh/URs6scitrTO1RykzkfWplU9xtlZa/WcKI2uGE2eI38Wv0Y4k8M6
-	 8HJVXwKz+tYN0vOrs6J+9Wn9Wd/XomUfsw8hKJ3KMW0nizHNPj3D2wKNjC8VN/Hr2uLpO
-	 sQGGW2mtIhsEVtMBjjPrsUWjurVmoz4/DaLZ8ANmvSBYrNiI1lLLGaLS8bOt2ge/2bpp1
-	 9uDmCTCz3kPACaavT7eUMkqM+ESbBElAHNl9HwpDvrvem30IfIb5pT7/1M8RUBiOsUw==
+	t=1792976508;
+	b=t7E3NFj6iPDbkv9QYscYg/OL1IN19jgM/pJdjuVBaJ+FDka2dCn4h3oXB5FQJiZqNv/F
+	 VNhEvSJFKQ5V+daOJ9I+M3VcAslh3Tia7cbDnuGAx3nDfkacue6rdJcPLVUE88NmoFoB3
+	 ckKhH4JnIJGVy0AEjvlQq5E/F4RPjzdbdYOLaBQnf8huqdp802igrSMNtxFV12GZZfcJL
+	 9hjA+WwkKIOJqS+YbfP3vcDZtFitfoGCqn1VsbcEksmkBip1v1cCYxzdqPEFbDBCyUIu+
+	 onMZ4ZerPxKRCeN4udIPrMKI+tNXkUlQVPeOV6Ab2wbXsqfM3qQELEMHKD+jDQlc+8A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792976476;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792976508;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Sender:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=ETaVg+JKCksv0hVScE41Vy/yxIUDCk9MA46Sf7uJaxg=;
-	b=uN/ZQtP3cU6SJnSJ6q7P6j7pzth7D1MZ6iTMysomv44p6qH0wHO6i9i/q8kszDIxrA1k
-	 qnQ5g0o4uLDgNpU3eVLun/AmevxCUMBq4J3Au3aMwbOts7yIAYIxLbo8jqggn6pXfpjlw
-	 MKJbbdymakc+0K/hTYnrGchIk+KQSPQBrhni1FL6r/94rqF86JS31anKmw1F19gdofkqG
-	 vJDIlc/KDuUEP5nsdzCTN7flBtoPaW3YvfcXXPkj8GGOJN3fiHEj4lbcL8dGwQ6xJYV3u
-	 0926ANJZc7iaham6v/7mj8fudYnnvP0r3mGwEq4stoxPWUQ+tCOggO5AHu7ljPeXJWw==
+	bh=VeZPXDm0RhtGiOKTO2xKl1A3KDZM7VNOTwEX394Zg9c=;
+	b=kRxvGo9a0fprPtW0UN7KvodOmw6BwhNhq3+x5gfBLSj5rw8FFTYBm34Ps+xsBVfNxRtZ
+	 7I8d9d/Z2vgqlSqKO69omlIH7gTYXxC6cWzuoVv0FSmXxVe0YU1vsYsJ/gwUhh3iwiFys
+	 mIol0qeBy9Tazs31JPMwQwarzZ8rInHX9WSx7IZgk7oIOX4KPTxGV1A6ly2VhGcVldRYQ
+	 rC2WrR2/3QdaV1AMZERMrBeoyOaM002Zy67drz7mfq0hHOM5fq/U8TRf+zh7NG3sg0xj+
+	 z4pOo4KzHErupTdjAwpaCUBgg7WOPHRRzuUZu6P67X14u64swMpIeJPa6ig/mrEFZRA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=JYGUz59G;
-	arc=none smtp.remote-ip=209.85.214.171
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=kesbnkBJ;
+	arc=none smtp.remote-ip=209.85.210.179
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7807E606A31D
-	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 01:01:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7807E606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1593606A31D
+	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 01:01:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B1593606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=JYGUz59G
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2e8da6ef7ddso12601315ad.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Oct 2026 18:01:16 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=kesbnkBJ
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8a4c72951b8so526695b3a.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Oct 2026 18:01:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792976476; x=1793581276; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792976507; x=1793581307; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=ETaVg+JKCksv0hVScE41Vy/yxIUDCk9MA46Sf7uJaxg=;
-        b=JYGUz59GR2IAGXxoiB3QNf8GkVf2fBELbswt2zzkZVtrkjTvYiwIr7neW8rK0w64G1
-         8hozvQJCQ5Db+2Xqp/s5exrlojlPWTyKhBZAUnbPObs/GnRAVj+Xc3FvY8WPLXC7oD+q
-         Rr2tGDWh/Pg2JjMVkUoj1cO5UxM8/RyJDOQZTr/BzBphFyM0hrXwkhGDudYHB3b2Ztgy
-         vlWbUCpgDH3E2r4uLPIKK5rX+yF0PSS1hlGRIy/LMfGsFn9dL5gLVhAXGPuH2+vrZcin
-         D3a9jItxfGcZElYsTBjaDBnr8U/qLYkKsdQchoqyDV8ULFwC3gfPNVll6kwcRZ59syb6
-         2Bgw==
+        bh=VeZPXDm0RhtGiOKTO2xKl1A3KDZM7VNOTwEX394Zg9c=;
+        b=kesbnkBJUvYzphCkzZljvgMUBw1E06XWOAD40PUeR5WSEw8f5QOb5oeqUFKJDCRJG9
+         yhVF178AgwImYtHmpAEKXvHVphu1ZGmSWSRrsYI2ORSd0HLi1vPcAMQwnSGS16lHAlSf
+         MYY2DGatfnLI75aO0EyiUmHgyzBzkJIg4iVMaTGSJ+bXC/6dCt8oBdnUkVPQSPjiTM8p
+         X0viSroGrckqS+rov3CRMIaaZ0HIdYA3aQunn68nZT2xkedbzpO8zq/aLIhN5KirLjT5
+         9rTyCnqnrA47T9HlUgzymCDyhYr3Xz6Nbn4AiwYE8KRLk6olcMMrC0W4/71LGf3zwL55
+         jvDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792976476; x=1793581276;
+        d=1e100.net; s=20260707; t=1792976507; x=1793581307;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ETaVg+JKCksv0hVScE41Vy/yxIUDCk9MA46Sf7uJaxg=;
-        b=xtlvIDjY6Tgd2M3+lVq8C6Et9cDyo1IiH4WRziVaL9sZfvux9Ib6MuQ2vkwvDJ94Fz
-         +LTfUjk5Cgww2vyIMvfttm2G8fRrHGY6+3pMNXV9aUbMOANbKrNyeTv0eT1A5j7GKU/5
-         fqTnEQWUe4siDEloWk2SFq+EjhZxeWTcineF9OO2d+64skr3ZQlfacjBrWl6xCSArEHb
-         gG7gGSUGa7/Kdt5puH9o9qqeGlryMwDbfFJAZrKLrg9VsgxIvejO26h5Yft2aQySo/jC
-         CkTt0qvROt3FrsKd26AHrEowdHmTuD/Xdnu33M6mY6JpjgN0fPS0rDiy8c/p+JwY8wYa
-         RAtw==
-X-Forwarded-Encrypted: i=1; AKwUvBzu5+Xu94sDTQKl+f2LG7Rj0xz19tHk2qXzAfTb+cOv6wu5Jb2Arg8+mDK8HDgXwYpClhbM4pH2okvYDQ==@vger.kernel.org
-X-Gm-Message-State: AFq9FYLi5viza2gUWhjz2XemPVmTdvdMlijt3zZpUkf9ipbfsuatRF0u
-	1iZtDn/RhWNsmtdYOSXd4K8otZWScqNFGQVfmS9b2m9yXZk7JhLau6NU
-X-Gm-Gg: AYBFou3tozKh8t/6oGaFDhdtIBv1WZLlV0BR2eXrPsUA4YE+WRKYoCwScMCFD34PLsj
-	/dtFUP4VdFo6jJ5sLHr5/TNhKL/85qQBuWhBERtvgNWRnrL5sGvB61kXbj1YcAWTJUBecGj5gbz
-	iViaMLqwnO3Bv/p6Jg7i4E9st+9RG4CRPM67nJXQxw0zbROfW8drOgBa4tP9a8035KZNyFrT0e5
-	CZjfgu1eze9/dKWgcauuxOQepnnz8O2mEVc0iEU5ehUVpAXHOXfe/vemAGlwuKtLeYF2jOMcM9S
-	5LwsvabwZYk+sVftRgltZFPspmEV6ysZxEHxA1nlA+8o+xinAjHM/gH9mutUuZYVX3RIpLxwM7g
-	PK9ZfO7ZfbiNVPlQ7mqBpwJR3FwzkWwrCmyXhJ7UlKSyUUMCfy5WvkDeFG7nGP07d6AIfMhnyUL
-	wYGrh84r4imdZv86K43iiXBfZ09yBXQVwNATELYSsuVtzI3PJ7Aeicl776qLW42RMlHdKELzF/7
-	IcptzF9mzUCqcFsCZb3cvGitW1iXkQx1243jBYjgvtsYraV3GAeK55GOeqEMmymmLafig==
-X-Received: by 2002:a17:90b:4488:b0:3ac:7749:2f0 with SMTP id 98e67ed59e1d1-3adead4c649mr4370525a91.44.1792976475605;
-        Sun, 25 Oct 2026 18:01:15 -0700 (PDT)
+        bh=VeZPXDm0RhtGiOKTO2xKl1A3KDZM7VNOTwEX394Zg9c=;
+        b=L7Zc4ZkEnxGELc/lvY3gqtR1ACTecFg/tHVGUU/2VtaKd159ndoarJT18SEfW9rX0g
+         knrF1JSYclP/lmWd1nQjqb/OFeDLTdDj7ub0taUnTZ7vzCOTo1nVPLvVDO9zTSFMVusA
+         sOUOtBD60P/ByMnFMSB2m+zMNDxmuVss0DtpK3Klc+xeNke6MV6gAu2FploSqej/4ly+
+         f+8uDh4My3XLwa51GNoREIh5pHAayYldm9VX0XZg8AvyCotwIbOMMhO51n4WqgRdCxUv
+         XtCPJiN0OpuTIZvMgaSv/lztt+AF/7yWldQVjqpbpyQd/z+UILIzGFqOLoR/ITCgMHgm
+         V57Q==
+X-Forwarded-Encrypted: i=1; AKwUvBwNZ4d7qW3COKG3VY2DpRAo7p1W0BNLjD0nFYiVFm1s33ga8FmHGhAz5Atybjhxet9IUeds9khb1j/1qA==@vger.kernel.org
+X-Gm-Message-State: AFq9FYLeRE5mGOS52XhA9AK2ogwdrLp2Tq7fw63iCxt2dL8Q2KgTVtib
+	EENz9EfUgRUoaiTsUN98Z7oYd6TqYmX768nTFNxEzWnqAAZ2OQ2tL6/e
+X-Gm-Gg: AYBFou3LKEHPSBTbXV9kz3MEej+Nir3o3PW0sfj+kDunPpculo6Y+7Hp37cDu9TKs2v
+	oP86ky+M4hQ1hV/EvDEyWIT6LEoef8mi6AcNQVRIpPokn9K/yq3zC2dHiNnnqVoqIKw5KpCu0i0
+	sM4YVkFjNbdH2lxiFj9tSqdB5UW8gmFtprCuUGFIrWG5ugF96J/7KAA4xTGWYNgCSTFngHrYiN8
+	ZRiBqd2tCjIiF6u0+H5lANkXWVDLomfQROv2CWVsoej1isEm5CxIkQxEyEYhZxZLEKSRnIfHF0I
+	uGdZrppgmarchf1xhkg8FMrewBRiKUzCr0DH+0DH3wFYV45S/twEpGj6sV0HanNExkVKIgZR+0X
+	+p+fKxBO5GN8vezo1xxF6fMAuxT2oTCOp9iA9/3yx9/YxA0TGBD2LQ2/JxcQlHI+r+KENFhIoHd
+	KqTiAkKWs/5tzh+Al3+HE/Ifs33DT3VQfqBjsSzY6gaDZPC7liacv/qnkxtGIKoM7zNr6ZYxw5v
+	c5cTWY4nfEOqbOsDLF5GTFNlieEqieG0OvgxgtRot0Dxro2CU4fI3/z5RQXt36beB1zAb3Qlo0d
+	Wwl3PLYE0xfxK7A=
+X-Received: by 2002:a05:6a00:2e9b:b0:89f:6989:cb9b with SMTP id d2e1a72fcca58-8a3686bf26cmr4112884b3a.27.1792976507110;
+        Sun, 25 Oct 2026 18:01:47 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adeba32f70sm5974385a91.1.2026.10.25.18.01.14
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8a36c4e8616sm830722b3a.56.2026.10.25.18.01.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 18:01:15 -0700 (PDT)
+        Sun, 25 Oct 2026 18:01:46 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 25 Oct 2026 18:01:14 -0700
+Date: Sun, 25 Oct 2026 18:01:45 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Vincent Jardin <vjardin@free.fr>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Charles Hsu <ythsu0511@gmail.com>,
 	Eduardo Valentin <eduval@amazon.com>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable+noautosel@kernel.org
-Subject: Re: [PATCH v3 1/2] hwmon: (pmbus/core) Register the thermal sensors
- with a 0-based index
-Message-ID: <f29d1bb0-27c1-4218-a022-9905f1af62bf@roeck-us.net>
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] dt-bindings: hwmon: pmbus: mps,mpq8785: add
+ #thermal-sensor-cells
+Message-ID: <cee14239-74f2-4fc7-8122-cd1df1dfbf84@roeck-us.net>
 References: <20261001-for-upstream-dt-mpq8785-thermal-sensor-cells-v3-0-bfafba9fcc95@free.fr>
- <20261001-for-upstream-dt-mpq8785-thermal-sensor-cells-v3-1-bfafba9fcc95@free.fr>
+ <20261001-for-upstream-dt-mpq8785-thermal-sensor-cells-v3-2-bfafba9fcc95@free.fr>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -104,26 +104,26 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261001-for-upstream-dt-mpq8785-thermal-sensor-cells-v3-1-bfafba9fcc95@free.fr>
+In-Reply-To: <20261001-for-upstream-dt-mpq8785-thermal-sensor-cells-v3-2-bfafba9fcc95@free.fr>
 
-On Thu, Oct 01, 2026 at 11:47:39PM +0200, Vincent Jardin wrote:
+On Thu, Oct 01, 2026 at 11:47:40PM +0200, Vincent Jardin wrote:
 > From: Vincent Jardin <vjardin@free.fr>
 > 
-> Since commit
->   3aa74796cfd0 ("hwmon: (pmbus) Register with thermal for PSC_TEMPERATURE")
-> pmbus_core registers each temperature input with the thermal core using
-> its hwmon index as the sensor id. That index starts at 1, so temp1 is
-> registered as sensor 1.
+> Each device of this binding has a single temperature sensor: the
+> internal sensor of its die, which the device also uses for its
+> over-temperature protection. It is read over PMBus with
+> READ_TEMPERATURE_1 (8Dh). The sensor is internal, not an input:
+> none of these devices has a pin for an external temperature sensor.
 > 
-> The thermal core expects a 0-based id, which is what the hwmon core
-> passes for the drivers that set HWMON_C_REGISTER_TZ:
-> thermal_of matches a thermal-sensors phandle without cells as id 0, so a
-> PMBus device with a single temperature input cannot
-> use #thermal-sensor-cells = <0>.
+> Allow a thermal zone to use the device as its sensor, to monitor the
+> regulator's temperature. With a single sensor per device, no cell is
+> needed.
 > 
-> Cc: stable+noautosel@kernel.org # changes the DT-visible sensor id, no in-tree user
-> Fixes: 3aa74796cfd0 ("hwmon: (pmbus) Register with thermal for PSC_TEMPERATURE")
+> The MPM82504 has four channels, each with its own PMBus address set by
+> its own ADDR pin, so each channel is described by its own node.
+> 
 > Signed-off-by: Vincent Jardin <vjardin@free.fr>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
 Applied.
 
