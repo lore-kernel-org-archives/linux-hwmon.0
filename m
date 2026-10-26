@@ -1,96 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793048550;
-	b=fjN/9JZ3nLWgW0j6kbUJaIKQyxLue4Tly4mQw6R3PP42V+iIytdnWCt5Nd5Wcd/v2qNm
-	 UUcV7xyNuJYGZ84ggMYayV3UeVoNwLsUBJY6EJrW/eFUD3AOUZOwrLEnCTrE8ViTuSRaw
-	 ne9Fbz8+P6Dpc6qavbfxQ6LjIAPrpJu++XLKNiw3buqkFFqlUSXZQQNUp1qAtCugLJUBV
-	 bw9sFibvMvmFWLjkR2yBVhPA27SzrQW7vTLGp3k+XStlMw0t6sQP1NB3XwB0ZgbnUxIus
-	 m+g2c3ujEKjAy38yQbAFVkQmSpNmzsQ2wrcPxhvsxcW8rhKhVUKokLITO+jpnVPvmug==
+	t=1793049570;
+	b=tvMGn8o+WmiH5VKFZRfuMWhs1nvdtXjXD5SX8VIYazqzXN+YuAjpn8xFVv6bkdfqTRI1
+	 V/ofTSrcjnRsYH2wGr/IAyLyT7gwLTrBsui400b3wOsb48ExRAD7GZGJL3jL4jYnZK0yG
+	 mTVL4RAMp/3g5NrWcGT/0SmrroMuGJQu8DkNJPwMi0cat2sBIlkf4niiyrThA6Kml2ynP
+	 wXUhosvIiHojmP6QzX6iASDwcDfxTU3EsL12aTD+RdfgbWVaswK8V+XjpudsB9O7fX1ht
+	 Ds0i9ZkVWLPDZsi+DSLRoGDY9i8IexI6qW/WWtcYVm/q4KSlyPqig7TvKaac1KY6WDA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793048550;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Sender:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=h5mYYH6ztXAGlslcRFjxz9nzyFLofC1QN+/Q6baEB84=;
-	b=wh/24bM3LASGxucaLnOrcm2pzdtlW+lUca/0TceNLNOyxQ7Yre+WKQknEW9HR1C8iSCA
-	 1oi5UFhqDVYBzTOSugM4Bi/EdM+kAChSJ00TvbHEV9b5HKDt/uJZJqlBc9CqIgFXd8U9u
-	 lC2NXDEB3RMm1kL5hD8T8iu1R4SiW3+Hsb/63ncd9vLoKB6rrtKECL71JMQq65T/V9Psg
-	 AlEKqMAz9B7DsNaeyzdKo7UKFXdyLfLhlg/oNr4hitMMQcg6npEJxT/MXV5Bvfce18KA8
-	 nW4h3XYFqURdDehj57tfH2tp8omFZZcLJGgwGo5C4A2PsFiIKZyj3IHmJK+fTbGtC2A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793049570;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
+	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
+	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
+	bh=v4rC3LA7hHsU0a6ZISsX3gzHyLk3rWOWw6Gn3xsQenA=;
+	b=mslwaOn09ZhB+XlKwNIiZqBxZCHQxHe4CeJf1tIxfZn0Zw5ls63bRHgiucFi8pUD0JPd
+	 MQiEcMBV2D+sLIK3o8va21Oh8A7CHP8/6O3s73g9xZvoh7gj1pBQZlvkCXBMgu2tM+nGW
+	 3hEa2vvHDY2XLMcyuFYDoyCII3j99jrXvI6CgskYmqLrore3RGYKGNAIVrk+jHWIJ2d33
+	 wVYqX2URSoRK7R7cnjV0Zab+hMwVDihc98Agq4Mf6Y2063wSrD8h/VrWp6buCQhGq47rV
+	 jUY6ehJwKaP1PCUi5D7LwaCww05qeV/cr+HxqwMNHPoYAXlsNN1S+KDSE6iTiiL3LBg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=VxewqWBw;
-	arc=none smtp.remote-ip=74.125.82.180
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=ktWPCtgE;
+	arc=none smtp.remote-ip=35.89.44.37
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F2A606A31F
-	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 21:02:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 81F2A606A31F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75384606A31B
+	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 21:19:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 75384606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=VxewqWBw
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-369f3e9e431so266549eec.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 14:02:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793048550; x=1793653350; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=h5mYYH6ztXAGlslcRFjxz9nzyFLofC1QN+/Q6baEB84=;
-        b=VxewqWBwssajqE1K/421twDEM50Ya0fxQ2dAzdBlnKNWbwpj7J17CO4utV9RQPeDXl
-         G1jSBc7MExVNmLM+hg3feEcOLCYA9JlvbD6GAvfloZ514VUyF3uDEM8TCQ11nuDCtk/U
-         wcBiWvOy+kvdWunLmDcJBV4+E6dByLruzRSFyUNHBbqtJt/CmVZMvaiOAjkS9D3EduMd
-         OXWXRPP2slF02OW98RJIoDQ4QsyYeb8S2RlsXTdfaJzkts73/5gmTaZ8AITeuAj1IuSO
-         q0e1WyHqg0eNbPrT4XlAE9VRgCzt9CfononI4rbBfisAPukqf/g/rJVbu2EIanaY7eH/
-         mDEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793048550; x=1793653350;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=h5mYYH6ztXAGlslcRFjxz9nzyFLofC1QN+/Q6baEB84=;
-        b=ESX3RYfYIlG51c6jCKEtpudxMy0QpVWbRH1U3vHfjM9c8YY6Z0dISAp02pkibWqhAj
-         0OfX/SxIkqkE3olwECvIpWwTxk7tqs1sXcechIBIMmzNLPfeB/80TgvM5ZCfc+FnzvNo
-         JgDKKsCW5Lx+VwZXa8rTtmKtdo1Goao7L/F9CJu7zkEgCaO4w9PSl/I1x+0TMKcgucxG
-         3q3/Htd4kAVUdbZ4PJc8utfGeFgXuBIZ6ESeAnj0YISf2WHiGD68cnd726mS7Z37Rsho
-         9D/F+5YdwN+oPNjUXl0dm+oERMTIosJW+2mYePeEEHHaMqD534AIbAmT/ZYwbaky/kyu
-         FjvA==
-X-Forwarded-Encrypted: i=1; AKwUvBz5tCk66th4qOsBFJ/3FL5LhnXoJPc6INS6jPoNKLPwm6svCeF4Jbxu0uC0Xc6ZRukYAri9/5i/3Mqb4Q==@vger.kernel.org
-X-Gm-Message-State: AFq9FYLB0sBGw++rOlisJbZHGqhutc1XEDN7ZcL4nEvkj/s7/rSOM4Kf
-	220O8x4sDbYmpVfDCGl4FelKvX8rKHYpDwB43PivJcIYmyICz5JUm1pV
-X-Gm-Gg: AYBFou3E9n7Ic138Cohsk0gpjuS7Wq9B+oVtPRYSG0tgxhQKxPhvduAYhS1U50AlZf0
-	NrxQCjq1RXoFWVLOUjvb2kr0SJj/m8vEbzNI5Fs7lbU89sIgXaeCp0muuu2iNQTC8P7FPKrheHG
-	RhkbRQ9E+WN14wKOm/4wrTQjsUY9JA4F2dsjIcSowTWYuQe5I3jthDrT6wtclkcHVMEuU3aPVQZ
-	YPqB8VMP2oJMCzsLxE89HIlALrBSXPHmdpKw8GUaeSIyy8KdFmA2QIxcfABpKzXgZyI8owk2DnG
-	sW/YHxxfzmnq28OgLSkATGfnu7jD1DOYCXqUUrDq89IdSiaBt2Ksv+vc6KpDiRVlhvUtOkWPPTu
-	mnrA9kgJ8ydjQEh9z30cvnp0O2iepxKtSfUy5iSPcFRtoZvp21Ey+4SYg7ciafWGGVmV+DvYNjb
-	PgeS7u3qo8FAxLOiY1UJZWfUwMPXUuT0nAide9Ba0pULf51vuqcOhJYMjwbpnEap1BZ2pwbTumm
-	KlAyjht5ziHuUZDwe1V+of9atr4qdVXeza7mSmBtmYi8jLN84dLCuIPAydSTCYd/uUr39rafDBX
-	BjZ3iHK6Uoz+xfo=
-X-Received: by 2002:a05:7301:618c:20b0:369:f1ca:5b24 with SMTP id 5a478bee46e88-36a0f52f51cmr959274eec.6.1793048549375;
-        Mon, 26 Oct 2026 14:02:29 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-369e8ecf087sm29394389eec.27.2026.10.26.14.02.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2026 14:02:28 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 26 Oct 2026 14:02:27 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Changhuang Liang <changhuang.liang@starfivetech.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] hwmon: (starfive-pwm-fan) Add PWM fan driver for
- StarFive JHB100
-Message-ID: <ddf7f5b4-9166-443b-9105-807f77307bb7@roeck-us.net>
-References: <20261008071950.4772-1-changhuang.liang@starfivetech.com>
- <20261008071950.4772-3-changhuang.liang@starfivetech.com>
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=ktWPCtgE
+Received: from eig-obgw-5005b.ext.cloudfilter.net ([10.0.29.189])
+	by cmsmtp with ESMTPS
+	id LKuExsf3sv0ndLS6KxE5sk; Mon, 26 Oct 2026 21:19:29 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id LS6KxeFhcJ2XTLS6KxKKSy; Mon, 26 Oct 2026 21:19:28 +0000
+X-Authority-Analysis: v=2.4 cv=Lfg86ifi c=1 sm=1 tr=0 ts=6adfc3e0
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=M0FbrtG7MMAA:10
+ a=pvCKQwyQPUSeEgUCWcgA:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
+	List-Archive; bh=v4rC3LA7hHsU0a6ZISsX3gzHyLk3rWOWw6Gn3xsQenA=; b=ktWPCtgE8iyS
+	9nS+Y564cp8+GGj7ZWva+OztI07Qt1ftHRqQ7ercjjmGAfCLGlD0EX86H089BdlwAuirXv1rJe+QI
+	dQnJptIixZ6qSFMsdV3D9gEyThxqNVt8U2eMBxk/UkTXTZ6FxRxehH6R3Rae9Q+KFj/bOIZpaGrEL
+	xf6FB/9teMWV9aOlVkwTZheLu1gYfDew0s0QWZLGc3BPiN1NDX67E14yE0h3hy7LDFwZu9ffZJUIJ
+	S0JcKTSsEhNh3wIObVv8ETzHiclZD/4XHnob+ZKtG9IFwbu3ne0sTy2gSqLJdp1+6siblfFEgr10U
+	8nXgjHPyNs3EI8tLF3ovGw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:52396)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xLS6K-00000003Py0-055E;
+	Tue, 27 Oct 2026 02:49:28 +0530
+Message-ID: <104c9c54-7bac-41e9-b82c-93df0a2b3d73@roeck-us.net>
+Date: Mon, 26 Oct 2026 14:19:27 -0700
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -100,28 +75,130 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261008071950.4772-3-changhuang.liang@starfivetech.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 00/11] hwmon: chipcap2: various bug fixes
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20261014-chipcap2_locks-v3-0-27ebfc2c5b9e@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20261014-chipcap2_locks-v3-0-27ebfc2c5b9e@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xLS6K-00000003Py0-055E
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:52396
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 4
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfHLv8MT1x+V0d4m2TxjC2VPlmYpM6XcyNdud0t7PyRbUkZ2A1DvvwoGKGHserHBvX4tr0lDmwVI9mRu3ewMjtLSMP7Ur75IwMm8gtY1FVM1uEwIXhego
+ cPYQeErDw0llDi2zv7JIuVsBuhKbxI3j+LOF4yyUyyN4mqMbcsNuaCP+OL7FFFi5Ww03V/qBQb2U/2oyaVbmB5aYpkoMh4adJoQkBZOViV58AntHLEfr5WDj
 
-On Thu, Oct 08, 2026 at 12:19:50AM -0700, Changhuang Liang wrote:
-> Add PWM fan controller driver for StarFive JHB100 SoC.
+On 10/14/26 10:33, Javier Carrasco wrote:
+> The original issue (race condition for the alarms) was found by Sashiko[1]
+> when an unrelated patch affected chipcap2.c. The issue is real as the
+> access to the variables is not protected by any locking mechanism
+> although 2 different sources (threaded interrupts and sysfs) could
+> modify them.
 > 
-> Fan speed is controlled through up to 8 PWM channels supplied by an
-> external PWM controller and exposed as pwm[1-8], and one PWM channel can
-> drive up to two fans. The tachometer block supports 16 independent
-> inputs and reports fan speed in RPM through the hwmon sysfs interface,
-> along with stall and low-speed alarms.
+> In further iterations Sashiko found new issues[2] that have been added to
+> the series:
 > 
-> For this controller, the special clock and reset operation sequence is:
->   probe: clk_prepare_enable() then reset_control_deassert()
->   remove: clk_disable_unprepare() then reset_control_assert()
+> - Fix be16 data handling.
+> - Defer probe when the IRQs are not available yet.
+> - IRQ teardown ordering: split the current implementation to provide the
+>    available interrupts before registering the hwmon device, and register
+>    the IRQs after the hwmon device has been registered.
+> - Disable the device after the hwmon device has been unregistered.
+> - Enable IRQ processing when the regulator is already enabled.
+> - Balance regulator counter.
+> - Do not discard the pending alarms when the device is disabled.
+> - Reset the completion to account for counter > 1.
+> - IRQ serialization and synchronization.
 > 
-> Co-developed-by: William Qiu <william.qiu@starfivetech.com>
-> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+> The last item required a dedicated mutex because the hwmon_lock was not
+> suitable to close the gaps where an interrupt might go unnoticed because
+> there is some dependency between the data read and the interrupt
+> generation, and also in the completion mechanism. I went through the
+> different alternatives with a combination of local Sashiko and a second
+> AI agent, and discarded some complex solutions to close gaps that are
+> more theoretical than practical e.g. the interrupt was fired, but it did
+> not reach the controller due to nested GPIO expanders. I added the
+> Assisted-by: tags to those patches accordingly, although it seems that
+> this requirement will soon vanish.
+> 
+> Additionally, a harmless off-by-one in a for loop has been fixed to save
+> ~80 ms after the last failed command retry, and the error reporting has
+> been fixed to show the right issue. These two ones have not been tagged
+> for stable as they are only meant to improve reaction time and logging
+> inaccuracies after a command fails. The deferred probe does not have the
+> stable tag as it is just a reaction if interrupts were provided but
+> still not available. Of course, I can add the tags to all patches
+> if required.
+> 
+> The fixes have been validated on real hardware with an Amphenol
+> ChipCap 2 CC2D23S sensor.
+> 
 
-Applied.
+Series applied. I assume any valid issues reported by Sashiko will be fixed
+separately.
 
 Thanks,
 Guenter
+
