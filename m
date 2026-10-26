@@ -1,86 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793024567;
-	b=z7O9TW9v207UM/K3+6m6ZwZofO5ykvhaTXf7hQ6jWW1tFA5/QhpAu9hHwwjPoWzIG/su
-	 wRKKpugJnKV5f00XAZzhUDN0fqFT+QCWrsVY2ttW0MYJg9faSh5PpI3Mb+5z0rzJS/9db
-	 1oU3kDdjPKNKEuJiLcAlzb+fqB0gj0l8P44bCG7gSAgYxXQ6lLa4NVz5ne1PTtL0+CJ8F
-	 N7ZEK7aQJiX6an3T1qokQWcpPMA6l3PR5//HDlayBuKia35mzztB9meT3k+Oh+2M1rB9W
-	 8zDw5FfbvUhyW8J0Pm9BVkU/RFQhkVmdjYvn3Fvp+5ZKPYELKj2NVQLZDbkzNr6u+Yw==
+	t=1793025327;
+	b=I9PhEE6AW06Yh4AIhGuhaulDPjB155UgtpzDNnUeiDVdW02u2bWoswgIIb0Tk1AEw9ve
+	 CIvzbcp5pv06hGRzmqjG3fzRGK5Yfd6lOmIk0tAOI/dG8ngHMoPvVZpYzmwBpyr5YWsZZ
+	 yim4YK5Ey+FYDxklCGJl7p7jjFOPVoALzCVMoNbWz99t8AV8b+Ba9yGOkutOjeIFKpGB9
+	 8jxUr/FlahxRg0lnNTlOjc25WjWrZUsqPzND0Xy0dgtxTkaZUhqzuUDlTj/jHtKQfkIxZ
+	 MPZMQKXnZrS9rgH2A74ooOA2ZB5zxUZdQcJpgli4fcx1O8dltBrV3Nv9yR4XchctITw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793024567;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793025327;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Sender:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
-	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=CUSUCiQZP/dAD19/atHYlozTi9sHvSmUJXvcuZQG9Bs=;
-	b=4FgimoYp+V7j1Dni42avGFXxtnSPiisGToLhMt/VHkbpS11enL7ywtLYsXwHBMSnuX0U
-	 KF9HU6+7G+MMhoGUG/SkG/7w+cHYhoSeTbCQkCTk0rzKChir2ueVzLFuBlUqWO4ys4UiE
-	 sOkoTTULg90OHlHsTudyjjqu2TLd2zbQgCfvaxxyKiQV7qmdCunEpFqpYUusM+aB8GGW6
-	 5biOzMJjoIoOt5rw5Yunlrm5SyBadoegttgynkh37V9ZIchEM4PtyqQGuIvlU6727+jEF
-	 eMJoRz+XPxS+xEJFRgiwT4UfSRCJquiOMcKoMl3g0tBA1WIhjuJ2/dhGSiJEe83v/TQ==
+	 Sender:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=3nXYf+vZdz1X4ceYTBG7b3k1LMVkfZE8bc94nKl4oNc=;
+	b=Ab53PSVsp/2+LOrgkM9YwCVb/bQaOj83mdn19RQDbogSPsf23fzDTgbWhJ3ToTL6JK4Y
+	 uacm+gAPFiUV7Ed7TxLGnICdjM8m8TLOU0oVdJwzK5RT+tH2FEgLCC/TKhmqE7hnN8wKm
+	 LoHmNV9gBszUnMbc0NZzlW3TcAZHsiCvrVA7hvW4d8goG7rOu8lcgYZefT1ZM+pTAEySA
+	 v4zKgGrueERHmQr8szr43VjEtF57GJLwRAhvYbgXeEVqEsiR4gSA/Kuq7Nwrhe0mDezQo
+	 GR/TOKhUYwIC6EBf8onGHl5XX8IYEKSDjJlBjM2r5VfWIh9ryLpE73kY9TEl45YkIXw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=pass smtp.mailfrom=gmail.com;
-	arc=none smtp.remote-ip=209.85.215.182
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Xr29qaEW;
+	arc=none smtp.remote-ip=209.85.216.51
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C4E9606A31E
-	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 14:22:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9C4E9606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42604606A31D
+	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 14:35:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 42604606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cc147d86bebso1509788a12.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 07:22:45 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Xr29qaEW
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3adc4590de4so2090272a91.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 07:35:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793024565; x=1793629365; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=CUSUCiQZP/dAD19/atHYlozTi9sHvSmUJXvcuZQG9Bs=;
-        b=gKA7taNdAdgVSgQKMxloBx5inx7xUSEgMIOXm7fVi4xaJlAoPHjWyYcVgrGI9QFEjg
-         zWC0n4IyLU4eijqnfH9bNYBUc9sdx9thPkqF4yhHyT36cuwWaiJE7D8I862oSB+/Fip+
-         N3LZ3ruw7/VJU2VOlWvAIYtfEaISQmvO4IPWmovsopn61xeg1LbCM0KwCM4gdifH+kPf
-         TcNlVa7NR/es/BmEywadSxzc16S/2FVhDVVzhn3vlneqbuh41J7MlImCJqzXgqZ61LCj
-         6yxfXds9jAmDLaapT/AqFG6OK2w+s1l2bT5T/d+wbTiT/ps+alRkhbZrHBUVfamGlcJ+
-         x+YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793024565; x=1793629365;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20251104; t=1793025327; x=1793630127; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=CUSUCiQZP/dAD19/atHYlozTi9sHvSmUJXvcuZQG9Bs=;
-        b=VXQRfxR8svXGkFxxpFZgLEsIcrc5D3aZO/NMQ4ChVeTYUAcaF+5fltGusUq7rHbVta
-         3UQtwiEOUvGh3DHoIAmOyvGVwwty0SnzurorldsEURe+gqUHw+3ip4w3u/xnsEjukJm8
-         ad45RdhaXNVUFNEqUwtxpX1bfhHYg2V/n9YBFLUfcu7GHr9oeMD5qGXk+9/ZB0CPMTCD
-         TFUmjACX5REF3dPvoiFasya22OaVdL1PvNqNfDbewJAW4cfzEMLHnrkmHKSmEiE1acZ6
-         L+Q1pQlB7eri/lCrFLFKvER+phTTUdG4dbK2KNnjuWaW+tmc/FFblXYuMcFZu/BtZar5
-         lXUA==
-X-Forwarded-Encrypted: i=1; AKwUvBwkLEeXy/hIg+L0xMhlEx++lzcwNpZ7JePsU7byvPeu8HVHYdsB4FfLDJk9HZtB5z4rgsDhPuiWEMTP+A==@vger.kernel.org
-X-Gm-Message-State: AFq9FYL4Xxu1zNZ+4h+5xXlnnoBBCYPV8q1fvvroLYGcy+6jqDREj+QI
-	tSnOAlZUdzsFqX60KeImtM0s90DsIKJGrUd3YTdLu/xqXrq8FJ/LDQ1a
-X-Gm-Gg: AYBFou0Gbcethbe50Vl/1DohjbrbcjRgREI+5CXtX1QYfcGzakESPpAw8YEUYPa9jYX
-	AOl8DJWhzZp2QQ776Y8NQOqgKCFdWPLFvqUTeo+Z2ua8p/pbpwmC8uoXbeJL84I6Uf3hkJIXhLd
-	Lks5Gd4HZmzRnu6SS9Xq+jZXSfQJAQ5qUCdXa5aRWVIlkjICAxRfb/HledeYUJcdSUqaW+PuzsS
-	GLagDVvQm7iiOrnMMt/Sk5nyNxE9kabPqw7Spbep3sNGsgKV5fK4v1XfEkNpGZwbjquyHr1dDqs
-	xBm9zzSKLvYjvFx3SphDVYKQCURMz6fEXmmbhpIAKUC9R1EoAjgKasVKk5GagLHp4u+2kyT1Ea2
-	IXNSF04Xp+DqLtd8Po1+WuI0g3G1/1dp1cXQiKGw04oj4b4jlmgJTWVmh7GfCFEcNdtWtR7xti+
-	o4KarPRxCjCvl5zMRvXUv6vwdbbisE9NYg5OBK3Q7yC5nLpJwYo+FxVgPXPtecWvX3ay2aDLCLK
-	lcqG4ePUbUxjI1ChDqnqqVXSJmSNvfL5fNCxOTJfqjKFgt2vwTlM9R/tZtf2fKAD+R75+5+eBSX
-	r/mtxot2iccViJRiNM9i4H+CaBvV6A==
-X-Received: by 2002:a05:6a21:e08a:b0:3e1:4fbc:5ce9 with SMTP id adf61e73a8af0-3e7bfa9c559mr4196804637.20.1793024564910;
-        Mon, 26 Oct 2026 07:22:44 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd8ccc666d1sm1618155a12.16.2026.10.26.07.22.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Oct 2026 07:22:44 -0700 (PDT)
+        bh=3nXYf+vZdz1X4ceYTBG7b3k1LMVkfZE8bc94nKl4oNc=;
+        b=Xr29qaEW9taLTBbnUhkAw6vv5m5lSMnIu5ELG5jiyxneo3tXFas5X7jNdaXsrNbMe0
+         gSoyn8jzPH5unOZQLYVGoiHpgON9Cs/NgrQfPsoR+o20os9K3nskmJMeazUgamyQIeYx
+         oA0ty4rUOZp2+HRBcM1UcbX71kfgg6L0JxQHe7QUesS+R0eCRMcFo6VqNEwI2eSwqJNe
+         QEBdyRQgIBZbSO7JpMhW5I0tWjFv3qSRKYbsNkVf2ernB3DtRlKhDU+hZg1eObSo4tcA
+         j3CCnWesfhY8TxIrlCFaY6eJhMzrzvlc49SOhxZ41yZqPQSAH9RP+Tryr0eb7eG3VQis
+         e7PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793025327; x=1793630127;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=3nXYf+vZdz1X4ceYTBG7b3k1LMVkfZE8bc94nKl4oNc=;
+        b=nNvKlQxasMi0Rv1XJoJTwZFzw9vJVwkJ7VmGfLWrUqE6hIj1a2+9KsvDmkeJZOOYr6
+         tvUIxV7fn2/Q9KGab8o/OfkoxA5KShnecOoZcJ3IwB6igm987dBs1yrQWl4C1n6O7Kf0
+         daqtuejamQ/E/h1JA6SbA3QrqGNzfeJiE32sdpfNEx04uvFVXryqZX9rYUiGnUV6qw2X
+         hit8b88+l2St6uB+w9gz+RVBPPlNNFS2hf18nwZY1HHG6n/zipmz8iAzAf8soIzNSo+T
+         74cmKNvtQTUwnASBL85kwzUMqxTK/wCKSaFD1sBhJLs9J5Av509lttmFU8wERGPxrgRC
+         OeUQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxxsnD5p4tpu4dM2vdfLVPbg7nvvqsSj7LMfCTtOgIrQrATKL4YlTZlnIZ9Dnm9OGtCijxdNS9ynoEIJQ==@vger.kernel.org
+X-Gm-Message-State: AFq9FYI0tWykFHDV/wo0FXTkbBa9N4ZUY3kFReBkquWgzzs6B98dCWm9
+	YoqekT/yihn2Nf+5v8L9kAJ6kJ8KYZ01rwzmaGJn/7OurUEC0lUoxfR11qBPpw==
+X-Gm-Gg: AYBFou33qw5jujcBwu4vkbuWuOH770emH3lkbCLBDJZ5COf4JL6sMOiQOO5eR8w94ch
+	Kt2wA5N1IQK+ceeKK7i0g8Ls8xiHBC1qQ8dnFoyHTSq66d9NmNfPgAdb5qVQ5Pp6bcKyzMv2aey
+	SHeYwVOQsd3A93vk5vDoRHYoW5Qq+mBmdbq0X+3azB3BIf0haf9merkUvh/WIk8maKSvdOaRUGn
+	JlsN0JC/qT0uMkHHin+mk5Rmx6RNZs+7DO1fYSqYH69GEoHtWJzpQW8FRVGUWJjnnf+hng9FND5
+	KpOQv6noKCXZEKVhyZH1vV1cYa63nuuG5cWEpufELRBMGqoEJUmE7/8gCpAkumSScGumU4p4+NW
+	uJrvZVweF2MdXchh6SMxJjOfbX3Qx+PZkWe2/aHhh2c3mLH8cGAC9KXMbpaJwmLBvWefF58OFU6
+	9zUm8u5PXDlYs0O/45L+ljeKc9Z4gNuipCnSKR7pzr/CPrpk99Sh9890/eYH3hsJVhPM/8gbFxx
+	I5SAy7n4pglCY+zPaGjpwVeAeIaozujfsI+4SOKTLYSvKDqTvwaf0nI6Sk+OLFS/XjNTp4=
+X-Received: by 2002:a17:90b:280c:b0:3ad:818f:3daf with SMTP id 98e67ed59e1d1-3adeac05c76mr5804256a91.14.1793025326567;
+        Mon, 26 Oct 2026 07:35:26 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adeba32e38sm9259927a91.2.2026.10.26.07.35.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Oct 2026 07:35:26 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d8c327b8-3113-4490-83b2-70cf3ccd3224@roeck-us.net>
-Date: Mon, 26 Oct 2026 07:22:42 -0700
+Date: Mon, 26 Oct 2026 07:35:24 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Pablo Mazzini <pmazzini@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+	Lee Jones <lee@kernel.org>,
+	Alistair Francis <alistair@alistair23.me>,
+	Andreas Kemnade <andreas@kemnade.info>, linux-hwmon@vger.kernel.org,
+	mfd@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/7] regulator: sy7636a: report the temperature
+Message-ID: <f68279bc-20f1-41a9-ba5c-92b974785cd8@roeck-us.net>
+References: <20261026003918.155321-1-pmazzini@gmail.com>
+ <20261026003918.155321-6-pmazzini@gmail.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -90,96 +100,21 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: (pmbus/max20830) Add support for MAX20810,
- MAX20815, LTM4739, LTM4740
-To: Carlos Jones Jr <carlosjr.jones@analog.com>,
- Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261026050241.100428-1-carlosjr.jones@analog.com>
- <20261026050241.100428-3-carlosjr.jones@analog.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20261026050241.100428-3-carlosjr.jones@analog.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261026003918.155321-6-pmazzini@gmail.com>
 
-Hi,
+On Mon, Oct 26, 2026 at 12:39:16AM +0000, Pablo Mazzini wrote:
+> The separate hwmon cell enables VCOM at probe. Report the temperature
+> from here, as the TPS65185 and FP9931 drivers do, and under the chip
+> name as they do: read it while the rails are on and return -ENODATA
+> otherwise. Boards that need the rails on mark VCOM always-on. Drop the
+> hwmon driver.
 
-On 10/25/26 22:02, Carlos Jones Jr wrote:
-> Add support for additional members of the MAX20830 family:
-> - MAX20810: 2.7V-16V input, up to 10A output
-> - MAX20815: 2.7V-16V input, up to 15A output
-> - LTM4739:  3V-15V input, up to 10A output
-> - LTM4740:  3V-15V input, up to 15A output
-> 
-> The LTM4739 and LTM4740 are the LTM-series equivalents of the MAX20810
-> and MAX20815 respectively. All share the MAX20830 PMBus command set and
-> telemetry, so no new register handling is required; they are accepted by
-> matching their IC_DEVICE_ID.
-> 
-> The LTM4739 and LTM4740 are uModules built around the MAX20810/MAX20815
-> dies and therefore report the die's IC_DEVICE_ID by design: "MAX20810B"
-> and "MAX20815B" respectively. Match on those identifiers rather than on
-> the module part names.
-> 
+This is going the wrong way. The correct solution would be to convert
+the hwmon driver to an auxiliary driver. I am not going to approve
+this patch. I am not giving an official NACK (yet).
 
-According to the datasheets, MAX20810 reports "MAX20810", and MAX20815 reports
-"MAX20815". I find no reference to the "B" variants on the Analog Web page.
+"Other drivers do the same wrong thing" is not an argument.
 
-LTM4739, according to its datasheet, reports "LTM4739”, and LTM4740 reports
-"LTM4740".
-
-Please explain the discrepancy.
-
-Thanks,
 Guenter
-
