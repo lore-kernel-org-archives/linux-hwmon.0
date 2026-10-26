@@ -1,94 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793043192;
-	b=IKUjXCSlzcK4K7tyPGMqfe0KlHSEuMIIOpyqQrz/rCyUDjtSTyPfvxy5joUE9Dadshsv
-	 IWZ4ihUuopsu9JtfcIYIdqyNsilCkMSCr0OAcsYtoS0ye15SgRrTjdZ7B9tzk4znlr704
-	 /WOtfSYlI+eGreemsM7nZYkKLFjIBogMySWfVMtCRVMU9a+NdXfbVmsLDA4xsCuLdeQ8Y
-	 JvNWuBqdAlzRx7zofA4IQnHuhmNjZ3u55KW19cz/3vtAXtxKBCeKvOMuksDc+MCM00luu
-	 Qetdf//avzp+TGO/byAfKI3AfyXXp/1maGko30GTp3Digcp8/gOBARFPGKso9J8Xg/g==
+	t=1793043238;
+	b=QAMIn8U7BkkPkP9+vVjI2Ufi4MhXRRSfXIm212OcJFjR15LqSNlIsjreORfhyusap3dE
+	 XWu4fsSCMorbR0+/ER4rlQ7Q1bkrq41+eUtptICfPLLRLWYaII2C6GkViASNJH5yeY1Ch
+	 SO2NP4kTQOTj7eGB0uKOpmgD0DntgwYPuWb0BRrRAcfN2sl1+5rYa5DhlHJ2BhlpGdVoR
+	 ENvtjm1TZ+J6g8JTc4QGiLf5KYRR18U7lSGhhqt3Qx53JPsppBOTYrStr5Ucay8f0BUFB
+	 gtIwx5lgoAM/SWn+hQwulLQQ2bnqNAUTH2vPK2AOgggcCnXmF1H1hJ+myi3yGg3O6bg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793043192;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793043238;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Sender:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=04JLIlecZFZkeu2diGMCwDrGIV8T9H33DS8yBLkYP4w=;
-	b=PHCUD2NGH2u6DwEW7mfjgsIEkiLVIPbRo6JXF09wkzIetlD55zfzrXGyqtkg3s1P5zwz
-	 TciE5ACZ+XL2W29YbNaUrE+COb1ij03KlmZ0FJkdTAQEQ5sMzuo5EZWSSDf9ACTXkw8fJ
-	 RZZy6gMEULdCZvfQSDnl3sJa4+bXM9XoONjvnvr3+WibjlopLTXXjv/YxSEjOKd0qb2UX
-	 EZ0zgfWqO+jd8Xq18+DISbWTyR50lLOCKMXriDkbNJDqPLG0FhVa3Rik+5PkVMMEP55XO
-	 gyfBu8UEIAeHbm1FnYQpJ1L7EJYxmhgnqAfKTIl5A/EJdIAbzKWGDxSa29jbCKVVftA==
+	bh=omRFy0cHyVLNWnAUCIu2kHA+eYvWta9ISAt1zEqsNXU=;
+	b=3Bp/6E8Ge15TyexlY0JI7U3cD+fNyBCY/RkABbms7BZk0UkEfY+TnZBnNNchRipQKOnB
+	 URIcXVaCTe5R5QyCd6+rY/9bPc2ao5bzrI/nchpop5FUYvuvmzneT9Ns7GTSJKqB52zut
+	 qvExOsL2Uc1WPfWGFCABjp5r5lDiO6zzSMPyvDsEQpAiiDNBLr8T7sofRSwQKQYBPBoTq
+	 kk6fIQ7haVATaS+y62RB/IFCJF4MMdCMHPw5S72oH+hixSvVXJiidZ4BV21ji3nPfo721
+	 KpssoAyUZyDXsYrb/AZ3nA4heuORec4m64S+YEqtBWcQ7wJor6BPdOxjkEY6ysosyRQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=CV+nkpCa;
-	arc=none smtp.remote-ip=74.125.82.52
-Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=P+zg+FTZ;
+	arc=none smtp.remote-ip=74.125.82.179
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D16A606A31F
-	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 19:33:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4D16A606A31F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E15F606A31D
+	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 19:33:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E15F606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=CV+nkpCa
-Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-185fd3a4ca3so2819491c88.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 12:33:12 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=P+zg+FTZ
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-369f33df08eso3682184eec.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 12:33:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793043191; x=1793647991; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1793043237; x=1793648037; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=04JLIlecZFZkeu2diGMCwDrGIV8T9H33DS8yBLkYP4w=;
-        b=CV+nkpCaoa3VPlrnwXwJHelWuW5pwnNvRh1HbGC6Ozklfuph7C9LBWlM5HiS+ZtKyh
-         vZHRJin5qeQdLQs46Vh/Y7y8XmyfFt1wIuGMLmycNpuRTRjHHRwUjKhKlItG7E1HruNN
-         9EpECQHxqgiQqJXQ3Ef793CnUMUwP4vZd9VbpU/YfWweXdsH0gPK2nY2mqiGnjLz2Ltd
-         ioV3iTLw/G1Xt3jwniteZ1Qx+TIfR9Au3qMZZfLF2dhLEuzC/txsO3BAjFyFDbnUAwhe
-         BsNTLa6v+dbS9vIH/gYVgKfPOoEolRRVEQ5KR+EmjN4UcMpwUYUfpxbGAm+NxE5oTrlS
-         0dgQ==
+        bh=omRFy0cHyVLNWnAUCIu2kHA+eYvWta9ISAt1zEqsNXU=;
+        b=P+zg+FTZaPnoLv3sNo3Rbrq7MdxQMEVlG4sFYf65DZsur9eCwQNFm5khndSy6mesI5
+         vskp7JWhmWSdXu3gbApqryLbJFOioha7qtwWilDIkY7409gVpaFofUaAtcpXpnoOzOt2
+         N5GOI+HL/QJCkiw6Quy34+PL7Hsoo+RKYsGV1JnXNr5W0DWXuMtVlJmTkGkO9BpychpK
+         Zjzt9++Gtj1IlwNRP/demXiZN2n58CGFdCNg/xdeRqcSyz8L3MUfc7Bus54MuuxVfru5
+         PxXIpegtD0koifEN0dhnGv/3kdisRxax7+ytQd7hfb28hOR7nfCLH9BVEei4X3yhWA3+
+         ZG2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793043191; x=1793647991;
+        d=1e100.net; s=20260707; t=1793043237; x=1793648037;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=04JLIlecZFZkeu2diGMCwDrGIV8T9H33DS8yBLkYP4w=;
-        b=f9Rm+myjVh/3UsSqKZr1DvSlkN3Pr/BumpyI8BuPgnGMKvtRnM6ArXNeR94PiemVw0
-         3JglXkN2xBm0vSWJtffiB1YalAP0mA8FvsuTVicpc1oLE+CYAVbRRkYVKGs0e9BEejMo
-         Jks5zsqJSZuD5QoO94mRkCTjPr/n4JDWNXE724CDQBwYxVu6PKiyhmFoTfkdI9Y93RG/
-         drAbb+STpAHM7u8mZK5oIPuZlFjXRQCn5L0HsnQYCANUcwyw8hXjHKbrmkhrXGH3jlHZ
-         F/oiWVjyyDOuhI1QULfOCCgRUqM4unm1OzSfjCbbPOUy9XO+hnANRmC+ANRmMCJrI8Gx
-         eRGA==
-X-Forwarded-Encrypted: i=1; AKwUvBy2Zw6Y5GLOVx67EwS7P4PjTnEny7+/2zxu2IYKODsogZHr962CFfbbkTwPwZNInA1NUlvyTCNDxw2iOA==@vger.kernel.org
-X-Gm-Message-State: AFq9FYI0iQcxsXTLiOIDj3ej1V7NNNCAuKq6KUwEYdK2x8UQToTjIR96
-	gFYFuydhL4WfdKc3BwQdwo3rAKccfn/UMR0gqSZ9/Px4swcy57z8fJIE
-X-Gm-Gg: AYBFou3R9Pla9zaqaftG4kgfD7tc6XK+ruyyc/uQ6uxUT6BVJE3JCJm22KNdJVWLtXh
-	MFqRx56DEvMeXo9YBKfLZMGynCYrwOPuL7Kp/27m7gwXhtQQ9QlfXS9xcKaYhU6tbjMKmgYOVXA
-	TlHMRnff64ycHVryi7VGynB7k8HaAg5NyuK3iRPGdGhYSoDwQ2qQJH1EKDKLU5GHSCVwYzkkJns
-	zzzbCYi+vBWLTnIDMSigfEmOrjN65sHkuSQFK1q7OodO24mIJ7BGk43asrfUxczCKPJyBMcszFc
-	tUmkyW3GhBO7yyHdq9eqM8hEE+Rp77meBAQWFfm17yRPrmsPijmSA/kpHOW0WHOEfxMf9NW4EcW
-	16nraQ8w7GfC6WQPQl0/Q0VN3TI7c+Mf4jsv+rt4nLAmMAKoZ5tlDNEByt8uZoSEYS3HP0hTFyM
-	QmF2JhhxV+gZEwfej15NogDdFS/eeO04jpP63FcLH6IlGMOYbh6INLGXs1Yu1nZLM2DJIxzP4FR
-	ynFmFttV08sx1j9rRjc+mtCD36tnyq3BDq/jJjPd15U8dxo2AP6p9+P+T06xU3z11v2pA==
-X-Received: by 2002:a05:7022:f511:b0:1a0:5c85:d1b3 with SMTP id a92af1059eb24-1a05c85e6damr5681820c88.43.1793043191140;
-        Mon, 26 Oct 2026 12:33:11 -0700 (PDT)
+        bh=omRFy0cHyVLNWnAUCIu2kHA+eYvWta9ISAt1zEqsNXU=;
+        b=jpbCjv963D3/xgIbkHfK1Wx/QWgruqduoscUOoIzXVQWfJvGyIZfWJ0RBdGNY32xsO
+         GxyAuGGLYBTRaaJ9dmdNYS3dCP5WxtI1uYvOKmehirhLz+bzaNXEL/LwGqVQKuwGFHvN
+         gZX8wHsJtbCFU9G2GI/4manJnfOnY18L0pupGVB//vfDsLboTvUUOlMpmECPCgeejqxQ
+         /n20x4j4Zx0q1+OoznJ71LI0sVX3MzNPxMQd3gYki7HgjeyDq9OAoerW+TXjLZNwVqXk
+         MDPgYHPq6yu0m/NgZtL5qJjVh31xwT9QuMsBEwO+4VlR/RVBjrg+TlE1JJ01/gpEnxhk
+         mD3g==
+X-Forwarded-Encrypted: i=1; AKwUvBwq+7pSDBDPJ5ntBK893ccfN3qm+WHv5U8QtbPnojCfRENIP1dCv0mujJDrvxyN/fOmIAf+JLYWRAvbJg==@vger.kernel.org
+X-Gm-Message-State: AFq9FYIu3cPfISrMndYmiweoLeU3UfNfiH//8Xh6qQfq917GmQ2UH/9q
+	JaOe9SoTWrEYkVwcsEiqMfqfVbYQfdIczKns42XYlWaN6CtMQSsdfk6K
+X-Gm-Gg: AYBFou2HZKMF7RHKatViGdIgePY9fG1wQqSNLgU3Y5ydT64UxGU3iqaizHD5zocA5er
+	qdsaVnoeSZUlDpYNwzT15szfDys1dN70bWPQGnyAid6bQrb3U7QpXAgWSnq5EgOFJXEYqTACttq
+	f/+znx166U5vORYIa7Tg4eS8OGzVAHvg7CbVObJxDTwbfSVhRLA8dmJqRi0ghNVVm7UbsgD3eL/
+	GganXLx9k6KxCFMJtqIm8nUP2YBIPcBCgBT4NZ/FwNYMcWJgGW7HZCYjCRAz+Qgk/2nSuTtVdym
+	KGI6t3uiYlFU2wu579fu7mxbr2JLkSyC0cInRwJyF/gcHyt9aXCcIiamYrEm7CJCARyQxHLJbqX
+	j7h4TZSZm3iNIjQUHxly5CLBQkAKDks8gM5wSzS+tP6HVStCszzIvCeO6jeVG2H6g6TRJ5zpE1Z
+	kOAqw5E6D/z3lTja3K2wxWQRN87KZR3C+Ipqk6ycF021mgr99u05W2IKFAIVoQfuDMJUDmfn60S
+	ADg/K4Koy8AkX2JA8trDeaIrNKTA+AETBaFu8/P40tQZO3l4FbFo4IckyRY0duafLpyp6plzm0y
+	GFFUdlXHpBlD0jgymQy526lf4IHXpW9n80lMBV6ZNS0=
+X-Received: by 2002:a05:693c:60c9:b0:369:f72d:1010 with SMTP id 5a478bee46e88-369f72d12e9mr8594937eec.18.1793043237086;
+        Mon, 26 Oct 2026 12:33:57 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-198a249c331sm55689859c88.17.2026.10.26.12.33.10
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-369e8d93663sm31461352eec.13.2026.10.26.12.33.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2026 12:33:10 -0700 (PDT)
+        Mon, 26 Oct 2026 12:33:56 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 26 Oct 2026 12:33:09 -0700
+Date: Mon, 26 Oct 2026 12:33:55 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Remy Demangeot <remy@demangeot.net>
 Cc: Eugene Shalygin <eugene.shalygin@gmail.com>,
 	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] hwmon: (asus-ec-sensors) add EXT_Sensor temperatures
+Subject: Re: [PATCH 2/3] hwmon: (asus-ec-sensors) add fan extension card fans
  for MAXIMUS IX EXTREME
-Message-ID: <08a1e24a-2cf0-47c7-ac10-c58ef70f0614@roeck-us.net>
+Message-ID: <98ee6ef3-5e5d-46eb-9a51-e732ebee540b@roeck-us.net>
 References: <20261026-b4-m9e-ext-sensors-v1-0-644d389b2de1@demangeot.net>
- <20261026-b4-m9e-ext-sensors-v1-1-644d389b2de1@demangeot.net>
+ <20261026-b4-m9e-ext-sensors-v1-2-644d389b2de1@demangeot.net>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -100,22 +101,25 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261026-b4-m9e-ext-sensors-v1-1-644d389b2de1@demangeot.net>
+In-Reply-To: <20261026-b4-m9e-ext-sensors-v1-2-644d389b2de1@demangeot.net>
 
-On Mon, Oct 26, 2026 at 09:57:35AM +0100, Remy Demangeot wrote:
+On Mon, Oct 26, 2026 at 09:57:36AM +0100, Remy Demangeot wrote:
 > From: Remy Demangeot <remy@demangeot.net>
 > 
-> The MAXIMUS IX EXTREME supports three additional thermistor inputs,
-> EXT_Sensor1-3, located on the optional ASUS fan extension card. The
-> EC reports them at bank 0, registers 0x60-0x62, as signed degrees
-> Celsius, with -60 when no probe is connected (already handled as a
-> blank value).
+> On the MAXIMUS IX EXTREME, the speeds of the three fans on the
+> optional ASUS fan extension card (EXT_FAN1-3) are not at fixed EC
+> addresses. Bank 0 register 0x43 selects which fan a group of registers
+> describes: after writing 0x0a, 0x0b or 0x0c to it, registers 0x57:0x58
+> hold the RPM of EXT_FAN1, EXT_FAN2 or EXT_FAN3 (big-endian).
 > 
-> Add them to the Intel 200-series family as Extra_1-Extra_3 and enable
-> them for the board.
+> Allow a sensor definition to carry a selector value, using the unused
+> byte of sensor_address. When reading such a register, the driver
+> writes the selector first and restores the previous selector value
+> once the bank has been read. Sensors without a selector are read as
+> before.
 > 
-> Readings match HWiNFO 8.54 on the same machine, and moving a probe
-> from one header to another moves the reading accordingly.
+> Readings match HWiNFO 8.54 on the same machine, and follow the fan
+> speed when the fan duty is changed.
 > 
 > Signed-off-by: Remy Demangeot <remy@demangeot.net>
 
