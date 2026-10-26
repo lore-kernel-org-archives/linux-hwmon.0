@@ -1,87 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=88.99.38.195
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793033077;
-	b=XaEfFIjmtRu169+kqLdgdyPkY2ZdXIcmOa87XdVJCS2DjIdKVugB4NF+MBiGjK/HQTw6
-	 HT6JGpDHhi8VUU6/7drpYsv9V12q+GptS27NNAmiV7hhdR7BLjs6ZXN1R/Abhu0xk/oUT
-	 UrRQKX8aTyl/lqueeaWvBf/BuNOy8Y7vmTg3bt4IWAVy36lUZPzv+9YRgCTGHzWCNJzoL
-	 Uptda3Z/ugh4lvXqwDorLyn7EvcRUIWLRX82NsfuEyg4RTv42cAdfeX65bf0YcpGqWHXi
-	 zxAuq8sPm6m/fE/iOGKHVetMySZoKMET5JlJe9Xaf69Vllks3rRa9NoazQq8+RkZ9IA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793033077;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Received-SPF:
-	 Received:X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:
-	 X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:X-PPP-Message-ID:X-PPP-Vhost:X-Virus-Scanned:
-	 X-Virus-Status;
-	bh=AFQJdAiGgN3fW1Ct+HsLIsRUW5WmUGGeAmWhxML3ipc=;
-	b=Xg6zWCuD/Oi1iew0hKaK4WDOa7ti8ET/ZflN/UEdCM7P0fPr9mSA6gMjPg1Ih6DrskuC
-	 ZFLW47Dv4UChVDL5sePM8RJs49qpq/m+7w0HzyyvmUySxCYMIfFC82L5PVEmnTn6yDcET
-	 mVWplSTbkRTAjvxm6WCFN3TRyidM3mEzZbtEd3uKN3VnDZjMBGskFEn+QYFQ6aKEVkMw2
-	 YZSkxCY+XLy/xpX0BgzpVCOMixEO8SToeIpvzzUfuVnMNKnc3JfE3DmYEIFMFwOvpNUzM
-	 zS7r2zAUTfVnCDfJrf0PwdA/gbOpOCXnpfsNIH0N3HKS9BV79ZyJ1hHPSrYseQQHeqQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=antheas.dev;
-	spf=pass smtp.mailfrom=antheas.dev;
-	dkim=pass header.d=antheas.dev header.i=@antheas.dev header.a=rsa-sha256 header.s=default header.b=m5hAYpex;
-	arc=none smtp.remote-ip=88.99.38.195
-Received: from relay12.grserver.gr (relay12.grserver.gr [88.99.38.195])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.209.30
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793033371;
+	b=pBL2ZJ+d6PXxHHRk1hW0QPG7qG8GcPtgsnsnuRbhSYT7dU0KY6RJq3UW77m57sPSKy5j
+	 qpah112ZeGyhDTJZhF50C1LwR/jQWrxrgQER5lCFY4acYvVmKXINNanGKR0B4nJW9iQ2A
+	 1/iGWB8ipT5Q6biWeAzg6bA3FcMyISIhwgGlX4evLM05VjLY+j3TuCWVs2WdMohAizRRW
+	 nr8s6wCohiOdBxnMlYdrWENuOWwuZCmtlp1dkK6TRrum952fCewtdc4IkS7qWVSez94pU
+	 8qA8rB4S7QsF0bt/04/+L/ExJw+q3Ifdrk2U052aGtian7z61Mbfgv5h8E5oBYiQGVg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793033371;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:Content-Language:To:Cc:References:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=CuMr5O2dc0SYh8l56ne+XDDxsQrly1A7DyhGpcssdaw=;
+	b=zlu89Q+X7gzuoOEEHacLLdRQ9/8JMfbNCsDRFbkxe3r7acrseMbByz8vlW2EaC3Y3D/1
+	 BzZ8AZtn0HU/TiKFLui7nxd+4CVza7Do7sMWkY87I6IRrXsVf+OdiJC5z8MHL+DxRrhev
+	 wdI6wawqGGKg2wGdtZLiA8DGsWu7xV9roUE+SnvPDiFKSiLuI54G6/9cI3cFgq21KYHyd
+	 mqYTaLxWc9VQXnWbV/a2glzK17J0fVdAXmf9/1UHJiozqDbWL1pqg5eHRaWeHSF3PNUkP
+	 KX41bhmvCY61fkrHg4OeSmxyhM+vhRzZA3QH/wvcPwaSprglcbinsXK9HdO7gX3xQBg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=amd.com;
+	spf=fail smtp.mailfrom=amd.com;
+	dkim=pass header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=Yakm6ZzH;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.209.30
+Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012030.outbound.protection.outlook.com [40.107.209.30])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7340E606A31E
-	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 16:44:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7340E606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADF0606A31E;
+	Mon, 26 Oct 2026 16:49:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CADF0606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=antheas.dev header.i=@antheas.dev header.a=rsa-sha256 header.s=default header.b=m5hAYpex
-Received: from relay12 (localhost [127.0.0.1])
-	by relay12.grserver.gr (Proxmox) with ESMTP id B6C10BC52F
-	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 18:44:28 +0200 (EET)
-Received: from linux3247.grserver.gr (linux3247.grserver.gr [213.158.90.240])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by relay12.grserver.gr (Proxmox) with ESMTPS id 4D790BC61B
-	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 18:44:28 +0200 (EET)
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	by linux3247.grserver.gr (Postfix) with ESMTPSA id 3A4EB1FEE34
-	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 18:44:27 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1793033067;
-	bh=AFQJdAiGgN3fW1Ct+HsLIsRUW5WmUGGeAmWhxML3ipc=;
-	h=Received:From:Subject:To;
-	b=m5hAYpexvqnx39l/JQ9/z6rKZqBJVFb/etCC5y34cNAd1Cr+pvONGaV2SM3nAGtOT
-	 nJnYsYaJwx3zRVFKGIilCFA2iZWtSc/Uta8XQ1QIXXlyVBvIyHsAsg0PxdJBZJWyqx
-	 iijFjttNSc+fF4sACmaPjVoHbTUjlI+DiaTOP+rlLaIP/UaNPIfJ0mYgRjIgE2l49v
-	 kJXPntO1TpXiBwWG8GxZAZaAAYYw8jVmx1jTd34vFqGp/rRVAgBo2kjIWgv2f/XMjI
-	 F6WvEBsqmaUknZK6JgOpobXflJlPDNq6N+Zqr870BMW99wOxNWJxJoKadtHTwTiFt8
-	 Rm/Rj7kvSSEIw==
-Authentication-Results: linux3247.grserver.gr;
-        spf=pass (sender IP is 209.85.214.173) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-pl1-f173.google.com
-Received-SPF: pass (linux3247.grserver.gr: connection is authenticated)
-Received: by mail-pl1-f173.google.com with SMTP id
- d9443c01a7336-2e96502e447so28263725ad.1
-        for <linux-hwmon@vger.kernel.org>;
- Mon, 26 Oct 2026 09:44:26 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AKwUvBxJMCj3GGaiogqxtydPAD6q4faZNPoUdE/sz13pNRQXt7wtuP3KqRTGm3NUqe48fOyqWp471MqbV/t+fw==@vger.kernel.org
-X-Gm-Message-State: AFq9FYILmWYljk5TrrSDID7ZqgfUA6pQNuPBXFve/W6jhyaL5svYJ4zo
-	18xVARNIMJgM0kiLBXcmO4D7tpPFEJq8vdcFXpO9/NaZrw+6VPB+axS6KFN4zy4fpgnI1CyGWK2
-	Y/W4gc4u3zNb9gG34tyZP1mHBsP3LAao=
-X-Received: by 2002:a17:903:3250:b0:2dd:b795:9cb6 with SMTP id
- d9443c01a7336-2ea9c63d703mr60076695ad.21.1793033065583; Mon, 26 Oct 2026
- 09:44:25 -0700 (PDT)
-X-Mailing-List: linux-hwmon@vger.kernel.org
-List-Id: <linux-hwmon.vger.kernel.org>
-List-Post: <mailto:linux-hwmon@vger.kernel.org>
-List-Help: <mailto:linux-hwmon+help@vger.kernel.org>
-List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
-Precedence: list
-MIME-Version: 1.0
+	dkim=pass (1024-bit key, unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=Yakm6ZzH
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ELgfOfyft1bSHslIbOsK7XWAVCcD5g4oTKJgRvpD5N1iu2PIb0h00Mvf+6zr4ycmc68bgPDqLgR/9tuhFAAjhkR7oeKHPPJJdRPiy8NTU98VzPapJ+wA7mVICVDV6vxBjQLUkf0551oeOmE9sYlQMjq8fuALLDqZ09R4ULMxMivFUsVtIm66c73YDgIsA/qp1ApdydGxYvpCsF2TDRimsaGmEKRE94n0PJSnsz2xw4FcIbUfWc1d/bihyMbSzX5vr5zPiBIHl1k2cqTroJnV75uzCfGTChOBxDfHIOZ1mU0XL/B9l57uy51Adhn24X1rvA3NxDPPd1vMjYSQNW4pHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CuMr5O2dc0SYh8l56ne+XDDxsQrly1A7DyhGpcssdaw=;
+ b=IqCMuTUnEDSCVypyRhL88wqc+K16QNWDEQBKPzMlRLsaPY9rbudyVPZVJoFwvaqy4IM23wQZwQlJDRjIo17VVmAKb7vxbxPjV3c6bNlMGKvsu9O0OlYXv+i1q3BPMpyuwN4+f9phyB7y7/vDHqxMI7GCx889Qd6kEwXzfiGukV7kkLqN/1mQCAHdFLPufDJBxTOFGBwggdHqAG6pxKRQ7Y0yB8x11PHD1991oC0dwpTXP6qW7jVazQrz+HU2gSbFmlWd/MLaKl9jWzFieuGidTomCNm5qYSoDBy+1FelJSsuiU7ZVQXS5JSsChrwf9v/k3fflHv4QZGoxyNYvm0KQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CuMr5O2dc0SYh8l56ne+XDDxsQrly1A7DyhGpcssdaw=;
+ b=Yakm6ZzHTXr5NuXiLvGTskGLGojXq2q1+ic3gsnTXARb//zSeiyZUW7mc3fgSAWHG2G1Tx5dwHSUE+6PU1MuVJEoQusV/K9BHCgviA0nt6s7YHG8lP2Tcys3ClexDNqiqm/C8p09Wo0QGOw/7SRs3YutKJibv1uhKCm3ICnKy9k=
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB9174.namprd12.prod.outlook.com (2603:10b6:510:2ed::9)
+ by IA1PR12MB8264.namprd12.prod.outlook.com (2603:10b6:208:3f5::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.21; Mon, 26 Oct
+ 2026 16:49:28 +0000
+Received: from PH7PR12MB9174.namprd12.prod.outlook.com
+ ([fe80::eaaa:b430:ba9:5dc]) by PH7PR12MB9174.namprd12.prod.outlook.com
+ ([fe80::eaaa:b430:ba9:5dc%7]) with mapi id 15.21.0546.021; Mon, 26 Oct 2026
+ 16:49:27 +0000
+Message-ID: <58b96909-215f-4e83-9b59-37dd24581248@amd.com>
+Date: Mon, 26 Oct 2026 11:49:24 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/6] platform/x86: msi-wmi-platform: Move guard out of
+ switch in platform_write()
+Content-Language: en-US
+To: Antheas Kapenekakis <lkml@antheas.dev>
+Cc: Derek John Clark <derekjohn.clark@gmail.com>,
+ Guenter Roeck <linux@roeck-us.net>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ W_Armin@gmx.de, corbet@lwn.net, jdelvare@suse.com, kuurtb@gmail.com,
+ linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, platform-driver-x86@vger.kernel.org
 References: <20250511204427.327558-1-lkml@antheas.dev>
  <20260803221614.59324-1-derekjohn.clark@gmail.com>
  <20260803221614.59324-2-derekjohn.clark@gmail.com>
@@ -92,74 +94,99 @@ References: <20250511204427.327558-1-lkml@antheas.dev>
  <CAFqHKTmQ2R-UAP9rAZzoxe=p-T1_JKPU1NaQ2ijrVg0RXZEHUA@mail.gmail.com>
  <CAGwozwGUAEb4Q9pfd_+aXMw2P3qY376F+usPHdUFO5Q6mV_ATQ@mail.gmail.com>
  <baf91d42-13dd-41eb-88d7-d6311ee0d9f9@amd.com>
-In-Reply-To: <baf91d42-13dd-41eb-88d7-d6311ee0d9f9@amd.com>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Mon, 26 Oct 2026 17:44:13 +0100
-X-Gmail-Original-Message-ID: 
  <CAGwozwF00=zMvJKrjMG7mO18zRqSVF_Pz4DDf+og0giC5oSRcA@mail.gmail.com>
-X-Gm-Features: AclHuK9dGUF3PYf3eMe7nI2U44d9425QaJilwQrMRy5o1E9SAE9mLWiMo4Hv_n8
-Message-ID: 
- <CAGwozwF00=zMvJKrjMG7mO18zRqSVF_Pz4DDf+og0giC5oSRcA@mail.gmail.com>
-Subject: Re: [PATCH 1/6] platform/x86: msi-wmi-platform: Move guard out of
- switch in platform_write()
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Derek John Clark <derekjohn.clark@gmail.com>,
- Guenter Roeck <linux@roeck-us.net>,
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	W_Armin@gmx.de, corbet@lwn.net, jdelvare@suse.com, kuurtb@gmail.com,
-	linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>, platform-driver-x86@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-PPP-Message-ID: 
- <179303306779.3339780.14746648327294002433@linux3247.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 1.4.6 at linux3247.grserver.gr
-X-Virus-Status: Clean
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <CAGwozwF00=zMvJKrjMG7mO18zRqSVF_Pz4DDf+og0giC5oSRcA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN7P220CA0014.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:806:123::19) To PH7PR12MB9174.namprd12.prod.outlook.com
+ (2603:10b6:510:2ed::9)
+X-Mailing-List: linux-hwmon@vger.kernel.org
+List-Id: <linux-hwmon.vger.kernel.org>
+List-Post: <mailto:linux-hwmon@vger.kernel.org>
+List-Help: <mailto:linux-hwmon+help@vger.kernel.org>
+List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
+Precedence: list
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB9174:EE_|IA1PR12MB8264:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9148289e-a99e-4f99-a5b9-08df3381189b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|23010399003|4143699003|11063799006|56012099006|261026121527099003|18002099003|22082099003|10067099003;
+X-Microsoft-Antispam-Message-Info:
+	JtV28XyNlMilg+fuc39Mfh9pTgk0srct/ipW2hDCjQH7hQdgfCSSvZTSvYbxPjHW5urMeaNk8DSkoenaaOuJ+Gi2+MmAtIPuMLTluaxNkRMMTT0oD4dszfbk37OkPPZYIW2hP8992Kb2Zd1eLLzbT5DcWgZ226cvYzNDEAJfY9bMmUaNKshF4abGi8EjVk7ZaRTJ/zqIqhyc0+Xee3XdO+fLDJE29jlAkAMrjh8z3V/7+IsFXh7FZJoxWfFei6QfqOPoNnqOTBugAd40SDwPvCv1iiCj8yeNp1BJAUVbn+HWvdlC5IQ/bcJX6PCdemTTebq+XKMBkZAAdteyL05VcRJCbKx2NB47NIYoUpjvlz6XW5wbmDYi6WAYkjQT5931b+xCmWbWLmsbkUq7ZThjjL7wi7TPW1CGDba9jUUZYxJJuTW7IwhLpyKtGYs5BQKNkNzMbgzSYt9yAEgF6zcT6uLjMK+wsFNKhZe4GMGS3Ik06/QPukmDvwH0tFuutwDOUvOzF9krxa/Cf2XUlyanRg9w6Si3IBvkMnIjYse45Huk/pyBeyLRtbUQz8G2QNlsdb29shzcYxnstfryhezhWYQivNfzWWBVIoDfHMixCxoh37k3iYOhyV3WFM53CEKzz3Bw8gMC5OhT9SaqrmBrGMoA7odNbLFFf8o09yTDIeU=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB9174.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(23010399003)(4143699003)(11063799006)(56012099006)(261026121527099003)(18002099003)(22082099003)(10067099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?N0NXUXFRODc3WXBYbUcxRWNneTJWZjlkc0tlcVd6aGFGdVJ6dm1FaXVBMTQ0?=
+ =?utf-8?B?eWMzeDY5cEx5ZFZvRi80eS9qcndIdGhHMVBnbFJVU2ZVNEE1dDdxaUg2Titq?=
+ =?utf-8?B?b2NpNXhuY0phMS8xTE5PSVBOUFRtVW83WkdONXBrNTdMeXBvRkFWMDRwOGZO?=
+ =?utf-8?B?cHV5MVNVV0lkN3Fva2R0azlSRjZ6aitJRTU3SHNDaFJ6dHlSTDEvVEpmeFRK?=
+ =?utf-8?B?T1VDVUFRTmZUM01rL01XNW5Uenljd2daZ1AydVQ5RUNxbnlzVjQ3UmFKUWha?=
+ =?utf-8?B?STlEcXpGeE5pSklKQ1JIbHpnZEFYS2tVWlpvMVh6QWNtR1JKbFg4WnV0Wm1s?=
+ =?utf-8?B?bFp0cHJ4WkpLMG9WbkEzdXZCNzVROU9FK01aTGF6a0pQRXpLZ1IvdWtnNWg3?=
+ =?utf-8?B?M0lVNythN3dRWFNuSUhsb0s3UmdOK2dyM3RWOTN1SDVmT2FxeVpBZ2Yzc2g5?=
+ =?utf-8?B?V1ZTZkRCU2tyY1d5THVPUUFSVkx4NTdUNEJEdnQ2MXFZOFpkNmZxQUhaeE9K?=
+ =?utf-8?B?bERReDlGZVQwd2R3TFNXMTYwaGdnTkNuV0xxUUtCT2t4ZDFrb2h6bE9mQ3dS?=
+ =?utf-8?B?ckxPaDJGcldLRE5WK3FRMkRHcFVRQ2dEbldram0rUnJxdlN5QmZiTHpKQWlo?=
+ =?utf-8?B?eHhoZWYralBKZGlaMWUzWUE3Qk83S0x2bUFsbi9NZW8xS0hPVys1QklwOXIz?=
+ =?utf-8?B?WWlQWG03VkFJQ0o4bGE3Y0ZVNVFydmRyeFBCR29xMzRSMmN4SWVpaGo0VVJY?=
+ =?utf-8?B?ajJrQS91NVlmbzZWOE02MmJUSWM2OC8rWldiaE93Ny90Nm8zMElCaXB4elN2?=
+ =?utf-8?B?bHp3blVyYTVSVktveVV5VHlHYXNRazJpWmo3czdVRzBxVlR6ZDBscGRKNnpW?=
+ =?utf-8?B?eDY2ajNVWUt2eHVBUFFXOC9lYmxMSHRjOEd5c0ZMbEJzTlU1K0VyS3lMbHUy?=
+ =?utf-8?B?Si9GM3dLOXRCSmYwc0pMS2lRalBsSGxPVy9JUmZ6T1phbzBldUdpaXdSekg5?=
+ =?utf-8?B?YVFCc1lzUnJlaGNLeDhIc05JM204NkJtMXdxSVhIUmdKUlBvR2ROUjlDZ29s?=
+ =?utf-8?B?Y3lvY0w1QndITnl0NnYzeVNjb3c0Wnk3K1k5L1FaZHlDMGJmajg4QndxRHdG?=
+ =?utf-8?B?R1FvKzVva0gxMzRuR24xSzFkOFBYbTZ0Vk1jMmU1MDMyUkRMRVFDT28xYXYz?=
+ =?utf-8?B?emdQMDdQdldBYXNiTzlLQThhT0ptNlNWV1J6UDhkblV0bzRicjJhVFZmQUJy?=
+ =?utf-8?B?cS94eERLck5JaEtnWTFIMWd2YTlWYmRRNTUrdG5OdFFnb1BHaERZNW5ObTRr?=
+ =?utf-8?B?Unc2REtlOFRlbHV4QVV0eVpLbDR4b0hNOE5LUHduRTNabHFVZmUwMVQvWXRi?=
+ =?utf-8?B?VWkrVnVVZm11dHgzTGxoR2tTdnhyNk5yQ0NMTHJIMUhYSkd1eHRrS09rWjNh?=
+ =?utf-8?B?a2NERVYrNjBUTDhKQWFPY0pHWnZZVCtscTUzQWIvSW9XSVU1R1RJOStBRDVr?=
+ =?utf-8?B?RjhqSHc4Qy9PN2hKRWRtSzRRUkF0R3FLaEZBOFRVRmxCVHpaTVY1L0x1WHZE?=
+ =?utf-8?B?MFdiWlVubG10bEU1eFdVcjQ4UkhsRDdJMjNnTHFoM2hIYUkvY2dWRG5PdzNi?=
+ =?utf-8?B?Ri9BR213SGt3OTE0QXZqSGUvcnQ0bWU5RkcyUzVMcVZUUHJLcWdrd1IyaTE5?=
+ =?utf-8?B?UFoydFVMVCtjcHBpVnVONlZSR0NqejZuMWsycEtLdnI0b2NFd0xtSVNGTVNv?=
+ =?utf-8?B?eHdHL1ZmbEh4aFppSmk2enkwN2xlRmtFa2phSGFWK0RjbDFPL0xIc3hWcFNo?=
+ =?utf-8?B?VHJoMEQ5OTNldHlPaElrYkV3UGdvR3g4V1BBUzVFMjdWTjJXSnpNbVJBNlN2?=
+ =?utf-8?B?MVArd1lxcGZQa1h1cDE3WDl1UTJzQ0VNc1FSRGJHVDFVU0w0dmNLYVV1WjBB?=
+ =?utf-8?B?MUVPNXJEaW00akd6QlRhR2hmSW80b1UrL2JhcWhORFRGTnNpUkdKMGtQNFV6?=
+ =?utf-8?B?aGtxRTQwN3VHS1A5VTJicVk2MTFEQmN3RWZBS2YrZ1RwZitCSDJPWUZFYkJO?=
+ =?utf-8?B?V0tHU01VUVJpL2ZOd1YxeHNzNnVrZHE3U3NTQUhPYUZpTmFHUXh4SzhXdnhF?=
+ =?utf-8?B?NVNjQU1LNGhYcWRkbGlyRVJjc04yNVdvTkRsaThuMDZ6OFo2dXlhY2NjVEdP?=
+ =?utf-8?B?SWtoN2QrL0xHbnhTWW83bCtIWHMrRytoMm51MERjZzYyTWQ5aUhzTnc3V2o0?=
+ =?utf-8?B?NTdjTmFQZTdSODczcStJQ3NoVnpTVndNd0ZkWUZWWjlHbnNqTTVtbGs5SWRu?=
+ =?utf-8?B?Z04zVE9uVHdidWtoNGNUR1hwSmdLR3JpUHRSNEgyVjdaWS9CbC9mUT09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9148289e-a99e-4f99-a5b9-08df3381189b
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB9174.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2026 16:49:26.9491
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: E4w+XwtjBvlzb+Dpdkya/4KOb+q/8o4qxRdAND7X1gHtxCxawv+lwRTou38/MMV5rbAZ/LqJkjP4kBIaKYlCuw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8264
 
-<snip>
-> > SimpleDeckyTDP uses a combination of RyzenAdj for AMD and RAPL for
-> > Intel. When set to 7W, users report 25W power consumption when using
-> > the kernel driver and 15W when using simpledeckytdp on A8. 15W is the
-> > correct value for a 7W envelope on an X840u APU.
-> >
-> > STAPM should not be required to use or deviate from STT. Both of them
-> > should have equivalent behavior and match ryzenadj as the underlying
-> > DPTC hooks are the same, ryzenadj just accesses the mailbox directly.
-> > Using STAPM is a workaround for buggy vendor firmware that does not
-> > control boost values correctly (SPPT/FPPT) and is what the first
-> > generation Lenovo Legion Go did as well before they fixed it.
-> >
-> > STAPM as a workaround works because it uses timers to control boost
-> > values, so they decay after 2-3 minutes to the steady state TDP set by
-> > the firmware. STT boosts for as long as the device thermal envelope
-> > allows. STAPM is deprecated by AMD, only STT should be used going
-> > forward. +CC Mario
->
-> It's up to the OEM to decide whether they have programmed their firmware
-> to to use STT or STAPM.  They should not be used at the same time.
 
-On BIOS configuration, not on runtime! The patches here based on RE
-configure STAPM on custom mode on demand. I did not even know this was
-possible.
+>> If their BIOS/EC is using one and reverse engineered software is using
+>> the other, you will expect problems.
+> 
+> Correctly implemented ACPI should 1-1 match both modes, so we do not
+> care what the manufacturer did. Caring means their boost values are
+> not being properly set.
+> 
+The problem you need to keep in mind is that if the EC or BIOS is 
+setting policy you are going to get into a situation of last one setting 
+it wins.
 
-The purpose is to make the "custom slider" behave. Lenovo did the same
-thing on the original Legion Go because they were not setting boost
-values, and STAPM decays to the correct value eventually. Should we
-bake this in the driver?
-
-> If their BIOS/EC is using one and reverse engineered software is using
-> the other, you will expect problems.
-
-Correctly implemented ACPI should 1-1 match both modes, so we do not
-care what the manufacturer did. Caring means their boost values are
-not being properly set.
-
-Antheas
-
-> >
-> > This points to a BIOS firmware issue. You should consider getting in
-> > touch with your MSI contact for feedback and to plan a fix. I do not
-> > have an MSI contact. And yes, I am not happy my users have to rely on
-> > third party unvetted plugins for basic power controls.
-> >
+BIOS/EC policy could change on anything: battery level, power adapter, 
+sensors etc.
 
