@@ -1,64 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=63.250.43.97
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793035485;
-	b=dZGZ6ApwKpAlbHemrWpsnIlNGCeAxoEnRisiLB8I5ISyOm2dyR+NIj4JvpsPB3ZHPOME
-	 3J7/UTxfkUh8mxcTJAi2YJ5EF5eYcENq64irsgn2hTyg2T7CY9eeYJxAR224DLstKEqAh
-	 UvdWYdED3cGlzOyGhRi98RzEoaLiHpmB12iurSRS+py6/1oUBusa1oLQmafGWC3YfA2YS
-	 6bdgPj8Aa48dtxrrBzK0wdgKBd8u5mIEIzGSykDxqwu28YSSv+7FjmqBYOByMn1lHl349
-	 xgmqDAu2elKC/Km1aKRRvYmDfd35uoSCSHZHqJVUiNsLMVWdNI/OzEw1gl8JCCCFcdg==
+	t=1793039730;
+	b=IC5AmLTa2SI+XZIhfl5NECMOBP9ZOQIYhU0N3cZjeRd4FTEU+f+nWqKRr/0BeErN2UzX
+	 XGuuet3zQ3xVmCvw6ZJ08eA+jOWvZIlRFUbK9IFw4xEv0UAlguxy6QMS7QMvOUEF0jI/D
+	 SFx9GnSChS5CDHfGgztp/txdkYYqmsDPraWY819x9baxLDiznhNOZc46P2vz6Ewib/kND
+	 T1pGFVxoqk/XvGL4g6pXf4NHXfX05myg0pxonFgvzUx0OtYYH+JJc4JS85JB0dXeK6agg
+	 q9OOcN3yS3V1pg/zeVhBELYa0gFAsR8orhdYqPBt0uWB5vuF6c1fhFKWNtETKRK0I0w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793035485;
-	h=Received:DKIM-Signature:Received:Subject:From:In-Reply-To:References:
-	 X-PR-Tracked-List-Id:X-PR-Tracked-Message-Id:X-PR-Tracked-Remote:
-	 X-PR-Tracked-Commit-Id:X-PR-Merge-Tree:X-PR-Merge-Refname:
-	 X-PR-Merge-Commit-Id:Message-Id:Date:To:Cc;
-	bh=6ubqhcFCacE+Avzz0yUZ8wkSpaP+sDvk2YKEl0NBok8=;
-	b=XdPUksieUzBlZHohIlozFDonk65ZZFLZxlC5uKEzKXaeTeO/xCKvqWluUwfd0MIN/YOy
-	 SAAr4ZBB0Nb7RDIgVp6m6VTbhH4aKrCgMGob/ODmejJ+2yjuiMydoUzwOZHTTFhVDhrSv
-	 mtfyxWWGJRRFC9lpME+UMJw53n9wcRPx8XdB0udfHBpbIRQhzACGw71JWYNWMc4iSA9aB
-	 A1/q2CZVodxOP3WmFiYnYTuiQUBWjvu8s2G1vYzbUiGQRYeJSKQYNRfTV1lw4LmVLRxwD
-	 dZMqB8m9lc6R5GMlVJAH7scoqm0unEMoVrGJ9Rsw1x/3ZCADTz3YBSikySB7v0mOlSA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793039730;
+	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
+	 X-Envelope-From;
+	bh=zHu5FnjSzgjYElaRKiWtsPwyU1mAdTABEQB9pNjOcM4=;
+	b=dPQHvPCkSayCxn7AdrJY+/JfbPk+QRp5kB4BzqP9+bQGabxDv06oDZ4ijvBjZ4zAuX1e
+	 MrOhiQrYLZ2xjLchXzX3tpLUXVqaDbXaA9H+bzJ+Hm5jbvS8EsY9Iz5hwN+AWsn4arXXT
+	 amTAgjeVEG1+TbJK5NwXMQvhRm3MzFN3+XDyL7J+72tG6pDilTIZ1zihO5cNHbapqz3CG
+	 3mzygbPtnLKxIXjuk4gAp7wjNW8yt3lMzPCW3C+C9wK5IrFqDwWDyCEGtPTYGARym2+FK
+	 NPVsHqYrvhQFIxfENZFKg0bmUrKE4HlSNRs+XCpy4HzmHoo5cABHo9YF4jkEeBfKMZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eZMweUvz;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=effective-light.com;
+	spf=pass smtp.mailfrom=effective-light.com;
+	arc=none smtp.remote-ip=63.250.43.97
+Received: from out-2uec-a97.jellyfish.systems (out-2uec-a97.jellyfish.systems [63.250.43.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887AC606A323;
-	Mon, 26 Oct 2026 17:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eZMweUvz
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63E151F01825;
-	Mon, 26 Oct 2026 17:24:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793035485;
-	bh=6ubqhcFCacE+Avzz0yUZ8wkSpaP+sDvk2YKEl0NBok8=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc;
-	b=eZMweUvzP+7vkUhc8ykHS7K5C+ElbbCN47wNuQJMUJUnOPX63U+TTXgB0QPSIu5pG
-	 /MEXmsyLnnCL3VmvKH4ZDNVmKiU+71RlEO/fTgs87udn/qInuS8LhMUs1BWwdqZwMp
-	 VPOjvvm91ZVD2A2dnShnWMdDxdW13D5P317zpJYN9YzKVqtey2aI4MG3g9OZahYL83
-	 YYgt8RZAs/W8Ald7f30DJyNOI5i5eUHvRszj+Xfq55AwS4nLmlBuqwnybR5LAXetTC
-	 5kG4dECM1cRJw/hmrblXwpwBbMkL9g9h+K0zssKVHsZDwt5qH8AyAtcnGB2dPUdo61
-	 hPucUnqOJio0A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 5AAEF3AA58BF;
-	Mon, 26 Oct 2026 17:24:45 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon updates for v7.4
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20261025145958.3032379-1-linux@roeck-us.net>
-References: <20261025145958.3032379-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20261025145958.3032379-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.4
-X-PR-Tracked-Commit-Id: e1b3c2630d5b8bc755fe4ba86d20d08c734eb504
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 7313d94c67daf04bc1b6ee39b492d2795fe2f3da
-Message-Id: <179303548401.3291751.11190416643249075464.pr-tracker-bot@kernel.org>
-Date: Mon, 26 Oct 2026 17:24:44 +0000
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C887A606A31A
+	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 18:35:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C887A606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=effective-light.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=effective-light.com
+Received: from mail.privateemail.com (unknown [174.89.145.246])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.privateemail.com (Postfix) with ESMTPSA id 4jD2P01jPvzyNj;
+	Mon, 26 Oct 2026 18:35:15 +0000 (UTC)
+Date: Mon, 26 Oct 2026 14:35:12 -0400
+From: Hamza Mahfooz <someguy@effective-light.com>
+To: linux-hwmon@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
+	Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] hwmon: (nct6683) Add fan control support for MSI
+ boards with NCT6687D-R
+Message-ID: <at-dYL4g1w_qBxe6@hal-station.localdomain>
+References: <20261004153250.516730-1-someguy@effective-light.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -67,16 +54,43 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261004153250.516730-1-someguy@effective-light.com>
+X-Envelope-From: someguy@effective-light.com
 
-The pull request you sent on Sun, 25 Oct 2026 07:59:57 -0700:
+On Sun, Oct 04, 2026 at 11:32:48AM -0400, Hamza Mahfooz wrote:
+> Recent MSI boards (customer ID 0x20d) use an NCT6687D-R, whose fan
+> control registers differ from the ones used on Mitac boards, the only
+> boards for which the driver supports fan control so far. In addition,
+> the system fans of these boards are connected to channels 10-15, whose
+> duty cycle the driver does not report.
+> 
+> This series adds fan control support for these boards, based on the
+> register map reverse engineered by the LibreHardwareMonitor project [1],
+> which uses it on MSI 800-series boards.
+> 
+> Patch 1 reports the duty cycle of the system fans, and patch 2 adds fan
+> control support for the CPU, pump and system fan headers. 
+> 
+> Tested on an MSI PRO B850-P WIFI (MS-7E56, BIOS 2.A93, NCT6687D EC
+> firmware version 0.0 build 04/18/25), on top of kernel v7.3-rc5. Fan
+> control is available on pwm1, pwm2 and pwm13 to pwm16 on this board.
+> 
+> [1] https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/pull/2294
+> 
+> Hamza Mahfooz (2):
+>   hwmon: (nct6683) Report the duty cycle of NCT6687D-R system fans
+>   hwmon: (nct6683) Add fan control support for MSI boards with
+>     NCT6687D-R
+> 
+>  Documentation/hwmon/nct6683.rst |  17 +++
+>  drivers/hwmon/nct6683.c         | 233 +++++++++++++++++++++++++++++++-
+>  2 files changed, 244 insertions(+), 6 deletions(-)
+> 
+> -- 
+> 2.56.0
+> 
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.4
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/7313d94c67daf04bc1b6ee39b492d2795fe2f3da
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Ping?
