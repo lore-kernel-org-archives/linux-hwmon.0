@@ -1,99 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.170
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792980636;
-	b=20TQC1o12rENeRkh8jpgLBQdipn9TBLRriYbLDe7UyGvI44F4qRHRcfRive5aB+JeGuz
-	 NP8oVSGyYqezN9VQ7tGgUXvI6BmGIfxIVnnSAkJiAUUCfhcZmCCjne+Xit5WKGIQfgkj3
-	 6PR8UUmbCq/oZgcyuodELxGsrWojs2ELLY7LI/WVCY7hsOBR6B0UPz1qpvLEtS8fq4K1C
-	 TIovBIFsRMLeXoWSZNEUVwKhAM1y5FCX++CZo6H2zy5qMVd7nfF16g4SpHY3v+OvNWiIL
-	 PORllLhcYM0YodzUDcZMvhJqjVekjjOymwSAiJ2CXnpSz8g8LBXYcsvuARt510pNH3g==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792980636;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=PhozeamFwuWtPyIKg2kpa7YRAXXBYhqW3aJ0bO6CqHQ=;
-	b=ig2pyLW0/Te/Lb1KeNIdbyNR4KnrBa3RmleUn6PDITql7/1rE+QNp4ia6gzxRXaF9O8w
-	 Raj8ZZV2LfqSq1xycoVs1ruK2z0thdVIxrnB9LnuKYlSTZZlQ0vo4krqDZalyb00FFU+Z
-	 4OSutNeQVbb544z8r5BVQWzxGG8c5s3Pxv9SCIfzPrvqMylVwVk+SOeEJz2pBfKCpurRO
-	 HYJSU7C4H5FllIsotdDYviGAPJ5bfzy7ohAxniQj/5K3cTq86+UybUMY82k6R5aNne2nY
-	 ribdslbzyTqoZw3Y3zO9NIxFz8wRhy+8LZgEc/9CAcI4xDe5uI3/nmQvbkgH8GSlY2w==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=W4XtmIAj;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.170
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.135.77
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792991015;
+	b=OsLeI/qkPTFQNHEzrxuMTnnuIHGxHziB/TAzto9zzfVRk8zuGB7C+Q8WjkYuKA3B6bUU
+	 uW3MdPkSuQ8dU/A/diTrGOUtbw3vMP5zdRjoEz32zDwNK6EMhatEBlwwsFnNDY/bXwUaZ
+	 XTcNzdznqQRpuL6dspg0y4l1Bb5VCpt9qP2XIWRWHi2I4GubqGqTfO5bnrgONI3fa0LcA
+	 zdUnT/kQWOYlt2BCACDjkatjDIrKv3Fs0p0+5lbxCjId9VZwrYPLeq2UjPD/517psSoTA
+	 CijXhD3xzQlCMfIqfLLy2yKK8gjCgqYaXOO4d3UmExvpxdNaW0getrtFhK5nOdM5fHA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792991015;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:Received:
+	 Received:Received:Received:Received:Received:From:To:CC:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:Content-Type:X-ADIRuleOP-NewSCL:
+	 X-Proofpoint-GUID:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-Spam-Info:X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
+	bh=vT0+zXTmG/EmzhQW9D3zRNY20EvRt94/oKoyM4sLpWI=;
+	b=E+f7bcIi8pS7jjHszBkbCls7mkLsuOZUHbHyzCPOwScHmjpA0c/7EQDNR1lZrFyyXg0B
+	 3C0MWzVmr9O4ZQNlUvUUYj+tbdcCVY2Q5EmkkKKabkI9xhJ2AXR1ggqlZnhDmvbchhndG
+	 gCjD2Ph2vzA3maq7Z27baN1DqdMaGfISkVjqgASEMQCqQ3GzcNtby3Ci1WtQae2VQ/hyK
+	 Gywwfl9KTwwW8f909xr5KPYaQdldrO2vkIDa0KXctUrRCMKXLpmwyXrdyEIAQIBd+Cbyh
+	 6wyo0DlitrLLHbt7tTiQmGaPQa0RV/MkTc034hojBhGO+xphKju7BzPIL1tS3Ntf7Bw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=analog.com;
+	spf=pass smtp.mailfrom=analog.com;
+	dkim=pass header.d=vtelectron.com header.i=@vtelectron.com header.a=rsa-sha256 header.s=DKIM header.b=cl0C8Iu5;
+	dkim=pass header.d=analog.com header.i=@analog.com header.a=rsa-sha256 header.s=DKIM header.b=wmILc5c1;
+	arc=none smtp.remote-ip=148.163.135.77
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1FF4606A31A
-	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 02:10:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F1FF4606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC409606A31B;
+	Mon, 26 Oct 2026 05:03:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EC409606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=W4XtmIAj
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8a06ca6e8f4so1738292b3a.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Oct 2026 19:10:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792980635; cv=none;
-        d=google.com; s=arc-20260327;
-        b=sXnwe/048PsM1K1JPIbLAZkbl3zjna5vuIGDEnoaEK7u/3oG4ie86xr+LRh063NtwL
-         MxT8lapUdmUuOKuO+F5bmBJxVZDeJQcpE0TGDHC4LoHBxrhmZrShTZyCLT4MHJqQanY/
-         UNk8N9YQeF/NGo791i2OkXs5JPSCuy2Cn/gCekClTWnre2IMWz9qcCB1h7X3Ds4dJVvH
-         dtjC41sFV6c5XhsGtYuCGA5ktdsNeSY7cJGiMVPWFghe2OK55P/y5QsrcWZlYe8aqTcs
-         34krBrEIs5EGgnRo1HV2gk+JHtD6HDY0Lsw7MMbbt4KQjpcqyeD9puh6SMVXa8u5/lBp
-         OVdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=PhozeamFwuWtPyIKg2kpa7YRAXXBYhqW3aJ0bO6CqHQ=;
-        fh=5iYfhhOzHQWYhMEjFDrcuaE5tJLWVyDMSfmgXPYvEJ0=;
-        b=X2jpbue/YaCPY20PcCmrbq+bRfDtvJPoZii79O1pgLAowd0tg8ZbteB3K0jyApo/u/
-         0ExlmIL5lwawMFRJ0eUtSYORoqZ0lB9U3dcfwfqzXWXTym2DaCdxRhydfIezwvy7ddaR
-         p83F4cEA73zLTnATUkuPT/hyvUYo6MzK07mHuVQsPkwqBsPWsqvm2OUB95h96dHi0gvG
-         dKLhZglkq3g0dT7HUKnUuftwJm3KOlZGRtJ7NeT6ZFa4Rd3N2OKSKo0HyMI3gszwSMny
-         +xeqgt0pwg1ZCf5abekogYVoHYDEjUecd+j/BMVWQNgHM+8yFAl/+4d1Rkffs4EjCfII
-         48Iw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792980635; x=1793585435; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=PhozeamFwuWtPyIKg2kpa7YRAXXBYhqW3aJ0bO6CqHQ=;
-        b=W4XtmIAjumYIcCZZ0mgykzUnRkrSmHlTc3KHWMsI2gjKKX2FAxgQECSnubT3j5+4qH
-         LrM24EW2dkaftmYr28NOR56uex40BsbTLzDpTSxQeK7MviOsUEB3bXOOqnI7YzFBh2lH
-         PNkG6SzqjHhRFwn61WYJMc7Y2lxGSW09KS+qdQ6z6G2n8J11Hd82RqBzKj8HkBr0odgw
-         Xh1y6PG+2jfqfJtnUJaM3WkooOmOLVom9MXk4ooRjhpACOAsiqddu/EozyFX12GO/U5c
-         RRrJZUO5uBfbBnfFX0mNW5E9fCnvN0YnaHpaZNlnH1gKed5MSvwZUeJAxwXh8LuqZw/u
-         U5hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792980635; x=1793585435;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PhozeamFwuWtPyIKg2kpa7YRAXXBYhqW3aJ0bO6CqHQ=;
-        b=QPaLa7Jz3sd5z+FUQv6e0QPBhfu9WF8Mo2E4mZ4oDZBoyzvwjJYOZIqapZAVC6TQQR
-         7mNKeNkLit1cSVpgi1dcEB/kK+qa9N7oExuLZ/7dKhXm2eQoSi29V2NQj7ly1HcggfSH
-         u/etamF5nBg8xwO5Zqw+SZX+ytL7AQWYGGK2R037ZeL3OInpc7/eqJSq7l2Vhk41Jy5d
-         QN7Z3XcH1LM10FEX5JYOFVrbXaLEF4R92P4ZtBIUrRZmPvjZGSV2sjUa7uGG7iLzuKfz
-         2iCfrynO0pf33ivUmTIUMygq6LcLp+YIIMZ1N3qpkSY62sPR72Lmq5U8t9Y4HBlAI0Pf
-         0XrQ==
-X-Gm-Message-State: AFq9FYJ4V0US0IY6mI+Wb7KKSRDUo/vVwy7QzNKT9yurFU/3qUMj3fbo
-	An9luRMEATW+rgJPMa5ySB62U1l9gypOedSV7SwM3mCtMJRR88f+7wwz+N7mHL3aR5/vgoxLwni
-	1fLVtGotQ3Mt0lpMa20qFBVsG8IiIdzY=
-X-Gm-Gg: AYBFou3WlTryhsjr0JUzB56IZUaeA/bX9dQv112d+XjHa7f5V5ABplZYfoorWuE5HDt
-	7YXcm9JTfgG/LhAXFNGJvqam/1r1dZjNrVMYpvg567eqamdtWc5IX6C8mWTrLIYqDp8BhxRszZd
-	P7QvbHJ9N10/roVrBw2rSpozcWdB9eRCOgFQDYR/wW+P3B5zTBmEvFiiqordD96x/3e/aBDfvlz
-	w9lUEQi5VYSh+PlB8TmCQCaSaTWeC0FXBj1dpMTTX7hp4coK1sS7PoBQwxecJUrHrF7/x2xKZ1S
-	DnNzf3fTl4GTwfAgFExsOlYx7G6cYD4HWL22VTJ5gGnyXzzz9JCKBe7yma7TE4Z73KjsiSZ0cOT
-	zDpA6fowtCTWzwFEtEpOT8jlu8mKPVKHiMBq63JRP2tZwoHRoFajC
-X-Received: by 2002:a05:6a21:3f92:b0:3e1:a769:9620 with SMTP id
- adf61e73a8af0-3e7cd688935mr3859739637.71.1792980635201; Sun, 25 Oct 2026
- 19:10:35 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=vtelectron.com header.i=@vtelectron.com header.a=rsa-sha256 header.s=DKIM header.b=cl0C8Iu5;
+	dkim=pass (2048-bit key, unprotected) header.d=analog.com header.i=@analog.com header.a=rsa-sha256 header.s=DKIM header.b=wmILc5c1
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69Q4t2mS4132700;
+	Mon, 26 Oct 2026 01:03:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vtelectron.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	DKIM; bh=vT0+zXTmG/EmzhQW9D3zRNY20EvRt94/oKoyM4sLpWI=; b=cl0C8Iu
+	5K1vRp3gC9CMhkDOcinT1J5117EZhGCcVKYxrp6Ps9idUQh71AjCCvf2QfPNglIl
+	ttWFmEqywLA8V5hY4fy/0iy6L+745QGEPivY69vrmpRgNzQmA5VEDVArA7zX4E5j
+	YyFnddWyKkSDlFmOZInY5C/625ipkdwfEEdbvwTfoUTQoNHr10TXeBvIf9vfhq4z
+	15KfFAvtFDsDOGCnbLS+syBz95HKzn5QQOfXug8Hd+GKvS4TrAvLKM31lNCl5KAn
+	cdV5HBHJLNJaoeGkLcF0dOml5lyv4UdCN5NuXEYfPV7MqDP8P6RWPnshGbArrCti
+	9O9VdKoAqgD0HXw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=DKIM; bh=vT0+z
+	XTmG/EmzhQW9D3zRNY20EvRt94/oKoyM4sLpWI=; b=wmILc5c1IosF0M04ZJHZ8
+	r7FDZHEn8HwvsLMNZtAwKzW4xHRwhk2at+RUq1+AGF3jctfZouqYDIsq+883M7tN
+	ifgrV2vOZg3vhNc3jb3KRgvlXSCR0VlCXKHaN1GW61i8gqMBdYdEtz+WQw3JZi1N
+	mk6WGoWbnE8MC8iXxGGMIKnECxpsA0TC6kyl2q26xitsq/3yvMQpTW19ersqcrNf
+	bD6DK96a+LNRLL6aUI1s9zE0B8J0SgAb4XQCg/TbXaEuRPc4Lvsz4mbVjAI8rvyL
+	kcDzX6DXVWk4V4QTgO8M7dgJoo3l/K7UeJU+uJD3sP5bng61v8XwHC46bo8LBPn2
+	g==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 4hj08m81mk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 26 Oct 2026 01:03:09 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 69Q538mc000987
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 26 Oct 2026 01:03:08 -0400
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Mon, 26 Oct 2026 01:03:08 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Mon, 26 Oct 2026 01:03:07 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.1748.37 via Frontend
+ Transport; Mon, 26 Oct 2026 01:03:07 -0400
+Received: from CJONES7-T01.ad.analog.com (CJONES7-T01.ad.analog.com [10.117.222.42])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 69Q52g3o018821;
+	Mon, 26 Oct 2026 01:02:59 -0400
+From: Carlos Jones Jr <carlosjr.jones@analog.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+        Alexis Czezar Torreno
+	<alexisczezar.torreno@analog.com>,
+        Rob Herring <robh@kernel.org>,
+        "Krzysztof
+ Kozlowski" <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>, <linux-hwmon@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/2] dt-bindings: hwmon: max20830: Add MAX20810, MAX20815, LTM4739, LTM4740
+Date: Mon, 26 Oct 2026 13:02:40 +0800
+Message-ID: <20261026050241.100428-2-carlosjr.jones@analog.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261026050241.100428-1-carlosjr.jones@analog.com>
+References: <20261026050241.100428-1-carlosjr.jones@analog.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -103,120 +111,62 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261026003918.155321-1-pmazzini@gmail.com> <20261026003918.155321-6-pmazzini@gmail.com>
- <sashiko-outbox-184583@kernel.org>
-In-Reply-To: <sashiko-outbox-184583@kernel.org>
-From: Pablo Mazzini <pmazzini@gmail.com>
-Date: Mon, 26 Oct 2026 02:10:24 +0000
-X-Gm-Features: AclHuK8r-7Bfel_EEhpHI86UjS9b9Nqlm9UoSS8x6HzK6eJI57dyjtwPozP_C4g
-Message-ID: <CAAxh=jvoB5c94U+y3ZQ8ijjPH=kB2DuL_+r1EXXKrSZQq7ojCQ@mail.gmail.com>
-Subject: Re: [PATCH 5/7] regulator: sy7636a: report the temperature
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-hwmon@vger.kernel.org, mfd@lists.linux.dev, lee@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: grFJvO88psFi7ukgE0xDpLVNqbz-b3kV
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI2MDAxOSBTYWx0ZWRfX1VPyziGSJ+m3
+ f3Mc8S7uXUlIqjNDuPK8yEfaYxl6uKCPVnTueC4Xv9UMDhQgYNrIqC/k3YG01gRU7ofEqqit0lp
+ QTQcKyrPRZhExV4OuTDYbBF1rCKZco9XUgHPsFj97N6912hdfkLJ52UMe5SFLOnFg89Mj+O2yoX
+ RNJTwONblHGOk7fodQH1h/ar865bFJe/eiZFkWe7o5UYmoX+RNkoYO4Cqvc/D89gWPkSgF/73XY
+ CTpHt+3gl8N3gpJUUyqIJ2qn8k+G5fjrSb4D1eEyEw8inODyj1SUC409RW43v4ZAcleObdPUgeg
+ W0Eef9XalPNUBwcz+yXyDHLX4a430E/3C03BIJkQ/h8JbIaauxrHZKJfzMuxEOGbLFQglFtEnr7
+ 3bcDwuv/YK1S/hMPrTTEn7U8T3vPha11xhz9WbrxKHWJD6qKJJ7Mu2+OeDLP03vmtvZ2KOhJhjb
+ 6YeTrxSboZ0OfLlW6cQ==
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI2MDAxOSBTYWx0ZWRfX0ZUYb7sh7eK2
+ 62q2zPhDx1eU8FFsIbY8i4MGYXhqlw+U/E8phpdRQ4H1HNZHOBGtc3IBMHWGtd29sFmWl68cEPU
+ 3SVlQ81kFo/kLayZHvQvrA4/7m+M91jrcPAp0+n38OGH4hYVzJJK
+X-Authority-Analysis: v=2.4 cv=LJ3z05W9 c=1 sm=1 tr=0 ts=6adedf0d cx=c_pps
+ a=3WNzaoukacrqR9RwcOSAdA==:117 a=3WNzaoukacrqR9RwcOSAdA==:17
+ a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=0sLvza09kfJOxVLZPwjg:22
+ a=Z0pTeXoby7EwIRygza74:22 a=gAnH3GRIAAAA:8 a=LkTFOP2xGKwYGyyeCikA:9
+X-Proofpoint-ORIG-GUID: grFJvO88psFi7ukgE0xDpLVNqbz-b3kV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-10-26_01,2026-10-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 suspectscore=0 adultscore=0 phishscore=0 clxscore=1011
+ bulkscore=0 malwarescore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2610190000 definitions=main-2610260019
 
-This follows the TPS65185 and FP9931 drivers, which register their
-temperature sensor in the same way.
+The MAX20810 (10A) and MAX20815 (15A) are members of the same device
+family as the MAX20830, sharing an identical PMBus command set and
+telemetry (VIN, VOUT, IOUT, TEMP). The LTM4739 and LTM4740 are the
+LTM-series module equivalents of the MAX20810 and MAX20815 respectively.
 
-On Mon, Oct 26, 2026 at 1:35=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Medium] regulator: sy7636a: registering hwmon device outside drivers/h=
-wmon/
-> --
->
-> commit 3011502577fb90233215473b5182522faa4b0058
-> Author: Pablo Mazzini <pmazzini@gmail.com>
->
-> regulator: sy7636a: report the temperature
->
-> This commit removes the dedicated sy7636a hardware monitoring driver and
-> moves temperature reporting into the sy7636a regulator driver, reading th=
-e
-> thermistor register only when the rails are enabled.
->
-> > diff --git a/drivers/regulator/sy7636a-regulator.c b/drivers/regulator/=
-sy7636a-regulator.c
-> > index 5705599d1b55e..816df7716c0e0 100644
-> > --- a/drivers/regulator/sy7636a-regulator.c
-> > +++ b/drivers/regulator/sy7636a-regulator.c
->
-> [ ... ]
->
-> > @@ -147,6 +148,52 @@ static const struct regulator_desc desc =3D {
-> >       .of_match =3D of_match_ptr("vcom"),
-> >  };
-> >
-> > +static int sy7636a_hwmon_read(struct device *dev, enum hwmon_sensor_ty=
-pes type,
-> > +                           u32 attr, int channel, long *temp)
-> > +{
-> > +     struct sy7636a_data *data =3D dev_get_drvdata(dev);
-> > +     unsigned int mode, val;
-> > +     int ret;
-> > +
-> > +     ret =3D regmap_read(data->regmap, SY7636A_REG_OPERATION_MODE_CRL,=
- &mode);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     /* the thermistor is only sampled while the rails are on */
-> > +     if (!(mode & SY7636A_OPERATION_MODE_CRL_ONOFF))
-> > +             return -ENODATA;
-> > +
-> > +     ret =3D regmap_read(data->regmap, SY7636A_REG_TERMISTOR_READOUT, =
-&val);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     *temp =3D (s8)val * 1000;
-> > +
-> > +     return 0;
-> > +}
->
-> [ ... ]
->
-> > @@ -235,6 +282,15 @@ static int sy7636a_regulator_probe(struct platform=
-_device *pdev)
-> >               return PTR_ERR(rdev);
-> >       }
-> >
-> > +     if (IS_REACHABLE(CONFIG_HWMON)) {
-> > +             struct device *hwmon_dev;
-> > +
-> > +             hwmon_dev =3D devm_hwmon_device_register_with_info(&pdev-=
->dev, "sy7636a", data,
-> > +                                                              &sy7636a=
-_hwmon_chip_info, NULL);
-> > +             if (IS_ERR(hwmon_dev))
-> > +                     dev_notice(&pdev->dev, "failed to register hwmon\=
-n");
-> > +     }
->
-> [Severity: Medium]
-> Should the hardware monitoring driver remain in drivers/hwmon/ rather tha=
-n
-> calling devm_hwmon_device_register_with_info() directly from
-> sy7636a_regulator_probe() in drivers/regulator/sy7636a-regulator.c?
->
-> Hardware monitoring drivers are expected to reside in drivers/hwmon/, and
-> when a chip's primary functionality is in another subsystem, its hardware
-> monitoring support should be implemented as an auxiliary or subdevice dri=
-ver
-> in drivers/hwmon/ rather than registering a hwmon device directly from
-> outside drivers/hwmon/.
->
-> While the follow-up commit ("regulator: sy7636a: bind to the i2c device
-> directly") removes the mfd cell table in drivers/mfd/simple-mfd-i2c.c,
-> sy7636a_hwmon_read() only accesses the shared regmap via regmap_read() an=
-d
-> does not depend on internal regulator driver state. Could the temperature
-> reading check be kept in drivers/hwmon/sy7636a-hwmon.c (for instance via =
-an
-> auxiliary device registered by the regulator driver)?
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261026003918.15=
-5321-1-pmazzini@gmail.com?part=3D5
+All variants use the existing adi,max20830 fallback compatible.
+
+Signed-off-by: Carlos Jones Jr <carlosjr.jones@analog.com>
+---
+ .../devicetree/bindings/hwmon/pmbus/adi,max20830.yaml         | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml
+index cc50a4ee44a2..8194108d61e3 100644
+--- a/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml
+@@ -26,6 +26,10 @@ properties:
+       - const: adi,max20830
+       - items:
+           - enum:
++              - adi,ltm4739
++              - adi,ltm4740
++              - adi,max20810
++              - adi,max20815
+               - adi,max20830c
+               - adi,max20840c
+           - const: adi,max20830
+-- 
+2.43.0
+
