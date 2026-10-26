@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792974011;
-	b=42TTG4k+Nxx6tzHMH+iIaZMHmqrEoqdg92PUBQ0ZSfLbJgSPGhq1Cz0DJ/2acyqfqjR+
-	 V5cwSQ5vxLx0Al81xsb5oxxwGJ25gaPBIptD8ZgBFLziUi2N4edovyfoYGcIugyM/l3gt
-	 M7yMYI1W4BE2mNc3tRPfS8WUPbpNU81yL2ZlW0VzyR8I24JA0lDnHOurqXZyXkR4fbjSV
-	 0Y+WSY6HItorM6DpAEfccbp64b1vKIoHrAl1k9nB13dPMXDaG0jF2TymnSlQdvBsyLJLD
-	 YzZNMuyPJnd5tYF01xsKKuY1osk2QGaRUQkuMLfxlUo+UHU2TELfIqFbTKChVGs9fsA==
+	t=1792974071;
+	b=jTLdt2MInQgrxpHS4+j5EIHQnwb9l60g9Vx9gVsmzwrBaTCPn4zSO/GxdWaTRJ/OE+AC
+	 /W5Kvuuh91Z2BVT52gnqqo63kSF0adgneQo6Ln9zFHo0GnpqUPm0NESVm/W/9MAJoGHh3
+	 sJNl5R9q5XeJTr8NsIXKlvCLvKISdrl9E6iRs4Qi5JXIOaHv4vAPmCdcx6cqEOujuyjC3
+	 /TE1QlMSIOsgRodvTx0nlsFULrNJVb2aWaO+CEqaUmrjexoTY0wScvItDmWIYZDKO04OP
+	 XEMAgbyYPsPlRdOmG8hmJgPwglQ0DEP8MsXmNFOU1IRUIMhFpIPUkrS1YdqUejnLu4g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792974011;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792974071;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Sender:Date:From:To:Cc:
 	 Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=lJk5MOLydIzjQOgGx/lqDh+M3wd1cLnQSwja/ynaVP4=;
-	b=y80a7eXxEdNFniGzsg/u2Fa0J54+cLi96JZscE/bwXerRxsqQSffwTFFFtlrRGH+l4A/
-	 5vZprev/qL8fFLoY0KCM/yiP1KM3vt5noC4Hwie51o4MPRQYmvjkI98a6WmeDQRNOiNC6
-	 MhUArJF1lzWVgW87guVTNWJkjfOTvdynCaWFsw+ph7QDIRAf42VKJvt7yhngSUaTz3x5y
-	 KIBdQl9LIqW8hkDm2d7vJLZyqHvUxqm36Kou67Ja6g6GeDqhzk+qBvoy+Z1e/CsTkbeQy
-	 eMyGpzYGBNJwgw/80vqSyGP4kDssbCzbcuWOMC1RL/DJBa7QVMz0ghp11DAkkFLuugg==
+	bh=E5UQIZrsUjY0M8HBvkzofYrI4Utc73LHtISdy+Zvk0s=;
+	b=Ii3PlhJEbuBWeEEf0olBTZ7J4DYi5anvMghJGNAsVKSjkpd1ZcA9SHDyeL49TDVNKPeC
+	 H0iMQ+qMMFbxqICsLpBIjLmGduHPwPEVS1zQOxD0EwAoL6CspUTEpJZYehm3cZDDYW5Fx
+	 f5tCY/SBwp1kVyzDvfQ2WdHKUS/AZTYJIA8RdLTxUStjvltdHXMHejY6h/LNqHFGuEZge
+	 KVhvEpUmdVN3649HPZNlWhxR94ls5wxGj10Dx/eWv5k7qdOqfQDSF/D/bU+CD3SUdlc7P
+	 0Wg8I//AQ+RkSVhhRzaWv5NadvE3L+7l+5M6MbPqxhdo/5MNfnaNvpYkDNSGV0MYRfA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=eRnUr89E;
-	arc=none smtp.remote-ip=209.85.214.171
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	arc=none smtp.remote-ip=209.85.216.44
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3337B606A31B
-	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 00:20:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3337B606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597DA606A31D
+	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 00:21:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 597DA606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=eRnUr89E
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2e98798cbddso8721515ad.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Oct 2026 17:20:08 -0700 (PDT)
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3adac5b29ebso1465676a91.2
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Oct 2026 17:21:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792974007; x=1793578807; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792974071; x=1793578871; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=lJk5MOLydIzjQOgGx/lqDh+M3wd1cLnQSwja/ynaVP4=;
-        b=eRnUr89E1tjfR/LxuxtyoX6EFK+rxjHZZCw2kLZGz5iagVOG6gW+YvNGCGXIJAdtKz
-         t/eXz5W0ycDlTBW7cZBAzaZinhd2JZaXnPngzlrpxtrVlRSxJGjBDEo7meg8+G7sUPHE
-         Kol9/EPzWK2nH9EzfWhyaS/aVzZoMU/MVbyGCxPPR9OW83HjGIrEA5FQzlb/gE+M68yz
-         5Jbc0I3JwymjeHupPEqPxrzNjb1wN1hY2jyCJIFpbQVsZ+Ba39y0bi+sx4ZqNleczN/5
-         lRhQfNIoe47QlT24yVsJ1ELBXCnpZ4IYAHKsI3c+VPvaU8/kWPHzycVBUokpDho5QkOv
-         heMA==
+        bh=E5UQIZrsUjY0M8HBvkzofYrI4Utc73LHtISdy+Zvk0s=;
+        b=lewLJdSSPjEPcv2HMEZBJkaENtQqv6hgCWl9ZeCBJhkMQbdq3AEyopJrdBPgiVhkMI
+         iSS9VI99Pp5a9R8/9v+yHAwrDFxVhH1eDv51PboYzZT5D0JliUYuXWXdKqAqBlqE/IxJ
+         6LPbDn5UbmPgQdPUzDwfgEl+q+FewgzwjypRp9zmJzzWW+i2+b4TamOKPWIXpqTQDZwH
+         pO8bAS8ru47TViuC3fY2qZVTwTqyHtdzJFuiiN7oJUcdY1lUMVDJU9pNG9el+aqrbw1x
+         7LBenTPDiHwnDZ1KbDUNAu/hzPPP2v146U7huSrULqS0OPt0aV5BwF0Vr9aVoVRHbT9n
+         jpZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792974007; x=1793578807;
+        d=1e100.net; s=20260707; t=1792974071; x=1793578871;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=lJk5MOLydIzjQOgGx/lqDh+M3wd1cLnQSwja/ynaVP4=;
-        b=CSa48U1SQXt0yNg5TQUOQU3SS89X4vAS+oofLUZfnX3b6b+FvupnViQLVDcrbDj+IG
-         J1qzgvvpAVy53eN4BOSEGSXvVcNmVtorsag8qR5NDcUcFvSPYfsUAy3o8JK+FcUDahB2
-         nKx02VY1hxCTOGxPlIVnN/dzAcUsiYv4XogVRR/w7LVNsY2T5aXN1BtKNNwvKhTK1smk
-         7NPYz/S9k5Xixli06C2XSnp7c4/wluSnSrdG7dm0nDFYZW2tUmH75+46abk7RliGb5zY
-         zXmcRVQL9lOFUkRuMxLKR5Fz5HmhyRHpWLQw70MuReVT0AHSIb9gQli9GYCcuQrjy0UL
-         NLsw==
-X-Gm-Message-State: AFq9FYI+GIFQXFheBitOFxG/+BmK1/IZ1Gzyugjf8/VAzSRagc2+Zeh+
-	DgadXp734o3ogr+2wy6XydcXvgwvmtPUFuQI5RloWbTYxhwFBTP/Pyci
-X-Gm-Gg: AYBFou2cRg4gk85S4oLLyI8FKblEQmu3hBYjUm/dbsbKRo/gBATu5QtDVzIwgJJwci8
-	9qFiJEY+dF4HG85M7cgZphoClktOWkZqM7Jn9E5dZReUTGBlKPt3NfS0qKzdoAmBcUTmIpo67gg
-	6Ge379S/mgJ1CbhGJc0fD1DBpy5nUmLdLkKXJj7FPLSKBf9P5NJgvdfIrOVxLwyttB2INkO6TnN
-	hRSI9HlOvG7Kd7trHH11Vd6EJdtMfD0mdsFfKCgeqesb6cdSzpIRRq4BK1s7uD0Z3M5GHBW9geZ
-	01dYSTmyd1M4FVKXfq9jJOCEpAMpBl4lY0tbITMHD93zRHQAOMkuXHl2Bm8RvZdxXJDQ/UDzthH
-	0PMP0dDvKbNC4E61j+rfSg/7zU8M32JysJ4fjILQ6LN0SfYHh5FKI+YzShyJQHQmETECxJYzpYD
-	cuwvlBbxv7mE3JHBk3lRmIu1VYP1DitV313AAKyAtWKaWJdzIT118/uy4oN3cw+Tlxsx7f5gVyD
-	K9xNyDws/9bCdiBFqdjRc1tO8+83Us7ADbXRQgOIVrA6xrf9t12EPtOdOFafEiP8GZOnbK2lO7s
-	0Y5o/3f5GmPRj2o=
-X-Received: by 2002:a17:902:d486:b0:2e3:1776:278f with SMTP id d9443c01a7336-2ea9c876327mr45145265ad.42.1792974007573;
-        Sun, 25 Oct 2026 17:20:07 -0700 (PDT)
+        bh=E5UQIZrsUjY0M8HBvkzofYrI4Utc73LHtISdy+Zvk0s=;
+        b=OeuR/5IGTsfffgoCK4iMqTFln9fc0eCBWHBwW9tCveeWX17h0JtKZNvf0dhm62YY37
+         1RIus/kDf3g/F/eya1L94HXVLQbNkWTINzFdjGzzwT4GNlRbgQucvSWt08kdIpWr76WF
+         VT2Ba23aaGcFEZRfEXNg8Wxz3O1/6aSP6bBgy9x8Gz5mBZbtbCR5l07q7d5vNAF7xDmT
+         X40/rPhyFrRKnwuqlvOoV1SdXc3B8WmNQhUbIWMYIya0vmeGZv+ABTUcM6dSuUbqwA7Y
+         Jic5ooLR16wdajS+3dD/m1KV0UXVkbSJw0GESg4+BXTkRis0nqOsryL25DRFxZdhYvuy
+         b6pw==
+X-Gm-Message-State: AFq9FYJ/tRXLwrkHJx8nJrTAs4SzULd2wrN8V+TDa3+egA46DAMETezd
+	kkywxdDHxI3a76QQZZr3gqzi+oex+6jN4LPpqiWpNMntRSfGx2dksbDn
+X-Gm-Gg: AYBFou31OmoZH75nCa0IowAxBUGiPTQeaehfF0UVlTJMYsSO7LSGp6bTl0dVuRPXCqn
+	kv6wRDHJ4SM8btSHfrxCQwmVnwzCPOxo9pfYwAsa2gOkEp5KxS4LWK+N3pwFQmh5uoV/FYFiQK4
+	WtK4WOPjgmtlSbI8TZ/FP3kr4BnzOhG+//T+M4dEQ8Hw9wlD5SElxsZxv6s84Nu7znR7NTY1F18
+	h3XSTQ+R77HG4hcAPKDAT1+ERsNE4eWGT21o9WOfJ6IsLRrIdb5OGLuEvJrVhb2rX+nKTUt8dKm
+	4/rJ4vNa/B5wZgaPgMhJZSWPa3eNtnc6dvBBPQ38MEoMXuJKzvWRw02EY4tLC6pLe8tJ7E3UhJb
+	Z/osWy+zN7Ubn4hhntWwIhTkjP55+Wobg/o0uErTQ8gUW2uTSH4MLmEUOMdJRBrYdcz53CUUofO
+	IfRkUaIR0vRLDWQMehtEK0HapCI7jr39H0jnQYMQSZVyE6mbQwNklnND/EofHjUOYPofkNZAZUy
+	6UFDrOYmyfuaRAuBfNA35/GvyAzMcb4+iYNxOrBzc/8psmBRlNlz0FfGPVCVGI2wViIBnk=
+X-Received: by 2002:a17:90b:3bc7:b0:3a4:ca46:8d44 with SMTP id 98e67ed59e1d1-3adead5841amr4344724a91.18.1792974070632;
+        Sun, 25 Oct 2026 17:21:10 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea9b121725sm9686325ad.14.2026.10.25.17.20.06
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebacc885sm6073592a91.5.2026.10.25.17.21.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 17:20:07 -0700 (PDT)
+        Sun, 25 Oct 2026 17:21:10 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 25 Oct 2026 17:20:05 -0700
+Date: Sun, 25 Oct 2026 17:21:09 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Myeonghun Pak <mhun512@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Ijae Kim <ae878000@gmail.com>
-Subject: Re: [PATCH v3] hwmon: (sht15) Stop deferred work before releasing
- its resources
-Message-ID: <4b1e8242-bb8c-4f4b-9813-c835f705a258@roeck-us.net>
-References: <20261024014044.27853-1-mhun512@gmail.com>
+To: hsyemail2@gmail.com
+Cc: linux-hwmon@vger.kernel.org, Sheng-Yuan Huang <syhuang3@nuvoton.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: lm75: Add Nuvoton NCT7715
+Message-ID: <c7532675-6cec-4613-a3a7-4cda31bf16df@roeck-us.net>
+References: <20260918084042.19541-1-syhuang3@nuvoton.com>
+ <20260918084042.19541-2-syhuang3@nuvoton.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -99,23 +99,18 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261024014044.27853-1-mhun512@gmail.com>
+In-Reply-To: <20260918084042.19541-2-syhuang3@nuvoton.com>
 
-On Fri, Oct 23, 2026 at 09:40:44PM -0400, Myeonghun Pak wrote:
-> The IRQ handler and regulator notifier can leave work pending after a
-> measurement or notification completes. Neither work item is drained before
-> its resources are released on removal or probe failure.
+On Fri, Sep 18, 2026 at 04:40:40PM +0800, hsyemail2@gmail.com wrote:
+> From: Sheng-Yuan Huang <syhuang3@nuvoton.com>
 > 
-> Disable read_work before freeing the IRQ, since the worker can re-enable
-> it. Use request_irq()/free_irq() for explicit teardown. Unregister the
-> regulator notifier before cancelling update_supply_work and disabling the
-> regulator. Apply the same ordering to probe failures.
+> Add the Nuvoton NCT7715 compatible to the LM75 hwmon binding.
 > 
-> Fixes: 251eb40f5ccd ("hwmon: sht15 humidity sensor driver")
-> Assisted-by: LLM
-> Co-developed-by: Ijae Kim <ae878000@gmail.com>
-> Signed-off-by: Ijae Kim <ae878000@gmail.com>
-> Signed-off-by: Myeonghun Pak <mhun512@gmail.com>
+> The NCT7715 supports an ALERT output, so permit the optional
+> interrupts property for this compatible.
+> 
+> Signed-off-by: Sheng-Yuan Huang <syhuang3@nuvoton.com>
+> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
 Applied.
 
