@@ -1,71 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.33
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793030915;
-	b=UBHxjW6JvzVflc85P8fHMrUN7JRFt9eK7U8IRz9KKY8oirPi8JQloIA63PKVKI5TH2PY
-	 uIGmLCKet/UdeH+ZV0tqv5Orq0QwVCxjYm7BSOcx+HTRt43wWFP3RT1KcAmtFT76h89X+
-	 r8X2Y4oN8NDnhR11aFF70psqPAhR1edMDKNqAmXp6SyGvrgcft2mN6hRMANgcT21q1mQa
-	 QSQDaOY35+WaJtz6JBeQ57MYplN6DbbFAbkjkSd9oa465N2y4bqH7U7e0wy7030yaRiFG
-	 RCDT2raelfZPgKCFxjEfVz+ajLFI3g0RbKYRHx8otYU0ATNEeruuXzhR13M+flY1sLA==
+	t=1793031864;
+	b=XPoLQVltVJIxU9bM8cJLqLkg8SQ/OKhI9EP0/v0N3bsvhXLfXzAFePL6PkG5Rd6k/ca7
+	 L0iLsFJIFNqYiakEl+9vehiWKo+qdQLs27H66Un7SlKao/Q7bn9BwJEnRZmS5a/Dfo+iu
+	 KSyT5LVzK2KZKMtPm5gzyBc+PI8u6UsEd9IrPXnVrjBE2ihlCiQtCV+FBQxorlLYny+7F
+	 g8IUdrW9T+s0CkVIwK4R8bQXG3lGmAIYvtrXOdtC9O5ZDvhs4n5idCHehGvNXQ8XAmSE+
+	 8yPqwywzzayjWJQU9IPrczsjU7Awf2DAfIfGY4jxImKN8YTSpcJNT1XmOwUWLmAbPRg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793030915;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793031864;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:
 	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
 	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
 	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=Xf58utkMOgxIj0uhLXI4el7NGrEFO6vQWA/HU0m3KYs=;
-	b=SeLHJobjGJ4aOEmxA8UiF5AxAoLbPhu/IKpg13V7wHiSbHtnbiolqjPnZmK1Tra8JBxv
-	 adeYMrziKAa1enlUhqbXMZVbJGQp1oGX7v6lFNNXfudafctG2MnykNRJ0BSChBzQAfFXe
-	 SBhDnlCj1NVY4+88hQUkFtiL8Kub5hnuqV0hBEYRtAGPkplMX2z5rZWlqEbqMWcATi9qu
-	 nfFDmHmOBCxtuuBZZi6p5rATtSFD/nuv0WGYeV0chkS4g/MdT4rwrgaOVSqOMLkMWKpW3
-	 38Dj+Ky6Jtam5kQwsgDBxiPlOZ4TWD0YgVflPdPYddRbM4QG1c2y6hMrYbxyEMuFknw==
+	bh=DajPTuRGlwcD4J4PQkOl0tYDfpyADr1jZ7qC3/V/b3M=;
+	b=O2gU8M9oQ4ZxLBstWVU3N/mnsKhrcrt/6NUlx43RtsBNgtEBLYzULFbWFeOs1ml5EcWM
+	 bBfsolgRZdu8FloiqGsOVajQY0PLup01WNIkdETFdIrz0xHtbrMpJubYoOzcX/nMd0HJt
+	 SXv76o5xZm36Os5uqOgg9uaH7ZOhSj8ySeb/4Ql+cNZVFsI99PMAvoJ9EjXJhRZv19BH6
+	 E3Ca6MrWBNx1wDIpLHwI8wWfD6kIAsGFDmQl8fE/epnhGTT7zzNGpvzKyTnDp0b0oa0KA
+	 5iEexT4uqT2jmYuSrSlWA0O2sBe3ecuwrzL7HaHdI/2zmAGMZxpXujzhcp3sQIHKhzw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b="JB49pk/a";
-	arc=none smtp.remote-ip=44.202.169.39
-Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=lsNrZREB;
+	arc=none smtp.remote-ip=35.89.44.33
+Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1E7606A328
-	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 16:08:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9D1E7606A328
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B2C606A31D
+	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 16:24:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 83B2C606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=JB49pk/a
-Received: from eig-obgw-6005b.ext.cloudfilter.net ([10.0.30.162])
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=lsNrZREB
+Received: from eig-obgw-6001b.ext.cloudfilter.net ([10.0.30.143])
 	by cmsmtp with ESMTPS
-	id L80HxsCc9MylkLNFMx1SV7; Mon, 26 Oct 2026 16:08:28 +0000
+	id LLXOxlmnMaC0ULNUmxWmHF; Mon, 26 Oct 2026 16:24:24 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id LNFLxYsolBsONLNFLx4fO5; Mon, 26 Oct 2026 16:08:27 +0000
-X-Authority-Analysis: v=2.4 cv=cqabk04i c=1 sm=1 tr=0 ts=6adf7afc
+	id LNUlxpTk3nXJHLNUmxkkuA; Mon, 26 Oct 2026 16:24:24 +0000
+X-Authority-Analysis: v=2.4 cv=JMM7s9Kb c=1 sm=1 tr=0 ts=6adf7eb8
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=M0FbrtG7MMAA:10
- a=V9agjKDxFwCPLbSgrBUA:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
+ a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=M0FbrtG7MMAA:10 a=VwQbUJbxAAAA:8
+ a=iox4zFpeAAAA:8 a=tt6zo4tp7eAlrjPKee4A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=WzC6qhA0u3u7Ye7llzcV:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
+	Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=Xf58utkMOgxIj0uhLXI4el7NGrEFO6vQWA/HU0m3KYs=; b=JB49pk/aMYDn
-	Qvvri8ozza7S/Vpw4DfJlLS8w7BP3L+L0bVamME2ds/khk5xYnyKjOX7vDvuK916G52iua0VcccGC
-	SH5R/mYzpbfIK/sBJYGXCBPcvBvfAIrWLw2BTaCJdR+J25APZnA/X8SAaedZQa2V9abeTnJJEmWUq
-	1CKGFzuD/l9JeNkY4pZYLc/GDngxFWUJpDAfx9IpvpMb1s0Irwz4d9ZYHNQVB+svYRNxbOWkYbYMC
-	G4Gqw0aqJVtabKxmfAIxAsvoFvlBS/aC7VFqezMCOqs7c/V/l3nrUDOJtr7HjQu84hfb4BbTunObv
-	81MCsRKzZNssppO8qgcgWg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:58566)
+	List-Archive; bh=DajPTuRGlwcD4J4PQkOl0tYDfpyADr1jZ7qC3/V/b3M=; b=lsNrZREBaNyV
+	34I/2MbZZFS63thif2qT+LwMsLC5dLGoqiCLbUJia0eyD7/PVaTnwaZHHWBpIRHUpZ+kP/A9qlsnH
+	LqSVDEQc4PwHDdqZElYdGktKtpvwrnoiWjROMvd4FIMmyEezANBlLwMHzae7YjSJjqa2NJ5umz4wc
+	+NYwr866ZOiDKLpxuf7nDfNXJm6ykgXrQNvHi5lixAMBJC6/MC9cpSZc1vt4cFDy7cGaWf7O/RPLN
+	UDkdRAa2PNjqUHhh3tLciDF5bwZZUKJjwIEzW3utdUXbkZoSkLtEUaSrtcIUnP+M2iPZOOkdGWCNC
+	LOnjiQRDB+ichCBDvYCJDA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:55640)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xLNFK-000000007SJ-0JSu;
-	Mon, 26 Oct 2026 21:38:26 +0530
-Message-ID: <ca8ea6f9-8eca-400b-9fe2-e4abd69ebf52@roeck-us.net>
-Date: Mon, 26 Oct 2026 09:08:23 -0700
+	id 1xLNUh-00000000J3G-11yk;
+	Mon, 26 Oct 2026 21:54:19 +0530
+Message-ID: <7df58d42-517c-4936-88b0-9d044d30882c@roeck-us.net>
+Date: Mon, 26 Oct 2026 09:24:16 -0700
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -76,18 +77,27 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] dt-bindings: trivial-devices: Add TDK FS160x and
- FS1006
-To: Krzysztof Kozlowski <krzk@kernel.org>, Kevin Jia <kjia@nexthop.ai>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+Subject: Re: [PATCH RFC 0/4] hwmon: Add fan tachometer support for Raspberry
+ Pi RP1
+To: Andrea della Porta <andrea.porta@suse.com>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Jonathan Corbet <corbet@lwn.net>,
  Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org
-References: <20261020-fs1603-v2-0-0986107a5cd2@nexthop.ai>
- <20261020-fs1603-v2-2-0986107a5cd2@nexthop.ai>
- <20261023-deft-tentacled-seriema-daa339@quoll>
+ <rdunlap@infradead.org>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
+ <ukleinek@kernel.org>, Ray Jui <rjui@broadcom.com>,
+ Scott Branden <sbranden@broadcom.com>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Gregor Herburger <gregor.herburger@linutronix.de>,
+ Stanimir Varbanov <svarbanov@suse.de>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
+ Gary Guo <gary@garyguo.net>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+References: <cover.1792748690.git.andrea.porta@suse.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -133,9 +143,9 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20261023-deft-tentacled-seriema-daa339@quoll>
+In-Reply-To: <cover.1792748690.git.andrea.porta@suse.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -144,40 +154,114 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xLNFK-000000007SJ-0JSu
+X-Exim-ID: 1xLNUh-00000000J3G-11yk
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:58566
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:55640
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 2
+X-Email-Count: 21
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfAO/9W6YCgfoa1XNvodB4Ajf44R7yKvD7SnfkirD9sUHukDPHwnPqkK/Cc0faUvhFCM5h76kvsxv8VSwpO1/pntcH1z8GTcd9A9heLR5AQP+reUBu2AG
- PAwty5hSY+zg66i/GqhhQQ3zpTcdeQXX1+c3hNZtz4vyXhFB9zNBqp53RIBkcRt/M4ZZj3rBlaWGTKnTYeILH9yA07i660pcHkWZq/REo9ghBGThohm/jxhU
+X-CMAE-Envelope: MS4xfP55+2PKwu/Oumj+pH+dLTv9hl9uaNeloiD9nyuajI3kVrzkEmgunMsirY75W0n5FAFGrhwhIf4ZHc5aweJmRTp2B4Ye+EaQYk9e3irqIPfwd+IJXztt
+ YjecAGV1F8hOc1FLxc7jtON8H5hX37j6LuOBAAn6shiBUy0o/jNXRBVvOH01DnKTm5pVmpP2JD+RLtDhdXOXy/Vpx66O3VsbeVQvSYYEipmQ4K93yygzcueQ
 
-On 10/23/26 01:57, Krzysztof Kozlowski wrote:
-> On Tue, Oct 20, 2026 at 04:48:15PM +0000, Kevin Jia wrote:
->> Add the TDK FS1603, FS1604, FS1606 and FS1006 uPOL converters. The
->> FS1606-0600 and FS1606-2500 presets scale telemetry differently, so they
->> get their own compatibles.
+On 10/23/26 03:15, Andrea della Porta wrote:
+> Hi,
 > 
-> And why tdk,fs1006 has multiple variants? Are they actually different?
+> This patch series adds fan tachometer / RPM monitoring support for the
+> Raspberry Pi RP1 southbridge found on the Raspberry Pi 5.
+> Please note that the patchset in [1] is a prerequisite for this one.
 > 
+> On the Raspberry Pi RP1, the active cooling fan speed is controlled via
+> the RP1 PWM controller. In addition to generating PWM signals, the RP1
+> monitors fan tachometer pulses. The pulse measurement and RPM calculation
+> are performed autonomously by the RP1's onboard Cortex-M microcontroller
+> core, which periodically writes the computed RPM value directly into
+> dedicated MMIO registers located within the RP1 PWM hardware block.
+> 
+> During earlier discussions, Uwe Kleine-König explicitly indicated a
+> preference to keep the core PWM controller driver (drivers/pwm/pwm-rp1.c)
+> focused strictly on PWM duties, rather than bloating it by registering an
+> hwmon device directly from within the PWM driver (see [2]).
+> 
+> Because the Linux PWM subsystem currently lacks a generic framework or
+> consumer API for reporting hardware-calculated tachometer readings, this
+> series implements a standalone hwmon driver (rp1-fan) using the following
+> structure:
+> 
+> -  The PWM driver exposes and exports rp1_pwm_read_tachometer() within a
+>     dedicated symbol namespace ('RP1_PWM') to read the RPM value from
+>     the MMIO block.
+> -  A companion DT binding (raspberrypi,rp1-fan.yaml) introduces a vendor
+>     property, 'raspberrypi,pwm-tachometer', to link the fan node to the
+>     PWM controller node without overloading or abusing the standard 'pwms'
+>     property.
+> -  The rp1-fan hwmon driver parses this phandle, establishes a device link
+>     for proper runtime and unbind dependency management, and registers the
+>     standard hwmon 'fan1_input' sysfs attribute.
+> 
+> An alternative architectural approach to the DT phandle + exported helper
+> method would be to model the tachometer as a child device using the
+> auxiliary bus framework (drivers/base/auxiliary.c). In that model, the RP1
+> PWM driver would instantiate an auxiliary device for the tachometer, and
+> the hwmon driver would bind to that auxiliary bus device without requiring
+> a separate DT node.
+> 
+> However, adopting the auxiliary bus would require a more significant
+> rework and refactoring of the existing RP1 PWM driver.
+> 
+> I'd appreciate any feedback on whether the current companion driver with
+> a dedicated DT property is acceptable, or if an auxiliary bus-based
+> refactoring of the PWM driver is the preferred upstream path.
+> 
+> Patch Breakdown
+> ---------------
+> Patch 1: pwm: rp1: Export helper to read fan tachometer RPM
+> Patch 2: dt-bindings: hwmon: Add Raspberry Pi RP1 fan binding
+> Patch 3: hwmon: Add driver for Raspberry Pi RP1 fan tachometer
 
-I checked the datasheet. Unfortunately, they _are_ different, and there seems
-to be no way to determine the chip ID by reading chip registers. This is an
-odd chip :-(.
+This seems conceptually wrong.
+
+Have you considered implementing the hwmon driver as auxiliary driver
+and accessing the register in question through regmap ?
+
+> Patch 4: arm64: dts: broadcom: bcm2712-rpi-5-b: Add RP1 fan tachometer node
+> 
+> Thanks,
+> Andrea
+> 
+> 
+> LINKS:
+> [1] - https://lore.kernel.org/all/cover.1790686331.git.andrea.porta@suse.com/
+> [2] - https://lore.kernel.org/all/adLTwOTbkJ0VQXy6@monoceros/
+> 
+> Andrea della Porta (4):
+>    pwm: rp1: Export helper to read fan tachometer RPM
+>    dt-bindings: hwmon: Add Raspberry Pi RP1 fan binding
+>    hwmon: Add driver for Raspberry Pi RP1 fan tachometer
+>    arm64: dts: broadcom: bcm2712-rpi-5-b: Add RP1 fan tachometer node
+> 
+>   .../bindings/hwmon/raspberrypi,rp1-fan.yaml   |  39 +++++
+>   Documentation/hwmon/index.rst                 |   1 +
+>   Documentation/hwmon/rp1-fan.rst               |  41 ++++++
+>   MAINTAINERS                                   |   1 +
+>   .../boot/dts/broadcom/bcm2712-rpi-5-b.dts     |   5 +
+>   drivers/hwmon/Kconfig                         |  11 ++
+>   drivers/hwmon/Makefile                        |   1 +
+>   drivers/hwmon/rp1-hwmon.c                     | 136 ++++++++++++++++++
+>   drivers/pwm/pwm-rp1.c                         |  27 ++++
+
+Either case, there is no such driver in mainline or linux-next.
 
 Guenter
 
->>
->> Signed-off-by: Kevin Jia <kjia@nexthop.ai>
->> ---
->>   Documentation/devicetree/bindings/trivial-devices.yaml | 14 ++++++++++++++
->>   1 file changed, 14 insertions(+)
+>   include/soc/bcm2835/raspberrypi-pwm-rp1.h     |  10 ++
+>   10 files changed, 272 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/raspberrypi,rp1-fan.yaml
+>   create mode 100644 Documentation/hwmon/rp1-fan.rst
+>   create mode 100644 drivers/hwmon/rp1-hwmon.c
+>   create mode 100644 include/soc/bcm2835/raspberrypi-pwm-rp1.h
 > 
-> Best regards,
-> Krzysztof
 
