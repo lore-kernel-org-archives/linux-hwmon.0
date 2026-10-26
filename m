@@ -1,51 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=63.250.43.97
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793039730;
-	b=IC5AmLTa2SI+XZIhfl5NECMOBP9ZOQIYhU0N3cZjeRd4FTEU+f+nWqKRr/0BeErN2UzX
-	 XGuuet3zQ3xVmCvw6ZJ08eA+jOWvZIlRFUbK9IFw4xEv0UAlguxy6QMS7QMvOUEF0jI/D
-	 SFx9GnSChS5CDHfGgztp/txdkYYqmsDPraWY819x9baxLDiznhNOZc46P2vz6Ewib/kND
-	 T1pGFVxoqk/XvGL4g6pXf4NHXfX05myg0pxonFgvzUx0OtYYH+JJc4JS85JB0dXeK6agg
-	 q9OOcN3yS3V1pg/zeVhBELYa0gFAsR8orhdYqPBt0uWB5vuF6c1fhFKWNtETKRK0I0w==
+	t=1793041279;
+	b=Ll/yNB7LPntcdLLkqqcGJSn0BUljRJZp4th+C8grhZQGBcg3PAKUghUU9/VrKaWaOLf7
+	 RjohR1RgW38CM8TP6T2jZC+B0COadP1drLD7R0RP9Fzct9UcK9zmJ9fkve+mGxAEjJu9s
+	 1AevlIfS2mPXVabaXtFTKieqkIYNz3VR5m3lNL0D0GVBduqpER1APTM3kyMWnfFqmERso
+	 dHlqkLR9GjMq8sTwHY6L8XI/AAaVqOfL4NZW+Cm5jihcZaTtmMGsAjSFP2ylGsm/dHdMD
+	 tFnKqErQF+QMAAF0+7VyGc0qmoPTAaW9zCM0UxVhsoCIAPwyas2LWrAxwcEnMiS0dUw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793039730;
-	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
-	 X-Envelope-From;
-	bh=zHu5FnjSzgjYElaRKiWtsPwyU1mAdTABEQB9pNjOcM4=;
-	b=dPQHvPCkSayCxn7AdrJY+/JfbPk+QRp5kB4BzqP9+bQGabxDv06oDZ4ijvBjZ4zAuX1e
-	 MrOhiQrYLZ2xjLchXzX3tpLUXVqaDbXaA9H+bzJ+Hm5jbvS8EsY9Iz5hwN+AWsn4arXXT
-	 amTAgjeVEG1+TbJK5NwXMQvhRm3MzFN3+XDyL7J+72tG6pDilTIZ1zihO5cNHbapqz3CG
-	 3mzygbPtnLKxIXjuk4gAp7wjNW8yt3lMzPCW3C+C9wK5IrFqDwWDyCEGtPTYGARym2+FK
-	 NPVsHqYrvhQFIxfENZFKg0bmUrKE4HlSNRs+XCpy4HzmHoo5cABHo9YF4jkEeBfKMZA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793041279;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=A4PemadTeQbjsJohAGGihDgo5G3CzFHovhD53Y0Q1zc=;
+	b=1ErA4rRTD9EIb0GBBCRO+v3bir1hO+WJMaHBkHF4r2jhtHok8667ru5kedIKIOdkhFPB
+	 K1I0la1cRCDTrRtBs2O2+2wBK1WXHogk0C/uMEaqq5+J+wtAJmJ2c2p7toyHum7Rf4QhN
+	 7qre5t06f4vU534/EJe+od31r4ckLCbFmd6ULLpzFQPcGVNn1wbaraSzC0ToaihhW0OKk
+	 WUHVdieB08JzkuDupGrk2Mlg99nBEW1FoNXLZBIhBT4KqrBnTklYvqxbDubmGT4BYULEm
+	 6kolSLYb0kkmOq/NqPivbqhFItKxyKeQTNAfJeeBOCUGhp6HNR7UEbeBxUYtSA74sgA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=effective-light.com;
-	spf=pass smtp.mailfrom=effective-light.com;
-	arc=none smtp.remote-ip=63.250.43.97
-Received: from out-2uec-a97.jellyfish.systems (out-2uec-a97.jellyfish.systems [63.250.43.97])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="i4/ZjJE1";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C887A606A31A
-	for <linux-hwmon@vger.kernel.org>; Mon, 26 Oct 2026 18:35:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C887A606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=effective-light.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=effective-light.com
-Received: from mail.privateemail.com (unknown [174.89.145.246])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.privateemail.com (Postfix) with ESMTPSA id 4jD2P01jPvzyNj;
-	Mon, 26 Oct 2026 18:35:15 +0000 (UTC)
-Date: Mon, 26 Oct 2026 14:35:12 -0400
-From: Hamza Mahfooz <someguy@effective-light.com>
-To: linux-hwmon@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B87C606A31A;
+	Mon, 26 Oct 2026 19:01:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=i4/ZjJE1
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F201F01825;
+	Mon, 26 Oct 2026 19:01:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793041279;
+	bh=A4PemadTeQbjsJohAGGihDgo5G3CzFHovhD53Y0Q1zc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=i4/ZjJE16Zzyzk5Ycvc93WT/OHTOJ4SUiMgRPiOd0EY/0QW907P95QixeMqCDFtP1
+	 8CF63P36Nd8yTS12r5JPUe6Db2XqBv5mowOtbZGkBEodf6Zw5EjZeDYMdUX0z50qFE
+	 /ndk4Mh+kjhnWw75/QJ0Xveix/ADMopMdzwx8+5O8EXB3OXoxOPy/uvH8zfMEYwZxd
+	 Z30foh/Agz2DvQnMiDy7qfRQrmQGcCzh8uRFGgayewLQpmqZ/GDyVY2dlJCkgsEub5
+	 OJE+VMFAYa/JtXQ4P0eNvtLAv0sYC2Ve3IvGfV4r1JG95LdCnZiL/NAqihrpN/ZyKv
+	 kuQ/Nwc9xxAgw==
+Date: Mon, 26 Oct 2026 19:01:14 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Carlos Jones Jr <carlosjr.jones@analog.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] hwmon: (nct6683) Add fan control support for MSI
- boards with NCT6687D-R
-Message-ID: <at-dYL4g1w_qBxe6@hal-station.localdomain>
-References: <20261004153250.516730-1-someguy@effective-light.com>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: max20830: Add MAX20810,
+ MAX20815, LTM4739, LTM4740
+Message-ID: <20261026-skinny-enchanted-df8dfdccebe9@spud>
+References: <20261026050241.100428-1-carlosjr.jones@analog.com>
+ <20261026050241.100428-2-carlosjr.jones@analog.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -55,42 +66,27 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="FrUjqUpTkpC+AgxC"
+Content-Disposition: inline
+In-Reply-To: <20261026050241.100428-2-carlosjr.jones@analog.com>
+
+--FrUjqUpTkpC+AgxC
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261004153250.516730-1-someguy@effective-light.com>
-X-Envelope-From: someguy@effective-light.com
 
-On Sun, Oct 04, 2026 at 11:32:48AM -0400, Hamza Mahfooz wrote:
-> Recent MSI boards (customer ID 0x20d) use an NCT6687D-R, whose fan
-> control registers differ from the ones used on Mitac boards, the only
-> boards for which the driver supports fan control so far. In addition,
-> the system fans of these boards are connected to channels 10-15, whose
-> duty cycle the driver does not report.
-> 
-> This series adds fan control support for these boards, based on the
-> register map reverse engineered by the LibreHardwareMonitor project [1],
-> which uses it on MSI 800-series boards.
-> 
-> Patch 1 reports the duty cycle of the system fans, and patch 2 adds fan
-> control support for the CPU, pump and system fan headers. 
-> 
-> Tested on an MSI PRO B850-P WIFI (MS-7E56, BIOS 2.A93, NCT6687D EC
-> firmware version 0.0 build 04/18/25), on top of kernel v7.3-rc5. Fan
-> control is available on pwm1, pwm2 and pwm13 to pwm16 on this board.
-> 
-> [1] https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/pull/2294
-> 
-> Hamza Mahfooz (2):
->   hwmon: (nct6683) Report the duty cycle of NCT6687D-R system fans
->   hwmon: (nct6683) Add fan control support for MSI boards with
->     NCT6687D-R
-> 
->  Documentation/hwmon/nct6683.rst |  17 +++
->  drivers/hwmon/nct6683.c         | 233 +++++++++++++++++++++++++++++++-
->  2 files changed, 244 insertions(+), 6 deletions(-)
-> 
-> -- 
-> 2.56.0
-> 
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+pw-bot: not-applicable
 
-Ping?
+--FrUjqUpTkpC+AgxC
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCat+jdwAKCRB4tDGHoIJi
+0n3lAQCKYxNkjvfVhlQnnBw80d4CjFatsIa9vO42t/gXeqdVuAD/fr1FpQ9Va2/j
+3N+U9x1Axk70Ml1ZvLnY5P2b05/fhwk=
+=Ra3M
+-----END PGP SIGNATURE-----
+
+--FrUjqUpTkpC+AgxC--
