@@ -1,112 +1,144 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793094359;
-	b=l5ylu/zmLX69Lg7dupaC9uiQ3SqDocsutC0vFLTsv6dpa/lYX9u8w5ZjAbHSfEYuV3na
-	 yvkwgugcdsElnSJvy6Qf8ZI9Kud/rxZYM5pAJ5JD9HurBH1TUOxDFGvcwteRCUnUc2r/B
-	 AvCBjUmSVpY/GXawNbt3UKWN7ZI8EMzZN+oRwMyLct573VUmElRmkzCiubOO8VZq3PlM5
-	 /1nyzvYKLe4LBRTN7N6IaULRQGaLPaMmPoBzRzfDOS2c/pHpTP71RblGlD3vvTMtX4HiJ
-	 iEqboFAuENisjfjekEdZQaXsu6ynznLHfOym88wa70SkLzlXxeHFeOlgKoCO7rxh/Fw==
+	t=1793098219;
+	b=vV+TePc/LgKWyTy/v3Jbgqnb5XFIc/rvo/3BZ3keN7JpJ2kCzDRdb2V5y3lZMIqarV2s
+	 Wj/+AzaQ07uiM5mEh+0nTTVgETGOTXdQf5Vx91UrdxEGjt2H08iCTpI24FVNw2hcXnTaR
+	 xEYaARm/pkYeMtIFwgcQA4Bqh8sVFpNhOxiXbDeOosGGmK3jECPKRvD/Q4abq7i/jzygD
+	 f5uM/t3XDCAyRUBmfE2qhF9fJMF9GF2kR3G/n5Arqm/IaAcDqIZRDMns742UOiAar9cbE
+	 qDT6bBx/Qwawru5ZZM5T1A+PEkJjTrk2I+iasE1JMADPs1/X43M5gdOqWdXXThrOS5g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793094359;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793098219;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=kxDEiSmJOiwfSYua1Zz9+AGsc9tKlOqwY2WHmMR/V1I=;
-	b=n63OnsI16E6uPmYhP9vk0n8cHDYcLUL3ysMMuBv8KLldq+I3k1O3f2SDJXfgJ6Q4IDts
-	 W0YzTk3ShTM9xq3w5NGXt/8A2XSnM7XDSAjXiRCZkxrtKbMlSn+QjimIHiNzh/Mqla+s/
-	 7aC1Eh2Ik9B8K+nHOext/Pfl0jlg31iqwY6auakIg9a5CX2bUeki5t/o93mqkIb7VCOQs
-	 mlv6zoCK6y3TyZeyqv0FbEmpcekXhSPbVD10nUWkiHJ6ubDUietg4HbCRBxMeSxp4gHQi
-	 W9N0J2lWXJbevFmV7wteEKgDbJPp5diULVjblanYBC5hsK0Wn0i/tvXWuAIpkrDpbRg==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
+	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
+	bh=XFZzZHqRNst1BMPTvXE87RueOS4Ft9OJQfvt5VLbbcE=;
+	b=0JULsLx1zFuR6ycU/0Ou+WnXlHXduP8Yv/iDAIi4iVqq1+9RjsxWsFwZ5BX2QB9thWl4
+	 +9Ywwu6UyzIhqXzDfdrYYb03Z3r7jY13NkmW21rrueRA/4MW/3rjPlnwBwp7TQGdy+KJ0
+	 ICMtxxucvNl7XULzk7Q0JDJkdv0fXWsAFWUbCqQ/01h3arHTrqRkwCBkHJJtZLumRQGr5
+	 3Hy1lK+saYAu8ZcplvpJRPERDLpMj799pk1sip5v9ya0W50KnlgXnnCQGe660F3INr3w8
+	 kbG4cU8k1I8pAvVHW7dDvZuxHLmXNa2xMbqCVez3rYi8t8ZPAbXxgcU13hgjhZhEz0w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=foXTMIMq;
-	arc=none smtp.remote-ip=209.85.128.51
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	dmarc=none header.from=baylibre.com;
+	spf=pass smtp.mailfrom=baylibre.com;
+	dkim=pass header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256 header.s=google header.b=dvDz+tkw;
+	arc=none smtp.remote-ip=209.85.221.49
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC928606A31D
-	for <linux-hwmon@vger.kernel.org>; Tue, 27 Oct 2026 09:45:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DC928606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84B1660A261E
+	for <linux-hwmon@vger.kernel.org>; Tue, 27 Oct 2026 10:50:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 84B1660A261E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=foXTMIMq
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4a208d93758so44925095e9.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 27 Oct 2026 02:45:57 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256 header.s=google header.b=dvDz+tkw
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-48dfaa3fa12so608344f8f.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 27 Oct 2026 03:50:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1793094356; x=1793699156; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:date
-         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=kxDEiSmJOiwfSYua1Zz9+AGsc9tKlOqwY2WHmMR/V1I=;
-        b=foXTMIMqZgAtLBq9U6Ye5Y5BEyzAFblKZjMqyPIiGxW0GYSUWzFinU/uKs9vprN6Ye
-         Hz/ClFy9OizHTRH5VyRnVcxo5LRCHq7k+nDdzYf3BcrgdxoIMjpDLN7sR8P1dfxW8GlM
-         Prw4tjEQSlDYcv+4KVQ/R+2qfvyN5r93DDysB+0pt8EoK+BXRwBx5nWWIx4bq3Q7lXB/
-         5U0pymYRzO/nQFKCWbevF/E3kqjzK6yxzrphZXdk0iTzLuEZiWNuQhxk3QDJC9HMyEEa
-         YBRbtfB4dfeU5rHkUnSMNO4xtvfkAh7JjrjmBtJxPlgn7QIzfkhgXHrwW1f9OrBppYAR
-         toyQ==
+        d=baylibre.com; s=google; t=1793098216; x=1793703016; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=XFZzZHqRNst1BMPTvXE87RueOS4Ft9OJQfvt5VLbbcE=;
+        b=dvDz+tkwazGMCamxvSaEkAPNpDuRiv9BJ7CN3nyJQXubmP0JbaqRwC8SLGGTCUeADO
+         /Pro+kbJFtSm92a/VL7B+fALEk42y1o3Qe3sLe2tqjSo4lWGT1kLfBJnIJImpjPuEiK+
+         8zdPn4Q8wS/lRWI5sWj255kuWR6sQ2uqoNJeeMymQg0Uv48xDVnUmtVMWPf1MtJyIhpL
+         ACvUskKnars7NWhHhhcT0QAwiBahkXXEbH8KDRDaEAwffVHbf4cRp5kDmgGAlHSJ6m7C
+         1CXwMURcy5WcbhjeNUomKXmOleDWMRul6Eda0euAYoSIZyQJuiJCpp/GhtbjPsKQ44BB
+         nmbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793094356; x=1793699156;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:date
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=kxDEiSmJOiwfSYua1Zz9+AGsc9tKlOqwY2WHmMR/V1I=;
-        b=X5eWf25XQlPlWJT8wXz19GvJkmUwmiIkSd8LMsdmO1yr30I4pOcpMJQlFytYTgb0gR
-         2kiQO0YbCSYrnexefnjYVv7HAcA+HysrAvZOkggcWdoxeCcDrwtz8W4TtwyL2zfJUxI4
-         guvfv+xheaxbZo5OexnNKzxgOixMo3XGPqOT/RXID72y9Gb/IEI0TJ4mCcyMcIf5Rowv
-         Q1VugpfGAcnzWT08YOA/abq2QQLtlz5HRQO17gVKkH7UUVDgtpcOyGS/H43Rvqtv57y3
-         vHqZGw2giibmjnRexMXRL28PAN/9muLujOz8pWDMSgBsNVwC/+uTMZMwCa6ulvdE7+TM
-         dV8A==
-X-Forwarded-Encrypted: i=1; AKwUvBxK/08g8HMcsYdtACAlfNEq1DdIRLhS6pkqKRSDfscDOuo0VELhaHkeLjYSl9xScv+xk9zU6NwvHfhV5w==@vger.kernel.org
-X-Gm-Message-State: AFq9FYKIh4GJjnYCsXDYgTPvyXGEygwTPPEhy3AQr8UkfDPsXfeRlkGV
-	gJG7Yho0ASFipljAz1hsux2bc6PBJFXa8rN6ns1KwZ3VNsksJNiO4+6I9CCnAlfUAls=
-X-Gm-Gg: AYBFou3ZchNFZbPc2A5Pk1m5Psew1mRIYBhUidghsC1hctyd3zmOwfQ6cLJXb2/lqLI
-	kfd9d7CpCRUcDyhiMCwEruPbRwvX7ZfbX8Jmbge8ZI0d4ZemoD4hlsKe+uP9Xp8f9oIgKdNuQsH
-	8RICPTYYeLglIE6NzKAbQaftvcyTz9KvsvHgfloT3Uj73yoee8OVdbEQtMm9tlXRSOGksWrUAWa
-	Vd/Yw4DzsRNkHHI/OkomXQCogVzWAhT01j24uGX/3bLVRLjEOXiyRGMhscqJY1VMzoYb/33EHPT
-	cw5qcg/vk8Bq4ozqZt/DMOIXIjLtDa5lcMtpd1x0mttOv1d31A4SJTplhQq/FqsXmE6Fp+C2FSF
-	6jnmig+Qx98SBUyOCN5gFiOsFJ6xPXJ1WF02zmSajtep2Dj6nVPghXP2aUI6pakCjy2ObQEP856
-	J8srR4EZvn/87y8RuTbXngIC4w/knGLCm6PRl2uj5FJi35P0EDuyIMEwqKktO4bo27lDk4rtQbP
-	mjCEoomqYfxjZw1BZoCUKM3hik7xNHRZAK6HQ1ONbNXj9AvT7kyOtk=
-X-Received: by 2002:a05:600c:4f0f:b0:4a0:27eb:49b with SMTP id 5b1f17b1804b1-4a35acba87fmr202982885e9.30.1793094356233;
-        Tue, 27 Oct 2026 02:45:56 -0700 (PDT)
-Received: from localhost ([82.192.120.214])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a35a2d9280sm251609365e9.13.2026.10.27.02.45.55
+        d=1e100.net; s=20260707; t=1793098216; x=1793703016;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=XFZzZHqRNst1BMPTvXE87RueOS4Ft9OJQfvt5VLbbcE=;
+        b=GX4G3smkM2ZHWNILnO5s1JixGFFuKwU4QCDUy96g+TPWXHBUKzsU/M2gEjlJVl2rxN
+         FJh5ANILb46yhmQqjV2tjthf2g6V6cdfdafoRfsYWoV2m6yWjR5z+Ox/CqCUL/0pPFj8
+         UG18SomjJ+YndrvPsjE3/PMN3HxFBSUwzr40gd+RtJ4SQ7GQtH4xQNv4VCcAA+Q4+Ukv
+         R7f4gEbQyyYY0Z6NKzYh36+gIG82iAei/rkWa0/yD0sUA+JiUJlVmwZdnxBVKsRHsKdP
+         F1h9F31cYDwSkxdre+wJd4/dnOs3wCvx7bSdGqVXIJGRClsaV8fRPH1vd85JD9HCdg1I
+         rIng==
+X-Forwarded-Encrypted: i=1; AKwUvBzQkpSbtNLK9abBBAW9mQ5eXrEkD/bmfDz2Pn/hC1WWRuLSYPFaYwjsCA37nOj4KRbLLWW96irX5hA24g==@vger.kernel.org
+X-Gm-Message-State: AFq9FYItFSzWrv8HoJsxlh6r57m7xtgxpInoK4Wkuy11QtQxtJmZBDNl
+	/bEsZlnz6ec+W/wi4fUVDXrTsh30548wAYKVvTzWgaBxHdKjRddsChIk1GUy+n/c8p4=
+X-Gm-Gg: AYBFou3f9awzP+SR64cUcAHvJeublZCZyp2NN1ahmFyMJJ/bqcnf9t2rfFFfEAfI28p
+	BtPY3v3wm2Akztoi+MIvQKkWeTTrgKkmn3jn86CLWIf5ko/sMozi48hUhosHB9TDhVNgWyiC1QN
+	OzCs+8MUIoPTk1aLAGBJm5X2KpG5rn3Vmk82XgSkJn6l5YfZlijtpbjb2eC/vdTVwa9RQaJPNAd
+	XdrHNbgGgd2AaZxDTdVvNlE6wBJxpvXHyRw87QVHHHZ8vgCM3SDPlwT2r1PB8rkpidiGW6pI2um
+	i07eDKkz3P28j8x1Sb1xaHvQul49WbddSOndVHrqPEhm0yDQUfvnlzQYhiz0x4xwVwr+G2Q6C4u
+	JgUWVjZHqEPVrlwIGNzrJs37T2qMab1h8etHHQw03TFk4AsMoi9+39fDJolWTQzHWMJo33CSPQY
+	AsSiNMApQRBx+pXH9DQvrk5Rj9zMWMQ/OMkyPudrTR/Qa0VyNerBOk27MlyjSHtPAmTbidNwLlL
+	t4iHf+C583qOSKsW6H1ik7nlxyX8p5rHhdvkTrymgpZL2JjhjQlFOnyhkGUjAEz76X/oDKi1xsZ
+	vbkT9HjPEN6YZQ7CkIkItk2BADy4Irycf+0qOIk6TRQ=
+X-Received: by 2002:a05:6000:438a:b0:48e:884:affb with SMTP id ffacd0b85a97d-48e55a51758mr5422454f8f.24.1793098215724;
+        Tue, 27 Oct 2026 03:50:15 -0700 (PDT)
+Received: from localhost (p200300f65f19a904240e81f1f32a429c.dip0.t-ipconnect.de. [2003:f6:5f19:a904:240e:81f1:f32a:429c])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-48e3ebd48e0sm22735578f8f.38.2026.10.27.03.50.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2026 02:45:55 -0700 (PDT)
-From: Andrea della Porta <andrea.porta@suse.com>
-X-Google-Original-From: Andrea della Porta <aporta@suse.de>
-Date: Tue, 27 Oct 2026 10:49:48 +0100
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Andrea della Porta <andrea.porta@suse.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
+        Tue, 27 Oct 2026 03:50:15 -0700 (PDT)
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig=20=28The=20Capable=20Hub=29?= <u.kleine-koenig@baylibre.com>
+To: Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>
+Cc: Andy Shevchenko <andy@kernel.org>,
+	linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Lixu Zhang <lixu.zhang@intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Gregor Herburger <gregor.herburger@linutronix.de>,
-	Stanimir Varbanov <svarbanov@suse.de>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
-	Gary Guo <gary@garyguo.net>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH RFC 0/4] hwmon: Add fan tachometer support for Raspberry
- Pi RP1
-Message-ID: <auBzvB8TsvIK8Hik@apocalypse>
-References: <cover.1792748690.git.andrea.porta@suse.com>
- <7df58d42-517c-4936-88b0-9d044d30882c@roeck-us.net>
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+	Frank Li <Frank.Li@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Imre Kaloz <kaloz@kernel.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Valentina Fernandez <valentina.fernandezalanis@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Daniel Palmer <daniel@thingy.jp>,
+	Romain Perier <romain.perier@gmail.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
+	Hoan Tran <hoan@os.amperecomputing.com>,
+	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Hans de Goede <hansg@kernel.org>,
+	=?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+	linux-hwmon@vger.kernel.org,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	"Enrico Weigelt, metux IT consult" <info@metux.net>,
+	Viresh Kumar <vireshk@kernel.org>,
+	virtualization@lists.linux.dev,
+	Yinbo Zhu <zhuyinbo@loongson.cn>,
+	Thierry Reding <thierry.reding@kernel.org>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	linux-tegra@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Srinivas Neeli <srinivas.neeli@amd.com>,
+	Michal Simek <michal.simek@amd.com>,
+	linux-aspeed@lists.ozlabs.org,
+	asahi@lists.linux.dev,
+	linux-mediatek@lists.infradead.org,
+	openbmc@lists.ozlabs.org,
+	linux-omap@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-unisoc@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	Michael Buesch <m@bues.ch>,
+	William Breathitt Gray <wbg@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-acpi@vger.kernel.org
+Subject: [PATCH v4 00/23] gpio: Improvements around device-id arrays
+Date: Tue, 27 Oct 2026 11:48:37 +0100
+Message-ID: <cover.1793097104.git.u.kleine-koenig@baylibre.com>
+X-Mailer: git-send-email 2.56.0.rc1
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -116,142 +148,180 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8137; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=k1gONcl2UIxBepDw11jo8AHu6ai+O1G0nVgkSy8JdIE=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBq4IGGNXr36bKoBw2PaxVdVtkUGC9jXmJpRnHf2 Csas+gKAK2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCauCBhgAKCRCPgPtYfRL+ TniYCACv6CLczaP+IEWqqjNz0H2IDCNFuAhnXKDLb4106wpApOzW0y6gufg8fEnzsamxLLEBdjV dqq25XfWZfdmZg3FMHHPJqnBr5fh7Zg46EwNe1jZvPkIkqY78ho7ESao5AKRIVqqTbQRpIaZEgz NNeJQhmaiL16rAeAP+okNpbCcIyWa33O12ZEutJCFYTQrA6235nE9ZSMLfl07igU0+tu+iunwWQ mCsDqRmK3fija+zCgkc0dIt3ssbXfQa1/DrtcjbcwgL9Jsq5zWCdDhzr7Rb8pliP+Uu/VBJJxty 27ri9KePaXD/wGvqViL+tL8IZZtej2Vgp0hRAsZI/QNPpgp7
+X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <7df58d42-517c-4936-88b0-9d044d30882c@roeck-us.net>
 
-Hi Guenter,
+Hello,
 
-On 09:24 Mon 26 Oct     , Guenter Roeck wrote:
-> On 10/23/26 03:15, Andrea della Porta wrote:
-> > Hi,
-> > 
-> > This patch series adds fan tachometer / RPM monitoring support for the
-> > Raspberry Pi RP1 southbridge found on the Raspberry Pi 5.
-> > Please note that the patchset in [1] is a prerequisite for this one.
-> > 
-> > On the Raspberry Pi RP1, the active cooling fan speed is controlled via
-> > the RP1 PWM controller. In addition to generating PWM signals, the RP1
-> > monitors fan tachometer pulses. The pulse measurement and RPM calculation
-> > are performed autonomously by the RP1's onboard Cortex-M microcontroller
-> > core, which periodically writes the computed RPM value directly into
-> > dedicated MMIO registers located within the RP1 PWM hardware block.
-> > 
-> > During earlier discussions, Uwe Kleine-König explicitly indicated a
-> > preference to keep the core PWM controller driver (drivers/pwm/pwm-rp1.c)
-> > focused strictly on PWM duties, rather than bloating it by registering an
-> > hwmon device directly from within the PWM driver (see [2]).
-> > 
-> > Because the Linux PWM subsystem currently lacks a generic framework or
-> > consumer API for reporting hardware-calculated tachometer readings, this
-> > series implements a standalone hwmon driver (rp1-fan) using the following
-> > structure:
-> > 
-> > -  The PWM driver exposes and exports rp1_pwm_read_tachometer() within a
-> >     dedicated symbol namespace ('RP1_PWM') to read the RPM value from
-> >     the MMIO block.
-> > -  A companion DT binding (raspberrypi,rp1-fan.yaml) introduces a vendor
-> >     property, 'raspberrypi,pwm-tachometer', to link the fan node to the
-> >     PWM controller node without overloading or abusing the standard 'pwms'
-> >     property.
-> > -  The rp1-fan hwmon driver parses this phandle, establishes a device link
-> >     for proper runtime and unbind dependency management, and registers the
-> >     standard hwmon 'fan1_input' sysfs attribute.
-> > 
-> > An alternative architectural approach to the DT phandle + exported helper
-> > method would be to model the tachometer as a child device using the
-> > auxiliary bus framework (drivers/base/auxiliary.c). In that model, the RP1
-> > PWM driver would instantiate an auxiliary device for the tachometer, and
-> > the hwmon driver would bind to that auxiliary bus device without requiring
-> > a separate DT node.
-> > 
-> > However, adopting the auxiliary bus would require a more significant
-> > rework and refactoring of the existing RP1 PWM driver.
-> > 
-> > I'd appreciate any feedback on whether the current companion driver with
-> > a dedicated DT property is acceptable, or if an auxiliary bus-based
-> > refactoring of the PWM driver is the preferred upstream path.
-> > 
-> > Patch Breakdown
-> > ---------------
-> > Patch 1: pwm: rp1: Export helper to read fan tachometer RPM
-> > Patch 2: dt-bindings: hwmon: Add Raspberry Pi RP1 fan binding
-> > Patch 3: hwmon: Add driver for Raspberry Pi RP1 fan tachometer
-> 
-> This seems conceptually wrong.
-> 
-> Have you considered implementing the hwmon driver as auxiliary driver
-> and accessing the register in question through regmap ?
+the original motivation for this series are the patches that convert the
+arrays to use named initializers, see
+https://lore.kernel.org/all/cover.1780048925.git.u.kleine-koenig@baylibre.com/
+for the idea behind it. Looking left and right a bit while implementing
+that, the series grew a bit.
 
-Yes, I also proposed that in the cover letter because auxbus seems also a viable
-solution.
+Changes since v3 (available at
+https://lore.kernel.org/all/cover.1793030820.git.u.kleine-koenig@baylibre.com):
 
-The current implementation is a consequence to the discussion about the companion
-PWM driver, from here (and the revisions that followed):
+ - Picked up review tags (b4 even found some from v2)
+ - Add a 2nd MODULE_DEVICE_TABLE(of, ...) in drivers/gpio/gpio-mpc5200.c
+   (My grep didn't handle >1 driver per file well), noticed by Sashiko
+ - New patch to use named initializers for auxiliary_device_id arrays
+ - Fix code style of of_device_id array in drivers/gpio/gpio-grgpio.c
+   (My script doesn't handle of_device_id::name) and
+   drivers/gpio/gpio-ppc44x.c (didn't exist yet when I sent v2 and
+   failed to notice that for v3)
+ - Fix code style of auxiliary_device_id array in
+   drivers/gpio/gpio-shared-proxy.c, missed as I didn't have a script
+   for auxiliary_device_id before.
+ - Dropped a few broken email addresses from Cc:
 
-https://lore.kernel.org/all/cover.1775223441.git.andrea.porta@suse.com/
+Best regards
+Uwe
 
-To give a short and hopefully coherent view of the decisions, here's a breakdown:
+Uwe Kleine-KÃ¶nig (The Capable Hub) (23):
+  gpio: Remove __maybe_unused annotations from acpi_device_id arrays
+  gpio: fxl6408: Remove __maybe_unused annotations from of_device_id
+    array
+  gpio: Drop unused assignment of acpi_device_id driver data
+  gpio: max7301: Drop unused assignment of spi_device_id driver data
+  gpio: mmio: Drop unused assignment of platform_device_id driver data
+  gpio: ljca: Drop unused assignment of auxiliary_device_id driver data
+  gpio: xgene: Add missing ACPI module annotation
+  gpio: sodaville: Add missing PCI module annotations
+  gpio: Add missing OF module annotations
+  gpio: pxa: Add missing platform module annotations
+  gpio: pl061: Use empty initializer for amba_id terminator
+  gpio: Use named initializers for acpi_device_id array
+  gpio: Use named initializers for auxiliary_device_id arrays
+  gpio: pcf857x: Use named initializers for of_device_id array
+  gpio: bd73800: Use named initializers for platform_device_id array
+  gpio: Use named initializers for spi_device_id array
+  gpio: virtio: Use a named initializer for virtio_device_id array
+  gpio: Unify style of acpi_device_id arrays
+  gpio: Unify style of of_device_id arrays
+  gpio: max77620: Unify style of platform_device_id array
+  gpio: Unify style of spi_device_id arrays
+  gpio: Unify style of pci_device_id arrays
+  gpio: Unify style of various *_device_id arrays
 
-- first proposal: PWM driver + fan hwmon (to read the RPM), all in the same driver
+ drivers/gpio/gpio-74x164.c          |  4 ++--
+ drivers/gpio/gpio-adnp.c            |  4 ++--
+ drivers/gpio/gpio-aggregator.c      |  2 +-
+ drivers/gpio/gpio-altera-a10sr.c    |  2 +-
+ drivers/gpio/gpio-altera.c          |  4 ++--
+ drivers/gpio/gpio-amd8111.c         |  2 +-
+ drivers/gpio/gpio-amdpt.c           |  8 ++++----
+ drivers/gpio/gpio-aspeed-sgpio.c    | 10 ++++-----
+ drivers/gpio/gpio-aspeed.c          | 10 ++++-----
+ drivers/gpio/gpio-ath79.c           |  2 +-
+ drivers/gpio/gpio-bcm-kona.c        |  1 +
+ drivers/gpio/gpio-bd73800.c         |  4 ++--
+ drivers/gpio/gpio-blzp1600.c        |  4 ++--
+ drivers/gpio/gpio-brcmstb.c         |  2 +-
+ drivers/gpio/gpio-bt8xx.c           |  2 +-
+ drivers/gpio/gpio-cadence.c         |  6 +++---
+ drivers/gpio/gpio-creg-snps.c       |  5 +++--
+ drivers/gpio/gpio-davinci.c         |  8 ++++----
+ drivers/gpio/gpio-dwapb.c           | 14 ++++++-------
+ drivers/gpio/gpio-elkhartlake.c     |  2 +-
+ drivers/gpio/gpio-em.c              |  4 ++--
+ drivers/gpio/gpio-ep93xx.c          |  1 +
+ drivers/gpio/gpio-ftgpio010.c       |  3 ++-
+ drivers/gpio/gpio-fxl6408.c         |  2 +-
+ drivers/gpio/gpio-graniterapids.c   |  4 ++--
+ drivers/gpio/gpio-grgpio.c          |  6 +++---
+ drivers/gpio/gpio-gw-pld.c          |  4 ++--
+ drivers/gpio/gpio-hisi.c            |  6 +++---
+ drivers/gpio/gpio-hlwd.c            |  4 ++--
+ drivers/gpio/gpio-imx-scu.c         |  1 +
+ drivers/gpio/gpio-ixp4xx.c          |  4 ++--
+ drivers/gpio/gpio-ljca.c            |  4 ++--
+ drivers/gpio/gpio-loongson-64bit.c  |  4 ++--
+ drivers/gpio/gpio-lp3943.c          |  2 +-
+ drivers/gpio/gpio-lpc32xx.c         |  4 ++--
+ drivers/gpio/gpio-ltc4283.c         |  2 +-
+ drivers/gpio/gpio-macsmc.c          |  4 ++--
+ drivers/gpio/gpio-max3191x.c        | 12 +++++------
+ drivers/gpio/gpio-max7301.c         |  2 +-
+ drivers/gpio/gpio-max7360.c         |  8 ++++----
+ drivers/gpio/gpio-max77620.c        |  4 ++--
+ drivers/gpio/gpio-max77759.c        |  2 +-
+ drivers/gpio/gpio-mb86s7x.c         |  2 +-
+ drivers/gpio/gpio-ml-ioh.c          |  2 +-
+ drivers/gpio/gpio-mlxbf.c           |  6 +++---
+ drivers/gpio/gpio-mlxbf2.c          |  6 +++---
+ drivers/gpio/gpio-mlxbf3.c          |  4 ++--
+ drivers/gpio/gpio-mm-lantiq.c       |  2 +-
+ drivers/gpio/gpio-mmio.c            |  3 +--
+ drivers/gpio/gpio-mockup.c          |  4 ++--
+ drivers/gpio/gpio-moxtet.c          |  4 ++--
+ drivers/gpio/gpio-mpc5200.c         | 10 +++++----
+ drivers/gpio/gpio-mpc8xxx.c         | 25 +++++++++++-----------
+ drivers/gpio/gpio-mpfs.c            |  1 +
+ drivers/gpio/gpio-mpsse.c           |  3 +--
+ drivers/gpio/gpio-msc313.c          |  1 +
+ drivers/gpio/gpio-mt7621.c          |  2 +-
+ drivers/gpio/gpio-mvebu.c           | 13 ++++++------
+ drivers/gpio/gpio-mxc.c             |  2 +-
+ drivers/gpio/gpio-mxs.c             |  4 ++--
+ drivers/gpio/gpio-nomadik.c         |  7 ++++---
+ drivers/gpio/gpio-novalake-events.c |  4 ++--
+ drivers/gpio/gpio-npcm-sgpio.c      |  6 +++---
+ drivers/gpio/gpio-octeon.c          |  2 +-
+ drivers/gpio/gpio-omap.c            |  2 +-
+ drivers/gpio/gpio-palmas.c          | 10 ++++-----
+ drivers/gpio/gpio-pca953x.c         |  4 ++--
+ drivers/gpio/gpio-pca9570.c         |  2 +-
+ drivers/gpio/gpio-pcf857x.c         | 26 +++++++++++------------
+ drivers/gpio/gpio-pci-idio-16.c     |  3 ++-
+ drivers/gpio/gpio-pcie-idio-24.c    |  8 +++++---
+ drivers/gpio/gpio-pisosr.c          |  4 ++--
+ drivers/gpio/gpio-pl061.c           |  2 +-
+ drivers/gpio/gpio-pmic-eic-sprd.c   |  2 +-
+ drivers/gpio/gpio-ppc44x.c          |  2 +-
+ drivers/gpio/gpio-pxa.c             | 20 ++++++++++--------
+ drivers/gpio/gpio-qixis-fpga.c      |  3 +--
+ drivers/gpio/gpio-rcar.c            |  2 +-
+ drivers/gpio/gpio-rda.c             |  2 +-
+ drivers/gpio/gpio-realtek-otto.c    |  2 +-
+ drivers/gpio/gpio-rockchip.c        |  4 ++--
+ drivers/gpio/gpio-sama5d2-piobu.c   |  2 +-
+ drivers/gpio/gpio-shared-proxy.c    |  2 +-
+ drivers/gpio/gpio-sifive.c          |  2 +-
+ drivers/gpio/gpio-sl28cpld.c        |  2 +-
+ drivers/gpio/gpio-sodaville.c       |  3 ++-
+ drivers/gpio/gpio-spear-spics.c     |  3 ++-
+ drivers/gpio/gpio-sprd.c            |  2 +-
+ drivers/gpio/gpio-stmpe.c           |  2 +-
+ drivers/gpio/gpio-stp-xway.c        |  2 +-
+ drivers/gpio/gpio-tc9563.c          |  2 +-
+ drivers/gpio/gpio-tegra.c           |  6 +++---
+ drivers/gpio/gpio-tegra186.c        | 32 ++++++++++++++---------------
+ drivers/gpio/gpio-thunderx.c        |  3 +--
+ drivers/gpio/gpio-tps65218.c        |  2 +-
+ drivers/gpio/gpio-ts4800.c          |  4 ++--
+ drivers/gpio/gpio-ts4900.c          |  2 +-
+ drivers/gpio/gpio-twl4030.c         |  4 ++--
+ drivers/gpio/gpio-usbio.c           | 14 ++++++-------
+ drivers/gpio/gpio-vf610.c           |  4 ++--
+ drivers/gpio/gpio-virtio.c          |  4 ++--
+ drivers/gpio/gpio-visconti.c        |  2 +-
+ drivers/gpio/gpio-waveshare-dsi.c   |  2 +-
+ drivers/gpio/gpio-xgene-sb.c        |  6 +++---
+ drivers/gpio/gpio-xgene.c           | 10 +++++----
+ drivers/gpio/gpio-xgs-iproc.c       |  2 +-
+ drivers/gpio/gpio-xilinx.c          |  4 ++--
+ drivers/gpio/gpio-xlp.c             |  6 +++---
+ drivers/gpio/gpio-xra1403.c         |  6 +++---
+ drivers/gpio/gpio-zevio.c           |  5 +++--
+ drivers/gpio/gpio-zynqmp-modepin.c  |  2 +-
+ drivers/gpio/gpiolib-acpi-quirks.c  |  2 +-
+ 112 files changed, 278 insertions(+), 260 deletions(-)
 
-- V2: Uwe preferred to split the PWM driver from the hwmon one, so the hwmon was
-  dropped from teh PWM driver in favor of a future (fan) driver. To accomplish this,
-  I moved from readl/writel to regmap + syscon.
 
-- V8: Gary proposed to export a function to read the fan RPM as a viable
-  solution. As a result, the regmap/syscon was dropped as it was no longer needed
-  and the function has been exported from the PWM driver
+base-commit: 20a33c6b6cbe7e4805dfb6cd68816937443aa148
+-- 
+2.56.0.rc1
 
-- new patchset for fan driver: the now independent hwmon moodle just call the
-  exported function from thw PWM driver.
-
-If the auxiliary bus is indeed the preferred approach, I'd like to ensure we are
-all aligned, as this would also require refactoring the PWM driver.
-
-> 
->  > Patch 4: arm64: dts: broadcom: bcm2712-rpi-5-b: Add RP1 fan tachometer node
-> > 
-> > Thanks,
-> > Andrea
-> > 
-> > 
-> > LINKS:
-> > [1] - https://lore.kernel.org/all/cover.1790686331.git.andrea.porta@suse.com/
-> > [2] - https://lore.kernel.org/all/adLTwOTbkJ0VQXy6@monoceros/
-> > 
-> > Andrea della Porta (4):
-> >    pwm: rp1: Export helper to read fan tachometer RPM
-> >    dt-bindings: hwmon: Add Raspberry Pi RP1 fan binding
-> >    hwmon: Add driver for Raspberry Pi RP1 fan tachometer
-> >    arm64: dts: broadcom: bcm2712-rpi-5-b: Add RP1 fan tachometer node
-> > 
-> >   .../bindings/hwmon/raspberrypi,rp1-fan.yaml   |  39 +++++
-> >   Documentation/hwmon/index.rst                 |   1 +
-> >   Documentation/hwmon/rp1-fan.rst               |  41 ++++++
-> >   MAINTAINERS                                   |   1 +
-> >   .../boot/dts/broadcom/bcm2712-rpi-5-b.dts     |   5 +
-> >   drivers/hwmon/Kconfig                         |  11 ++
-> >   drivers/hwmon/Makefile                        |   1 +
-> >   drivers/hwmon/rp1-hwmon.c                     | 136 ++++++++++++++++++
-> >   drivers/pwm/pwm-rp1.c                         |  27 ++++
-> 
-> Either case, there is no such driver in mainline or linux-next.
-
-As stated in the cover letter, the pwm driver comes from the prerequisite in [1].
-
-Many thanks,
-Andrea
-
-> 
-> Guenter
-> 
-> >   include/soc/bcm2835/raspberrypi-pwm-rp1.h     |  10 ++
-> >   10 files changed, 272 insertions(+)
-> >   create mode 100644 Documentation/devicetree/bindings/hwmon/raspberrypi,rp1-fan.yaml
-> >   create mode 100644 Documentation/hwmon/rp1-fan.rst
-> >   create mode 100644 drivers/hwmon/rp1-hwmon.c
-> >   create mode 100644 include/soc/bcm2835/raspberrypi-pwm-rp1.h
-> > 
-> 
