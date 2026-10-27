@@ -1,100 +1,112 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.176
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793093025;
-	b=q2DBbHGNvndRR07p+2Ctxs4MIBQg4XPHWtVhCS9ruIPJ55hZOzEqz5mRfL3dJ/S7o/JY
-	 F+kSq5zZNZTaX5SSNhMq3iVj2FL+C4QFJ6yaaEBwr/7fy5YpDowXEyla7hbR75M3ySzDj
-	 z01u82qSEqKoihMYA+g/7az7BGZOc4/60nnlCRCEzgDctr6C8x+bE4fRO3iB8ebqiaM08
-	 L+7UkkyhbGftLTo6Ya2llzBbXxvpE3+KBN6Uv6wiPJowYNBCjoX+ia3SixLy+eiryDkbk
-	 jcDRAsBSYeuD5nMItWjluKxrgs+mt2UuSAVblm/rjwK3N1kIMxrAgjG++CFdctpyW4Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793093025;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.51
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793094359;
+	b=l5ylu/zmLX69Lg7dupaC9uiQ3SqDocsutC0vFLTsv6dpa/lYX9u8w5ZjAbHSfEYuV3na
+	 yvkwgugcdsElnSJvy6Qf8ZI9Kud/rxZYM5pAJ5JD9HurBH1TUOxDFGvcwteRCUnUc2r/B
+	 AvCBjUmSVpY/GXawNbt3UKWN7ZI8EMzZN+oRwMyLct573VUmElRmkzCiubOO8VZq3PlM5
+	 /1nyzvYKLe4LBRTN7N6IaULRQGaLPaMmPoBzRzfDOS2c/pHpTP71RblGlD3vvTMtX4HiJ
+	 iEqboFAuENisjfjekEdZQaXsu6ynznLHfOym88wa70SkLzlXxeHFeOlgKoCO7rxh/Fw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793094359;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=1jACJZEOy9s3Wl+8/QWDpBdu4SymQx/EotUdFAbYztU=;
-	b=zrlaiUx9CGkgNMJdqqwzZJ5DutiST4VYSXppEmtjV+i0vy072ZAz9MGcedZ0AUVpQhZR
-	 wzOP5Z0w+auT1erGiY2Gh2YnsMn/k+oGYFJmXEwUSupVJHcWznbDrmPJJXS6DWI+/x6v3
-	 WEGBs/frf+Il8APRbpJXUCVCAWZAcmFdJDmxQgL3Ip9N1A1H1NFWAS/GmZLBV97HpbpWr
-	 g0Tt0r/NV9CiZgaDZ9+HrhHfy0XRB60Tf2TLiSW9xzMY9vb/vy2Plag1E7KdhuBYdY/vy
-	 02rV5qQqt48Fk6VdAC8zcwT+jEAx0CAXVeqaNUU6GJ7Wxk4rJPD61F4PrL9PGx5eQuw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Gs1hjsad;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.176
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=kxDEiSmJOiwfSYua1Zz9+AGsc9tKlOqwY2WHmMR/V1I=;
+	b=n63OnsI16E6uPmYhP9vk0n8cHDYcLUL3ysMMuBv8KLldq+I3k1O3f2SDJXfgJ6Q4IDts
+	 W0YzTk3ShTM9xq3w5NGXt/8A2XSnM7XDSAjXiRCZkxrtKbMlSn+QjimIHiNzh/Mqla+s/
+	 7aC1Eh2Ik9B8K+nHOext/Pfl0jlg31iqwY6auakIg9a5CX2bUeki5t/o93mqkIb7VCOQs
+	 mlv6zoCK6y3TyZeyqv0FbEmpcekXhSPbVD10nUWkiHJ6ubDUietg4HbCRBxMeSxp4gHQi
+	 W9N0J2lWXJbevFmV7wteEKgDbJPp5diULVjblanYBC5hsK0Wn0i/tvXWuAIpkrDpbRg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=foXTMIMq;
+	arc=none smtp.remote-ip=209.85.128.51
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0BE606A337
-	for <linux-hwmon@vger.kernel.org>; Tue, 27 Oct 2026 09:23:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6E0BE606A337
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC928606A31D
+	for <linux-hwmon@vger.kernel.org>; Tue, 27 Oct 2026 09:45:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DC928606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Gs1hjsad
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-89f28c3ac7bso1282068b3a.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 27 Oct 2026 02:23:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793093025; cv=none;
-        d=google.com; s=arc-20260327;
-        b=r6ze9B8B6KguDnTqW6MfKyH2G006NBYSjQI24S1Z49tJHaTmTQKA81tT0TGefVDgqQ
-         1s8LdurZ/GSVUdbzpPcSpAGX+FA2VvzS5GL31GnKpyOwE3AFgvAxA/aR4z0sDeqt02X1
-         gokjTKaMPX/ICeYBGRL5GfHrLdipLNMQ/dK1WohPsY4Gd+6DHisaxolUrzWWWKPLVSaq
-         DR8JpZCESU2F9fwl8RgynjuzEEKO/XxeDbbOmJCjO9vdWpasj20HXgYb3pCehdtdOLGy
-         UY3upXQXIIPK1r8K07dkLQHHmJYp7TBWX1HJqo9hhnrGVaHeZkHm/o9herFsc4ekgKPo
-         PDww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=1jACJZEOy9s3Wl+8/QWDpBdu4SymQx/EotUdFAbYztU=;
-        fh=2wgHDEpRJ5Snc2NW+vxGVR5nKmzqprjDgn6/CmuQFxc=;
-        b=mzklrQ+2bB9i3lNZE2qj2r426xrE0ptseEKN7sQtfgmPBI8agsOSk1JH1CmTe/fMUs
-         smbeceRIuDm8mATzG7ckTdPcv8MOXUSeP6B5rqzVashvsTA1i5eL++tfovwqGHlWwTVq
-         NL6s0XvH2tK5k7th9prj3pQR79bCXro+kDvN863pZM7/tiMPUAhjGgHlSt0SLXWymGHX
-         EG9RN7GqVoCz6CqdhqFwzKvgYIBOcK0hinIyB8rfVPz0l5Q05un/8gvp6oCVSBE297cu
-         w6Y+wosthf2SZnsEhDjPcSeKxmZk9Vlnq3os1He3cGohIFiQPrXy6F2FuZiZCstIHtvt
-         TJjw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=foXTMIMq
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4a208d93758so44925095e9.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 27 Oct 2026 02:45:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793093025; x=1793697825; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=1jACJZEOy9s3Wl+8/QWDpBdu4SymQx/EotUdFAbYztU=;
-        b=Gs1hjsadhhTrOMc6iSu4+8C6/UqhNf5aVe2ySfU5CC8jEZy6gmQOa2Gj97TPqyElEx
-         436p7r643883lPt4v8gBeVwOqtS3e+w2OLMGYQ7fDpyGD7toTgXSF0E8THZkxLoJh/3E
-         ciiEMBSNlWoqtRxIVYIrDetzHzvn1vahQQ8kKzjixIbmOLzI2tbWIF4zUMgAS87XAkiG
-         qhqUEFOcbLLI6O4nYuNvVJd/+0q3SgtXjI3NU77jD7XegOnXr9ZeEitVxOOVgDIpcVTg
-         9d3XkRg+pP1X5G/+6o+6uKIKHreniXuaBRGteaCuC7aMkjBb2v1tr6bVjqlrs/290nRW
-         4wdg==
+        d=suse.com; s=google; t=1793094356; x=1793699156; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:date
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=kxDEiSmJOiwfSYua1Zz9+AGsc9tKlOqwY2WHmMR/V1I=;
+        b=foXTMIMqZgAtLBq9U6Ye5Y5BEyzAFblKZjMqyPIiGxW0GYSUWzFinU/uKs9vprN6Ye
+         Hz/ClFy9OizHTRH5VyRnVcxo5LRCHq7k+nDdzYf3BcrgdxoIMjpDLN7sR8P1dfxW8GlM
+         Prw4tjEQSlDYcv+4KVQ/R+2qfvyN5r93DDysB+0pt8EoK+BXRwBx5nWWIx4bq3Q7lXB/
+         5U0pymYRzO/nQFKCWbevF/E3kqjzK6yxzrphZXdk0iTzLuEZiWNuQhxk3QDJC9HMyEEa
+         YBRbtfB4dfeU5rHkUnSMNO4xtvfkAh7JjrjmBtJxPlgn7QIzfkhgXHrwW1f9OrBppYAR
+         toyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793093025; x=1793697825;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=1jACJZEOy9s3Wl+8/QWDpBdu4SymQx/EotUdFAbYztU=;
-        b=vkgmKqr1w18A9u2kPtWZhAnl2WfhmrHEkT4peu6YMt0zMbhcRVxkZ4m61PsLlQPtRS
-         wfU2AyRxwJcOY1FafvaaKOPcYuNWO1emjVS+XGVW3ko90A5Iz4OfmaFb+xmMHihlXnI0
-         cl8kI1hCnV3TVD6UHKhrwIK+wqm2ZKk09kdubQOxTecEL6NZakmtOtLis01/JCaOPclz
-         rJSFz3l8Bq25ZR3IiNTfI9caUWwAKrkYXzm7DJe7wXVO1g3U/rSgbYO6v3U4uBkeh/2z
-         vmuuhkgmGXDhz39Suu2yjVMqOKiM7k+qP8j9sYg4y/qLpDcvNNV0DLHGGlRAZFw3rJVp
-         FwAA==
-X-Forwarded-Encrypted: i=1; AKwUvBxreWDnIMl6fhphRtRlkJldzTwMQPf3co8F7y5j2i0gXs3MPYRNmpNygQbOlxlXivtmeYveIL9chxYVrA==@vger.kernel.org
-X-Gm-Message-State: AFq9FYLcDE11CMBfXLURPlCqO5FYpur+7zZRIx7P4T78IMEx8MIamMC7
-	GK/NV763IcSTFMRSoY3mG6KI0HWO2jh43tvIfQbZM+QVKbg1oPA66HHg5kA9s7fB52iT7B41V2V
-	tFQ8XpZvRJSS3l1SSi/iS/q8GWcOsZGbvvA==
-X-Gm-Gg: AYBFou2c46IGVdz+wUloaHm5H2jhpq3SHJIRBRfOW3mLpgroyGNJaUOCDLFZDzsuG7n
-	pfezpz2FeCFBcX5QatdSAtTcpwqmwLvaip3wT45rAQS0SrHKrRa+Bw9UnZZZVrUDnH4q0jh7DFj
-	TaFriESgh8FW3hPdn+dIYhNzc8Q+SxFw8ghruQO7CTB/N7AWoBOlX0LeCD0FJmPYDdJsW2TVzGc
-	Cqd2/bAcV46ycXkGyLIcVITQDA39gNaTBKmNDLF1POe2d5q7JMlzahn5JgZo7o+KXNYFKqBe1Yt
-	09kPWEjpJI5heWlYl2T0sHEi0vu0JqJMkNHt2IK+fJZScwy/IHt1Tw6TJtZjgv/Bfd4H3bBTtzg
-	DP9AMgFnpOTdJ1wTUqOI4J75lYxic7JbFA+4vQlfaWJqXDIUsV6E7rZYm4NHnd0xT6JuzV/2+7L
-	CH
-X-Received: by 2002:a05:6a21:880a:b0:3e2:7e0c:134f with SMTP id
- adf61e73a8af0-3e7af80effcmr5634590637.3.1793093024830; Tue, 27 Oct 2026
- 02:23:44 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1793094356; x=1793699156;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:date
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=kxDEiSmJOiwfSYua1Zz9+AGsc9tKlOqwY2WHmMR/V1I=;
+        b=X5eWf25XQlPlWJT8wXz19GvJkmUwmiIkSd8LMsdmO1yr30I4pOcpMJQlFytYTgb0gR
+         2kiQO0YbCSYrnexefnjYVv7HAcA+HysrAvZOkggcWdoxeCcDrwtz8W4TtwyL2zfJUxI4
+         guvfv+xheaxbZo5OexnNKzxgOixMo3XGPqOT/RXID72y9Gb/IEI0TJ4mCcyMcIf5Rowv
+         Q1VugpfGAcnzWT08YOA/abq2QQLtlz5HRQO17gVKkH7UUVDgtpcOyGS/H43Rvqtv57y3
+         vHqZGw2giibmjnRexMXRL28PAN/9muLujOz8pWDMSgBsNVwC/+uTMZMwCa6ulvdE7+TM
+         dV8A==
+X-Forwarded-Encrypted: i=1; AKwUvBxK/08g8HMcsYdtACAlfNEq1DdIRLhS6pkqKRSDfscDOuo0VELhaHkeLjYSl9xScv+xk9zU6NwvHfhV5w==@vger.kernel.org
+X-Gm-Message-State: AFq9FYKIh4GJjnYCsXDYgTPvyXGEygwTPPEhy3AQr8UkfDPsXfeRlkGV
+	gJG7Yho0ASFipljAz1hsux2bc6PBJFXa8rN6ns1KwZ3VNsksJNiO4+6I9CCnAlfUAls=
+X-Gm-Gg: AYBFou3ZchNFZbPc2A5Pk1m5Psew1mRIYBhUidghsC1hctyd3zmOwfQ6cLJXb2/lqLI
+	kfd9d7CpCRUcDyhiMCwEruPbRwvX7ZfbX8Jmbge8ZI0d4ZemoD4hlsKe+uP9Xp8f9oIgKdNuQsH
+	8RICPTYYeLglIE6NzKAbQaftvcyTz9KvsvHgfloT3Uj73yoee8OVdbEQtMm9tlXRSOGksWrUAWa
+	Vd/Yw4DzsRNkHHI/OkomXQCogVzWAhT01j24uGX/3bLVRLjEOXiyRGMhscqJY1VMzoYb/33EHPT
+	cw5qcg/vk8Bq4ozqZt/DMOIXIjLtDa5lcMtpd1x0mttOv1d31A4SJTplhQq/FqsXmE6Fp+C2FSF
+	6jnmig+Qx98SBUyOCN5gFiOsFJ6xPXJ1WF02zmSajtep2Dj6nVPghXP2aUI6pakCjy2ObQEP856
+	J8srR4EZvn/87y8RuTbXngIC4w/knGLCm6PRl2uj5FJi35P0EDuyIMEwqKktO4bo27lDk4rtQbP
+	mjCEoomqYfxjZw1BZoCUKM3hik7xNHRZAK6HQ1ONbNXj9AvT7kyOtk=
+X-Received: by 2002:a05:600c:4f0f:b0:4a0:27eb:49b with SMTP id 5b1f17b1804b1-4a35acba87fmr202982885e9.30.1793094356233;
+        Tue, 27 Oct 2026 02:45:56 -0700 (PDT)
+Received: from localhost ([82.192.120.214])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a35a2d9280sm251609365e9.13.2026.10.27.02.45.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2026 02:45:55 -0700 (PDT)
+From: Andrea della Porta <andrea.porta@suse.com>
+X-Google-Original-From: Andrea della Porta <aporta@suse.de>
+Date: Tue, 27 Oct 2026 10:49:48 +0100
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Andrea della Porta <andrea.porta@suse.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Gregor Herburger <gregor.herburger@linutronix.de>,
+	Stanimir Varbanov <svarbanov@suse.de>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
+	Gary Guo <gary@garyguo.net>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH RFC 0/4] hwmon: Add fan tachometer support for Raspberry
+ Pi RP1
+Message-ID: <auBzvB8TsvIK8Hik@apocalypse>
+References: <cover.1792748690.git.andrea.porta@suse.com>
+ <7df58d42-517c-4936-88b0-9d044d30882c@roeck-us.net>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -104,34 +116,142 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261026-b4-m9e-ext-sensors-v1-0-644d389b2de1@demangeot.net> <20261026-b4-m9e-ext-sensors-v1-3-644d389b2de1@demangeot.net>
-In-Reply-To: <20261026-b4-m9e-ext-sensors-v1-3-644d389b2de1@demangeot.net>
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-Date: Tue, 27 Oct 2026 10:23:33 +0100
-X-Gm-Features: AclHuK8-pbrEOhB7S4T7aoKC56lROm_LkCCEjp9fGZ_EnNBKx3YVsCLkjoXmb1g
-Message-ID: <CAB95QAQaogxV6KO5kpv9RBpzhhmH_N3Dvvy=nqWHOG6qAQB_aw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] hwmon: (asus-ec-sensors) add water temperatures for
- MAXIMUS IX EXTREME
-To: remy@demangeot.net
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7df58d42-517c-4936-88b0-9d044d30882c@roeck-us.net>
 
-Hi,
+Hi Guenter,
 
-On Mon, 26 Oct 2026 at 09:57, Remy Demangeot via B4 Relay
-<devnull+remy.demangeot.net@kernel.org> wrote:
->
-> From: Remy Demangeot <remy@demangeot.net>
->
-> The MAXIMUS IX EXTREME has a second EC (firmware ID "RGE2-Z270-0109"),
-> not handled by the ACPI EC driver, at I/O ports 0x68 (data) and 0x6c
-> (command/status). It uses the standard EC protocol (0x80 read, 0x81
-> write) and the same bank register (0xff).
+On 09:24 Mon 26 Oct     , Guenter Roeck wrote:
+> On 10/23/26 03:15, Andrea della Porta wrote:
+> > Hi,
+> > 
+> > This patch series adds fan tachometer / RPM monitoring support for the
+> > Raspberry Pi RP1 southbridge found on the Raspberry Pi 5.
+> > Please note that the patchset in [1] is a prerequisite for this one.
+> > 
+> > On the Raspberry Pi RP1, the active cooling fan speed is controlled via
+> > the RP1 PWM controller. In addition to generating PWM signals, the RP1
+> > monitors fan tachometer pulses. The pulse measurement and RPM calculation
+> > are performed autonomously by the RP1's onboard Cortex-M microcontroller
+> > core, which periodically writes the computed RPM value directly into
+> > dedicated MMIO registers located within the RP1 PWM hardware block.
+> > 
+> > During earlier discussions, Uwe Kleine-König explicitly indicated a
+> > preference to keep the core PWM controller driver (drivers/pwm/pwm-rp1.c)
+> > focused strictly on PWM duties, rather than bloating it by registering an
+> > hwmon device directly from within the PWM driver (see [2]).
+> > 
+> > Because the Linux PWM subsystem currently lacks a generic framework or
+> > consumer API for reporting hardware-calculated tachometer readings, this
+> > series implements a standalone hwmon driver (rp1-fan) using the following
+> > structure:
+> > 
+> > -  The PWM driver exposes and exports rp1_pwm_read_tachometer() within a
+> >     dedicated symbol namespace ('RP1_PWM') to read the RPM value from
+> >     the MMIO block.
+> > -  A companion DT binding (raspberrypi,rp1-fan.yaml) introduces a vendor
+> >     property, 'raspberrypi,pwm-tachometer', to link the fan node to the
+> >     PWM controller node without overloading or abusing the standard 'pwms'
+> >     property.
+> > -  The rp1-fan hwmon driver parses this phandle, establishes a device link
+> >     for proper runtime and unbind dependency management, and registers the
+> >     standard hwmon 'fan1_input' sysfs attribute.
+> > 
+> > An alternative architectural approach to the DT phandle + exported helper
+> > method would be to model the tachometer as a child device using the
+> > auxiliary bus framework (drivers/base/auxiliary.c). In that model, the RP1
+> > PWM driver would instantiate an auxiliary device for the tachometer, and
+> > the hwmon driver would bind to that auxiliary bus device without requiring
+> > a separate DT node.
+> > 
+> > However, adopting the auxiliary bus would require a more significant
+> > rework and refactoring of the existing RP1 PWM driver.
+> > 
+> > I'd appreciate any feedback on whether the current companion driver with
+> > a dedicated DT property is acceptable, or if an auxiliary bus-based
+> > refactoring of the PWM driver is the preferred upstream path.
+> > 
+> > Patch Breakdown
+> > ---------------
+> > Patch 1: pwm: rp1: Export helper to read fan tachometer RPM
+> > Patch 2: dt-bindings: hwmon: Add Raspberry Pi RP1 fan binding
+> > Patch 3: hwmon: Add driver for Raspberry Pi RP1 fan tachometer
+> 
+> This seems conceptually wrong.
+> 
+> Have you considered implementing the hwmon driver as auxiliary driver
+> and accessing the register in question through regmap ?
 
-I'm not fond of re-implementing EC access logic in this driver. I
-believe the ec.c driver needs to be changed to allow us to simply
-create another acpi_ec structure to operate the second EC.
+Yes, I also proposed that in the cover letter because auxbus seems also a viable
+solution.
 
-Cheers,
-Eugene
+The current implementation is a consequence to the discussion about the companion
+PWM driver, from here (and the revisions that followed):
+
+https://lore.kernel.org/all/cover.1775223441.git.andrea.porta@suse.com/
+
+To give a short and hopefully coherent view of the decisions, here's a breakdown:
+
+- first proposal: PWM driver + fan hwmon (to read the RPM), all in the same driver
+
+- V2: Uwe preferred to split the PWM driver from the hwmon one, so the hwmon was
+  dropped from teh PWM driver in favor of a future (fan) driver. To accomplish this,
+  I moved from readl/writel to regmap + syscon.
+
+- V8: Gary proposed to export a function to read the fan RPM as a viable
+  solution. As a result, the regmap/syscon was dropped as it was no longer needed
+  and the function has been exported from the PWM driver
+
+- new patchset for fan driver: the now independent hwmon moodle just call the
+  exported function from thw PWM driver.
+
+If the auxiliary bus is indeed the preferred approach, I'd like to ensure we are
+all aligned, as this would also require refactoring the PWM driver.
+
+> 
+>  > Patch 4: arm64: dts: broadcom: bcm2712-rpi-5-b: Add RP1 fan tachometer node
+> > 
+> > Thanks,
+> > Andrea
+> > 
+> > 
+> > LINKS:
+> > [1] - https://lore.kernel.org/all/cover.1790686331.git.andrea.porta@suse.com/
+> > [2] - https://lore.kernel.org/all/adLTwOTbkJ0VQXy6@monoceros/
+> > 
+> > Andrea della Porta (4):
+> >    pwm: rp1: Export helper to read fan tachometer RPM
+> >    dt-bindings: hwmon: Add Raspberry Pi RP1 fan binding
+> >    hwmon: Add driver for Raspberry Pi RP1 fan tachometer
+> >    arm64: dts: broadcom: bcm2712-rpi-5-b: Add RP1 fan tachometer node
+> > 
+> >   .../bindings/hwmon/raspberrypi,rp1-fan.yaml   |  39 +++++
+> >   Documentation/hwmon/index.rst                 |   1 +
+> >   Documentation/hwmon/rp1-fan.rst               |  41 ++++++
+> >   MAINTAINERS                                   |   1 +
+> >   .../boot/dts/broadcom/bcm2712-rpi-5-b.dts     |   5 +
+> >   drivers/hwmon/Kconfig                         |  11 ++
+> >   drivers/hwmon/Makefile                        |   1 +
+> >   drivers/hwmon/rp1-hwmon.c                     | 136 ++++++++++++++++++
+> >   drivers/pwm/pwm-rp1.c                         |  27 ++++
+> 
+> Either case, there is no such driver in mainline or linux-next.
+
+As stated in the cover letter, the pwm driver comes from the prerequisite in [1].
+
+Many thanks,
+Andrea
+
+> 
+> Guenter
+> 
+> >   include/soc/bcm2835/raspberrypi-pwm-rp1.h     |  10 ++
+> >   10 files changed, 272 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/hwmon/raspberrypi,rp1-fan.yaml
+> >   create mode 100644 Documentation/hwmon/rp1-fan.rst
+> >   create mode 100644 drivers/hwmon/rp1-hwmon.c
+> >   create mode 100644 include/soc/bcm2835/raspberrypi-pwm-rp1.h
+> > 
+> 
