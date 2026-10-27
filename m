@@ -1,59 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.227.15.15
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793109995;
-	b=cknlw9yEO1Y7Onl6LZken7NDwV5Gaqxb5aU+InB50FvfEsjlFUxIoTeEIUhM9O8i5zDx
-	 q1tlK7ElTCCyF/3KmvfJRcxWzrACnOrFl4SSbjn71ApPRmAhPaQTamlzjA7TkALpWImDF
-	 dgkdFG7v/1DMJjhF26zA96rABdsPKl6qfGg3CV1pKBFDy0Q03sC6Fcp3HXWAdyED/z7Ky
-	 pKZgNVKh3P8LlJfJUK4209jcK4pbPk9tJX/HDKlQiCIPdt+EqRUv48oWie/OeBAb2DKVL
-	 aenT6oAO2fmNNJGS33SeKqGbvthu4Us3pUB2YUH9YKmhEIon7WCuK0Na30FydQozHaQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793109995;
-	h=DMARC-Filter:DKIM-Signature:X-UI-Sender-Class:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
-	bh=ngY32Jt9QPGZSTlFXtTgTm8s6NAGNxB6e/Z1Utv4++A=;
-	b=BLGw8778+pJDPRG0YTZDSO2jXbbvd8M3NtlozHS4XkfceHZZEW1++ufIt3P+spZLoUAp
-	 L9qXbiXQj+AEyhy8YjwrNuJf9jA4DetUgeeToXHvo3UIeCws7F3ssq7QM6Ut2CgVBcogx
-	 3QK9ihhElZ93cE4XT93LabZ14Ddf4/egaOXnXRqL/+xX6t4V/lGLu1pR7xXhNiQW3Czlu
-	 2gakFQKYBPF6lV5vzf/zOUu+3O5n4qxLCQy7C75jiyNAqvR8cD5rhDXmm2DXAK1qbEiBu
-	 uezOFTQITYcBITiIxLBQuymxLGhsyemzIbflQUXvglZHnOrP7zhM5aKxfplpY3IZFDg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmx.de;
-	spf=pass smtp.mailfrom=gmx.de;
-	dkim=pass header.d=gmx.de header.i=w_armin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=takSi8BY;
-	arc=none smtp.remote-ip=212.227.15.15
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.196.110
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793112702;
+	b=E2GDXeS2/XJl8LJxPNNGZUWpf4/AKnRjf4JO9bkEZSgu9PrJmdcGn6FAigrMYSvgipAe
+	 WnLBlsekzAcf+aMJJsKQTVUkRHGFADsBAj7d0nbNGNpU3v8FMBNRWo1Y8uei4ez8lac79
+	 NkeC3nt623K4NGSpwJEUYNRFpFnFZwxtSWLlkN18EEfytpq6ArX9YU8Z7dtZcGi6uOZWn
+	 GgFNsCUdjhej2aaEG4foGXE39I4Zyc4dXvNdayqv9j2K5bNQo2mL37b8kn4rWgnTloArq
+	 +3Kz3+uCW+HC7bbNNISfASIwQR3J/RcQTyxogqayFh8ZI+kNrI3jJdgdwlZUGItellw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793112702;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:
+	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:From:To:Cc:
+	 Subject:X-Mailer:References:In-Reply-To:X-ClientProxiedBy:
+	 MIME-Version:X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=W0tAYPaDOA4f756PfZHjoOunZ++lQmvM3dsZP3bK4pQ=;
+	b=mcf5e7zP4W+bJKbMBYa99hGjR+F0+QkaRr3VvJxnkuZku+yRXDoPe6rP+UBbqJJOVLg7
+	 lbC29NxBd9LHWn32DILsuveOcZFK8VkWFHyl/rtFWt3oFE41mnj/+jNwN/mfzzefrKHiu
+	 PQtKKs8WjaJToKjBlmE6gH/qtKcT/tHDDqvtI3n5gALH4bapWBu0S8RpXo060HsJzTl52
+	 eq66nN/vSa+CC2ESEghJan+7+It1dRTkt+wbrYUsaFj+oBIruV0VC8YPcWelSAF0Rk1/9
+	 PUvcrGfolL29K3cglEmpFtFUIMP8in04Q8g2cJPpMnCyYRwpZYAYrBcj663cL7fXDXA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=garyguo.net;
+	spf=pass smtp.mailfrom=garyguo.net;
+	dkim=pass header.d=garyguo.net header.i=@garyguo.net header.a=rsa-sha256 header.s=selector1 header.b=iWv9x1NB;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.196.110
+Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020110.outbound.protection.outlook.com [52.101.196.110])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A46C606A31A
-	for <linux-hwmon@vger.kernel.org>; Tue, 27 Oct 2026 14:06:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A46C606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA606606A31A;
+	Tue, 27 Oct 2026 14:51:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EA606606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmx.de header.i=w_armin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=takSi8BY
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1793109992; x=1793714792; i=w_armin@gmx.de;
-	bh=ngY32Jt9QPGZSTlFXtTgTm8s6NAGNxB6e/Z1Utv4++A=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=takSi8BYh1JVGMuHCZqT0eJ2Li1AK6btTazcGdapGZukEbpkKp+D/xVZ3nQpbbCI
-	 p1LqyH2uKQth308tmF4Yx4a1T3XMhL9v3Z5ffT7mWiuBlfHz0DcnOfWCW5Ufyb8O1
-	 etKe6CwrMsV7Y7Qyr+RCCmAZsNDUmBkaLU2Ku66XsQFyfQwhLgUzCnxrnleQSInA9
-	 ed/uqNzueYguHCRwmNK15T7JJfrhQ5zQPwhgGqfDUgQNMGzW+p/wg9db0qShpmeal
-	 VKKn56K25OwDcl1fk7e/1naarlDurn5PZv7+junABC9dJpfji3GE+CdKgIjQyZRxE
-	 Apk71zgbHeQD0UVh1g==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N6bfw-1wUG181GiU-00qpFF; Tue, 27
- Oct 2026 15:06:32 +0100
-Message-ID: <6be33528-a1b1-4aea-8cd5-2086a430bbde@gmx.de>
-Date: Tue, 27 Oct 2026 15:06:31 +0100
+	dkim=pass (1024-bit key, unprotected) header.d=garyguo.net header.i=@garyguo.net header.a=rsa-sha256 header.s=selector1 header.b=iWv9x1NB
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=lKDhRteJa7sXN1uXZ/fwYB3wxLEOznMWnvLKavl6ugWisX7nBD5jTj6M+sR7sMaUF+kZ215jLM23WGCNKvX4XyQXIRLwYXa3+Q89Uq9jKinWXyEb/6Xf4lOlCxWOJhDLchPQ/hoin9sRm0mUKZOMcVk+VgtcCfB43ymgqPbnj0DUrnWo5vQvCBH/ryQtHOViwE8WwY5/7ZQehVmkCWCS5qZxbRDInro21T1pxoCyCXqz19ARyiG4DGhxTk+0Z70qBcCuk/qp1JbVnYrxYbBaWHVk+/jEKLNKLGd5c0hz/RdRO4F7mQjQA0PBXJyWByZpRHTh+C3eEdk+NboKGbWzvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=W0tAYPaDOA4f756PfZHjoOunZ++lQmvM3dsZP3bK4pQ=;
+ b=KLUA+rGJjZZ9yHPrSZy8pT+lsarOotfbQAF/Rfj5gdcrVMssEBDtmMTiOD6q2u+tfkCsD9XeRq+Xgg6JgIwDB7ihpgGOy3zEZWy+lrxifuCWZdKB8WLocBFYXd7kzOV8CplMvhnF9U5HwG3MDAkDDwQU/Yp8sC07c1dv9A8+97zo+2hqrRi2sjh1pr7MPuL1XOzWd1e3Y9wFLXtHGT66F2LkohCBJg3182hXOedr0Gzw+/Iq56MUOvCmI/RT+mBKjdrONiZH4Dhm63yHM1aTUOyiRTljyT54+oC8OudDhkK8mjhIuk5ICaDoqtcFXYytYgvzOjOd4/yw1zwcG+LNNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W0tAYPaDOA4f756PfZHjoOunZ++lQmvM3dsZP3bK4pQ=;
+ b=iWv9x1NB2cqjb7vKnPd2exvfbKN1Xdu33WhnvQwDcXEYXpjskwXTi1+rj5z75yzNMrhOh8plX25hhyQ27cNUIqerpOJjssdbIaQN2U8LTiBrd3xtjKdCpa5DWFtXhSWEWdg7A5CScMGqCigXcrA8yu2dOco7Pc77m0/tgvQ2bzU=
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1cb::9)
+ by LO3P265MB1961.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:bc::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.22; Tue, 27 Oct
+ 2026 14:51:35 +0000
+Received: from CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::55f6:f98b:7fad:c6e3]) by CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::55f6:f98b:7fad:c6e3%2]) with mapi id 15.21.0546.021; Tue, 27 Oct 2026
+ 14:51:35 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 27 Oct 2026 22:51:15 +0800
+Message-Id: <DMFPE71J8205.3FZKD5BKW3U7C@garyguo.net>
+From: "Gary Guo" <gary@garyguo.net>
+To: "Guenter Roeck" <linux@roeck-us.net>, "Andrea della Porta"
+ <andrea.porta@suse.com>
+Cc: "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
+ <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>, "Florian
+ Fainelli" <florian.fainelli@broadcom.com>, "Broadcom internal kernel review
+ list" <bcm-kernel-feedback-list@broadcom.com>, "Jonathan Corbet"
+ <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>, "Randy Dunlap"
+ <rdunlap@infradead.org>, =?utf-8?q?Uwe_Kleine-K=C3=B6nig?=
+ <ukleinek@kernel.org>, "Ray Jui" <rjui@broadcom.com>, "Scott Branden"
+ <sbranden@broadcom.com>, "Laurent Pinchart"
+ <laurent.pinchart@ideasonboard.com>, "Gregor Herburger"
+ <gregor.herburger@linutronix.de>, "Stanimir Varbanov" <svarbanov@suse.de>,
+ <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-rpi-kernel@lists.infradead.org>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <linux-pwm@vger.kernel.org>, "Gary Guo"
+ <gary@garyguo.net>, "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH RFC 0/4] hwmon: Add fan tachometer support for Raspberry
+ Pi RP1
+X-Mailer: aerc 0.22.0
+References: <cover.1792748690.git.andrea.porta@suse.com>
+ <7df58d42-517c-4936-88b0-9d044d30882c@roeck-us.net>
+ <auBzvB8TsvIK8Hik@apocalypse>
+ <53a4b4bb-271c-4d2d-a9e4-cec4e0ce214b@roeck-us.net>
+In-Reply-To: <53a4b4bb-271c-4d2d-a9e4-cec4e0ce214b@roeck-us.net>
+X-ClientProxiedBy: TY6P301CA0007.JPNP301.PROD.OUTLOOK.COM
+ (2603:1096:405:3be::17) To CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:400:1cb::9)
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -63,143 +114,152 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: (dell-smm) Add Dell Pro Micro Plus QBM1250 to
- fan control whitelist
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: pali@kernel.org, linux-hwmon@vger.kernel.org, serjo32.games@gmail.com
-References: <20261024035735.6810-1-W_Armin@gmx.de>
- <95b6055c-27ad-4e5a-bbfc-87722600b20b@roeck-us.net>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <95b6055c-27ad-4e5a-bbfc-87722600b20b@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Zu9VQpm2h+KjiqHxWs2LXMyC79LAzjGEF65uxUmYIxDvjiJuuMS
- 6RJ3JtqBzh2NLIJLxItQtoGudIutQKqNZ/96WWOPN4zZ/Pq7R2aERT243IRD5fCOowa7Zdp
- iBPN0wTnUcFIfh12R0RvflCMua7US7d3vSSrdpfFOfr6sjHQzH+3Fbpkr/+3CVYi8uHaZ8O
- PaLr9x2M2VXiLq7Wa9rkw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:ylAcqOQ0YSM=;DEDoeGXCj82EKNWXxzo3Tl1W1w0
- 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
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CWLP265MB6051:EE_|LO3P265MB1961:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54fb2695-c3d5-4e74-dcf7-08df3439cbfc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|366016|23010399003|10070799003|376014|1800799024|18002099003|22082099003|261026140227099003|261021121427099003|56012099006|4143699003|10067099003|261021123027099003|261009223027099003|261022105027099003|261026121527099003|260925021911599003|260925022911599003|260925021311599003;
+X-Microsoft-Antispam-Message-Info:
+	maYIBDOfQfFGMxIM5Irf4+rEPPxj7BXTbLUoyn+css2gqcvevKbYZPhbd/RzPbno567Y/Rl3Mu1WQG/6h1bhb+Jn8el2mhgigBUQXpXcRBw5YLZ4aBR5XFSMF8/oZL4W38ovSOgMGyGwtgBy5usNgesZeBzJJPODUZjBGfpM3xIf6czXfz861a8udpzjouMLy/q9wQYYIJ7CpJ0Ldf6K1QV7CWnoJmEV/3rIeFQFaXpdGCsiTICLNQuoPn+i2vpO8gqiOgWh21YVIljCDPdDLv+nPzJP8omqjN5fGrN9QpmHYsjkhNaqEED3smvTj+kQ8KugCANu612EQxokPSF9Fm41q8kwjOTpTJyub1XBWG9HxAXZjbb32SJmCCGiUbxx1aGvV7gk6ATuNe3SgO6J/tBORaA8jqHjOGKs1fe9AYHdDq7yeDK3rBQk3IpNrG0mkHbD2Yy57FPQuYQx1mEwvb10HhP0c9LIMwYG25/8AAzIStdh75BkAYsSM01dekrScm61rj/7mkWjEmVsrBdz2YCPbx9X5wENK7YxeYKkSRAWINwpCvZUlT6Lj7CVx55qrt4LfEp4FxARpdlc8t5/jP2FrJdyD/XfxWUlGBQ11mNrDICj8Ot6D0DTY8QiA63A
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(23010399003)(10070799003)(376014)(1800799024)(18002099003)(22082099003)(261026140227099003)(261021121427099003)(56012099006)(4143699003)(10067099003)(261021123027099003)(261009223027099003)(261022105027099003)(261026121527099003)(260925021911599003)(260925022911599003)(260925021311599003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?T0JVWUx2RlJGY251djdNckY2b1M1ZUk0SjlSSWVyVzBRRUlwdDJaYzBIZFJU?=
+ =?utf-8?B?RllDZ3d0a3Y3ZE9rUnJROTFKUGVJczFoRHk2N1F3L1ltZ0w3OWQ1d00vbk12?=
+ =?utf-8?B?T0RmVUU3aHJBRFhpWlBVU1dtMTdBbElJVHpkWHMvd0I0L3RmVXp6eUV1L2V0?=
+ =?utf-8?B?M0RBZTlRcTlkb1dTVkhuajFuUloveWZublNxZGs5K09MbVBGTVhPZTdkTVhk?=
+ =?utf-8?B?dGxwK0lTek50cFZqZVA1dHA5VzFTNG85TmswSjl5bEdsM3pRT3puR3UxRDZz?=
+ =?utf-8?B?NnFKaDNJN0RYQW4wSEVwdDVWQy9NY1I2Qk1ZUHI1QUdJWU5nMi8yRXVBNE54?=
+ =?utf-8?B?ZzdLd3I3ZTI0dm94dWRuUTJVdGtZWWN1QTBaZjZJSWxMZ0hEbGdoSkhnQVZI?=
+ =?utf-8?B?RTJFRzFtdCtaSHVVeFdPS0dwbzFFM0YyZHoybTVwV3ZLQWxNb3RWSElqY2lZ?=
+ =?utf-8?B?ZjJ5Vy9QWFNvejBCbnZia1FhZkgzZEttVnphSnhZekFmVkQvRGt3YzhrZUIz?=
+ =?utf-8?B?NVEzbEpJcG0zcTIyYUdjSjFyUGNpTzlBeTlXZnRuaE0zK2RObEI1bnFVN2da?=
+ =?utf-8?B?Z3UySEtpQjlCZW5xU0tpNE04bDdvSmkyTXdod25TUGlwSFpEUTZ5aU1IQTRR?=
+ =?utf-8?B?RjRxcFJyWjJiSUtVdEEzYSsyalliMGllRGYrUVVmUXNNVWN6OWpnUlNyQmVy?=
+ =?utf-8?B?MkVXaDRUemVtN2MrTUhxRDZrNXgvc0pqamREQk1YQVh0RlVlemVGbllJaVZL?=
+ =?utf-8?B?blA0KzNZNzliNTFyZUxpd3J2RnMzTFV0bXQxZHEvYzVrekhPV1JOM0NxS3Fy?=
+ =?utf-8?B?T0lhcFZydUFrOHA3Yk5neExlak5zdzd4NG5KSU9sS0N2WWttcEpLeUwzN05F?=
+ =?utf-8?B?RS85N0lDclZkRDBaMWJRZTR1QVE2NzNpWDR0ZEYvT3FFaC9lYjRPekw4S1Va?=
+ =?utf-8?B?UjlzZUtPaFArZVVqZnlvSEF1UTg3M1JXUnFVM3YwRTM2VlBjRWZVTnM0QThm?=
+ =?utf-8?B?R1VDTWd6YnptQmNWQzJjWXZTYnN5NmpqMCsyampBYXRCZ3RzZzMwa0EyYnpT?=
+ =?utf-8?B?aUVrV01ZdEcxbE05aWVzSlZDd21GRVpCc3A3d000TERneHByVlJJdllGcnBL?=
+ =?utf-8?B?Ry8xTStZTTQrWEp2MUhjU1Z2MUtsaGJwcWlRUlFBRG92Qy9mY0NLeEVXeVlK?=
+ =?utf-8?B?K0dJTU82TWttcyt0ZTdEaElkOGxhV1RreVI3NGtHRG9RNHZ3MUJRYTdUU0dB?=
+ =?utf-8?B?Sjh4cWZNT0I1Q2FmRjlUa3dTZ0ZEQmlZRTQwZVJ3ZmFBTzI0dGVXODZSbTlE?=
+ =?utf-8?B?RmxUZVR5WmxGaFozYmRNUEJZejluZjFKNFZvbzM5MWdFdkY3TEkwRThuR1VC?=
+ =?utf-8?B?bjJKc3JiZmxiQ1NVSlVnTzdKZmR2ZVNrclNuOVpvTUF3V2pJQ1Nyelc1Z0NB?=
+ =?utf-8?B?RklLSnVmYXhtTks1WlNaUUl0T3JKT3FDVmd4a1ZoZ29ibFZ4Qm44bkF3cmdQ?=
+ =?utf-8?B?OHorbXl6Nm9NaDV5ZDJUbUhsMlE3eitnVldHQzUzejNwU29YUXBlTENzeUcw?=
+ =?utf-8?B?endVeVlsRStyN2MwSU1PTTkvUzBueXgyaWFwTk9BdU5YUUNLSmFpNXV0Qy9h?=
+ =?utf-8?B?bXBBeW9SN05ZOFZaWHJMR2RXRkhJcXpxYjFoT0JlRXlXM2xnbFJBWmhyMlFG?=
+ =?utf-8?B?bUoyRmNMRlFLNFZuUzE5c1B6SGNOWUxMbTVkVGljelJ5THgvK0JLRHpsblZC?=
+ =?utf-8?B?TDdFTFRTRFVNU1R2Y3FtWlc0RFZmcmdaS3NTYjcyOTRNbTJWL1RKci9VbTJO?=
+ =?utf-8?B?bUZXS010QXlOYi8wd3F1UVhOcE1TVVZWMUZYajhZOVVlckhDcXB6L2djTmhX?=
+ =?utf-8?B?bHR3K2JLWWV1L2Q0VW1TekNlZk14MUFNaUhNMnd0cHU3d0FuUndLQ3BlN3U3?=
+ =?utf-8?B?UGhpVHc4TVpkaTBVRlNlbkcxNjN2d3VFMmwwSkhXcXFEdFNFN3UzNHhNY2xE?=
+ =?utf-8?B?and3blZvSEUrc0pqejlKcWJldG05L0NQRE1QTTRzQ2Z3MTRvNnNJWklDdXlh?=
+ =?utf-8?B?TW80LzZQdXNlZ09OMTllS0xtNEpyRVNMOU9wN2JpWnZRS1dmektSbk9UQjE2?=
+ =?utf-8?B?QklIalo3c0tkczNPWHFzK2VDZU90Q1RSQ0JmUlpRNTV2T0NPTFBTbkxxbnV2?=
+ =?utf-8?B?VVJVYlhWVjNtSDhqeGhWVExrOG9pdFlRUUpQalc2MFFLRkExd1NhdjJienJN?=
+ =?utf-8?B?aG1ISDNlTDZ2OVg1UXk5RkkzMUM2eGNIS3RZZXFMMFNuQzNRVld5dTg1aUR2?=
+ =?utf-8?B?UGZkQkpLS3g4eTlkWWl0Nzg2ZXBKaDVjb3ZUYVVnRzlRdjhMS0pIa3k5SzB3?=
+ =?utf-8?Q?+qpSlrfEfBnvQH2gRWSaMMWkXoR6VoBoRFcqv?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54fb2695-c3d5-4e74-dcf7-08df3439cbfc
+X-MS-Exchange-CrossTenant-AuthSource: CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2026 14:51:35.3511
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6yc9wjNsAOubu3nRK7HzqJLoNdm2s3mjDDJ43sxPofnXPx6rHZXb0zWLBCxgh53wz8ecN4DD4JI7iuBXXFfxtQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO3P265MB1961
 
-Am 26.10.26 um 01:18 schrieb Guenter Roeck:
-> On Sat, Oct 24, 2026 at 05:56:45AM +0200, Armin Wolf wrote:
->> A user reported that the Dell Pro Micro Plus QBM1250 needs to be
->> whitelisted for the special SMM calls necessary for globally
->> enabling/disabling BIOS fan control.
->>
->> Acked-by: Pali Roh=C3=A1r <pali@kernel.org>
->> Closes: https://github.com/Wer-Wolf/i8kutils/issues/20
->> Co-developed-by: Sergei <serjo32.games@gmail.com>
->> Signed-off-by: Sergei <serjo32.games@gmail.com>
->> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
->> Tested-by: Sergei <serjo32.games@gmail.com>
->=20
-> Applied.
->=20
-> Thanks,
-> Guenter
+On Tue Oct 27, 2026 at 9:48 PM CST, Guenter Roeck wrote:
+> On Tue, Oct 27, 2026 at 10:49:48AM +0100, Andrea della Porta wrote:
+>> Hi Guenter,
+>>=20
+>> Yes, I also proposed that in the cover letter because auxbus seems also =
+a viable
+>> solution.
+>>=20
+>> The current implementation is a consequence to the discussion about the =
+companion
+>> PWM driver, from here (and the revisions that followed):
+>>=20
+>> https://lore.kernel.org/all/cover.1775223441.git.andrea.porta@suse.com/
+>>=20
+>> To give a short and hopefully coherent view of the decisions, here's a b=
+reakdown:
+>>=20
+>> - first proposal: PWM driver + fan hwmon (to read the RPM), all in the s=
+ame driver
+>>=20
+>> - V2: Uwe preferred to split the PWM driver from the hwmon one, so the h=
+wmon was
+>>   dropped from teh PWM driver in favor of a future (fan) driver. To acco=
+mplish this,
+>>   I moved from readl/writel to regmap + syscon.
+>>=20
+>> - V8: Gary proposed to export a function to read the fan RPM as a viable
+>>   solution. As a result, the regmap/syscon was dropped as it was no long=
+er needed
+>>   and the function has been exported from the PWM driver
+>>=20
+>> - new patchset for fan driver: the now independent hwmon moodle just cal=
+l the
+>>   exported function from thw PWM driver.
+>>=20
+>> If the auxiliary bus is indeed the preferred approach, I'd like to ensur=
+e we are
+>> all aligned, as this would also require refactoring the PWM driver.
+>>=20
+>
+> Let's say it that way: If you don't want to implement the auxiliary drive=
+r,
+> and you insist using the exported function, I would prefer for you to go =
+back
+> to the first solution. The one thing I really dislike is conceptually bro=
+ken
+> code, and I consider the current approach broken. Your call, but the one =
+thing
+> I won't accept is the code with the exported function.
 
-Thank you :)
+I agree on the auxiliary driver part. However, I don't think EXPORT_SYMBOL_=
+NS is
+an issue, and regmap is not the right fit here:
+
+- Previous version of the PWM1 patch series publish regmap using
+  of_syscon_register_regmap, but this cannot be undone -- which needs to ha=
+ppen
+  on PWM device unbind (the RP1 PWM device is itself platform device, but R=
+P1
+  chip itself is PCIe device which must be removable).
+
+- The tachometer register is not its own separate register, but rather (re)=
+using
+  the phase control register. The phase control is not implemented in the R=
+P1
+  PWM driver on the list yet, so this is currently a simple register read -=
+- I
+  can see that RP1 PWM driver need to take special care to about the tachom=
+eter
+  reading if the phase control is implemented.
+
+  For the two reasons above, I think the way that tachometer is read should
+  really be an implementation detail of the PWM driver and not for the hwmo=
+n
+  driver to worry about, so I suggested using EXPORT_SYMBOL_NS.
+
+- EXPORT_SYMBOL_NS is the documented way for exposing functionality from pa=
+rent
+  device to auxiliary drivers: https://docs.kernel.org/driver-api/auxiliary=
+_bus.html
+
+Best,
+Gary
+
