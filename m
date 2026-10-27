@@ -1,81 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793118067;
-	b=En9zpkG4nZQOIqxPN4QmjkJwag+Tyj6x07R0UY6a3+WW8nPbzKzmiDiR1ync4/jIhVAa
-	 qorzLkCrCQwbUgw9OWATHjc242sKuUq2vcw8Gh0hakhFyV8+fTMS4pGx4RwoJCJ9bwitU
-	 Ty5xSBqiJpxvL5Q4vAL7mFdbspXwAXrr65pj4fM59GX8Cwv9lGYzPLyCRpLbaDh9lxwVF
-	 Z9RdJuoKlwyoF/1Lhyk18KU+/zzluDI/N+I5Q9xHlldPKu2tKI/2cL9SuxjuM7hCurdox
-	 hzSv6ldI0JyKcGKKyZHCGTgDNqRPoTjt9f3mq7jAIIKWd+lLSqJJHlSkTmJO/vMr1bA==
+	t=1793118743;
+	b=sN8Duze6fWAE5LW9QCsoyO/TbH8lDY1wavCKw1/S1B0mOwtcM+XQF1vhQa/jtpGeiTJy
+	 oSRUmNFXp4EjyHLe5+VPNMAF6dK7AXs7OmkUZHFEsJVhVYfza136Ek4rNiFMTJtWOuRUX
+	 kRSsPf8Mvtk2v/QerZ9aitQDe5UwdL4fVDz2c4j+BO1Bkmj4pfCQhIRLQlqVY5J3W3zpd
+	 5aryKxMbyOiCZUednbM0FaQWDgdOWhKa2m+58clpDAyZqkdgW4SehPlWGts5TCUIWQpEn
+	 fkXjo5n8Vj3MYdOZyjXckaRi8gNE6i6zUUzAStu09hAFluj2E6xe+znA+irOIngIBbg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793118067;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
-	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
-	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
-	 X-Local-Domain:X-CMAE-Envelope;
-	bh=/EJgt032IdKFtV9uvcwyjszAG6BEFtwyoI2Bq1VEXIs=;
-	b=YQWR7h8t3QkZi1kLpTiskjuDH5TqP6+0G+x10lCzCRBS7Zw8ee1Z8u0GruQoTXIxrFJ8
-	 kABZFn0ZXyy4IJMY9NGxO7w8uQhOe4gKcbIReviBQExVE9ypOCy2UhYKNniKws/6oBOKA
-	 bYByRcJ0mo9RBB1pCtNaNifRdlFzLXQc9wsdmGc9vGspei1lLS0IBzrtf9ZyTIAfkn79v
-	 wnWkkaPTIK9Yc1hZZ9j2LhDc0vwh8PsVBuAbLOlyhzILnaEmiBznELhmCT8f2DPxNVSjO
-	 gZc1L9ZY0xXX9mwgKdjFDzJ88c3u3Ntc0e8P1NsTqia5LkAJqKYoob7Bc53NZnzm+ow==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793118743;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=kvHpdbzr181XbRpEgtV1R2oktcYB29tcS5XHBNv0lQ8=;
+	b=KoUOxH97hXzKH3k8C7fdKuyRm1h9OQTOxLTUJGF0Yt1Gll9NSlkeHgBvWDqvyPcHIYz1
+	 m6pJg6gFsn7SNl23L/S9k4iuYycLbSTLMeuq26pH1kjXqBD5cQH86MrAZ84IUmSQ9mXfq
+	 dBrqnl8LGG0wKYA9jNEx5JolBcXAnwYp217An3zciqu1r7p/eptaJkmnCzx9iHz+d9k00
+	 QqjXq4/OES2mt2G/GkjI/vtU8+DW/+513Ep+Rki9ZPhqxcyKWc4nXjciX4A9rCkmvTPU2
+	 JbFFRT6t/9fz6KW7N3colL/+VU/iA9usU82igHfM8Oa87tXdUNVxn3DXFvYM59fghaA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b="Q+/9W7sV";
-	arc=none smtp.remote-ip=35.89.44.37
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="L/9wjUU8";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3198606A31F
-	for <linux-hwmon@vger.kernel.org>; Tue, 27 Oct 2026 16:21:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C3198606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 837CE606A31A;
+	Tue, 27 Oct 2026 16:32:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=Q+/9W7sV
-Received: from eig-obgw-6004b.ext.cloudfilter.net ([10.0.30.210])
-	by cmsmtp with ESMTPS
-	id LhouxxmPqv0ndLjv8xLfGF; Tue, 27 Oct 2026 16:21:06 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id Ljv7xT3uVH2S8Ljv7xIlLV; Tue, 27 Oct 2026 16:21:06 +0000
-X-Authority-Analysis: v=2.4 cv=Mfxsu4/f c=1 sm=1 tr=0 ts=6ae0cf72
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=kj9zAlcOel0A:10 a=660iZSQnnn4A:10 a=M0FbrtG7MMAA:10 a=VwQbUJbxAAAA:8
- a=QDHc5EiPAAAA:8 a=cFugUJLFjlu1G8EhGgcA:9 a=CjuIK1q_8ugA:10 a=zZCYzV9kfG8A:10
- a=59RwALqDKVzMjVMkmKwL:22 a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=/EJgt032IdKFtV9uvcwyjszAG6BEFtwyoI2Bq1VEXIs=; b=Q+/9W7sVWOL7f94vaxUWWWnKuw
-	/eS72wD3OA7M7OAmX+n98fIkwLOQ+u3kytxX9w2qqJWmJ2jBX4ZX3mncaSCNcMtdga1RjjBeR9C3r
-	3h3R+f7HVI/nIgVrGTcTs2nV/tLtsj3iYFaYBAXOxw4M4X34EvQOzBfIEnKuirwapyb0ZxaErHDIN
-	XAe0Iw/6AJSrQv3DI12/LAOQPuzNnYSobXDtOsx+b4/BV7jJTNXX49DDgAvOVCRrmSOpCtC7aClo8
-	7Rmvdqp8DENvcoqHQs34Z69zJi9HiMFeRVNHFY1WTuy+/urM6kxp7AXmSxVRdyWpzFGFXiHd+t2WF
-	pjghLRrA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:38130 helo=server.roeck-us.net)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xLjv7-00000000nU6-1WJd;
-	Tue, 27 Oct 2026 21:51:05 +0530
-Date: Tue, 27 Oct 2026 09:21:04 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc: remy@demangeot.net, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] hwmon: (asus-ec-sensors) add water temperatures for
- MAXIMUS IX EXTREME
-Message-ID: <1fcc110e-7269-44de-a415-1848922f75f6@roeck-us.net>
-References: <20261026-b4-m9e-ext-sensors-v1-0-644d389b2de1@demangeot.net>
- <20261026-b4-m9e-ext-sensors-v1-3-644d389b2de1@demangeot.net>
- <CAB95QAQaogxV6KO5kpv9RBpzhhmH_N3Dvvy=nqWHOG6qAQB_aw@mail.gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L/9wjUU8
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id C18B21F01825;
+	Tue, 27 Oct 2026 16:32:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793118743;
+	bh=kvHpdbzr181XbRpEgtV1R2oktcYB29tcS5XHBNv0lQ8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=L/9wjUU8d3mrJwpelfh/WNYBeL7ClsTN5Z/FIX9bgBT1bfIhFUN3uaTN0CEBEiPwu
+	 QCRNL0gSXhd8ncuR9jPx5QFJNPcHNPAo2d3R8t7++MKn7Z48961Ce4h7KI5UDuxYl3
+	 07CrG3a8hujQ5s9l2pItC+VbFzItUn9n97KARlIuArpKZleglBPKNFp5J5a03ALXbf
+	 sg0amAQcUKZC/SyPFhVmBuCHVm0vaQpfcM88JU8TqsFkaVHbuf+VmMkShkS6NfPvvY
+	 oESgVQBE981tciY4ny4xpyD9tT8Ki/cRNVBY6Y4XeWq89PigUFKMseSmjmbEXl+SvT
+	 n34tFbBgT8Gow==
+Date: Tue, 27 Oct 2026 17:32:20 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+To: Andrea della Porta <andrea.porta@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Gregor Herburger <gregor.herburger@linutronix.de>, 
+	Stanimir Varbanov <svarbanov@suse.de>, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	Gary Guo <gary@garyguo.net>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH RFC 3/4] hwmon: Add driver for Raspberry Pi RP1 fan
+ tachometer
+Message-ID: <auDRHk8eaYife2zH@monoceros>
+References: <cover.1792748690.git.andrea.porta@suse.com>
+ <0d2249a66732bfce38a2260bee08cd1ba4097e51.1792748690.git.andrea.porta@suse.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -85,48 +66,56 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="wczsomz7ltpapr6j"
 Content-Disposition: inline
-In-Reply-To: <CAB95QAQaogxV6KO5kpv9RBpzhhmH_N3Dvvy=nqWHOG6qAQB_aw@mail.gmail.com>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xLjv7-00000000nU6-1WJd
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:38130
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 51
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfGA/v6cbhKhbJ5HpvYGu5LaXtGX6faoM87LuZqX78pP3l6cbQsMR9hKEj2hffz7WHJsAvb17PcUtgU2bcbzDsp7lylov0I+BEeksVfwisNtir9x7/7Pp
- +Ve9/pUFRRnRxvBzmEjp0w+kbD4AGbXWziUPaFPyy7x9mHNPiGZqtRb25fznqbb5i0yr9QhklkcAaqnAJV5DhGQ8+a0qAAuqKTeHMxMd+LR2sq2a+bYh3tFC
+In-Reply-To: <0d2249a66732bfce38a2260bee08cd1ba4097e51.1792748690.git.andrea.porta@suse.com>
 
-On Tue, Oct 27, 2026 at 10:23:33AM +0100, Eugene Shalygin wrote:
-> Hi,
-> 
-> On Mon, 26 Oct 2026 at 09:57, Remy Demangeot via B4 Relay
-> <devnull+remy.demangeot.net@kernel.org> wrote:
-> >
-> > From: Remy Demangeot <remy@demangeot.net>
-> >
-> > The MAXIMUS IX EXTREME has a second EC (firmware ID "RGE2-Z270-0109"),
-> > not handled by the ACPI EC driver, at I/O ports 0x68 (data) and 0x6c
-> > (command/status). It uses the standard EC protocol (0x80 read, 0x81
-> > write) and the same bank register (0xff).
-> 
-> I'm not fond of re-implementing EC access logic in this driver. I
-> believe the ec.c driver needs to be changed to allow us to simply
-> create another acpi_ec structure to operate the second EC.
-> 
-Me not either, but that would (should ?) be a separate effort and might
-take a substantial amount of time to get accepted upstream.
 
-Guenter
+--wczsomz7ltpapr6j
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH RFC 3/4] hwmon: Add driver for Raspberry Pi RP1 fan
+ tachometer
+MIME-Version: 1.0
+
+Hello,
+
+On Fri, Oct 23, 2026 at 12:15:56PM +0200, Andrea della Porta wrote:
+> Add a hardware monitoring driver to support the fan tachometer on the
+> Raspberry Pi RP1 southbridge, found on the Raspberry Pi 5.
+>=20
+> The RP1 PWM controller block contains specific MMIO registers that hold
+> the current fan speed in RPM. These registers are periodically updated by
+> the RP1 internal firmware based on the tachometer pulses.
+>=20
+> Since the Linux PWM subsystem does not currently offer a framework for
+> exposing integrated hardware tachometer readings, this driver is
+> implemented as a standalone hwmon device. It parses the
+> 'raspberrypi,pwm-tachometer' DT property to find the supplier PWM device,
+> establishes a device link to ensure proper lifecycle management, and uses
+> RP1-specific PWM functions to retrieve the RPM values.
+
+I wonder if the tachometer readout should be a counter driver? That
+would allow this driver to not be specific to the RP1 hardware.
+
+Best regards
+Uwe
+
+--wczsomz7ltpapr6j
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmrg0hIACgkQj4D7WH0S
+/k4tWgf/aBdc0sompTuoqGx4glA5Q7tPemfla+YycjTGdxt9ZwZgvezbioJbkniK
+oTXSogrYNoBat5wjHuBQluVrr7TxDUAYcPemNasPLXXw8YsFbuQ6VkxeNJxnoFLI
+efQX1S4xPFPOZogKw/pXdFopxrV3J+SGNyNzIKp5CLBHu+MipL78wMBX4W7j2IL8
+Fda5MbTg+pbz8BNA5NNmr1xbwLLt+hSSGommcetIOv16gzgyrKd0vZeEtFTsFQSS
+NQcPN9XQYOp9unKPk1L1FKip3M+uew5pmOyMYgGBhSoSVetzagYc7FF0YQwK6+Ai
+TrVi1WtPSfetPZ6w6o39mL5AThZ+Pg==
+=1ZwV
+-----END PGP SIGNATURE-----
+
+--wczsomz7ltpapr6j--
