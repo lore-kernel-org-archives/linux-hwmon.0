@@ -1,57 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.12
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793194396;
-	b=ZwkoBTcSugm2icsJ95ZC1TXvqwNfF7LWeG5ZoELGsNDMNhxTfRm9MZYSCzusnkFLwbDE
-	 M8FfsxR5TPsW/1ACPiCWuxjDlHxaUjLHRHM/ByPZkopkbKW5uas3VEuiEXUaVu0lAJkFA
-	 uhhi7NlZ5oto7vfzwTp8pHznvx5NG45XIEShNOmjO5GfBrpj7I4bCQlgIQCvgvawVhVFG
-	 Hltt7zayIW+AzM9o40EnQJP8tswAF6Bcyd2b9FU2X6JULizVHpOh0ysbHREXsa2y2rk5D
-	 kC0GVJnqDlz+mlOLzJpd2IloZPk+vyVL32rdaeuHG7RR3WRrejBy4G5NySkdBOlexDg==
+	t=1793195708;
+	b=bEIV0Zep131c53xd/X6J7iW6EyQ98PITdcRR6p2/whfkpvxlhq0m2xLh0yZcLvrhcex2
+	 uRf7+iUCqrn1A97b9DceC7KHPw1VRB0p8RSO5BexzYDMSAaa2bCdoCvcR+hoUKxjOH+MC
+	 WEIBkTqWyFDFzmhcZn1AEDgjwuzK/dSVwWqLm/c6ng5YWujZnAPP8pYZAjI3CFu/Qql1J
+	 TQa9h98AXfvf+8Wo9ImIHHWdPUlZPrwAa7JSLmD+ZZ39kvAuLSZ1/t/58R2FofELXP/Da
+	 TNu3wKt319l6UISjHx/x5/bWy85hfuV5wnxQ9EGmFdrRR9LOr0obeJeZr5pcDUigSgg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793194396;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=xp9ThrwCoNoVF1h3ZengAAl6CwgWVhuHFNZnRS4UoaA=;
-	b=UvQwcxub8cftnW68M1NFtXeaB2x+F3uf7QpVO+hy80tAlj3bW3ksQR/0JJlz1fdtUeDT
-	 QjK5AvjvaZKX6H6K6qipaKiLGRLY/vVzIdGdkLaZNxpqvsgCtz7nDr+EmhInuTwiK6K8x
-	 gOkNOAhGKPcNQWdPLlfZgtujjs5Iph+x2bn2Cj4O0H4hrjgPhV7nx6pAPRXH1J2Y1K5aY
-	 r7YKnMU5PTpwqBABY1rmT3M/mPPLe4rCJ7Vfd8Z8fHpsBgUgeyTDmupTNWPf13lNz/svJ
-	 waUssR84ulu3fiR9mXvGr2/b/CSSJTqaYPA8+ymnjs8iIQHRriZKySLYnuMxoMj47Zg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793195708;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To:Organization;
+	bh=ppjHqUVsglS3sP4IvrCeWYBNEAaFHo0dcAQS3txioPw=;
+	b=2wGXsOUgNDgybb3N3eu4mXE8FLXd1gANWM1Sjqb6PNfkqDjOdAdfeoG9NDW6gf+hnk2i
+	 RrmolB+7i/6hf4wxy/n544/Lli/rxAjPx6MbXasFlnGbIOLyM9QM5nj9M90NvsCvVaGTl
+	 NHLRQpckYO+dkLUWF/A4ZmTmgg5gC7M71Lw4ogzL2PcQNc4O9rSL0jMEJHvY4Zyd/SVjF
+	 ryCANKQ41MblKOWWqF7a5KYsIJo9ARE9sA3ygQbOl7eavt4OW1WTuZx5wyDK6vZzM+/oa
+	 VntIBSOFUZfs/65srxlgWO8p1TJF3cAK6AB188xvxZlGKXSR1icnjcR5CreSyOpU+Yw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oG0BZ7Ch;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=QeMMikUA;
+	arc=none smtp.remote-ip=192.198.163.12
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D086606A322;
-	Wed, 28 Oct 2026 13:33:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6FFF606A31C;
+	Wed, 28 Oct 2026 13:55:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6FFF606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oG0BZ7Ch
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 671821F01825;
-	Wed, 28 Oct 2026 13:33:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793194395;
-	bh=xp9ThrwCoNoVF1h3ZengAAl6CwgWVhuHFNZnRS4UoaA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=oG0BZ7Chx5QRVRffMs9J45Xrvd+MFH42yTTFatxAVPX+/avHNpCCXd/9+5DBZ6e8w
-	 8mHKg7qeMZf6OC61+STsra1jhcwesg01iG7bewAvAF9R11hMTgu3ISpWDrqYvRhPqh
-	 Y0BDLD1YN7QPEQDqEUupW5g3w9YFbvyMoM31gkkUp4ktyoQI1qgMgqGBS3hcqju0xO
-	 B2VcPiJFVKi33AG6VqP0alTRXXF9LknQIQ4meOL+KvXgBeMAqN+1kGpXccwUA/zeyc
-	 QAdDwsYAr6gYHvjVX9tNYb514u1OKmm1GAI+kZu49ES4bA5xUBgqehqW4S2/ykSPSd
-	 hES7C1FxN9NkA==
-Message-ID: <sashiko-outbox-187926@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 3/3] iio: adc: add driver for the MAX34417
- Four-Channel High Dynamic Range Power Accumulator
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Neil Armstrong" <neil.armstrong@linaro.org>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org
-In-Reply-To: <20261028-topic-sm8x50-iio-max34417-adc-v4-3-d4baaf3ee903@linaro.org>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=QeMMikUA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793195707; x=1824731707;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WOn6xYyEphAdy77ddUIYxqei8Cv3mh2qBW9TTARgsLY=;
+  b=QeMMikUA4I9fvLT1iJtCpwKeR6iz6CG1jv+IY+SI/3IeMUJ5irq4Tvy1
+   /ZfPJqVeG0Et1Wp+rLmu2hrzCeunMyXZix6y+WX2rDJwdbHx3GBRG8uRN
+   m/oxcpsTftAxqDdI3G2FPPtVdyad2hgw1l2z4Y4Q4wLQDqLqUgO0U+Sba
+   37bTMFf/5UvpaoMTdRuLL4ml3f7yafKwTotGFS/duZsnWW5zAgx9EivG+
+   sb6k0Fj2t3xNr11V+H+F/01PdVzZQHI3mgR6YWglh9o9Q/b+kDuM6cVXx
+   XFdjC/o7jLsakDi6zkXytOFFwdY1+3n7l6VG6GKnYQook03NiQanOM+1Z
+   w==;
+X-CSE-ConnectionGUID: I4x+rTziQICluj8Hutp3lw==
+X-CSE-MsgGUID: spsPJNBiQhaNwpQe/nVn2g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11949"; a="1812952"
+X-IronPort-AV: E=Sophos;i="6.27,182,1787036400"; 
+   d="scan'208";a="1812952"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2026 06:55:06 -0700
+X-CSE-ConnectionGUID: VMU1DyMOQlOXkwpRTX1z0Q==
+X-CSE-MsgGUID: XjlXhUujQRGWC6CQKWnFlg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,182,1787036400"; 
+   d="scan'208";a="5361534"
+Received: from abityuts-desk1.ger.corp.intel.com (HELO localhost) ([10.245.244.117])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2026 06:55:03 -0700
+Date: Wed, 28 Oct 2026 15:54:59 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux@analog.com, Marius Cristea <marius.cristea@microchip.com>
+Subject: Re: [PATCH v4 2/3] unaligned: introduce be56 unaligned accessors
+Message-ID: <auH-swoZ1mWwgWU9@ashevche-desk.local>
 References: <20261028-topic-sm8x50-iio-max34417-adc-v4-0-d4baaf3ee903@linaro.org>
- <20261028-topic-sm8x50-iio-max34417-adc-v4-3-d4baaf3ee903@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 28 Oct 2026 13:33:14 +0000
+ <20261028-topic-sm8x50-iio-max34417-adc-v4-2-d4baaf3ee903@linaro.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -60,278 +86,31 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261028-topic-sm8x50-iio-max34417-adc-v4-2-d4baaf3ee903@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] iio: adc: max34417: missing UPDATE write before setting CAM in m=
-ax34417_setup_cam_mode()
-- [Medium] iio: adc: max34417: missing 1 ms delay between UPDATE commands
---
+On Wed, Oct 28, 2026 at 02:19:05PM +0100, Neil Armstrong wrote:
 
-commit 43fd5d352abe401ff6be6a80277fec3e15b10fb2
-Author: Neil Armstrong <neil.armstrong@linaro.org>
+> The MAX34417, IIO driver, is using some unaligned 56 bit registers.
 
-iio: adc: add driver for the MAX34417 Four-Channel High Dynamic Range Power=
- Accumulator
+56-bit
 
-This commit adds an IIO ADC driver for the Analog Devices MAX34417
-four-channel high dynamic range power accumulator, supporting voltage,
-average power, and energy measurements over I2C/SMBus.
+(When you refer to the size as adjective, use '-' dash, otherwise space.)
 
-> diff --git a/drivers/iio/adc/max34417.c b/drivers/iio/adc/max34417.c
-> new file mode 100644
-> index 0000000000000..b1064cf631b51
-> --- /dev/null
-> +++ b/drivers/iio/adc/max34417.c
+> Provide some helper accessors in preparation for the new driver.
 
-[ ... ]
+...
 
-> +static int max34417_trigger_smm(struct max34417_data *max34417)
-> +{
-> +	u32 control;
-> +	int rc;
-> +
-> +	rc =3D regmap_read(max34417->regmap, MAX34417_CONTROL_REG, &control);
-> +	if (rc)
-> +		return rc;
-> +
-> +	if (control & MAX34417_CONTROL_SMM) {
-> +		/* Set SMM=3D0 to re-init the SMM mode */
-> +		rc =3D regmap_clear_bits(max34417->regmap, MAX34417_CONTROL_REG,
-> +				       MAX34417_CONTROL_SMM);
-> +		if (rc)
-> +			return rc;
-> +
-> +		/* Reset accumulators after setting SMM=3D0 */
-> +		rc =3D regmap_write(max34417->regmap, MAX34417_UPDATE_REG, 1);
-> +		if (rc)
-> +			return rc;
-> +	}
-> +
-> +	/* Enable SMM to do a single accumulation */
-> +	rc =3D regmap_set_bits(max34417->regmap, MAX34417_CONTROL_REG,
-> +			     MAX34417_CONTROL_SMM);
-> +	if (rc)
-> +		return rc;
-> +
-> +	/*
-> +	 * After the SMM bit is changed, the UPDATE command should be sent
-> +	 * to reset the accumulators and perform the selected scan operation.
-> +	 */
-> +	rc =3D regmap_write(max34417->regmap, MAX34417_UPDATE_REG, 1);
-> +	if (rc)
-> +		return rc;
-> +	/*
-> +	 * UPDATE commands should be no less than 1msec apart for reliable
-> +	 * measurements.
-> +	 */
-> +	fsleep(1 * USEC_PER_MSEC);
-> +
-> +	return 0;
-> +}
+I think I gave a tag to something similar in the past. Anyways,
+with the above being fixed,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
 
-[ ... ]
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> +static int max34417_check_ovf(struct max34417_data *max34417)
-> +{
-> +	u32 control;
-> +	int rc;
-> +
-> +	rc =3D regmap_read(max34417->regmap, MAX34417_CONTROL_REG, &control);
-> +	if (rc)
-> +		return rc;
-> +
-> +	if (control & MAX34417_CONTROL_OVF) {
-> +		rc =3D regmap_clear_bits(max34417->regmap, MAX34417_CONTROL_REG,
-> +				       MAX34417_CONTROL_OVF);
-> +		if (rc)
-> +			return rc;
-> +
-> +		rc =3D regmap_write(max34417->regmap, MAX34417_UPDATE_REG, 1);
-> +		if (rc)
-> +			return rc;
-> +	}
-> +
-> +	return 0;
-> +}
 
-[ ... ]
-
-> +static int max34417_read_voltage(struct max34417_data *max34417,
-> +				 const struct iio_chan_spec *chan, int *val)
-> +{
-> +	u8 buf[MAX34417_VOLTAGE_READ_LENGTH];
-> +	int rc;
-> +
-> +	/* In SMM mode, trigger a measurement cycle manually */
-> +	if (!max34417->cam_mode) {
-> +		rc =3D max34417_trigger_smm(max34417);
-> +		if (rc)
-> +			return rc;
-> +	}
-> +
-> +	/* Move the new UPDATE data into the SMBus read registers */
-> +	rc =3D regmap_write(max34417->regmap, MAX34417_UPDATE_REG, 1);
-> +	if (rc)
-> +		return rc;
-> +
-> +	if (max34417->cam_mode) {
-> +		/* Retrieve all channels to avoid missing data for other channels */
-> +		rc =3D max34417_save_accumulators(max34417);
-> +		if (rc)
-> +			return rc;
-> +	}
-> +
-> +	rc =3D regmap_noinc_read(max34417->regmap, chan->address, &buf, sizeof(=
-buf));
-> +	if (rc)
-> +		return rc;
-> +
-> +	if (!max34417->cam_mode) {
-> +		rc =3D max34417_reset_smm(max34417);
-> +		if (rc)
-> +			return rc;
-> +	}
-> +
-> +	*val =3D get_unaligned_be16(&buf[MAX34417_VOLTAGE_READ_OFFSET]) >> 2;
-> +
-> +	return IIO_VAL_INT;
-> +}
-> +
-> +static int max34417_read_power(struct max34417_data *max34417,
-> +			       const struct iio_chan_spec *chan,
-> +			       int *val, int *val2)
-> +{
-> +	u64 power;
-> +	int rc;
-> +
-> +	/* In SMM mode, trigger a measurement cycle manually */
-> +	if (!max34417->cam_mode) {
-> +		rc =3D max34417_trigger_smm(max34417);
-> +		if (rc)
-> +			return rc;
-> +	}
-> +
-> +	/*
-> +	 * Move the new UPDATE data into the SMBus read registers.
-> +	 * In CAM mode this will also reset the accumulators, returning
-> +	 * the power accumulated since the last UPDATE.
-> +	 */
-> +	rc =3D regmap_write(max34417->regmap, MAX34417_UPDATE_REG, 1);
-> +	if (rc)
-> +		return rc;
-> +
-> +	/*
-> +	 * Only get the accumulator counter in CAM mode, in SMM mode
-> +	 * we only accumulate only once, so the counter is 1
-> +	 */
-> +	if (max34417->cam_mode) {
-> +		u64 acc_count;
-> +		u64 acc_power;
-> +
-> +		/* Retrieve all channels to avoid missing data for other channels */
-> +		rc =3D max34417_save_accumulators(max34417);
-> +		if (rc)
-> +			return rc;
-> +
-> +		/* Get current channel power, counter and reset them */
-> +		acc_power =3D max34417->acc_power[chan->channel];
-> +		acc_count =3D max34417->acc_count[chan->channel];
-> +		max34417->acc_power[chan->channel] =3D 0;
-> +		max34417->acc_count[chan->channel] =3D 0;
-> +
-> +		if (acc_count =3D=3D 0) {
-> +			dev_warn_ratelimited(&max34417->indio_dev->dev,
-> +					     "unexpected zero accumulator count\n");
-
-[Severity: Medium]
-Can back-to-back writes to MAX34417_UPDATE_REG occur less than 1 ms apart in
-these paths?
-
-As noted in max34417_trigger_smm(), UPDATE commands must be at least 1 ms
-apart for reliable measurements, since a 4-channel scan takes roughly 976 us
-at 1024 SPS in SMM mode and 651 us at 1536 SPS in CAM mode. However,
-fsleep(1 * USEC_PER_MSEC) is only called once at the end of
-max34417_trigger_smm().
-
-In CAM mode, if userspace enables in_energy_en via max34417_setup_cam_mode()
-or reads in_energyX_raw via max34417_read_energy() and then reads
-in_powerX_average_raw on the same channel within 1 ms, max34417_read_power()
-writes MAX34417_UPDATE_REG before a single scan completes. That latches 0
-accumulated samples from MAX34417_ACC_COUNT_REG, triggers the "unexpected
-zero accumulator count" warning, and returns 0.
-
-Similarly, max34417_save_accumulators() -> max34417_check_ovf() can issue an
-immediate second UPDATE before max34417_read_voltage() reads the voltage
-register, and in SMM mode both the recovery path in max34417_trigger_smm()
-and max34417_reset_smm() issue UPDATE writes without enforcing the 1 ms
-minimum delay.
-
-Should the 1 ms minimum interval be enforced across all MAX34417_UPDATE_REG
-writes?
-
-> +
-> +			*val =3D 0;
-> +			*val2 =3D 0;
-> +
-> +			return IIO_VAL_INT_64;
-> +		}
-
-[ ... ]
-
-> +static int max34417_setup_cam_mode(struct max34417_data *max34417, int v=
-al)
-> +{
-> +	int rc;
-> +
-> +	if (max34417->cam_mode && !val) {
-> +		rc =3D regmap_clear_bits(max34417->regmap, MAX34417_CONTROL_REG,
-> +				       MAX34417_CONTROL_CAM | MAX34417_CONTROL_SMM);
-> +		if (rc)
-> +			return rc;
-> +
-> +		/*
-> +		 * If CAM mode must be set, the Control byte must be set to
-> +		 * desired values with CAM =3D 0, then followed by an UPDATE
-> +		 */
-> +		rc =3D regmap_write(max34417->regmap, MAX34417_UPDATE_REG, 1);
-> +		if (rc)
-> +			return rc;
-> +	} else if (!max34417->cam_mode && val) {
-> +		/*
-> +		 * After this, the CAM mode bit can be set and another
-> +		 * UPDATE must be sent.
-> +		 */
-> +		rc =3D regmap_clear_bits(max34417->regmap, MAX34417_CONTROL_REG,
-> +				       MAX34417_CONTROL_SMM);
-> +		if (rc)
-> +			return rc;
-> +		rc =3D regmap_set_bits(max34417->regmap, MAX34417_CONTROL_REG,
-> +				     MAX34417_CONTROL_CAM);
-> +		if (rc)
-> +			return rc;
-> +
-> +		rc =3D regmap_write(max34417->regmap, MAX34417_UPDATE_REG, 1);
-
-[Severity: Medium]
-Is an intermediate write to MAX34417_UPDATE_REG missing between clearing
-MAX34417_CONTROL_SMM and setting MAX34417_CONTROL_CAM in the enable branch =
-of
-max34417_setup_cam_mode()?
-
-It looks like the comment describing the two-step sequence to enable CAM mo=
-de
-was split across the disable (!val) and enable (val) branches. When enabling
-CAM mode in the (!max34417->cam_mode && val) branch, clearing
-MAX34417_CONTROL_SMM is immediately followed by setting MAX34417_CONTROL_CAM
-without an UPDATE write to latch the CAM =3D 0, SMM =3D 0 state first.
-
-If a prior single-shot read in max34417_read_voltage() or
-max34417_read_power() failed after max34417_trigger_smm() set
-MAX34417_CONTROL_SMM, a subsequent write to enable the energy channel via
-max34417_write_raw() -> max34417_setup_cam_mode() would transition directly
-from SMM to CAM without latching the intermediate reset state.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261028-topic-sm8x=
-50-iio-max34417-adc-v4-0-d4baaf3ee903@linaro.org?part=3D3
