@@ -1,63 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793170966;
-	b=pWxGWTilLh4vT2S4AQ6GzrtaeoZOCmlUUquz9WyiJd64CJEdp/dg0EDsNmBtawNrqWxW
-	 7Du8BXF3vLV1plau63AHzl72jQ7ut7M9s4Fvqs6Oou5tOzbfCGwq+z+bHuhukaHj/bp/j
-	 1cIDUzcYw3jYmpOm+RhVokyoUbj8JfVOI+Aqd9KDnbXX24v9JAA9MjZntS64JovFPpdwk
-	 EOz4Ozs85SzuLBrmpcGGMULEYwPhh2XftVs+WlVQCHpJqUg/7aBYwEJTVBPMNIpzMNkDA
-	 zdAGnPrxGiDgqptev3G8/OIUFawz7vCplgFbn/0BCA7SMwnu56LdIxq6d1IhzjZDRng==
+	t=1793175337;
+	b=SxRExsYeYo5QrMtLbgFOqZPrYcVOSC09v6NDTk1Dg69wINPgyBCL5O3LMuxwAHMIYzCX
+	 ZUebGrxdBIg9zepCCwi/9PKiZQHPcWTk5l/hrw2Fg+1H++F7eeLsXTDlTIEVecA+NZid7
+	 1yX+78sBkVu7Syy+5kJhrr9rgjujlm7Y2aJLP27pjZPaVqMuXvtskIAM9DD35x1X6HplZ
+	 8C4OfGnqq3PDEZ3yiVtSAKWwEJwlzXY4Dwcq8vK2cEc3HbzIZzZPnhhZUCNuXtGAVrsC/
+	 bNu6t3BP2droAZyziZdro/JsmFYH2AZTBXOfA8JWKhVHSwMt1IQBudsrzmg+QIzcElQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793170966;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=q08GKnMLIclDg6PTr8i2voxZm8I33mhrixHE5JuaMUs=;
-	b=gAFXf74OWVO3pbsVyGMRkXMvIRWRhCsUis+Gs9EtAodWrKzCW5Z4HMzjWDMPqL/N6j9C
-	 qxeIQTp9zxra2aouUi2W018u3vB23yQPDA+hUSddVJe/ccXbNWEQj1c3/+AxIWd6PiXC9
-	 DehalXtkuXs3Ah8CoYxlaKbwr7df/XXHo4fP5ooTYhOGqcNi0M6ATYW7Axwlf6yrqPfCO
-	 Umuk1+j9FtNv1+Gz/jwr6tXXCloM4J71VY3rOH54CXQqLqqJ855SYT73xlXhJ2bcLqqIM
-	 tqQFdpslasGD/Ci8HWPSvCsWBs2yG9U6QEHgzNX9NYY1WnMfqka6DtBMAB39Aada8Qw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793175337;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=lCx4BcrORJni91sIsjKBnbCAJ5Ch1lEXBg8pjpqe8IE=;
+	b=JilbQZ/bxlkN3JIbiw5W0lo6WA+HRaD8s3324UCqqFEZ8Itefw6mWOWowinGlo6oCcIQ
+	 x1i4vfg7QBKlELRc+psvEOUzmJ0y0gIF++yp4evTy/Y5cr6jq51+FKfS3FiZCMjZO8OE7
+	 7hCgB6NI3NLWURet4W0GI+SRMrjAbwUhCe+JpM38GoVNMchfk0pWJnLWcPf0hYvD77TZt
+	 rgKucGbSNU1UayvQH5KzIdwUwzddNIpdIrf2cTamS798M/4RNvAO/zy9cwEv0vaKk2znN
+	 W/vewm3c1CXjyfYZnrkFxNJ0x9UjBKXUH4P4X7gT/I50/bqLhJUhz/2jwUI03qyI7YA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EzZZqJ47;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=x8bF8AXt;
+	arc=none smtp.remote-ip=74.125.82.49
+Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id D36AA606A31F;
-	Wed, 28 Oct 2026 07:02:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E756606A31D
+	for <linux-hwmon@vger.kernel.org>; Wed, 28 Oct 2026 08:15:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4E756606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EzZZqJ47
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id E64751F01825;
-	Wed, 28 Oct 2026 07:02:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793170965;
-	bh=q08GKnMLIclDg6PTr8i2voxZm8I33mhrixHE5JuaMUs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=EzZZqJ47lMCCR7dVk2hu9KwHo/iAZMjZKBzMs+gjAQnA5TfLoAuE/lrZCIOrYBw2T
-	 3NJ37YKg2C+FPc+wr4HddAc2Lcwd0PrM7GrlUrbLfa7uiEGHEYphF62rWWWE3Og/BM
-	 HivWTNw80Wc5XdUqU6TW9QuFPSLpnsKPaOGmd8esPDUZuLF0SmumPlvE1s2anqINIS
-	 ONgZOScwSvGLCwtxsKgrXFKCNBzzddx1VZLNH1PRoP4ELfkSqvk4UHzCK2PzbFwsgV
-	 Nax0KXyAkaA9c1MumOTuxrQZkxVYCOzpNvPkB8F//DjxCWnBgE/SjUIDQdlFSSUqCB
-	 aMpRoEtnAt17g==
-Date: Wed, 28 Oct 2026 08:02:42 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-To: Andrea della Porta <andrea.porta@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Gregor Herburger <gregor.herburger@linutronix.de>, 
-	Stanimir Varbanov <svarbanov@suse.de>, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	Gary Guo <gary@garyguo.net>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH RFC 3/4] hwmon: Add driver for Raspberry Pi RP1 fan
- tachometer
-Message-ID: <auGdsv0OVG4iLjZV@monoceros>
-References: <cover.1792748690.git.andrea.porta@suse.com>
- <0d2249a66732bfce38a2260bee08cd1ba4097e51.1792748690.git.andrea.porta@suse.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=x8bF8AXt
+Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-1a3c08d6928so945102c88.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 28 Oct 2026 01:15:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793175336; x=1793780136; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=lCx4BcrORJni91sIsjKBnbCAJ5Ch1lEXBg8pjpqe8IE=;
+        b=x8bF8AXtwUYKMukSmmSlSOvy0FTCaMALw0lrAjREYQETLatMg6hPsmE1M4qjmSlw9+
+         Val04sjHUXiuSmd/+LmB0J8zh7EsFEREu0Uq2Kpk3WzT81vsQamsq3EJa5cZ7O2Q+huL
+         RV2FXdtizGR6+zS5CgJOV/7yZBLgH7DLfh+T/yi6JR05khWEvRSYmVBsoYsTd3sihYKR
+         vvIlC9FMVwoKgVR0fgToaKMB3eDmBWyU44NxVzSJeULOqUDBPLLMEihKqno1ntlcOooB
+         lTckuohrQPh1TNuJy4ZPqDjBGjfhfTxRXZ1K23ywKVntr+AD+PgqxJHhqGxBmh54HuP6
+         V7MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793175336; x=1793780136;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=lCx4BcrORJni91sIsjKBnbCAJ5Ch1lEXBg8pjpqe8IE=;
+        b=hvHVCcFaNvebJCgBhReJ8nkYq6g0AxveR8gFD4NPZ5Vlta8eqFQI4Uxz32gU5PwJUd
+         UkO8kV1cpITbGjXFgJ31ATLI2AUt0xP7EylZiqQLO05rO2Oo8wQ7hZahRRhax2qRVcfW
+         1XyBmsffllTBUOdtXhOwnuAwIfa5zm5AO4DcIP9O83sizqugzFt4v3BKL9RcwS1/rKrr
+         hStxjNHWkgKRARw5CnLdfTZ8Xy3xqTtFJK971qtFfNyNGHo6mIycRssFiW6asw+YI3Xq
+         u4abSiqcY0AeS1V4MR/lE9PhyaDnEfTu88bTGDGBqkIRc/QuKiggbI3ICGdD1MD7O+Je
+         1Flw==
+X-Gm-Message-State: AFq9FYLiVt8MSgo2EfJWBseID/QIvcnGfwt7n0xIB5wSVuYvkN2A4+Gy
+	Gv/EhHaCs6wrXGmO9OhIBGOP+BE4Ns3u+0185Qa0jsoiGLFSWXf2RK2/
+X-Gm-Gg: AYBFou17KUOqBf29FlTey65kkOlDgitvssoVgaUDXIK7OoIud6VOB49ad9Z6G/RgeZd
+	IpZTP4PPVyZ58W6iQN3xvqENodNGYtRZncqGJIIXjtx9dDfw8jA5+Fv8IaUFaeO15Sg0r9M0p+z
+	vwc2SAMgSAOvu0ms5odhXg6DQqrt7LjVbS1nAjkZ/+sTQx3pHlrZchgP/eJDDyjiduIhKFopqJx
+	cBqiNKPlYgBHg0sCiFKGRnyuNyXudjfcr87UEwjcu7N0eIKM7HkdCYZK82pvfi8yHxsBJuoFAb4
+	lNIOjvtELp/Aenx2kZ9IirtrMfI52+ktg1TEQTGih3B7uhE70dRrFjnhGznaVgs/MT6y+hJzwaI
+	7AIcqcz4Axxifu2G9rTJmHT/8WX/6LIJQLP8Xh4g6emh377epn2AMVvj5HPRrZ3nGRzkZOF+B/q
+	XLtbbHe/VOi8NDOzw1epCcsZIWyDbgkGuS6uU+jymciY6MjrEiBPxrm3gFeqZQDHKUd7kfbwBOr
+	F7EG1b8t6s1z+MOxHcRx6A0MNjSjIgctWr+Eed+t+nQ6svMfPK9lPoR2NtLPz4kP3Nr+f+JBoMG
+	rJaiPBef6A467YlfjmgMLHYkEJcdxPfZU3O9X55dubXW0ieB
+X-Received: by 2002:a05:7022:1703:b0:166:3e26:c4b5 with SMTP id a92af1059eb24-1a6ce4ea2bfmr2235088c88.18.1793175336081;
+        Wed, 28 Oct 2026 01:15:36 -0700 (PDT)
+Received: from himanshubakshi ([2401:4900:1c2d:4ec6:6994:85c7:638d:44c8])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1a7549528ebsm3355296c88.0.2026.10.28.01.15.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2026 01:15:34 -0700 (PDT)
+From: himanshu bakshi <himanshu.bakshi478@gmail.com>
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Himanshu Bakshi <himanshu.bakshi478@gmail.com>
+Subject: [PATCH] hwmon: Fix minor style issues
+Date: Wed, 28 Oct 2026 13:45:04 +0530
+Message-ID: <20261028081504.127535-1-himanshu.bakshi478@gmail.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -67,44 +93,142 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7352vh2aneherser"
-Content-Disposition: inline
-In-Reply-To: <0d2249a66732bfce38a2260bee08cd1ba4097e51.1792748690.git.andrea.porta@suse.com>
+Content-Transfer-Encoding: 8bit
 
+From: Himanshu Bakshi <himanshu.bakshi478@gmail.com>
 
---7352vh2aneherser
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Subject: Re: [PATCH RFC 3/4] hwmon: Add driver for Raspberry Pi RP1 fan
- tachometer
-MIME-Version: 1.0
+Add newline between variable declarations and executable statements
+to address the checkpatch warnings.
 
-On Fri, Oct 23, 2026 at 12:15:56PM +0200, Andrea della Porta wrote:
-> +#include <linux/platform_device.h>
-> +#include <linux/mod_devicetable.h>
+Signed-off-by: Himanshu Bakshi <himanshu.bakshi478@gmail.com>
+---
+ drivers/hwmon/adm1031.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-Irrespective of how this patch set evolves: Please don't add new
-includes for <linux/mod_devicetable.h>. <linux/platform_device.h>
-already provides of_device_id without introducing a batch of unneeded
-dependencies.
+diff --git a/drivers/hwmon/adm1031.c b/drivers/hwmon/adm1031.c
+index 24d0d4146c87..45d75a6383f5 100644
+--- a/drivers/hwmon/adm1031.c
++++ b/drivers/hwmon/adm1031.c
+@@ -212,6 +212,7 @@ static struct adm1031_data *adm1031_update_device(struct device *dev)
+ static int FAN_TO_REG(int reg, int div)
+ {
+ 	int tmp;
++
+ 	tmp = FAN_FROM_REG(clamp_val(reg, 0, 65535), div);
+ 	return tmp > 255 ? 255 : tmp;
+ }
+@@ -322,6 +323,7 @@ static ssize_t fan_auto_channel_show(struct device *dev,
+ {
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	struct adm1031_data *data = adm1031_update_device(dev);
++
+ 	return sprintf(buf, "%d\n", GET_FAN_AUTO_BITFIELD(data, nr));
+ }
+ 
+@@ -387,6 +389,7 @@ static ssize_t auto_temp_off_show(struct device *dev,
+ {
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	struct adm1031_data *data = adm1031_update_device(dev);
++
+ 	return sprintf(buf, "%d\n",
+ 		       AUTO_TEMP_OFF_FROM_REG(data->auto_temp[nr]));
+ }
+@@ -395,6 +398,7 @@ static ssize_t auto_temp_min_show(struct device *dev,
+ {
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	struct adm1031_data *data = adm1031_update_device(dev);
++
+ 	return sprintf(buf, "%d\n",
+ 		       AUTO_TEMP_MIN_FROM_REG(data->auto_temp[nr]));
+ }
+@@ -425,6 +429,7 @@ static ssize_t auto_temp_max_show(struct device *dev,
+ {
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	struct adm1031_data *data = adm1031_update_device(dev);
++
+ 	return sprintf(buf, "%d\n",
+ 		       AUTO_TEMP_MAX_FROM_REG(data->auto_temp[nr]));
+ }
+@@ -468,6 +473,7 @@ static ssize_t pwm_show(struct device *dev, struct device_attribute *attr,
+ {
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	struct adm1031_data *data = adm1031_update_device(dev);
++
+ 	return sprintf(buf, "%d\n", PWM_FROM_REG(data->pwm[nr]));
+ }
+ static ssize_t pwm_store(struct device *dev, struct device_attribute *attr,
+@@ -569,6 +575,7 @@ static ssize_t fan_div_show(struct device *dev, struct device_attribute *attr,
+ {
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	struct adm1031_data *data = adm1031_update_device(dev);
++
+ 	return sprintf(buf, "%d\n", FAN_DIV_FROM_REG(data->fan_div[nr]));
+ }
+ static ssize_t fan_min_show(struct device *dev, struct device_attribute *attr,
+@@ -576,6 +583,7 @@ static ssize_t fan_min_show(struct device *dev, struct device_attribute *attr,
+ {
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	struct adm1031_data *data = adm1031_update_device(dev);
++
+ 	return sprintf(buf, "%d\n",
+ 		       FAN_FROM_REG(data->fan_min[nr],
+ 				    FAN_DIV_FROM_REG(data->fan_div[nr])));
+@@ -668,6 +676,7 @@ static ssize_t temp_show(struct device *dev, struct device_attribute *attr,
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	struct adm1031_data *data = adm1031_update_device(dev);
+ 	int ext;
++
+ 	ext = nr == 0 ?
+ 	    ((data->ext_temp[nr] >> 6) & 0x3) * 2 :
+ 	    (((data->ext_temp[nr] >> ((nr - 1) * 3)) & 7));
+@@ -678,6 +687,7 @@ static ssize_t temp_offset_show(struct device *dev,
+ {
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	struct adm1031_data *data = adm1031_update_device(dev);
++
+ 	return sprintf(buf, "%d\n",
+ 		       TEMP_OFFSET_FROM_REG(data->temp_offset[nr]));
+ }
+@@ -686,6 +696,7 @@ static ssize_t temp_min_show(struct device *dev,
+ {
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	struct adm1031_data *data = adm1031_update_device(dev);
++
+ 	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp_min[nr]));
+ }
+ static ssize_t temp_max_show(struct device *dev,
+@@ -693,6 +704,7 @@ static ssize_t temp_max_show(struct device *dev,
+ {
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	struct adm1031_data *data = adm1031_update_device(dev);
++
+ 	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp_max[nr]));
+ }
+ static ssize_t temp_crit_show(struct device *dev,
+@@ -700,6 +712,7 @@ static ssize_t temp_crit_show(struct device *dev,
+ {
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	struct adm1031_data *data = adm1031_update_device(dev);
++
+ 	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp_crit[nr]));
+ }
+ static ssize_t temp_offset_store(struct device *dev,
+@@ -812,6 +825,7 @@ static ssize_t alarms_show(struct device *dev, struct device_attribute *attr,
+ 			   char *buf)
+ {
+ 	struct adm1031_data *data = adm1031_update_device(dev);
++
+ 	return sprintf(buf, "%d\n", data->alarm);
+ }
+ 
+@@ -822,6 +836,7 @@ static ssize_t alarm_show(struct device *dev, struct device_attribute *attr,
+ {
+ 	int bitnr = to_sensor_dev_attr(attr)->index;
+ 	struct adm1031_data *data = adm1031_update_device(dev);
++
+ 	return sprintf(buf, "%d\n", (data->alarm >> bitnr) & 1);
+ }
+ 
+-- 
+2.56.0
 
-Best regards
-Uwe
-
---7352vh2aneherser
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmrhng8ACgkQj4D7WH0S
-/k4mXQf/f5hiHhqUiclt+2CPju6hq8FCsfStkH+EZvSc7NslDu75MRe7OC+1yY7u
-nWSyOG6WZJOrBiFEFih2KF5vWvNqRT1lW3XPYx336dt5u3QSAtO/PXVnzZHIxW4U
-L8YmwRx/roF86xyaKZ5W1zffnXUSBd/kl0vx9EPzXtxk7QUYcxp7aRf17fkQFr5t
-RfO+cCPHdi5EYs2bx1/YpQMw3dxHTNv7Bk9+muv9DArcBaZxXI/dluDw1eKhcshP
-z8k28tn35as60d4zbj2J06gpwzuLCyHgyfOoR8ztRK5z46PqHhSNVzecRZFLDeZZ
-fMrS+8lBuPXYYKbmDD7Yt/AbS9cvCA==
-=+FkA
------END PGP SIGNATURE-----
-
---7352vh2aneherser--
