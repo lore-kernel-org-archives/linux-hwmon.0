@@ -1,42 +1,42 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793211878;
-	b=S3ewKB+RzomIpldox7ckUfMFZhRZs0O+ayAT8eemCoDIV5v1osvloChVSet+8PKl3SBV
-	 ePmEoNI75RX/V68+1XrOAv1PAN4tv19HU2ovXT6wtuGrPLU9nstn7eShAF3DIFJsvY+fa
-	 Bv6a4BuNyYSZHvY9lWnz8HlqRmYAe0gXy5puf9pEG7ZyRYSQZkSUuMKnDTS8ulZNuEEEM
-	 eO87rNYcmjqihbwMGRYwwIbVOI78/mJNF3j1VcRL0atjeGYBGBV7uFFH2gWeNsZ9ayeug
-	 5SF0kUpo0VqJwIO75JGdJZtiBKJoR2pY3tMwGKO2lVgtTebT4MMtfZhOlRuImVbfODg==
+	t=1793217080;
+	b=1HRJcBLhi65SFsMk9fGK2wUo9+JVcaO0eY7uuHwVjM2oLLkRP6E+uUGw9lNGQGZsKrsn
+	 S9Uc1hC046O8ImVd8UOp60qPOVevGm+QpIfow3PsxuQve0HVgrTLrHaUbmcCqi4xDJwLQ
+	 itqT6QhSVngcchwCqc3SWPxJGuHVMaZ2yD1bTN93yAdcRNsfdpmq65yAEaaRLOMXeJ/Ri
+	 O2B8Axlgpma/rqz31lxJsf6R40VZTktPSyP7fp44iRzOO2ojS3tKmHHC+YIHg4dsmKvZ5
+	 /ib4OqmvPNkJNt8NMQTFKVjyWq60I/8whY4qqDiXaSbmHZRO2+4aoIoq4HMl+Okm5vA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793211878;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793217080;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:User-Agent:X-stable:X-Patchwork-Hint:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=or8+JLMxiZBPAbx6o4e8NET7jv5HaVgGCgnWz6oodK8=;
-	b=HRDJi8puiUqmt//Z5Lifj8Vd7VXAAZtdenCXglyhnntKW1T5hdqomQE2z96lE3FblS5l
-	 YrU77LDlyDFAKxIHL4RlgpPtaMhRMypvO3xyBUd8XTVhheQkcacrS9C81uDitD9rhHg3m
-	 vYHGGiPVpK3iwj6NgEKbUAJwzFZpnK7oO+n/h2RUheBFDpbjlcqeMckY8cY6SrMlfpb8z
-	 jXdFSFzZBEz68jK+pTaLT8BlUWuQY+guvJgc3lb+b1HWnARm8SZCevzf9OGtzrX4Tr8JJ
-	 JYwCQ1AEhbId0Zzl3j0yk//GkWbY4y4dvCGF0GeYGRN+1SfvPnadq1+KXDs7qIJJaLA==
+	bh=i6f0QeEq1H2S/vNkISekiiOHHXnBUKuLQOaQmB90gW8=;
+	b=B1Maooa+z99G3CGfPfyaHH4uWQ9Ry+W1X1jhAOM4u+NQgV7v7cFRkKURQcMD9j72OAIw
+	 Z+qy9zIsB4r9rWl+J7xB70LvzVlurHvmsnc5BeANiIllr0vkunLWF7ANQiKzVRqh/hm+a
+	 /Y/Qw05DDfIspUV9PB/td1p8/BH9PWs2MqnQR2Oy/mGsyY5xgVkdg2P4Ac/H7kz+N1LGs
+	 4VM8/pmCRRvSbQ8elleeFsx+79gIE9IkxGsK163S9T5WaXD6ZHuxLVf4lsHuRYIe4DO7O
+	 Izl83dBG1jsh8xFxVcKVLUPjvpUVI3gAztYXrVvWQlvxIYnJVZceYyumpti0ynwRkJA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=korg header.b=FrMkiKcx;
+	dkim=pass header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=korg header.b=cEA3Knjf;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED4C8606A31C;
-	Wed, 28 Oct 2026 18:24:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0013606A31C;
+	Wed, 28 Oct 2026 19:51:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=korg header.b=FrMkiKcx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46B071F01825;
-	Wed, 28 Oct 2026 18:24:37 +0000 (UTC)
+	dkim=pass (1024-bit key, unprotected) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=korg header.b=cEA3Knjf
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 292521F01825;
+	Wed, 28 Oct 2026 19:51:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1793211877;
-	bh=or8+JLMxiZBPAbx6o4e8NET7jv5HaVgGCgnWz6oodK8=;
+	s=korg; t=1793217079;
+	bh=i6f0QeEq1H2S/vNkISekiiOHHXnBUKuLQOaQmB90gW8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=FrMkiKcxGezg51JX8Re+YsM6RtA0x7t4rtuyGtV2SzW1o0+TW/nT9Dy6NKkXkDjjQ
-	 Q+7Y15nhSbT+Rh6YJ6/joPNYgMVIl61jZ1lsv/IEB16SjABO/ZwsMBGJmIBEdgHyku
-	 4KJUGPQp0oZE6gNeKgtLgAH9wAgEIScPTUYdkfxc=
+	b=cEA3Knjfro/xa3uY/aqbHrDvleEL0bjiAqx5XJ0BYGiDcDil+KFVzhTMRNe4a+vjm
+	 mEkKvILMoUaI9INn62v7yeVbA7BXapoCjMZWa3DemmJjbmEFp3K7u3jvoWPt0x8yPV
+	 5FdNlbWEeQoye4M58+qFUsIDppBgT7Qj0f5LNQ64=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -53,12 +53,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-hwmon@vger.kernel.org,
 	"Nobuhiro Iwamatsu (CIP)" <nobuhiro.iwamatsu.x90@mail.toshiba>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 532/571] hwmon: (drivetemp) Fix driver producing garbage data when SCSI errors occur
-Date: Wed, 28 Oct 2026 18:01:19 +0100
-Message-ID: <20261028170020.654917731@linuxfoundation.org>
+Subject: [PATCH 6.1 1779/1887] hwmon: (drivetemp) Fix driver producing garbage data when SCSI errors occur
+Date: Wed, 28 Oct 2026 18:04:35 +0100
+Message-ID: <20261028170539.934442300@linuxfoundation.org>
 X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261028170008.009143722@linuxfoundation.org>
-References: <20261028170008.009143722@linuxfoundation.org>
+In-Reply-To: <20261028170459.200466217@linuxfoundation.org>
+References: <20261028170459.200466217@linuxfoundation.org>
 User-Agent: quilt/0.69
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -73,7 +73,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-5.15-stable review patch.  If anyone has any objections, please let me know.
+6.1-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
