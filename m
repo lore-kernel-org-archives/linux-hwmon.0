@@ -1,56 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793292216;
-	b=n3F57rsvfGDD/MP/ddEAxCjHiIuroYimFVPi24mAyudLRnlMPbvwbg4wvRa7iHRb9imj
-	 UtP/v0+hN1JyzZ5Hv6ifSEcVfUG07thyLF0p2HlSFE6jq3arxzrNcCq7ddTd0aUut1Kcn
-	 CtkHTI4S1l0z06e8bM87IVZWKXn5pu8mXIy2M90y8p7oA3GsVSnvWQgt41yGb5ew2t1E3
-	 CoK4179IORu70l/P8e0N6GtNKqiV5sD86zHNv8a6a58ZOzScM81ygWUEvgHii3Aumzr3+
-	 gfDHNYoaB7SKl23n36myhRIiAFTwYAuULKc6uoiC80HTHPO0FIcgsc98HDXILqj1QsQ==
+	t=1793292257;
+	b=xVfFAF9CIuUDeyFmCkf1cxlCfN6iPKAMl+kXj2yQfqPU8zIU6l/9raCLQUyo1XM2zUxg
+	 Mjdpx849W4O3Z2MH+VVD8N6sSrNhE8FeJJShszLuvnziMmAb9t7KxblRtdTc8zU75iW/v
+	 pEnxtYcxGGDQg+1gHj2Fte3Fr1X5cEM1Fw2gkGWyoh5EhgomLf9PnuME7+Abon+GFUgDa
+	 9xHriL6alL/t4Ij1bDc6A6BKRyNrCGTNQMLtUXsG59emAn9DEhbOrC7OcOtxpyTr1UWHK
+	 60Sri3/a6i/TIeM0XHedzND5TCsoGKCw/zcubHoM7M15UBDwmf0XxImFXds302xXQMw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793292216;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793292257;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=fLNVx75cMN3EyzNlZPAKW1LvFu7qtigaSdkc0VgNLQQ=;
-	b=Ob3svEA8HBgGmm1Gl/DtdLDHbnBH8EANzPv2SmFmdm2AO8pOzrUggLpNL8uIE2KcEQnA
-	 N6Ol21H6cRbSQThcg9mXBDuzT4p9iJBq+40WzU2kegmHjre7YBLa+zUxVnO7X9vdy1D+e
-	 iRgtyIEzFC5cG4MoVAmSbe7kWOQY4e6ttM9c21IA3z3Bw/CIbWj1GILUABRY7txzLVVKf
-	 uugotaxg60lgbNUpPeEnkgldYrC3PLCD36fzfxaRK/jPnXmZcgzgeKLIi/Y9OYANsurzD
-	 TFST1sHuB3iShDBg0L0gTw9YUZWtSGzt+y9v2PPG25TCa3udSTqhe8K5i0gBTLRUGVA==
+	bh=kw2Pxpqk2n2DD7b29qBbVOgp+an3jDurpLcMZm4KHk4=;
+	b=EmDMVxq0uq1Nw546T850HS2XvW2GZnBi2RMq3JKRsffAW6KfGjLu0rVEtwOCOoTCLyWv
+	 r+Gonwbz9N7BlC3yBZSDJ1dLPGbp0jYtB3vEV0g/R39gR7SjmcSglsnyU8f6kmSk57PRG
+	 EmTipYFgHriOPMnW7ehu1mcAzs/t+U9gQsDMBPbFjJP3vWysjp1k1QuhteSAZjzS/ljvu
+	 Ru8TOnJ6OGxxdJOzolaBGS9E332v4ObD9EpKH2CYdvG+DKVoaad3Sd8ZJtXODlJrcnfqr
+	 RdLwoGMFivF7ITUXAINDsfZUPpxDtalMfBwVrAvblgkHjmw7169foU8rWp9qgvWa04g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dfEDHDlI;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="KbYhIm/K";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DE41606A31A;
-	Thu, 29 Oct 2026 16:43:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C55606A31C
+	for <linux-hwmon@vger.kernel.org>; Thu, 29 Oct 2026 16:44:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dfEDHDlI
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D22B01F01816;
-	Thu, 29 Oct 2026 16:43:35 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KbYhIm/K
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9496E1F01816;
+	Thu, 29 Oct 2026 16:44:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793292216;
-	bh=fLNVx75cMN3EyzNlZPAKW1LvFu7qtigaSdkc0VgNLQQ=;
+	s=k20260515; t=1793292256;
+	bh=kw2Pxpqk2n2DD7b29qBbVOgp+an3jDurpLcMZm4KHk4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dfEDHDlIXRHZcN0hbbvsFSTw/1XURIziF2u0SBc/c5n81b1b7zieni8d+eT5JYOZs
-	 1I4Wmq/7YOiiYuFXcPGYkYNAoZyIlALFzqJluMOe/SDLtCQZOjgNDWC/ju7ENNkdFC
-	 s3s9ulaJ7PNfRvdJJFrrfW5tlDEKfeJU0vay7czfkWW5kByl1Z6JQzsI4IwRfgNeUE
-	 kArElLb8rfc/fjCvNh6ng9CMkg6Q44FVgGuM+skpNikUQNSK8LjsKDQRBoOH+sh2vz
-	 ShWAJSWTwZr4Acl/Kl6tiQGWGIewmCi4CBAcmeH5Lt7Qmw0S8QNSkBjiXz9WvOmHGc
-	 YJYg5Wym9FD5g==
-Message-ID: <sashiko-outbox-189670@kernel.org>
+	b=KbYhIm/Ku7KehDKYTrEqZwaKH/zj5JPnWMAxwQRH4E+HHELWQtF8UZdS4FDunCaW8
+	 o2d9Fla7yTZYpxVr+cU6xga+coWEz1dXU6TpBZqF+Ykx1xxcwfURK6EDdPOJJGNlrs
+	 3Wrsq48l/p5EU/8wKXla2o4MHAhYmEXEAu/3D0cxgaXElB/l3pE6fiqngmm5f9Yqnz
+	 LnlFG2CraazFTyhaUS5GHiLh8Y7kebhjtaMlfYljCDwjnK0/n32UIQ0c3aV70dfGNE
+	 mSUgBMPdz97OBb7hQFk3ga/4SgHgztsRRch8cyiVt2I5OXY95iNsU5etwO3Nr4mTbL
+	 uHFq9Thg8tK6g==
+Message-ID: <sashiko-outbox-189671@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/1] PM: runtime: change stub pm_runtime_get_if_active()
- return 1 when !CONFIG_PM
+Subject: Re: [PATCH v2 1/3] hwmon: (lm87) Propagate sysfs write errors
 Reply-To: sashiko-reviews@lists.linux.dev
-To: Frank.Li@oss.nxp.com
-Cc: linux-usb@vger.kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20261029163044.3062958-1-Frank.Li@oss.nxp.com>
-References: <20261029163044.3062958-1-Frank.Li@oss.nxp.com>
+To: =?utf-8?b?QmFlayBLeXUsIEtpbQ==?= <pocj8ur4in@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20261029164016.338450-2-pocj8ur4in@gmail.com>
+References: <74e00272-306d-4d83-b6f6-10059ad3a91f@roeck-us.net>
+ <20261029164016.338450-1-pocj8ur4in@gmail.com>
+ <20261029164016.338450-2-pocj8ur4in@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 29 Oct 2026 16:43:35 +0000
+Date: Thu, 29 Oct 2026 16:44:16 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -60,31 +61,15 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> From: Frank Li <Frank.Li@nxp.com>
+> Check the I2C result before updating cached values for writable
+> attributes. Handle both writes in fan divider changes separately so a
+> failed second write does not hide the first one.
 >=20
-> When CONFIG_PM is not enabled, all devices runtime PM state should be
-> treated as active.
->=20
-> __pm_runtime_resume() returns 1 (called by pm_runtime_get()).
-> pm_runtime_get_if_active() is the try-and-get version of pm_runtime_get().
-> stub pm_runtime_active() also returns true. So pm_runtime_get_if_active()
-> should return the same value as the stub pm_runtime_get(), which is 1.
->=20
-> Analysis of all callers and their behavior with old (-EINVAL) vs new (1):
->=20
-> Pattern A: if (!pm_runtime_get_if_active(dev)) -- no impact
->   Both -EINVAL and 1 are non-zero, so !ret is false in both cases.
->   Callers: drivers/accel/ethosu/ethosu_perfmon.c,
-> [ ... ]
->     Both succeed when CONFIG_PM is disabled; functionally equivalent.
->   drivers/hwmon/eic7700-pvt.c: call is guarded by IS_ENABLED(CONFIG_PM),
->     stub is never reached. No impact.
->=20
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> Signed-off-by: Baek Kyu, Kim <pocj8ur4in@gmail.com>
 
 Sashiko has reviewed this patch and found no issues.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261029163044.3062=
-958-1-Frank.Li@oss.nxp.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261029164016.3384=
+50-1-pocj8ur4in@gmail.com?part=3D1
 
