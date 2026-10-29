@@ -1,58 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.39
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793292605;
-	b=kevpGE/7Jdkryw2fFlgCxhPMU9Is7nuwCzTqqQlC+Q9h/4VyfawOGF0wBSAs7oM7ibcH
-	 FndmAItkxZ5FP/5AgtDRbnwZAnqINDP7kJ27XO/9Fhr27Y7+ly1CWjlVC7IBBJh4fvDx0
-	 F7fyKMfSj+muHXHZTtvGLLXvyK5qvGYTIcbGDiTnRJ96ClVxEptZY31mjoYn6ibtbjuBw
-	 45NZRg8qlIm/1plWynCF9qGguyo1O+79fnQWRhgxncCmG+BV2e2lIteXY+lGn0jE3U1Wc
-	 y7UvqOJA98dhY2SZSAud+O5WNTy9rD8VZvzoLpNnWX58U24acfOcc2HGuOvw46oqaVQ==
+	t=1793294484;
+	b=VV6UeR0xEKaPldyR1iMFuqJ1sE58dq3c68iJXUfKwiUGPfPJvuM19dt5aIpnHCVpp4WR
+	 pZ6+4EQJNcNhRZRzqTbM6jWPtd8aProqP8m5YYVY6NzHQSOTpgiWfPSaHi5FHIKE5T9oS
+	 Q7H76CbVW6ZibaivSE4rGXeBrTT6bzMzTx6KugZa669KIZRBfdwtsjtI31o+9GRT+wq7b
+	 MLS9rfy2gF/NVTu0wRkcmSm2U+UQjNmHhhuNVoioO4W89VEz6YeUw+xVywdtaMINktY1M
+	 O3t/QmVJmaP4Xk1CIg3UMVKMpoqZCJGsLLvz5klT5HRLsZPTiQ4E4FES9tSxd2y+e+w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793292605;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=Pa0vkJzj0k3zZLL/20GlQy9JpgmBB2nzAtp9OHFpta8=;
-	b=WMAB8e0Zxci9rJNHMel7PzVRhAN/PNHusa4a93NwxJUyH1ZJYObKrUpCoM+lT8euSB4n
-	 WwiWPQWBUFQSAOlWRvDpSjEOGc47TQdupuaBpQWJx403VwRqIbMkXwbTnWp45aTs2iNWi
-	 dqkJAxsNfqtk3FfejSnvENQrMB9bdCzdOCgshpsZGXitXavI9NzblKUvTqT/MSr6gKxqc
-	 H4joBuoDCXftBA15NfZupUFEg5VuhoH1Je2RdQs+m+Z9G0sOh6DF0wb52Vvf4QRgvAfMq
-	 83ulkSUbtZBM/J7Z0FYieSfQRUVP40gk6EPRtDKG0nTteWgS/CyUQSY00/vZSGNRwhQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793294484;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
+	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
+	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
+	 X-Local-Domain:X-CMAE-Envelope;
+	bh=TgNeBHsknHj0wzoAxUWE7QektXUSWiHy+TF+yx5mrrI=;
+	b=NZd0656w69sf9KB8Kn4Tmg3JQBVd5f7N9UGZU4YyhTRZg5i6YzJroVNikF3HOTCdA2Qk
+	 fy3j0xwFA5naxftf8vdc53DXsqg+ks4jfMCyAziuEM+OkpNvC9ax2umVOEirAbmYnVUsH
+	 g6/xKWFcZwBL9Z+exa2g+Osk5X3mdHzyNQNFwyBzEwrd+f1+1JTWFlsKgnxS5HG+0Ng72
+	 dyZxrHoapJ8xoBFVAny4OlcPpZyKMRBczEI0xoCCdzZz5tyRE3PFzB4z5bIC+N+K7I0A4
+	 gouYm8FZ+brv9ww0NNFraxwqSTFb1v1yJjBABaUljiRahpGEOfvTTFv2CTdrm2+Cgmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XUzZmyq4;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=roeck-us.net;
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=Nq9dyxYn;
+	arc=none smtp.remote-ip=35.89.44.39
+Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0AB5606A31C
-	for <linux-hwmon@vger.kernel.org>; Thu, 29 Oct 2026 16:50:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC322606A31A
+	for <linux-hwmon@vger.kernel.org>; Thu, 29 Oct 2026 17:21:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC322606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XUzZmyq4
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 201301F01816;
-	Thu, 29 Oct 2026 16:50:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793292604;
-	bh=Pa0vkJzj0k3zZLL/20GlQy9JpgmBB2nzAtp9OHFpta8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=XUzZmyq481DVF40OONEbXfTOGi0gu+W9J1nq/yfJXFA8ML998aX88/NasRLnXjVx6
-	 cQuQBfM6uu7L+fDZQ3nOhvbhgVoVL2QPtY8lyGNKMZ65FloEQPtkn27XhsGeFFesBu
-	 aevRLXDFmBS4KjApbgo83O2zwKGGLkKPKzRWjVYaFiOENV+9olDVlbXU+dJ228ooJj
-	 kWxVA1pv9rBPCwG/rQcxo3GSlO5a4k/peqhFNPuxraK9tmDJiM4BO7rmd2b8Tjkuj4
-	 jSwK7anYtxdRwvlmUM+tzIpRH64L1IB3OCkmfYTvb65Tuv1yHzPNTLcqph5p0cWhxc
-	 weIKllRUjA0ew==
-Message-ID: <sashiko-outbox-189682@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 3/3] hwmon: (lm87) Check I2C errors during detection
- and setup
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?QmFlayBLeXUsIEtpbQ==?= <pocj8ur4in@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261029164016.338450-4-pocj8ur4in@gmail.com>
-References: <74e00272-306d-4d83-b6f6-10059ad3a91f@roeck-us.net>
- <20261029164016.338450-1-pocj8ur4in@gmail.com>
- <20261029164016.338450-4-pocj8ur4in@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 29 Oct 2026 16:50:03 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=Nq9dyxYn
+Received: from eig-obgw-5002b.ext.cloudfilter.net ([10.0.29.226])
+	by cmsmtp with ESMTPS
+	id MJ5sxOo6yc3XsMToZx3hAu; Thu, 29 Oct 2026 17:21:23 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id MToYxZvWCQfwNMToYxCzfz; Thu, 29 Oct 2026 17:21:22 +0000
+X-Authority-Analysis: v=2.4 cv=bfprUPPB c=1 sm=1 tr=0 ts=6ae38092
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=kj9zAlcOel0A:10 a=660iZSQnnn4A:10 a=M0FbrtG7MMAA:10
+ a=VQ8kBUOwJ9iVmVjqGIYA:9 a=CjuIK1q_8ugA:10 a=KPbNTLLc3YvdawN95zVk:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=TgNeBHsknHj0wzoAxUWE7QektXUSWiHy+TF+yx5mrrI=; b=Nq9dyxYnqJLYGid9u042rSqtkZ
+	byNcIobryJ+YXGbg0mAm7UUvDLSCBd1q/pX4VxpvxXk96no5UO5kkR8yAXg8/fkeqtfG0xdncZVJ8
+	ywH1MvAOh6LcwA6xm/3WSZmecvq3JNazu0Z5Eqw1uzNEpx9J1Z8w8BH+YAwcsSlRx3fSZBcqjJAIZ
+	HEbf9HJh9bmYZEU/XGYm76sWY20cTY4o3puFmG3w195eoaTCavVdOjbvuBxF1GLbB+Pv6uPC2P0wG
+	78Duj95nPk9jL0tEBRR2+IWo12Vvug5z344bompnXjysyw1PVHTkS915PCDW5j/N0K0IyVf3lRh0A
+	K5W04eSg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:47456 helo=server.roeck-us.net)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xMToX-00000002CM1-44C0;
+	Thu, 29 Oct 2026 22:51:22 +0530
+Date: Thu, 29 Oct 2026 10:21:21 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: Mike <mikedeuchar@gmail.com>, linux-hwmon@vger.kernel.org
+Subject: Re: Precision 7670 SPD5118 resume -ENXIO with confirmed SPD Write
+ Disable: supported temperature monitoring without weakening protection
+Message-ID: <9cfafb7c-8f9a-4736-ab38-4f46eb5b0d0e@roeck-us.net>
+References: <CAD2WtuOZEtLGkncdKA45T7mV+udX4jt7cZpqqz+xUZ_Z9UVGsQ@mail.gmail.com>
+ <650722d0-5f7e-46ab-9044-5fbb133a7967@gmx.de>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -61,100 +81,70 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <650722d0-5f7e-46ab-9044-5fbb133a7967@gmx.de>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xMToX-00000002CM1-44C0
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:47456
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 1
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfKr5Zv309QyKrqnXH1SR1Se0dJ3rn+vRw1xQtk0+/YHyn6lNUHmsTt1db/JE3zG7NwJpgm2MN49QCze3ytKI6q5sc1Ry4XMzPqUtQsedIsjm//QdSP6+
+ HQJOqQRkADB0+Y9RhR7cYw5JiTRymyx5Zq0kpu7Yg4UGvnfDfuZpHQu3/UXr0TMXV5N2519Wj8T1CtPPeRNHm3DXEBWEKQK/NazINSUf9RJHgYyhyCLvXSSD
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] hwmon: (lm87) premature devm_add_action() in lm87_init_client() on =
-error path
---
+On Thu, Oct 29, 2026 at 03:08:48PM +0100, Armin Wolf wrote:
+> Am 29.10.26 um 12:31 schrieb Mike:
+> > Hardware: Dell Precision 7670, BIOS 1.41.0, i7-12850HX, original 2x16
+> > GB DDR5-4800. Passed Dell advanced diagnostics preserved. Kali kernel
+> > 7.1.5+kali-amd64; spd5118 in-tree module.
+> > Boot: i801_smbus 0000:00:1f.4: SPD Write Disable is set
+> > Boot: i2c i2c-0: Successfully instantiated SPD at 0x50
+> > Boot: spd5118 0-0050: DDR5 temperature sensor: vendor 0x06:0x32 revision 1.6
+> > On each of two completed s2idle tests:
+> > spd5118 0-0050: Failed to write b = 0: -6
+> > spd5118 0-0050: PM: dpm_run_callback(): spd5118_resume [spd5118] returns -6
+> > spd5118 0-0050: PM: failed to resume async: error -6
+> > 
+> > Temperature sysfs attribute readable after first resume, 30000
+> > millidegrees C. This is not independently validated against
+> > register-page state or another thermometer. No direct SMBus write
+> > tests performed, no protection changes, no module blacklist.
+> > 
+> > Aware of maintainer concerns in August/September 2026:
+> > read-only/skipped-restore proposals cannot guarantee valid sensor page
+> > selection after firmware activity. Neither proposal installed. We
+> > require protection and reliable monitoring retained, not silent error
+> > suppression.
+> > 
+> > Request: is there a supported firmware interface or driver design to
+> > validate sensor register-page state and provide reliable read-only
+> > monitoring on this platform? If firmware cooperation is required, what
+> > specific documented behaviour should Dell provide? Please distinguish
+> > unavoidable read-only limitations from a correctable resume callback
+> > error.
+> 
+> Dell could either modify its BIOS software to not set the write-disable bit
+> _or_ it could expose the SPD as a ACPI thermal zone.
+> 
+> The upcoming 7.4 kernel should contain a fix that disables the spd5118
+> driver on platforms where the write-disable bit is set, so the error during
+> resume should disappear.
+> 
 
-commit c6264ca6c303f980a5123962ced0900012b6d8d6
-Author: Baek Kyu, Kim <pocj8ur4in@gmail.com>
+Correct. Until then, I would suggest to block the spd5118 driver.
 
-hwmon: (lm87) Check I2C errors during detection and setup
-
-This commit adds error checking for SMBus read and write operations in
-lm87_detect(), lm87_restore_config(), and lm87_init_client().
-
-> diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
-> index a66d486b314cf..32ec44f583eb8 100644
-> --- a/drivers/hwmon/lm87.c
-> +++ b/drivers/hwmon/lm87.c
-
-[ ... ]
-
-> @@ -989,7 +994,12 @@ static void lm87_restore_config(void *arg)
->  	struct i2c_client *client =3D arg;
->  	struct lm87_data *data =3D i2c_get_clientdata(client);
-> =20
-> -	lm87_write_value(client, LM87_REG_CONFIG, data->config);
-> +	int err;
-> +
-> +	err =3D lm87_write_value(client, LM87_REG_CONFIG, data->config);
-> +	if (err < 0)
-> +		dev_warn(&client->dev, "Failed to restore configuration: %d\n",
-> +			 err);
->  }
-> =20
->  static int lm87_init_client(struct i2c_client *client)
-> @@ -1013,16 +1023,26 @@ static int lm87_init_client(struct i2c_client *cl=
-ient)
-
-[ ... ]
-
-> -	data->config =3D lm87_read_value(client, LM87_REG_CONFIG) & 0x6F;
-> +	rc =3D lm87_read_value(client, LM87_REG_CONFIG);
-> +	if (rc < 0)
-> +		return rc;
-> +	data->config =3D rc & 0x6F;
-> =20
->  	rc =3D devm_add_action(&client->dev, lm87_restore_config, client);
->  	if (rc)
-> @@ -1033,28 +1053,52 @@ static int lm87_init_client(struct i2c_client *cl=
-ient)
-> =20
->  		/* Limits are left uninitialized after power-up */
->  		for (i =3D 1; i < 6; i++) {
-> -			lm87_write_value(client, LM87_REG_IN_MIN(i), 0x00);
-> -			lm87_write_value(client, LM87_REG_IN_MAX(i), 0xFF);
-> +			rc =3D lm87_write_value(client, LM87_REG_IN_MIN(i), 0x00);
-> +			if (rc < 0)
-> +				return rc;
-> +			rc =3D lm87_write_value(client, LM87_REG_IN_MAX(i), 0xFF);
-> +			if (rc < 0)
-> +				return rc;
->  		}
-
-[ ... ]
-
->  	/* Make sure Start is set and INT#_Clear is clear */
->  	if ((data->config & 0x09) !=3D 0x01)
-> -		lm87_write_value(client, LM87_REG_CONFIG,
-> -				 (data->config & 0x77) | 0x01);
-> +		return lm87_write_value(client, LM87_REG_CONFIG,
-> +					(data->config & 0x77) | 0x01);
->  	return 0;
->  }
-
-[Severity: Low]
-In drivers/hwmon/lm87.c, lm87_init_client() registers lm87_restore_config()
-via devm_add_action() before writing the sensor limit registers and before
-updating LM87_REG_CONFIG at the end of the function:
-
-	/* Make sure Start is set and INT#_Clear is clear */
-	if ((data->config & 0x09) !=3D 0x01)
-		return lm87_write_value(client, LM87_REG_CONFIG,
-					(data->config & 0x77) | 0x01);
-
-Now that lm87_init_client() returns early when any of the limit register
-writes or the final LM87_REG_CONFIG write fails, devres cleanup will run
-lm87_restore_config() during probe unwind even though LM87_REG_CONFIG was
-never modified. On an already failing bus, that issues an extra write to
-LM87_REG_CONFIG and logs a "Failed to restore configuration" warning.
-
-Should devm_add_action() (or devm_add_action_or_reset()) only be called
-after LM87_REG_CONFIG has been successfully modified?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261029164016.3384=
-50-1-pocj8ur4in@gmail.com?part=3D3
+Guenter
