@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.39
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793303215;
-	b=Ks3CwP1M8d6d7meeap0aDvYXOI5eejeaQigpN2jy8SmkGlEcniBFs53yN1qmZ6LHSqwa
-	 EokchvjaPJs1VdwgpapRHLxxmg4gmJ6AvB6DAg59K0h6bJkNlx89HgiMOWKYqZ1g2gBIE
-	 viPrFJM4TXKL+7AWQqWgZGlqHWr7AHfUbY4L3zIONLsNnjVl7PZOaatLc2IhoCi8Mo5wb
-	 pLqIA5pENkDJLIqjAf3CBydniFxdmrUyCebtWxHafwypD4bYg/+Y1e7/TWEtlJQDq1Ymh
-	 wKL48mCAsXUVj+ztGBuwIj5FQ0THqZ2AeW13I6xZYZGG8PuLlH/w6ZQS7mT/Y575Oqw==
+	t=1793303445;
+	b=DlmYbB2JIGNsXmbyOfJKHJ0nBA16G5RBa7IkFk0RENChzMBeTIVCU5WzR5QGoJxNyjQn
+	 c40tLx+lwihioSbsMvtBCrYR5exjAu+Nspnv2zC47lRIf8LZeXvuPW0DDwtB6O3eEA1H3
+	 8Nx3E38qoIuwWwQ0xmOJ773unJHnU3Tr42PPl0kN430OcHb5CAsVq313hPnCgIJI0b2V0
+	 +VeVzmsxs4D19QxNC+ZqPMJpiAO+5mMcGp6NN1MS5z+B9wPlvi35Vbnxw7PNYkdaipYQr
+	 WzFU5NLWr1wI4sFv47q+ls1Z/JLTe5+wRul7ewW5iGrfDV2sbi4hhISubLYOeWyfJDQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793303215;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793303445;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
 	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
@@ -15,58 +15,54 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
 	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=+h9aUIF3lgC6iW7pvb6Ey2DCmFEjJr+jxRPMdBIxh3E=;
-	b=SwpzB/sULSmh8ZldA8A09hj4EbxNzrwJPxFE4xHKQBUKQofTooAIWwH+XH6PDka6Fipw
-	 tFi6jiefZ5f368/KOGtsMnBGwypuEDmefaJYAeuLwUP+7oPvH/TlORiPDsz3WZhIPRY6T
-	 ux09RNk7UGkBddbY5Btb+bKU8/3Sy0KhAgKT2pD3pEBczpKz0FDBmcMO2VA6q01uGocNG
-	 h1m2QIF3g467BKTZIaexiOLLLXtS9Op102hISTEIEp1oUINsncR/OY6YgE3N0v0Kf3px+
-	 Knw4wMkuTWFG50CU3mQW6LbOEhldmkMVW2h8CXV4phXSsteAsD/85uqjNVrOVRDr+rg==
+	bh=UiOFXnJN4aEt2ursm4/ofn3G0mtekA2dd4OwLMrURCk=;
+	b=IkDtl9jTLfVkG2ijj/qjswQPvUgbjo5sa+zacmSH28XPfncqI0NJagrbYs7LfZ5UrQ71
+	 BBhc6agLMWCOfvlXK31DklSHYI7fY6INs+7Exy7jrtqoOXtcsP+Pq2j8/MhMIYHhCbXOl
+	 bY/d4Usr2wMpAiZ5AmcKRBt8Mi1/skEHtiZIBexgnxoM5TqfqhkjT1wBeTO0yjHymFhSI
+	 vIqbboRdYmS2+2Wscw1Un3MP4ESR4fWFYl0pr5y4sDPOkMssudAher3MVWEKD1RPy1/G1
+	 2wvbXRkYSe0/EJn+dsXah/wQw+N2mRhYjTKn3YddiKxnP0zg45xeMtT0qPxamiimWqg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=Ju5rmvhG;
-	arc=none smtp.remote-ip=44.202.169.39
-Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
+	arc=none smtp.remote-ip=35.89.44.39
+Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A19606A31A
-	for <linux-hwmon@vger.kernel.org>; Thu, 29 Oct 2026 19:46:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 59A19606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C66DA606A31D
+	for <linux-hwmon@vger.kernel.org>; Thu, 29 Oct 2026 19:50:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C66DA606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=Ju5rmvhG
-Received: from eig-obgw-6004b.ext.cloudfilter.net ([10.0.30.210])
+Received: from eig-obgw-5005b.ext.cloudfilter.net ([10.0.29.189])
 	by cmsmtp with ESMTPS
-	id MPKRxAOTXMylkMW5OxZCSQ; Thu, 29 Oct 2026 19:46:54 +0000
+	id MPPlxQ9QBc3XsMW92x582E; Thu, 29 Oct 2026 19:50:40 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id MW5Nx3cWIe0duMW5NxkwHA; Thu, 29 Oct 2026 19:46:53 +0000
-X-Authority-Analysis: v=2.4 cv=KINaDEFo c=1 sm=1 tr=0 ts=6ae3a2ad
+	id MW91xCj04vtkxMW92x4qq7; Thu, 29 Oct 2026 19:50:40 +0000
+X-Authority-Analysis: v=2.4 cv=BbzY0qt2 c=1 sm=1 tr=0 ts=6ae3a390
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=M0FbrtG7MMAA:10
- a=Ct8S1O0kwU24StytZNQA:9 a=QEXdDO2ut3YA:10 a=ZXulRonScM0A:10
- a=KPbNTLLc3YvdawN95zVk:22
+ a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8
+ a=j1beT1lkjW76g4ZdyDUA:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=+h9aUIF3lgC6iW7pvb6Ey2DCmFEjJr+jxRPMdBIxh3E=; b=Ju5rmvhGNJ6q
-	lO85jRGcyKeSlABaiSJuUu+yf5c2BIJ8t/hAYfnDoVX7psRF1y3O+cWIZhkVQSdQKPOxJtgBsWnON
-	eSHjA/U3E754xCUsMMeQNNaHFh1kat2kp1lre+OukTqEFFKsW+h05P3UF/vIE174ETIXPsH4QJHCV
-	q6uBptjcctg372SjEIsrQLiYKWZwVlHOMJdg4aULBDXXnEpX3AQzwQ1jhxivB7QVVT10vSD1W1N2N
-	jtpG0xUAnTB1PPG/5Y+AIvHcXT/Tm0nAPbfEXg8GuNABYJUVfT/D6RbftZTjz7duZtAVvvoD73chm
-	25d5dKlJsx3/w1BYCXy7DA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:53462)
+	List-Archive; bh=UiOFXnJN4aEt2ursm4/ofn3G0mtekA2dd4OwLMrURCk=; b=GYlnC/P9NnMB
+	eihavemhPsjci7TrJkZbqbfAtjCpoM8AR9UkQmPVow8lIYVpKhtcaBbhorBFvcuCt1eRmxpXOaTKb
+	6qXGxh7VEbl3AybcqcaSMO2T+0Y3MZTXKauKR5RfVtw1KHJayM8O5CSN0d+rGSTqyzAqPikYlI2uR
+	xQGLGiSmUPhlMTEmSSde9+cjPEnwND1gqwwRkbxw+7D7rftqRqus05Nb1AjZ3QSBbqxhRPa+Evzkm
+	cb8wDL1MuKVqWmIxIm8luXdGy7E3/Gu3usHO4dhcHg2udSURyTSuVaARP0Ge06hymvS3ssbrIqq4r
+	E3f+SEJwonCqjIMiTPZGmQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:60694)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xMW5N-00000003fAx-0enu;
-	Fri, 30 Oct 2026 01:16:53 +0530
-Message-ID: <d81211a9-a860-4597-b15f-b8627c490e67@roeck-us.net>
-Date: Thu, 29 Oct 2026 12:46:52 -0700
+	id 1xMW91-00000003goX-2ruq;
+	Fri, 30 Oct 2026 01:20:39 +0530
+Message-ID: <c0a2503c-061e-4057-810e-5a93443cef32@roeck-us.net>
+Date: Thu, 29 Oct 2026 12:50:38 -0700
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -77,11 +73,10 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] hwmon: (lm87) Handle I2C read and write errors
-To: "Baek Kyu, Kim" <pocj8ur4in@gmail.com>
+Subject: Re: [PATCH] hwmon: Fix minor style issues
+To: himanshu bakshi <himanshu.bakshi478@gmail.com>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <74e00272-306d-4d83-b6f6-10059ad3a91f@roeck-us.net>
- <20261029164016.338450-1-pocj8ur4in@gmail.com>
+References: <20261028081504.127535-1-himanshu.bakshi478@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -127,7 +122,7 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20261029164016.338450-1-pocj8ur4in@gmail.com>
+In-Reply-To: <20261028081504.127535-1-himanshu.bakshi478@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -138,40 +133,36 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xMW5N-00000003fAx-0enu
+X-Exim-ID: 1xMW91-00000003goX-2ruq
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:53462
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:60694
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 2
+X-Email-Count: 5
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfFYVmDIgrsospXtElmV9IouZFIRAJ89EA6f644l0GSmekl9Z9QQ43Sbkueb8uGRXPAmb6nYGd72jiYiGOSzKiMpyqpm9FGcBoJheHht0VYiAZ+VzvDJb
- hQiRAwlOi/3ay1r8x5K8WpifIxSiRXdoOfJmvZFGdtkes4Ic0cfS/oKxAqBAKq0Wpa1fpuEDI1CNoQ8mIl75QjapcbxbVGpnWbz90UYiH1QVZkw9XXjZRiS0
+X-CMAE-Envelope: MS4xfDrPjvsL1MzFFEc7ZJfEdOK6cD7gDVxsKF7XXHFqddpeBPqOEPZY7XB/WZwZMMq9/RA2f/qZlRDZBbEK58XkMbFDr3ocsMNTw/vYRQYCIJ6CziS3X0PA
+ OC4a1gZ/AtSucryRRnGLuiEHj2YxDSISRVo+6gKZAJ5Mt/fdiWMkjyt4FYL6D8Ppe2bTzi5fahrBerEM4A6PGHn7BHfQLC/PLQR7SlbLXECMTIE93D+j+YNS
 
 Hi,
 
-On 10/29/26 09:40, Baek Kyu, Kim wrote:
-> The LM87 driver does not check I2C transfer results in its sysfs stores,
-> sensor cache refresh, and device setup. As a result, failed writes can
-> be reported as successful and failed reads can be used as sensor data.
+On 10/28/26 01:15, himanshu bakshi wrote:
+> From: Himanshu Bakshi <himanshu.bakshi478@gmail.com>
 > 
-> This series propagates transfer errors to sysfs and probe callers.
-> Cached settings change only after successful writes; a failed cache
-> refresh is retried, with alarms already read retained for the retry.
-> 
-> Under ARM64 QEMU/KVM, 46 emulated SMBus scenarios passed for LM87 and
-> ADM1024. The earlier aout_output regression suite passed all 118 checks.
+> Add newline between variable declarations and executable statements
+> to address the checkpatch warnings.
 > 
 
-This driver is more than 20 years old. It survived all that time without
-i2c error checks, and it is very questionable if it is still active on
-any actual hardware.
+This patch only affects a single driver, not the entire hardware
+monitoring subsystem as the subject suggests.
 
-Please refrain from touching such drivers unless there is a real problem,
-observed in the field.
+Either case, the adm1031 driver is more than 20 years old.
+It is quite unlikely that any modern hardware still uses
+a chip supported by this driver. Please refrain from making
+changes to such drivers unless it fixes a real bug and you
+can show that the driver is still used.
 
 Thanks,
 Guenter
