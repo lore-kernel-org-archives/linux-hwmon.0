@@ -1,78 +1,142 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793260091;
-	b=vBtE9YZuVyShyi6qSmrKaOumXK9TQZ7glbGw8mZ11yGSHDA9sVwfcXy+Isr+76mkUn4H
-	 jFGkl5emROpJPidwpNtTMXZiElVQUe4w+e+5nL8T5yrG2h8t6yBjDfngRmXjYj8WX6bfE
-	 Ots85cV26BP6npnzxWgWeKTO/Oht4E5wGbBvwIQV50wsLCYrq6vjkP8D5w11fMyHD4fBV
-	 6Ygmdx3YnEkTsEaAZ5poELHe5zgI0FYqMAZfiMgeTI2SOeuoP7yCYD6Hbe+v1z7MtDjSV
-	 zaHH5wxfHv1xBAauoCNIPC+GJQsem/yBFv/96gfY7ZOmiERhVq7var7IJu79Won5YyQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793260091;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=kLPsObaT6f/PPOqYyCA0kMg08YEwAESLQry3ZVb28XY=;
-	b=l8JeMmCJUAVKohtb1yFCTrTQKLVLLz81hyMkOQWBC13p3WaVcGEA2Bpi1oedmK/Jbe5Q
-	 lMM8ihZUDSdY4r84OC5X3g7X6GyEbMApOGc2unsz6nAsXMYzhI2/Usbw5iJlCauNq2leI
-	 nUbwT9a0d3C3ApkT3+T3oeki4Ns78VSdL0zrynOQHxqInKFSGVOxb1Yu68oeDWk7ZmjE3
-	 iInOOy/03WfbjN1d/yfPyt6iedFJamvd64bY0Yyw/hPixgjzNNXMr0IQcY9uXgcfKG01B
-	 DpTztPhypHd/Uo4zYucxeEhD3KlIghCLNnon/xRpBEJOfLFD24FXn+2UFHaEqwoF72Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nXGvRbc0;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76382606A31D;
-	Thu, 29 Oct 2026 07:48:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nXGvRbc0
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793260090;
-	b=g8YN6WcNBE/WeUSixnomOIge6T+yjJcmw+EPPjh34EhOdgwQpWJQS2kLE6Y3QoHJfH2N
-	 NBBY3EeTCyLsclfPJdcgoWDmN5vPJxyBdmIXHK2sNm7Wt9Wnp64VswfH8wxQXgq9T6heV
-	 84kEDcAc7rec0EbBsgKT2GF16fzJ/K7+GKoIs7lupxwE3Rxd3u4hLUb2d3JiEIWC6K0tP
-	 +Mr9NTwzfR4mTV1e2PkNjP1YlPnUv40fhQy6dV6L3Y2oQQVkdJwFP62sW9DnUpx2wn4YI
-	 oX/6lVV/CPOP2kAlpH0qJE9hJZEjJr+BkWN6bCn80f28h0mJbYxIHdAOX+Wg4GTIt4w==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793260090;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=kLPsObaT6f/PPOqYyCA0kMg08YEwAESLQry3ZVb28XY=;
-	b=ocLdFtbGOaVqmTwooG/HhkMAsN3qDUOhr8oI97lO/pSTfGPqFEfy8mK99CGul2GIG5B9
-	 qo6EbiY3cNF+tYFW1AKzBca/Q7/oyZpYvV/sWaprs/tVwBQZ8dWa8DFPW+lE86BP7ofGw
-	 aHRf76EG9EZ8LztvcFhC/zZ6mqyw+9wEGbK+y9lOG76bGwKi4CuOscGzqmfoNW6/ZM6PT
-	 Mb24S+QfUfIA9aOdZWK9hJiMt5nld3rzdA4DxPQkrbB9jMYMaUknfER06LSow8Wy4zmQn
-	 8CPUgV99zMtf7TP9QdmyBU+WnOWQgJ8AvrJ3Zg2NTUwrZSeG5q9RZdvWGX3pCGCzXAA==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.182
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793264154;
+	b=R2aPoDqmq4A/5Ehld2CmkUPedQpQIdqvvcFkYOyChK3nY6ZYjWn5aYyNbfOPIe8iTCzI
+	 TpJfNHrRRUU29DAoIc54Lv17zWxRu73r2/lI1Dchw62ADVCKKFiRIkZecp36ZrrEfeBVi
+	 puuPHJRZX7eVXTO9WnBsWhVxTJNd+Eoeej0fFQo/3kjHsWDvS42/Lj2qZoVRtNSQQwHfE
+	 xq6NFRIZGjIHDV9cR9WhZLHo/LQQSXsxhuoSnTckUBayhclsoVjkHYXQhRvWaV7SMSmti
+	 5zypqtcmfscwv6/4u0QbVX6EhMOvfxDnVpau05WeZ1nSbwXXDNQqmUPlyY1FpKWXtcA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793264154;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=YYDnw0w3VJ1m8RLFL/nZJuly2Onkx72MVUQSXk8vs44=;
+	b=JqB0FvE6PkRK+Fv/Kkxy5OzTlaeANfo+3p3gvBd+TjR3+t31CI4W1dm2R7MayTFvbgwz
+	 1+v1SsbPyX56x+lY3YNU8Zm20fIyd5HzhGm0MsPTQ5juMYpDt1zQHyIfBMdi76LS4XmQu
+	 5ooJW3I4zPzBlCd/M0aXvYABuSalNTXkMExZKVifko1k+E687kQhMcrkcLUc40wLcvZ5n
+	 bof6e9ZlPopWyOs+Sh6Bptcs5wtGqWQT3Bgw4FtDL+TKhTa+IA20UCnZSmX2E0xaoMfEJ
+	 G6YIJ1RGJ0f/V5B5yHOLmmpEkPdauNEYkVoGiskZdIGkimZC/RcukjHaDOTlxkDaY1Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DLptjGD4;
+	arc=none smtp.remote-ip=74.125.82.182
+Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 217E01F01829;
-	Thu, 29 Oct 2026 07:48:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793260090;
-	bh=kLPsObaT6f/PPOqYyCA0kMg08YEwAESLQry3ZVb28XY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=nXGvRbc0lQvqE8SMg05FrZECiXSMuoPggUsUNQ2k3RhR4SpD9gPnzCgNGat5lyUGU
-	 9j5fIjUsMWX4OELOnDqqceKJu0BvHpwf0cZqMv+NHvWdrPos6ZoDTm8j1y5JM4CXI3
-	 WkGLnWCQCMkA7lqKhf4RsEPIlorWuk6AtW58ZLbBFyQLuw1uXx6m0sdeGVjMVOhOhN
-	 ZbD63SfPin0ZdKZd99RW6EqyxDYkrbF3sJPQcJCNPGJSxEbZ1EikoVBL3tXOXUzy6J
-	 B6cHk99SbMDkO3Y4aXgme5oulxcLqzvDq3YhBKuMti0qJ2nhlKMzOlSL0hDuVKMLOB
-	 wLEEvI0wG9bhg==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 88CBE4571A;
-	Thu, 29 Oct 2026 07:48:08 +0000 (UTC)
-From: Remy Demangeot via B4 Relay <devnull+remy.demangeot.net@kernel.org>
-Date: Thu, 29 Oct 2026 08:48:02 +0100
-Subject: [PATCH v2 1/2] ACPI: EC: allow drivers to create a polled EC
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02814606A327
+	for <linux-hwmon@vger.kernel.org>; Thu, 29 Oct 2026 08:55:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 02814606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DLptjGD4
+Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-369f33df08eso3511004eec.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 29 Oct 2026 01:55:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793264152; x=1793868952; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=YYDnw0w3VJ1m8RLFL/nZJuly2Onkx72MVUQSXk8vs44=;
+        b=DLptjGD46znSG6byzVrIUXtEd0wYp2ocot16hHp52y7rmlSFqfhMJlc6i2rtkGMNBC
+         Lgp16RnFrXpaOvusnzJqL0Eh7tb8mrb+2S6ryqC4/zFcjcyLv9hWVwYn3Ct8znpb1mAY
+         so8I8+u8h95CImV2pByyPmF8cmpo1oCNQNz8QowMRx103M7m3wqfPNJaNdCOnyzam9aC
+         s0Ew2+a8RHtNJQMbBZr3Fuyn6iie3/gbNdgGgCe1hA1aD+U7IEXr99AgA0mAo/8Z543B
+         gQLUedJ85qZ4m2DMMLVn/f/dF2yt6LCZfyLT6jtXnVAoOe+nA0P/YgtA+MtL7Neibt5k
+         lprw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793264152; x=1793868952;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=YYDnw0w3VJ1m8RLFL/nZJuly2Onkx72MVUQSXk8vs44=;
+        b=ID679xgSdPuH/Ghz9vRYWi/HCE33M6K2g4q+qSq4DNyMb9+fq2yO4H3mbCwh+vU7JV
+         tVtxpIq2S3+194WWT2O6ROj8JclRSndZdUHRNhNUckl+Sa1IRBTAW3UlcVWfuiV4QEp7
+         jNDQrOuNEKKT/Eviuuj8jgHVPyGxPYq6raJJzrP1ieBx9uELmzVDYKzgxWOja9uQBvTp
+         til1rsYWBqKz23qcwC8vQPBtcr3hDnXNSEUYq7gBj8DR6pQVSda5xsR+dov23n9Nyza/
+         BPE1KSIf4hGlclePwPsfdLnGnoNVYH82JKZ9vC7WUmtEg9t722sq1O/RejdPXxy+F0sH
+         yrrA==
+X-Forwarded-Encrypted: i=1; AKwUvBw3IFyeQwda7BRMGTkVTHGRfndKz3F3s1jeQchm+hEgelSY2RR2nsieK5dXkSV/33kAo2vX5anf0T4pqw==@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ1VKKbZb+rjvKraVpVdEV/TGgqvbA/AUvJW0AJ9R+0sAmHymf+
+	Yhr5mRf4SJcj0DXCZLzRlfrNDy7IiRGTQAjjU6Su0DTLMaQWQ5UzPEo=
+X-Gm-Gg: AYBFou16iEqznxeFTCpx5sbM8/MjPmDTpBE1OkRphlS5P+B59lFHIce8Y89Y/edZmJT
+	+KvlTzMzf223yFy/FZVsKb6tBBaCIM07cKsXj4GvDTd0hCfYo6BiNBC1wF4E4lRnLXuTmKTjwF1
+	Z0kOdl/ZYhTp2gpt6PRTxc/lAHkLnuRE4IUUWQpmCh45qr7ZLA6XX2FfoISTfR0qzGQ9NlAsEdi
+	74OpN9WxPiMefHscOG5JyzuMxa7IvqBSb2fSa12Yj/+sVk8tva0zZ+4k5NtkK3qYQ1mKBJQl+LO
+	NC674KYyuptl2thxGmMPDCQODvbKNUD/LWRA4o/zk7DIalifWBeqnpxBYDjqg1CagfZ/ifLzIX9
+	ivdv8hu0iCt4/HpfVyKdfW/aIWFRVXgxar3UYd6q68WXfrByyWQrZOSlBz9RbswDechQHatbvId
+	fKePB6fDef00Nw5mxeeMZDIX+Xye5FyuHDU0U3OhQFnBRmtfppdHBdLu2tkPQTb8NOhpdiGox56
+	hD5m0fL3oyxb4TD/nP6fFUsEjlFTmB1Ex14jRlIgu3PjAHbRUZ7ZlWhJwWNfInqoIZhaHrVKGVf
+	5FKHtYMzsXHmEF2Hfhd5LIXVisrqybSAc2ydLN8WekJRhs+ZNEEXUr11uDmWBonierC4F3pcjDO
+	8fn4KKzY=
+X-Received: by 2002:a05:7301:7c12:b0:35c:ba31:6fef with SMTP id 5a478bee46e88-36a2016c61dmr10086277eec.36.1793264151721;
+        Thu, 29 Oct 2026 01:55:51 -0700 (PDT)
+Received: from at-Standard-PC-Q35-ICH9-2009 ([27.60.20.232])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a23641e78sm16497937eec.0.2026.10.29.01.55.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Oct 2026 01:55:51 -0700 (PDT)
+From: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>
+To: 
+Cc: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Sven Peter <sven@kernel.org>,
+	Janne Grunau <j@jannau.net>,
+	Neal Gompa <neal@gompa.dev>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Lee Jones <lee@kernel.org>,
+	Pavel Machek <pavel@kernel.org>,
+	Griffin Kroah-Hartman <griffin@kroah.com>,
+	Hans de Goede <hansg@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Sebastian Reichel <sre@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-hwmon@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	linux-leds@vger.kernel.org,
+	mfd@lists.linux.dev,
+	platform-driver-x86@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: [RFC PATCH 00/14] Add macsmc support for Intel Macs, replacing applesmc
+Date: Thu, 29 Oct 2026 04:51:57 -0400
+Message-ID: <20261029085504.3547-1-atharvatiwarilinuxdev@gmail.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -82,195 +146,123 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261029-m9e-ec2-v2-1-e9c4e2ba8415@demangeot.net>
-References: <20261029-m9e-ec2-v2-0-e9c4e2ba8415@demangeot.net>
-In-Reply-To: <20261029-m9e-ec2-v2-0-e9c4e2ba8415@demangeot.net>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
- Eugene Shalygin <eugene.shalygin@gmail.com>, 
- Guenter Roeck <linux@roeck-us.net>
-Cc: Armin Wolf <W_Armin@gmx.de>, linux-acpi@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- Remy Demangeot <remy@demangeot.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793260087; l=5632;
- i=remy@demangeot.net; s=20261015; h=from:subject:message-id;
- bh=/cs87yafgZ1YRaT6jFA1fah9Em8PNXk59oRg4Wxln8U=;
- b=SJGYtPngqwrsMY4JTdkpDFBhIAECWlUUIsYKw5585DN4UsoU7Fx7Mt6Jv/SYCNPECjwUwVhtG
- gquoTchcIAhBHpIF/H8nWPTyU1qNGX4VmBFZIFINuLY0Cz6BTD7ifuf
-X-Developer-Key: i=remy@demangeot.net; a=ed25519;
- pk=h/s5N2ZlgZ0m+8FpMhSaCNJt0jvb9whRBAdJwpC+VAo=
-X-Endpoint-Received: by B4 Relay for remy@demangeot.net/20261015 with
- auth_id=1194
-X-Original-From: Remy Demangeot <remy@demangeot.net>
-Reply-To: remy@demangeot.net
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-From: Remy Demangeot <remy@demangeot.net>
+applesmc is very old, and all of its code is lumped into one
+driver. Fan control, sensors, the light sensor, the motion
+sensor and the keyboard backlight in a single file
+with its own way of talking to the SMC. It is hard to extend
+and to support new machines.
 
-Some boards have a second embedded controller that uses the standard EC
-protocol but is not described in the ACPI tables. For example, the ASUS
-ROG MAXIMUS IX EXTREME has one at I/O ports 0x68/0x6c that holds the
-water temperature sensors. Its DSDT has no EC device for it: only a WMI
-method writes to these ports directly.
+This series adds Intel Mac support to the macsmc drivers that
+were written for Apple Silicon (the Asahi implementation).
+The SMC works the same way on both platforms, so we share a
+lot of code with Asahi. Only the way of talking to the SMC
+differs.
 
-Add acpi_ec_create_polled() and acpi_ec_destroy_polled() so that a
-driver can create a struct acpi_ec for such a controller, and
-acpi_ec_read_byte() and acpi_ec_write_byte() to access it. The EC is
-used in busy polling mode, like the boot EC before its GPE handler is
-installed: no GPE, no IRQ, no query events and no address space handler.
+To make that work, patch 1 splits the macsmc driver into a
+common core and a backend. The existing RTKit code moves into
+its own backend. Patch 2 adds an ACPI backend for Intel Macs
+with I/O port, MMIO and interrupt support. After that, each
+function gets its own small driver using the standard kernel
+interfaces (hwmon, IIO, LEDs, power supply, RTC, watchdog),
+instead of one large driver doing everything.
 
-An EC with neither a GPE nor an IRQ must not touch any interrupt when
-its events are masked or unmasked, so check ec->irq there too.
+On Intel Macs these drivers replace applesmc (hwmon, light
+sensor, motion sensor and keyboard backlight) and acpi-sbs
+(battery and adapter). They are mutually exclusive with the
+drivers they replace, so only one is used at a time.
 
-Signed-off-by: Remy Demangeot <remy@demangeot.net>
----
- drivers/acpi/ec.c    | 89 ++++++++++++++++++++++++++++++++++++++++++++++++++--
- include/linux/acpi.h |  8 +++++
- 2 files changed, 95 insertions(+), 2 deletions(-)
+This is an RFC to get early feedback on the design. The macsmc
+split and the Intel Mac backend touch fundamental parts, so I
+would rather change them now if maintainers ask. After that I
+will test the series on more macsand send it upstream as a
+proper series.
 
-diff --git a/drivers/acpi/ec.c b/drivers/acpi/ec.c
-index a89f10256dbb85768b86a2a970c75a7d8e3814fa..48e83e84cfdb64c28adedcb77fce29affc956e4c 100644
---- a/drivers/acpi/ec.c
-+++ b/drivers/acpi/ec.c
-@@ -401,7 +401,7 @@ static void acpi_ec_mask_events(struct acpi_ec *ec)
- 	if (!test_bit(EC_FLAGS_EVENTS_MASKED, &ec->flags)) {
- 		if (ec->gpe >= 0)
- 			acpi_ec_disable_gpe(ec, false);
--		else
-+		else if (ec->irq >= 0)
- 			disable_irq_nosync(ec->irq);
- 
- 		ec_dbg_drv("Polling enabled");
-@@ -415,7 +415,7 @@ static void acpi_ec_unmask_events(struct acpi_ec *ec)
- 		clear_bit(EC_FLAGS_EVENTS_MASKED, &ec->flags);
- 		if (ec->gpe >= 0)
- 			acpi_ec_enable_gpe(ec, false);
--		else
-+		else if (ec->irq >= 0)
- 			enable_irq(ec->irq);
- 
- 		ec_dbg_drv("Polling disabled");
-@@ -934,6 +934,34 @@ int ec_write(u8 addr, u8 val)
- }
- EXPORT_SYMBOL(ec_write);
- 
-+/**
-+ * acpi_ec_read_byte - read a register of a given EC
-+ * @ec: the EC, e.g. from acpi_ec_create_polled()
-+ * @addr: register address
-+ * @val: where to store the value
-+ *
-+ * Return: 0 on success, a negative error code otherwise.
-+ */
-+int acpi_ec_read_byte(struct acpi_ec *ec, u8 addr, u8 *val)
-+{
-+	return acpi_ec_read(ec, addr, val);
-+}
-+EXPORT_SYMBOL_GPL(acpi_ec_read_byte);
-+
-+/**
-+ * acpi_ec_write_byte - write a register of a given EC
-+ * @ec: the EC, e.g. from acpi_ec_create_polled()
-+ * @addr: register address
-+ * @val: value to write
-+ *
-+ * Return: 0 on success, a negative error code otherwise.
-+ */
-+int acpi_ec_write_byte(struct acpi_ec *ec, u8 addr, u8 val)
-+{
-+	return acpi_ec_write(ec, addr, val);
-+}
-+EXPORT_SYMBOL_GPL(acpi_ec_write_byte);
-+
- int ec_transaction(u8 command,
- 		   const u8 *wdata, unsigned wdata_len,
- 		   u8 *rdata, unsigned rdata_len)
-@@ -1436,6 +1464,63 @@ static struct acpi_ec *acpi_ec_alloc(void)
- 	return ec;
- }
- 
-+/**
-+ * acpi_ec_create_polled - create an EC that is not described by ACPI
-+ * @command_addr: I/O port of the command/status register
-+ * @data_addr: I/O port of the data register
-+ * @name: name used to request the I/O ports
-+ *
-+ * Some boards have additional embedded controllers that use the standard
-+ * EC protocol but are not described in the ACPI tables. This creates a
-+ * struct acpi_ec for such a controller, to be used with acpi_ec_read_byte()
-+ * and acpi_ec_write_byte(). It only works in busy polling mode: no GPE, no
-+ * IRQ, no query events and no address space handler.
-+ *
-+ * Return: the new EC, or an ERR_PTR() on failure.
-+ */
-+struct acpi_ec *acpi_ec_create_polled(unsigned long command_addr,
-+				      unsigned long data_addr,
-+				      const char *name)
-+{
-+	struct acpi_ec *ec;
-+
-+	if (!request_region(data_addr, 1, name))
-+		return ERR_PTR(-EBUSY);
-+	if (!request_region(command_addr, 1, name)) {
-+		release_region(data_addr, 1);
-+		return ERR_PTR(-EBUSY);
-+	}
-+
-+	ec = acpi_ec_alloc();
-+	if (!ec) {
-+		release_region(command_addr, 1);
-+		release_region(data_addr, 1);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+	ec->command_addr = command_addr;
-+	ec->data_addr = data_addr;
-+	acpi_ec_start(ec, false);
-+
-+	return ec;
-+}
-+EXPORT_SYMBOL_GPL(acpi_ec_create_polled);
-+
-+/**
-+ * acpi_ec_destroy_polled - destroy an EC created by acpi_ec_create_polled()
-+ * @ec: the EC to destroy, may be NULL or an ERR_PTR()
-+ */
-+void acpi_ec_destroy_polled(struct acpi_ec *ec)
-+{
-+	if (IS_ERR_OR_NULL(ec))
-+		return;
-+
-+	acpi_ec_stop(ec, false);
-+	release_region(ec->command_addr, 1);
-+	release_region(ec->data_addr, 1);
-+	kfree(ec);
-+}
-+EXPORT_SYMBOL_GPL(acpi_ec_destroy_polled);
-+
- static acpi_status
- acpi_ec_register_query_methods(acpi_handle handle, u32 level,
- 			       void *context, void **return_value)
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index ddacac81209473cfc5fc83047a0de91c07ceb7b5..d657a94aed5dd90c2ba0c8c2784c7a0cb0fb3bc2 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -432,6 +432,14 @@ extern int ec_transaction(u8 command,
-                           u8 *rdata, unsigned rdata_len);
- extern acpi_handle ec_get_handle(void);
- 
-+struct acpi_ec;
-+struct acpi_ec *acpi_ec_create_polled(unsigned long command_addr,
-+				      unsigned long data_addr,
-+				      const char *name);
-+void acpi_ec_destroy_polled(struct acpi_ec *ec);
-+int acpi_ec_read_byte(struct acpi_ec *ec, u8 addr, u8 *val);
-+int acpi_ec_write_byte(struct acpi_ec *ec, u8 addr, u8 val);
-+
- extern bool acpi_is_pnp_device(struct acpi_device *);
- 
- #if defined(CONFIG_ACPI_WMI) || defined(CONFIG_ACPI_WMI_MODULE)
+The series is organised as follows:
+
+  1      Split macsmc into a core and backends
+  2      ACPI backend for Intel Macs
+  3-6    New drivers: watchdog, IIO light and accelerometer,
+         keyboard backlight LED
+  7-9    RTC support for T2 Macs, a T2 detection flag, and
+         disabling the broken ACPI RTCs
+  10-11  Power supply support, replacing acpi-sbs
+  12-13  hwmon support for Intel Macs
+  14     ioctl for userspace access to SMC keys
+
+
+Tested-on: MacBookPro16,1 , iMac20,1 , MacBookAir4,2 , MacBookPro12,1 ,
+MacBookPro15,1
+
+NOTE: Almost all drivers have been tested except the motion sensor
+driver as i was not able to find any device that had one.
+
+Atharva Tiwari (14):
+  treewide: Add backend for macsmc
+  platform/x86: add backend for macsmc in intel macs
+  watchdog: add driver for apple smc
+  iio/light: add new driver for macsmc
+  iio/accel: add driver for apple SMS
+  leds: add support for macsmc kbl
+  rtc: add support for x86 macs in macsmc-rtc
+  treewide: Add a flag to detect the Apple T2 chip
+  treewide: disable other rtc's in t2 macs
+  power/supply: add support for x86 macs in macsmc-power
+  acpi: disable battery and adapter for x86 apple machines
+  hwmon/macsmc: add more types
+  hwmon: add support for x86 macs in macsmc-hwmon
+  mfd/macsmc: add ioctl to access smc keys
+
+ MAINTAINERS                                   |    2 +-
+ arch/x86/kernel/quirks.c                      |   37 +
+ drivers/acpi/acpi_tad.c                       |    4 +
+ drivers/acpi/sbs.c                            |   17 +-
+ drivers/acpi/x86/utils.c                      |    4 +
+ drivers/gpio/Kconfig                          |    2 +-
+ drivers/gpio/gpio-macsmc.c                    |   13 +-
+ drivers/hwmon/Kconfig                         |    7 +-
+ drivers/hwmon/macsmc-hwmon.c                  | 1126 ++++++++++++++++-
+ drivers/iio/accel/Kconfig                     |   10 +
+ drivers/iio/accel/Makefile                    |    1 +
+ drivers/iio/accel/macsmc-accel.c              |  248 ++++
+ drivers/iio/light/Kconfig                     |   11 +
+ drivers/iio/light/Makefile                    |    1 +
+ drivers/iio/light/macsmc-light.c              |  189 +++
+ drivers/leds/Kconfig                          |   11 +
+ drivers/leds/Makefile                         |    1 +
+ drivers/leds/leds-macsmc.c                    |   69 +
+ drivers/mfd/Kconfig                           |   15 +-
+ drivers/mfd/Makefile                          |    2 +-
+ drivers/mfd/macsmc-core.c                     |  362 ++++++
+ drivers/platform/x86/Kconfig                  |   10 +
+ drivers/platform/x86/Makefile                 |    1 +
+ drivers/platform/x86/macsmc-acpi.c            |  642 ++++++++++
+ drivers/power/reset/Kconfig                   |    2 +-
+ drivers/power/supply/Kconfig                  |    2 +-
+ drivers/power/supply/macsmc-power.c           |  751 ++++++++---
+ drivers/rtc/Kconfig                           |    2 +-
+ drivers/rtc/rtc-cmos.c                        |    4 +
+ drivers/rtc/rtc-macsmc.c                      |  126 +-
+ drivers/soc/apple/Kconfig                     |   14 +
+ drivers/soc/apple/Makefile                    |    2 +
+ .../macsmc.c => soc/apple/macsmc-rtkit.c}     |  185 ++-
+ drivers/watchdog/Kconfig                      |   11 +
+ drivers/watchdog/Makefile                     |    2 +-
+ drivers/watchdog/macsmc_wdt.c                 |  140 ++
+ include/linux/mfd/macsmc.h                    |  104 +-
+ include/linux/platform_data/x86/apple.h       |    5 +
+ .../platform_certs/keyring_handler.h          |    8 -
+ security/integrity/platform_certs/load_uefi.c |   38 +-
+ 40 files changed, 3786 insertions(+), 395 deletions(-)
+ create mode 100644 drivers/iio/accel/macsmc-accel.c
+ create mode 100644 drivers/iio/light/macsmc-light.c
+ create mode 100644 drivers/leds/leds-macsmc.c
+ create mode 100644 drivers/mfd/macsmc-core.c
+ create mode 100644 drivers/platform/x86/macsmc-acpi.c
+ rename drivers/{mfd/macsmc.c => soc/apple/macsmc-rtkit.c} (70%)
+ create mode 100644 drivers/watchdog/macsmc_wdt.c
 
 -- 
-2.47.3
-
+2.55.0
 
