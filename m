@@ -1,89 +1,89 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793292024;
-	b=AUQgreVhDxji3V9py+OCNtUVWNYqYfaLMJTNeXKfl4/SgXFFOWjnC9k81ny+miu/qeDd
-	 h69AGSqlJwFtVptHw5SHBLFEr35395WH+Qy1V6/MgJTb+KhY3oZLHOzsMCZgcM6sBjpdx
-	 ccB77k/hemMBRi04E9d9zTtDdJxdAfRJA4LPc5hgMttAjNCb7RxBeyiReDcTI7t3uryUq
-	 zUk+GlLMhMN2vqsTsRcgEhXFxezq+0C9FPE4UDtHjygQUQ7AB98MAoCU4J+tnPjUA6Sc4
-	 s2YRaaItq77NnYSPwYFvQjO+dW6SRoBEvNm9i5LkarH2NDgZFMMnJq/t9S3eEaDKCyg==
+	t=1793292025;
+	b=4IiqK42cy/L3s/Rw6LSH2fYFFMRBH2MtyP2X8pOGPbNlTBNKAlY1I+kqDvB9gNDXTEqU
+	 ujg8L1Lp7LzLP8m7uvnSFK258oenWeKLfeATqa+flf+dlpxACTBmAEY7iHCfJ9dxajZpK
+	 vdDj3j6JSoFwZ8QlmL16bS+VD98z5SfOQcAavzt+Pypka9CXFrRWUkN7aaIStSNyiz4P8
+	 ZAdn/zj7JH6no8Uv4J3bfVd+w7TaEUIvo/isJ3pUVmKNN2hWw8GSF4G3AaD/i2F0zgCra
+	 93/nnaOiqZ/txdDj3flGWQiYHxdgkbK9w28lzprDvA7zRKq37TUhoLXE+JAiOgPsGBg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793292024;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793292025;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=yay1Lz5FDTqZjTYYlkX6TelXO/NAlu3nwD/lDLlliJM=;
-	b=LQHizoCZnYlnnBln/76H/vXJBRDbuG+goA3+0EfEwNPmLFAL8pe8d+tSmh+AL/Le8/9u
-	 JNU9jgijHoTNI+Yg2ukHQ3MJeTbcFG9BRyPN91v8RGr3MGpy/+Crkzk4IWEnLGZXHo9L9
-	 Dl9TkDiauerZRCP1sLzj24C2LbSlf0LZwOjcB4xahBSPZS3RUL8wkf1BNsJ+DYhEwkTUz
-	 fUQCyxQE5W6BOuqPFAQWGT0NYUexeKGSkq2IpuGmyUcrJg268I+Jk8ukl1Lni7efE5h8Z
-	 oWV9U3trvACyORuxGZr727cD9aOKsLb2qBpLrMP57vRKEZB9ruLDXETovykZtEn68rA==
+	bh=EnHcyg1guBpqRLa2mp/z3Uj8gNSIJFUrX0ZJsKC6wbo=;
+	b=YgLY7vC9QMEh1PjOk4ZLJEcpJQsH7YtloIV53daHnXGqRS8lkS49QD/Bhvl1LBf+XAeG
+	 G40Vdep0KOLAVgvrlpbuz7MUm4qzxc6SzWqkcpsj5VOpC+LjwhNirJLjMv4Kdgbzes+9l
+	 wU+lzMhhOMfKOg+HatC0xANpLaqBFz+rVCwFE9up182RKmhrY59zdL07BZwnYvoIgUQ0Z
+	 jjeIY8tBLiT3bO0prE+yZ0kepC4fwgArnmMZsUvIP+u0Cmz15G8j7QPK8C3R97wyuiFXZ
+	 RYanajY35lv1UZT11a8gm0YE9P0KJBBGDEjYlpEhB6s4rFMid0aJyZ0NxV5eFkCJRsA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=COsNLR5g;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EQYa3NtY;
 	arc=none smtp.remote-ip=74.125.82.177
 Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9AD606A33F
-	for <linux-hwmon@vger.kernel.org>; Thu, 29 Oct 2026 16:40:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E9AD606A33F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CDC360A2606
+	for <linux-hwmon@vger.kernel.org>; Thu, 29 Oct 2026 16:40:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6CDC360A2606
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=COsNLR5g
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-36a18fc7a38so4707953eec.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 29 Oct 2026 09:40:24 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EQYa3NtY
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-36a0f27c9f4so3640419eec.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 29 Oct 2026 09:40:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793292023; x=1793896823; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793292025; x=1793896825; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=yay1Lz5FDTqZjTYYlkX6TelXO/NAlu3nwD/lDLlliJM=;
-        b=COsNLR5ghRxDJOfM+t/eRyM09DxePm/vL5RYAxxzfxIN/zjY1RIbswu9buA4u1k9LI
-         EMFD8AgUx7v7z91UasI67U+Q0uuJsQThmPJO2NLJiSW15CpOMXQGzjRIwp5bmH3uFnKl
-         MZ531k3kjgjiuvICoppFNW6Lugy7AcgFUbE9vRJSkQpShLBAPHpmvr2j1QYlDuuS8UhX
-         bCtraLCG/OJFEXsPguvKJotMIT7FVWPVkQJWp++z+w2DDyLMp0JmwzSsvQOy/k/XJo41
-         R7ySDoBuFlqxheO/t/Lpi4niApv+DDjBREJiajGlwZ2odbEWsbwtT0X5OLZr0fABWGPT
-         QyJw==
+        bh=EnHcyg1guBpqRLa2mp/z3Uj8gNSIJFUrX0ZJsKC6wbo=;
+        b=EQYa3NtYFX1z/ggKvGoPMocKCy9l4/ylOXsU+UaREtdUVlFcj9Arq4X9hoEPn1FisI
+         PhXlRoGhWpdGzbtPWdwKXy6JKqNG6MSZPzsketM4Q3DH+4RoJsdrgkVDElwwBe9B++Gw
+         97WtMAcEioay7HSQRMLyVkA36x+MPUonMHdfAz9nLzx7Q68FsoIi+VpTZXEJXERDSbl7
+         1IhWeP5vjI8CeYUy9LUOG190TRfW3HGGZOqd9yyzctaV/3XT07JMBFdLHQXD7VvmzrN+
+         hYl1AXFfpA+y2GJyVvo4s6LJSqQk8YqxGLtWTiQ5U5i6Og0BZ7F1JUolmoLzmQWv6OpY
+         ZR9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793292023; x=1793896823;
+        d=1e100.net; s=20260707; t=1793292025; x=1793896825;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=yay1Lz5FDTqZjTYYlkX6TelXO/NAlu3nwD/lDLlliJM=;
-        b=OqaL0CJXwksGbES89FjW+rqA5Hox1wr0kNSlw42OJR8kkUU5GUvu+u/Aex8HRkrGns
-         A+CQuAFwm/ao2qqhuuCT2hKvCdV6RAAZGXNlz+gjbnnxvA9ockRvGM/lO2rB/8519yem
-         PJ3uPNzK4cEEGwfJeXGK1g27kVo2Et7Nbxdw8dVPG13NV0f9kZAJPrsZzB3E42cKp0rL
-         QO1VcnFEss/bKMw3Dq2f/XlneJIQbVlbYuD3Y0u7+gymiWb9xNTDZlAVUfTWSkiN/ibf
-         gcE6vSLwhs96fHc2HUiYcaPb0kdXhunedZ/ybusQ/3X7n48gCd4BblpkTRASjJU/1g1x
-         sP7Q==
-X-Gm-Message-State: AFq9FYIZQkOEpGOlURnJTIkh92aGspFWbwxKHHgZXgGr1epiGmGjOvbB
-	hlUL7PXAkWJkQqstumdSIhDTd3GQrLKSCu3B1JHk5PzoMReh2EWq7fdd
-X-Gm-Gg: AYBFou010kcpbnyiXl9FX9aJ05bnD02swr93V0R+UDTSmRncVr39zl96qEdWY0z22FA
-	LBvOYLIgmv2m4Q0dyIbsC54sduQDicqLr15K52UuSVz3o1hFlTXM98uXvb8AhpVUoWsdx4AMaIQ
-	VktmSj85zwijev8cX4o+dIhrBVKwnMVAEc3+tM2t6kLVFminB9dNmOvVPvOyv+uhaHiNNRE2dit
-	h8SH6d6Y5yUc5gjD3KUJVa0t4eyFoX/zTKOLGdqc5gu34S/PReto+zmkIETTD5q6Eho9UanMf3G
-	GhEVotKVQcZp5CE9dthX8fNbprAzuRz8Ok/GpviLj5cAZmvmkybpCFMEM0f8qgzEh4dgHxOlZ1U
-	JfvYi002GxcwAGOksz9U19bP9q+bPA2QMj8jIezMM+Yz6Rat47f3f4U7p2QtGX1TVV7ZCFJDrUu
-	hMhEDHwjDupSYL/ErADkG/82jzHBS6womHgE7D/xBCrWjjzYLUqpnhxll2dxMWvciYM+Qy2eQ0/
-	NqMeW3AcZ5VUWEOsT4sx0RCcy3X5FS/xSPh0MvBiEqAUK61GptOtfHI+193RQvKEgQU6aDddnQQ
-	xOsGFx3PQAxuNN7haXaqaBMUwDRimz5HOe0/XWu9St3j2n7VjCgmrRq7GYe59TLv3Xk=
-X-Received: by 2002:a05:7300:d402:b0:369:d6ed:f2b5 with SMTP id 5a478bee46e88-36a204cc914mr8073483eec.39.1793292022708;
-        Thu, 29 Oct 2026 09:40:22 -0700 (PDT)
+        bh=EnHcyg1guBpqRLa2mp/z3Uj8gNSIJFUrX0ZJsKC6wbo=;
+        b=Q/Jq0TV9ujcVSRVMlBzwVZnrNP/2wrvpa1Yd/VLTHQ0qKiL7NmXxY+DfTAenV7ZjD9
+         NfGJXhej+Z9In4Lv9O+KAvucTuVQIza7uUggEhputgxmPgaLkTXO2xhyGxhg9bl7242/
+         ++sYoQ2mXbtmOimAA1XlQnlL5uG+0Hu74qRjwCLk6HcWf/+kFiRnIPbcqYJPHrMkmDyK
+         pX4R9Yz5ABETvJqKuFj5sm4VWCxV77fP7V2z5RRCY88wsORdksr42pgr61d4zX0sD7/M
+         m9+RtTHYlRjWcdRzbNZ/2aazgVF3sF9GJE949pb6XlIYEUq3jj6ufGPBKDOm5DfqBZpl
+         vF2w==
+X-Gm-Message-State: AFq9FYKmwJckOyxCNShh9KqJNWxIuZvWk+m43dczdmXQOWl+mFgC4JW+
+	on3FZgpd3HpD4IS0ZJao117S5dUw4xknKzOLEKrvCGfHCbHZNGrMWrmL4lnh0qHV
+X-Gm-Gg: AYBFou38SAGYflqUMfP5AOht/cscowe32gNEx3+nw3YxYNP8SLngwPYZOJQ8NFG9vEF
+	S6N/8ng8irgmDiac64+cwNSxWmnYoFAVD6BXZwQHYLtiXkY/QzEx5OBDahRhmkCBnjFpszJv15W
+	/kT3dZGuCQSCpjw4cbBUwCcwGWxo5ejfJxEFhqRtLeOHZOwDS7StjsDskGKkVGrvEgB6V3l2aHJ
+	SCDQ7Zif3/uYPt/f57j+5tfkfZuUM+KKAuEJ81VAJLUfnBWpMz8/Ay/hD6ghAX71ZNQSLt+/DEG
+	pz5kCogPKF3/pjZrN/8sk6k8d9zLavEV80byEv0qoEbwGDXRCVDJ0fmJkKFMWozVILCdrjvPKR1
+	mItjrAgeQKPHdzg1VLitk+C09XnWoxMr08+2Jte/Wsh3muvQlHMimw2MIaH9Ek+VYZprE0bNwRG
+	qrDuZmtZC6tu443nyBfTJ37hkhzx50cti1pBCh+813iAXIz2rUwhzAEJqWLvguthvpRXQeNOGZ3
+	tWlUTwLePO11X4exm1pHdA+nowhEggSrXA9Cjz8jE0eKxv6JZYPaX0XLIKZhrwvDIfMJWex9pwv
+	YMvbVJK6ud4gOYdr6xPLChWLI5qVJVxgLQV4iXAkuKQbFxuqK6LHeRWMiLYtxaGMHNMo
+X-Received: by 2002:a05:7301:488a:b0:36a:ebf:5816 with SMTP id 5a478bee46e88-36a2039d162mr8365200eec.19.1793292024262;
+        Thu, 29 Oct 2026 09:40:24 -0700 (PDT)
 Received: from asahi.tail4da9e3.ts.net ([218.48.198.193])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a410faa87sm264319eec.26.2026.10.29.09.40.21
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a410faa87sm264319eec.26.2026.10.29.09.40.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2026 09:40:22 -0700 (PDT)
+        Thu, 29 Oct 2026 09:40:23 -0700 (PDT)
 From: "Baek Kyu, Kim" <pocj8ur4in@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/3] hwmon: (lm87) Propagate cached sensor read errors
-Date: Fri, 30 Oct 2026 01:40:15 +0900
-Message-ID: <20261029164016.338450-3-pocj8ur4in@gmail.com>
+Subject: [PATCH v2 3/3] hwmon: (lm87) Check I2C errors during detection and setup
+Date: Fri, 30 Oct 2026 01:40:16 +0900
+Message-ID: <20261029164016.338450-4-pocj8ur4in@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261029164016.338450-1-pocj8ur4in@gmail.com>
 References: <74e00272-306d-4d83-b6f6-10059ad3a91f@roeck-us.net>
@@ -99,375 +99,156 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Abort cache refresh when an I2C read fails and pass the error to
-sysfs readers instead of returning stale or invalid sensor values.
-
-Read the alarm registers last, since reading them can clear latched
-alarms. Preserve the first alarm byte if reading the second fails,
-so a retry can still report the captured alarm.
+Reject devices whose identification registers cannot be read, fail
+initialization on transfer errors, and report configuration restore
+failures.
 
 Signed-off-by: Baek Kyu, Kim <pocj8ur4in@gmail.com>
 ---
- drivers/hwmon/lm87.c | 202 +++++++++++++++++++++++++++++++++----------
- 1 file changed, 158 insertions(+), 44 deletions(-)
+ drivers/hwmon/lm87.c | 86 +++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 65 insertions(+), 21 deletions(-)
 
 diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
-index c118a7ff718b..a66d486b314c 100644
+index a66d486b314c..32ec44f583eb 100644
 --- a/drivers/hwmon/lm87.c
 +++ b/drivers/hwmon/lm87.c
-@@ -170,6 +170,7 @@ struct lm87_data {
- 	u8 aout;		/* register value */
- 
- 	u16 alarms;		/* register values, combined */
-+	u16 pending_alarms;	/* alarms read before an I2C error */
- 	u8 vid;			/* register values, combined */
- 	u8 vrm;
- 
-@@ -186,75 +187,138 @@ static inline int lm87_write_value(struct i2c_client *client, u8 reg, u8 value)
- 	return i2c_smbus_write_byte_data(client, reg, value);
- }
- 
-+static int lm87_read_reg(struct i2c_client *client, u8 reg, u8 *value)
-+{
-+	int ret = lm87_read_value(client, reg);
-+
-+	if (ret < 0)
-+		return ret;
-+	*value = ret;
-+	return 0;
-+}
-+
-+static int lm87_read_temp(struct i2c_client *client, u8 reg, s8 *value)
-+{
-+	int ret = lm87_read_value(client, reg);
-+
-+	if (ret < 0)
-+		return ret;
-+	*value = ret;
-+	return 0;
-+}
-+
- static struct lm87_data *lm87_update_device(struct device *dev)
+@@ -955,17 +955,22 @@ static int lm87_detect(struct i2c_client *client, struct i2c_board_info *info)
  {
- 	struct i2c_client *client = dev_get_drvdata(dev);
+ 	struct i2c_adapter *adapter = client->adapter;
+ 	const char *name;
+-	u8 cid, rev;
++	int cid, rev, config;
+ 
+ 	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA))
+ 		return -ENODEV;
+ 
+-	if (lm87_read_value(client, LM87_REG_CONFIG) & 0x80)
++	config = lm87_read_value(client, LM87_REG_CONFIG);
++	if (config < 0 || config & 0x80)
+ 		return -ENODEV;
+ 
+ 	/* Now, we do the remaining detection. */
+ 	cid = lm87_read_value(client, LM87_REG_COMPANY_ID);
++	if (cid < 0)
++		return -ENODEV;
+ 	rev = lm87_read_value(client, LM87_REG_REVISION);
++	if (rev < 0)
++		return -ENODEV;
+ 
+ 	if (cid == 0x02			/* National Semiconductor */
+ 	 && (rev >= 0x01 && rev <= 0x08))
+@@ -989,7 +994,12 @@ static void lm87_restore_config(void *arg)
+ 	struct i2c_client *client = arg;
  	struct lm87_data *data = i2c_get_clientdata(client);
-+	int i, j, ret;
-+	u8 first, second;
  
- 	mutex_lock(&data->update_lock);
+-	lm87_write_value(client, LM87_REG_CONFIG, data->config);
++	int err;
++
++	err = lm87_write_value(client, LM87_REG_CONFIG, data->config);
++	if (err < 0)
++		dev_warn(&client->dev, "Failed to restore configuration: %d\n",
++			 err);
+ }
  
- 	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
--		int i, j;
--
- 		dev_dbg(&client->dev, "Updating data.\n");
- 
- 		i = (data->channel & CHAN_TEMP3) ? 1 : 0;
- 		j = (data->channel & CHAN_TEMP3) ? 5 : 6;
- 		for (; i < j; i++) {
--			data->in[i] = lm87_read_value(client,
--				      LM87_REG_IN(i));
--			data->in_min[i] = lm87_read_value(client,
--					  LM87_REG_IN_MIN(i));
--			data->in_max[i] = lm87_read_value(client,
--					  LM87_REG_IN_MAX(i));
-+			ret = lm87_read_reg(client, LM87_REG_IN(i), &data->in[i]);
-+			if (ret < 0)
-+				goto error;
-+			ret = lm87_read_reg(client, LM87_REG_IN_MIN(i),
-+					    &data->in_min[i]);
-+			if (ret < 0)
-+				goto error;
-+			ret = lm87_read_reg(client, LM87_REG_IN_MAX(i),
-+					    &data->in_max[i]);
-+			if (ret < 0)
-+				goto error;
+ static int lm87_init_client(struct i2c_client *client)
+@@ -1013,16 +1023,26 @@ static int lm87_init_client(struct i2c_client *client)
+ 				val |= CHAN_VCC_5V;
  		}
+ 		data->channel = val;
+-		lm87_write_value(client,
+-				LM87_REG_CHANNEL_MODE, data->channel);
++		rc = lm87_write_value(client, LM87_REG_CHANNEL_MODE,
++				      data->channel);
++		if (rc < 0)
++			return rc;
+ 	} else if (dev_get_platdata(&client->dev)) {
+ 		data->channel = *(u8 *)dev_get_platdata(&client->dev);
+-		lm87_write_value(client,
+-				 LM87_REG_CHANNEL_MODE, data->channel);
++		rc = lm87_write_value(client, LM87_REG_CHANNEL_MODE,
++				      data->channel);
++		if (rc < 0)
++			return rc;
+ 	} else {
+-		data->channel = lm87_read_value(client, LM87_REG_CHANNEL_MODE);
++		rc = lm87_read_value(client, LM87_REG_CHANNEL_MODE);
++		if (rc < 0)
++			return rc;
++		data->channel = rc;
+ 	}
+-	data->config = lm87_read_value(client, LM87_REG_CONFIG) & 0x6F;
++	rc = lm87_read_value(client, LM87_REG_CONFIG);
++	if (rc < 0)
++		return rc;
++	data->config = rc & 0x6F;
  
+ 	rc = devm_add_action(&client->dev, lm87_restore_config, client);
+ 	if (rc)
+@@ -1033,28 +1053,52 @@ static int lm87_init_client(struct i2c_client *client)
+ 
+ 		/* Limits are left uninitialized after power-up */
+ 		for (i = 1; i < 6; i++) {
+-			lm87_write_value(client, LM87_REG_IN_MIN(i), 0x00);
+-			lm87_write_value(client, LM87_REG_IN_MAX(i), 0xFF);
++			rc = lm87_write_value(client, LM87_REG_IN_MIN(i), 0x00);
++			if (rc < 0)
++				return rc;
++			rc = lm87_write_value(client, LM87_REG_IN_MAX(i), 0xFF);
++			if (rc < 0)
++				return rc;
+ 		}
  		for (i = 0; i < 2; i++) {
- 			if (data->channel & CHAN_NO_FAN(i)) {
--				data->in[6+i] = lm87_read_value(client,
--						LM87_REG_AIN(i));
--				data->in_max[6+i] = lm87_read_value(client,
--						    LM87_REG_AIN_MAX(i));
--				data->in_min[6+i] = lm87_read_value(client,
--						    LM87_REG_AIN_MIN(i));
--
-+				ret = lm87_read_reg(client, LM87_REG_AIN(i),
-+						    &data->in[6 + i]);
-+				if (ret < 0)
-+					goto error;
-+				ret = lm87_read_reg(client, LM87_REG_AIN_MAX(i),
-+						    &data->in_max[6 + i]);
-+				if (ret < 0)
-+					goto error;
-+				ret = lm87_read_reg(client, LM87_REG_AIN_MIN(i),
-+						    &data->in_min[6 + i]);
-+				if (ret < 0)
-+					goto error;
- 			} else {
--				data->fan[i] = lm87_read_value(client,
--					       LM87_REG_FAN(i));
--				data->fan_min[i] = lm87_read_value(client,
--						   LM87_REG_FAN_MIN(i));
-+				ret = lm87_read_reg(client, LM87_REG_FAN(i),
-+						    &data->fan[i]);
-+				if (ret < 0)
-+					goto error;
-+				ret = lm87_read_reg(client, LM87_REG_FAN_MIN(i),
-+						    &data->fan_min[i]);
-+				if (ret < 0)
-+					goto error;
- 			}
+-			lm87_write_value(client, LM87_REG_TEMP_HIGH[i], 0x7F);
+-			lm87_write_value(client, LM87_REG_TEMP_LOW[i], 0x00);
+-			lm87_write_value(client, LM87_REG_AIN_MIN(i), 0x00);
+-			lm87_write_value(client, LM87_REG_AIN_MAX(i), 0xFF);
++			rc = lm87_write_value(client, LM87_REG_TEMP_HIGH[i],
++					      0x7F);
++			if (rc < 0)
++				return rc;
++			rc = lm87_write_value(client, LM87_REG_TEMP_LOW[i],
++					      0x00);
++			if (rc < 0)
++				return rc;
++			rc = lm87_write_value(client, LM87_REG_AIN_MIN(i), 0x00);
++			if (rc < 0)
++				return rc;
++			rc = lm87_write_value(client, LM87_REG_AIN_MAX(i), 0xFF);
++			if (rc < 0)
++				return rc;
  		}
- 
- 		j = (data->channel & CHAN_TEMP3) ? 3 : 2;
- 		for (i = 0 ; i < j; i++) {
--			data->temp[i] = lm87_read_value(client,
--					LM87_REG_TEMP[i]);
--			data->temp_high[i] = lm87_read_value(client,
--					     LM87_REG_TEMP_HIGH[i]);
--			data->temp_low[i] = lm87_read_value(client,
--					    LM87_REG_TEMP_LOW[i]);
-+			ret = lm87_read_temp(client, LM87_REG_TEMP[i],
-+					     &data->temp[i]);
-+			if (ret < 0)
-+				goto error;
-+			ret = lm87_read_temp(client, LM87_REG_TEMP_HIGH[i],
-+					     &data->temp_high[i]);
-+			if (ret < 0)
-+				goto error;
-+			ret = lm87_read_temp(client, LM87_REG_TEMP_LOW[i],
-+					     &data->temp_low[i]);
-+			if (ret < 0)
-+				goto error;
+ 		if (data->channel & CHAN_TEMP3) {
+-			lm87_write_value(client, LM87_REG_TEMP_HIGH[2], 0x7F);
+-			lm87_write_value(client, LM87_REG_TEMP_LOW[2], 0x00);
++			rc = lm87_write_value(client, LM87_REG_TEMP_HIGH[2],
++					      0x7F);
++			if (rc < 0)
++				return rc;
++			rc = lm87_write_value(client, LM87_REG_TEMP_LOW[2],
++					      0x00);
++			if (rc < 0)
++				return rc;
+ 		} else {
+-			lm87_write_value(client, LM87_REG_IN_MIN(0), 0x00);
+-			lm87_write_value(client, LM87_REG_IN_MAX(0), 0xFF);
++			rc = lm87_write_value(client, LM87_REG_IN_MIN(0), 0x00);
++			if (rc < 0)
++				return rc;
++			rc = lm87_write_value(client, LM87_REG_IN_MAX(0), 0xFF);
++			if (rc < 0)
++				return rc;
  		}
+ 	}
  
--		i = lm87_read_value(client, LM87_REG_TEMP_HW_INT_LOCK);
--		j = lm87_read_value(client, LM87_REG_TEMP_HW_INT);
--		data->temp_crit_int = min(i, j);
--
--		i = lm87_read_value(client, LM87_REG_TEMP_HW_EXT_LOCK);
--		j = lm87_read_value(client, LM87_REG_TEMP_HW_EXT);
--		data->temp_crit_ext = min(i, j);
--
--		i = lm87_read_value(client, LM87_REG_VID_FAN_DIV);
--		data->fan_div[0] = (i >> 4) & 0x03;
--		data->fan_div[1] = (i >> 6) & 0x03;
--		data->vid = (i & 0x0F)
--			  | (lm87_read_value(client, LM87_REG_VID4) & 0x01)
--			     << 4;
--
--		data->alarms = lm87_read_value(client, LM87_REG_ALARMS1)
--			     | (lm87_read_value(client, LM87_REG_ALARMS2)
--				<< 8);
--		data->aout = lm87_read_value(client, LM87_REG_AOUT);
-+		ret = lm87_read_reg(client, LM87_REG_TEMP_HW_INT_LOCK,
-+				    &first);
-+		if (ret < 0)
-+			goto error;
-+		ret = lm87_read_reg(client, LM87_REG_TEMP_HW_INT, &second);
-+		if (ret < 0)
-+			goto error;
-+		data->temp_crit_int = min(first, second);
-+
-+		ret = lm87_read_reg(client, LM87_REG_TEMP_HW_EXT_LOCK,
-+				    &first);
-+		if (ret < 0)
-+			goto error;
-+		ret = lm87_read_reg(client, LM87_REG_TEMP_HW_EXT, &second);
-+		if (ret < 0)
-+			goto error;
-+		data->temp_crit_ext = min(first, second);
-+
-+		ret = lm87_read_reg(client, LM87_REG_VID_FAN_DIV, &first);
-+		if (ret < 0)
-+			goto error;
-+		data->fan_div[0] = (first >> 4) & 0x03;
-+		data->fan_div[1] = (first >> 6) & 0x03;
-+		ret = lm87_read_reg(client, LM87_REG_VID4, &second);
-+		if (ret < 0)
-+			goto error;
-+		data->vid = (first & 0x0F) | (second & 0x01) << 4;
-+
-+		ret = lm87_read_reg(client, LM87_REG_AOUT, &data->aout);
-+		if (ret < 0)
-+			goto error;
-+
-+		ret = lm87_read_reg(client, LM87_REG_ALARMS1, &first);
-+		if (ret < 0)
-+			goto error;
-+		ret = lm87_read_reg(client, LM87_REG_ALARMS2, &second);
-+		if (ret < 0) {
-+			data->pending_alarms |= first;
-+			goto error;
-+		}
-+		data->alarms = data->pending_alarms | first | second << 8;
-+		data->pending_alarms = 0;
- 
- 		data->last_updated = jiffies;
- 		data->valid = true;
-@@ -263,6 +327,11 @@ static struct lm87_data *lm87_update_device(struct device *dev)
- 	mutex_unlock(&data->update_lock);
- 
- 	return data;
-+
-+error:
-+	data->valid = false;
-+	mutex_unlock(&data->update_lock);
-+	return ERR_PTR(ret);
+ 	/* Make sure Start is set and INT#_Clear is clear */
+ 	if ((data->config & 0x09) != 0x01)
+-		lm87_write_value(client, LM87_REG_CONFIG,
+-				 (data->config & 0x77) | 0x01);
++		return lm87_write_value(client, LM87_REG_CONFIG,
++					(data->config & 0x77) | 0x01);
+ 	return 0;
  }
  
- /*
-@@ -275,6 +344,9 @@ static ssize_t in_input_show(struct device *dev,
- 	struct lm87_data *data = lm87_update_device(dev);
- 	int nr = to_sensor_dev_attr(attr)->index;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%u\n", IN_FROM_REG(data->in[nr],
- 		       data->in_scale[nr]));
- }
-@@ -285,6 +357,9 @@ static ssize_t in_min_show(struct device *dev, struct device_attribute *attr,
- 	struct lm87_data *data = lm87_update_device(dev);
- 	int nr = to_sensor_dev_attr(attr)->index;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%u\n", IN_FROM_REG(data->in_min[nr],
- 		       data->in_scale[nr]));
- }
-@@ -295,6 +370,9 @@ static ssize_t in_max_show(struct device *dev, struct device_attribute *attr,
- 	struct lm87_data *data = lm87_update_device(dev);
- 	int nr = to_sensor_dev_attr(attr)->index;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%u\n", IN_FROM_REG(data->in_max[nr],
- 		       data->in_scale[nr]));
- }
-@@ -378,6 +456,9 @@ static ssize_t temp_input_show(struct device *dev,
- 	struct lm87_data *data = lm87_update_device(dev);
- 	int nr = to_sensor_dev_attr(attr)->index;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp[nr]));
- }
- 
-@@ -387,6 +468,9 @@ static ssize_t temp_low_show(struct device *dev,
- 	struct lm87_data *data = lm87_update_device(dev);
- 	int nr = to_sensor_dev_attr(attr)->index;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%d\n",
- 		       TEMP_FROM_REG(data->temp_low[nr]));
- }
-@@ -397,6 +481,9 @@ static ssize_t temp_high_show(struct device *dev,
- 	struct lm87_data *data = lm87_update_device(dev);
- 	int nr = to_sensor_dev_attr(attr)->index;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%d\n",
- 		       TEMP_FROM_REG(data->temp_high[nr]));
- }
-@@ -463,6 +550,9 @@ static ssize_t temp1_crit_show(struct device *dev,
- 			       struct device_attribute *attr, char *buf)
- {
- 	struct lm87_data *data = lm87_update_device(dev);
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp_crit_int));
- }
- 
-@@ -470,6 +560,9 @@ static ssize_t temp2_crit_show(struct device *dev,
- 			       struct device_attribute *attr, char *buf)
- {
- 	struct lm87_data *data = lm87_update_device(dev);
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp_crit_ext));
- }
- 
-@@ -483,6 +576,9 @@ static ssize_t fan_input_show(struct device *dev,
- 	struct lm87_data *data = lm87_update_device(dev);
- 	int nr = to_sensor_dev_attr(attr)->index;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%d\n", fan_from_reg(data->fan[nr],
- 		       FAN_DIV_FROM_REG(data->fan_div[nr])));
- }
-@@ -493,6 +589,9 @@ static ssize_t fan_min_show(struct device *dev, struct device_attribute *attr,
- 	struct lm87_data *data = lm87_update_device(dev);
- 	int nr = to_sensor_dev_attr(attr)->index;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%d\n", fan_from_reg(data->fan_min[nr],
- 		       FAN_DIV_FROM_REG(data->fan_div[nr])));
- }
-@@ -503,6 +602,9 @@ static ssize_t fan_div_show(struct device *dev, struct device_attribute *attr,
- 	struct lm87_data *data = lm87_update_device(dev);
- 	int nr = to_sensor_dev_attr(attr)->index;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%d\n",
- 		       FAN_DIV_FROM_REG(data->fan_div[nr]));
- }
-@@ -613,6 +715,9 @@ static ssize_t alarms_show(struct device *dev, struct device_attribute *attr,
- 			   char *buf)
- {
- 	struct lm87_data *data = lm87_update_device(dev);
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%d\n", data->alarms);
- }
- static DEVICE_ATTR_RO(alarms);
-@@ -621,6 +726,9 @@ static ssize_t cpu0_vid_show(struct device *dev,
- 			     struct device_attribute *attr, char *buf)
- {
- 	struct lm87_data *data = lm87_update_device(dev);
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%d\n", vid_from_reg(data->vid, data->vrm));
- }
- static DEVICE_ATTR_RO(cpu0_vid);
-@@ -654,6 +762,9 @@ static ssize_t aout_output_show(struct device *dev,
- 				struct device_attribute *attr, char *buf)
- {
- 	struct lm87_data *data = lm87_update_device(dev);
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%d\n", AOUT_FROM_REG(data->aout));
- }
- static ssize_t aout_output_store(struct device *dev,
-@@ -686,6 +797,9 @@ static ssize_t alarm_show(struct device *dev, struct device_attribute *attr,
- {
- 	struct lm87_data *data = lm87_update_device(dev);
- 	int bitnr = to_sensor_dev_attr(attr)->index;
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%u\n", (data->alarms >> bitnr) & 1);
- }
- static SENSOR_DEVICE_ATTR_RO(in0_alarm, alarm, 0);
 -- 
 2.55.0
 
