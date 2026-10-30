@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.33
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793390174;
-	b=vuWmaveP2sdr/3Yo0HIdcBH/7KfCzWqc3yAi5Lv1u6G+/hgT4MLxOk57winDo78Om78i
-	 kFQa0Ws8zMamJx6JYJkejSJPnu+vxtSveVYtIhrkdOs9QLZ6FDdmHMe/njw+lfxVB9ARX
-	 mf+uMxvGDMbzQQt6BcKSVqPGoXPeDw9LXNGmYEnLXJIS2ax/hLExLy7sPzJtTltQ0qg7N
-	 EvwI8dBn/3XfsbKtkccO76duBiuQNlfwBdJaxOwtMCgw8amFfqciAV/+J1xm5WZBR2Ke1
-	 vjc0OKvo5THGNpU1SVEj2FkJhQiLFoENfI//AKLvSumMNUrNkeTjgbdAurJP98Cd7oA==
+	t=1793390200;
+	b=PSc1giqgOeT1/fmour0TIPiuCj65Bei5RsIGiP5Ocd97F1P/38vl0iyrZmjwADN3mVW6
+	 j9hB5RVbKN+9gd/PxZaj5/wGCwK/B6cxMG1jAJWqeK9Wy5WfWXlINTflMlC2md6dNGMws
+	 M6AqQBKCNgNN6B/zrvUIiHCShxtoHZQNhk9MaguQEuQeTHGaFY8vWgutcZEWcy3c4HK5o
+	 nAhX/jQwzBE5jpiO/BJufwZGNlYZxzdrUaXolrjBYd/jyoelyHom89DS0PA6oKJmwO+VL
+	 GeUdvBRLhfI9gCnbxsQ8sNX5Q8OhP7VZwqaYqw4jK1IzLxcqNozyt+C34v6cnSSeQIw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793390174;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793390200;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
@@ -15,37 +15,37 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
 	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
 	 X-Local-Domain:X-CMAE-Envelope;
-	bh=8kVz0XILX5RIwQ6HYtuHl7gWfjeYLa70o0sQEUAqlEc=;
-	b=BqhB2SRXsqX3B6gmoxMcK2SlPyitYKz0a47eToI/O6z6M+02HQ3IbJhrq7WHvWp/6CAG
-	 C7wrA+aa/Y+4OlruLrLNpNck0N7huPtcj+mZIg+eQ2ZvB5JcOMCjV7wm41ZgOYS7Tu69P
-	 yeJ3bGV6Fe/zcJB9QE9iDcAzICnKSmVSf5pw9g9BKeG6KS8K7s39/cKTaXXULfAz5KXGt
-	 EuG66L7vKpCbwuCOOxqJhSYHdnCDfaNDtX5g6lvUzXhLAHpoTUR6yTwT8y5JGMWEwVKUd
-	 cO5jzNHEMTzDVvwXy/AIPugcy77tl/uYwXO7AT1w/zcEHmNNi8viRp94vfgQ+1gOwDA==
+	bh=DWzHdFiapqL57vQ9QQf4q1XeBGnNvtXOlbL7A4/rAco=;
+	b=L+Jgk+E97sDGzULQnFBL6h+1ei+UsSCcoyegww6jnUX0LSyUtbD5d/a0oI8UQGVN8oyj
+	 HDTziVmyYzTiG2aurmCzZBWJZSzCzyOElPFvyF+lhSmbutcApsn8t+OaYvA+fWzsqK+na
+	 dI4NX359WYehMAAxyd88NkEQoGA+MaL1wVqY9U8sXXQ5KkkRWTC3YwsE60DPTf8N4OQ/b
+	 PjZ0f3bH/DTszgM1jByT2hxYJ7hTNkenI9XBTCKZHbMXV37x4SJBU2j/ArLXSCdUB9tA3
+	 FNmcrKeZR1w06gV8gChOnldVc154/8oyE0ds8/KAc+04g4QPfoEr1KVfZ21eTie0Ndw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=irb78aLA;
-	arc=none smtp.remote-ip=35.89.44.37
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=doEtbsmg;
+	arc=none smtp.remote-ip=35.89.44.33
+Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB337606A31C
-	for <linux-hwmon@vger.kernel.org>; Fri, 30 Oct 2026 19:56:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BB337606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6E5606A31A
+	for <linux-hwmon@vger.kernel.org>; Fri, 30 Oct 2026 19:56:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BE6E5606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=irb78aLA
-Received: from eig-obgw-5003b.ext.cloudfilter.net ([10.0.29.155])
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=doEtbsmg
+Received: from eig-obgw-5007b.ext.cloudfilter.net ([10.0.29.167])
 	by cmsmtp with ESMTPS
-	id MfemxB3U3v0ndMshxxrtfI; Fri, 30 Oct 2026 19:56:13 +0000
+	id Mn9Lx59glaC0UMsiNxDS0h; Fri, 30 Oct 2026 19:56:39 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id MshwxcMQWbxHHMshxx2iP5; Fri, 30 Oct 2026 19:56:13 +0000
-X-Authority-Analysis: v=2.4 cv=QK5oRhLL c=1 sm=1 tr=0 ts=6ae4f65d
+	id MsiNxSjJtLr2uMsiNxWfzw; Fri, 30 Oct 2026 19:56:39 +0000
+X-Authority-Analysis: v=2.4 cv=UudjN/wB c=1 sm=1 tr=0 ts=6ae4f677
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
  a=kj9zAlcOel0A:10 a=660iZSQnnn4A:10 a=M0FbrtG7MMAA:10 a=Bq6zwJu1AAAA:8
- a=QyXUC8HyAAAA:8 a=_jlGtV7tAAAA:8 a=FQuEuSn5fJWHmgwBhRsA:9 a=CjuIK1q_8ugA:10
+ a=QyXUC8HyAAAA:8 a=_jlGtV7tAAAA:8 a=TmeHqywlB-wf64vNx90A:9 a=CjuIK1q_8ugA:10
  a=KQ6X2bKhxX7Fj2iT9C4S:22 a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
@@ -53,19 +53,19 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
 	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=8kVz0XILX5RIwQ6HYtuHl7gWfjeYLa70o0sQEUAqlEc=; b=irb78aLAgTGRW1joDBbOI1pJ4l
-	CiMU4xia3rmyGJcuc44medSaPBlvl8MLgbpRpkIc6y5/y+S3hPgTtgsAmZ0yYNTpL9TspgU9F4aIu
-	ZHVJvVuhkcaLcfaXwblDAmtGwlI52rLnPK5T/sThWTVvW2p5622vsP52jowuilovBtmwFdf28s0pB
-	L/DzIFxK5dKwXgvRUY3Yj5OxFru/Lw4563WYCJlG9ALTvp4SwNhcKcwHOVWhbkip25xmOGDlBIkBB
-	iAVISuWrDoc7eXIqQwdE+Xjv2zlOwF/+/Ud3T/lAjynlS8b8ikbiIMYpCgLmQNCGEYiypG91gJDm1
-	xBgaS43w==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:55592 helo=server.roeck-us.net)
+	bh=DWzHdFiapqL57vQ9QQf4q1XeBGnNvtXOlbL7A4/rAco=; b=doEtbsmgS12KszkRR7TRgjgMvi
+	e4hdP6WzcIw88nPHe3j+q+T2q9jbGdVy49soWf5ZMcQBLYeAT5zxBVYrrkCy4gpiTjddJjznuW+0G
+	duvX7QwtYGic1g1Fs4KtKw0NAhOSocKFKuTvXCUCqtcyLi00VHe4vk/IhMJi9TWOuq3HsTgZdGp0M
+	VmxYb2gRLA0sq6SXAL58CMmbYYM+90xRnn5gweKBgnMasv4Y/tt6xu+UXpaSCAV5glZQtogaMpV/0
+	0M9GGNoufgNpv4k5sS3J1ALa9w06bWHRE2WMiKID5fn3HXhEV/WB7jAGZZ5ZzkssRWQtuylPjv9E8
+	LLmTy/lQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:38324 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xMshw-00000003xjp-10yC;
-	Sat, 31 Oct 2026 01:26:12 +0530
-Date: Fri, 30 Oct 2026 12:56:11 -0700
+	id 1xMsiM-00000003xwz-2LGQ;
+	Sat, 31 Oct 2026 01:26:38 +0530
+Date: Fri, 30 Oct 2026 12:56:37 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Changhuang Liang <changhuang.liang@starfivetech.com>
 Cc: Iwona Winiarska <iwona.winiarska@intel.com>,
@@ -74,11 +74,11 @@ Cc: Iwona Winiarska <iwona.winiarska@intel.com>,
 	Conor Dooley <conor+dt@kernel.org>, openbmc@lists.ozlabs.org,
 	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-hwmon@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH v4 5/6] hwmon: (peci/cputemp) Add support for Granite
+Subject: Re: [PATCH v4 6/6] hwmon: (peci/dimmtemp) Add support for Granite
  Rapids (GNR)
-Message-ID: <34cac8b5-ddb9-4b76-a60a-8f6ffb0fd9ac@roeck-us.net>
+Message-ID: <215a0b5a-9fda-4bce-bff5-b9e4bb5c3928@roeck-us.net>
 References: <20261019114502.55307-1-changhuang.liang@starfivetech.com>
- <20261019114502.55307-6-changhuang.liang@starfivetech.com>
+ <20261019114502.55307-7-changhuang.liang@starfivetech.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -90,7 +90,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261019114502.55307-6-changhuang.liang@starfivetech.com>
+In-Reply-To: <20261019114502.55307-7-changhuang.liang@starfivetech.com>
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -99,29 +99,37 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xMshw-00000003xjp-10yC
+X-Exim-ID: 1xMsiM-00000003xwz-2LGQ
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:55592
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:38324
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 87
+X-Email-Count: 97
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfG6kNr+J7ksWu4KF/+x+qS6WCHiyc/bo1J2oRrFwD6vDrOVHtG2PadXjsRQRFI7Fs6IgGaJMXZfe/zN7LtfxODJIvAYeNhFh5rO+sVbPkqnlPle1QVL+
- WV7EbU6PE2mZxBbNncDCmaxHvYkZs3CqKaCLlyMUYnVU5HXxIqn6brbs8aWNonsPJq7FI7evPwaQ7B76UxKA2BL82wGRcI4Isa+WEOJA1rpWsvgp809+fIyq
+X-CMAE-Envelope: MS4xfENOIX4qV5iSXoczNGJCX6qRuCaJS4LgNSh+oGO+ZalcnYOGkg8zmFvq8RQHnQr4vg7hy0HbHFzdQpOS8CLKjb/3+XKpo6qzbYiaFDI4YDa+/kLBJJYR
+ SC1QuOSao3Vq8bGOWErI/ZBwsFN9204Y+4x2mfQNgoj6/MJFPs8qi2Qr/2Up/OwjPMXYUoDHZgYYgBytqhEzxEFWYWqiSZ6K1yAugogbWmM6n4oDpXjsR0bl
 
-On Mon, Oct 19, 2026 at 04:45:01AM -0700, Changhuang Liang wrote:
-> Add Granite Rapids (GNR) CPU support to the PECI cputemp driver.
+On Mon, Oct 19, 2026 at 04:45:02AM -0700, Changhuang Liang wrote:
+> Add support for Granite Rapids (GNR) platform in PECI DIMM temperature
+> monitoring driver.
 > 
-> For Granite Rapids, the resolved cores mask must be collected from each
-> compute core. This implementation is relatively complex. Since we do not
-> use the resolved cores information for these CPUs, we can explicitly
-> state in the driver that the core mask is not supported for this model.
+> The GNR platform has different DIMM topology from previous generations,
+> with 12 channel ranks (CHAN_RANK_MAX_ON_GNR) and 2 DIMM indexes per
+> channel. Define these new constants and update CHAN_RANK_MAX to use
+> the GNR value since it represents the maximum across all supported
+> platforms.
 > 
-> Define new cpu_info structure for GNR with minimum PECI revision 0x42 and
-> the thermal margin conversion function dts_ten_dot_six_to_millidegree().
+> Since the current peci core does not support domains, accessing GNR's
+> DIMM_TEMP_MAX and DIMM_TEMP_CRIT via PECI commands will be rejected
+> and return completion code 0x90 (invalid request). To handle this, the
+> read_thresholds callback is not defined for GNR, and the visibility
+> logic is updated to skip exposing the max and crit temperature
+> attributes.
+> 
+> The minimum PECI revision required for GNR is 0x42.
 > 
 > Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
 > Reviewed-by: Iwona Winiarska <iwona.winiarska@intel.com>
@@ -129,52 +137,73 @@ On Mon, Oct 19, 2026 at 04:45:01AM -0700, Changhuang Liang wrote:
 Acked-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/hwmon/peci/cputemp.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
+>  drivers/hwmon/peci/dimmtemp.c | 33 +++++++++++++++++++++++++++++----
+>  1 file changed, 29 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
-> index 457089c561b4..69c4a07b99f7 100644
-> --- a/drivers/hwmon/peci/cputemp.c
-> +++ b/drivers/hwmon/peci/cputemp.c
-> @@ -339,6 +339,18 @@ static int init_core_mask(struct peci_cputemp *priv)
->  	u32 data;
->  	int ret;
+> diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
+> index bd3e8715dfec..791a8e866081 100644
+> --- a/drivers/hwmon/peci/dimmtemp.c
+> +++ b/drivers/hwmon/peci/dimmtemp.c
+> @@ -34,8 +34,10 @@
+>  #define DIMM_IDX_MAX_ON_SPR	2
+>  #define CHAN_RANK_MAX_ON_EMR	8
+>  #define DIMM_IDX_MAX_ON_EMR	2
+> +#define CHAN_RANK_MAX_ON_GNR	12
+> +#define DIMM_IDX_MAX_ON_GNR	2
 >  
+> -#define CHAN_RANK_MAX		CHAN_RANK_MAX_ON_HSX
+> +#define CHAN_RANK_MAX		CHAN_RANK_MAX_ON_GNR
+>  #define DIMM_IDX_MAX		DIMM_IDX_MAX_ON_HSX
+>  #define DIMM_NUMS_MAX		(CHAN_RANK_MAX * DIMM_IDX_MAX)
+>  
+> @@ -198,10 +200,18 @@ static umode_t dimmtemp_is_visible(const void *data, enum hwmon_sensor_types typ
+>  {
+>  	const struct peci_dimmtemp *priv = data;
+>  
+> -	if (test_bit(channel, priv->dimm_mask))
+> -		return 0444;
+> +	if (!test_bit(channel, priv->dimm_mask))
+> +		return 0;
+>  
+> -	return 0;
 > +	/*
-> +	 * For Granite Rapids, the resolved cores mask is relatively complex to implement.
-> +	 * Since we do not use the resolved cores information for this CPU, the driver
-> +	 * explicitly does not support the core mask for this model.
+> +	 * Some platforms do not provide the DIMM temperature thresholds over
+> +	 * PECI - do not expose the corresponding attributes there.
 > +	 */
-> +	if (!reg) {
-> +		dev_dbg(priv->dev,
-> +			"resolved cores scan is not supported on vendor-family-model 0x%x\n",
-> +			peci_dev->info.x86_vfm);
-> +		return -EOPNOTSUPP;
-> +	}
+> +	if ((attr == hwmon_temp_max || attr == hwmon_temp_crit) &&
+> +	    !priv->gen_info->read_thresholds)
+> +		return 0;
 > +
->  	/* Get the RESOLVED_CORES register value */
->  	switch (peci_dev->info.x86_vfm) {
->  	case INTEL_ICELAKE_X:
-> @@ -543,6 +555,11 @@ static const struct cpu_info cpu_emr = {
->  	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
+> +	return 0444;
+>  }
+>  
+>  static const struct hwmon_ops peci_dimmtemp_ops = {
+> @@ -626,6 +636,17 @@ static const struct dimm_info dimm_emr = {
+>  	.read_thresholds = &read_thresholds_emr,
 >  };
 >  
-> +static const struct cpu_info cpu_gnr = {
+> +static const struct dimm_info dimm_gnr = {
+> +	.chan_rank_max	= CHAN_RANK_MAX_ON_GNR,
+> +	.dimm_idx_max	= DIMM_IDX_MAX_ON_GNR,
 > +	.min_peci_revision = 0x42,
-> +	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
+> +	/*
+> +	 * Reading DIMM_TEMP_MAX/DIMM_TEMP_CRIT over PECI is answered with
+> +	 * completion code 0x90 (invalid request) on Granite Rapids, so the
+> +	 * threshold attributes are not exposed on this platform.
+> +	 */
 > +};
 > +
->  static const struct auxiliary_device_id peci_cputemp_ids[] = {
+>  static const struct auxiliary_device_id peci_dimmtemp_ids[] = {
 >  	{
->  		.name = "peci_cpu.cputemp.hsx",
-> @@ -576,6 +593,10 @@ static const struct auxiliary_device_id peci_cputemp_ids[] = {
->  		.name = "peci_cpu.cputemp.emr",
->  		.driver_data = (kernel_ulong_t)&cpu_emr,
+>  		.name = "peci_cpu.dimmtemp.hsx",
+> @@ -659,6 +680,10 @@ static const struct auxiliary_device_id peci_dimmtemp_ids[] = {
+>  		.name = "peci_cpu.dimmtemp.emr",
+>  		.driver_data = (kernel_ulong_t)&dimm_emr,
 >  	},
 > +	{
-> +		.name = "peci_cpu.cputemp.gnr",
-> +		.driver_data = (kernel_ulong_t)&cpu_gnr,
+> +		.name = "peci_cpu.dimmtemp.gnr",
+> +		.driver_data = (kernel_ulong_t)&dimm_gnr,
 > +	},
 >  	{ }
 >  };
->  MODULE_DEVICE_TABLE(auxiliary, peci_cputemp_ids);
+>  MODULE_DEVICE_TABLE(auxiliary, peci_dimmtemp_ids);
