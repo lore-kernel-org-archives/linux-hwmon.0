@@ -1,59 +1,59 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793374723;
-	b=2gu4G2y1In22fA1FPZrEC4z3WiIYuKt4SSIToiYxqx7U8EZktM4rPikIOAOAK833UF6o
-	 dK0ofIDsVT1BgCTPoKMRfBth2aKVyYZVcJhOBsGHJvA/4Njo/0a7jPDqs8BWgeOM/2JbV
-	 THb6vm7VbOCN2qHWP5saMpfam5kf6Is0mo8LmFzJ4F7bkJrcqTGfezkJy4wdKPu9rG0QC
-	 IXjBXjlPfMshanbLR9x0FuJ4HRm7WvqY/3lL7kdGvj9vQnIKob7bg8k6R8jA5lD2mdrwT
-	 5jKicbIQhOXscaiuexR4lQcsYupXTh4GUJLE0Ks909+chD04NvQ5k0UakPctaKmYq7w==
+	t=1793378756;
+	b=Py3UwiW/Y/YP0/qOWOxHreslO8V05CyZpjAtG+GyYNzR2FY6DujUPn1OUJZTVGAFtvIT
+	 463EONoNWqWZTGjUtFEgSiL1d7F1fgfmI+18x9dMfOhqfQ/TNWPGJDWacwBUqi3OdYvQZ
+	 dTlroX9kBOBjNMDIHU4VHm7NEFfL2es1wloCFKI1jbM4IObA7b3ys5aJuq1qkDrZQCwRA
+	 E0zeVrVTBvxWgEf/kkNINs3pcFSqGU33kuwd6X2+gzrXKG0I3Jqh7Hw3zuyQK6pB9wXLW
+	 YrZE8UUBFqdmoVfBH8zhP1k1Qv7mw/jZVOMqeYsu5c09dkZZ7jrDLNF1/KXFQXyXytQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793374723;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793378756;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=uEkdquko9VR4gRZhJYW+RWvIiAuc7lgxpha8X3M0roc=;
-	b=zw4LkTbwX1pjvFKd8UHiRg5vTGNa1FAV0tfoA/5KbsgBzklk5JXHAu9WEhMFcyEjRWgY
-	 GhKGoBjqBo8Di3Yd+VRgb7c5ZuzD/4J1gfSU6whVFxLJepWPHyUM8QapT4Z/C9eONMkea
-	 q2JWAf4PqCLJn2D8swR7QB2pjCc1/grSSlGGA0gnUcsk5krkeEAQ49VMsseobAExSco1u
-	 BiJ9YUe97GDd1KYbIt6lK1RRMVwiF+C3Z0mYqDhfLh0Q+EE8/iz9jy3qNhZTezzcOgW7c
-	 0H3aO7kyzNArQYLrfB+OgsZ+mom0tOR7Pzigd7G8RbHy5aR5mJ9JquGeXQ1/L6XuD7w==
+	bh=52xTTzrrbC1bMV9FtChgDxBJI5ySTBL3GYcsCBoyQKg=;
+	b=2p+vk1gtyeEpsF7t31GTZGPtbgrFMkoObByyZRPofgWL49NWOsSve0UzHyb4lcbsaH75
+	 1o/XbX5kIWDgv0xU0v2HsmD2+u6TnhZkitc7dpkyV4biCrmnkwf2hEIuCXT4ZbS4EKBIM
+	 gWGh1JeUHayYRFld4QiIvYVdYahaw0C/KRwcjAcc26I9ukaM3S/o6S8cgg+MJ3e4nB54Z
+	 dDi8h7Yxebu8ZfAiz1h3//GIFA0PahvgL6NlbO+mAHeGDYlmDMY6UYLSivFEVQt4fk9AM
+	 HgF5rPn+QZc1MLmP+5WZJhZXLizlmTdTB4S9MvTG72QmeC1HLHMdlXXNCRZSA1gaGVQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UQTAu7XD;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bVzNbutF;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05206606A31A;
-	Fri, 30 Oct 2026 15:38:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D21D4606A31A;
+	Fri, 30 Oct 2026 16:45:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UQTAu7XD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BBC61F000C1;
-	Fri, 30 Oct 2026 15:38:42 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bVzNbutF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F34841F0093A;
+	Fri, 30 Oct 2026 16:45:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793374722;
-	bh=uEkdquko9VR4gRZhJYW+RWvIiAuc7lgxpha8X3M0roc=;
+	s=k20260515; t=1793378755;
+	bh=52xTTzrrbC1bMV9FtChgDxBJI5ySTBL3GYcsCBoyQKg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=UQTAu7XDwiexZUovqY842fH+4N6aw5pL0Xe5ubdGhxbFLYsR18H7uvEOJZ/RCxXC3
-	 ITRSlklkZIVUaOp5s+rF5lbb4y+SbmCTs2wnmg/Cg3XZ31zI9DuTq2pCn9lwVpx2o2
-	 Lv1Jb/BgwpWKSDLNAKcVyhaPlBUS8EZzMwNY3/JCR083DDhniQyeaKugadbKR83UZz
-	 d4V8khHCDck4p43mYLRcyV3iVFkIVoPAavAedeGvu0Ui51x7y1h8l2wCDWaNQFWhBO
-	 3+zD07/HLClTnjIsm4w9egQphEgdjOlGttSDnKamoJBVLZiLaecptRzdTkaBgJPvk0
-	 1fkM09l/K4ZmQ==
-Date: Fri, 30 Oct 2026 10:38:39 -0500
+	b=bVzNbutFMnANPdYkbrUI56pS2HX2noR+FLh/AXMn0/doxaUOhkfZiC2RbvoooAlcx
+	 2YVSjDrUVw/J78r1HgYDY0K5/UpBEuU2t5b4/kDbqFgXwj8dTxSyUpt+Lo12i9MVAY
+	 Fqc+cPRg6Kg7V/T6SrMLvO6x7liI9IuCSkzHXfFNPYEAI8qxlCbF5y074pNpIZp/JA
+	 U0/sz+kQcX1szwPJRhKXef+kvXpqxDZ8TR+9SgpSMLhGg3Xic+iODcP0FrE1UrxDLP
+	 i9oGkPUN/FBHE9WNnov3mkNmxhbLYthi1Vj5IfXW55YBU/aWEYQ6EjIgOdY4vRbLR9
+	 BEyajOTXOkFFQ==
+Date: Fri, 30 Oct 2026 11:45:51 -0500
 From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Igor Velkov <iav@iav.lv>
-Cc: Heiko Stuebner <heiko@sntech.de>, linux-hwmon@vger.kernel.org,
+To: Kevin Jia <kjia@nexthop.ai>
+Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-arm-kernel@lists.infradead.org,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Reference the common
- fan schema
-Message-ID: <179337471871.91953.13659250524662558962.robh@kernel.org>
-References: <20261018-helios64-fan-label-v1-0-69a3f96d4efa@iav.lv>
- <20261018-helios64-fan-label-v1-1-69a3f96d4efa@iav.lv>
+	Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v2 2/3] dt-bindings: trivial-devices: Add TDK FS160x and
+ FS1006
+Message-ID: <179337875070.546916.6057991565347100078.robh@kernel.org>
+References: <20261020-fs1603-v2-0-0986107a5cd2@nexthop.ai>
+ <20261020-fs1603-v2-2-0986107a5cd2@nexthop.ai>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -65,24 +65,19 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261018-helios64-fan-label-v1-1-69a3f96d4efa@iav.lv>
+In-Reply-To: <20261020-fs1603-v2-2-0986107a5cd2@nexthop.ai>
 
 
-On Sun, 18 Oct 2026 07:54:59 +0300, Igor Velkov wrote:
-> pwm-fan predates fan-common.yaml and repeats several of its properties.
-> Reference the common schema, drop the duplicated properties and keep
-> only the constraints specific to PWM fans.
+On Tue, 20 Oct 2026 16:48:15 +0000, Kevin Jia wrote:
+> Add the TDK FS1603, FS1604, FS1606 and FS1006 uPOL converters. The
+> FS1606-0600 and FS1606-2500 presets scale telemetry differently, so they
+> get their own compatibles.
 > 
-> This also allows label, which the hwmon core exposes as the label
-> attribute.
-> 
-> Link: https://lore.kernel.org/r/20250106173805.GA501301-robh@kernel.org
-> Assisted-by: LLM
-> Signed-off-by: Igor Velkov <iav@iav.lv>
+> Signed-off-by: Kevin Jia <kjia@nexthop.ai>
 > ---
->  .../devicetree/bindings/hwmon/pwm-fan.yaml         | 22 +++++-----------------
->  1 file changed, 5 insertions(+), 17 deletions(-)
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
