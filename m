@@ -1,84 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.33
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793390200;
-	b=PSc1giqgOeT1/fmour0TIPiuCj65Bei5RsIGiP5Ocd97F1P/38vl0iyrZmjwADN3mVW6
-	 j9hB5RVbKN+9gd/PxZaj5/wGCwK/B6cxMG1jAJWqeK9Wy5WfWXlINTflMlC2md6dNGMws
-	 M6AqQBKCNgNN6B/zrvUIiHCShxtoHZQNhk9MaguQEuQeTHGaFY8vWgutcZEWcy3c4HK5o
-	 nAhX/jQwzBE5jpiO/BJufwZGNlYZxzdrUaXolrjBYd/jyoelyHom89DS0PA6oKJmwO+VL
-	 GeUdvBRLhfI9gCnbxsQ8sNX5Q8OhP7VZwqaYqw4jK1IzLxcqNozyt+C34v6cnSSeQIw==
+	t=1793392546;
+	b=KoDPXE+olC+aXYlVq7TkTklrpdAth1TcOwgo1X7QGQFecwKGieIVPbjkNSoqenfnCUSO
+	 IXckjHL+UAEALlv9TplvvFYUavYdwPQDE1M6Gvs97NAg6uwKOBDh1NTuuaJC1+1eaTszA
+	 fYiYQ9lfXu82vW1BE2fdXDthez4nYDIT62HPVxpg0DNpoal3Lkfima6nfWazYsUeZjWfz
+	 uKwLE3q5Yc1QKDIOiqf4NTWjvp3qYoB9zDax49Zl7NNaMRALs7kRLSA2ZmQtGjZcUqQCE
+	 3xrFxON0UYjytZ8QWCCFh9fEjjiBYuPb/td0lpL7Arh32TH1/wi5hBdM115OMSNMQAw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793390200;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
-	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
-	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
-	 X-Local-Domain:X-CMAE-Envelope;
-	bh=DWzHdFiapqL57vQ9QQf4q1XeBGnNvtXOlbL7A4/rAco=;
-	b=L+Jgk+E97sDGzULQnFBL6h+1ei+UsSCcoyegww6jnUX0LSyUtbD5d/a0oI8UQGVN8oyj
-	 HDTziVmyYzTiG2aurmCzZBWJZSzCzyOElPFvyF+lhSmbutcApsn8t+OaYvA+fWzsqK+na
-	 dI4NX359WYehMAAxyd88NkEQoGA+MaL1wVqY9U8sXXQ5KkkRWTC3YwsE60DPTf8N4OQ/b
-	 PjZ0f3bH/DTszgM1jByT2hxYJ7hTNkenI9XBTCKZHbMXV37x4SJBU2j/ArLXSCdUB9tA3
-	 FNmcrKeZR1w06gV8gChOnldVc154/8oyE0ds8/KAc+04g4QPfoEr1KVfZ21eTie0Ndw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793392546;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key;
+	bh=SN1nku32vaFiTenqE1IuYVioDYWxzqsexpbb3IFiLMA=;
+	b=Rrnk50JIag7E9sT0Q65CBgtUY/nTM/JFI1wPTeoGf8xlGfWpfSH/MhToeUQGjWl/CZu0
+	 Lt9n7jlWcl2nNdh1yg6PQUJFQR/efioPO2HcCvlEGQUBwBpGyN4+qwvAgC4Har/VDqady
+	 zXUMDqHq0VIbiMpnoFocmny9MOn9c+6u9LCvuiJyEyXErBvsyXX6QpFIlrcBaHAlStAE2
+	 g9WTDRVsvnLxrLTxXycUDSKDmi1T/K+Ors4SqvGAvgOGiykW+75eJ9/64Lgay3B5fwMcT
+	 ieNZrd03OktTmwBId0mJNODdofhlJxRTGp+y90RVxMlCRW7EktHMmgZ0vVgZHSilJDg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=doEtbsmg;
-	arc=none smtp.remote-ip=35.89.44.33
-Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=nexthop.ai;
+	spf=pass smtp.mailfrom=nexthop.ai;
+	dkim=pass header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b="DTlfrjQ/";
+	arc=none smtp.remote-ip=74.125.82.43
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6E5606A31A
-	for <linux-hwmon@vger.kernel.org>; Fri, 30 Oct 2026 19:56:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BE6E5606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F284606A31E
+	for <linux-hwmon@vger.kernel.org>; Fri, 30 Oct 2026 20:35:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9F284606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=doEtbsmg
-Received: from eig-obgw-5007b.ext.cloudfilter.net ([10.0.29.167])
-	by cmsmtp with ESMTPS
-	id Mn9Lx59glaC0UMsiNxDS0h; Fri, 30 Oct 2026 19:56:39 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id MsiNxSjJtLr2uMsiNxWfzw; Fri, 30 Oct 2026 19:56:39 +0000
-X-Authority-Analysis: v=2.4 cv=UudjN/wB c=1 sm=1 tr=0 ts=6ae4f677
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=kj9zAlcOel0A:10 a=660iZSQnnn4A:10 a=M0FbrtG7MMAA:10 a=Bq6zwJu1AAAA:8
- a=QyXUC8HyAAAA:8 a=_jlGtV7tAAAA:8 a=TmeHqywlB-wf64vNx90A:9 a=CjuIK1q_8ugA:10
- a=KQ6X2bKhxX7Fj2iT9C4S:22 a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=DWzHdFiapqL57vQ9QQf4q1XeBGnNvtXOlbL7A4/rAco=; b=doEtbsmgS12KszkRR7TRgjgMvi
-	e4hdP6WzcIw88nPHe3j+q+T2q9jbGdVy49soWf5ZMcQBLYeAT5zxBVYrrkCy4gpiTjddJjznuW+0G
-	duvX7QwtYGic1g1Fs4KtKw0NAhOSocKFKuTvXCUCqtcyLi00VHe4vk/IhMJi9TWOuq3HsTgZdGp0M
-	VmxYb2gRLA0sq6SXAL58CMmbYYM+90xRnn5gweKBgnMasv4Y/tt6xu+UXpaSCAV5glZQtogaMpV/0
-	0M9GGNoufgNpv4k5sS3J1ALa9w06bWHRE2WMiKID5fn3HXhEV/WB7jAGZZ5ZzkssRWQtuylPjv9E8
-	LLmTy/lQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:38324 helo=server.roeck-us.net)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xMsiM-00000003xwz-2LGQ;
-	Sat, 31 Oct 2026 01:26:38 +0530
-Date: Fri, 30 Oct 2026 12:56:37 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Changhuang Liang <changhuang.liang@starfivetech.com>
-Cc: Iwona Winiarska <iwona.winiarska@intel.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, openbmc@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH v4 6/6] hwmon: (peci/dimmtemp) Add support for Granite
- Rapids (GNR)
-Message-ID: <215a0b5a-9fda-4bce-bff5-b9e4bb5c3928@roeck-us.net>
-References: <20261019114502.55307-1-changhuang.liang@starfivetech.com>
- <20261019114502.55307-7-changhuang.liang@starfivetech.com>
+	dkim=pass (2048-bit key, unprotected) header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b=DTlfrjQ/
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-1a2761c69fbso138892c88.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 30 Oct 2026 13:35:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nexthop.ai; s=google; t=1793392545; x=1793997345; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=SN1nku32vaFiTenqE1IuYVioDYWxzqsexpbb3IFiLMA=;
+        b=DTlfrjQ/VHNxMLfWO6pvlc5ajLU1MYy8EDBD/923WefzkcYMPYXJTMQaOqCdT0VbcU
+         TmVzApEgUoKReUCNLlW2Ffw6rqKbIui/Fx21a54XebtlnplJphN4JnfQ9QrVWQJhJxc7
+         9TAhPbNMVSc0scZmk/zRTblZ2zrP78gg6IPKJBA0ko26IQ6mgDJLq0ZpO/Wzw+0ckN/l
+         /tIKhcBSLvTyBhi67UEKRfwMyq2fc990wiBUSfPFaNxahhC3jNgm0LZqWuVj8PrDZ4KC
+         81M73Mgs+3P1K9Nt2kdIJULcgN414SlSqiEDBku9aS8QzhB3t/+uXW3bY/2sAtBAdgCF
+         HyTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793392545; x=1793997345;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=SN1nku32vaFiTenqE1IuYVioDYWxzqsexpbb3IFiLMA=;
+        b=WZbwRTt10gG9D4e5V8JeK9jiQ8ztxfWM0c5ZIFNpMM+zyztuzdPMOl0mb6eXlJx41y
+         04QlHdJvYXd+Nv++ZW9ftL9El+Jfxuk8pLHXDjQbcgHdTZTNz3Z+D0sldpi4lejCyoNX
+         D82sOEHQlcGYqoFIv/7J6tr7NauEkCtivDnpEhBQys3zC52W2FcM2VbGD7uVRyODrB6q
+         Gpb0nakJ6t3HBbDAQ1EAm3Da8r6oYGIb1VscF8jBHxDtTCXJo8hD9ZH+yk7mmR4WU8iV
+         TOjkfVLiaEg/4QMJWyr4Sb/6r+p8OidsFCl3qOfA5Tm//QxUgyfQrMwZlaVKBscW9qIj
+         Cw0w==
+X-Forwarded-Encrypted: i=1; AKwUvBzyXRNtTsY39r2xVfK6aOyUBZ4IIRXM3m1QpYFpw4xAlY/RBfiAgqLIKhWzVdKpxyjZS7FhtxjTZ709Uw==@vger.kernel.org
+X-Gm-Message-State: AFq9FYIAp7sQMFeIIp4zm9rb3Ef7uUDvcJ0eqOQ59/j8F/x6hH8Wtxs/
+	bIHEx8zSQr70GAwIlgLcPo7SM4U7zpAvmYu48UnGaQUMmq9nDlXI78MMNAnTypP9WkMeWGAC5oy
+	IBbSjfsw=
+X-Gm-Gg: AYBFou1quiOYAxIX0xJDAxxeCLoWXPCgyTkT7KCrK+6WMUNSBDbVTLS55rXKRZOdBXh
+	IiiqY4M2DnVWifpKr/+Ilv2BQmYaUMCG5OZAs8gfh0+SfXcvwXEiBxAiHJnHwb6hpYlANfoltfl
+	/vGl7JbtKJx8v/GOknh5EedDGM3u2SaeuvBkScLKHDqBvlIpttntTXc4b2FmNvWxsoJ6QmF2eS2
+	IYNEAOVIj3tdkJqKf/JJRlBfj/kjjMyg/ATziNXnaVimcvY2KynLDLbIMzMVkKb1kCpWxCfXnvH
+	HPsaI/30IyINCvXC0nYDK94G9TokfY7k/J5NigrdwLoTBDX4EwXPhzLvHBCFUSy3A2c3vDGykR5
+	yiEREEAsWvJhB1WYP/FXuNXuX2IV0+5pjjp0W35/Ybwg358SKPM1rb777hyUY9EDi3FT1zLa2Zf
+	neDjiAr8NzqmbHKFtroOXCRAIe3OWGxfznVbnJz6tjB5HyJTj5RLr9PlDV9X6oVwsrPN8oqw79K
+	e1rSqQz4+vQkZ6cpfM0UyMQXhVpyG6GhU5KNBBbYkQEGTiJxZPypG52VB71QdbYCg2uHZl0jrpy
+	u0to0YlwdRz09rVx7zZx+P4m7ZHC2e7QfCf556UjU/2b
+X-Received: by 2002:a05:7022:281:20b0:1ac:91b6:8dfd with SMTP id a92af1059eb24-1ade9e3e335mr2396890c88.31.1793392544510;
+        Fri, 30 Oct 2026 13:35:44 -0700 (PDT)
+Received: from [127.0.1.1] ([50.145.100.174])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac1854d925sm15120020c88.7.2026.10.30.13.35.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2026 13:35:43 -0700 (PDT)
+From: Kevin Jia <kjia@nexthop.ai>
+Subject: [PATCH v3 0/2] hwmon: (fs1603) Add driver for TDK FS160x and
+ FS1006 uPOL converters
+Date: Fri, 30 Oct 2026 20:35:36 +0000
+Message-Id: <20261030-fs1603-v3-0-6f8963a74def@nexthop.ai>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -88,122 +94,94 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261019114502.55307-7-changhuang.liang@starfivetech.com>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xMsiM-00000003xwz-2LGQ
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:38324
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 97
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfENOIX4qV5iSXoczNGJCX6qRuCaJS4LgNSh+oGO+ZalcnYOGkg8zmFvq8RQHnQr4vg7hy0HbHFzdQpOS8CLKjb/3+XKpo6qzbYiaFDI4YDa+/kLBJJYR
- SC1QuOSao3Vq8bGOWErI/ZBwsFN9204Y+4x2mfQNgoj6/MJFPs8qi2Qr/2Up/OwjPMXYUoDHZgYYgBytqhEzxEFWYWqiSZ6K1yAugogbWmM6n4oDpXjsR0bl
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJj/5GoC/1WPS07DMBRFtxJ5jJH9/IkTIcQ+EAN/XomR8iFOQ
+ lHVvWMnalWG17rn+N0LSThHTKStLmTGLaY4DjmIp4r4zg6fSGPImQADzRnX9JS4ZoKCkkZ4hcG
+ rmuTyNOMpnnfR+8eR0+q+0C+FLo0upmWcf/efNl56N2lzk26cMmpsODU1CKM9fxvwvHTj9GwjK
+ dYNHjhgdw4yxxqTH2urfIB/3PU4Z8bvNc9bjhtJjynZfV5bvdyF3U8/DnTq3ZqKXHKgm8xyqNG
+ jRCkCkw/y1zLM2YTUj30fl7aSjDnUjeLKC6g9Bs2YAZf5gA0Da0IjvAsun3X9AyIhysZ9AQAA
+X-Change-ID: 20261016-fs1603-25483c5edc57
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Kevin Jia <kjia@nexthop.ai>, Abdurrahman Hussain <abdurrahman@nexthop.ai>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793392543; l=3249;
+ i=kjia@nexthop.ai; s=20261016; h=from:subject:message-id;
+ bh=cTgLvVzXaKHSwBE678iEgA8UVGNfgBCAPJmAjE3eC88=;
+ b=Vu7zVw+XBh1ibGSRgqoa6lb8P65/Wi0lgWnaO1NKouSN3Dltk2HRiB2+5WY0rOBTJfEOI5YHO
+ BkAYsjPhrSMBOYx+cNrHCJ5MpxAjqf1sVpPccYMgN2Ml3AnTkHg9Fpd
+X-Developer-Key: i=kjia@nexthop.ai; a=ed25519;
+ pk=TcHV4RjX7qo9R0iryPJ/gWzq3O9yq1SUw0VO2QXQ3Zs=
 
-On Mon, Oct 19, 2026 at 04:45:02AM -0700, Changhuang Liang wrote:
-> Add support for Granite Rapids (GNR) platform in PECI DIMM temperature
-> monitoring driver.
-> 
-> The GNR platform has different DIMM topology from previous generations,
-> with 12 channel ranks (CHAN_RANK_MAX_ON_GNR) and 2 DIMM indexes per
-> channel. Define these new constants and update CHAN_RANK_MAX to use
-> the GNR value since it represents the maximum across all supported
-> platforms.
-> 
-> Since the current peci core does not support domains, accessing GNR's
-> DIMM_TEMP_MAX and DIMM_TEMP_CRIT via PECI commands will be rejected
-> and return completion code 0x90 (invalid request). To handle this, the
-> read_thresholds callback is not defined for GNR, and the visibility
-> logic is updated to skip exposing the max and crit temperature
-> attributes.
-> 
-> The minimum PECI revision required for GNR is 0x42.
-> 
-> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
-> Reviewed-by: Iwona Winiarska <iwona.winiarska@intel.com>
+The TDK FS1603, FS1604, FS1606 and FS1006 are uPOL DC-DC converters with
+an integrated inductor. They report input and output voltage, output
+current and temperature over a proprietary I2C register map. They are not
+PMBus devices, and their register numbers collide with PMBus command codes.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Patch 1 adds a devicetree binding, and patch 2 adds a read-only hwmon
+driver. The model cannot be detected from the part, so it is declared
+through the I2C device name or the devicetree compatible. Parts that
+encode telemetry like the FS1603 list tdk,fs1603 as a fallback.
 
-> ---
->  drivers/hwmon/peci/dimmtemp.c | 33 +++++++++++++++++++++++++++++----
->  1 file changed, 29 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
-> index bd3e8715dfec..791a8e866081 100644
-> --- a/drivers/hwmon/peci/dimmtemp.c
-> +++ b/drivers/hwmon/peci/dimmtemp.c
-> @@ -34,8 +34,10 @@
->  #define DIMM_IDX_MAX_ON_SPR	2
->  #define CHAN_RANK_MAX_ON_EMR	8
->  #define DIMM_IDX_MAX_ON_EMR	2
-> +#define CHAN_RANK_MAX_ON_GNR	12
-> +#define DIMM_IDX_MAX_ON_GNR	2
->  
-> -#define CHAN_RANK_MAX		CHAN_RANK_MAX_ON_HSX
-> +#define CHAN_RANK_MAX		CHAN_RANK_MAX_ON_GNR
->  #define DIMM_IDX_MAX		DIMM_IDX_MAX_ON_HSX
->  #define DIMM_NUMS_MAX		(CHAN_RANK_MAX * DIMM_IDX_MAX)
->  
-> @@ -198,10 +200,18 @@ static umode_t dimmtemp_is_visible(const void *data, enum hwmon_sensor_types typ
->  {
->  	const struct peci_dimmtemp *priv = data;
->  
-> -	if (test_bit(channel, priv->dimm_mask))
-> -		return 0444;
-> +	if (!test_bit(channel, priv->dimm_mask))
-> +		return 0;
->  
-> -	return 0;
-> +	/*
-> +	 * Some platforms do not provide the DIMM temperature thresholds over
-> +	 * PECI - do not expose the corresponding attributes there.
-> +	 */
-> +	if ((attr == hwmon_temp_max || attr == hwmon_temp_crit) &&
-> +	    !priv->gen_info->read_thresholds)
-> +		return 0;
-> +
-> +	return 0444;
->  }
->  
->  static const struct hwmon_ops peci_dimmtemp_ops = {
-> @@ -626,6 +636,17 @@ static const struct dimm_info dimm_emr = {
->  	.read_thresholds = &read_thresholds_emr,
->  };
->  
-> +static const struct dimm_info dimm_gnr = {
-> +	.chan_rank_max	= CHAN_RANK_MAX_ON_GNR,
-> +	.dimm_idx_max	= DIMM_IDX_MAX_ON_GNR,
-> +	.min_peci_revision = 0x42,
-> +	/*
-> +	 * Reading DIMM_TEMP_MAX/DIMM_TEMP_CRIT over PECI is answered with
-> +	 * completion code 0x90 (invalid request) on Granite Rapids, so the
-> +	 * threshold attributes are not exposed on this platform.
-> +	 */
-> +};
-> +
->  static const struct auxiliary_device_id peci_dimmtemp_ids[] = {
->  	{
->  		.name = "peci_cpu.dimmtemp.hsx",
-> @@ -659,6 +680,10 @@ static const struct auxiliary_device_id peci_dimmtemp_ids[] = {
->  		.name = "peci_cpu.dimmtemp.emr",
->  		.driver_data = (kernel_ulong_t)&dimm_emr,
->  	},
-> +	{
-> +		.name = "peci_cpu.dimmtemp.gnr",
-> +		.driver_data = (kernel_ulong_t)&dimm_gnr,
-> +	},
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(auxiliary, peci_dimmtemp_ids);
+The TDK vendor prefix is added by the FS1412 series, which this series
+depends on:
+https://lore.kernel.org/all/20261020-hwmon-pmbus-fs1412-v4-0-27ece4e43d04@nexthop.ai/
+
+Tested on FS1603, FS1604, FS1006-3300, FS1006-5000 and FS1606-0600 parts
+with the driver backported to 6.12.
+
+Signed-off-by: Kevin Jia <kjia@nexthop.ai>
+---
+Changes in v3:
+- Drop the vendor-prefixes patch, the TDK prefix is added by the FS1412
+  series (Guenter).
+- dt-bindings: Move to a dedicated tdk,fs1603.yaml, where the FS1604,
+  FS1006-3300, FS1006-5000 and FS1606-2500 fall back to tdk,fs1603
+  (Krzysztof, Guenter).
+- hwmon: Drop the OCSet probe check. OCSet is a programmable over-current
+  level and not really an ID, so it warned falsely on boards that
+  reprogram it.
+- hwmon: Match only tdk,fs1603, tdk,fs1606 and tdk,fs1606-0600, and share
+  driver data between parts that encode telemetry the same way (Guenter).
+- Link to v2: https://patch.msgid.link/20261020-fs1603-v2-0-0986107a5cd2@nexthop.ai
+
+Changes in v2:
+- hwmon: Scale in1_crit by the feedback divider ratio measured at probe.
+  Further testing after v1 found that on boards that raise the rail with a
+  feedback divider, as the FS1606-0600 is used, VOUT_SET holds the 0.6 V
+  feedback target while VOUT reports the rail, so v1 reported the
+  feedback-pin trip point (about 0.72 V) as in1_crit on every such rail.
+- hwmon: Use named initializers in fs1603_id[] (Sashiko).
+- Link to v1: https://patch.msgid.link/20261019-fs1603-v1-0-8adf972386c1@nexthop.ai
+
+---
+Kevin Jia (2):
+      dt-bindings: hwmon: Add TDK FS160x and FS1006
+      hwmon: (fs1603) Add driver for TDK FS160x and FS1006 uPOL converters
+
+ .../devicetree/bindings/hwmon/tdk,fs1603.yaml      |  53 +++
+ Documentation/hwmon/fs1603.rst                     |  75 ++++
+ Documentation/hwmon/index.rst                      |   1 +
+ MAINTAINERS                                        |   8 +
+ drivers/hwmon/Kconfig                              |  11 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/fs1603.c                             | 498 +++++++++++++++++++++
+ 7 files changed, 647 insertions(+)
+---
+base-commit: 400be69515c327ced60082b27ede902a8d93cbdb
+change-id: 20261016-fs1603-25483c5edc57
+prerequisite-message-id: <20261020-hwmon-pmbus-fs1412-v4-0-27ece4e43d04@nexthop.ai>
+prerequisite-patch-id: 48986e9a4b228cab399cc8b28ab5cebedebbca09
+prerequisite-patch-id: e9d346bc8703fcb8032b663bddb7514ce31f2c1c
+prerequisite-patch-id: 460dc5083895fdd9fc430ce886736561151571bf
+prerequisite-patch-id: 34cc05e38fdf5462d315c20f186a2c2904a572f2
+
+Best regards,
+--  
+Kevin Jia <kjia@nexthop.ai>
+
