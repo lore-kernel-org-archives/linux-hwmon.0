@@ -1,59 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793378756;
-	b=Py3UwiW/Y/YP0/qOWOxHreslO8V05CyZpjAtG+GyYNzR2FY6DujUPn1OUJZTVGAFtvIT
-	 463EONoNWqWZTGjUtFEgSiL1d7F1fgfmI+18x9dMfOhqfQ/TNWPGJDWacwBUqi3OdYvQZ
-	 dTlroX9kBOBjNMDIHU4VHm7NEFfL2es1wloCFKI1jbM4IObA7b3ys5aJuq1qkDrZQCwRA
-	 E0zeVrVTBvxWgEf/kkNINs3pcFSqGU33kuwd6X2+gzrXKG0I3Jqh7Hw3zuyQK6pB9wXLW
-	 YrZE8UUBFqdmoVfBH8zhP1k1Qv7mw/jZVOMqeYsu5c09dkZZ7jrDLNF1/KXFQXyXytQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793378756;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=52xTTzrrbC1bMV9FtChgDxBJI5ySTBL3GYcsCBoyQKg=;
-	b=2p+vk1gtyeEpsF7t31GTZGPtbgrFMkoObByyZRPofgWL49NWOsSve0UzHyb4lcbsaH75
-	 1o/XbX5kIWDgv0xU0v2HsmD2+u6TnhZkitc7dpkyV4biCrmnkwf2hEIuCXT4ZbS4EKBIM
-	 gWGh1JeUHayYRFld4QiIvYVdYahaw0C/KRwcjAcc26I9ukaM3S/o6S8cgg+MJ3e4nB54Z
-	 dDi8h7Yxebu8ZfAiz1h3//GIFA0PahvgL6NlbO+mAHeGDYlmDMY6UYLSivFEVQt4fk9AM
-	 HgF5rPn+QZc1MLmP+5WZJhZXLizlmTdTB4S9MvTG72QmeC1HLHMdlXXNCRZSA1gaGVQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bVzNbutF;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.222.181
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793381947;
+	b=mTuC3CewE3UU9qw2aOLY9BaH/KDFo2Z3umYI5GogVd/nrM3Q6VlVeCax4okQ6evykCLU
+	 nWkMkawzt97F02xkKnN6VMDidNf8hchY1OsGt1IqeSS9oOgjG6guxa2WpEQ1FG8OaapQ6
+	 hKqE+S3DpjYyBte+gV4VS0LbC/wzoWztTD1oaAC2fTJYgXcFVZXjFa3NJdlhtLT4gaX8F
+	 DL5irKEs/+lnC2/C5iv1+hc77+w3zi6DUajQrnTahGAtT3+8pSybqpDIJErlozuwQqlD6
+	 ogjFD/+cx0N+FnZ/d3HQEIdM4X3IIttqo/vjY1hH2q/D7SQEQ2kZR4p2mThPPRxDLpA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793381947;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type;
+	bh=espr7eMUoL4NEp1fFPw2X7cY1hYHDQwWESfnyLsQmNw=;
+	b=N4rveKL5RTQa12+q6PFBUb0QOnT1gvED6Xz/Hzms6dsuFAIgehloT3X4ndgebTKFGhsc
+	 i23sTz6mlnMHOY1uDRCNXxUM3OITaPRwgV9PjkPSNP8tQU+BmjxlZPWpi0SwOl/PY5s/d
+	 i2ZACg6VDdtAY93vuj4rOmWiFsVIF31pn1Sm+/MIXNLDh8M4IKU/+yk5NzvOhwR5kLNbS
+	 1JG9AkLNe5btQsGdYa3tOKKMLe4zxvy3CRbdYrtjkmFrRxnxCQUZSjel1YDS3M4D9Fc8H
+	 74pB3PHrkHW5g8K6jJ6zLr1inKenLMwGmVLep1o4yU3B4hC3IsJI6GVx/jR/vjRTVcg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=phsogC6Y;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.222.181
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D21D4606A31A;
-	Fri, 30 Oct 2026 16:45:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA17606A31E
+	for <linux-hwmon@vger.kernel.org>; Fri, 30 Oct 2026 17:39:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2BA17606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bVzNbutF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F34841F0093A;
-	Fri, 30 Oct 2026 16:45:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793378755;
-	bh=52xTTzrrbC1bMV9FtChgDxBJI5ySTBL3GYcsCBoyQKg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=bVzNbutFMnANPdYkbrUI56pS2HX2noR+FLh/AXMn0/doxaUOhkfZiC2RbvoooAlcx
-	 2YVSjDrUVw/J78r1HgYDY0K5/UpBEuU2t5b4/kDbqFgXwj8dTxSyUpt+Lo12i9MVAY
-	 Fqc+cPRg6Kg7V/T6SrMLvO6x7liI9IuCSkzHXfFNPYEAI8qxlCbF5y074pNpIZp/JA
-	 U0/sz+kQcX1szwPJRhKXef+kvXpqxDZ8TR+9SgpSMLhGg3Xic+iODcP0FrE1UrxDLP
-	 i9oGkPUN/FBHE9WNnov3mkNmxhbLYthi1Vj5IfXW55YBU/aWEYQ6EjIgOdY4vRbLR9
-	 BEyajOTXOkFFQ==
-Date: Fri, 30 Oct 2026 11:45:51 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Kevin Jia <kjia@nexthop.ai>
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v2 2/3] dt-bindings: trivial-devices: Add TDK FS160x and
- FS1006
-Message-ID: <179337875070.546916.6057991565347100078.robh@kernel.org>
-References: <20261020-fs1603-v2-0-0986107a5cd2@nexthop.ai>
- <20261020-fs1603-v2-2-0986107a5cd2@nexthop.ai>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=phsogC6Y
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-93f259cdc86so87311185a.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 30 Oct 2026 10:39:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793381946; cv=none;
+        d=google.com; s=arc-20260327;
+        b=KVLaJjLF06BbZACVOTPlVkp8J6WwIq1GpdKc13wSDVeTtFf/W6v2CQ6PA3Gm4L/nMX
+         X02K/2Cd7uewEeduTEUQdX9XrTO/agEya01N0+TAK8OAFWZ+v5ej7tN3LXEyepbmNVNM
+         ofEcC9aLRnagNvXmxVo1eeaH2MECB8EyBVuPPPm3RXrCusONyzELkLf2sLDYINcWDUWu
+         KlPALYiVMlnvuHJC0db13SecOm7l2a/+wm+nAsxSMXrn7Rj4M6YuzGgn8Jb+KCHW/1j/
+         KSN1prnJqbSPfAxL1wfCNDaivW3zHjRR4vhUIpQ4lC3iiXuxPmMTESgLu21CipmnFeyi
+         Du9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=espr7eMUoL4NEp1fFPw2X7cY1hYHDQwWESfnyLsQmNw=;
+        fh=d4tpDA2LtysrWf2WxN2nG8a8VwDu4ZnNVTM1LXgOB/s=;
+        b=kDR1g51AppKnkYlHU/YIWaykJmiJHwbbqCTN/m8I22InzQrYD+L3cp4sgcnWVVi4ao
+         lxxXq3fXeOeVtJny75uubExwfc5d/KffV1vGQ/kXzWCOhYJTnsXSqVlKWibMWfm6U9nL
+         ElQKWA6cFTPPtQgl0T0cdwVYcXo0r7gtZbXj0jg2Kpu4R158hb6YlSpxtpJ0t4rvjltm
+         VkEjJv6y9855DKkZecvhXVM9AqNR/2rZDSfJtqPBFhV4SMkiV+c+EdAra9g/M5tTyc44
+         DAkzch5WeGo29sjSsCXho0zLLEnymScQwpL7iEhC6HdDUlzPIzI0nfXQwN0IMCkTMRnb
+         1XoQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793381946; x=1793986746; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=espr7eMUoL4NEp1fFPw2X7cY1hYHDQwWESfnyLsQmNw=;
+        b=phsogC6Y+qtsb0QGVFGSDDf5T5Kh20EJJXMOsGlfuqX5VlyD6VMPQ8vSmR/mCfXDMo
+         2GFmmgqHGJeNJVXfLqFbsvCh324IQWNuBvDyY3Pcci4A5ESkB2Z3hSC8Q/GovLQZtU8k
+         Iwd/evxgoGgJvL5OMRp8Or9unuzO0a7dxUCCb1SUwkmIRNALmNb/9AEo3rA8zEPai2hS
+         6s703AX4O2RsuiJcwFc0vfd5vPLtYQXa70N6TaP01xJsrNXxTVYKk/fFr3SOLlcEd4s8
+         RDzu1j9SEC0hqsaxOtJpkWxdEywO/uUnHQY6XgxhjDO0E+SPt3O/kmthnolh6hc3rYrL
+         CNKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793381946; x=1793986746;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=espr7eMUoL4NEp1fFPw2X7cY1hYHDQwWESfnyLsQmNw=;
+        b=x4F7pUb0U1DZ8Uu+vtBkggnK/qvy0//CxA+Nsvu5GAUomV1w3/olUMCbiPhMMcUW75
+         WYYerdRT8+6oLkIJKQNBU04DouzxwA9KwoMwd5wDkrccJV/zGUfX92oLhqR1a777MWq2
+         tCLzWMRT/foyPWJhh+URS263+EzqALlOGxRBCxQ/RS9q56qr5CyLDTP7frp2TMPzULx2
+         oIC9U6ISZx8y+10XOUosrGij/BKYf0SO/61YEU0bDj0P3TeM+0yD8z6+DNgKro5th8xm
+         DTdIynCOWNGmMAQV0kK9EBmNglJosKvNugWMdpHDmvFpUoX+XWFAdp3oEJskKvHc1O+Q
+         roxg==
+X-Gm-Message-State: AFq9FYIl4dXTuIWGmNxrO6ynBEurG7iDOgrLl4hAVye+zR75a0Wir0Az
+	UmCyTTrA0p61FbGvtME4i7im6dYVUQgWyP99daKzWDh92a5wNOw0xoyStHYBaxeJbkoa5q13p8B
+	KNz30RPTVYvAgyRpkiR+9ZU5msplQUQCRuG/tJSQQVA==
+X-Gm-Gg: AYBFou3X2fuqInGorG5WMf24Nm6MAz1s2EKk/waxg7sc33aPtPtGEkqh4a79fgldCg0
+	X0QUa5GvdqbmVmBVtwRKkQzyQ/FxhckqD5BYuiTdfJCryPvkrSrAWFm7XRRD4XOA76bb+0bsFD+
+	brEzgSLp5vwWnewwjvyOEI3D10RiuD5m3DkQv0eqQpGGtnHhKeKSHxguQ4c0TO346B0dVEZqvZN
+	4cKekjj0tL/5Pv64YK/J5mjOkO2/eXnLsU8+dLr81lW/RwJy0Be5zbbkOGAIHSRH21DCOltTcef
+	kVwcu2EoTtajeLeW0UuTubS7Kxd1A2URXmA7fELfYmg+Q+JQmKEHyO6OoRSTFfZ17RRw2YbNwAe
+	e4JC/Hl+HD1dRWRSd6kMc0g3hGAz++UlRZSa2
+X-Received: by 2002:a05:620a:1a08:b0:93c:9d56:a860 with SMTP id
+ af79cd13be357-944217439e4mr528491585a.19.1793381946045; Fri, 30 Oct 2026
+ 10:39:06 -0700 (PDT)
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -63,21 +102,29 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261020-fs1603-v2-2-0986107a5cd2@nexthop.ai>
+References: <cover.1790512964.git.lanzonza@gmail.com> <7ca8fe6cd6b4125813613bd4187ff6cdda72e4b6.1790512964.git.lanzonza@gmail.com>
+In-Reply-To: <7ca8fe6cd6b4125813613bd4187ff6cdda72e4b6.1790512964.git.lanzonza@gmail.com>
+From: Zac Lanzon <lanzonza@gmail.com>
+Date: Fri, 30 Oct 2026 13:38:55 -0400
+X-Gm-Features: AclHuK-QAySofGqN-BH0ysfW9wI2BwE9lRTbGJWzIzgQZTntV5tJ3u0NVFiOCeQ
+Message-ID: <CAPusjWrmKH4wHK6LY7NFi1=+rzDY0uq5N4dgKC4FuUh_=xGhLg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] hwmon: (asus_rog_ryujin) Fix pump control source
+ on the Ryujin III
+To: linux-hwmon@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>, Aleksa Savic <savicaleksa83@gmail.com>, 
+	Edward Blair <edward.blair@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Guenter,
 
-On Tue, 20 Oct 2026 16:48:15 +0000, Kevin Jia wrote:
-> Add the TDK FS1603, FS1604, FS1606 and FS1006 uPOL converters. The
-> FS1606-0600 and FS1606-2500 presets scale telemetry differently, so they
-> get their own compatibles.
-> 
-> Signed-off-by: Kevin Jia <kjia@nexthop.ai>
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
+Gentle ping on v2 of this series. Patch 1 fixes the pump control
+source on the Ryujin III and is Cc'd to stable. Patch 2 adds
+pwm1_enable.
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+I can rebase onto hwmon-next and resend if that helps.
 
+Thanks,
+Zac
