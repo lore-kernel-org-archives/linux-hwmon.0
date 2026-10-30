@@ -1,100 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.175
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793306107;
-	b=4wdKSGxDEWsT2EpXKqAWkCR179fc4NrleXTsmaPFsjIcBqYrl+Xcl2Rx302whexnobQO
-	 gFDN6pYs8UJJbsW8PsE9NbEiIfyxKpSf/64gPdZaU8S9SYAGgoYIB3PfB+AJdA2HMy7x5
-	 tJFQ6NAmTRiOvujOK8F8xBot61tbiculRTgb++ftnf+cam/nhZ3TNyWFZtVtXbSVF9HRK
-	 aXqs5xJJikhHZgOffmWEnyweuny7QoksrgihCbm3S7nk6GsqJ65pvCCC82GdditVVJkeM
-	 W6U+CBYTRWbUmVRFBzXtqHSRzIqKmKGn/3uIPfO4bpbbKKllc4eBfcuwoLeI5so04Uw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793306107;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.178
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793334403;
+	b=NwEjLxn62vO78eXspw6lcnZOwXZG223AFKcrXB1QIA52BcKONs5+c4VLsIXTxt2DCD8H
+	 +QSIeO3B9j3otZcOJrrn7anl3yd7aocRMRNocJjFmfWEFJ3HwAkigZYxi4Re2FOZbE4IO
+	 EE8hPRvLvNAMcq1F/IZhkY+473p0JnkwIwFyke0ayqPbSW/IS7yhKbNbuzPbsqYK1earU
+	 S+LER1WdLnyADWY/4Fatv68qCGhUgTMYNcxXoQcBDMtJhhRhU6vo37jSJeDcXTxsZqwZO
+	 2SAKSm9mhoDEB6vt+vqiDY2UQaefTrLvcY3Q1Pel9Y2s9CQzYtuVApgf/sN4Yk+O21A==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793334403;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Received:MIME-Version:
-	 From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type;
-	bh=wV0jAZkoNRSmCucNjo6hSl/i5bAlJ4AOy7rZeNtsLuc=;
-	b=H9OoTDpUwgQQOD+ySl2R5mYGpoWK+lpVwg/ReIxZ7qb9RRLI/+GdeK+3QnGX099c33QQ
-	 dEp7pA3iQEcOmfDbKetu2/LaF9jfR+AEfx44zLtGLTHQBjMIMfnUhZ/ewkhCv6Rkkr4s1
-	 harqvy+dtN0Uv3LJUf+0Pu6K3LoS/32TeHT1k9iQJzZUKez0Wh2f19gSA0pNo8Tu/F33f
-	 fTCG/nJgMFQiRbjCIAN2E101VoYwwm3Ke6DnZ3a29dqhTtEyQYQILsEs9mnNIArBDrUUz
-	 Po5y9+lVlPq2xPgcox1buZt3WsHujK25mWHzxBtUwukEflN29RVxsxbmQtlZ63s2eKA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=vjV3ThcETJTQohEswOVEipA/50M6i7Rw1D6pUxeaH6o=;
+	b=hoMYFMMUhoIJQDFkz4AmWhGlkCBmISQSrEJr3TBO77LIw3Ch3WNMONVlBMnBqt+ttS77
+	 c6ygDxE7+8uUL3XGacMy7biwhs3vSllDZvgkrd0t0TCuzak9jJfRo8JOzsxqyTYcGF6t7
+	 HQPlEiZGI3b29P29UnDx7lJrQwYEPuTnEP3qouv8a9RH2XaRVh+5cMYU5e6Hh6Kx0Shl5
+	 FqV6Q4wbYPeJnHZ9KxPPgviQR8SCfZrJC8xmVlFfkxAyQpB+kWlvVevPBX9KcaaHPOjR8
+	 4m8CFqHK5xc202HfrGF+d7jpeWnHT83RzmTZp9VT/zpGyBhfPN86fXb6tpqv6jqROCg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=I3stLgwm;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.175
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OOGfl08i;
+	arc=none smtp.remote-ip=209.85.214.178
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA55A60A262F
-	for <linux-hwmon@vger.kernel.org>; Thu, 29 Oct 2026 20:35:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DA55A60A262F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A62606A31F
+	for <linux-hwmon@vger.kernel.org>; Fri, 30 Oct 2026 04:26:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 91A62606A31F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=I3stLgwm
-Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-5ead5ff47caso48012e0c.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 29 Oct 2026 13:35:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793306106; cv=none;
-        d=google.com; s=arc-20260327;
-        b=kCaU6m4KXf2+cd0P37B+t3aTJ3aSZERV5bBrtVdjtCD95xeTzycuj/2pg0n9k6x37M
-         En0iss+U/WrC2KpVaLta+1WviRhyl5eJ9D8KYx6Tz/hGltfhiM9imQIv3NKyTFwKizIV
-         iqeoeBo7OG6w3djCL9Yz1d11wQ2fRsJUIogMTEXrs9xu3rmx0TDYzeO0fvFI9t3d+KO0
-         Cp0MlJkxqbuKecNNPaczyrWRfN6MkM80piLXhiPMDW5NdTxqrxLglcaQvfVU/F0pXCeL
-         D3zp+g9UAyThXwioOgQJ4VM3QZE9L9FrtgjKfdTU5kb32o/jbm7k+qZwk+mFy4/vg79D
-         BSTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=wV0jAZkoNRSmCucNjo6hSl/i5bAlJ4AOy7rZeNtsLuc=;
-        fh=hXpIlXERyF5mkMCQUTBAiEvzfGEOkx83ifC2/79at4I=;
-        b=h+arLLwQb6vNQQlldwddaHNxAQG0LZsx9mTze8tBkeNKTDzzBQj1gnRbmRPWPXkEjY
-         01tz/6BOimonS+6oQY2Jdh6uBZHlZe95zMS/k5EL5jPACw91icRXiQuIR9KCPduolLW0
-         IbZJdKpS7sWLEgFbRqEqq4E89+JiVMzzCpNJ3/2zXGSpRrmsQkAO7efYojilj5Ozo1YQ
-         zcs9F8OzsAIy0MemVj2WPzelkQ9D7lA95LYrpqME1ehGS9pzKJtm1Mi8bJgr1lijybDU
-         J2hH3Vugex69r47hbFswjWVwiw5yJmi3MKwS4t9QzEX0PKhFBInztHLZBmCgt4+2iY/X
-         eObw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OOGfl08i
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2e8246b13cbso2756775ad.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 29 Oct 2026 21:26:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793306106; x=1793910906; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=wV0jAZkoNRSmCucNjo6hSl/i5bAlJ4AOy7rZeNtsLuc=;
-        b=I3stLgwmuyQ6kFl1cF1ki58BRkP0lybVH3vSh0255GidOA4EJhvX6YSP3+WmcIoJhj
-         Crh+jVB3l7oE3UUrMFAvT3IdW8jvKM3RRkwQMihhRIrjl7O6OByO2WGcmel91nsQDRyz
-         akTEDpVQdPazPpkyQcFGw7nyLsx3qBu6kU8S7wSntfl38imXo3NxN/G9jORpqfCyeapt
-         JwagMVB2Hv7arapldBA2UTQuS2uQotOPe4AQOQzAsptASkJO7dK0LOCe9YU+rGlr4Lcj
-         vbH87fv2Yngtt0wQ6So/hSYEHq0Fy5qZlRFr+xf1mL3HJg2xQAXvm51cBQ0mIkKwpW5f
-         E/WA==
+        d=gmail.com; s=20260707; t=1793334402; x=1793939202; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=vjV3ThcETJTQohEswOVEipA/50M6i7Rw1D6pUxeaH6o=;
+        b=OOGfl08iTrDcSP5CRoXDmSVya4AolyQdAG5OWHgE9ofXhHL55pCqAnLRy3QOWArl7Q
+         waeVAr4qZkWUShO1RmfxQqhrxoPq/ZSnc5SpnwuVgdXh4uUo3uTMWH2m3jGzBhUOoKFx
+         piwI3wn6MAqmd1Jhykxn1EE4vgfRhKxFaW6GtH8BDqaTg6lhfH+PQ4OKYqKo0UaA/SHn
+         G+h4ly81vQPBO+1raeS2XxMsGTShwbFSSrem/WohBifnUltiwlf2RuGeIQYnhL9m3Aq7
+         m0V3jj7XEILRpMI0/2a20+1yKez2+/pkZAsbweZ62X9Oq2XkzL9wOS2u7ALkWWYDls5i
+         Qy4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793306106; x=1793910906;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=wV0jAZkoNRSmCucNjo6hSl/i5bAlJ4AOy7rZeNtsLuc=;
-        b=cAgf7f/QzYLH65jhbKWQjUdo6P6Bwpk7Blxc6akBAWzkkMZfmmqpY967A4ZelwJk7t
-         g6s3cWU3t2VLr12gQeGVbWq2LRxWJNyDa1EakBxd1wrRjgijZZGz1uySHi0Uorm4+ISw
-         7UiO6VBE8/gdavk81Q175Q8XAO/eAaEKF4I6ae/5gHrMplKEVE40bCSX4f893fY/dHfZ
-         bSXovwwfBck6i6v/JXoOzlTCJhndMhmU57HmNOCGzzH5KFmrHupZ4VCI7Bt7IKsYY1me
-         3k5rtwzr+LPi6xSn0aie925tRfMH/flHNGuPMA+a4pCXDBctyEDMRCe2yM6GsXyQnSFr
-         PEwA==
-X-Gm-Message-State: AFq9FYLlp9pmwKEm5e8VBZAvSQbwdqNURuvWptCGn7iGzxYC+3o/poGp
-	FdKVox26mql1RXYBWa2O59jPEyOHJuHfgBulFsCov1UW5ejPQ4F+I6+29bVrK+4uPPKTE+4e+ws
-	ia4+9ztJoBlws1JzE/rvPt+yiAgzPYVSdKwThjBg=
-X-Gm-Gg: AYBFou2m5SmOHEb0xAY57kLrmL07REQcSmxwbQGmvj2+C7QjaNML5MSm2zZ0HWExS0K
-	X2uTqHyzCxPoniYue1xCipT0WulPfnOhsrXEHmfpzB8LOm+3pX7bbMnryFC/86RO5v2g+CHS4To
-	upBI9SNKkAEDsG8WpENa4x+e2NcQlZyUqKeCsXFsqgGHEZ4UgVjnqgr54LRCtSugwhl5fXa6wCe
-	4VnS8nKGdw6UA0bnX3RMoOv5f899y8iuOxxkfVfy56siJKui5XMVmbHgJOUoJinmNZtyUkx9zqx
-	ATHI/drGs3XRtkiZc22IAUgor7eZLgxd60PKkjUGFpchyKwPRbCeBY0oMH/JHhpfGmAcYm10a4Z
-	5mLHHNAJ24g3Z5wlSwhmQm7hlST8ppz45P8huKIpu6ojc59iYQtzjNZ6oztm/id5wLZc0xX1XNO
-	wK/ml2yjjE8K94
-X-Received: by 2002:a05:6102:8097:b0:7c3:3890:6076 with SMTP id
- ada2fe7eead31-7d0725cfd65mr214492137.6.1793306105545; Thu, 29 Oct 2026
- 13:35:05 -0700 (PDT)
-Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Thu, 29 Oct 2026 15:35:05 -0500
-Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Thu, 29 Oct 2026 15:34:22 -0500
+        d=1e100.net; s=20260707; t=1793334402; x=1793939202;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=vjV3ThcETJTQohEswOVEipA/50M6i7Rw1D6pUxeaH6o=;
+        b=g7bQ8fsf1nihNp7agr/npHWRzXoraZv55hDhsnEZs9pxdLzKIwhYZz59LfCjqwMblr
+         QbDUhe8yMT/ujn9GXdtNYj9T2cLKCzbmsh4x9rqgyT3G1FkWBKbeDo4T+IeO5DIQMuIL
+         zu9B6V0S1stl9wflc69UfMk7tkHGY8HAmON4I+eI9/qD99mR/3M9lCoPXW7uUPCoYVx5
+         SJFxhJ9epMPX1QLWW2PkNRtXxe0ss9i5DjHCcIRxZrjCBXB9JSn5PvwU3opAv3e/Gy9e
+         mJAaVOSt+mJCk7ajeHDf8LaC2ieEL0qgN0dP5jibRVafYP1J6LXq8XkQxcsN9Sl32mrs
+         2+fQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzHC6Ihp0gFkzAKL9gNTFKDlkvZFVX+CKcaUijVHUN5T7Wep35IGJsNdI2gnzk0EmwMThqTecS1eqWhhQ==@vger.kernel.org
+X-Gm-Message-State: AFq9FYKBJEwEQCG7kSyJMkfqFeaytV2GZVMto9PjuKFYyttR+ca7K72M
+	SD/m4sYEtpDA/SbioM+w50EcHwhLb26VK1PFN3AYHSL2fHWvduu1DMs=
+X-Gm-Gg: AYBFou1d2cYwDCPRsGjmnptJhqWNG42kSYFxxHl1Gj7scQc/q4wse2oZjqV7PPAzJo7
+	BJBQEoS6oAF7DPNg1xSH8leQTGRWpL4l25Rlvlk1jpUE/zlMbpWXfMLjPPhBlKMFkSqUWA92r9K
+	QWOSeF8kz3EWb2NVSrSM6oq9RkTZ1PxmIc99Ezx7C3K6kFMqvHmtGKDPuPrPM/lk2iXxYYyYtnd
+	vZ2aOqe1HDsZCrPY53wlgQGbJkuSWV2VumwEDBGwKp+q2VM7fmIS3F05wnmZBpC6SJh8NGnjNuC
+	dg5CsJDjyqV1Q0PT0bks61zexv3xdxO0tyzIrsmgi/B7AJA7IBzsGvI7J6LwIvgCY2jp4Wulsro
+	Aaq4iFXnu3yOf9AZf5KYZ18rNZrXmby5j69OA6TK712ORbI4Zxx2j/pKDFhkasndINEFnQFOubU
+	594Memsl83xJwKcRj/L8bWiDlCUqwvJXEFhFLkh9drW39jxSGHd/j0g+/iJjmFiqSrY39KvX+FB
+	w4a/XNEJr9eDJ5s9kR87eL6F8qrOSDlc0BQNO3tR7d1geK8k0K9QUdcjsI2sqQ7n8ytlGbI4u5K
+	/Yv+dnpQbBVLreFaAQWU4/3PMMIQRE+33dCVez2fA3HLc09xym96ahFkdo5y6aGnsqjZ
+X-Received: by 2002:a17:903:faf:b0:2e9:5eee:e087 with SMTP id d9443c01a7336-2eb364e553fmr13990205ad.43.1793334401915;
+        Thu, 29 Oct 2026 21:26:41 -0700 (PDT)
+Received: from freddie-kane.lan ([71.212.222.246])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb3922fbc4sm1965845ad.24.2026.10.29.21.26.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Oct 2026 21:26:41 -0700 (PDT)
+From: Burke Cates <burke.cates@gmail.com>
+To: Konrad Dybcio <konradybcio@kernel.org>
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Hans de Goede <hansg@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Abel Vesa <abelvesa@kernel.org>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Abel Vesa <abel.vesa@oss.qualcomm.com>
+Subject: Re: [PATCH v4 3/4] arm64: dts: qcom: glymur-zenbook-a16: Add Embedded Controller
+Date: Thu, 29 Oct 2026 21:26:27 -0700
+Message-ID: <20261030042630.2744339-1-burke.cates@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20261015-topic-asus_ec-v4-3-af6305ffcb10@oss.qualcomm.com>
+References: <20261015-topic-asus_ec-v4-0-af6305ffcb10@oss.qualcomm.com> <20261015-topic-asus_ec-v4-3-af6305ffcb10@oss.qualcomm.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -104,435 +111,34 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-From: LIght JUNction <lightjunction.me@gmail.com>
-Date: Thu, 29 Oct 2026 15:35:05 -0500
-X-Gm-Features: AclHuK-pC9PW7iAnXLN_O4M5k0COMI-fqZCQi-poa9mgUL3D71BBt8UElVd0XeU
-Message-ID: <CAOD9jOPXYG=n1BL+OjyLBz-zjy8RXnN3h9OTyapTFZwOvD1Rsg@mail.gmail.com>
-Subject: [PATCH] hwmon: add read-only MECHREVO GM6PX0X sensor driver
-To: linux-hwmon@vger.kernel.org
-Cc: linux@roeck-us.net
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-From: LIghtJUNction <lightjunction.me@gmail.com>
+On 15-Oct-26 10:55, Konrad Dybcio wrote:
+> The Glymur-based Zenbook A16 features an Embedded Controller running
+> custom ASUS firmware [...] It provides keyboard backlight control,
+> additional temperature sensor readouts, fan speed monitoring and a
+> number of miscellaneous functions.
 
-The GM6PX0X firmware exposes CPU and GPU temperatures and fan speeds
-through the INOU.ECRR ACPI method. Add a read-only hwmon driver for
-these sensors, scoped to the verified MECHREVO Kuangshi16Pro GM6PX0X,
-board GM6PX0X, and BIOS N.1.09MRO07.
+Tested on an ASUS Zenbook A16 (UX3607OA, BIOS UX3607OA.312), on v7.3
+plus out-of-tree Glymur platform/board patches, with the v4 driver
+(2/4, now db3a9dddab5f in mainline) and a local change that leaves
+the keyboard backlight to the HID driver:
 
-The driver checks the firmware project ID and fan capability before
-registering the device. It uses only ECRR reads and exposes standard
-hwmon temperature and fan input attributes. It does not write EC
-registers or expose fan controls. Fan counters are sampled high/low/high
-to reject a high-byte rollover.
+  - The EC driver binds from this node at boot.
+  - Both fan speeds and the EC temperatures are readable via hwmon
+    and follow load: under an all-core stress-ng run the fans went to
+    about 5900 and 5100 rpm, and both fans and temperatures came back
+    down within a few minutes after.
+  - 115 s2idle suspend/resume cycles in one boot with the EC bound;
+    its fan and temperature readings kept updating across them.
 
-Tested on MECHREVO Kuangshi16Pro Series GM6PX0X, board GM6PX0X, BIOS
-N.1.09MRO07, running 7.2.11-arch1-1: the module built with W=1, loaded
-beside the installed sensor module, provided all four readings, and
-unloaded without removing the existing module. Other systems and BIOS
-versions have not been tested.
+I didn't test the EC's keyboard backlight control, because of that
+local change.
 
-Assisted-by: Codex:GPT-6
-Signed-off-by: LIghtJUNction <lightjunction.me@gmail.com>
----
-AI assistance: Codex was used to draft the read-only driver, its Kconfig
-and Makefile integration, documentation, and commit message. The request
-was to prepare a hwmon submission for the locally verified GM6PX0X using
-the firmware read interface and no EC writes.
+Tested-by: Burke Cates <burke.cates@gmail.com> # ASUS Zenbook A16 (UX3607OA)
 
-Validation is limited to an external-module W=1 build and runtime reads on
-the laptop and BIOS listed above; no full kernel-tree build was performed.
-checkpatch --strict reports no errors and one advisory about a new
-MAINTAINERS entry. The general HWMON entry covers these paths.
+AI coding assistants helped run these tests and draft this reply; the
+results are from the hardware runs.
 
- Documentation/hwmon/index.rst       |   1 +
- Documentation/hwmon/mechrevo-ec.rst |  31 +++
- drivers/hwmon/Kconfig               |  11 ++
- drivers/hwmon/Makefile              |   1 +
- drivers/hwmon/mechrevo-ec.c         | 290 ++++++++++++++++++++++++++++
- 5 files changed, 334 insertions(+)
- create mode 100644 Documentation/hwmon/mechrevo-ec.rst
- create mode 100644 drivers/hwmon/mechrevo-ec.c
-
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 199ca79..6bd4ece 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -189,6 +189,7 @@ Hardware Monitoring Kernel Drivers
-    mc34vr500
-    mcp3021
-    mcp9982
-+   mechrevo-ec
-    menf21bmc
-    minisforum-um780xtx
-    mlxreg-fan
-diff --git a/Documentation/hwmon/mechrevo-ec.rst
-b/Documentation/hwmon/mechrevo-ec.rst
-new file mode 100644
-index 0000000..91ffd77
---- /dev/null
-+++ b/Documentation/hwmon/mechrevo-ec.rst
-@@ -0,0 +1,31 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=======================
-+MECHREVO GM6PX0X EC
-+=======================
-+
-+Supported systems:
-+
-+  * MECHREVO Kuangshi16Pro Series GM6PX0X, board GM6PX0X
-+  * BIOS N.1.09MRO07
-+
-+The driver exposes two EC temperatures and two fan speeds through hwmon. It
-+uses the firmware ACPI method ``\_SB.INOU.ECRR`` to read EC bytes. Temperatures
-+are reported in millidegrees Celsius and fan speeds in RPM. The CPU and GPU
-+temperature bytes are at ``0x043e`` and ``0x044f``. The 16-bit CPU and GPU fan
-+counters use high/low bytes at ``0x0464``/``0x0465`` and ``0x046c``/``0x046b``,
-+respectively.
-+
-+Each successful ECRR read is followed by a 6 to 12 ms delay. Fan reads sample
-+the high byte before and after the low byte and retry up to three times if the
-+high byte changes. The EC updates independently, so the driver cannot provide
-+an atomic snapshot of the two bytes.
-+
-+At probe, the driver checks EC project ID ``0x10`` at ``0x0740`` and bit 6 of
-+the capability byte at ``0x078e``. It only binds the exact DMI identity and
-+BIOS version listed above. Other models and BIOS versions have not been
-+validated.
-+
-+The driver is read-only. It does not call the firmware write method, change EC
-+configuration, or expose fan-control attributes. Values above 125 degrees C
-+are reported as unavailable; zero is passed through as read from firmware.
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 18c682e..7e397c2 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2888,6 +2888,17 @@ config SENSORS_HP_WMI
- 	  This driver can also be built as a module. If so, the module
- 	  will be called hp_wmi_sensors.
-
-+config SENSORS_MECHREVO_EC
-+	tristate "MECHREVO GM6PX0X EC sensors"
-+	depends on X86 && ACPI
-+	help
-+	  If you say yes here you get read-only temperature and fan speed
-+	  monitoring for the MECHREVO Kuangshi16Pro Series GM6PX0X with BIOS
-+	  N.1.09MRO07, using its firmware ACPI method.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called mechrevo_ec.
-+
- endif # ACPI
-
- endif # HWMON
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index d4c345e..ac362a1 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -13,6 +13,7 @@ obj-$(CONFIG_SENSORS_ASUS_EC)	+= asus-ec-sensors.o
- obj-$(CONFIG_SENSORS_ASUS_WMI)	+= asus_wmi_sensors.o
- obj-$(CONFIG_SENSORS_HONOR_FMI)	+= honor-fmi.o
- obj-$(CONFIG_SENSORS_HP_WMI)	+= hp-wmi-sensors.o
-+obj-$(CONFIG_SENSORS_MECHREVO_EC)	+= mechrevo-ec.o
-
- # Native drivers
- # asb100, then w83781d go first, as they can override other drivers' addresses.
-diff --git a/drivers/hwmon/mechrevo-ec.c b/drivers/hwmon/mechrevo-ec.c
-new file mode 100644
-index 0000000..d4a3430
---- /dev/null
-+++ b/drivers/hwmon/mechrevo-ec.c
-@@ -0,0 +1,290 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/* Read-only hwmon driver for the MECHREVO Kuangshi16Pro GM6PX0X. */
-+
-+#include <linux/acpi.h>
-+#include <linux/delay.h>
-+#include <linux/dmi.h>
-+#include <linux/err.h>
-+#include <linux/hwmon.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+
-+#define MECHREVO_ECRR_DELAY_MIN_US	6000
-+#define MECHREVO_ECRR_DELAY_MAX_US	12000
-+#define MECHREVO_RPM_ATTEMPTS		3
-+
-+struct mechrevo_ec_data {
-+	acpi_handle inou;
-+	/* Serialize the three ECRR calls that make up one fan sample. */
-+	struct mutex rpm_lock;
-+};
-+
-+static const struct dmi_system_id mechrevo_ec_dmi_table[] = {
-+	{
-+		.matches = {
-+			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "MECHREVO"),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_NAME,
-+					"Kuangshi16Pro Series GM6PX0X"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "GM6PX0X"),
-+			DMI_EXACT_MATCH(DMI_BIOS_VERSION, "N.1.09MRO07"),
-+		},
-+	},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(dmi, mechrevo_ec_dmi_table);
-+
-+static int mechrevo_ec_read_byte(struct mechrevo_ec_data *data, u16 address,
-+				 u8 *value)
-+{
-+	union acpi_object argument = {
-+		.integer.type = ACPI_TYPE_INTEGER,
-+		.integer.value = address,
-+	};
-+	struct acpi_object_list arguments = {
-+		.count = 1,
-+		.pointer = &argument,
-+	};
-+	unsigned long long raw;
-+	acpi_status status;
-+
-+	status = acpi_evaluate_integer(data->inou, "ECRR", &arguments, &raw);
-+	if (ACPI_FAILURE(status))
-+		return -EIO;
-+
-+	/* Match the delay used by the in-tree Uniwill ECRR transport. */
-+	usleep_range(MECHREVO_ECRR_DELAY_MIN_US, MECHREVO_ECRR_DELAY_MAX_US);
-+	if (raw > 255)
-+		return -ERANGE;
-+
-+	*value = raw;
-+	return 0;
-+}
-+
-+static int mechrevo_ec_read_temp(struct mechrevo_ec_data *data, int channel,
-+				 long *value)
-+{
-+	u16 address;
-+	u8 raw;
-+	int ret;
-+
-+	switch (channel) {
-+	case 0:
-+		address = 0x043e;
-+		break;
-+	case 1:
-+		address = 0x044f;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	ret = mechrevo_ec_read_byte(data, address, &raw);
-+	if (ret)
-+		return ret;
-+	if (raw > 125)
-+		return -ENODATA;
-+
-+	*value = raw * 1000;
-+	return 0;
-+}
-+
-+static int mechrevo_ec_read_fan(struct mechrevo_ec_data *data, int channel,
-+				long *value)
-+{
-+	u16 high_address, low_address;
-+	u8 high, low, check;
-+	int attempt, ret;
-+
-+	switch (channel) {
-+	case 0:
-+		high_address = 0x0464;
-+		low_address = 0x0465;
-+		break;
-+	case 1:
-+		high_address = 0x046c;
-+		low_address = 0x046b;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	/* The EC can update between byte reads; reject a high-byte rollover. */
-+	mutex_lock(&data->rpm_lock);
-+	for (attempt = 0; attempt < MECHREVO_RPM_ATTEMPTS; attempt++) {
-+		ret = mechrevo_ec_read_byte(data, high_address, &high);
-+		if (ret)
-+			goto out_unlock;
-+
-+		ret = mechrevo_ec_read_byte(data, low_address, &low);
-+		if (ret)
-+			goto out_unlock;
-+
-+		ret = mechrevo_ec_read_byte(data, high_address, &check);
-+		if (ret)
-+			goto out_unlock;
-+
-+		if (high == check) {
-+			*value = ((long)high << 8) | low;
-+			ret = 0;
-+			goto out_unlock;
-+		}
-+	}
-+	ret = -EAGAIN;
-+
-+out_unlock:
-+	mutex_unlock(&data->rpm_lock);
-+	return ret;
-+}
-+
-+static umode_t mechrevo_ec_is_visible(const void *data,
-+				      enum hwmon_sensor_types type,
-+				      u32 attr, int channel)
-+{
-+	if (channel < 0 || channel > 1)
-+		return 0;
-+
-+	if (type == hwmon_temp)
-+		return attr == hwmon_temp_input || attr == hwmon_temp_label ? 0444 : 0;
-+	if (type == hwmon_fan)
-+		return attr == hwmon_fan_input || attr == hwmon_fan_label ? 0444 : 0;
-+
-+	return 0;
-+}
-+
-+static int mechrevo_ec_read(struct device *dev, enum hwmon_sensor_types type,
-+			    u32 attr, int channel, long *value)
-+{
-+	struct mechrevo_ec_data *data = dev_get_drvdata(dev);
-+
-+	if (type == hwmon_temp && attr == hwmon_temp_input)
-+		return mechrevo_ec_read_temp(data, channel, value);
-+	if (type == hwmon_fan && attr == hwmon_fan_input)
-+		return mechrevo_ec_read_fan(data, channel, value);
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static int mechrevo_ec_read_string(struct device *dev,
-+				   enum hwmon_sensor_types type, u32 attr,
-+				   int channel, const char **value)
-+{
-+	if (channel < 0 || channel > 1)
-+		return -EOPNOTSUPP;
-+
-+	if (type == hwmon_temp && attr == hwmon_temp_label)
-+		*value = channel ? "GPU EC" : "CPU EC";
-+	else if (type == hwmon_fan && attr == hwmon_fan_label)
-+		*value = channel ? "GPU fan" : "CPU fan";
-+	else
-+		return -EOPNOTSUPP;
-+
-+	return 0;
-+}
-+
-+static const struct hwmon_ops mechrevo_ec_hwmon_ops = {
-+	.is_visible = mechrevo_ec_is_visible,
-+	.read = mechrevo_ec_read,
-+	.read_string = mechrevo_ec_read_string,
-+};
-+
-+static const struct hwmon_channel_info * const mechrevo_ec_hwmon_info[] = {
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL),
-+	HWMON_CHANNEL_INFO(fan,
-+			   HWMON_F_INPUT | HWMON_F_LABEL,
-+			   HWMON_F_INPUT | HWMON_F_LABEL),
-+	NULL
-+};
-+
-+static const struct hwmon_chip_info mechrevo_ec_chip_info = {
-+	.ops = &mechrevo_ec_hwmon_ops,
-+	.info = mechrevo_ec_hwmon_info,
-+};
-+
-+static int mechrevo_ec_probe(struct platform_device *pdev)
-+{
-+	struct mechrevo_ec_data *data;
-+	struct device *hwmon_dev;
-+	u8 project, capability;
-+	acpi_status status;
-+	int ret;
-+
-+	if (!dmi_check_system(mechrevo_ec_dmi_table))
-+		return -ENODEV;
-+
-+	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	mutex_init(&data->rpm_lock);
-+	status = acpi_get_handle(NULL, "\\_SB.INOU", &data->inou);
-+	if (ACPI_FAILURE(status) || !acpi_has_method(data->inou, "ECRR"))
-+		return dev_err_probe(&pdev->dev, -ENODEV,
-+				     "missing INOU.ECRR method\n");
-+
-+	ret = mechrevo_ec_read_byte(data, 0x0740, &project);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret,
-+				     "failed to read EC project ID\n");
-+	ret = mechrevo_ec_read_byte(data, 0x078e, &capability);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret,
-+				     "failed to read EC fan capability\n");
-+	if (project != 0x10 || !(capability & 0x40))
-+		return dev_err_probe(&pdev->dev, -ENODEV,
-+				     "unsupported EC project or fan layout\n");
-+
-+	platform_set_drvdata(pdev, data);
-+	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev, "mechrevo",
-+							 data,
-+							 &mechrevo_ec_chip_info,
-+							 NULL);
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
-+}
-+
-+static struct platform_driver mechrevo_ec_driver = {
-+	.probe = mechrevo_ec_probe,
-+	.driver = {
-+		.name = "mechrevo-ec-hwmon",
-+	},
-+};
-+
-+static struct platform_device *mechrevo_ec_device;
-+
-+static int __init mechrevo_ec_init(void)
-+{
-+	int ret;
-+
-+	if (!dmi_check_system(mechrevo_ec_dmi_table))
-+		return -ENODEV;
-+
-+	ret = platform_driver_register(&mechrevo_ec_driver);
-+	if (ret)
-+		return ret;
-+
-+	mechrevo_ec_device = platform_device_register_simple("mechrevo-ec-hwmon",
-+							     PLATFORM_DEVID_NONE,
-+							     NULL, 0);
-+	if (IS_ERR(mechrevo_ec_device)) {
-+		ret = PTR_ERR(mechrevo_ec_device);
-+		platform_driver_unregister(&mechrevo_ec_driver);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void __exit mechrevo_ec_exit(void)
-+{
-+	platform_device_unregister(mechrevo_ec_device);
-+	platform_driver_unregister(&mechrevo_ec_driver);
-+}
-+
-+module_init(mechrevo_ec_init);
-+module_exit(mechrevo_ec_exit);
-+
-+MODULE_DESCRIPTION("MECHREVO GM6PX0X EC hwmon driver");
-+MODULE_LICENSE("GPL");
--- 
-2.56.0
+Thanks,
+Burke
