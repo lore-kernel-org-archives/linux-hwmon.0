@@ -1,13 +1,13 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.33
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793386408;
-	b=ZsVpOUqNAgUBZfgkcxyYLf4GzyMcFemrQBfTxPjG2/BVcuju91EWXBLotLdsXVtc0RtQ
-	 jIewsxbq8ztVqpMPxj9Z3buNvKXfNtF8z9dd+k1+66c6tG+iAmpodCVBcRIIpLikpif44
-	 hdHzijrIsMRC6o+/8Kqq4zTJsR2CixOK2HALLPcwsGKLfQxYMCrAewlpElOWYAtxLiEb2
-	 YY5ZSiWa7j9x08GpWoYRguiLcG/LyGKp3pL6upLDu/r+xAQyrbm0onQySMxvB3DcptKiC
-	 EfWx+aPcMsHc5CaZ4WUxXIk/cOg/PlYc7BnVdoiEAN9zlfGisDSPvC5rZqKVQI0AV7g==
+	t=1793386412;
+	b=0NAJvNffJlN1v4ACvZVSGI4eo6GcZbp+NCS+elsS6PxuMSiP0OL9OD1yLtWYbNbsVR9q
+	 +lsC2nN5nsAm4tRWAu8sfWAStdn2jn6VejUZlvFbJfAqkY4aphX9ZzcKoqpOF+cI63T4z
+	 Zqh544Nh/b6Gpd27m+p3B1Os4w/z5gmiR1/jxa/fNA3qiGQwXfrjPZqKkWfuXDQKep2oy
+	 X9xDfODyRrF/4+ARp9nQ+Q+czgfr9D8/hk202tKhZi7QNidwyF/c7GAw1GrzzlV5rz9x7
+	 AD0+jmh+au3781O80y0ux0JFextiqpiKCW9FMxBhXvduioChoMQcjpBbnyT/ZzO9ZQQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793386408;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793386412;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:X-AntiAbuse:
@@ -15,36 +15,36 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-Source-IP:X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
 	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
 	 X-Local-Domain:X-CMAE-Envelope;
-	bh=rDac4+DrMD87o76YcIHYm2+tfROu0y3up8ue9EHb3Ds=;
-	b=MQ2L+aWTfbSaaqr+3JgOPCx4SLDr4+46s8mTRtp7ZlrDQWvE1Xedf7S92Jf3YJaf0X0H
-	 /XiMVn7qDmUrecH6zJYoflYPcdNTHMKh3OUkmvFfe3RyzuGIcVFzoTa0k9/X21PyYlHBO
-	 vZuJU1W1FzMV33cpBALj9VGPUdXs1dEAzpi1nAcEXuNPqkmb8yy/QG8pUZMjJ23zkgGY0
-	 Eu+X5KQvW0mc6UmkNDq5fEecPbg1yIUQyJXn0YX9H9XA5B/lQvWPK/78EeZgts1RCfFS9
-	 EZDA+uyU9FPRZTQx1kuB8dwMbOGuBb3pyP4vVO2L1KuP1MoqRygM+xUUkYvYL5RWN5w==
+	bh=C6ipldrZm6z19+34gCLaFQ1359jUTvXFU7aa2Sm27Rk=;
+	b=wK1Ckzu1PbyEUy7CfHfvQpbO0ee3VrcY0piArTGRbgj6zHjlVEGkWN0nYWoDu+czK0gn
+	 HEmiQnP/z8YgQw5J2h2SgFBZPjfO5YxXDvKdPdMVn0A+QZveYBg8bHqFV3AikTU4JyM/S
+	 8AL8HdV9tWNfEQvy1wXotL5balnbMOkCHJlgw6ZYVCvJ8ANlrgixD263Fe35c0byFZc1n
+	 4D1O3CHWtkMzCMRq2Fs7/3Q/6RSY7yQY/mNUGdL69we1eZZzMj2sEX3opFp1mG2lKgy/A
+	 dKW/yaDqFn4ZTIui0wlOCW+2rGvIVe+1zyDBYWed5TmeFEL3Z03HUj+CtSLVOGT2pIA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=ijh2C9HR;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=XI52j2Nq;
 	arc=none smtp.remote-ip=35.89.44.33
 Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42E38606A31A
-	for <linux-hwmon@vger.kernel.org>; Fri, 30 Oct 2026 18:53:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 42E38606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64F4606A31C
+	for <linux-hwmon@vger.kernel.org>; Fri, 30 Oct 2026 18:53:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A64F4606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=ijh2C9HR
-Received: from eig-obgw-5006b.ext.cloudfilter.net ([10.0.29.217])
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=XI52j2Nq
+Received: from eig-obgw-6002b.ext.cloudfilter.net ([10.0.30.203])
 	by cmsmtp with ESMTPS
-	id Magdx36NfaC0UMrj8xCvsI; Fri, 30 Oct 2026 18:53:22 +0000
+	id Mnc2x5HMoaC0UMrjBxCvtd; Fri, 30 Oct 2026 18:53:25 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id Mrj8xukI5NSXiMrj8xSjEf; Fri, 30 Oct 2026 18:53:22 +0000
-X-Authority-Analysis: v=2.4 cv=JvXxrN4C c=1 sm=1 tr=0 ts=6ae4e7a2
+	id MrjAxNADQ63hBMrjAxxLNv; Fri, 30 Oct 2026 18:53:24 +0000
+X-Authority-Analysis: v=2.4 cv=CYsI5Krl c=1 sm=1 tr=0 ts=6ae4e7a4
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=660iZSQnnn4A:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8 a=-25jO8nRFeh6d--6hIYA:9
+ a=660iZSQnnn4A:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8 a=am1Euf2RqiVFQgXQ-Y4A:9
  a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
@@ -52,24 +52,24 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=rDac4+DrMD87o76YcIHYm2+tfROu0y3up8ue9EHb3Ds=; b=ijh2C9HRtHWy
-	ukAgddL9xaE5WjVCtVxyJprrakr+jdJOniuJxYDuXJGL15+RRz6+j4hbsrSHJ6Ui39bDGw54Jc0mi
-	tKx3Rg3vaBZXuVWMCWXKv0ED3TPWFwKvSfYFrwnW80NSdulzaH+07yzhAjtleIrnMw0Fcx21vVR8y
-	JD1sk+60+Bm3II+GoCxTU9MLUnbqT2LmZzR8IpOrS9bptqKHWQQXZuqm6a/Ts7x+WnyVRpkCjExmz
-	Cjkb+EDeeCldH+hvnGZEwz4CwWUUtly+7eyWqE+Cz9CCoWEkYuVHvFhV8ujk87EOZpm+3sF55l605
-	o0k62StUYRyQCo3gyvGJcA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:43082 helo=server.roeck-us.net)
+	List-Archive; bh=C6ipldrZm6z19+34gCLaFQ1359jUTvXFU7aa2Sm27Rk=; b=XI52j2NqlkDp
+	gryqvIJjRw8/OdK3cBDyYioz9JiHTm86XtpYwkun1/PRQ9vzMSV6KtsnP/YAwKuUVCRRo6wLagRYD
+	j+Pr7L+4q4lTDR1Zkw+Er8OX0dTf3u3Juf05gBrsMt/9F2lH2IYs0pNMmhbTQVv3m0HHw13rl8LVs
+	rK6yj4jY6NW2ffeu+qwWAcNwQio/fcFng6oKdsIRxykFl/ie2U55Aq/uE9f2TU0y4mwkE95TbD8sX
+	/J7/c6+2j7PoCXTHEKrR1eqJykwZS4yaQr6WDDtzRqtMajJrQNTQw0sW0cn9n64IstCS1UysmF1S+
+	p0cPXbFV+Siq7EMgJ35RaQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:37490 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xMrj7-00000003RRg-3IX8;
-	Sat, 31 Oct 2026 00:23:21 +0530
+	id 1xMrjA-00000003RUc-0YYK;
+	Sat, 31 Oct 2026 00:23:24 +0530
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 06/11] hwmon: (nct6683) Fix incorrect struct cast in show_pwm() and store_pwm()
-Date: Fri, 30 Oct 2026 11:52:51 -0700
-Message-ID: <20261030185256.976255-7-linux@roeck-us.net>
+Subject: [PATCH 09/11] hwmon: (pmbus) Check return value from pmbus_thermal_add_sensor()
+Date: Fri, 30 Oct 2026 11:52:54 -0700
+Message-ID: <20261030185256.976255-10-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20261030185256.976255-1-linux@roeck-us.net>
 References: <20261030185256.976255-1-linux@roeck-us.net>
@@ -91,66 +91,161 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xMrj7-00000003RRg-3IX8
+X-Exim-ID: 1xMrjA-00000003RUc-0YYK
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:43082
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:37490
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 22
+X-Email-Count: 26
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfOPbP6HcHYrb/XHlP7DAvYbbq+/laR97enKfd0lDy4XvFxuFM3iVvtL/emev6YUrJcmLjzMM0eA4Va+fvQyUYwh89mRLAL0Ia51fNASzdHEQhgxFXIAV
- QRt1k/Q4W1t/fItKfxLq5V8VX/akeelX2BBLYEZ7Or3LnJXfVNBPA9Kc9LuBqszRuEHQgGwcZb/viOOx6sKD5K4eArHzUXpFlQyN1RiPtuhT6tmW1uxkXB2o
+X-CMAE-Envelope: MS4xfPunte0+Bhj+cq3y2qBhX/mCNA0d/yT5Lq76nQHoA6NehTasSpNQ0H03zhMGzhvQ2yBala3nfcswo8UkPH8/1WOqp7EXl/qIEm2FodRX36ez/qdqo/4P
+ rZg9d853motj4p423nj0mCrceU7sg5Ft5ujD2nnqGgXZkeIm27mS/AzVdzKRF9VXYFVYudZ+nrUBcYRU+TxWlB6z+Chu/bSFWScdguRgHG7NBisQpVbt0Y4d
 
-On big-endian architectures, reading or writing the pwm[1-8] sysfs
-attributes in the nct6683 hardware monitoring driver always redirects to
-channel 0 due to an incorrect struct downcast in show_pwm() and
-store_pwm().
-The driver defines the PWM sysfs attributes using SENSOR_TEMPLATE(),
-which initializes them as struct sensor_device_attribute (where the index
-is a 32-bit int). However, the sysfs callbacks show_pwm() and store_pwm()
-incorrectly downcast the attribute to a struct sensor_device_attribute_2
-(where the index is an 8-bit u8). Because both structs start with struct
-device_attribute, container_of() resolves to the same base address. On
-big-endian architectures, reading the 8-bit index field from the memory
-layout of a 32-bit int fetches the most significant byte (which is 0),
-rather than the intended channel number.
-This type mismatch causes all PWM reads to return data for channel 0, and
-any writes intended to configure other channels will silently overwrite the
-duty cycle of PWM channel 0 instead.
+During PMBus device probe, if registering a temperature sensor with the
+thermal subsystem fails, pmbus_add_sensor() silently ignores the error and
+returns success.
+When a valid temperature sensor is detected (class PSC_TEMPERATURE and type
+"input"), pmbus_add_sensor() invokes pmbus_thermal_add_sensor() to hook it
+into the kernel's thermal framework. However, the return value of this call
+is completely discarded. If thermal registration fails, such as from an
+-ENOMEM allocation failure or an invalid device tree configuration like a
+malformed #thermal-sensor-cells property, no error is propagated.
 
-Fix the type casts in show_pwm() and store_pwm() to solve the problem.
+Because the hardware monitor probe falsely succeeds despite the failure to
+register the thermal zone, the system is left without thermal mitigation
+for the affected PMBus device. This silently blinds the system to actual
+PMIC temperatures, preventing the execution of necessary cooling mechanisms
+or emergency shutdowns and risking localized overheating.
 
-Fixes: 41082d66bfd6 ("hwmon: Driver for NCT6683D")
+Pass the return value from pmbus_thermal_add_sensor() to the calling code
+to fix the problem. To enable passing the actual error, change the error
+return from pmbus_add_sensor() from NULL to ERR_PTR() and extract the error
+from in the calling code.
+
+Fixes: 3aa74796cfd0 ("hwmon: (pmbus) Register with thermal for PSC_TEMPERATURE")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/nct6683.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hwmon/pmbus/pmbus_core.c | 42 ++++++++++++++++++--------------
+ 1 file changed, 24 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
-index e1c36c95affb..f34cb62305be 100644
---- a/drivers/hwmon/nct6683.c
-+++ b/drivers/hwmon/nct6683.c
-@@ -920,7 +920,7 @@ static ssize_t
- show_pwm(struct device *dev, struct device_attribute *attr, char *buf)
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index af13408c62f9..9bccbf41c884 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -1551,10 +1551,11 @@ static struct pmbus_sensor *pmbus_add_sensor(struct pmbus_data *data,
  {
- 	struct nct6683_data *data = nct6683_update_device(dev);
--	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-+	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
- 	int index = sattr->index;
+ 	struct sensor_device_attribute *a;
+ 	struct pmbus_sensor *sensor;
++	int err;
  
- 	return sprintf(buf, "%d\n", data->pwm[index]);
-@@ -930,7 +930,7 @@ static ssize_t
- store_pwm(struct device *dev, struct device_attribute *attr, const char *buf,
- 	  size_t count)
- {
--	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-+	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
- 	struct nct6683_data *data = dev_get_drvdata(dev);
- 	int index = sattr->index;
- 	unsigned long val;
+ 	sensor = devm_kzalloc(data->dev, sizeof(*sensor), GFP_KERNEL);
+ 	if (!sensor)
+-		return NULL;
++		return ERR_PTR(-ENOMEM);
+ 	a = &sensor->attribute;
+ 
+ 	if (type)
+@@ -1579,14 +1580,17 @@ static struct pmbus_sensor *pmbus_add_sensor(struct pmbus_data *data,
+ 			pmbus_set_sensor, -1);
+ 
+ 	if (pmbus_add_attribute(data, &a->dev_attr.attr))
+-		return NULL;
++		return ERR_PTR(-ENOMEM);
+ 
+ 	sensor->next = data->sensors;
+ 	data->sensors = sensor;
+ 
+ 	/* temperature sensors with _input values are registered with thermal */
+-	if (class == PSC_TEMPERATURE && strcmp(type, "input") == 0)
+-		pmbus_thermal_add_sensor(data, sensor, seq);
++	if (class == PSC_TEMPERATURE && strcmp(type, "input") == 0) {
++		err = pmbus_thermal_add_sensor(data, sensor, seq);
++		if (err)
++			return ERR_PTR(err);
++	}
+ 
+ 	return sensor;
+ }
+@@ -1687,8 +1691,8 @@ static int pmbus_add_limit_attrs(struct i2c_client *client,
+ 						page, 0xff, l->reg, attr->class,
+ 						attr->update || l->update,
+ 						l->readonly, l->writeonly, true);
+-			if (!curr)
+-				return -ENOMEM;
++			if (IS_ERR(curr))
++				return PTR_ERR(curr);
+ 			if (l->sbit && (info->func[page] & attr->sfunc)) {
+ 				ret = pmbus_add_boolean(data, name,
+ 					l->alarm, index,
+@@ -1727,8 +1731,8 @@ static int pmbus_add_sensor_attrs_one(struct i2c_client *client,
+ 	}
+ 	base = pmbus_add_sensor(data, name, "input", index, page, phase,
+ 				attr->reg, attr->class, true, true, false, true);
+-	if (!base)
+-		return -ENOMEM;
++	if (IS_ERR(base))
++		return PTR_ERR(base);
+ 	/* No limit and alarm attributes for phase specific sensors */
+ 	if (attr->sfunc && phase == 0xff) {
+ 		ret = pmbus_add_limit_attrs(client, data, info, name,
+@@ -2401,8 +2405,8 @@ static int pmbus_add_fan_ctrl(struct i2c_client *client,
+ 				  0xff, PMBUS_VIRT_FAN_TARGET_1 + id, PSC_FAN,
+ 				  false, false, false, true);
+ 
+-	if (!sensor)
+-		return -ENOMEM;
++	if (IS_ERR(sensor))
++		return PTR_ERR(sensor);
+ 
+ 	if (!((data->info->func[page] & PMBUS_HAVE_PWM12) ||
+ 	      (data->info->func[page] & PMBUS_HAVE_PWM34)))
+@@ -2412,15 +2416,15 @@ static int pmbus_add_fan_ctrl(struct i2c_client *client,
+ 				  0xff, PMBUS_VIRT_PWM_1 + id, PSC_PWM,
+ 				  false, false, false, true);
+ 
+-	if (!sensor)
+-		return -ENOMEM;
++	if (IS_ERR(sensor))
++		return PTR_ERR(sensor);
+ 
+ 	sensor = pmbus_add_sensor(data, "pwm", "enable", index, page,
+ 				  0xff, PMBUS_VIRT_PWM_ENABLE_1 + id, PSC_PWM,
+ 				  true, false, false, false);
+ 
+-	if (!sensor)
+-		return -ENOMEM;
++	if (IS_ERR(sensor))
++		return PTR_ERR(sensor);
+ 
+ 	return 0;
+ }
+@@ -2437,6 +2441,7 @@ static int pmbus_add_fan_attributes(struct i2c_client *client,
+ 		int f;
+ 
+ 		for (f = 0; f < ARRAY_SIZE(pmbus_fan_registers); f++) {
++			struct pmbus_sensor *sensor;
+ 			int regval;
+ 
+ 			if (!(info->func[page] & pmbus_fan_flags[f]))
+@@ -2457,10 +2462,11 @@ static int pmbus_add_fan_attributes(struct i2c_client *client,
+ 			    (!(regval & (PB_FAN_1_INSTALLED >> ((f & 1) * 4)))))
+ 				continue;
+ 
+-			if (pmbus_add_sensor(data, "fan", "input", index,
+-					     page, 0xff, pmbus_fan_registers[f],
+-					     PSC_FAN, true, true, false, true) == NULL)
+-				return -ENOMEM;
++			sensor = pmbus_add_sensor(data, "fan", "input", index,
++						  page, 0xff, pmbus_fan_registers[f],
++						  PSC_FAN, true, true, false, true);
++			if (IS_ERR(sensor))
++				return PTR_ERR(sensor);
+ 
+ 			/* Fan control */
+ 			if (pmbus_check_word_register(client, page,
 -- 
 2.45.2
 
