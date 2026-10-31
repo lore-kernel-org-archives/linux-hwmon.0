@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.33
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793476077;
-	b=3irpC5CZVWBiee2560mS7h0RF+p4rBPF+SMDUriiL3LceU/OTHnZCyacVOn8pTY740bp
-	 /8uZdeMwtUMuCBOYIarrXrminFaf6ybOq1jBCdYYUH/QVLd+NnJfSZmY/POZGdt1pYfxE
-	 MHeQUVpr2DyNqn3sEocJsCVCdbRRKTFO/jXc5qBeQYGraBH/zhtkcr2Jg/J24uAz5L/8Z
-	 8zgBv0TbmumPquaPsIkDvr5+sVq5NurUJF4to4mjb0cNcYzLV9ZqdaCd4s0eVT5Zq4YjI
-	 Unm1RLrLlstTRLWy+X47gBc+pF572TMo0nWBGFnNwoohJ8ZMLK+TznPfnXPkxGMtHAg==
+	t=1793476135;
+	b=NKtqybJ9KyH3bKDTFtB5SdwNf0d5gP94Grdv5juJJo0lyNRkgOauEfnKfl3l7leNPIBD
+	 dlqbCrNSYjy8iWPF66jl5I5zvp4tBUIWUgaYj9FH3fhqnAS6il0pHb6kD4CTu9sRg2MHh
+	 X9+5sUas2sn4KVJyxNIcjpjsA2YfmNAROi49e1070rfGz4pMpg7rHG3DsfbbYGEJ3BH/5
+	 bImjZF0PK8tI+QK9NydjiczEaF2PbNbW6O5/1rDSOYBHzx5zA0+m+qtrsT+dL00uiM3gI
+	 eiRWrKFgAOhGs3lZETasfk85J8lRY/MR7LrXJEWsKTXwzK+wqNB2zGirG1VMP5bh6CA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793476077;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793476135;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
 	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
@@ -15,37 +15,37 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
 	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=OhwUmbRQtnx4j/x0VQjKx2T7r8wqay7H8kI7w/8Q+qI=;
-	b=AOrbQbPWItz4SWd4Dw4e265cAgOhBNVAEug/0mIEEzf/NSINskJ/EmJvG+KZyn81iSuR
-	 yuvlbo77lEF3R91E4GyLwkbc3DO3GfahYkXfqrme72lS9dYWXGplL+sLX52VsMQ6EA+2q
-	 ydjmemodeMjZTcW4voRgZEHvrSl5JQkfzXBSu15lbgV0BWC4loIMqrrhLi9knXeA2eiJn
-	 z0t7+1WYR3HG2G1J63K6JqpYrKBO2oWLycng7BS8APETBJZ6wMFBZB10Itd8usUjOzS21
-	 dbvxKSqTLcv8d3cdEK8qBQ/6Ro2QixnIDOQCjpHfqoWWGITfXSWIv2/V7FTF2pgCX1A==
+	bh=HJ01yingFTQYQF4y4g2RqF7tHUN9CZXgLAGIzT9D8Vs=;
+	b=4eDN80b/8doqpbf7Y26XKr73z3yUSCbsaemd+8cN/xtBMrV1qiXwlD28JyRCO62PAjId
+	 ccFOAPEphy63xz9VXWeT8pt0q5BoO16QmABMilxGUkhvsOKms74wRvI6qoedTpHCqCC/3
+	 A3OL5JIQQ+DTNsaonIjFXAFBdw1qVoBr9OJVoecg9vLFzg7AWZrYbQ1Jpj7hVqZbqfjKn
+	 4hnhYP2+hOZgln4CvTY/V5wUyhAuuK2yh9p0cbdoEp9tc9sd+ZbZCToCc5ZqgkHxi/ZBS
+	 swvzkL4dkjJ00D4yTDbFNDRip6URBR5N3HEmpZF+geE1ZrZ4CdocQrYW/aPYgTyuP0w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=aQ1Wx0YU;
-	arc=none smtp.remote-ip=35.89.44.33
-Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=h0bbkFSi;
+	arc=none smtp.remote-ip=35.89.44.37
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44176606A31E
-	for <linux-hwmon@vger.kernel.org>; Sat, 31 Oct 2026 19:47:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44176606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41C5D606A31A
+	for <linux-hwmon@vger.kernel.org>; Sat, 31 Oct 2026 19:48:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 41C5D606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=aQ1Wx0YU
-Received: from eig-obgw-5004b.ext.cloudfilter.net ([10.0.29.208])
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=h0bbkFSi
+Received: from eig-obgw-6002b.ext.cloudfilter.net ([10.0.30.203])
 	by cmsmtp with ESMTPS
-	id N1CGx7mugaC0UNF3OxJEtI; Sat, 31 Oct 2026 19:47:50 +0000
+	id NDdXxH09Qv0ndNF4RxxgvK; Sat, 31 Oct 2026 19:48:55 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id NF3NxLhH7mTkmNF3NxVOAd; Sat, 31 Oct 2026 19:47:50 +0000
-X-Authority-Analysis: v=2.4 cv=eKsTjGp1 c=1 sm=1 tr=0 ts=6ae645e6
+	id NF4QxxE6P63hBNF4QxSmYx; Sat, 31 Oct 2026 19:48:54 +0000
+X-Authority-Analysis: v=2.4 cv=CYsI5Krl c=1 sm=1 tr=0 ts=6ae64626
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10
- a=9-mYwotj93D_UCNkWmMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8
+ a=9_b8qFIJTfSYkaBB_zEA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
  a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
@@ -53,20 +53,20 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=OhwUmbRQtnx4j/x0VQjKx2T7r8wqay7H8kI7w/8Q+qI=; b=aQ1Wx0YUYtqR
-	Gj4fIHFtapSUHNm76aVkCNXmwFdGCKaL/XuukHuIHnvObFCHyjQVjNK/OjGR3y8CxzFTt1KEWSbiL
-	MTGBLo30WOoLdijOW3jEyz3GZPdyriMNm+p/c3NB/8lQNrQc/1w1USqM72SsXtT2gfmDrYJZrElcb
-	81ei9ztEQLDu1x7PnmwnCLHtNTaW8kpr3yVh0PjZMIGkdxL0WoWpK53S+QkrdkbLRVGbTrCWxTR6U
-	HzZUsu283yKy2zyYcG2LjYnhTbYNEKoVKQ6oYzha0EVqzWRs7a5Hr1Kvt4k4C6CR+w7AH9SjdgQO1
-	NUciOIqOHx4IAoATgq2fOw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:33928)
+	List-Archive; bh=HJ01yingFTQYQF4y4g2RqF7tHUN9CZXgLAGIzT9D8Vs=; b=h0bbkFSi6ZwP
+	vgwdyg3JWUKCH7DMm/T22Wd6A2BOWszLSGcmHAVPD30Ek8W4f7glzirJ3a/jftPzbUxisI7WW60iE
+	VpP9fMshBM/epw6LIrCXcBLO8RAKeOVcnhumMh5BcCtHNDls394xZvRs1+p40E8UqtEMEePd7M4gh
+	bmUhLQplidwe1bMTfxtwUlH730/dKikpCNAscWflEIw0JB/4bbclHQ5paQQqd9E93KYe02PZqvn+K
+	FL3n2tXDFkgeQLv0oKZl9mcNujOzQAbwX+TRAzR6wWOwBzX4xGPA2wcA5TyxQFnYBTMZZ8fMhwk2F
+	f9xPI9OmPfIgGVDsBTDnoA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:34050)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xNF3N-000000001Bs-1oDF;
-	Sun, 01 Nov 2026 01:17:49 +0530
-Message-ID: <e7ded3a0-ac50-484e-8559-c2b9e897c73a@roeck-us.net>
-Date: Sat, 31 Oct 2026 12:47:48 -0700
+	id 1xNF4Q-000000002Wf-1HkE;
+	Sun, 01 Nov 2026 01:18:54 +0530
+Message-ID: <40a6d9f4-b547-4c23-9198-6a4d641c36ed@roeck-us.net>
+Date: Sat, 31 Oct 2026 12:48:53 -0700
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -77,15 +77,11 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] hwmon: (acer-aspire14-ec) Add driver for Acer Aspire
- 14 52MT and 52M fan
-To: Ethan Jimmy <duhxu0@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <388aa474-3606-4c7f-b073-224d5e0880fd@roeck-us.net>
- <20261031174651.856627-1-duhxu0@gmail.com>
- <985bd253-a9da-4b72-9348-956094625a3e@roeck-us.net>
- <CAOS5+2Gd1Sn1Wd9GY=ghzWmpWViXiz6hLaZChAYJYNs6E+hyrw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] hwmon: coretemp fixes
+To: =?UTF-8?Q?Asaf_Nuri_Bertizlio=C4=9Flu?= <ycistak@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+References: <20261031153528.3195123-1-linux@roeck-us.net>
+ <20261031191059.1425111-1-ycistak@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -131,7 +127,7 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <CAOS5+2Gd1Sn1Wd9GY=ghzWmpWViXiz6hLaZChAYJYNs6E+hyrw@mail.gmail.com>
+In-Reply-To: <20261031191059.1425111-1-ycistak@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -142,25 +138,48 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xNF3N-000000001Bs-1oDF
+X-Exim-ID: 1xNF4Q-000000002Wf-1HkE
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:33928
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:34050
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 3
+X-Email-Count: 5
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfN3L9gYFxUpAysjRnLQwLGlw7EgnjOiHsM+fD2vsWmobH5JWe3YYAqKy8RtRhuBrXMiuscguf5bLX6kqVD+j+nt3sXxtCBahvOFkZ/kZTDXAXessU6E5
- IwK/xRkiHL38zqDzgsf5NdK6bROMBU688cll3Ymcyrpjd/R9YcYAB+YYNBAmnoGPm+WdOwY4uOjJJHbGxHtIG6hVKGtLhXdStMZgZjCasoNFwutMlgboc8Kj
+X-CMAE-Envelope: MS4xfLLDuCO3Pdzume2s8fRgcBLejfDL+bJlmOR8EknF2HllHQpz25EJjaAhL7W2NTqlhbljTlUgh46cb41Iv+vZqNJyoNDH6WjfNPqiAPK1s/yoQSpR0doZ
+ N5+ifP95Z8RHLpMuGppJsuNcOiWAKBdM5haHAcxV2AyQEfCggSO+7Un742LBGtKuURHOBL+s/yuHKvF2+h5ldD9TdopHQqtuKgAjPDH1uRw/04JKZ7+WGI+o
 
-On 10/31/26 11:13, Ethan Jimmy wrote:
-> Hi Guenter,
+On 10/31/26 12:10, Asaf Nuri Bertizlioğlu wrote:
+> Tested on an Intel Core i7-14700F (8 P-cores + 12 E-cores, 1 package),
+> x86_64. I built coretemp.c from groeck/linux-staging hwmon branch,
+> commit 2b05d95c12b8, as an out-of-tree module against the running
+> 7.3.0-4-cachyos kernel, and loaded it in place of the stock module.
 > 
-> Thanks!  Is this headed for 7.5 or 7.4?
+> Observed with the patched module:
+> - Loads cleanly, 21 temperature inputs (Package id 0 + 20 cores),
+>    values look sane in sensors.
+> - Offlining both SMT threads of a P-core (cpu2/cpu3) and one E-core
+>    (cpu27) removes exactly that core's input; onlining brings it back.
+>    21 inputs afterwards, same labels.
+> - Readings refresh after the 1 s rate limit: temp1_input went from
+>    32000 to 61000-63000 under stress-ng load and back to 33000 after it.
+> - rmmod and insmod again: 21 inputs.
+> - No BUG/Oops/WARNING in dmesg.
 > 
-7.5
+> Not tested: the 32-bit jiffies wraparound (patch 3) - this is a 64-bit
+> system, so I can only say it shows no regression here. The NULL
+> platform device path (patch 1) and the core_data allocation failure
+> path (patch 2) are not triggered on this hardware either, so for those
+> it is also just "no regression".
+> 
+> I used an LLM to help prepare the test setup and this reply; I ran the
+> tests and checked the results myself.
+> 
+> Tested-by: Asaf Nuri Bertizlioğlu <ycistak@gmail.com>
+
+Thanks!
 
 Guenter
 
