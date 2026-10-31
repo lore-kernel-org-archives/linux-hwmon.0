@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.35
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.35
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793465696;
-	b=p8rwI49t3AoJKV3gp3yygCvokuJOqB6zn7aSHl+YqyFP/ysWFVnKX+iXIyGpQZ0pXyHM
-	 WG5cBjD0IpGJ3PTHd/zL2qbP5FcmsYSxNt99zjMsbfEuWnEoM3EzT5QR53zIVPAva4S/e
-	 n3zTIbXuz80vnAxmEO2ldp5UyZD0VPDAN5YPV7K7NVSyz8EaJ0st7d+qlmNPTS0l+cY9k
-	 Y+u+h9K+CbWf8S3Nly2QUFCMI4gWuSUYV9EhPDPT92xrBPm/20jxwIpfMK/rrJHj+os74
-	 WTapYi34sm7bQ8EemZVW8Vav4sjFU8UCLn/uWnRr4iBCLqw++BZZctzHSsp12o8gA5Q==
+	t=1793465700;
+	b=Z3flmDwJuETAeI4cYZ4BzCsC3vKI/wdn3NO8Jn3ZhyMsfWxICakpQJKwEsKN/Z42qQ5b
+	 qjFQzqq1f8Ap3CpXGTjLsYvz02p8qr0o6BinFuiN0M7VaiMjWHZu3RVLHbQH+qD2sa/fe
+	 dycQil7caXtP7o3wv9FLWEj0y9Cu9FypDxjOqyhAMTQw/wLsg0BvKK6YnqSgp+kHZNnMi
+	 /uoEXpt8tondOJSIL/CCe8OMmVghMfto44mA6I2OjvqAy5zpE6YUtM7gOFEk3d7jnefEj
+	 yTfxPIYLXbFIT22Y04BO2P1/dgLpuJD1BrxewYAJ6lJhpwxCiIgVkIB6OWau/SxoGgg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793465696;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793465700;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:X-AntiAbuse:
@@ -15,62 +15,62 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-Source-IP:X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
 	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
 	 X-Local-Domain:X-CMAE-Envelope;
-	bh=g4vM4EN4j8A//YEMCG6K+WOzGvGoYlqZUo/wS/KmjXI=;
-	b=o11A0w3L1zXYMkJ+iBeCflZj5MtxtQjHhQUtyBnQOJI0IAuOIw4LHft+PlquMNEb7wCK
-	 pQ+mkgNfgzGTzqfmzKROiDBdGsMdqzBoIoYpy0iBCztO+MeuCTCT0ydfnhGiMg0XbsKqW
-	 cL8x6W0+0PcxDRfeCRiHyZ0JpyRoBBblcdirwL1Ve7/7Uyre0DLQVAkS3k4KsNlffy/Y+
-	 gjfwXJFcZ6ZEfaLxiHewBDKuA/QBpLj/W/4lSAZG5QS32m1oNQcvvTj7xuRQfF6vpbxgH
-	 lsnDdzJqSsItiXiltQV42gTwwLfj+MYfuDWvxANY7mIy8rbQc9zPSf1r08LG7WV6JMw==
+	bh=k9jWCA85MhmtLLSuDGiypFCkhxXfqXeyQX/TTt2UlWE=;
+	b=Yxb6MVyKg2Qy83s/ajo9nQ/rZcsoYy9ZeXhZRUH9zaC4OHXagp1KcK5u2dC3BNmQQFiz
+	 k/u9KHUOu4tATm5erNN5WShPNRnUcf34sp0hqfTIQQbg5LIDqPhNY9ImL/v/FiRFa6+TA
+	 WMl8RkSpn0WckMN7A5udgQv2h8WwqYhLtOWE2pBG0H9TQ4Emwwo7/qVEmU53N/dOceXS9
+	 ZL3yUf52mwjxC+r9mr2bnbGYBwsmhiqDzEaTFFU8cQH4nGcoKZacnBGW4JwFaigqauMhh
+	 kpKkQt6zmp55Wldi3eNzS7nvD+WeEcUa/uQYbgW1YxzQH7oJ1UuPP/icH/LPDRurRMw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=BxYolzqW;
-	arc=none smtp.remote-ip=35.89.44.35
-Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=qA6xWNdd;
+	arc=none smtp.remote-ip=44.202.169.35
+Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6BC3606A31C
-	for <linux-hwmon@vger.kernel.org>; Sat, 31 Oct 2026 16:54:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6BC3606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D430E606A31A
+	for <linux-hwmon@vger.kernel.org>; Sat, 31 Oct 2026 16:54:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D430E606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=BxYolzqW
-Received: from eig-obgw-5005b.ext.cloudfilter.net ([10.0.29.189])
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=qA6xWNdd
+Received: from eig-obgw-5007b.ext.cloudfilter.net ([10.0.29.167])
 	by cmsmtp with ESMTPS
-	id MzK8x51gwusRSNCM3xeTnH; Sat, 31 Oct 2026 16:54:55 +0000
+	id N8XFxQmGcLvgbNCM0xX6RY; Sat, 31 Oct 2026 16:54:52 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id NCM2xLS9NvtkxNCM3x4kbP; Sat, 31 Oct 2026 16:54:55 +0000
-X-Authority-Analysis: v=2.4 cv=BbzY0qt2 c=1 sm=1 tr=0 ts=6ae61d5f
+	id NCM0xxemzLr2uNCM0xxRYk; Sat, 31 Oct 2026 16:54:52 +0000
+X-Authority-Analysis: v=2.4 cv=UudjN/wB c=1 sm=1 tr=0 ts=6ae61d5c
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
  a=660iZSQnnn4A:10 a=M0FbrtG7MMAA:10 a=VwQbUJbxAAAA:8 a=_jlGtV7tAAAA:8
- a=87PJh__p_OewbDqui_cA:9 a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
+ a=NBYwl7_TlWtQaAuGWt0A:9 a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=g4vM4EN4j8A//YEMCG6K+WOzGvGoYlqZUo/wS/KmjXI=; b=BxYolzqWATcS
-	emovKwd5UKfOyv6gvFTRAb4G5zdkLlZgnxRlLenKWLd9Gm9NOLGoWQviVFGp4L9ICf/sfNiphWJja
-	e1ZyXFd4tKD6wvWZgQ62iywQyNlA4he28kqB57M7tIJwRurlmfGN6qEiRti+w0cu1L8qZd3FkQqU5
-	tiTSabCAdXRy1G/+vkzmluA42Uf13xSR0nTlehtNu3PAce48A6f1LlA7H5E9DRqtxE72pz8/7qwsE
-	DSa7lFLGhEVb4hKA0e02umQVaWuECv+/0Q2VDKqYcbQADopR90GsO76/cwmdO95JoRnQi7mVE8RDA
-	m3fimRYE7mzQluyRPbwUwQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:47790 helo=server.roeck-us.net)
+	List-Archive; bh=k9jWCA85MhmtLLSuDGiypFCkhxXfqXeyQX/TTt2UlWE=; b=qA6xWNddfFYg
+	GzCzY2Ani6JMATH8L8gIP6Ub6/KSTUl49CuH+yCdlCOdF18FRS0G5LAS4HANPh1OFICsE1buYPrhV
+	R6rfUgBTxuqSP/ZoiZzPPz3UOgYI1OTYqzAuy6HVHIRycwAxoIITj6Z/EKZDleHIMPEMw/GaF4B9l
+	yZfqLP8IppB7Vpyt4WUP5pzgohNGXNg74xjfyY33+N6jNgdsbcb8C8YkH+3s+AAdXZBnaVqVDyhOn
+	Dv9oSHicLgSeZqPN0xdfhgiCadKwzUhgcdE2HrPuqvX2vRCUr+XMN2joNEoo4fRxOWxASZN/fTcSr
+	ef1eHqC0lE/TynGt7ntRLw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:53514 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xNCM2-00000002iAc-20Hj;
-	Sat, 31 Oct 2026 22:24:54 +0530
+	id 1xNCLz-00000002i8M-3Vz1;
+	Sat, 31 Oct 2026 22:24:51 +0530
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
 Cc: Guenter Roeck <linux@roeck-us.net>,
 	Sashiko <sashiko-bot@kernel.org>
-Subject: [PATCH 3/3] hwmon: (acpi_power_meter) Check for 32-bit and 64-bit unknown ACPI values
-Date: Sat, 31 Oct 2026 09:54:47 -0700
-Message-ID: <20261031165447.1771473-4-linux@roeck-us.net>
+Subject: [PATCH 1/3] hwmon: (acpi_power_meter) Fix missing locking in sysfs show callbacks and resume
+Date: Sat, 31 Oct 2026 09:54:45 -0700
+Message-ID: <20261031165447.1771473-2-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20261031165447.1771473-1-linux@roeck-us.net>
 References: <20261031165447.1771473-1-linux@roeck-us.net>
@@ -92,196 +92,156 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xNCM2-00000002iAc-20Hj
+X-Exim-ID: 1xNCLz-00000002i8M-3Vz1
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:47790
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:53514
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 7
+X-Email-Count: 3
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfPMBJEOBsrEqQ7DfE3CysfwINOsv8m5dVWKHTs/uxwSrrzFpa55Ryz00hdSJZSes6m+GgsDOD+gJhWU9CFRw7740jIsgV90QoiMcNcvPlUtTCCyGP++A
- Izxlu+oPHyOHcWguGk6dhGAb84+rHwpw2l/gRUvVoHmja2naUv4NHsfIm577J+gpq9a1E6yJRXuK05g+ixdld+6UvNDqBL2uhoAlEyh/O+a91cYZHxQSqkLa
+X-CMAE-Envelope: MS4xfKC9vMqF6zBVT/fPVodUQTdHxOPdoib4rKQP4H6xntddJ5c3Nt6asF6OE6HjODnwQgsR1e6g/CYBS8e5CLpl+r/wMkWKe4zoAv3Dx8O+IaQy8WihV/Vd
+ uN8eguueTCKWSU7Tl/lv6DdKZ2ALuh85T5OsHL9WbyAX+b3PyL99kMoUSw+UGeLRYcBr8c1lnjrCO9LyK5Z8E4+1Xyken2A/SBgC1DE5tLjORzhtg/slDK3R
 
-According to the ACPI specification (Section 10.4), ACPI Power Meter
-objects (_PMC capability fields, _PMM, _GHL, _PAI) report unknown or
-unavailable integer values using an integer with all bits set, which can
-be either U32_MAX (0xffffffff) or U64_MAX (0xffffffffffffffff) depending
-on the DSDT revision.
+During system resume, acpi_power_meter_resume() calls free_capabilities()
+and read_capabilities() without acquiring resource->lock. Because ACPI
+notifications run on the non-freezable kacpi_notify_wq workqueue, a
+concurrent METER_NOTIFY_CONFIG notification during resume can race with
+acpi_power_meter_resume() and trigger a double-free or use-after-free on
+the model_number, serial_number, and oem_info strings as well as
+concurrently overwrite resource->caps. When CONFIG_SUSPEND_FREEZER is
+disabled, concurrent sysfs readers can also dereference the freed
+capability strings mid-update.
 
-Currently, only hwmon_power_average checks both 32-bit and 64-bit
-unknown sentinels:
-- power1_cap_hyst_show() only compares res->caps.hysteresis against the
-  32-bit UNKNOWN_HYSTERESIS (0xffffffff), so a 64-bit U64_MAX sentinel
-  bypasses the check, overflows when multiplied by 1000, and emits a
-  bogus number instead of "unknown".
-- power1_accuracy_show() does not check for unknown sentinels at all,
-  formatting 0xffffffff as "4294967.295%".
-- power_meter_read() does not check min_avg_interval, max_avg_interval,
-  avg_interval, min_cap, max_cap, or cap for unknown sentinels, exposing
-  scaled or overflowed values (or negative values when cast to signed
-  long) to userspace instead of returning -ENODATA.
-- get_power_alarm_state() does not check whether resource->cap is
-  unknown before comparing resource->power > resource->cap.
-- update_meter() passes an unknown caps.sampling_time directly to
-  msecs_to_jiffies(), caching sensor readings for weeks on 64-bit builds.
+In addition, none of the extra sysfs attribute show callbacks acquire
+res->lock:
+- power1_average_min_show() and power1_average_max_show() read the 64-bit
+  res->trip[] entries twice without locking while set_trip() modifies
+  them under res->lock (including temporarily storing a candidate value
+  before evaluating _PTP and rolling it back on failure). On 32-bit
+  architectures this exposes torn 64-bit reads, and on all architectures
+  it exposes uncommitted trip values and a TOCTOU race between the < 0
+  check and multiplication (emitting "-1000" instead of "unknown" if
+  set_trip() rolls back to -1).
+- power1_model_number_show(), power1_oem_info_show(),
+  power1_serial_number_show(), power1_cap_hyst_show(),
+  power1_accuracy_show(), and power1_is_battery_show() read capability
+  strings and 64-bit capability fields without synchronization against
+  resume updates.
 
-Introduce acpi_power_meter_is_unknown() to check for both U32_MAX and
-U64_MAX, and use it across sysfs attribute handlers and meter updates:
-- Return -ENODATA in power_meter_read() when numeric power, interval, or
-  cap attributes report an unknown value.
-- Emit "unknown" in power1_cap_hyst_show() and power1_accuracy_show()
-  when hysteresis or accuracy is unknown.
-- Avoid comparing against an unknown cap in get_power_alarm_state(),
-  returning 0 (no alarm, no error) unless a hardware capping
-  notification was latched.
-- Skip the sampling_time cache window in update_meter() when
-  sampling_time is unknown.
+Acquire resource->lock using guard(mutex) in acpi_power_meter_resume()
+and in all extra sysfs show callbacks. Also return -ENODATA in the
+capability string show callbacks if a string pointer is NULL after a
+failed capability re-read.
 
 Reported-by: Sashiko <sashiko-bot@kernel.org>
 Fixes: de584afa5e18 ("hwmon driver for ACPI 4.0 power meters")
+Fixes: 16746ce8adfe ("hwmon: (acpi_power_meter) Replace the deprecated hwmon_device_register")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/acpi_power_meter.c | 49 ++++++++++++++++++++++----------
- 1 file changed, 34 insertions(+), 15 deletions(-)
+ drivers/hwmon/acpi_power_meter.c | 30 +++++++++++++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
-index 1f1d58995693..b28ca6acf630 100644
+index 3891962f03db..38d6a1e56ffc 100644
 --- a/drivers/hwmon/acpi_power_meter.c
 +++ b/drivers/hwmon/acpi_power_meter.c
-@@ -30,13 +30,6 @@
- #define POWER_METER_CAN_CAP	(1 << 2)
- #define POWER_METER_CAN_NOTIFY	(1 << 3)
- #define POWER_METER_IS_BATTERY	(1 << 8)
--#define UNKNOWN_HYSTERESIS	0xFFFFFFFF
--/*
-- * ACPI integers can either be 32-bit or 64-bit wide, so
-- * we have to check for both values.
-- */
--#define UNKNOWN_POWER_32	U32_MAX
--#define UNKNOWN_POWER_64	U64_MAX
- 
- #define METER_NOTIFY_CONFIG	0x80
- #define METER_NOTIFY_TRIP	0x81
-@@ -54,6 +47,15 @@ static bool force_cap_on;
- 
- static DEFINE_MUTEX(acpi_notify_lock);
- 
-+/*
-+ * ACPI integers can either be 32-bit or 64-bit wide, so
-+ * we have to check for both values.
-+ */
-+static bool acpi_power_meter_is_unknown(u64 val)
-+{
-+	return val == U32_MAX || val == U64_MAX;
-+}
-+
- static int can_cap_in_hardware(void)
+@@ -584,6 +584,8 @@ static ssize_t power1_average_min_show(struct device *dev,
  {
- 	return force_cap_on || cap_in_hardware;
-@@ -179,9 +181,10 @@ static int update_meter(struct acpi_power_meter_resource *resource)
- 	acpi_status status;
- 	unsigned long local_jiffies = jiffies;
+ 	struct acpi_power_meter_resource *res = dev_get_drvdata(dev);
  
--	if (time_before(local_jiffies, resource->sensors_last_updated +
-+	if (!acpi_power_meter_is_unknown(resource->caps.sampling_time) &&
-+	    time_before(local_jiffies, resource->sensors_last_updated +
- 			msecs_to_jiffies(resource->caps.sampling_time)) &&
--			resource->sensors_valid)
-+	    resource->sensors_valid)
- 		return 0;
- 
- 	status = acpi_evaluate_integer(resource->acpi_dev->handle, "_PMM",
-@@ -387,9 +390,7 @@ static bool get_power_alarm_state(struct acpi_power_meter_resource *resource)
- 	resource->power_alarm = false;
- 
- 	ret = update_meter(resource);
--	if (ret ||
--	    resource->power == UNKNOWN_POWER_32 ||
--	    resource->power == UNKNOWN_POWER_64)
-+	if (ret || acpi_power_meter_is_unknown(resource->power))
- 		return alarm;
- 
- 	/* need to update cap if not to support the notification. */
-@@ -399,6 +400,9 @@ static bool get_power_alarm_state(struct acpi_power_meter_resource *resource)
- 			return false;
- 	}
- 
-+	if (acpi_power_meter_is_unknown(resource->cap))
-+		return alarm;
++	guard(mutex)(&res->lock);
 +
- 	resource->power_alarm = resource->power > resource->cap;
- 	return alarm || resource->power_alarm;
- }
-@@ -460,26 +464,36 @@ static int power_meter_read(struct device *dev, enum hwmon_sensor_types type,
- 		ret = update_meter(res);
- 		if (ret)
- 			return ret;
--		if (res->power == UNKNOWN_POWER_32 || res->power == UNKNOWN_POWER_64)
-+		if (acpi_power_meter_is_unknown(res->power))
- 			return -ENODATA;
- 		*val = res->power * 1000;
- 		break;
- 	case hwmon_power_average_interval_min:
-+		if (acpi_power_meter_is_unknown(res->caps.min_avg_interval))
-+			return -ENODATA;
- 		*val = res->caps.min_avg_interval;
- 		break;
- 	case hwmon_power_average_interval_max:
-+		if (acpi_power_meter_is_unknown(res->caps.max_avg_interval))
-+			return -ENODATA;
- 		*val = res->caps.max_avg_interval;
- 		break;
- 	case hwmon_power_average_interval:
- 		ret = update_avg_interval(res);
- 		if (ret)
- 			return ret;
--		*val = (res)->avg_interval;
-+		if (acpi_power_meter_is_unknown(res->avg_interval))
-+			return -ENODATA;
-+		*val = res->avg_interval;
- 		break;
- 	case hwmon_power_cap_min:
-+		if (acpi_power_meter_is_unknown(res->caps.min_cap))
-+			return -ENODATA;
- 		*val = res->caps.min_cap * 1000;
- 		break;
- 	case hwmon_power_cap_max:
-+		if (acpi_power_meter_is_unknown(res->caps.max_cap))
-+			return -ENODATA;
- 		*val = res->caps.max_cap * 1000;
- 		break;
- 	case hwmon_power_alarm:
-@@ -489,6 +503,8 @@ static int power_meter_read(struct device *dev, enum hwmon_sensor_types type,
- 		ret = update_cap(res);
- 		if (ret)
- 			return ret;
-+		if (acpi_power_meter_is_unknown(res->cap))
-+			return -ENODATA;
- 		*val = res->cap * 1000;
- 		break;
- 	default:
-@@ -614,7 +630,7 @@ static ssize_t power1_cap_hyst_show(struct device *dev,
- 
- 	guard(mutex)(&res->lock);
- 
--	if (res->caps.hysteresis == UNKNOWN_HYSTERESIS)
-+	if (acpi_power_meter_is_unknown(res->caps.hysteresis))
+ 	if (res->trip[POWER_METER_TRIP_AVERAGE_MIN_IDX] < 0)
  		return sysfs_emit(buf, "unknown\n");
  
- 	return sysfs_emit(buf, "%llu\n", res->caps.hysteresis * 1000);
-@@ -629,6 +645,9 @@ static ssize_t power1_accuracy_show(struct device *dev,
+@@ -596,6 +598,8 @@ static ssize_t power1_average_max_show(struct device *dev,
+ {
+ 	struct acpi_power_meter_resource *res = dev_get_drvdata(dev);
  
- 	guard(mutex)(&res->lock);
- 
-+	if (acpi_power_meter_is_unknown(res->caps.accuracy))
-+		return sysfs_emit(buf, "unknown\n");
++	guard(mutex)(&res->lock);
 +
- 	acc = res->caps.accuracy;
+ 	if (res->trip[POWER_METER_TRIP_AVERAGE_MAX_IDX] < 0)
+ 		return sysfs_emit(buf, "unknown\n");
+ 
+@@ -608,6 +612,8 @@ static ssize_t power1_cap_hyst_show(struct device *dev,
+ {
+ 	struct acpi_power_meter_resource *res = dev_get_drvdata(dev);
+ 
++	guard(mutex)(&res->lock);
++
+ 	if (res->caps.hysteresis == UNKNOWN_HYSTERESIS)
+ 		return sysfs_emit(buf, "unknown\n");
+ 
+@@ -619,8 +625,11 @@ static ssize_t power1_accuracy_show(struct device *dev,
+ 				    char *buf)
+ {
+ 	struct acpi_power_meter_resource *res = dev_get_drvdata(dev);
+-	unsigned int acc = res->caps.accuracy;
++	unsigned int acc;
+ 
++	guard(mutex)(&res->lock);
++
++	acc = res->caps.accuracy;
  	return sysfs_emit(buf, "%u.%u%%\n", acc / 1000, acc % 1000);
  }
+ 
+@@ -630,6 +639,8 @@ static ssize_t power1_is_battery_show(struct device *dev,
+ {
+ 	struct acpi_power_meter_resource *res = dev_get_drvdata(dev);
+ 
++	guard(mutex)(&res->lock);
++
+ 	return sysfs_emit(buf, "%u\n",
+ 			  res->caps.flags & POWER_METER_IS_BATTERY ? 1 : 0);
+ }
+@@ -640,6 +651,11 @@ static ssize_t power1_model_number_show(struct device *dev,
+ {
+ 	struct acpi_power_meter_resource *res = dev_get_drvdata(dev);
+ 
++	guard(mutex)(&res->lock);
++
++	if (!res->model_number)
++		return -ENODATA;
++
+ 	return sysfs_emit(buf, "%s\n", res->model_number);
+ }
+ 
+@@ -649,6 +665,11 @@ static ssize_t power1_oem_info_show(struct device *dev,
+ {
+ 	struct acpi_power_meter_resource *res = dev_get_drvdata(dev);
+ 
++	guard(mutex)(&res->lock);
++
++	if (!res->oem_info)
++		return -ENODATA;
++
+ 	return sysfs_emit(buf, "%s\n", res->oem_info);
+ }
+ 
+@@ -658,6 +679,11 @@ static ssize_t power1_serial_number_show(struct device *dev,
+ {
+ 	struct acpi_power_meter_resource *res = dev_get_drvdata(dev);
+ 
++	guard(mutex)(&res->lock);
++
++	if (!res->serial_number)
++		return -ENODATA;
++
+ 	return sysfs_emit(buf, "%s\n", res->serial_number);
+ }
+ 
+@@ -984,6 +1010,8 @@ static int acpi_power_meter_resume(struct device *dev)
+ {
+ 	struct acpi_power_meter_resource *resource = dev_get_drvdata(dev);
+ 
++	guard(mutex)(&resource->lock);
++
+ 	free_capabilities(resource);
+ 	read_capabilities(resource);
+ 
 -- 
 2.45.2
 
