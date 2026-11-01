@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793571314;
-	b=aPdBYhVpjCwzPUWQsq4QQgqP0fawK3cRn3tYpKO0YlHNLYOW4QVub1NUoMZ9jBF2EEXG
-	 XmqcJwqANs73f38nhPIUf5QVJJIHpLlfHrZEcSsTbowtpJ+Bsqvs0RtT4TP9K+6M5JqYt
-	 SXtsSnyqYGTUzw0k8QXKj9gQNc2zwqyKe9vg6Ey+frHZeU49wJ6lqXrIBjkOepBfrljd1
-	 7MqdpeZkhayP9vctF/uGv9/W+bwEcIuKFbrYcb7NbKRGWLwgLAwM4oNAzBmpr6j7bTn3v
-	 yh+POnS2QMzU/WTlovu7cgzib40vV4Qbh/g52pNUmcy8TzhLe100Hm3PWUltvcMjohw==
+	t=1793571319;
+	b=Oszu4+p88r3hSjNglo2/uA71bKs5J918nOL/hc4zxhZf/WGW//E8ntQQ8hnzZp+UX19o
+	 P88P+JyNlMNCdBSjc5XoC3pu6wfdB4dzn4BQV9r0dt6kRVlfRngrUbrPlyeKZNTFEuB4u
+	 bkbX9vfCrN5tmJcqzg1qIbmGEy2m3wQpzWOzy2qyIaRg7pJLBCf3L4KGVpSsN/10bsBMp
+	 MPmpxDGVtqr4rwGAJEO0lqAtw2rT80fXnKJty1XzI71ID4cgiCmPjxQnXQwNbMvMixEIu
+	 La4x6z9l3b9+bSSAhoisrMjL4adbhhXrSfv7thTXIEnKYMrUEy1F4O2cNtk5Isxj13A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793571314;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793571319;
 	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
 	 X-Mailer;
-	bh=NtVaifRkdM7rJKIrVhOAsBBjfY7hpuAXEUZnSC/T4nM=;
-	b=MLlrZHVCALs4wHF45W5sm1p3ckO6Sjzcy9YYVKxDK6yeGhE1otD1Eaudnl5OVjZ2Rgch
-	 595fys7ly/TQ+3kh3r+VXnChyD+1TwDnRE3Wv0XTeDBhIJiKsRyXuHuE3f9gLCLe19Rid
-	 n7WHAHXiKdkF6LIm76JEekj+iOHPY942x9wECM7NcXxzSr+fm/1OkaAFhw9/efSWx5kKt
-	 TApTd4pyxuSOcoBW7an/y+fsx4on/TpArtOu5qPRXPR/ktWEvHSk9d2a4ITcadvG14dN5
-	 2kynTaMBtnMVCrYsZg5CHIOxm5P9XSB5a1/Ywv4PaKhk5WP1iEgoRW43pB01skVvPdA==
+	bh=scYcWMNNu13bkYH0P+vdYEJHejS/aKAXPznqUvsNAj8=;
+	b=MG0DYwj74nEt+Hj+I9htUKl/t0tGuktNI/rG+i8xVfiXSJ6rd3/5hu7VSPWkTn2rEWhd
+	 TJti9vD5GBNkAlp9NDN0KwBw2WVptgbKvm/KpJ0F0FfqONAnFsZBc47gLAoYWANaPfRhN
+	 yOPXF95cSVDyakyG8fXZccGR50xQzIfrRGTOdcP8kVBE6E9hOelyXrDq+AvWAvm9sh0iq
+	 wtqyAeeJvCIWUoTwozcRoOyfMYiel8IrIe/9tfsaj2zZyfVNAtHMryUm9Ac+XwaxGJ4if
+	 BULEVoCkSn9pQiLy5+xGW8vY7G+FmqZQ9v8CoS1ckmY+RjxnPPC0U3K/wNzJCrRCSkA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aGIrUS94;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AL6vaqjz;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4C0606A324;
-	Sun,  1 Nov 2026 22:15:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634D2606A327;
+	Sun,  1 Nov 2026 22:15:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aGIrUS94
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 050EB1F000C1;
-	Sun,  1 Nov 2026 22:15:07 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AL6vaqjz
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF3EF1F00919;
+	Sun,  1 Nov 2026 22:15:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793571313;
-	bh=NtVaifRkdM7rJKIrVhOAsBBjfY7hpuAXEUZnSC/T4nM=;
+	s=k20260515; t=1793571318;
+	bh=scYcWMNNu13bkYH0P+vdYEJHejS/aKAXPznqUvsNAj8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=aGIrUS94DIosIkqIL6+h1x/PLW5z9Py10+0F8MU2SYtV7cQCnkIfi8mSI9iZUDpOc
-	 PpLk3AoEZqAUcsN0Dh2l01kvh05SknrZY+l/NKV3AUbtKj8BOZdio5pH3CpoBEVZGH
-	 fesmMKwlsCJsc97Rj/msZIn7NNDK4fxlRlUWQRlBCDSqLA3cR7Oqln9Braj2HJE3gi
-	 rsRfGJv2Y5Y53ZmWs06hepB676GG3FkgXIiURGKCIHedN54ziFfjNilKI14LQAF5oM
-	 20wlk5Q+Fyqj+Hi2cMHJz94YAJtOa4QVlD77il5wFy2rcAJroTue/yuchlzLIYcOvO
-	 r77jsSnyUdJ7A==
+	b=AL6vaqjzRCtb8/RXpAsTJWmQMmOYoidnXVduSHmUm8aZgExEFpSND9djQjstlBR/l
+	 Si8U9HBUmLS1Dx1iT3yQ3wleYmqrj1hSiJizOauz6NSekqsGfV3jTdpBKTIS3lpi1O
+	 VLRhlPqFcetp0rhIou26ZegoyZilxbR3CMXyfquy1RXzjg3xTP5OV2dVtflHvJdEPF
+	 elRomu/nZ3QzPJ0W3pCInHiZwr+DeeM8PlI8mlwqOgfLKbaRI+rZyNc0LEh3tdglGH
+	 mhP+6fRfyLluZWlj7spbapVSQTMCj0ra+LAjLAeyig2fB3KCAZkLb3jkKGH9GCjBkQ
+	 7JYLEY5qalYsA==
 From: Linus Walleij <linusw@kernel.org>
-Date: Sun, 01 Nov 2026 23:14:38 +0100
-Subject: [PATCH v2 5/7] clk: bcm: Add BCMBCA PMB clocks
+Date: Sun, 01 Nov 2026 23:14:39 +0100
+Subject: [PATCH v2 6/7] hwmon: Add Broadcom PMB PVTMON monitoring
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -54,7 +54,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261101-xg6846b-bcmbca-xrdp-reset-v2-5-455fe9eed5ee@kernel.org>
+Message-Id: <20261101-xg6846b-bcmbca-xrdp-reset-v2-6-455fe9eed5ee@kernel.org>
 References: <20261101-xg6846b-bcmbca-xrdp-reset-v2-0-455fe9eed5ee@kernel.org>
 In-Reply-To: <20261101-xg6846b-bcmbca-xrdp-reset-v2-0-455fe9eed5ee@kernel.org>
 To: Linus Walleij <linusw@kernel.org>, Lee Jones <lee@kernel.org>, 
@@ -76,458 +76,389 @@ Cc: mfd@lists.linux.dev, devicetree@vger.kernel.org,
  linux-hwmon@vger.kernel.org
 X-Mailer: b4 0.16.0
 
-Add a BCM6846 clock provider for the Processor Monitor Bus (PMB) MFD
-cell. Expose six outputs from each of the RDP and BIU PLLs, the Runner
-clock divided from RDP PLL channel 1, the crystal output, PVTMON and
-block-zone clock gates.
+Expose the BCM6846 die temperature and seven voltage inputs through
+hwmon using the shared Processor Monitor Bus (PMB) regmap.
 
-PVTMON and zone clocks provide gate control only.
+Register the temperature channel with the thermal framework so
+existing zero-cell device-tree thermal sensor references work.
+
+Poll for valid samples with a bounded timeout, releasing the PMB lock
+between reads. Report temperature in millidegrees Celsius, including
+negative values, and voltages in millivolts.
 
 Signed-off-by: Linus Walleij <linusw@kernel.org>
 ---
- MAINTAINERS                      |   1 +
- drivers/clk/bcm/Kconfig          |  11 ++
- drivers/clk/bcm/Makefile         |   1 +
- drivers/clk/bcm/clk-bcmbca-pmb.c | 389 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 402 insertions(+)
+ Documentation/hwmon/bcm_pmb_pvtmon.rst |  53 ++++++++
+ Documentation/hwmon/index.rst          |   1 +
+ MAINTAINERS                            |   2 +
+ drivers/hwmon/Kconfig                  |  18 +++
+ drivers/hwmon/Makefile                 |   1 +
+ drivers/hwmon/bcm_pmb_pvtmon.c         | 232 +++++++++++++++++++++++++++++++++
+ 6 files changed, 307 insertions(+)
 
+diff --git a/Documentation/hwmon/bcm_pmb_pvtmon.rst b/Documentation/hwmon/bcm_pmb_pvtmon.rst
+new file mode 100644
+index 000000000000..7dba658bdc76
+--- /dev/null
++++ b/Documentation/hwmon/bcm_pmb_pvtmon.rst
+@@ -0,0 +1,53 @@
++.. SPDX-License-Identifier: GPL-2.0-only
++
++Kernel driver bcm_pmb_pvtmon
++============================
++
++Supported chips:
++
++  * Broadcom BCM6846 PVTMON
++
++    Access: Processor Monitor Bus (PMB), bus 1, device 6
++
++Author: Linus Walleij <linusw@kernel.org>
++
++Description
++-----------
++
++The process, voltage and temperature monitor (PVTMON) measures die
++temperature and seven voltage inputs. The driver uses the shared PMB MFD
++transport and obtains its clock and reset from the sibling providers.
++
++With CONFIG_THERMAL_OF enabled, the temperature channel also supplies
++device-tree thermal zones. The PVTMON node uses #thermal-sensor-cells = <0>;
++voltage inputs do not have thermal sensor indices.
++
++Sysfs attributes
++----------------
++
++All attributes are read-only. Temperature is reported in millidegrees
++Celsius and voltages in millivolts, using the BCM6846 vendor conversion
++formulas and input-divider ratios.
++
++================ ================================
++Attribute        Description
++================ ================================
++temp1_input      Die temperature
++in0_input        First 0.85 V input
++in1_input        Second 0.85 V input
++in2_input        VIN input
++in3_input        1.0 V input
++in4_input        1.8 V input
++in5_input        3.3 V input
++in6_input        Diagnostic test input
++in0_label        V0.85_1
++in1_label        V0.85_2
++in2_label        VIN
++in3_label        V1.0
++in4_label        V1.8
++in5_label        V3.3
++in6_label        Vtest
++================ ================================
++
++Labels follow the vendor channel names. Vtest is a diagnostic ADC input,
++not a supply rail. The driver does not change the analog test routing.
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 199ca79621e9..5a579391cf9e 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -54,6 +54,7 @@ Hardware Monitoring Kernel Drivers
+    axiado-pwm-fan
+    axiado-tsadc
+    bcm54140
++   bcm_pmb_pvtmon
+    bel-pfe
+    bpa-rs600
+    cgbc-hwmon
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 29ec1c9d617e..74f0783d512f 100644
+index 74f0783d512f..124d67ea1582 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -5451,6 +5451,7 @@ F:	Documentation/devicetree/bindings/hwmon/brcm,bcm6846-pmb-pvtmon.yaml
+@@ -5451,7 +5451,9 @@ F:	Documentation/devicetree/bindings/hwmon/brcm,bcm6846-pmb-pvtmon.yaml
  F:	Documentation/devicetree/bindings/mfd/brcm,bcm6846-pmc.yaml
  F:	Documentation/devicetree/bindings/reset/brcm,bcm6846-pmb-reset.yaml
  F:	Documentation/devicetree/bindings/soc/bcm/brcm,bcm6846-pmb.yaml
-+F:	drivers/clk/bcm/clk-bcmbca-pmb.c
++F:	Documentation/hwmon/bcm_pmb_pvtmon.rst
+ F:	drivers/clk/bcm/clk-bcmbca-pmb.c
++F:	drivers/hwmon/bcm_pmb_pvtmon.c
  F:	drivers/mfd/bcmbca_pmc3_pmb.c
  F:	drivers/reset/reset-bcmbca-pmb.c
  F:	include/dt-bindings/clock/brcm,bcm6846-pmb.h
-diff --git a/drivers/clk/bcm/Kconfig b/drivers/clk/bcm/Kconfig
-index a972d763eb77..db17eadde7aa 100644
---- a/drivers/clk/bcm/Kconfig
-+++ b/drivers/clk/bcm/Kconfig
-@@ -1,5 +1,16 @@
- # SPDX-License-Identifier: GPL-2.0-only
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 18c682e1a475..7e2bc32628d4 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -334,6 +334,24 @@ config SENSORS_AXIADO_TSADC
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called axiado-tsadc.
  
-+config CLK_BCMBCA_PMB
-+	tristate "Broadcom BCMBCA PMB clocks"
++config SENSORS_BCM_PMB_PVTMON
++	tristate "Broadcom PMB PVTMON hardware monitoring"
++	depends on ARCH_BCMBCA || COMPILE_TEST
 +	depends on MFD_BCMBCA_PMB
++	depends on COMMON_CLK
++	depends on RESET_CONTROLLER
++	select CLK_BCMBCA_PMB
++	select RESET_BCMBCA_PMB
 +	select REGMAP
 +	default MFD_BCMBCA_PMB
 +	help
-+	  Provide BCM6846 PLL output, Runner, crystal, PVTMON and block-zone
-+	  clocks through the Processor Monitor Bus.
++	  Enable temperature and voltage monitoring through the Processor
++	  Monitor Bus on Broadcom BCM6846. With THERMAL_OF enabled, the
++	  temperature channel also supplies the thermal zones described in
++	  the device tree.
 +
-+	  The module will be called clk-bcmbca-pmb.
++	  This driver can also be built as a module called bcm_pmb_pvtmon.
 +
- config CLK_BCM2711_DVP
- 	tristate "Broadcom BCM2711 DVP support"
- 	depends on ARCH_BCM2835 ||COMPILE_TEST
-diff --git a/drivers/clk/bcm/Makefile b/drivers/clk/bcm/Makefile
-index d0b6f4b1fb08..7123eefff138 100644
---- a/drivers/clk/bcm/Makefile
-+++ b/drivers/clk/bcm/Makefile
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
-+obj-$(CONFIG_CLK_BCMBCA_PMB)	+= clk-bcmbca-pmb.o
- obj-$(CONFIG_CLK_BCM_63XX)	+= clk-bcm63xx.o
- obj-$(CONFIG_CLK_BCM_63XX_GATE)	+= clk-bcm63xx-gate.o
- obj-$(CONFIG_CLK_BCM63268_TIMER) += clk-bcm63268-timer.o
-diff --git a/drivers/clk/bcm/clk-bcmbca-pmb.c b/drivers/clk/bcm/clk-bcmbca-pmb.c
+ config SENSORS_K8TEMP
+ 	tristate "AMD Athlon64/FX or Opteron temperature sensor"
+ 	depends on X86 && PCI
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index d4c345ed7261..edf8e8d2f345 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -62,6 +62,7 @@ obj-$(CONFIG_SENSORS_ATXP1)	+= atxp1.o
+ obj-$(CONFIG_SENSORS_AXI_FAN_CONTROL) += axi-fan-control.o
+ obj-$(CONFIG_SENSORS_AXIADO_PWM_FAN) += axiado-pwm-fan.o
+ obj-$(CONFIG_SENSORS_AXIADO_TSADC)	+= axiado-tsadc.o
++obj-$(CONFIG_SENSORS_BCM_PMB_PVTMON) += bcm_pmb_pvtmon.o
+ obj-$(CONFIG_SENSORS_CGBC)	+= cgbc-hwmon.o
+ obj-$(CONFIG_SENSORS_CHIPCAP2) += chipcap2.o
+ obj-$(CONFIG_SENSORS_CORETEMP)	+= coretemp.o
+diff --git a/drivers/hwmon/bcm_pmb_pvtmon.c b/drivers/hwmon/bcm_pmb_pvtmon.c
 new file mode 100644
-index 000000000000..41acab23688a
+index 000000000000..8b95dac83994
 --- /dev/null
-+++ b/drivers/clk/bcm/clk-bcmbca-pmb.c
-@@ -0,0 +1,389 @@
++++ b/drivers/hwmon/bcm_pmb_pvtmon.c
+@@ -0,0 +1,232 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * Broadcom BCM6846 Processor Monitor Bus (PMB) clocks.
-+ *
-+ * PMB transactions sleep, so gating uses the prepare callbacks. Firmware
-+ * also uses these clocks: leave prepared clocks running and retain PLL
-+ * rates.
++ * Broadcom BCM6846 process, voltage and temperature monitor (PVTMON).
 + */
 +
 +#include <linux/bitfield.h>
 +#include <linux/clk.h>
-+#include <linux/clk-provider.h>
-+#include <linux/math64.h>
++#include <linux/hwmon.h>
 +#include <linux/mfd/bcmbca-pmb.h>
 +#include <linux/mod_devicetable.h>
 +#include <linux/module.h>
 +#include <linux/platform_device.h>
 +#include <linux/regmap.h>
-+#include <linux/slab.h>
++#include <linux/reset.h>
 +
-+#include <dt-bindings/clock/brcm,bcm6846-pmb.h>
++#define PVTMON_BUS		1
++#define PVTMON_DEVICE		6
 +
 +/* PMB register offsets are in 32-bit words. */
-+#define PLL_CHANNEL_DISABLE	BIT(8)
-+#define PLL_CHANNEL_HOLD		BIT(9)
-+#define PLL_MDIV_OVERRIDE		BIT(15)
-+#define PLL_LOCK			BIT(31)
-+#define PLL_NDIV_INT		GENMASK(9, 0)
-+#define PLL_NDIV_FRAC		GENMASK(31, 12)
-+#define PLL_PDIV			GENMASK(3, 0)
-+
-+#define XTAL_CONTROL		14
-+#define XTAL_DRIVER_POWER_DOWN	BIT(17)
-+
 +#define PVTMON_CONFIG		17
-+#define PVTMON_CLOCK_ENABLE	BIT(2)
-+#define PVTMON_CLOCK_DIVIDER	GENMASK(12, 8)
++#define PVTMON_RESET_N		BIT(0)
++#define PVTMON_POWER_DOWN		BIT(1)
 +
-+#define ZONE_CLOCK_ENABLE	BIT(0)
-+#define ZONE_MANUAL_CONTROL	BIT(7)
-+#define ZONE_POWER_DOWN_REQUEST	BIT(9)
-+#define ZONE_POWER_ON		BIT(26)
++#define PVTMON_ACQ_CONFIG		20
++#define PVTMON_ACCUM_ENABLE	BIT(0)
++#define PVTMON_SKIP_LENGTH	GENMASK(11, 8)
 +
-+enum bcmbca_pmb_clock_type {
-+	PMB_PLL_CHANNEL,
-+	PMB_RUNNER,
-+	PMB_XTAL,
-+	PMB_PVTMON,
-+	PMB_ZONE,
++#define PVTMON_CHANNEL_BASE	24
++#define PVTMON_NUM_CHANNELS	8
++#define PVTMON_VALUE		GENMASK(9, 0)
++#define PVTMON_VALID		BIT(18)
++#define PVTMON_SAMPLES		GENMASK(26, 24)
++#define PVTMON_CHANNEL_ENABLE	BIT(31)
++
++/* Voltage labels and divider ratios follow the BCM6846 vendor definitions. */
++static const struct {
++	const char *label;
++	unsigned int divisor;
++} bcm6846_pvtmon_voltages[] = {
++	{ "V0.85_1", 10 },
++	{ "V0.85_2", 10 },
++	{ "VIN", 7 },
++	{ "V1.0", 7 },
++	{ "V1.8", 4 },
++	{ "V3.3", 2 },
++	{ "Vtest", 10 },
 +};
 +
-+struct bcmbca_pmb_pll_layout {
-+	u16 ch01;
-+	u16 status;
-+	u16 ndiv;
-+	u16 pdiv;
-+	u16 ch25;
-+};
-+
-+struct bcmbca_pmb_clock_desc {
-+	const char *name;
-+	enum bcmbca_pmb_clock_type type;
-+	u8 bus;
-+	u8 device;
-+	u8 channel;
-+	u16 reg;
-+	const struct bcmbca_pmb_pll_layout *pll;
-+};
-+
-+struct bcmbca_pmb_clock {
-+	struct clk_hw hw;
-+	struct device *dev;
-+	struct regmap *regmap;
-+	const struct bcmbca_pmb_clock_desc *desc;
-+};
-+
-+#define to_pmb_clock(_hw) container_of(_hw, struct bcmbca_pmb_clock, hw)
-+
-+static int bcmbca_pmb_clock_prepare(struct clk_hw *hw)
++static int bcm_pmb_pvtmon_init(struct regmap *regmap,
++			       struct reset_control *reset)
 +{
-+	struct bcmbca_pmb_clock *clock = to_pmb_clock(hw);
-+	const struct bcmbca_pmb_clock_desc *desc = clock->desc;
-+	unsigned int shift = (desc->channel % 2) * 16;
-+	unsigned int reg = BCMBCA_PMB_REG(desc->bus, desc->device, desc->reg);
-+	u32 value;
++	unsigned int reg = BCMBCA_PMB_REG(PVTMON_BUS, PVTMON_DEVICE, PVTMON_CONFIG);
++	u32 config, acq, channel;
++	unsigned int i;
 +	int ret;
 +
-+	switch (desc->type) {
-+	case PMB_PLL_CHANNEL: {
-+		unsigned int regs[] = {
-+			BCMBCA_PMB_REG(desc->bus, desc->device, desc->pll->status),
-+			BCMBCA_PMB_REG(desc->bus, desc->device,
-+				       desc->pll->ch01 + desc->channel / 2),
-+		};
-+		u32 values[ARRAY_SIZE(regs)];
-+
-+		ret = regmap_multi_reg_read(clock->regmap, regs, values, ARRAY_SIZE(regs));
-+		if (ret)
-+			return ret;
-+		/* Firmware owns PLL power and reset. */
-+		if (!(values[0] & PLL_LOCK))
-+			return -EAGAIN;
-+		/* A held output may be undergoing a firmware rate transition. */
-+		if (values[1] & (PLL_CHANNEL_HOLD << shift))
-+			return -EBUSY;
-+		return regmap_update_bits(clock->regmap, regs[1],
-+					  PLL_CHANNEL_DISABLE << shift, 0);
-+	}
-+	case PMB_XTAL:
-+		return regmap_update_bits(clock->regmap, reg, XTAL_DRIVER_POWER_DOWN, 0);
-+	case PMB_PVTMON:
-+		ret = regmap_read(clock->regmap, reg, &value);
-+		if (ret)
-+			return ret;
-+		/* Preserve the divider when firmware already enabled acquisition. */
-+		if (value & PVTMON_CLOCK_ENABLE)
-+			return 0;
-+		return regmap_update_bits(clock->regmap, reg,
-+					  PVTMON_CLOCK_ENABLE | PVTMON_CLOCK_DIVIDER,
-+					  PVTMON_CLOCK_ENABLE |
-+					  FIELD_PREP(PVTMON_CLOCK_DIVIDER, 5));
-+	case PMB_ZONE:
-+		ret = regmap_read(clock->regmap, reg, &value);
-+		if (ret)
-+			return ret;
-+		/* Power and isolation belong to the power-domain sequencer. */
-+		if (!(value & ZONE_POWER_ON) || value & ZONE_POWER_DOWN_REQUEST)
-+			return -EHOSTDOWN;
-+		if (!(value & ZONE_MANUAL_CONTROL))
-+			return 0;
-+		return regmap_update_bits(clock->regmap, reg, ZONE_CLOCK_ENABLE,
-+					  ZONE_CLOCK_ENABLE);
-+	case PMB_RUNNER:
-+		return 0;
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static int bcmbca_pmb_clock_is_prepared(struct clk_hw *hw)
-+{
-+	struct bcmbca_pmb_clock *clock = to_pmb_clock(hw);
-+	const struct bcmbca_pmb_clock_desc *desc = clock->desc;
-+	unsigned int shift = (desc->channel % 2) * 16;
-+	u32 value;
-+	int ret;
-+
-+	if (desc->type == PMB_PLL_CHANNEL) {
-+		unsigned int regs[] = {
-+			BCMBCA_PMB_REG(desc->bus, desc->device, desc->pll->status),
-+			BCMBCA_PMB_REG(desc->bus, desc->device,
-+				       desc->pll->ch01 + desc->channel / 2),
-+		};
-+		u32 values[ARRAY_SIZE(regs)];
-+
-+		ret = regmap_multi_reg_read(clock->regmap, regs, values, ARRAY_SIZE(regs));
-+		if (ret || !(values[0] & PLL_LOCK))
-+			return 0;
-+		return !(values[1] & ((PLL_CHANNEL_DISABLE | PLL_CHANNEL_HOLD) << shift));
-+	}
-+
-+	ret = regmap_read(clock->regmap,
-+			  BCMBCA_PMB_REG(desc->bus, desc->device, desc->reg), &value);
++	ret = regmap_read(regmap, reg, &config);
 +	if (ret)
-+		return 0;
++		return ret;
 +
-+	switch (desc->type) {
-+	case PMB_XTAL:
-+		return !(value & XTAL_DRIVER_POWER_DOWN);
-+	case PMB_PVTMON:
-+		return !!(value & PVTMON_CLOCK_ENABLE);
-+	case PMB_ZONE:
-+		return (value & ZONE_POWER_ON) && !(value & ZONE_POWER_DOWN_REQUEST) &&
-+		       (!(value & ZONE_MANUAL_CONTROL) || (value & ZONE_CLOCK_ENABLE));
-+	default:
-+		return 0;
++	/* Do not reset acquisition already running for the PMC firmware. */
++	if ((config & (PVTMON_RESET_N | PVTMON_POWER_DOWN)) != PVTMON_RESET_N) {
++		ret = regmap_update_bits(regmap, reg, PVTMON_POWER_DOWN, 0);
++		if (ret)
++			return ret;
++		ret = reset_control_reset(reset);
++		if (ret)
++			return ret;
 +	}
++
++	ret = regmap_read(regmap, BCMBCA_PMB_REG(PVTMON_BUS, PVTMON_DEVICE,
++						 PVTMON_ACQ_CONFIG), &acq);
++	if (ret)
++		return ret;
++
++	for (i = 0; i < PVTMON_NUM_CHANNELS; i++) {
++		reg = BCMBCA_PMB_REG(PVTMON_BUS, PVTMON_DEVICE, PVTMON_CHANNEL_BASE + i);
++		ret = regmap_read(regmap, reg, &channel);
++		if (ret)
++			return ret;
++
++		if (channel & PVTMON_CHANNEL_ENABLE)
++			continue;
++
++		/* Average 32 samples, matching the vendor acquisition setup. */
++		ret = regmap_update_bits(regmap, reg, PVTMON_CHANNEL_ENABLE | PVTMON_SAMPLES,
++					 PVTMON_CHANNEL_ENABLE | FIELD_PREP(PVTMON_SAMPLES, 5));
++		if (ret)
++			return ret;
++	}
++
++	if (!(acq & PVTMON_ACCUM_ENABLE))
++		return regmap_update_bits(regmap,
++					  BCMBCA_PMB_REG(PVTMON_BUS, PVTMON_DEVICE,
++							 PVTMON_ACQ_CONFIG),
++					  PVTMON_SKIP_LENGTH | PVTMON_ACCUM_ENABLE,
++					  PVTMON_ACCUM_ENABLE | FIELD_PREP(PVTMON_SKIP_LENGTH, 8));
++
++	return 0;
 +}
 +
-+static unsigned long bcmbca_pmb_clock_recalc_rate(struct clk_hw *hw,
-+						  unsigned long parent_rate)
++static int bcm_pmb_pvtmon_read(struct device *dev, enum hwmon_sensor_types type,
++			       u32 attr, int channel, long *val)
 +{
-+	struct bcmbca_pmb_clock *clock = to_pmb_clock(hw);
-+	const struct bcmbca_pmb_clock_desc *desc = clock->desc;
-+	unsigned int regs[4], count = 3;
-+	u32 values[4], ndiv, pdiv, channel, mdiv;
-+	unsigned int shift = (desc->channel % 2) * 16;
-+	u64 multiplier, rate;
++	struct regmap *map = dev_get_drvdata(dev);
++	unsigned int index;
++	u32 value;
 +	int ret;
 +
-+	if (desc->type == PMB_XTAL)
-+		return parent_rate;
-+	/* The vendor sources do not identify these clocks' parent rates. */
-+	if (desc->type != PMB_PLL_CHANNEL)
-+		return 0;
-+
-+	regs[0] = BCMBCA_PMB_REG(desc->bus, desc->device, desc->pll->ndiv);
-+	regs[1] = BCMBCA_PMB_REG(desc->bus, desc->device, desc->pll->pdiv);
-+	regs[2] = BCMBCA_PMB_REG(desc->bus, desc->device,
-+				 desc->pll->ch01 + desc->channel / 2);
-+	if (desc->channel >= 2)
-+		regs[count++] = BCMBCA_PMB_REG(desc->bus, desc->device, desc->pll->ch25);
-+
-+	ret = regmap_multi_reg_read(clock->regmap, regs, values, count);
-+	if (ret) {
-+		dev_err_ratelimited(clock->dev, "cannot read %s rate: %d\n", desc->name, ret);
-+		return 0;
++	switch (type) {
++	case hwmon_temp:
++		if (attr != hwmon_temp_input)
++			return -EOPNOTSUPP;
++		index = 0;
++		break;
++	case hwmon_in:
++		if (attr != hwmon_in_input)
++			return -EOPNOTSUPP;
++		index = channel + 1;
++		break;
++	default:
++		return -EOPNOTSUPP;
 +	}
-+	ndiv = values[0];
-+	pdiv = values[1];
-+	channel = values[2];
-+	if (channel & (PLL_MDIV_OVERRIDE << shift))
-+		mdiv = (channel >> shift) & 0xff;
-+	else if (desc->channel < 2)
-+		mdiv = (pdiv >> (16 + desc->channel * 8)) & 0xff;
-+	else
-+		mdiv = (values[3] >> ((desc->channel - 2) * 8)) & 0xff;
 +
-+	pdiv = FIELD_GET(PLL_PDIV, pdiv);
-+	/* No rate can be determined from a zero divider. */
-+	if (!pdiv || !mdiv)
-+		return 0;
-+	multiplier = ((u64)FIELD_GET(PLL_NDIV_INT, ndiv) << 20) |
-+		     FIELD_GET(PLL_NDIV_FRAC, ndiv);
-+	rate = div64_u64((u64)parent_rate * multiplier,
-+			 ((u64)pdiv * mdiv) << 20);
++	/* Release the PMB between samples so other clients can make progress. */
++	ret = regmap_read_poll_timeout(map,
++				       BCMBCA_PMB_REG(PVTMON_BUS, PVTMON_DEVICE,
++						      PVTMON_CHANNEL_BASE + index),
++				       value, value & PVTMON_VALID, 1000, 100000);
++	if (ret)
++		return ret;
 +
-+	return rate > ULONG_MAX ? 0 : rate;
++	value = FIELD_GET(PVTMON_VALUE, value);
++	if (type == hwmon_temp) {
++		/* Signed arithmetic allows temperatures below zero Celsius. */
++		*val = (41335000 - 49055 * (int)value) / 100;
++	} else {
++		/* 880 mV ADC reference, accounting for each input divider. */
++		*val = 880 * value * 10 /
++			(bcm6846_pvtmon_voltages[channel].divisor * 1024);
++	}
++
++	return 0;
 +}
 +
-+static const struct clk_ops bcmbca_pmb_clock_ops = {
-+	.prepare = bcmbca_pmb_clock_prepare,
-+	.is_prepared = bcmbca_pmb_clock_is_prepared,
-+	.recalc_rate = bcmbca_pmb_clock_recalc_rate,
-+	/* No unprepare: these clocks can remain in use by PMC firmware. */
++static int bcm_pmb_pvtmon_read_string(struct device *dev,
++				      enum hwmon_sensor_types type, u32 attr,
++				      int channel, const char **str)
++{
++	if (type != hwmon_in || attr != hwmon_in_label)
++		return -EOPNOTSUPP;
++
++	*str = bcm6846_pvtmon_voltages[channel].label;
++	return 0;
++}
++
++static const struct hwmon_ops bcm_pmb_pvtmon_ops = {
++	.visible = 0444,
++	.read = bcm_pmb_pvtmon_read,
++	.read_string = bcm_pmb_pvtmon_read_string,
 +};
 +
-+static const struct bcmbca_pmb_pll_layout bcm6846_rdppll = {
-+	.ch01 = 16,
-+	.status = 19,
-+	.ndiv = 21,
-+	.pdiv = 22,
-+	.ch25 = 23,
++static const struct hwmon_channel_info * const bcm_pmb_pvtmon_info[] = {
++	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
++	HWMON_CHANNEL_INFO(in,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL),
++	NULL
 +};
 +
-+/* The BIU PLL uses the classic BPCM register layout. */
-+static const struct bcmbca_pmb_pll_layout bcm6846_biupll = {
-+	.ch01 = 11,
-+	.status = 15,
-+	.ndiv = 17,
-+	.pdiv = 18,
-+	.ch25 = 19,
++static const struct hwmon_chip_info bcm_pmb_pvtmon_chip_info = {
++	.ops = &bcm_pmb_pvtmon_ops,
++	.info = bcm_pmb_pvtmon_info,
 +};
 +
-+#define PMB_PLL(_id, _name, _device, _channel, _pll) \
-+	[_id] = { .name = _name, .type = PMB_PLL_CHANNEL, .bus = 1, \
-+		  .device = _device, .channel = _channel, \
-+		  .pll = _pll }
-+#define PMB_GATE(_id, _name, _type, _bus, _device, _reg) \
-+	[_id] = { .name = _name, .type = _type, .bus = _bus, \
-+		  .device = _device, .reg = _reg }
-+#define PMB_ZONE_CLK(_id, _name, _bus, _device, _zone) \
-+	PMB_GATE(_id, _name, PMB_ZONE, _bus, _device, 32 + (_zone) * 8)
-+
-+static const struct bcmbca_pmb_clock_desc bcm6846_clocks[] = {
-+	PMB_PLL(BCM6846_CLK_RDPPLL_CH0, "rdppll-ch0", 3, 0, &bcm6846_rdppll),
-+	PMB_PLL(BCM6846_CLK_RDPPLL_CH1, "rdppll-ch1", 3, 1, &bcm6846_rdppll),
-+	PMB_PLL(BCM6846_CLK_RDPPLL_CH2, "rdppll-ch2", 3, 2, &bcm6846_rdppll),
-+	PMB_PLL(BCM6846_CLK_RDPPLL_CH3, "rdppll-ch3", 3, 3, &bcm6846_rdppll),
-+	PMB_PLL(BCM6846_CLK_RDPPLL_CH4, "rdppll-ch4", 3, 4, &bcm6846_rdppll),
-+	PMB_PLL(BCM6846_CLK_RDPPLL_CH5, "rdppll-ch5", 3, 5, &bcm6846_rdppll),
-+	PMB_PLL(BCM6846_CLK_BIUPLL_CH0, "biupll-ch0", 38, 0, &bcm6846_biupll),
-+	PMB_PLL(BCM6846_CLK_BIUPLL_CH1, "biupll-ch1", 38, 1, &bcm6846_biupll),
-+	PMB_PLL(BCM6846_CLK_BIUPLL_CH2, "biupll-ch2", 38, 2, &bcm6846_biupll),
-+	PMB_PLL(BCM6846_CLK_BIUPLL_CH3, "biupll-ch3", 38, 3, &bcm6846_biupll),
-+	PMB_PLL(BCM6846_CLK_BIUPLL_CH4, "biupll-ch4", 38, 4, &bcm6846_biupll),
-+	PMB_PLL(BCM6846_CLK_BIUPLL_CH5, "biupll-ch5", 38, 5, &bcm6846_biupll),
-+	[BCM6846_CLK_RUNNER] = { .name = "runner", .type = PMB_RUNNER },
-+	PMB_GATE(BCM6846_CLK_XTAL_OUT, "xtal-out", PMB_XTAL, 1, 1, XTAL_CONTROL),
-+	PMB_GATE(BCM6846_CLK_PVTMON, "pvtmon", PMB_PVTMON, 1, 6, PVTMON_CONFIG),
-+	PMB_ZONE_CLK(BCM6846_CLK_PERIPH_ZONE0, "periph-zone0", 0, 0, 0),
-+	PMB_ZONE_CLK(BCM6846_CLK_PERIPH_ZONE1, "periph-zone1", 0, 0, 1),
-+	PMB_ZONE_CLK(BCM6846_CLK_PERIPH_ZONE2, "periph-zone2", 0, 0, 2),
-+	PMB_ZONE_CLK(BCM6846_CLK_PERIPH_ZONE3, "periph-zone3", 0, 0, 3),
-+	PMB_ZONE_CLK(BCM6846_CLK_MEMC, "memc", 1, 8, 0),
-+	PMB_ZONE_CLK(BCM6846_CLK_USB_ZONE0, "usb-zone0", 1, 10, 0),
-+	PMB_ZONE_CLK(BCM6846_CLK_USB_ZONE1, "usb-zone1", 1, 10, 1),
-+	PMB_ZONE_CLK(BCM6846_CLK_USB_ZONE2, "usb-zone2", 1, 10, 2),
-+	PMB_ZONE_CLK(BCM6846_CLK_USB_ZONE3, "usb-zone3", 1, 10, 3),
-+	PMB_ZONE_CLK(BCM6846_CLK_WAN_ZONE0, "wan-zone0", 1, 11, 0),
-+	PMB_ZONE_CLK(BCM6846_CLK_WAN_ZONE1, "wan-zone1", 1, 11, 1),
-+	PMB_ZONE_CLK(BCM6846_CLK_WAN_ZONE2, "wan-zone2", 1, 11, 2),
-+	PMB_ZONE_CLK(BCM6846_CLK_XRDP_ZONE0, "xrdp-zone0", 1, 12, 0),
-+	PMB_ZONE_CLK(BCM6846_CLK_XRDP_ZONE1, "xrdp-zone1", 1, 12, 1),
-+	PMB_ZONE_CLK(BCM6846_CLK_XRDP_ZONE2, "xrdp-zone2", 1, 12, 2),
-+	PMB_ZONE_CLK(BCM6846_CLK_RUNNER0, "runner0", 1, 14, 0),
-+	PMB_ZONE_CLK(BCM6846_CLK_RUNNER1, "runner1", 1, 15, 0),
-+	PMB_ZONE_CLK(BCM6846_CLK_RUNNER2, "runner2", 1, 16, 0),
-+	PMB_ZONE_CLK(BCM6846_CLK_PCIE0, "pcie0", 0, 18, 0),
-+	PMB_ZONE_CLK(BCM6846_CLK_PCIE1, "pcie1", 0, 19, 0),
-+	/* BIU uses the classic BPCM layout, with its zone at word 16. */
-+	PMB_GATE(BCM6846_CLK_BIU, "biu", PMB_ZONE, 1, 39, 16),
-+};
-+
-+static int bcmbca_pmb_clock_probe(struct platform_device *pdev)
++static int bcm_pmb_pvtmon_probe(struct platform_device *pdev)
 +{
 +	struct device *dev = &pdev->dev;
 +	struct regmap *regmap = dev_get_regmap(dev->parent, NULL);
-+	struct clk_hw_onecell_data *data;
-+	struct bcmbca_pmb_clock *clocks;
-+	struct clk *ref;
-+	unsigned int i;
++	struct device *hwmon;
++	struct reset_control *reset;
++	struct clk *clk;
 +	int ret;
 +
 +	if (!regmap)
 +		return -ENODEV;
 +
-+	ref = devm_clk_get(dev, "ref");
-+	if (IS_ERR(ref))
-+		return dev_err_probe(dev, PTR_ERR(ref), "failed to get reference clock\n");
++	reset = devm_reset_control_get_exclusive(dev, NULL);
++	if (IS_ERR(reset))
++		return dev_err_probe(dev, PTR_ERR(reset), "failed to get PVTMON reset\n");
 +
-+	data = devm_kzalloc(dev, struct_size(data, hws, ARRAY_SIZE(bcm6846_clocks)),
-+			    GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+	data->num = ARRAY_SIZE(bcm6846_clocks);
-+	clocks = devm_kcalloc(dev, data->num, sizeof(*clocks), GFP_KERNEL);
-+	if (!clocks)
-+		return -ENOMEM;
++	clk = devm_clk_get_enabled(dev, NULL);
++	if (IS_ERR(clk))
++		return dev_err_probe(dev, PTR_ERR(clk), "failed to enable PVTMON clock\n");
 +
-+	for (i = 0; i < data->num; i++) {
-+		const struct bcmbca_pmb_clock_desc *desc = &bcm6846_clocks[i];
-+		struct clk_parent_data parent = {};
-+		struct clk_init_data init = {
-+			.ops = &bcmbca_pmb_clock_ops,
-+			.flags = CLK_GET_RATE_NOCACHE | CLK_IGNORE_UNUSED,
-+		};
++	ret = bcm_pmb_pvtmon_init(regmap, reset);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to initialize PVTMON\n");
 +
-+		init.name = devm_kasprintf(dev, GFP_KERNEL, "%s-%s", dev_name(dev), desc->name);
-+		if (!init.name)
-+			return -ENOMEM;
-+		if (desc->type == PMB_RUNNER) {
-+			struct clk_hw *parent_hw = data->hws[BCM6846_CLK_RDPPLL_CH1];
-+			struct clk_hw *runner;
++	hwmon = devm_hwmon_device_register_with_info(dev, "bcm6846_pvtmon", regmap,
++						     &bcm_pmb_pvtmon_chip_info, NULL);
++	if (IS_ERR(hwmon))
++		return dev_err_probe(dev, PTR_ERR(hwmon), "failed to register hwmon device\n");
 +
-+			runner = devm_clk_hw_register_fixed_factor_parent_hw(dev,
-+									     init.name, parent_hw,
-+									     init.flags, 1, 2);
-+			data->hws[i] = runner;
-+			if (IS_ERR(data->hws[i]))
-+				return PTR_ERR(data->hws[i]);
-+			continue;
-+		}
-+		if (desc->type == PMB_PLL_CHANNEL || desc->type == PMB_XTAL) {
-+			parent.fw_name = "ref";
-+			init.parent_data = &parent;
-+			init.num_parents = 1;
-+		}
-+		clocks[i].regmap = regmap;
-+		clocks[i].dev = dev;
-+		clocks[i].desc = desc;
-+		clocks[i].hw.init = &init;
-+		ret = devm_clk_hw_register(dev, &clocks[i].hw);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "failed to register %s\n", desc->name);
-+		data->hws[i] = &clocks[i].hw;
-+	}
-+
-+	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, data);
++	/* Acquisition remains enabled for the PMC firmware after unbinding. */
++	return 0;
 +}
 +
-+static const struct of_device_id bcmbca_pmb_clock_match[] = {
-+	{ .compatible = "brcm,bcm6846-pmb-clock" },
++static const struct of_device_id bcm_pmb_pvtmon_of_match[] = {
++	{ .compatible = "brcm,bcm6846-pmb-pvtmon" },
 +	{ }
 +};
-+MODULE_DEVICE_TABLE(of, bcmbca_pmb_clock_match);
++MODULE_DEVICE_TABLE(of, bcm_pmb_pvtmon_of_match);
 +
-+static struct platform_driver bcmbca_pmb_clock_driver = {
-+	.probe = bcmbca_pmb_clock_probe,
++static struct platform_driver bcm_pmb_pvtmon_driver = {
++	.probe = bcm_pmb_pvtmon_probe,
 +	.driver = {
-+		.name = "bcm6846-pmb-clock",
-+		.of_match_table = bcmbca_pmb_clock_match,
++		.name = "bcm6846-pmb-pvtmon",
++		.of_match_table = bcm_pmb_pvtmon_of_match,
 +	},
 +};
-+module_platform_driver(bcmbca_pmb_clock_driver);
++module_platform_driver(bcm_pmb_pvtmon_driver);
 +
 +MODULE_AUTHOR("Linus Walleij <linusw@kernel.org>");
-+MODULE_DESCRIPTION("Broadcom BCMBCA PMB clocks");
++MODULE_DESCRIPTION("Broadcom PMB PVTMON hardware monitoring driver");
 +MODULE_LICENSE("GPL");
 
 -- 
