@@ -1,66 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793571392;
-	b=FoRkPkJYlcGSYi+VZFPuzekRlaLwWLvKLYgnMMVnA6x3TjTfplkPT2j4CzV7eITjxnyV
-	 ciZ6krGCKjD/kiB18N8gek9jC3B5hN0fKtxPvf8YletKFmB4ZWKYZuiw1NZGanAdYJYLu
-	 OSGqP8SEb65xEQJQif98ob5wiUGqJdk5S0aKWf4gNYbGuw/q23RTs11e0VuyinfsdNVOJ
-	 cCVWNWavsNLs2QVJ9IDd7eKkB2cvVRLKW41PTilfJjYTRUM3DObmFVADzG6YlVYR6YZLN
-	 xVe33ht82Xqja7mxA2A6KS39fN2JJo1C97ElzbCZ95Op7Zehii/T+xReLP2Z+hk8Plg==
+	t=1793571649;
+	b=Qjn6OrxIk2rPv8E+Nvxtf8Tb6Na/8s9TcqQWFzpf71Ic6wTR3WMdW6EtIOVC0t6Wtgx5
+	 TL4xLUWFvS7ctcZPlzP7YKZJm4u+EpwIM6sAyaVgUdFRhLmt83GwhEULQE0J09nU/x7kn
+	 JoOOTbouOTUMoAis8Ijo9ouGf3gjeqbHIwOaNF0E3HTgus/OEMKr8Knw4tISTaVp0eUEF
+	 XFG0nNxg9vgvP87RRdp4KsgXoEcLLjYBWEIYQ0+4tqlMqkqCeH4jd0+1XknbX3fVMf2Fx
+	 IpKy1INNYOrxF33tYJLGR//0maoWUUiNxEAOVnnHq6HJOQrzqFIwwWFsJg3BY4h0KIA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793571392;
-	h=DMARC-Filter:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=LKx3D3L8i20KkgdM053WRZoZcyEWptAt+bunmlcQ35w=;
-	b=ZaBQqFtxZKRj26k/OjRc/lbbRYQ1oncndx038JsNK0VswzznGvEwfbe/irQ/RAGK+4UZ
-	 1AZBcZ6CrNRWNRCwkdXdcmuDc8aU82n64fgSYL0rQTiESn1Fa+bF6OzM1SXA3k4rh5z7z
-	 1ue0Ex8HXcIBRhewRQzsRcYeiSYqAVFezf2+NKA3xLZlKXtNZ+N/df5ge1Nr/PTA8UBKp
-	 tkJRNdd/yd90WU7LbJyJiRwvUVv0BwBGhg5nFkIuKohO4eGZW52cb/F3g1EYyVJBXImbu
-	 y2gXW0ChmoZH1cWejcAR6VafurTgLVZcUAikWeCmIHGM6fVu0WfPfr48jPpXVJ7iYWw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793571649;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=U0hFfZFqkn7CoDWwgk8yDqp8fa+VP07aEXq9RW+yvIk=;
+	b=1dJiS6R7porwHG7ijQBHvyMWpqOGr14lFAu0wMgkvJenV0pAUsogICY9Y6ZHT9quPzbD
+	 uzpUXYfif9IgD1ig4xWmaOzllT+8poLe6tPaHBAo6eUxiiaJpOMKowdIYwmhd/6oClzny
+	 Y6A+ddV4hSa2K/OQRk2t0MxjwSO4NY8KkCnS0WnTrwT10cj9sqfgjDPL3g6kZwhZCnXUC
+	 SuI0R19BX6Gz1vUbgCV9uaL6T43N3jAI5qgobBaAOpu2zsDsxJVuM3VS1wcRnj6Xa8yF6
+	 /z35kjM/VcPLXBDV82IVOm4xCwaUykWYzbFgsuiT2aeAPTEBArc/c0lzpn3jRvI1/OQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=sntech.de;
-	spf=pass smtp.mailfrom=sntech.de;
-	dkim=pass header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=waKZaezF;
-	arc=none smtp.remote-ip=185.11.138.130
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b5zbtFJU;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AD73606DB64;
-	Sun,  1 Nov 2026 22:16:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8AD73606DB64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF3ED606A32D;
+	Sun,  1 Nov 2026 22:20:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=waKZaezF
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
-	bh=LKx3D3L8i20KkgdM053WRZoZcyEWptAt+bunmlcQ35w=; b=waKZaezFft+W4+DVAkBekptegW
-	UnVtPxS4CWRmPMUfT3usNMXRPi8pgRhKiYrCC2qldwTF6kvbPud9Rv7dp711s66/Cn4JMTgHi4jE/
-	Dan6sZi23Dgp9BRiTCR7QsGIrt1bO0O/kbzrt5213L9azRmU/aVc4z29eJoGXc9mYP/AOEd2P5Hti
-	8HVpHlQ8NcnOSef9F2acRL0TLvgmxMqtbSeCZ2Nw5bKT7LAO1hk036BgG7raWsIcnEKJJVWnIefEE
-	cagbA2Zxzi5h0KO962bVDJQPnzq6Vpv5qsRfmX0xor0slj/x1u/uwVDKKkJaw262eKa9Xvs0FTML2
-	lMCkZ8Yw==;
-From: Heiko Stuebner <heiko@sntech.de>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Igor Velkov <iav@iav.lv>
-Cc: Heiko Stuebner <heiko@sntech.de>,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH 0/2] Label the fans on Kobol Helios64
-Date: Sun,  1 Nov 2026 23:16:05 +0100
-Message-ID: <179357136496.4108155.6955639670454082907.b4-ty@b4>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261018-helios64-fan-label-v1-0-69a3f96d4efa@iav.lv>
-References: <20261018-helios64-fan-label-v1-0-69a3f96d4efa@iav.lv>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b5zbtFJU
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CEBF1F000C1;
+	Sun,  1 Nov 2026 22:20:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793571648;
+	bh=U0hFfZFqkn7CoDWwgk8yDqp8fa+VP07aEXq9RW+yvIk=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=b5zbtFJUox77/qiH81MzGEqFAAZqchI14dcoMcPHQLeg+4UjIuDlVUHxEs8ZjUWjW
+	 v0J9u9bk6ehqHlJ/wx2vRD5UnVHNHd0Xl2IbRS3k3DbAKHS36e3z6pJ+UNGNc9UTr8
+	 ow/IFMLiyY0tG3RNEHBFOc5wRsLa/JdP+/MXng2YTrdoec76PXPRpx/EZWBb87ASSj
+	 d1W8zZ5dS3+AayDam+VloTjhD8bbmV3Qb1FE6X/2F1OFx9Cf/0LL9aa1Y4OVzIeo9S
+	 PqFmAnRrL0VjcDdNy9MrdSElYCF5GT50rK0zd10747zRQRTizHHG5oujKtODPkGOk6
+	 IEvrOWIuxsVTA==
+Message-ID: <sashiko-outbox-192706@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 6/7] hwmon: Add Broadcom PMB PVTMON monitoring
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Linus Walleij" <linusw@kernel.org>
+Cc: mfd@lists.linux.dev, linux-hwmon@vger.kernel.org, lee@kernel.org
+In-Reply-To: <20261101-xg6846b-bcmbca-xrdp-reset-v2-6-455fe9eed5ee@kernel.org>
+References: <20261101-xg6846b-bcmbca-xrdp-reset-v2-0-455fe9eed5ee@kernel.org>
+ <20261101-xg6846b-bcmbca-xrdp-reset-v2-6-455fe9eed5ee@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 01 Nov 2026 22:20:47 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -69,37 +59,22 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
 
+> Expose the BCM6846 die temperature and seven voltage inputs through
+> hwmon using the shared Processor Monitor Bus (PMB) regmap.
+>=20
+> Register the temperature channel with the thermal framework so
+> existing zero-cell device-tree thermal sensor references work.
+>=20
+> Poll for valid samples with a bounded timeout, releasing the PMB lock
+> between reads. Report temperature in millidegrees Celsius, including
+> negative values, and voltages in millivolts.
+>=20
+> Signed-off-by: Linus Walleij <linusw@kernel.org>
 
-On Sun, 18 Oct 2026 07:54:58 +0300, Igor Velkov wrote:
-> Helios64 has two identical PWM fans, and userspace can tell them apart
-> only by their platform device names. Patch 1 makes pwm-fan.yaml
-> reference fan-common.yaml, as Rob suggested, which also allows label;
-> the hwmon core already exposes it as the label attribute. Patch 2 names
-> the fans after their headers, P6 and P7.
-> 
-> To: Guenter Roeck <linux@roeck-us.net>
-> To: Jean Delvare <jdelvare@suse.com>
-> To: Rob Herring <robh@kernel.org>
-> To: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> To: Conor Dooley <conor+dt@kernel.org>
-> To: Heiko Stuebner <heiko@sntech.de>
-> Cc: linux-hwmon@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-rockchip@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> [...]
+Sashiko has reviewed this patch and found no issues.
 
-Applied, thanks!
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261101-xg6846b-bc=
+mbca-xrdp-reset-v2-0-455fe9eed5ee@kernel.org?part=3D6
 
-[2/2] arm64: dts: rockchip: Label the fans on Kobol Helios64
-      commit: f80a26e10a39dd51061513db96fb525244e5e890
-
-Best regards,
--- 
-Heiko Stuebner <heiko@sntech.de>
