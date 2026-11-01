@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793571308;
-	b=VdRhERvnzwEqCXy/vJxuJnzbBlJTh6Pf6vsqzbO+b6mBhGaiEAFfrrndKSjiemwyWeKh
-	 0n4PiNJjz0bsEL1l8aCrC5CiWhBYMPHHrhjWUTuxijjrTKkE3Q3/jnI+/HIzsosqpS2Sh
-	 dpEd9ew6weixuQiD7y7zjeDTK2Kv9xHGntXVNXcVxIgXKroGKzse9HRhAD8foqh29k4/6
-	 PKVkdwQg9ypUg7t88j+OSjh1fToU12liGaVHbLZ5oDg2Bb96qrKvBEGBNbUSTT+yqDiZo
-	 hoTBvjKQvXgvs46HWlWhu/O66HGt+pcPeR5z6VYAUrCdBvbRxTFVlVo3VKYwfkF2rXQ==
+	t=1793571314;
+	b=aPdBYhVpjCwzPUWQsq4QQgqP0fawK3cRn3tYpKO0YlHNLYOW4QVub1NUoMZ9jBF2EEXG
+	 XmqcJwqANs73f38nhPIUf5QVJJIHpLlfHrZEcSsTbowtpJ+Bsqvs0RtT4TP9K+6M5JqYt
+	 SXtsSnyqYGTUzw0k8QXKj9gQNc2zwqyKe9vg6Ey+frHZeU49wJ6lqXrIBjkOepBfrljd1
+	 7MqdpeZkhayP9vctF/uGv9/W+bwEcIuKFbrYcb7NbKRGWLwgLAwM4oNAzBmpr6j7bTn3v
+	 yh+POnS2QMzU/WTlovu7cgzib40vV4Qbh/g52pNUmcy8TzhLe100Hm3PWUltvcMjohw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793571308;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793571314;
 	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
 	 X-Mailer;
-	bh=VNVGu/D/wrBBV+BXSddmoSZd6zPTYzJLygpxC2NiH2Q=;
-	b=SrPoZZEYZ5tZiDGVrvf4gQbO1ozpeZPqMfnlv8uQ/kFpQ1cdFyIrfjgc1HkQH/lANmjo
-	 Vzoa6GfPWrLnFHF/qq3S6BSaxcbUMkRkIg3hjk6I0zSTPPAu/2GhU2F+AMcuBkOlNTG9l
-	 bIidE1VcKQQMyUJEhnLX6L9WJfncr1edHIuMY3vXlmrD4zYZmJ97evKi0TNHin4iq0fG8
-	 HADGk5LB5iF0rFqLsJsQVWRadX8THy578YAxomxQ7AkwZjOoaeZMe3ErzISLl78l82Bs5
-	 7pgsmNSZkDrEA+9pRM67uROq4MqqKkRT4P7OPuEoce6Bn1zX22RDcfufaE/i2y4JyyQ==
+	bh=NtVaifRkdM7rJKIrVhOAsBBjfY7hpuAXEUZnSC/T4nM=;
+	b=MLlrZHVCALs4wHF45W5sm1p3ckO6Sjzcy9YYVKxDK6yeGhE1otD1Eaudnl5OVjZ2Rgch
+	 595fys7ly/TQ+3kh3r+VXnChyD+1TwDnRE3Wv0XTeDBhIJiKsRyXuHuE3f9gLCLe19Rid
+	 n7WHAHXiKdkF6LIm76JEekj+iOHPY942x9wECM7NcXxzSr+fm/1OkaAFhw9/efSWx5kKt
+	 TApTd4pyxuSOcoBW7an/y+fsx4on/TpArtOu5qPRXPR/ktWEvHSk9d2a4ITcadvG14dN5
+	 2kynTaMBtnMVCrYsZg5CHIOxm5P9XSB5a1/Ywv4PaKhk5WP1iEgoRW43pB01skVvPdA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jVSUn8h8;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aGIrUS94;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99580606A329;
-	Sun,  1 Nov 2026 22:15:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4C0606A324;
+	Sun,  1 Nov 2026 22:15:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jVSUn8h8
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EC7A1F00919;
-	Sun,  1 Nov 2026 22:15:02 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aGIrUS94
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 050EB1F000C1;
+	Sun,  1 Nov 2026 22:15:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793571307;
-	bh=VNVGu/D/wrBBV+BXSddmoSZd6zPTYzJLygpxC2NiH2Q=;
+	s=k20260515; t=1793571313;
+	bh=NtVaifRkdM7rJKIrVhOAsBBjfY7hpuAXEUZnSC/T4nM=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=jVSUn8h8NnUbwE0QXk13vcqGrXzGqqfGglVanzwnR5J9XZN85YAgO/ySvKBFyIPaI
-	 81AaAgw51JtgFA2hMKDhu4WBsbrG5mSga51WWZR248QU8wnR5+G6C506a/e0YdGrjU
-	 UZBKIilyisG4fJFywI0KqiEg/XjOgj8A4AZ2kyy5zb17qXECKrifJiNaV+/HS4+xeo
-	 HFQgyPy5B24EZSjj2NQIHd24mA/FmuVQGP49okVj3scR3FkhgML5r49SdWN4jfYDWV
-	 zLzy6u+xcmPgnGpdFmg/JogXUgPS8pmSYxLoBs6CwukbsOEWZPQVWMBMJ6dNwjx/m4
-	 VdZ6oBPjv/ngA==
+	b=aGIrUS94DIosIkqIL6+h1x/PLW5z9Py10+0F8MU2SYtV7cQCnkIfi8mSI9iZUDpOc
+	 PpLk3AoEZqAUcsN0Dh2l01kvh05SknrZY+l/NKV3AUbtKj8BOZdio5pH3CpoBEVZGH
+	 fesmMKwlsCJsc97Rj/msZIn7NNDK4fxlRlUWQRlBCDSqLA3cR7Oqln9Braj2HJE3gi
+	 rsRfGJv2Y5Y53ZmWs06hepB676GG3FkgXIiURGKCIHedN54ziFfjNilKI14LQAF5oM
+	 20wlk5Q+Fyqj+Hi2cMHJz94YAJtOa4QVlD77il5wFy2rcAJroTue/yuchlzLIYcOvO
+	 r77jsSnyUdJ7A==
 From: Linus Walleij <linusw@kernel.org>
-Date: Sun, 01 Nov 2026 23:14:37 +0100
-Subject: [PATCH v2 4/7] reset: Add BCMBCA block resets through the PMB
+Date: Sun, 01 Nov 2026 23:14:38 +0100
+Subject: [PATCH v2 5/7] clk: bcm: Add BCMBCA PMB clocks
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -53,8 +53,8 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20261101-xg6846b-bcmbca-xrdp-reset-v2-4-455fe9eed5ee@kernel.org>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261101-xg6846b-bcmbca-xrdp-reset-v2-5-455fe9eed5ee@kernel.org>
 References: <20261101-xg6846b-bcmbca-xrdp-reset-v2-0-455fe9eed5ee@kernel.org>
 In-Reply-To: <20261101-xg6846b-bcmbca-xrdp-reset-v2-0-455fe9eed5ee@kernel.org>
 To: Linus Walleij <linusw@kernel.org>, Lee Jones <lee@kernel.org>, 
@@ -76,385 +76,458 @@ Cc: mfd@lists.linux.dev, devicetree@vger.kernel.org,
  linux-hwmon@vger.kernel.org
 X-Mailer: b4 0.16.0
 
-Support BCM6846 XRDP and PVTMON resets through the Processor Monitor
-Bus (PMB) of the third generation Power Management Controller (PMC3).
+Add a BCM6846 clock provider for the Processor Monitor Bus (PMB) MFD
+cell. Expose six outputs from each of the RDP and BIU PLLs, the Runner
+clock divided from RDP PLL channel 1, the crystal output, PVTMON and
+block-zone clock gates.
 
-The sequence is hardware-tested in the XG6846B OpenWrt port.
-
-Power-cycle resets for USB2, WAN, PERIPH, MEMC, BIU and BIU PLL were
-considered but left out. These belong in power-domain and platform
-power-management abstractions, which can coordinate affected users.
+PVTMON and zone clocks provide gate control only.
 
 Signed-off-by: Linus Walleij <linusw@kernel.org>
 ---
  MAINTAINERS                      |   1 +
- drivers/reset/Kconfig            |  13 ++
- drivers/reset/Makefile           |   1 +
- drivers/reset/reset-bcmbca-pmb.c | 309 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 324 insertions(+)
+ drivers/clk/bcm/Kconfig          |  11 ++
+ drivers/clk/bcm/Makefile         |   1 +
+ drivers/clk/bcm/clk-bcmbca-pmb.c | 389 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 402 insertions(+)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 18e32cc036b5..29ec1c9d617e 100644
+index 29ec1c9d617e..74f0783d512f 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -5452,6 +5452,7 @@ F:	Documentation/devicetree/bindings/mfd/brcm,bcm6846-pmc.yaml
+@@ -5451,6 +5451,7 @@ F:	Documentation/devicetree/bindings/hwmon/brcm,bcm6846-pmb-pvtmon.yaml
+ F:	Documentation/devicetree/bindings/mfd/brcm,bcm6846-pmc.yaml
  F:	Documentation/devicetree/bindings/reset/brcm,bcm6846-pmb-reset.yaml
  F:	Documentation/devicetree/bindings/soc/bcm/brcm,bcm6846-pmb.yaml
++F:	drivers/clk/bcm/clk-bcmbca-pmb.c
  F:	drivers/mfd/bcmbca_pmc3_pmb.c
-+F:	drivers/reset/reset-bcmbca-pmb.c
+ F:	drivers/reset/reset-bcmbca-pmb.c
  F:	include/dt-bindings/clock/brcm,bcm6846-pmb.h
- F:	include/dt-bindings/reset/brcm,bcm6846-pmb.h
- F:	include/linux/mfd/bcmbca-pmb.h
-diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-index eda9c698a95f..56f7aee6cf1f 100644
---- a/drivers/reset/Kconfig
-+++ b/drivers/reset/Kconfig
-@@ -49,6 +49,19 @@ config RESET_BCM6345
- 	help
- 	  This enables the reset controller driver for BCM6345 SoCs.
+diff --git a/drivers/clk/bcm/Kconfig b/drivers/clk/bcm/Kconfig
+index a972d763eb77..db17eadde7aa 100644
+--- a/drivers/clk/bcm/Kconfig
++++ b/drivers/clk/bcm/Kconfig
+@@ -1,5 +1,16 @@
+ # SPDX-License-Identifier: GPL-2.0-only
  
-+config RESET_BCMBCA_PMB
-+	tristate "Broadcom BCMBCA PMB reset controller"
-+	depends on ARCH_BCMBCA || COMPILE_TEST
-+	depends on OF && HAS_IOMEM
++config CLK_BCMBCA_PMB
++	tristate "Broadcom BCMBCA PMB clocks"
 +	depends on MFD_BCMBCA_PMB
 +	select REGMAP
 +	default MFD_BCMBCA_PMB
 +	help
-+	  Reset BCMBCA blocks through the Processor Monitor Bus (PMB) of
-+	  the third generation Power Management Controller (PMC3).
++	  Provide BCM6846 PLL output, Runner, crystal, PVTMON and block-zone
++	  clocks through the Processor Monitor Bus.
 +
-+	  The module will be called reset-bcmbca-pmb.
++	  The module will be called clk-bcmbca-pmb.
 +
- config RESET_BERLIN
- 	tristate "Berlin Reset Driver"
- 	depends on ARCH_BERLIN || COMPILE_TEST
-diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
-index 489fafd6bbe3..26c8a73f774f 100644
---- a/drivers/reset/Makefile
-+++ b/drivers/reset/Makefile
-@@ -11,6 +11,7 @@ obj-$(CONFIG_RESET_ASPEED) += reset-aspeed.o
- obj-$(CONFIG_RESET_ATH79) += reset-ath79.o
- obj-$(CONFIG_RESET_AXS10X) += reset-axs10x.o
- obj-$(CONFIG_RESET_BCM6345) += reset-bcm6345.o
-+obj-$(CONFIG_RESET_BCMBCA_PMB) += reset-bcmbca-pmb.o
- obj-$(CONFIG_RESET_BERLIN) += reset-berlin.o
- obj-$(CONFIG_RESET_BRCMSTB) += reset-brcmstb.o
- obj-$(CONFIG_RESET_BRCMSTB_RESCAL) += reset-brcmstb-rescal.o
-diff --git a/drivers/reset/reset-bcmbca-pmb.c b/drivers/reset/reset-bcmbca-pmb.c
+ config CLK_BCM2711_DVP
+ 	tristate "Broadcom BCM2711 DVP support"
+ 	depends on ARCH_BCM2835 ||COMPILE_TEST
+diff --git a/drivers/clk/bcm/Makefile b/drivers/clk/bcm/Makefile
+index d0b6f4b1fb08..7123eefff138 100644
+--- a/drivers/clk/bcm/Makefile
++++ b/drivers/clk/bcm/Makefile
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
++obj-$(CONFIG_CLK_BCMBCA_PMB)	+= clk-bcmbca-pmb.o
+ obj-$(CONFIG_CLK_BCM_63XX)	+= clk-bcm63xx.o
+ obj-$(CONFIG_CLK_BCM_63XX_GATE)	+= clk-bcm63xx-gate.o
+ obj-$(CONFIG_CLK_BCM63268_TIMER) += clk-bcm63268-timer.o
+diff --git a/drivers/clk/bcm/clk-bcmbca-pmb.c b/drivers/clk/bcm/clk-bcmbca-pmb.c
 new file mode 100644
-index 000000000000..532398032fa8
+index 000000000000..41acab23688a
 --- /dev/null
-+++ b/drivers/reset/reset-bcmbca-pmb.c
-@@ -0,0 +1,309 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
++++ b/drivers/clk/bcm/clk-bcmbca-pmb.c
+@@ -0,0 +1,389 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * BCMBCA block resets through the Processor Monitor Bus (PMB) of the
-+ * third generation Power Management Controller (PMC3).
++ * Broadcom BCM6846 Processor Monitor Bus (PMB) clocks.
++ *
++ * PMB transactions sleep, so gating uses the prepare callbacks. Firmware
++ * also uses these clocks: leave prepared clocks running and retain PLL
++ * rates.
 + */
 +
-+#include <linux/bits.h>
-+#include <linux/delay.h>
++#include <linux/bitfield.h>
++#include <linux/clk.h>
++#include <linux/clk-provider.h>
++#include <linux/math64.h>
 +#include <linux/mfd/bcmbca-pmb.h>
 +#include <linux/mod_devicetable.h>
 +#include <linux/module.h>
-+#include <linux/mutex.h>
 +#include <linux/platform_device.h>
-+#include <linux/property.h>
 +#include <linux/regmap.h>
-+#include <linux/reset-controller.h>
++#include <linux/slab.h>
 +
-+#include <dt-bindings/reset/brcm,bcm6846-pmb.h>
++#include <dt-bindings/clock/brcm,bcm6846-pmb.h>
 +
-+/* BCM6846 BPCM zone control, in PMB words (6846/BPCM.h). */
-+#define BCM6846_ZONE_CONTROL(zone)	(32 + (zone) * 8)
-+#define BCM6846_ZONE_DPG_EN		BIT(8)
-+#define BCM6846_ZONE_POWER_DOWN		BIT(9)
-+#define BCM6846_ZONE_POWER_UP		BIT(10)
-+#define BCM6846_ZONE_MEM_POWER		BIT(11)
-+#define BCM6846_ZONE_RESET		BIT(12)
-+#define BCM6846_ZONE_POWER_ON		BIT(26)
++/* PMB register offsets are in 32-bit words. */
++#define PLL_CHANNEL_DISABLE	BIT(8)
++#define PLL_CHANNEL_HOLD		BIT(9)
++#define PLL_MDIV_OVERRIDE		BIT(15)
++#define PLL_LOCK			BIT(31)
++#define PLL_NDIV_INT		GENMASK(9, 0)
++#define PLL_NDIV_FRAC		GENMASK(31, 12)
++#define PLL_PDIV			GENMASK(3, 0)
 +
-+struct bcmbca_pmb_reset_block {
++#define XTAL_CONTROL		14
++#define XTAL_DRIVER_POWER_DOWN	BIT(17)
++
++#define PVTMON_CONFIG		17
++#define PVTMON_CLOCK_ENABLE	BIT(2)
++#define PVTMON_CLOCK_DIVIDER	GENMASK(12, 8)
++
++#define ZONE_CLOCK_ENABLE	BIT(0)
++#define ZONE_MANUAL_CONTROL	BIT(7)
++#define ZONE_POWER_DOWN_REQUEST	BIT(9)
++#define ZONE_POWER_ON		BIT(26)
++
++enum bcmbca_pmb_clock_type {
++	PMB_PLL_CHANNEL,
++	PMB_RUNNER,
++	PMB_XTAL,
++	PMB_PVTMON,
++	PMB_ZONE,
++};
++
++struct bcmbca_pmb_pll_layout {
++	u16 ch01;
++	u16 status;
++	u16 ndiv;
++	u16 pdiv;
++	u16 ch25;
++};
++
++struct bcmbca_pmb_clock_desc {
++	const char *name;
++	enum bcmbca_pmb_clock_type type;
 +	u8 bus;
 +	u8 device;
-+	u16 offset; /* PMB word offset of the reset register. */
-+	u32 mask;
-+	u32 assert_value;
-+	u32 deassert_value;
++	u8 channel;
++	u16 reg;
++	const struct bcmbca_pmb_pll_layout *pll;
 +};
 +
-+struct bcmbca_pmb_reset;
-+
-+struct bcmbca_pmb_reset_group {
-+	const char *name;
-+	int (*reset)(struct bcmbca_pmb_reset *rst,
-+		     const struct bcmbca_pmb_reset_group *group);
-+	const struct bcmbca_pmb_reset_block *blocks;
-+	unsigned int num_blocks;
-+	/* Minimum reset assertion hold time in microseconds. */
-+	unsigned int assert_hold_us;
-+};
-+
-+struct bcmbca_pmb_reset_variant {
-+	const struct bcmbca_pmb_reset_group *groups;
-+	unsigned int num_groups;
-+};
-+
-+struct bcmbca_pmb_reset {
-+	struct reset_controller_dev rcdev;
-+	const struct bcmbca_pmb_reset_variant *variant;
++struct bcmbca_pmb_clock {
++	struct clk_hw hw;
++	struct device *dev;
 +	struct regmap *regmap;
-+	/* Serialize complete reset pulses and failure cleanup. */
-+	struct mutex lock;
++	const struct bcmbca_pmb_clock_desc *desc;
 +};
 +
-+static int bcmbca_pmb_reset_sequence(struct bcmbca_pmb_reset *rst,
-+				     const struct bcmbca_pmb_reset_group *group);
++#define to_pmb_clock(_hw) container_of(_hw, struct bcmbca_pmb_clock, hw)
 +
-+static int bcm6846_xrdp_reset(struct bcmbca_pmb_reset *rst,
-+			      const struct bcmbca_pmb_reset_group *group);
-+
-+static const struct bcmbca_pmb_reset_block bcm6846_xrdp_resets[] = {
-+	{
-+		.bus = 1,
-+		.device = 12,
-+		.offset = 5,
-+		.mask = GENMASK(27, 0),
-+		/* Keep bits 0–2 deasserted, matching the vendor sequence. */
-+		.assert_value = GENMASK(2, 0),
-+		.deassert_value = GENMASK(27, 0),
-+	},
-+	{
-+		.bus = 1,
-+		.device = 14,
-+		.offset = 5,
-+		.mask = GENMASK(27, 0),
-+		.deassert_value = GENMASK(27, 0),
-+	},
-+	{
-+		.bus = 1,
-+		.device = 15,
-+		.offset = 5,
-+		.mask = GENMASK(27, 0),
-+		.deassert_value = GENMASK(27, 0),
-+	},
-+	{
-+		.bus = 1,
-+		.device = 16,
-+		.offset = 5,
-+		.mask = GENMASK(27, 0),
-+		.deassert_value = GENMASK(27, 0),
-+	},
-+};
-+
-+/* Analog acquisition reset, independent of clock and power configuration. */
-+static const struct bcmbca_pmb_reset_block bcm6846_pvtmon_reset = {
-+	.bus = 1,
-+	.device = 6,
-+	.offset = 17,
-+	.mask = BIT(0),
-+	.deassert_value = BIT(0),
-+};
-+
-+static const struct bcmbca_pmb_reset_group bcm6846_pmb_reset_groups[] = {
-+	[BCM6846_RESET_XRDP] = {
-+		.name = "XRDP",
-+		.reset = bcm6846_xrdp_reset,
-+		.blocks = bcm6846_xrdp_resets,
-+		.num_blocks = ARRAY_SIZE(bcm6846_xrdp_resets),
-+		.assert_hold_us = 10,
-+	},
-+	[BCM6846_RESET_PVTMON] = {
-+		.name = "PVTMON",
-+		.reset = bcmbca_pmb_reset_sequence,
-+		.blocks = &bcm6846_pvtmon_reset,
-+		.num_blocks = 1,
-+		.assert_hold_us = 1000,
-+	},
-+};
-+
-+static const struct bcmbca_pmb_reset_variant bcm6846_pmb_variant = {
-+	.groups = bcm6846_pmb_reset_groups,
-+	.num_groups = ARRAY_SIZE(bcm6846_pmb_reset_groups),
-+};
-+
-+/* Best effort: never restart a partially reset group. */
-+static void bcmbca_pmb_reset_cleanup(struct bcmbca_pmb_reset *rst,
-+				     const struct bcmbca_pmb_reset_group *group)
++static int bcmbca_pmb_clock_prepare(struct clk_hw *hw)
 +{
-+	const struct bcmbca_pmb_reset_block *block;
-+	unsigned int i;
++	struct bcmbca_pmb_clock *clock = to_pmb_clock(hw);
++	const struct bcmbca_pmb_clock_desc *desc = clock->desc;
++	unsigned int shift = (desc->channel % 2) * 16;
++	unsigned int reg = BCMBCA_PMB_REG(desc->bus, desc->device, desc->reg);
++	u32 value;
 +	int ret;
 +
-+	for (i = 0; i < group->num_blocks; i++) {
-+		block = &group->blocks[i];
-+		ret = regmap_update_bits(rst->regmap,
-+					 BCMBCA_PMB_REG(block->bus, block->device, block->offset),
-+					 block->mask, block->assert_value);
++	switch (desc->type) {
++	case PMB_PLL_CHANNEL: {
++		unsigned int regs[] = {
++			BCMBCA_PMB_REG(desc->bus, desc->device, desc->pll->status),
++			BCMBCA_PMB_REG(desc->bus, desc->device,
++				       desc->pll->ch01 + desc->channel / 2),
++		};
++		u32 values[ARRAY_SIZE(regs)];
++
++		ret = regmap_multi_reg_read(clock->regmap, regs, values, ARRAY_SIZE(regs));
 +		if (ret)
-+			dev_err(rst->rcdev.dev,
-+				"failed to hold PMB bus %u device %u in reset: %d\n",
-+				block->bus, block->device, ret);
++			return ret;
++		/* Firmware owns PLL power and reset. */
++		if (!(values[0] & PLL_LOCK))
++			return -EAGAIN;
++		/* A held output may be undergoing a firmware rate transition. */
++		if (values[1] & (PLL_CHANNEL_HOLD << shift))
++			return -EBUSY;
++		return regmap_update_bits(clock->regmap, regs[1],
++					  PLL_CHANNEL_DISABLE << shift, 0);
 +	}
++	case PMB_XTAL:
++		return regmap_update_bits(clock->regmap, reg, XTAL_DRIVER_POWER_DOWN, 0);
++	case PMB_PVTMON:
++		ret = regmap_read(clock->regmap, reg, &value);
++		if (ret)
++			return ret;
++		/* Preserve the divider when firmware already enabled acquisition. */
++		if (value & PVTMON_CLOCK_ENABLE)
++			return 0;
++		return regmap_update_bits(clock->regmap, reg,
++					  PVTMON_CLOCK_ENABLE | PVTMON_CLOCK_DIVIDER,
++					  PVTMON_CLOCK_ENABLE |
++					  FIELD_PREP(PVTMON_CLOCK_DIVIDER, 5));
++	case PMB_ZONE:
++		ret = regmap_read(clock->regmap, reg, &value);
++		if (ret)
++			return ret;
++		/* Power and isolation belong to the power-domain sequencer. */
++		if (!(value & ZONE_POWER_ON) || value & ZONE_POWER_DOWN_REQUEST)
++			return -EHOSTDOWN;
++		if (!(value & ZONE_MANUAL_CONTROL))
++			return 0;
++		return regmap_update_bits(clock->regmap, reg, ZONE_CLOCK_ENABLE,
++					  ZONE_CLOCK_ENABLE);
++	case PMB_RUNNER:
++		return 0;
++	}
++
++	return -EINVAL;
 +}
 +
-+static int bcmbca_pmb_reset_sequence(struct bcmbca_pmb_reset *rst,
-+				     const struct bcmbca_pmb_reset_group *group)
++static int bcmbca_pmb_clock_is_prepared(struct clk_hw *hw)
 +{
-+	const struct bcmbca_pmb_reset_block *block;
-+	enum {
-+		PASS_ASSERT,
-+		PASS_DEASSERT,
-+	} pass;
-+	unsigned int i;
++	struct bcmbca_pmb_clock *clock = to_pmb_clock(hw);
++	const struct bcmbca_pmb_clock_desc *desc = clock->desc;
++	unsigned int shift = (desc->channel % 2) * 16;
++	u32 value;
 +	int ret;
 +
-+	if (!group->num_blocks)
-+		return -EINVAL;
++	if (desc->type == PMB_PLL_CHANNEL) {
++		unsigned int regs[] = {
++			BCMBCA_PMB_REG(desc->bus, desc->device, desc->pll->status),
++			BCMBCA_PMB_REG(desc->bus, desc->device,
++				       desc->pll->ch01 + desc->channel / 2),
++		};
++		u32 values[ARRAY_SIZE(regs)];
 +
-+	/* Assert every block before releasing any of them. */
-+	for (pass = PASS_ASSERT; pass <= PASS_DEASSERT; pass++) {
-+		for (i = 0; i < group->num_blocks; i++) {
-+			block = &group->blocks[i];
-+			ret = regmap_update_bits(rst->regmap,
-+						 BCMBCA_PMB_REG(block->bus, block->device,
-+								block->offset), block->mask,
-+						 pass == PASS_DEASSERT ? block->deassert_value :
-+						 block->assert_value);
-+			if (ret)
-+				goto cleanup;
-+		}
-+		if (pass == PASS_ASSERT && group->assert_hold_us)
-+			usleep_range(group->assert_hold_us, group->assert_hold_us * 2);
++		ret = regmap_multi_reg_read(clock->regmap, regs, values, ARRAY_SIZE(regs));
++		if (ret || !(values[0] & PLL_LOCK))
++			return 0;
++		return !(values[1] & ((PLL_CHANNEL_DISABLE | PLL_CHANNEL_HOLD) << shift));
 +	}
-+cleanup:
-+	if (ret) {
-+		dev_err(rst->rcdev.dev, "%s %s failed at PMB bus %u device %u: %d\n",
-+			group->name, pass == PASS_DEASSERT ? "deassert" : "assert",
-+			block->bus, block->device, ret);
-+		bcmbca_pmb_reset_cleanup(rst, group);
-+	}
-+	return ret;
-+}
 +
-+/* The boot loader may power down the Runners before entering Linux. */
-+static int bcm6846_power_on_zone(struct bcmbca_pmb_reset *rst, u8 device, u8 zone)
-+{
-+	unsigned int reg = BCMBCA_PMB_REG(1, device, BCM6846_ZONE_CONTROL(zone));
-+	u32 value, mask;
-+	int ret;
-+
-+	ret = regmap_read(rst->regmap, reg, &value);
++	ret = regmap_read(clock->regmap,
++			  BCMBCA_PMB_REG(desc->bus, desc->device, desc->reg), &value);
 +	if (ret)
-+		return ret;
-+	if ((value & BCM6846_ZONE_POWER_ON) && !(value & BCM6846_ZONE_POWER_DOWN))
 +		return 0;
 +
-+	/* Match PowerOnZone() in the BCM6846 vendor PMC driver. */
-+	mask = BCM6846_ZONE_POWER_DOWN | BCM6846_ZONE_DPG_EN |
-+	       BCM6846_ZONE_POWER_UP | BCM6846_ZONE_MEM_POWER | BCM6846_ZONE_RESET;
-+	ret = regmap_write_bits(rst->regmap, reg, mask, mask & ~BCM6846_ZONE_POWER_DOWN);
-+	if (ret)
-+		return ret;
-+
-+	return regmap_read_poll_timeout(rst->regmap, reg, value,
-+					value & BCM6846_ZONE_POWER_ON, 10, 10000);
-+}
-+
-+static int bcm6846_xrdp_reset(struct bcmbca_pmb_reset *rst,
-+			      const struct bcmbca_pmb_reset_group *group)
-+{
-+	/* BCM6846 pmc_addr.h: XRDP, three Runners, then WAN (no WAN reset). */
-+	static const struct {
-+		u8 device;
-+		u8 zones;
-+	} power[] = {
-+		{ 12, 3 }, { 14, 1 }, { 15, 1 }, { 16, 1 }, { 11, 3 },
-+	};
-+	unsigned int i, zone;
-+	int ret;
-+
-+	for (i = 0; i < ARRAY_SIZE(power); i++) {
-+		for (zone = 0; zone < power[i].zones; zone++) {
-+			ret = bcm6846_power_on_zone(rst, power[i].device, zone);
-+			if (ret) {
-+				dev_err(rst->rcdev.dev,
-+					"XRDP power-up failed at PMB bus 1 device %u zone %u: %d\n",
-+					power[i].device, zone, ret);
-+				bcmbca_pmb_reset_cleanup(rst, group);
-+				return ret;
-+			}
-+		}
++	switch (desc->type) {
++	case PMB_XTAL:
++		return !(value & XTAL_DRIVER_POWER_DOWN);
++	case PMB_PVTMON:
++		return !!(value & PVTMON_CLOCK_ENABLE);
++	case PMB_ZONE:
++		return (value & ZONE_POWER_ON) && !(value & ZONE_POWER_DOWN_REQUEST) &&
++		       (!(value & ZONE_MANUAL_CONTROL) || (value & ZONE_CLOCK_ENABLE));
++	default:
++		return 0;
 +	}
-+
-+	return bcmbca_pmb_reset_sequence(rst, group);
 +}
 +
-+static int bcmbca_pmb_reset(struct reset_controller_dev *rcdev, unsigned long id)
++static unsigned long bcmbca_pmb_clock_recalc_rate(struct clk_hw *hw,
++						  unsigned long parent_rate)
 +{
-+	struct bcmbca_pmb_reset *rst = container_of(rcdev, struct bcmbca_pmb_reset, rcdev);
-+	const struct bcmbca_pmb_reset_group *group;
++	struct bcmbca_pmb_clock *clock = to_pmb_clock(hw);
++	const struct bcmbca_pmb_clock_desc *desc = clock->desc;
++	unsigned int regs[4], count = 3;
++	u32 values[4], ndiv, pdiv, channel, mdiv;
++	unsigned int shift = (desc->channel % 2) * 16;
++	u64 multiplier, rate;
 +	int ret;
 +
-+	if (id >= rst->variant->num_groups)
-+		return -EINVAL;
-+	group = &rst->variant->groups[id];
-+	if (!group->reset)
-+		return -EINVAL;
++	if (desc->type == PMB_XTAL)
++		return parent_rate;
++	/* The vendor sources do not identify these clocks' parent rates. */
++	if (desc->type != PMB_PLL_CHANNEL)
++		return 0;
 +
-+	mutex_lock(&rst->lock);
-+	ret = group->reset(rst, group);
-+	mutex_unlock(&rst->lock);
-+	return ret;
++	regs[0] = BCMBCA_PMB_REG(desc->bus, desc->device, desc->pll->ndiv);
++	regs[1] = BCMBCA_PMB_REG(desc->bus, desc->device, desc->pll->pdiv);
++	regs[2] = BCMBCA_PMB_REG(desc->bus, desc->device,
++				 desc->pll->ch01 + desc->channel / 2);
++	if (desc->channel >= 2)
++		regs[count++] = BCMBCA_PMB_REG(desc->bus, desc->device, desc->pll->ch25);
++
++	ret = regmap_multi_reg_read(clock->regmap, regs, values, count);
++	if (ret) {
++		dev_err_ratelimited(clock->dev, "cannot read %s rate: %d\n", desc->name, ret);
++		return 0;
++	}
++	ndiv = values[0];
++	pdiv = values[1];
++	channel = values[2];
++	if (channel & (PLL_MDIV_OVERRIDE << shift))
++		mdiv = (channel >> shift) & 0xff;
++	else if (desc->channel < 2)
++		mdiv = (pdiv >> (16 + desc->channel * 8)) & 0xff;
++	else
++		mdiv = (values[3] >> ((desc->channel - 2) * 8)) & 0xff;
++
++	pdiv = FIELD_GET(PLL_PDIV, pdiv);
++	/* No rate can be determined from a zero divider. */
++	if (!pdiv || !mdiv)
++		return 0;
++	multiplier = ((u64)FIELD_GET(PLL_NDIV_INT, ndiv) << 20) |
++		     FIELD_GET(PLL_NDIV_FRAC, ndiv);
++	rate = div64_u64((u64)parent_rate * multiplier,
++			 ((u64)pdiv * mdiv) << 20);
++
++	return rate > ULONG_MAX ? 0 : rate;
 +}
 +
-+static const struct reset_control_ops bcmbca_pmb_reset_ops = {
-+	.reset = bcmbca_pmb_reset,
++static const struct clk_ops bcmbca_pmb_clock_ops = {
++	.prepare = bcmbca_pmb_clock_prepare,
++	.is_prepared = bcmbca_pmb_clock_is_prepared,
++	.recalc_rate = bcmbca_pmb_clock_recalc_rate,
++	/* No unprepare: these clocks can remain in use by PMC firmware. */
 +};
 +
-+static int bcmbca_pmb_reset_probe(struct platform_device *pdev)
++static const struct bcmbca_pmb_pll_layout bcm6846_rdppll = {
++	.ch01 = 16,
++	.status = 19,
++	.ndiv = 21,
++	.pdiv = 22,
++	.ch25 = 23,
++};
++
++/* The BIU PLL uses the classic BPCM register layout. */
++static const struct bcmbca_pmb_pll_layout bcm6846_biupll = {
++	.ch01 = 11,
++	.status = 15,
++	.ndiv = 17,
++	.pdiv = 18,
++	.ch25 = 19,
++};
++
++#define PMB_PLL(_id, _name, _device, _channel, _pll) \
++	[_id] = { .name = _name, .type = PMB_PLL_CHANNEL, .bus = 1, \
++		  .device = _device, .channel = _channel, \
++		  .pll = _pll }
++#define PMB_GATE(_id, _name, _type, _bus, _device, _reg) \
++	[_id] = { .name = _name, .type = _type, .bus = _bus, \
++		  .device = _device, .reg = _reg }
++#define PMB_ZONE_CLK(_id, _name, _bus, _device, _zone) \
++	PMB_GATE(_id, _name, PMB_ZONE, _bus, _device, 32 + (_zone) * 8)
++
++static const struct bcmbca_pmb_clock_desc bcm6846_clocks[] = {
++	PMB_PLL(BCM6846_CLK_RDPPLL_CH0, "rdppll-ch0", 3, 0, &bcm6846_rdppll),
++	PMB_PLL(BCM6846_CLK_RDPPLL_CH1, "rdppll-ch1", 3, 1, &bcm6846_rdppll),
++	PMB_PLL(BCM6846_CLK_RDPPLL_CH2, "rdppll-ch2", 3, 2, &bcm6846_rdppll),
++	PMB_PLL(BCM6846_CLK_RDPPLL_CH3, "rdppll-ch3", 3, 3, &bcm6846_rdppll),
++	PMB_PLL(BCM6846_CLK_RDPPLL_CH4, "rdppll-ch4", 3, 4, &bcm6846_rdppll),
++	PMB_PLL(BCM6846_CLK_RDPPLL_CH5, "rdppll-ch5", 3, 5, &bcm6846_rdppll),
++	PMB_PLL(BCM6846_CLK_BIUPLL_CH0, "biupll-ch0", 38, 0, &bcm6846_biupll),
++	PMB_PLL(BCM6846_CLK_BIUPLL_CH1, "biupll-ch1", 38, 1, &bcm6846_biupll),
++	PMB_PLL(BCM6846_CLK_BIUPLL_CH2, "biupll-ch2", 38, 2, &bcm6846_biupll),
++	PMB_PLL(BCM6846_CLK_BIUPLL_CH3, "biupll-ch3", 38, 3, &bcm6846_biupll),
++	PMB_PLL(BCM6846_CLK_BIUPLL_CH4, "biupll-ch4", 38, 4, &bcm6846_biupll),
++	PMB_PLL(BCM6846_CLK_BIUPLL_CH5, "biupll-ch5", 38, 5, &bcm6846_biupll),
++	[BCM6846_CLK_RUNNER] = { .name = "runner", .type = PMB_RUNNER },
++	PMB_GATE(BCM6846_CLK_XTAL_OUT, "xtal-out", PMB_XTAL, 1, 1, XTAL_CONTROL),
++	PMB_GATE(BCM6846_CLK_PVTMON, "pvtmon", PMB_PVTMON, 1, 6, PVTMON_CONFIG),
++	PMB_ZONE_CLK(BCM6846_CLK_PERIPH_ZONE0, "periph-zone0", 0, 0, 0),
++	PMB_ZONE_CLK(BCM6846_CLK_PERIPH_ZONE1, "periph-zone1", 0, 0, 1),
++	PMB_ZONE_CLK(BCM6846_CLK_PERIPH_ZONE2, "periph-zone2", 0, 0, 2),
++	PMB_ZONE_CLK(BCM6846_CLK_PERIPH_ZONE3, "periph-zone3", 0, 0, 3),
++	PMB_ZONE_CLK(BCM6846_CLK_MEMC, "memc", 1, 8, 0),
++	PMB_ZONE_CLK(BCM6846_CLK_USB_ZONE0, "usb-zone0", 1, 10, 0),
++	PMB_ZONE_CLK(BCM6846_CLK_USB_ZONE1, "usb-zone1", 1, 10, 1),
++	PMB_ZONE_CLK(BCM6846_CLK_USB_ZONE2, "usb-zone2", 1, 10, 2),
++	PMB_ZONE_CLK(BCM6846_CLK_USB_ZONE3, "usb-zone3", 1, 10, 3),
++	PMB_ZONE_CLK(BCM6846_CLK_WAN_ZONE0, "wan-zone0", 1, 11, 0),
++	PMB_ZONE_CLK(BCM6846_CLK_WAN_ZONE1, "wan-zone1", 1, 11, 1),
++	PMB_ZONE_CLK(BCM6846_CLK_WAN_ZONE2, "wan-zone2", 1, 11, 2),
++	PMB_ZONE_CLK(BCM6846_CLK_XRDP_ZONE0, "xrdp-zone0", 1, 12, 0),
++	PMB_ZONE_CLK(BCM6846_CLK_XRDP_ZONE1, "xrdp-zone1", 1, 12, 1),
++	PMB_ZONE_CLK(BCM6846_CLK_XRDP_ZONE2, "xrdp-zone2", 1, 12, 2),
++	PMB_ZONE_CLK(BCM6846_CLK_RUNNER0, "runner0", 1, 14, 0),
++	PMB_ZONE_CLK(BCM6846_CLK_RUNNER1, "runner1", 1, 15, 0),
++	PMB_ZONE_CLK(BCM6846_CLK_RUNNER2, "runner2", 1, 16, 0),
++	PMB_ZONE_CLK(BCM6846_CLK_PCIE0, "pcie0", 0, 18, 0),
++	PMB_ZONE_CLK(BCM6846_CLK_PCIE1, "pcie1", 0, 19, 0),
++	/* BIU uses the classic BPCM layout, with its zone at word 16. */
++	PMB_GATE(BCM6846_CLK_BIU, "biu", PMB_ZONE, 1, 39, 16),
++};
++
++static int bcmbca_pmb_clock_probe(struct platform_device *pdev)
 +{
 +	struct device *dev = &pdev->dev;
 +	struct regmap *regmap = dev_get_regmap(dev->parent, NULL);
-+	struct bcmbca_pmb_reset *rst;
++	struct clk_hw_onecell_data *data;
++	struct bcmbca_pmb_clock *clocks;
++	struct clk *ref;
++	unsigned int i;
++	int ret;
 +
 +	if (!regmap)
 +		return -ENODEV;
 +
-+	rst = devm_kzalloc(dev, sizeof(*rst), GFP_KERNEL);
-+	if (!rst)
++	ref = devm_clk_get(dev, "ref");
++	if (IS_ERR(ref))
++		return dev_err_probe(dev, PTR_ERR(ref), "failed to get reference clock\n");
++
++	data = devm_kzalloc(dev, struct_size(data, hws, ARRAY_SIZE(bcm6846_clocks)),
++			    GFP_KERNEL);
++	if (!data)
 +		return -ENOMEM;
-+	rst->variant = device_get_match_data(dev);
-+	if (!rst->variant)
-+		return -ENODEV;
-+	rst->regmap = regmap;
-+	mutex_init(&rst->lock);
-+	rst->rcdev.owner = THIS_MODULE;
-+	rst->rcdev.dev = dev;
-+	rst->rcdev.ops = &bcmbca_pmb_reset_ops;
-+	rst->rcdev.of_node = dev->of_node;
-+	rst->rcdev.of_reset_n_cells = 1;
-+	rst->rcdev.nr_resets = rst->variant->num_groups;
-+	return devm_reset_controller_register(dev, &rst->rcdev);
++	data->num = ARRAY_SIZE(bcm6846_clocks);
++	clocks = devm_kcalloc(dev, data->num, sizeof(*clocks), GFP_KERNEL);
++	if (!clocks)
++		return -ENOMEM;
++
++	for (i = 0; i < data->num; i++) {
++		const struct bcmbca_pmb_clock_desc *desc = &bcm6846_clocks[i];
++		struct clk_parent_data parent = {};
++		struct clk_init_data init = {
++			.ops = &bcmbca_pmb_clock_ops,
++			.flags = CLK_GET_RATE_NOCACHE | CLK_IGNORE_UNUSED,
++		};
++
++		init.name = devm_kasprintf(dev, GFP_KERNEL, "%s-%s", dev_name(dev), desc->name);
++		if (!init.name)
++			return -ENOMEM;
++		if (desc->type == PMB_RUNNER) {
++			struct clk_hw *parent_hw = data->hws[BCM6846_CLK_RDPPLL_CH1];
++			struct clk_hw *runner;
++
++			runner = devm_clk_hw_register_fixed_factor_parent_hw(dev,
++									     init.name, parent_hw,
++									     init.flags, 1, 2);
++			data->hws[i] = runner;
++			if (IS_ERR(data->hws[i]))
++				return PTR_ERR(data->hws[i]);
++			continue;
++		}
++		if (desc->type == PMB_PLL_CHANNEL || desc->type == PMB_XTAL) {
++			parent.fw_name = "ref";
++			init.parent_data = &parent;
++			init.num_parents = 1;
++		}
++		clocks[i].regmap = regmap;
++		clocks[i].dev = dev;
++		clocks[i].desc = desc;
++		clocks[i].hw.init = &init;
++		ret = devm_clk_hw_register(dev, &clocks[i].hw);
++		if (ret)
++			return dev_err_probe(dev, ret, "failed to register %s\n", desc->name);
++		data->hws[i] = &clocks[i].hw;
++	}
++
++	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, data);
 +}
 +
-+static const struct of_device_id bcmbca_pmb_reset_of_match[] = {
-+	{ .compatible = "brcm,bcm6846-pmb-reset", .data = &bcm6846_pmb_variant },
++static const struct of_device_id bcmbca_pmb_clock_match[] = {
++	{ .compatible = "brcm,bcm6846-pmb-clock" },
 +	{ }
 +};
-+MODULE_DEVICE_TABLE(of, bcmbca_pmb_reset_of_match);
++MODULE_DEVICE_TABLE(of, bcmbca_pmb_clock_match);
 +
-+static struct platform_driver bcmbca_pmb_reset_driver = {
-+	.probe = bcmbca_pmb_reset_probe,
++static struct platform_driver bcmbca_pmb_clock_driver = {
++	.probe = bcmbca_pmb_clock_probe,
 +	.driver = {
-+		.name = "brcm-pmb-reset",
-+		.of_match_table = bcmbca_pmb_reset_of_match,
++		.name = "bcm6846-pmb-clock",
++		.of_match_table = bcmbca_pmb_clock_match,
 +	},
 +};
-+module_platform_driver(bcmbca_pmb_reset_driver);
++module_platform_driver(bcmbca_pmb_clock_driver);
 +
-+MODULE_DESCRIPTION("Broadcom BCMBCA PMB reset controller");
++MODULE_AUTHOR("Linus Walleij <linusw@kernel.org>");
++MODULE_DESCRIPTION("Broadcom BCMBCA PMB clocks");
 +MODULE_LICENSE("GPL");
 
 -- 
