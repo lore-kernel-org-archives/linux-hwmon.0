@@ -1,88 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793530015;
-	b=CZ0QerLBNU9ehPtC95VwBdhNm+LZ74/4aBpc056Hbj80kycPzD/+GTQlPxGmLB4brYRo
-	 hzshscx2TItDSX8YZfTbARrHQGlG8JF/y6LLyI+fDWKMFhjAvH/S9xjmDm8pTJpK3HKUl
-	 HhfBgxehbhoxXaqq6X0opkuZKn2UWSi73pUGlgDng8rCv4/sNifCcaa9ygF1L6ZWN41zr
-	 A6iK6YvHlHJtjmEGqzKreH4DLrv52ry7EwxHvcnyFa5vCMnPugweNDEXNNy+BCnWCCC2x
-	 UaxHeSLMfiRTg7f08AZ3gGm1sAQ0LqcfZcmjBffRe5DpAph3swE6MfpGoeq+R8rmCsg==
+	t=1793530019;
+	b=m89RWOqR1lbds7zSm87I4GmpW4wiMrmObbSjBbEInL/OEYbFVyHCjTYp+4xJnkNLpIvd
+	 gJJ4ocYyY9ZYrzxTFSRzA7n+ZQATUxysA8L04nbxtyg+Vw/rrZMQ7Y9ixfzWioumdX1nl
+	 8LaoXdVjZPSDZBeHZVvVrZCd8yaC9H3jdeQIC/Xey6rSG4MosQQ1ReuYO+UWMB3Chzvjl
+	 +LEfyjHMAycOMJne0FF1Va+OT11xgpGnLIyRq1kR/RpVGybPnfxx2aPQkcr0qzfQFEi/z
+	 sXpA5wBk5+wO5CH+nZwJtt53vzx5KaAEluPPgYNXPLbpmoTSrICWUUjCUi9Lxm8NDiA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793530015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793530019;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:Subject:Date:Message-Id:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer;
-	bh=7Sa7EuzODPgC5bkSmwziiOqJ7XjyGe4GIlwE6PhFhCg=;
-	b=KJ/cIEAk3tpIaemERmh0Qi63Hmd1E8jn1CPamXCZ+ppNkUgT/zFtjVDCd59iHT/zsK82
-	 tyegjWkn2+NdsczIqiPDV7mBn5D4z6V3w14zXVjwH2TOToAeGzYuHf1+fZOQb8B1/lRFm
-	 n9xfJig1jIhJnrdQyBWewfDtudVWX0/s2maWPUNh5MvcFxmFckVh0dz+YL3z1zE+5S7pN
-	 G7439j97K9BWL0URQ2MYmRyi5y3oRabb+KSORYlU1Fr2jMmVb6OUEUclqkIN3oRVuewm4
-	 n6dSth90JFhC5zkW6kLOEjOi+I6GRO7IBSqQ10LVTK8zDjXWlLjMNYae+xnkl1Guycg==
+	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
+	bh=7G9vF9OS16E0g31UX34geJPbbud9xS33YqrpYdPUMwo=;
+	b=tvfynNFKSCe5rl26gwpNWyNqb68FjpcgqC8gljrV8ylbQniaBskpUa9ZZg2+uvFAmeSk
+	 DN6MxOqD+oEqfSzbA+vO1k3LArSvAatbjTGM+/lXkDsf/+ZmsDg1iCL13XfITsODAE5o/
+	 8HWUx/jqvlTCFy50xgMRewga7FRIuyF6M/QYQtXFZjPfEy5lDmwmJdnQzHfSU25eVDBUy
+	 NOgFauMp5yG1Pd4U0lGOyt5Bn4OuR4GeZxrWV9BOm1MbhFyXmWgHMEyR/fyu1/m6Xujf4
+	 gzGsUVDt3mZZwI1LZknHdQ2QY60dCiN9RgWxnwFbs59IJFswOi9dmGAVWG55rbFnAKQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VMM0swZT;
-	arc=none smtp.remote-ip=209.85.128.51
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D5NoKQzc;
+	arc=none smtp.remote-ip=209.85.128.41
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 401E6606A324
-	for <linux-hwmon@vger.kernel.org>; Sun,  1 Nov 2026 10:46:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 401E6606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CDBC606A324
+	for <linux-hwmon@vger.kernel.org>; Sun,  1 Nov 2026 10:46:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9CDBC606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VMM0swZT
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4a35db1f202so21773385e9.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 01 Nov 2026 02:46:55 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D5NoKQzc
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4a9a8d6cea8so26845785e9.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 01 Nov 2026 02:46:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793530013; x=1794134813; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=7Sa7EuzODPgC5bkSmwziiOqJ7XjyGe4GIlwE6PhFhCg=;
-        b=VMM0swZThh3i7/Qr5Rr7qet/lk7hp4aqptKFJUOM64NMsr3WH19czfsDAi0RNCclvt
-         2SiTW9YiZ54vAZCfcPUUIhaWdw+uGavPD9WyyK3FTnbzx+zMQfw6TGfrSPNUW7VwkMc+
-         y4napnk7iFsF9rmb8RwANkSyJlJUyiMniBFq4atNVVkJP0Hy+VA/VKyNeYcPxk/aQLWn
-         K9irpt74R+RfA6OZI3+nIm44F7TsgAdwhwJ8rW3gvEt93/HtyYHJHqnnIkNoKXlwUNqb
-         0BFU4KnqUhD/pqw+bTkZwzMBLdjwarxn8HYdIiCoVMmhGiPLHSmmKolvKx3pdnzGY5fB
-         S6lQ==
+        d=gmail.com; s=20260707; t=1793530017; x=1794134817; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=7G9vF9OS16E0g31UX34geJPbbud9xS33YqrpYdPUMwo=;
+        b=D5NoKQzcOhGbdR3DBrqW2mnxCLFInSyDjJH/+62YKTx0X38vQhc0vCYMBkzpHK6ymy
+         ojU36Lg0xAj5NCCRLOLESGFqMcgx3+01OGf9fHep8bcKrI0/XANmkKByV4QuqjtGZBM+
+         7vqshWMC8YbcujGmfcvqq6kI0L5EusmF8CfkQicmO/0vuyhAVoiCIo9170VnG0tWkyYS
+         0z5dMP7QJKk0Ylbu6Wo04qPRi/l/f+1VYSgr49ZS60iRBTt6btidI0JBWNWQ0NrfBKpl
+         jyI0O4p6VYliMAfJtARMbVyi2ggH6S8I8qE/omv1YL4NqENqwIEOn/dbWDS5jHItVOdF
+         Mxtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793530013; x=1794134813;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=7Sa7EuzODPgC5bkSmwziiOqJ7XjyGe4GIlwE6PhFhCg=;
-        b=tVe1OSCF0N0u68rNyquiQXqGGl03aBZ1RTeXaeMdprpGVGHRdAaOtZ7o9C5fXAKpgk
-         X7XWSpzz3sF+ppG3+MQgZgYR3j8HJMxwpDsSKt37qSAQQhmcxJdsUT8QgW3qqPknTOUT
-         OWzAoguZnfM8Lsxo/RLs0lzxYKEKgOPyQmsjnewV0GVn+eg3OePzykDpayUKcCiHiMNq
-         oxJDEQqCUQGFerr4DZXdPN6TIeKaSUyhyK5tGZeFa/KMm2kUprk/CpIV0hb9aFL1U0Kx
-         JYv0CggDCIRMCJJB4Q72tJJixsFHjlPtyy2xzSASdDR8nYU8AeIi6YmSXMjCf3E5YFZO
-         bPrQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxhCLmqELvkFzWgdA81+tDAQ2GqT96xqJ7ONgGBuxbzvMcH0s3GDScx7dmPmap/7Qch5bRG7nXlzvF7PQ==@vger.kernel.org
-X-Gm-Message-State: AFq9FYKfvEF6ZDwtb+Edh/wc33AtT+xeZEgip0B2uJW6/HIsy4Zptsn7
-	VeFI/aq/gM2uy6FPLnopqkstNKhJUBeam7IvYtOzcHxhgsjSV7jUV/2o
-X-Gm-Gg: AYBFou2o312vc2HhkTGQ3xHigyOlOQguedLzI0Qh3YdACgnvh2CeeMDALagF7bQfBq8
-	r5hy5DzC/yOvkPIXzcxU8p2M9G93S3kexJeFXfAIsVQiuvLa/3E1PBBFm1MM9/hfBPTL3QLmIrD
-	7rlwCG+mn/DoEn9voS5hDvkCX/mdXrhzE1Wj2OcdZwi2MytB5tztzEeuJmBwyiqC6CCzPlk8FiQ
-	izCsKqm7fitVAmvlpVkXOPg3Z2ndPeWf8/9MjjMGlh5Q9QB3vrQAkGOk8dDxu1EYmHZS0i2iSsP
-	PGssk5c0rdMlp5yqnrTDOOjnab4AF+qx+w3vY4Qy+L1QQCEAA8nDoDkglK+l54EU3wgd3K/+I+9
-	AoqnytG6K7/cdxtR3QPeCSv/HJ0wqTaIndveAkeB+oJZ6KQ3/DODrutq1kOBb3Rrr2q8ROOUGvI
-	QadEEtXpU0YuaHpvC9kh/i5sImkveY1xeinUShS5sV1Au+CV8z16iw3E1q7Oq0mzHrg9sQxg9B4
-	kH/UQMijlJDP2UMj3Mwno167sEeee5b7VjlcS7c7EV+wkm/acm+2xqOpdS5Xk0A10kLF3Yym5Ii
-	vurt41zMedr21k12dZEyIAeRvos=
-X-Received: by 2002:a05:600c:46d2:b0:4a1:d537:1c8d with SMTP id 5b1f17b1804b1-4ac187a6a38mr168066175e9.19.1793530013583;
-        Sun, 01 Nov 2026 02:46:53 -0800 (PST)
+        d=1e100.net; s=20260707; t=1793530017; x=1794134817;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7G9vF9OS16E0g31UX34geJPbbud9xS33YqrpYdPUMwo=;
+        b=LwB8N+IUWldBc9KCYxRh2mw4foetYLF/F9wQMsl4KktbCWu6w8wNFBEru7SeHNUmFo
+         reBr2ZCzUurVgO7o2gMDKVzVUnCNYvScts8ygiSVocMBMTWKkHh6uUjxn4l9xKbN2Yys
+         xtWGv751kAPeP5NslYUhBc9Y1z4AFq2poj/rxJNrSPmoViaaR2XBgksIemIKfYRzrT71
+         mS0jofNWLeVXPGxZQpXNRb/EXjVpGJazYOgyVc1XwKbVUPvfr2cTT7dTw5muVJp8rymj
+         lmyuURRUtxFx/mbw1uOZsVPo7V3WH7iNZ8hz1aqCoMkKW6Sflg2NJosvIDoyJMNouxs1
+         i0zg==
+X-Forwarded-Encrypted: i=1; AKwUvByRKA3XqTsTsdnANihRCh/wbmc0zhQjEMMjnfYVAkvx4Bnfhs8p6q3+Jdl1I3e9JzxMoqbbiOhXLMsHBA==@vger.kernel.org
+X-Gm-Message-State: AFq9FYLE1lwcLTr8ewS5yJPgyKmoJUh8hyUJ7fA0TFNNfUUfYst8W7qV
+	4uE9baqyXv+J/vWWsEuH075DRKLSZnJk88+T+aP9rL4eds5XB/zO01yL
+X-Gm-Gg: AYBFou0/fLeezDDA9ncqEPfazhNKvaF2o+JC/9GlvjRm9oEygQZYo6uT+RWdH4crz5U
+	QFJ9NQSsn6bHLQiDSVk7BXxyxCsb73vvcb/N2/XLCU7/nUkNtHw2mWUqyPI7KPp2vvPR/pF8JIz
+	GloN6lCpfhZLweYvV4MmQOh7cDTl5kwOvCIQMkSCAODxlS9yLf4A4K02b9CRzilR6iLtX9hKeIl
+	jrRodqJtOZ5g13P5030JQ5lkIfYjiF4hvcMXjveqfPwChsSgl+R39uLdqpUIei96BW4i9pjDfNI
+	wkesgYLk2DHvh7tbp9RZc1Q/HTW0lQfrykD3MhkWkyhQ6wU4YAi/JFBitmVmkVnbm4RgrfFk1vH
+	dmT/5wNpKrBt4zajqHso/IW6esM7AhzWl35WFCKw/iTJPn+MJQcR+NWE7E+AkRjzfPvJa9Co/NX
+	0t8XjsZSgQO99KuM+b7VzU51neCdVNJWrLfA/lspCaI+NKDhEDZSJMNrQx2fCWYOX7MM2fKcw1E
+	ETVxES0O9IjKS5Gy5VSp8k+2ShFmqISabG6quefTdJ+L3Nf2AtNDGG+yuitlnY6MqD9pdQDwfTU
+	Wx6rbJoSDOKISythDjIXwdVF7fE=
+X-Received: by 2002:a05:600c:8116:b0:4a0:20b4:ba93 with SMTP id 5b1f17b1804b1-4ac17e10724mr168860485e9.16.1793530017002;
+        Sun, 01 Nov 2026 02:46:57 -0800 (PST)
 Received: from [127.0.1.1] ([85.105.252.11])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4aa7f322c46sm255602715e9.2.2026.11.01.02.46.49
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4aa7f322c46sm255602715e9.2.2026.11.01.02.46.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 02:46:52 -0800 (PST)
+        Sun, 01 Nov 2026 02:46:56 -0800 (PST)
 From: Bartu Alev <bartualev@gmail.com>
-Subject: [PATCH 0/7] platform/x86: asus-wmi: expose the firmware fan floor
- tables
-Date: Sun, 01 Nov 2026 13:46:40 +0300
-Message-Id: <20261101-asus-fan-floors-v4-v1-0-b8d1c31a99a9@gmail.com>
+Date: Sun, 01 Nov 2026 13:46:41 +0300
+Subject: [PATCH 1/7] platform/x86: asus-wmi: dump buffer replies in the
+ debugfs dsts file
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -93,11 +93,10 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMwQrCMAyA4VcZORtoi0jnq4iHdCYuQ1pp3BiMv
- fuqHr/D/29gXJUNrt0GlRc1LbnBnzoYRspPRn00Q3Dh4r3zSDYbCmWUVynVcDljoERRJLoUe2j
- hu7Lo+pve7n/bnCYePt8T7PsB8eGWSnYAAAA=
-X-Change-ID: 20261101-asus-fan-floors-v4-2aba8ff80b89
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261101-asus-fan-floors-v4-v1-1-b8d1c31a99a9@gmail.com>
+References: <20261101-asus-fan-floors-v4-v1-0-b8d1c31a99a9@gmail.com>
+In-Reply-To: <20261101-asus-fan-floors-v4-v1-0-b8d1c31a99a9@gmail.com>
 To: Corentin Chary <corentin.chary@gmail.com>, 
  "Luke D. Jones" <luke@ljones.dev>, Denis Benato <denis.benato@linux.dev>, 
  Hans de Goede <hansg@kernel.org>, 
@@ -107,114 +106,89 @@ Cc: platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-api@vger.kernel.org, Bartu Alev <bartualev@gmail.com>
 X-Mailer: b4 0.15.2
 
-On some ASUS laptops, the embedded controller enforces minimum fan duties
-on custom fan curves (CPU, GPU, and mid fan where present). These limits
-are not exposed in curve tables or standard devstate queries. Because the
-EC applies max(curve, floor) on each thermal tick, a curve requesting 10%
-on a point with a 58% floor runs at 58%, while pwmY_auto_pointZ_pwm still
-reports 10%. The thresholds share a similar asymmetry: reads return the
-uploaded byte, but the EC clamps the value to the point's temperature
-decade before use.
+Reading dsts calls asus_wmi_get_devstate(), which uses
+asus_wmi_evaluate_method().  Because that helper handles only
+ACPI_TYPE_INTEGER and leaves other return types zeroed, methods
+returning an ACPI buffer read as 0x0.  This affects fan floor tables
+(0x00110026, 0x00110027, 0x00110033), fan curve getters (0x00110024,
+0x00110025), and TUF RGB readback (0x0010005B).
 
-Because firmware never writes enforced floors into the reported curve
-buffers, userspace curve utilities like asusctl cannot display
-unreachable duty ranges or explain why fans run faster than configured.
-This series exposes the firmware floor tables through read-only sysfs
-attributes so userspace can inspect the enforced limits.
+Evaluate the method through asus_wmi_evaluate_method_locked() directly,
+matching the call node, which keeps execution serialized against other
+WMI operations.  Format integer replies as before, dump buffer
+contents with their byte length, and print any other type as t:<type>:
 
-Hardware analysis:
+  DSTS(0x110026) = 16 bytes:
+    00000000: 00 00 00 00 19 30 3a 4a 00 00 00 00 00 00 00 00
 
- - Reverse engineering the FA507 EC firmware shows that duty[i] =
-   max(curve[i], floor[i]) is computed on each thermal tick. Point Z
-   (1-based) is constrained to the temperature decade [30 + 10 * (Z - 1),
-   39 + 10 * (Z - 1)] °C, downward transitions use 5 °C hysteresis, points
-   step without interpolation, and thresholds outside the decade are
-   clamped on write.
-
- - Live devmem and DSTS captures on an FA507NV confirm these floor tables:
-   CPU {0, 0, 0, 0, 25, 48, 58, 74}% and GPU {0, 0, 0, 0, 26, 57, 68,
-   91}%.
-
- - The read path matches the G614PR DSDT DSFL method, which returns 8
-   bytes via the mailbox. Values and band layouts for that family are not
-   yet confirmed on hardware. The driver rejects replies shorter than 8
-   bytes or containing values above 100%, and warns once if entries
-   decrease.
-
-Design notes:
-
- - Floor attributes are non-standard hwmon extensions: they add a
-   read-only, hardware-enforced minimum to the pwmY_auto_pointZ_* family.
-
- - The series does not clamp user uploads in software. The EC already
-   enforces the floor in hardware, and keeping the write path pass-through
-   ensures user-configured curves are not rewritten if firmware table
-   parsing encounters quirks.
-
- - Tables refresh after profile changes and curve resets because the EC
-   re-runs its defaults reload when the mode byte it keys on changes,
-   which a power profile switch can do. On the FA507, floor values
-   remain identical across profiles, so this refresh is precautionary for
-   other hardware families.
-
-Pre-existing issues noted during development (can be addressed in a
-separate series):
- - asus_wmi_evaluate_method_buf() dereferences the return object without a
-   NULL check.
- - asus_wmi_remove() frees driver data while the devm-managed hwmon device
-   remains accessible.
- - fan_curve_store() updates curves without serializing against
-   fan_curve_write().
-
-Questions:
-
- 1. Hardware verification: captures from ROG Zephyrus, ROG Strix, Ally
-    or other DSFL-family hardware would confirm values and band layouts
-    there. With patch 1 applied:
-
-        echo 0x00110026 > /sys/kernel/debug/asus-nb-wmi/dev_id
-        cat /sys/kernel/debug/asus-nb-wmi/dsts
-
-    On a stock kernel, the same reply can be captured with the
-    out of tree acpi_call module by evaluating \_SB.ATKD.WMNB with
-    method id 0x53545344 and the devid in the argument buffer. Any
-    report would be very welcome.
-
- 2. Patch 7 reports effective duty max(stored, floor) on enabled curves.
-    Userspace could compute this from the floor attributes;
-    is handling this in the driver preferred? or userspace(asusctl)?
-
- 3. Registration API: floor attributes are added to the existing
-    asus_custom_fan_curve device via devm_hwmon_device_register_with_groups(),
-    matching existing auto_point attributes. The with_info API has no
-    auto_point channel, while hwmon.h marks with_groups deprecated.
-    Is extending the current group acceptable, or would you prefer
-    converting the device to with_info with auto_point attributes carried
-    in extra_groups?
-
- 4. Naming: new attributes use pwmY_auto_pointZ_floor_pwm, inserting a
-    _floor_ infix into the standard name. Is this naming acceptable?
+The sentinels 0xfffffffe and 0xffffffff continue to return -ENODEV.
 
 Signed-off-by: Bartu Alev <bartualev@gmail.com>
 ---
-Bartu Alev (7):
-      platform/x86: asus-wmi: dump buffer replies in the debugfs dsts file
-      Documentation: ABI: document the ASUS custom fan curve attributes
-      platform/x86: asus-wmi: define the fan floor table DEVIDs
-      platform/x86: asus-wmi: read the firmware fan floor tables
-      platform/x86: asus-wmi: reject short fan curve replies
-      platform/x86: asus-wmi: expose the fan floor tables via hwmon
-      platform/x86: asus-wmi: show the effective duty for enabled curves
+ drivers/platform/x86/asus-wmi.c | 46 ++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 39 insertions(+), 7 deletions(-)
 
- Documentation/ABI/testing/sysfs-platform-asus-wmi |  96 ++++++
- drivers/platform/x86/asus-wmi.c                   | 390 +++++++++++++++++++++-
- include/linux/platform_data/x86/asus-wmi.h        |   3 +
- 3 files changed, 473 insertions(+), 16 deletions(-)
----
-base-commit: 9d3475065167197742b0882aff21cf8e78393277
-change-id: 20261101-asus-fan-floors-v4-2aba8ff80b89
+diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+index b33ebdb21aa21..c55f469cb03dc 100644
+--- a/drivers/platform/x86/asus-wmi.c
++++ b/drivers/platform/x86/asus-wmi.c
+@@ -5038,16 +5038,48 @@ struct asus_wmi_debugfs_node {
+ static int show_dsts(struct seq_file *m, void *data)
+ {
+ 	struct asus_wmi *asus = m->private;
+-	int err;
+-	u32 retval = -1;
++	struct bios_args args = {
++		.arg0 = asus->debug.dev_id,
++	};
++	struct acpi_buffer input = { (acpi_size) sizeof(args), &args };
++	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
++	union acpi_object *obj;
++	acpi_status status;
++	u32 retval;
++	int err = 0;
+ 
+-	err = asus_wmi_get_devstate(asus, asus->debug.dev_id, &retval);
+-	if (err < 0)
+-		return err;
++	status = asus_wmi_evaluate_method_locked(asus->dsts_id, &input, &output);
++	if (ACPI_FAILURE(status))
++		return -EIO;
+ 
+-	seq_printf(m, "DSTS(%#x) = %#x\n", asus->debug.dev_id, retval);
++	obj = (union acpi_object *)output.pointer;
++	if (!obj)
++		return -ENODATA;
+ 
+-	return 0;
++	switch (obj->type) {
++	case ACPI_TYPE_BUFFER:
++		seq_printf(m, "DSTS(%#x) = %u bytes:\n", asus->debug.dev_id,
++			   obj->buffer.length);
++		seq_hex_dump(m, "  ", DUMP_PREFIX_OFFSET, 16, 1,
++			     obj->buffer.pointer, obj->buffer.length, false);
++		break;
++	case ACPI_TYPE_INTEGER:
++		retval = (u32)obj->integer.value;
++		if (retval == ASUS_WMI_UNSUPPORTED_METHOD || retval == (u32)~0)
++			err = -ENODEV;
++		else
++			seq_printf(m, "DSTS(%#x) = %#x\n", asus->debug.dev_id,
++				   retval);
++		break;
++	default:
++		seq_printf(m, "DSTS(%#x) = t:%d\n", asus->debug.dev_id,
++			   obj->type);
++		break;
++	}
++
++	kfree(obj);
++
++	return err;
+ }
+ 
+ static int show_devs(struct seq_file *m, void *data)
 
-Best regards,
---  
-Bartu Alev <bartualev@gmail.com>
+-- 
+2.56.0
 
