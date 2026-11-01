@@ -1,99 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.181
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793575158;
-	b=WmBSKAt0sv1l5/Yu+reHKh2CzIfvchkXsrpplL7r8nErJ/3kA6ORdxCr3WIhgi+cY684
-	 XXdmhFjmP5TOM6Y7QCS7DvW4p1ztxj1kqJxjMWPLx5AYsRoY6CHkszCsgpmyjxqQHVXnI
-	 9iMc33o4lmLpHj4tLCt8v4m5plo2YKrJ0DZedrprn1uW3lBcG71Blxx4yo4qJ8qi//Wh0
-	 05TXG/+FTDIUA+MTEYUa5VkEdGkW4It0sAykXDkmfPuI7IyqC+uRTpCj7oOd5RYdtOdWW
-	 8nzVvPylcwt43CGbRmX16ZBl0UdIvtz8sCii2sbKYUMexJRm0F2lPTcKhqrOottJU0g==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793575158;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=OgokyJgZPmoFvmekackCrMWks/pVfhNUcYrltTftkwI=;
-	b=AOTYaTNX8sMgZ5wfYi194Ze7UvBdaIwbT+p9+SLux8cWXABiUzOEX/Wp+fFuZ3wij5Hk
-	 enJZE6RUVMyIkXmSE+a7Tm4IfUDSrXfHeMbtTY5JE2BublDmHkcQqMYBKKj5AH2otcZA1
-	 PUjfB/0J//n62ee4lm/4UhthoFJ7Z8ivfAA3fOHc3Uf++jM07Yx9P/vjGjHPgdzgTmrfO
-	 XjQYjuOM2u8pmp0+41SYnjDrc4bGJqteyIlHOTXj4AL3FWdT0PIPqMQa57G6ceC7jLAhK
-	 dABPKs2akt/lBeY2dtyvWjcdKRyB1TxKAJd1NfhM79nZXOJJ7jl1oe+RR6sTuMc8nfw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="OXHyd/vG";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.181
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=109.224.244.17
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793577084;
+	b=ZUzegQu44VNYZwf2gvkzugRD0dkagibRp0fYnFqDa85NsG5wAVvYXVekj0WTWHa5GeeC
+	 GFqGvWuKl8getSIPy5J5teidTPYvFH/CiiVgbIBN9BVRjNop5nrhye0s6mzYUZxkQkcBp
+	 kSNbHLvfcxgLc1y/h1n+D8rZ3RN3aG9qkeEi3rQNyht6wyuHkCnAvaj6t6LL2kbv6hSz5
+	 fAQSdi1Hm2YLOwgwt4yyEpkgYbxhSMlejh7pBHpWJH8wtKj6fVv4rsMPHglGooe1NnHyF
+	 nQo3krClr4PToAuVEAfkF9eLQ31qG53o+HaWQuGtUY3Q4485kUALg7zqmZAhnX1YgXA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793577084;
+	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
+	 Feedback-ID:X-Pm-Message-ID:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=EzaB0dFrqATFo/F9hMIFjRzg10fufdUElMcuGto4f/g=;
+	b=az5VXDV2je8Kp7HCmUvNplrLcIHNSM3eUsU37FrtVoHsKvfpzUAiZu92YM3fBrtvMjDB
+	 Z2sDTiSW2R887+8fyBj0kXp3LL5GN2JaQcTUj++mLqfJThaFbx6DO3XEhZzpWO9+HCwBP
+	 mJWPwwoZWGUvrEyfsJY47YK0Ql0d1JicDz/+mGHuqOY+0cHVsJ8ZGhqU/05+I695+t/G5
+	 ZkPCO4iXXvLh4mDw9R99goBzvhSPDu15ELA85hDvKeVRVJMmaDmACiDJTQDVUzAUBhpqQ
+	 x2iroc1d6GZFZpYpF9BHPb8iQPlNfowuZQFcex0RpGv5VoYnXsc5Wk66JisajcXHMkA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=proton.me;
+	spf=pass smtp.mailfrom=proton.me;
+	dkim=pass header.d=proton.me header.i=@proton.me header.a=rsa-sha256 header.s=protonmail2 header.b=ZlQD0HLF;
+	arc=none smtp.remote-ip=109.224.244.17
+Received: from mail-24417.protonmail.ch (mail-24417.protonmail.ch [109.224.244.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D72CD606A324
-	for <linux-hwmon@vger.kernel.org>; Sun,  1 Nov 2026 23:19:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D72CD606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB9A606A326;
+	Sun,  1 Nov 2026 23:51:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EBB9A606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OXHyd/vG
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cd623dfe420so1789311a12.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 01 Nov 2026 15:19:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793575157; cv=none;
-        d=google.com; s=arc-20260327;
-        b=GGL/GdWWwHTwLWxE6lWSzhX6tEEz2BacQVU5lAzDKCB0IVYYPkLhebukhXDt6UdCuA
-         I5Ds0Jl6y9nGhPdTMdX9fSNx5cBADXxZHSyW3iEJ5OV2f/i7koxBUFPW8FRr/V1QBN2J
-         Zw0B4jsuf4dae0UuCppUXoqiAdqKstt/ZYPPWUMUyEKfub7hf6pBmMFavkyPQuAvvLT3
-         hAzHDqTI0DV9NMDKz6IW2BRlU1tzV0A86PwIQ7ZiTCC95FWwGomNdpSdGv1BxWKRaM/s
-         TMekIZAWcWVbd2zFxsElM9KsxUYJdZ4KnNfnizAMyIsFu1OMM5H8LuzbIgRR4MW2dflQ
-         WGIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=OgokyJgZPmoFvmekackCrMWks/pVfhNUcYrltTftkwI=;
-        fh=1TxlMDGQ2pTmQhHhXYNbkcySwtRdUtpr5cT0QIkERW8=;
-        b=PCPmHktfP1Cl5i+jX/O5P6eQQ0WuLHIKc4d01Sqaf4V8VBybzCFA/dRaNyc7GKNlJs
-         2jQarxkoTIJP4e1nIidBFizE0mR8c/hIwViT85ZWTDVICKDDE5OLkajzdilJPHHpnpPf
-         o5Y6rATKLa8W5IsLvXo+wFZGyrkxQWmUDy+AhqGicPvrwi88+0ZrMz6v69jSCQAuXGtZ
-         hYwgat2jej6JtBTwfrkd/mXDjCmejuKzwQtnRL/fo4dkPwEHTGtzGytOiiK5dRk5qEdl
-         jXaRBwjtBJY8FC9QtN0W1tvdVXo3OnavbcgjTbemNqXonSPR1klhU7VZQtNkhDWoCHWG
-         WTJA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793575157; x=1794179957; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=OgokyJgZPmoFvmekackCrMWks/pVfhNUcYrltTftkwI=;
-        b=OXHyd/vGnIfgmvSFHADK+RlniQufcjFzY6YiuxpVoLBM2DWxg3RSSuWOfz6YMluEYK
-         P8VZ4tD66yFJNlf11v6V9J2ZML+oVibTmqVntBCAWwOlHVEAvm7CcWv0n8T9FW7c3694
-         mPdHQzwEe7gKj7aNcObAw/0fqGl7LASVaqhMxHYRUgVrDOcSTLLPFAERB4ErPSRr4EBA
-         EBU1ynLk3xBNbm2IGvjOo0tNFdGI7wCypEZ2dSmDaFbf1lyqo1ujKSinTNPb8WLLdzEe
-         72imA/TQiUApLWgGltel5+tAcGBpqhOuZOkHKAbylQWqZFJJ0uB4GzrUP0lXmf/PXTcS
-         WANg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793575157; x=1794179957;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OgokyJgZPmoFvmekackCrMWks/pVfhNUcYrltTftkwI=;
-        b=wJ9F9px1B0S2bJYxNRkOlm9kHPhsD15/Jw5iSuUOWx8JXLit79+7pT1RFymJCNRj7K
-         53SMzGwNflcTC53HiqL7gE6ZpQsfzxvsXJLqEqdQ+dEJLP7MepyJ4ViaIw3dDGlHXuH8
-         /HhK9j8mH+/BfIEwNk8RCie1Nu3u+Q8SXv5v9wxtFMZufeCw8Ehw/GgBcP/+HYnkos/S
-         PFfLNqW0Bkvz55Bx4nIBElA4Q+WjG8RFBFYhyIhxNhtX0XxHIn2clxOa/jjGje0ltj9Q
-         T/U6T3i0L0hqTKCUe/86xTV1ITVumVHpQlFTS25/3ud79H+grjvO8SUqmk8xlzo/Hsi2
-         PZWA==
-X-Gm-Message-State: APuU4Z818auCkjfLheYQA4smvLlLag5i8/1eRz5FPSzpIQDFxTekKASY
-	aF6KpkWeXs/+Ofm6P3K4gCXCT7ZbNqh3LsXPhlA9XTtxluVi05qjvgN+zOCV2Yv7N3Jo6H+rehp
-	k5+piiR/0PP6bwoFnLb0WLHbXyrqkL21SWL5W8U9hDQe/
-X-Gm-Gg: AYBFou0fVjkCBX+Du2Gh4SDwgueQhkT/PJCL4sEGYrQv0pmzgSfiK9gALWVDJ8c7oEK
-	Xudcju0vFBHHCZhmOBN7+UeA+Gsc5XWbYVZFeWjiZOFveCwWvd/deAmREhrYFO8Dik6FNyMt9Mi
-	D+aZ7dl6ZGawuJiNeWqFP7kPwZRM+i8GQQDAbazOIgDTx7fk9JcyqkEU5uvfXfJKDaP18PZlPnX
-	tIEiI+eSiYtvPrFwqaTqlnvjWCLSjjIXB1WuduQjN9ofspuhwaAtcXufPs2pNi4VbrUu/NBzbo7
-	LId1VTFW8C7XvwBMKcxugS609qFbh3vglZtLLDyBv0nzSq/AWne20JH/9Rv0KCKG0UTlGL64D4m
-	HnoyiAqsphIEoPfpD4f2tLtOJq+qeKKx6kbf/jPGhCtjwolAEFA4d
-X-Received: by 2002:a17:90b:180d:b0:3ac:a204:aa27 with SMTP id
- 98e67ed59e1d1-3ae8985edbfmr7252728a91.66.1793575157168; Sun, 01 Nov 2026
- 15:19:17 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=proton.me header.i=@proton.me header.a=rsa-sha256 header.s=protonmail2 header.b=ZlQD0HLF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail2; t=1793577079; x=1793836279;
+	bh=EzaB0dFrqATFo/F9hMIFjRzg10fufdUElMcuGto4f/g=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=ZlQD0HLF/IOtVcjNIj9YatHrxg3HKazXhbtNL7qoLz8L2HMJKM7T0c7RUqz8C9nxR
+	 BG/wg2JNrIUU0+kgiE+zXfZ5jlGD19ufQ+ssmo4/Zt7dg4DV4EqgBKWPlS3j8K/eop
+	 Hk5vPcenhJR+Z80J89IPsjfe4xiqR6pXm5ynYHNcQ9aKvVnUlFTrAbuqDXLCS3/24s
+	 4+fseg1jQJ9L8mkD9Yg78CRkLnmGtQoxl2LNtkhRIJwGPxkVAX3AgGASZl/aqMKHDG
+	 YyErqqG2Ic0VeDm9L7ZFQyNGTk7obaxDoDipU2KkwAkjZwH0LILPaN+VIYwDqTMit2
+	 QBy9tpiR9mi7Q==
+Date: Sun, 01 Nov 2026 23:51:16 +0000
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+From: Ismael Ojeda Perez <iojedaperez@proton.me>
+Cc: Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (it87) Add support for IT8607E
+Message-ID: <179357707375.834227.595814448085536071@proton.me>
+Feedback-ID: 55883223:user:proton
+X-Pm-Message-ID: 195c5c7a0034942337a697c596d10dd4e26769cc
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -103,151 +61,190 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261101223125.302001-1-pmazzini@gmail.com> <20261101223125.302001-6-pmazzini@gmail.com>
- <sashiko-outbox-192738@kernel.org>
-In-Reply-To: <sashiko-outbox-192738@kernel.org>
-From: Pablo Mazzini <pmazzini@gmail.com>
-Date: Sun, 1 Nov 2026 23:19:02 +0000
-X-Gm-Features: AclHuK9xi2Gx2yZNeMpyMDXsD4VBMsSeY1I24W_gI-TNXeinEzyyjVyZpY76rRE
-Message-ID: <CAAxh=jt4UV3iUkXYq9bnB7k8uayD1t4+BPdO4q+dAQM8tdeh_w@mail.gmail.com>
-Subject: Re: [PATCH v2 5/7] hwmon: sy7636a: read the temperature only while
- the rails are on
-To: andreas@kemnade.info
-Cc: linux-hwmon@vger.kernel.org, linux@roeck-us.net, alistair@alistair23.me, 
-	sashiko-reviews@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Right. On the reMarkable 2 nothing in mainline turns the rails on.
-Keeping the rails on is out, so I would drop the epd-thermal zone from
-imx7d-remarkable2.dts in v3.
+The IT8607E is the Super I/O of the Intel NUC6i3SYB and, according to
+Intel's product specification, the NUC6i5SYB (BIOS SYSKLi35.86A). Its
+environment controller is hidden from ACPI (HHMD._STA returns 0), so the
+chip is only reachable through the LPC configuration ports, and the ACPI
+resource check must be bypassed with ignore_resource_conflict=3D1.
 
-Andreas, is that OK with you, or would you prefer something else?
+No datasheet is available. The register layout was compared against the
+IT8603E, and the BIOS fan setup (IT8607PeiInit and FanPei PEI modules of
+SYSKLi35.86A.0071) was disassembled to confirm it programs the same
+"newer autopwm" registers (0x68-0x6d for pwm2). Features are therefore
+copied from the IT8603E.
 
-On Sun, Nov 1, 2026 at 10:51=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [High] hwmon: sy7636a: returning -ENODATA when rails are off disables t=
-hermal zone
-> --
->
-> commit 72fc8d76dc4f0fe2ee1ec4e02805a6f20803ef65
-> Author: Pablo Mazzini <pmazzini@gmail.com>
->
-> hwmon: sy7636a: read the temperature only while the rails are on
->
-> This commit stops enabling the VCOM regulator at probe, registers the hwm=
-on
-> device under the chip name "sy7636a", and reads the fault flag alongside =
-the
-> thermistor in a single bulk transfer, returning -ENODATA when power good =
-is
-> not set.
->
-> > diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmo=
-n.c
-> > index f01f368d68e5f..475aff997c2d2 100644
-> > --- a/drivers/hwmon/sy7636a-hwmon.c
-> > +++ b/drivers/hwmon/sy7636a-hwmon.c
-> > @@ -14,7 +14,6 @@
-> >  #include <linux/module.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/regmap.h>
-> > -#include <linux/regulator/machine.h>
-> >
-> >  #include <linux/mfd/sy7636a.h>
-> >
-> > @@ -22,14 +21,22 @@ static int sy7636a_read(struct device *dev, enum hw=
-mon_sensor_types type,
-> >                       u32 attr, int channel, long *temp)
-> >  {
-> >       struct regmap *regmap =3D dev_get_drvdata(dev);
-> > -     int ret, reg_val;
-> > -
-> > -     ret =3D regmap_read(regmap,
-> > -                       SY7636A_REG_TERMISTOR_READOUT, &reg_val);
-> > +     u8 buf[2];
-> > +     int ret;
-> > +
-> > +     /*
-> > +      * Read power good and the thermistor in one transfer: the thermi=
-stor is
-> > +      * only sampled while the rails are on, and power good comes afte=
-r the
-> > +      * first sample
-> > +      */
-> > +     ret =3D regmap_bulk_read(regmap, SY7636A_REG_FAULT_FLAG, buf, siz=
-eof(buf));
-> >       if (ret)
-> >               return ret;
-> >
-> > -     *temp =3D (s8)reg_val * 1000;
-> > +     if (!(buf[0] & SY7636A_FAULT_FLAG_PG))
-> > +             return -ENODATA;
->
-> [Severity: High]
-> Will returning -ENODATA in sy7636a_read() when SY7636A_FAULT_FLAG_PG is
-> cleared cause the thermal core to permanently disable the attached therma=
-l
-> zone when the rails remain off?
->
-> In drivers/hwmon/sy7636a-hwmon.c, sy7636a_info sets HWMON_C_REGISTER_TZ:
->
-> static const struct hwmon_channel_info * const sy7636a_info[] =3D {
->         HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
->         HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
->         NULL
-> };
->
-> In arch/arm/boot/dts/nxp/imx/imx7d-remarkable2.dts, the epd-thermal zone
-> binds to &sy7636a with a 30-second polling delay while the vcom regulator=
- only
-> specifies regulator-boot-on:
->
->         thermal-zones {
->                 epd-thermal {
->                         thermal-sensors =3D <&sy7636a>;
->                         polling-delay-passive =3D <30000>;
->                         polling-delay =3D <30000>;
->
-> When the thermal zone is polled while the EPD rails are off, the call cha=
-in
-> __thermal_zone_device_update() -> __thermal_zone_get_temp() ->
-> hwmon_thermal_get_temp() -> sy7636a_read() passes -ENODATA to
-> thermal_zone_recheck() in drivers/thermal/thermal_core.c:
->
-> static void thermal_zone_recheck(struct thermal_zone_device *tz, int erro=
-r)
-> {
->         if (error =3D=3D -EAGAIN) {
->                 thermal_zone_device_set_polling(tz, THERMAL_RECHECK_DELAY=
-);
->                 return;
->         }
->
->         if (tz->recheck_delay_jiffies =3D=3D THERMAL_RECHECK_DELAY)
->                 dev_info(&tz->device, "Temperature check failed (%d)\n", =
-error);
->
->         thermal_zone_device_set_polling(tz, tz->recheck_delay_jiffies);
->
->         tz->recheck_delay_jiffies +=3D max(tz->recheck_delay_jiffies >> 1=
-, 1ULL);
->         if (tz->recheck_delay_jiffies > THERMAL_MAX_RECHECK_DELAY) {
->                 thermal_zone_broken_disable(tz);
->
-> Because thermal_zone_recheck() only treats -EAGAIN as a non-fatal retry a=
-nd
-> treats -ENODATA as a sensor failure, it logs an error, switches to
-> exponential backoff polling starting at 250 ms, and after roughly 5.5 min=
-utes
-> with the rails off calls thermal_zone_broken_disable(), which sets the th=
-ermal
-> zone mode to THERMAL_DEVICE_DISABLED so thermal monitoring remains disabl=
-ed
-> even after the rails are turned back on.
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261101223125.30=
-2001-1-pmazzini@gmail.com?part=3D5
+Tested on a NUC6i3SYB (BIOS SYSKLi35.86A.0042, chip ID 0x8607, rev 2):
+temperatures agree with coretemp, +3.3V reads 3.31 V, the 3VSB and VBAT
+inputs read plausible values, fan2 tach and pwm2 respond to the
+automatic-curve registers (start 74 C, full speed 92 C, as programmed by
+the BIOS) and to manual mode, and the original values are restored.
+
+The tachometer was not compared with an external tachometer and the
+voltage scaling was not compared with a multimeter; the values above are
+only cross-checked against coretemp and the expected rail voltages.
+
+Signed-off-by: Ismael Ojeda Perez <iojedaperez@proton.me>
+---
+Notes (not part of the commit message):
+
+Based on the hwmon-next branch of groeck/linux-staging.git (file contents
+as of 2026-11-01). Also compiled as a module against 6.18.58.
+
+Sample output on the NUC6i3SYB with it87 loaded with
+ignore_resource_conflict=3D1 (raw sysfs, hwmon5 =3D it8607):
+
+  in0_input=3D828  in1_input=3D1212  in2_input=3D2004  in3_input=3D2004
+  in4_input=3D2016  in7_input=3D3312 (3VSB)  in8_input=3D2808 (Vbat)
+  in9_input=3D3312 (+3.3V)
+  temp1_input=3D72000  temp2_input=3D67000  temp3_input=3D74000
+  fan1_input=3D0  fan2_input=3D4623
+  pwm2=3D89  pwm2_enable=3D2
+
+The Super I/O is found at 0x2e, chip ID 0x8607, revision 2, and the
+hardware monitor at 0xa40; ACPI reserves that range, hence the module
+parameter. Is that acceptable, or would you prefer a DMI quirk for the
+NUC6 boards?
+
+ Documentation/hwmon/it87.rst | 16 +++++++++++++++-
+ drivers/hwmon/Kconfig        |  4 ++--
+ drivers/hwmon/it87.c         | 17 +++++++++++++++--
+ 3 files changed, 32 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/hwmon/it87.rst b/Documentation/hwmon/it87.rst
+index c33ba8a..17bfffb 100644
+--- a/Documentation/hwmon/it87.rst
++++ b/Documentation/hwmon/it87.rst
+@@ -19,6 +19,14 @@ Supported chips:
+=20
+     Datasheet: Not publicly available
+=20
++  * IT8607E
++
++    Prefix: 'it8607'
++
++    Addresses scanned: from Super I/O config space (8 I/O ports)
++
++    Datasheet: Not publicly available
++
+   * IT8620E
+=20
+     Prefix: 'it8620'
+@@ -243,7 +251,7 @@ motherboard models.
+ Description
+ -----------
+=20
+-This driver implements support for the IT8603E, IT8620E, IT8623E, IT8628E,
++This driver implements support for the IT8603E, IT8607E, IT8620E, IT8623E,=
+ IT8628E,
+ IT8689E, IT8705F, IT8712F, IT8716F, IT8718F, IT8720F, IT8721F, IT8726F,
+ IT8728F, IT8732F, IT8758E, IT8771E, IT8772E, IT8781F, IT8782F, IT8783E/F,
+ IT8786E, IT8790E, IT8792E/IT8795E, IT87952E and SiS950 chips.
+@@ -287,6 +295,12 @@ The IT8603E/IT8623E is a custom design, hardware monit=
+oring part is similar to
+ IT8728F. It only supports 3 fans, 16-bit fan mode, and the full speed mode
+ of the fan is not supported (value 0 of pwmX_enable).
+=20
++The IT8607E is found on the Intel NUC6i3SYB and NUC6i5SYB boards. The hard=
+ware
++monitoring part is treated as compatible with the IT8603E (16-bit fans, ne=
+wer
++autopwm registers) because no datasheet is available. The BIOS keeps the
++environment controller hidden from ACPI, so the driver can only be loaded
++with ``ignore_resource_conflict=3D1``.
++
+ The IT8620E and IT8628E are custom designs, hardware monitoring part is si=
+milar
+ to IT8728F. It only supports 16-bit fan mode. Both chips support up to 6 f=
+ans.
+=20
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 18c682e..bc6ddff 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -952,8 +952,8 @@ config SENSORS_IT87
+ =09  If you say yes here you get support for ITE IT8705F, IT8712F, IT8716F=
+,
+ =09  IT8718F, IT8720F, IT8721F, IT8726F, IT8728F, IT8732F, IT8758E,
+ =09  IT8771E, IT8772E, IT8781F, IT8782F, IT8783E/F, IT8786E, IT8790E,
+-=09  IT8603E, IT8620E, IT8623E, IT8628E, and IT8689E sensor chips, and
+-=09  the SiS950 clone.
++=09  IT8603E, IT8607E, IT8620E, IT8623E, IT8628E, and IT8689E sensor chips=
+,
++=09  and the SiS950 clone.
+=20
+ =09  This driver can also be built as a module. If so, the module
+ =09  will be called it87.
+diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+index 2757d42..bdef0b7 100644
+--- a/drivers/hwmon/it87.c
++++ b/drivers/hwmon/it87.c
+@@ -12,6 +12,7 @@
+  *  similar parts.  The other devices are supported by different drivers.
+  *
+  *  Supports: IT8603E  Super I/O chip w/LPC interface
++ *            IT8607E  Super I/O chip w/LPC interface
+  *            IT8620E  Super I/O chip w/LPC interface
+  *            IT8622E  Super I/O chip w/LPC interface
+  *            IT8623E  Super I/O chip w/LPC interface
+@@ -66,7 +67,7 @@
+=20
+ enum chips { it87, it8712, it8716, it8718, it8720, it8721, it8728, it8732,
+ =09     it8771, it8772, it8781, it8782, it8783, it8786, it8790,
+-=09     it8792, it8603, it8613, it8620, it8622, it8628, it8689, it87952 };
++=09     it8792, it8603, it8607, it8613, it8620, it8622, it8628, it8689, it=
+87952 };
+=20
+ static struct platform_device *it87_pdev[2];
+=20
+@@ -160,6 +161,7 @@ static inline void superio_exit(int ioreg, bool noexit)
+ #define IT8786E_DEVID 0x8786
+ #define IT8790E_DEVID 0x8790
+ #define IT8603E_DEVID 0x8603
++#define IT8607E_DEVID 0x8607
+ #define IT8613E_DEVID 0x8613
+ #define IT8620E_DEVID 0x8620
+ #define IT8622E_DEVID 0x8622
+@@ -530,6 +532,14 @@ static const struct it87_devices it87_devices[] =3D {
+ =09=09.num_temp_map =3D 6,
+ =09=09.peci_mask =3D 0x07,
+ =09},
++=09[it8607] =3D {
++=09=09.name =3D "it8607",
++=09=09.model =3D "IT8607E",
++=09=09.features =3D FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
++=09=09  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
++=09=09  | FEAT_AVCC3 | FEAT_PWM_FREQ2,
++=09=09.peci_mask =3D 0x07,
++=09},
+ =09[it8620] =3D {
+ =09=09.name =3D "it8620",
+ =09=09.model =3D "IT8620E",
+@@ -2941,6 +2951,9 @@ static int __init it87_find(int sioaddr, unsigned sho=
+rt *address,
+ =09case IT8613E_DEVID:
+ =09=09sio_data->type =3D it8613;
+ =09=09break;
++=09case IT8607E_DEVID:
++=09=09sio_data->type =3D it8607;
++=09=09break;
+ =09case IT8620E_DEVID:
+ =09=09sio_data->type =3D it8620;
+ =09=09break;
+@@ -3095,7 +3108,7 @@ static int __init it87_find(int sioaddr, unsigned sho=
+rt *address,
+=20
+ =09=09sio_data->beep_pin =3D superio_inb(sioaddr,
+ =09=09=09=09=09=09 IT87_SIO_BEEP_PIN_REG) & 0x3f;
+-=09} else if (sio_data->type =3D=3D it8603) {
++=09} else if (sio_data->type =3D=3D it8603 || sio_data->type =3D=3D it8607=
+) {
+ =09=09int reg27, reg29;
+=20
+ =09=09superio_select(sioaddr, GPIO);
+--=20
+2.56.0
+
+
