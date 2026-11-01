@@ -1,104 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.217.41
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.52
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793563587;
-	b=vm/G1TWIyKQkgwNWLX2/uMvGb4FIREeVRiKKstkXLAw2noAZ5PLvsLEpCS3x3iMoJimx
-	 rXItedCKxnKSbgDuI+fjjIW9OEIRBVfs3n0GeLt6ovfyzQRmtSh0aFEWI3klGsZtdk56J
-	 JAbHHrWaiqRNgHgyP+RVjOlHGx13gMKlK3Ea9VdP3P5LolT4GeruEjDkNrjX5jNCl3P22
-	 ICKeQyplHn+gQQkLQNAg562Wa2SA/YVj063FYPayja4rpmFSjGqevp7pHU7KyQtoMOaIq
-	 MnTADjwNUuXee0c2+SemTw8M8Wg4s05laN3OjBWPfR1nYmP5ZFjHk5W/iOf0Rb8rgzw==
+	t=1793566654;
+	b=4agOFVhhfU2aYWHM77fUFigD4w5kx+o8FPJ679rvLAFCgAl2RQbkiUO+A4HTE0u+hdvy
+	 rYwP2PG8v3OkdD/LVkNKYorx7MYGiDAQHxXEvzwK6DkwK004JLVlgOxhn6gcJYVZol9hM
+	 bILXxdeAICgE33vRQi2OZWmhVJR8W4+MXbBSgZzgRowgnDLhZ08M8B1r37/xIWa3i1XbL
+	 hRfLaPVAudAZ+v7B5ih5vKLfVhokzYvhEbuqLfPcPw8953m+v9rxgMu1pbDBJHVHUOGNo
+	 FI1g5LbrjjAt359l/GXokw2DWNZyk7e/ga2R0CvCz7riWrf/HBXujN+gcfUjr3jD5/w==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793563587;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793566654;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Received:MIME-Version:
-	 In-Reply-To:References:From:Date:X-Gm-Features:Message-ID:Subject:To:
-	 Cc:Content-Type:Content-Transfer-Encoding;
-	bh=2y29sQ2dPba/54GelCiYbC4bFX1dedr3eek43WaIQkM=;
-	b=IJgy8YTefCUlAL43+yfnPpmbt5q5WZGIg3pASpLXc4jK8dKvTx7YmJH96bD5HyAks6ZG
-	 J1Up5sMiubT07spb2YiHiq210WYkiTov4V/E+4/rUQw/4w/bIYOHoy1t558JAWDn8I+nV
-	 IaNwYlqMfHUZnvvKWVDQAhv0kIO/iI4eiMSbuUelAbr6Rk/XwvPb20Lz0w/O4eqyUwzn/
-	 VcJxYERHpNihdbNYOvBgSwkxiWN2UquGJs5NJMP8pA4SBrQTMBMGID/pFPikzMJPHzqCY
-	 DI6A5IXTOmuSLiZGEzlvNIUcKDzeOQxCz/CaLIJN9cjhRTVUjl/aSVbNqF/Zg0GK5iw==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=QPohgoPuf5d963Y2G/ZdUa/zMplXrQUxWQ1kLVkoHy8=;
+	b=QftwL0wJNIRwXOOrcH/W1NrsV680L2Xn5ucJV4mQzbwU8NvEuxfgBBCqug/s/WqUEtaH
+	 Qu3BNF0SPd5WUWDdDEG7RuVU58PpW9iRLqm2gY8eF/0i1/y5vO962zxfcOVY6WU9FrAQH
+	 rPGVh/cv3xN4uLvtVhNubUr/KmyfLporkzwXp1iJAHFDbxla+nB+Aksmst1yV8KlMKWVc
+	 D27y7CSdpHhBt0ZP8Iy1flVCK13AEQzrpDMsNtcywqTRUB4ayoLcYAAKOqq0fPFH88673
+	 3P/qw7lxJeG+mbvUsXomk3ZpHgPx37aOwzN+wzc6w3Bb/fN8t1xcM4isy7J0ZJlcIYw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=h0cE6znW;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.217.41
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+	dmarc=pass header.from=sartura.hr;
+	spf=pass smtp.mailfrom=sartura.hr;
+	dkim=pass header.d=sartura.hr header.i=@sartura.hr header.a=rsa-sha256 header.s=sartura header.b=PfdrVEH9;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.52
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AFE9606A324
-	for <linux-hwmon@vger.kernel.org>; Sun,  1 Nov 2026 20:06:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0AFE9606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC1D606A327
+	for <linux-hwmon@vger.kernel.org>; Sun,  1 Nov 2026 20:57:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6BC1D606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=h0cE6znW
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-7c19c6721a3so1567514137.2
-        for <linux-hwmon@vger.kernel.org>; Sun, 01 Nov 2026 12:06:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793563586; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=sartura.hr header.i=@sartura.hr header.a=rsa-sha256 header.s=sartura header.b=PfdrVEH9
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3ae1da332bcso1061730a91.2
+        for <linux-hwmon@vger.kernel.org>; Sun, 01 Nov 2026 12:57:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793566654; cv=none;
         d=google.com; s=arc-20260327;
-        b=SQGZjOo9nDpBoU4o7xG3nSoFwlrXIZbm5tZ3LLYP4RutlVawLRM3AKkekjjOZjCuYG
-         B7AhFLK3beU9eylyPllKDC/xX0FJ6z6wgo0AyeViS7lX51bB7h+lWe4xK2qxtxUZQwXk
-         tUOWtZU5kah4wVPfh130FePO0tmP5FskmzyJgo9yiBkDv3LXroJqFGqcy/Dc6NJp34if
-         RpwPwHYvjWKqUTrpL6+5hbZCsaedbdZYFL8hYKJwd8wCg3Y31FPfBLMq7dBWyMFmWMoJ
-         e1GJc5zk8Gg2YghMVVhmpyzdLuh2LECc4LnBa2HOcdMJDzIkx6RkibvuS3X1Kw7gEAKu
-         m+Bw==
+        b=Vl0bZzLAsxa+91GBNbOysDIAftYzEhdTvPTW4lCGKSSyQNg6K1wXl7JvHQHGHq5xPT
+         bxRKbrmSy768Vqs46dO7KOMGCSN32BZEwcrnycNspR4pCYn0C3ZBv1Mu+QN8TbNrZpNm
+         8Si24WayYyAvCTA1KFrCzM7OWm8w424BQow7EW67L/O35cVnTIxWC+EKWU9ersmrq/Mf
+         d1XNus4LFubN/p2tO2po/6IExnKxj8QdoxUsbWrHWqh1BjK6ngo7xMUfGpDwIYciIZMz
+         XxOGooXCESVa7bdZESZRYZykZwNYZB/+QAG7a1xPQTLK9m3MDK9++Gm+8yVRUpfUaA/w
+         2EPw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :references:in-reply-to:mime-version:dkim-signature;
-        bh=2y29sQ2dPba/54GelCiYbC4bFX1dedr3eek43WaIQkM=;
-        fh=XYEm73zIZpmdoFl+iRTo12jIN4q5yC3unDWFV58Bgc4=;
-        b=b2HvwI+q1ytPzYOUJ/74XJ277fMVCJmrdxEz0dKiaCCSSuTp0loBT5iiqRuMW17i+Y
-         lbO1/tkNwDIpwczQ8fkPbPp6BSYdNBNh6pCqRZx6GJvCY+G845cC1P96wqyp4lARbToW
-         UudqyPf8RI6csqKWKrKxZ3IHT1x2cD7qCAvku/lm8UCBi2V6kAVmDkuA7o4zsL34PB6C
-         Dwz7yohAn/J8kUTIoQWCs0q+KKgUJLW+e8AugEpqJrVYWWBBr6SfrtFMhPGIZa3HbfYq
-         wYVzakQBzPWrojAK4dNjOP2uFetMm68ZbiJZ0vVkaTmr292q824+EpbnqqjmBRmR/My3
-         dpkw==;
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=QPohgoPuf5d963Y2G/ZdUa/zMplXrQUxWQ1kLVkoHy8=;
+        fh=RaWQypBYheB1AH/ID6q0ccP5qXBJMqJCGgpg5gGm6ak=;
+        b=FOyRsANyRVR3Zx8Rfpgqm32g2M8l+9m/w18SjVvtlqb2jC1YE4qKKdCksJn5miHJYV
+         ZB/5QJsSVe7izxinDhiskv2bTPBXJecWXRwD27IOF1pOOxFcTMjsa376gz5KL3aIlngY
+         /IdD/6Mbnv5eHD584FFYPETirKn1qghDDyE2C6E4nil2Xb5aXk4z1QOwY6cIW1ltPqec
+         O6lkvCDENe6DD+wKjHW9D6+p12dev0ZxHPs5E/Q3rgdJoF/DUxXAd3mCYUznns97GhjT
+         X1Ib48S92/lGeqMjr/dr9daOD1esXFlwbkR68JgURH/R1S7zONHjlTT7++p4cXs1bxt8
+         NOPQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793563586; x=1794168386; darn=vger.kernel.org;
+        d=sartura.hr; s=sartura; t=1793566654; x=1794171454; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:references:in-reply-to:mime-version:from:to:cc:subject
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=2y29sQ2dPba/54GelCiYbC4bFX1dedr3eek43WaIQkM=;
-        b=h0cE6znWQAeBtkpJ5uqnF++TsX+Id/TQETw1gbIdQZEJxcmX/VCHnXvaE/+q1paWdN
-         Q3HoE5XLzSJ9HO2lqjTHa6cKr2vgU23Zq/cN2qlhIctb0FtAxsnGTYpQ8FPZu54d4sYC
-         bjMIgYj1kQpLYJYU/wlHk9Ig0T2nUwvd9gbz0HwFfkgFu4KVnpd/8/oCqCNcTfx/p0oS
-         h+pG6RvnRGAjdcFK+FwX0fitrHDI6pXRWhlKOK/CxoCuypicKu8XUBz/secpMfrscyEE
-         7USHtEICFat/L2Pqnuea8mtOjyjYMc9xjIf70FrTeE+xS2wK9wL8mcdxEMvMmLiK2cgu
-         k4Iw==
+        bh=QPohgoPuf5d963Y2G/ZdUa/zMplXrQUxWQ1kLVkoHy8=;
+        b=PfdrVEH9VF8i06vBnK1r/kJ3TMJdZ9l7DDBY/wtcVylKvRxCBH1W9o3zCCh/oHrGe9
+         NoSgsSmDrqewDYraCvEDVnf78u6oGK7DKAUl4sewkY5yys4PRJ9Eu7vxxDKHAKlupVrX
+         As/P+kqU288ALl4t/nSche2fXbeQZDR2BHKavCxMJiVvacpiXP8H89/UJQdmLxeiwOFA
+         hKX8uUJh5cnrDbAvtsLIRVX5r+Hrvsz3MKJofUMr08xfWAK53NN30fdiReZfaxgdcF6P
+         737nLz1BSfoWe4/UJFCFOmOpASN9iUC6WCSRRdxcwIdfdi2EeAUkZERg7kCJ4lwxom6a
+         +ezg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793563586; x=1794168386;
+        d=1e100.net; s=20260707; t=1793566654; x=1794171454;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:references:in-reply-to:mime-version:x-gm-gg
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=2y29sQ2dPba/54GelCiYbC4bFX1dedr3eek43WaIQkM=;
-        b=oWcrOcgSeHUX1VjOcPvGuP3rAWa1pZNB7eXkWCqmFO3FILJjydPGlLAtCbVWq7O1I1
-         5oGksa8y3VPFhPYdNLJJ9C3o6W27Vq4uAegWvnEY4WwGNqucRl0GMqr48ft8Vmg9pC0U
-         5HmvJdxQU+vx605pJ7zFwfU+K2Xlq0DPNgzbZfgqGuJxTVCAbrctI1tK0kk7YjsLIOOo
-         ZzvRa6xid7/mjcHykqfn44t5Qu+nvQLxQWtmkwgRmBUXpe1R/z3JKA1BwC3ccqYEI2Cx
-         W8czXlfCn7FenNYzd7zndQXLXw0cyFft4V0ECoBR7SiL5LRKJPDrJP5EWd9Gnv7fqPtq
-         /0sA==
-X-Gm-Message-State: APuU4Z/ZDI4Y7uyejLuBzd4PGOeLLTWL6h8hRymqXfyshzMGKmzC2OvC
-	lSDqoggShNQxAb3vmOHZKimeuRR6PEsMDoZkumIYdSjD1JVzvKNOAKyPncfCa8PruPa3T2TG+Iu
-	7ke3oE5NkCFSgfjsekswIybTRkotDJhR3wHC2
-X-Gm-Gg: AYBFou1qMrQPUBvPyv+oaH0IJCPRRqlrHA08JD1iLKFdNTIVl/ZLac3ORRML8sq3JuM
-	Sa+K7EsUQ92fdMIceyOQV0ya3yE3Qs835ZyHIg64JcoziPV8nK3qK/wViENbkBYJh0x8qH0w1EK
-	ail99SKbAPh+xyjSLQSZ45VL99Kidq+cYiFSZXrM5qy/AArbiVCS3CEk32YbLYEklPerUUgb0FF
-	53V7HKYsdqhZ7APUSm/N5dhvXnmjE5iElk7RJhP54QXJ8tWxUFzNMzrlWIub3cFrsiKfMPMMYeb
-	tfcgAphhfAFLLmsmcrwcVBFspepbGtWCOSRGtVIk+HR1GordhAqLDzhrueE1XnONX6jYghAErzm
-	wuzXGrYaZwthDZmi1vJiksZKr6WzEo54PKpzdRbL1JO9Sc1vmofyL3rlx/eZSkiqI9jUL9czvC3
-	+HEUfJj7bbv05QYsSkcAg6LUVy2izA8F8L+pH4FSAracp7fdYX
-X-Received: by 2002:a67:e111:0:b0:78e:1e0f:ea42 with SMTP id
- ada2fe7eead31-7d07223fbb2mr3225317137.2.1793563585821; Sun, 01 Nov 2026
- 12:06:25 -0800 (PST)
-Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Sun, 1 Nov 2026 15:06:25 -0500
-Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Sun, 1 Nov 2026 15:06:25 -0500
+        bh=QPohgoPuf5d963Y2G/ZdUa/zMplXrQUxWQ1kLVkoHy8=;
+        b=Ki0Ryelb36WX8DEtMXi+1cku7+pOYLHFX4npjvFb9DnK6kuSjIyhrgAAuPcyrZI4m5
+         PVtBW3Q46cwUDIC6s8C+cUp6nFY8j1e7KIUjdzRl7f7NIKVm+OP21IIZynga5VOXrthG
+         W6lqoNvnSj6AbVjAVsA/xYshYji14zz2CsLLhTS5SxuSQZLM6z1Vymw6JI4ZKIu/yS+D
+         xIPAqX+N8C6FaF2sC8kb4tCAd2cOFCWPSNSbDrHiPJIStucpvwvHw3W7NmIZIfDesxwP
+         oLqev1sHFLii7DuUJiILVkk1QQUJ+eP8ecd6pEIvieFeyX8xj2mKpVmyzDWZ1O+IWgpv
+         JSUQ==
+X-Forwarded-Encrypted: i=1; AKwUvBw6Ccx0ylCeQ1cKlUfrLOjbIWfX4biuNfEXCvJEDoOhZtqzJzoUfQvP5oq6X+d8dAjMWA0ofiCfpsWxSw==@vger.kernel.org
+X-Gm-Message-State: APuU4Z/0G6Y4ZOqWdymP1GDPkGy2KrP7ThKMnZzjhi1EpaM6CrqwTyTd
+	1QhyHnwJ6T+AbhcpZ3Scd8AplxsS8xIuQDkOyQGL7k4UWYayd768j6vLezwTRY6MTsKLXsF/9rE
+	FTu+X+IKndhMQuyrDt5cc1JftC24ryELtihY8kz/GfVTRb+U5WUAp2AGSGA==
+X-Gm-Gg: AYBFou1VvyfoIv2w1tzrm0xaH+qHjU7xOunNPPJLGbrme5+xYpp63dSin3qZ34JfLSq
+	x/Z3aamox5vrmvkP8IWWj3zXFT9NI2Kwt3u+aNFIvokWsyQuVxRhRBpLvY1SwkVWQvH+FudAcRw
+	VhPUUfkuhwblZc1gVSKoOAq9zDFDnLcdvGWTLGUxNUef/VMJvymei8FTmdcIhX0l8fYuFzsn3JJ
+	dVaBCoS1D/UzY9JQNZGsImPkZvEj8bsf9qdsQcGMmVPIv65gzPrnEoud95WQhXUjAcb/kSs58zN
+	OT/c3gSVfMecjZviZaiCCYAD6Yxvt98GcZD4L71JNsV2GjwNJ+mzJlrMjexlpi0uKQfpNjoFI6+
+	rxrO7tAxrPrcuqxiT2+zgJexu26aRRA5dTsK1Tgo7vw8EaNT8ve9Ii6cXJLoq0PI0u452mvhaiO
+	7EGTORr9WUdOSU6Bg=
+X-Received: by 2002:a17:90a:da86:b0:39e:21a7:5df5 with SMTP id
+ 98e67ed59e1d1-3ae897f61aamr6786067a91.24.1793566653699; Sun, 01 Nov 2026
+ 12:57:33 -0800 (PST)
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -108,247 +105,81 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-In-Reply-To: <CAOD9jOO2Ncdu9H_HO_gXDUawQOc8BgkiVuzoMS4gvPEVHZ3GEQ@mail.gmail.com>
-References: <CAOD9jOPXYG=n1BL+OjyLBz-zjy8RXnN3h9OTyapTFZwOvD1Rsg@mail.gmail.com>
- <de2db474-969d-4999-9b7b-1e5dc5f81ac2@gmx.de> <CAOD9jONjxwnyYdNUKYNy1pOv2yBTvVy9yT+iB_yatooisjG4GA@mail.gmail.com>
- <CAOD9jONGkoub7CPdBqmNGhSWvy8p5S=bJCY-43NxjkQPEqQzyw@mail.gmail.com>
- <dae6828e-2da3-441f-bc5e-a273819f7499@gmx.de> <CAOD9jOMcc78EK_HhkTMVGTihhVOLU1O=i0jh_R-C4SH=Gv8GzA@mail.gmail.com>
- <88d6dda7-49d1-4b58-a166-98e6e0c60d03@gmx.de> <d3a44b63-ec0d-42e9-bd0f-20ea388c6c14@roeck-us.net>
- <CAOD9jOO2Ncdu9H_HO_gXDUawQOc8BgkiVuzoMS4gvPEVHZ3GEQ@mail.gmail.com>
-From: LIght JUNction <lightjunction.me@gmail.com>
-Date: Sun, 1 Nov 2026 15:06:25 -0500
-X-Gm-Features: AclHuK_Cvnzl9dSZxzibWMp0_e5DIbfyBCFep99jFu3TZ1e3TEwczm1I1RmmUTs
-Message-ID: <CAOD9jOO4rJ09ezmSSvFVEAngOYW4XD3WKaPyS0teM_8VEk3y1Q@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: add read-only MECHREVO GM6PX0X sensor driver
-To: W_Armin@gmx.de, linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org
+References: <03055ffd-d015-4810-8b8a-678821fa6dcc@damex.org> <92e3383e-26f8-4bed-b487-1c52f6c4f420@roeck-us.net>
+In-Reply-To: <92e3383e-26f8-4bed-b487-1c52f6c4f420@roeck-us.net>
+From: Robert Marko <robert.marko@sartura.hr>
+Date: Sun, 1 Nov 2026 21:57:22 +0100
+X-Gm-Features: AclHuK85M4-bkzt8KtwzbjCxHOMk28x-2V4KLSaVQEH_PBp03_WXhAeiSslNHY8
+Message-ID: <CA+HBbNE1qs8VBGXyZ6+4mmawi67RN-8RYVQU91hoGBWVfu60nA@mail.gmail.com>
+Subject: Re: [RFC] hwmon: (tps23861) PSE-PD support, extend hwmon driver or
+ move to pse-pd?
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Roman Kuzmitskii <roman@damex.org>, linux-hwmon@vger.kernel.org, netdev@vger.kernel.org, 
+	o.rempel@pengutronix.de, kory.maincent@bootlin.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Armin, Guenter,
-
-For some additional context, the in-tree uniwill-laptop driver was
-developed using TUXEDO's out-of-tree tuxedo-drivers implementation as
-one of its references:
-
-https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers
-
-TUXEDO also maintains its own driver stack and currently blacklists
-the in-tree uniwill_laptop module until feature parity is reached for
-NB02 devices.
-
-I also found that TUXEDO's driver stack can be made to work on my
-GM6PX0X, although it still requires additional model-specific changes.
-I have been maintaining these adaptations here:
-
-https://github.com/LIghtJUNction/mechrevo-drivers
-
-Some features have been validated on my hardware, but full
-compatibility has not yet been established.
-
-This leaves us in a rather complicated situation, with overlapping
-functionality across the in-tree driver, TUXEDO's out-of-tree drivers,
-and my own adaptations.
-
-I agree that maintaining multiple drivers for the same EC interface is
-not a good long-term solution. My goal is to resolve these
-compatibility differences and consolidate the relevant changes into
-the existing upstream uniwill-laptop driver.
-
-Ideally, I would like to have a single upstream implementation that
-supports this hardware safely, without maintaining a separate driver
-or relying on module blacklisting as a workaround.
-
-I also ran the requested commands on my GM6PX0X. The relevant output
-is below. I have omitted the system serial number and UUID.
-
-$ sudo dmidecode
-
-BIOS vendor: American Megatrends International, LLC.
-BIOS version: N.1.09MRO07
-Embedded Controller Firmware Revision: 1.8
-System Manufacturer: MECHREVO
-Product Name: Kuangshi16Pro Series GM6PX0X
-Baseboard Manufacturer: MECHREVO
-Baseboard Product Name: GM6PX0X
-
-The acpidump output identifies the INOU ACPI device and its ECRR
-method. Relevant excerpts:
-
-96530: 5F 53 42 5F 5B 82 45 EC 49 4E 4F 55 08 5F 48 49  _SB_[.E.INOU._HI
-96540: 44 0D 49 4E 4F 55 30 30 30 30 00 08 5F 55 49 44  D.INOU0000.._UID
-...
-967D0: 52 57 68 01 0A 02 69 14 1A 45 43 52 52 01 72 0C  RWh...i..ECRR.r.
-967E0: 00 00 41 FE 68 60 70 4D 4D 52 57 60 00 00 00 61  ..A.h`pMMRW`...a
-967F0: A4 61 14 16 45 43 52 57 02 72 0C 00 00 41 FE 68  ..a..ECRW.r...A.h
-
-The dump was 3,982,091 bytes across 42 ACPI tables. I have included
-the INOU.ECRR excerpt relevant to the sensor path; the full dump is
-too large to include inline.
-
-The current read-only sensor path in my driver uses INOU.ECRR for
-these addresses:
-
-CPU EC temperature: 0x043e
-GPU EC temperature: 0x044f
-CPU fan counter:    high 0x0464, low 0x0465
-GPU fan counter:    high 0x046c, low 0x046b
-Probe project ID:   0x0740 (expects 0x10)
-Probe capability:   0x078e (requires bit 6)
-
-The driver matches the exact DMI identity and BIOS shown above. It
-reads sensors only, checks the project ID and fan capability, and
-exposes no fan controls. Fan reads use a high/low/high sample with up
-to three retries if the high byte changes. These checks and values
-have only been verified on this GM6PX0X with BIOS N.1.09MRO07.
-
-Thanks,
-LIghtJUNction
-
-On Mon, 02 Nov 2026 04:03:25 +0800, LIght JUNction
-<lightjunction.me@gmail.com> wrote:
-> Hi Armin, Guenter,
+On Sun, Nov 1, 2026 at 7:38=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
+rote:
 >
-> For some additional context, the in-tree `uniwill-laptop` driver was
-> developed using TUXEDO's out-of-tree `tuxedo-drivers` implementation as o=
-ne
-> of its references:
->
-> https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers
->
-> TUXEDO also maintains its own driver stack and currently blacklists the
-> in-tree `uniwill_laptop` module until feature parity is reached for NB02
-> devices.
->
-> I also found that TUXEDO's driver stack can be made to work on my GM6PX0X=
-,
-> although it still requires additional model-specific changes. I have been
-> maintaining these adaptations here:
->
-> https://github.com/LIghtJUNction/mechrevo-drivers
->
-> Some features have been validated on my hardware, but full compatibility
-> has not yet been established.
->
-> This leaves us in a rather complicated situation, with overlapping
-> functionality across the in-tree driver, TUXEDO's out-of-tree drivers, an=
-d
-> my own adaptations.
->
-> I agree that maintaining multiple drivers for the same EC interface is no=
-t
-> a good long-term solution. My goal is to resolve these compatibility
-> differences and consolidate the relevant changes into the existing upstre=
-am
-> `uniwill-laptop` driver.
->
-> Ideally, I would like to have a single upstream implementation that
-> supports this hardware safely, without maintaining a separate driver or
-> relying on module blacklisting as a workaround.
->
-> I also ran the requested commands on my GM6PX0X. The relevant output is
-> below. I have omitted the system serial number and UUID.
->
-> `sudo dmidecode`:
->
-> ```
-> BIOS vendor: American Megatrends International, LLC.
-> BIOS version: N.1.09MRO07
-> Embedded Controller Firmware Revision: 1.8
-> System Manufacturer: MECHREVO
-> Product Name: Kuangshi16Pro Series GM6PX0X
-> Baseboard Manufacturer: MECHREVO
-> Baseboard Product Name: GM6PX0X
-> ```
->
-> The `acpidump` output identifies the `INOU` ACPI device and its `ECRR`
-> method. Relevant excerpts:
->
-> ```
-> 96530: 5F 53 42 5F 5B 82 45 EC 49 4E 4F 55 08 5F 48 49  _SB_[.E.INOU._HI
-> 96540: 44 0D 49 4E 4F 55 30 30 30 30 00 08 5F 55 49 44  D.INOU0000.._UID
-> ...
-> 967D0: 52 57 68 01 0A 02 69 14 1A 45 43 52 52 01 72 0C  RWh...i..ECRR.r.
-> 967E0: 00 00 41 FE 68 60 70 4D 4D 52 57 60 00 00 00 61  ..A.h`pMMRW`...a
-> 967F0: A4 61 14 16 45 43 52 57 02 72 0C 00 00 41 FE 68  ..a..ECRW.r...A.h
-> ```
->
-> The dump was 3,982,091 bytes across 42 ACPI tables. I have included the
-> `INOU.ECRR` excerpt relevant to the sensor path; the full dump is too lar=
-ge
-> to include inline.
->
-> The current read-only sensor path in my driver uses `INOU.ECRR` for these
-> addresses:
->
-> ```
-> CPU EC temperature: 0x043e
-> GPU EC temperature: 0x044f
-> CPU fan counter:    high 0x0464, low 0x0465
-> GPU fan counter:    high 0x046c, low 0x046b
-> Probe project ID:   0x0740 (expects 0x10)
-> Probe capability:   0x078e (requires bit 6)
-> ```
->
-> The driver matches the exact DMI identity and BIOS shown above. It reads
-> sensors only, checks the project ID and fan capability, and exposes no fa=
-n
-> controls. Fan reads use a high/low/high sample with up to three retries i=
-f
-> the high byte changes. These checks and values have only been verified on
-> this GM6PX0X with BIOS N.1.09MRO07.
->
-> Thanks,
-> LIghtJUNction
->
->
-> On Sun, 01 Nov 2026 07:29:50 -0800, Guenter Roeck <linux@roeck-us.net>
-> wrote:
-> > On 11/1/26 06:47, Armin Wolf wrote:
-> > > Am 30.10.26 um 21:44 schrieb LIght JUNction:
-> > >
-> > >> Hi Armin,
-> > >>
-> > >> I added 0x046D to the read-only ECRR probe and sampled it 10 times o=
-n
-> the GM6PX0X. With 0x046C as the high byte, 0x046D produced 4934=E2=80=934=
-979 RPM;
-> the verified 0x046B path produced 4994 RPM in the same samples. So 0x046D
-> also gives plausible fan-speed readings, but the values differ. This does
-> not establish which offset is correct; I can only confirm that 0x046B
-> matches the existing sensor readings on this machine.
-> > >>
-> > > Interesting, on my machine register 0x046B always returns 0x0F, so it
-> seems that only some models
-> > > report values values inside this new register. Because of this i
-> suggest that we use register 0x046D
-> > > for now.
-> > >
-> > >> I still won't load uniwill_laptop with force=3D1 on this running sys=
-tem.
-> The probe writes several EC settings, including CTGP, lightbar and
-> keyboard-backlight state, and I have no complete way to snapshot and
-> restore them. I have not tested whether a cold boot reinitializes all of
-> those settings, so I can't rely on that as a recovery method.
-> > >>
-> > > Can you share the output of acpidump and dmidecode? I can then provid=
-e
-> you with a patch that only enables
-> > > a subset of known safe features on your device. Because i am very
-> against having a second driver using the
-> > > exact same hardware interface as the uniwill-laptop driver, so this
-> patch will not fly with me.
-> > >
+> On 11/1/26 10:02, Roman Kuzmitskii wrote:
+> > hi,
 > >
-> > I agree. There should not be two drivers accessing the same EC firmware=
-,
-> > and the register value similarity can not be coincidence. Disable
-> everything
-> > but hardware monitoring for this system if needed, but please do not
-> > introduce multiple drivers for the same underlying hardware / EC firmwa=
-re
-> > and use the existing drivers.
+> > TP-Link TL-SG2210P v3 (realtek rtl838x, openwrt) has two tps23861 for P=
+oE.
+> > driver is hwmon only. ports can be enabled via in*_enable sysfs, rest i=
+s only reachable by poking i2c directly.
+> > i would like to control them through PSE-PD instead (ethtool --set-pse)=
+.
 > >
-> > Armin, thanks a lot for catching this.
+> > i made patch for openwrt which registers pse_controller_dev from hwmon =
+driver when node has pse-pis.
+> > it does c33 admin state, power status, enable/disable, voltage and powe=
+r class.
+> > events are polled.
+> > only ports with pse-pi node go to auto mode, and in*_enable is hidden w=
+hile PSE is registered.
+> > https://github.com/openwrt/openwrt/pull/26330 (tested on openwrt 6.18 k=
+ernel)
 > >
-> > Guenter
+> > openwrt reviewers asked me to check with you first which way you prefer=
+:
+> > 1. extend hwmon driver with PSE-PD (like it is done right now)
+> > 2. move driver to drivers/net/pse-pd and extend it with PSE-PD
+> > 3. something else
+> >
+> The hardware monitoring "enable" attribute is supposed to enable monitori=
+ng,
+> not to enable some power delivery or network (or any other) port. That "p=
+ort
+> enable" feature using the hwmon ABI was sneaked in, and I am inclined to =
+just
+> remove the upstream driver for severe ABI violation.
+
+Hi Guenther, I am the original driver author for tps23861.
+
+Sorry for the ABI violation, that wasn't really clear back when it was
+being written, especially with no PSE subsystem at all.
+
+We can always just remove the enable attribute, the IC works in auto
+mode by default anyway, instead of dropping the driver
+as it is still useful for monitoring.
+
+That being said, ideally it would just be moved to the PSE subsystem.
+
+Regards,
+Robert
+
+>
+> Guenter
+>
+
+
+--=20
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura d.d.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
