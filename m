@@ -1,49 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793630941;
-	b=RC8J22JEZS6Qq6bGTq48GuDItffn3tLr2alCq0KbuItwOjfGD8gJTPUjkPvuAGEcjx1d
-	 SX+Klp75MYL2Ncvkk5JTcFhKFX45yPa+ICXoad3oMyR3VHxzXgzsHjm7Q1oJ3ECNtK2Hp
-	 ByyHX1dbGMX8mnlTDpU2bfmAyJ7kIjuWEZljgwzRltzAckKuO4XCKfnkJ+k+DGjYdu+lY
-	 cz3EZOyhWxFoeEuNxmNT9nhNYd1dUuGHVSJF0By6FwwFeLPXCDc9tUh6WcudmkGKlZP2K
-	 mf+SDkwyv0IYgBCO31mwOGGq3OOweNFXaoI4+jddCpI/y86yQ9OzHSW412ddLmvEzyw==
+	t=1793630956;
+	b=jvod6Ah2wDyua+zu+mktzAZe97934TXxfQ5ftlaJ4EYbyD+igXbwspSq7jn1yanMvHth
+	 F9wgn2SipkUZXosrJjOXDzc+TvRdUWa6NkdXAFQCZ9ZlqfOUlDXeigyOsWUqtFtiHh8Hj
+	 F5adp3WWAJZ9s1rc2R6CmLk0ymKVVGIXxNAmPRpyOjkfw8A++1nsIjkBOJm/VoVaeF++T
+	 PxhC3cp3JnQGz0SzYHlAF13VtWnK9yF+9bnReBgqMLWW8WmOXoqtjh3iAbdb9SineCy5y
+	 TdkNhwQGJxNREHaVzVdDEpMx6mZnPC4IW616xKI3q7dzvxgDvVhD1n8k6M/7D9qlweQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793630941;
-	h=Received:DKIM-Signature:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:
-	 In-Reply-To:References:To:Cc:X-Mailer;
-	bh=8jrSUs1NekCcqSC9vvFrLSxyeMYzE04YL21WWGf4M1s=;
-	b=fU1K5UAEFqlTN1hOcX1QIDVHSJWbEM3PtAgDCe8+xHBKTSBoCHAY7l7Rbe1S5I+eLhnS
-	 5X9trJVXC+f87hB4MtWpS7aBrkpG/DNQ/Uy5BGCyNU2X0sBDuUeO8pRBFOMadMm6Y20tJ
-	 /1KLpGRbsltZ4eClC1L1+XO9c1sg2aZHBo7XCDf30V34hqj+YQaK2IKnwoaLwR7nrQi+y
-	 8mBuBoga59DjUuWgxbJ0kcm67XnfIXfFADPriQLqxPYZjQQjWKJZZX59uVvER04jocLTH
-	 EUKx9Qw0izvw11S9ns/pQrPEj0pWALO60c07Ge2E9yidbTztPLtfrAjd1GPxuRT6pnQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793630956;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key;
+	bh=0qUp81D/2Ci0HUHkZPw66TOq85Lgn8fgQoyIUETqHdI=;
+	b=huppq6NtuBAjIZ8lSHxGOgIb0WUTAN/zyyXQNCH6O1YVxcqMbeSbgHh49Y7UIoalqgPF
+	 PwFSMwhFQ0qQqWzEVxcLMjYMFlb4ZjfDrsj3roqe6rd6aaD1WDSu6KQIaH1ddUvKIybF+
+	 gsIT6Ke5vtjpQGcb2CKovdJFIvZEDSHGghX26K0IommNINQnH1c7s/DIDTdTWaseA71Vp
+	 hH0/ba0xfk8QET6VrPPMFxAWMOGPCXmNmPzix+DfL44tR2HFCoKd3lFD8pUMQUZm+rs5h
+	 dvmM+CZhQcDWXdXUCjNEzD5bgiksOcALk4CweZ2KLIwi0D43gSXn9QMmgyLvyHvqBnQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KdaVBd+L;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linaro.org;
+	spf=pass smtp.mailfrom=linaro.org;
+	dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=hyXgvT9R;
+	arc=none smtp.remote-ip=209.85.128.54
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ADFF606A91C;
-	Mon,  2 Nov 2026 14:49:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35CB0606A916
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 14:49:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 35CB0606A916
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KdaVBd+L
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0000C1F00A17;
-	Mon,  2 Nov 2026 14:48:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793630941;
-	bh=8jrSUs1NekCcqSC9vvFrLSxyeMYzE04YL21WWGf4M1s=;
-	h=From:Subject:Date:In-Reply-To:References:To:Cc;
-	b=KdaVBd+LR6dYrZOwxkALP6csVexgpTI17X0oGeUCg9cBeFTUgiR94zL6IyLoxq3GZ
-	 aQIkaCOUsB8Oj/VUFcyqtDjBTHM3GgcvmUMOBZk0ZHCAJ2h41NDOZ+peUAbAsjobsF
-	 zM0SFZ6wizhatH0BU12+Ioe1vUILWF6E1PDa0Tf8A/4th4qQcCELh9uSBD2k61TxFY
-	 6DJtyWMTqO1JSRuci+enS4ZGiVJraiPNydbCuB9pH27FOcPP2tfaKhcNesGf3tTGPM
-	 Mj1aPT7WKn91KKayYyS6um+HvRncQzg65nW7VPnUHihTaWl5PXPZv6N7VacBwj9V5+
-	 0bdrkd3Bl9Nsg==
-From: Christian Brauner <brauner@kernel.org>
-Subject: [PATCH RFC 00/16] proc: let procfs own the data path
-Date: Mon, 02 Nov 2026 15:48:40 +0100
-Message-Id: <20261102-work-procfs-core-v1-0-75df35e4f8b8@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=hyXgvT9R
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4afe2d546f9so14170685e9.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 02 Nov 2026 06:49:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1793630954; x=1794235754; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=0qUp81D/2Ci0HUHkZPw66TOq85Lgn8fgQoyIUETqHdI=;
+        b=hyXgvT9Ra57UmHv1LWPVx6d11ZdCUUrZGkiHQEtM+lNQNR+3jew2yiCqK3QH8JpLWN
+         SBYBxK/QCcdXR/qWV7k5W6i8bXaF4oH30hq+xv2wKjCQ8moRJJCPCuCOdLqkAp83saOU
+         ctdKQ95u/D4LodRDbK7qBJ7ZmUL7a4BrDbEyOf4wn5roPO7CuAiKbdYhkGFj+R/kZvd9
+         puliQdCzx+iErkpdKK6aNxGEXHrllYVH/jsPAqkvc9ZlLDGCPXr5Aw3vaNpHKy4WQbZa
+         nXUwKiXGge2PqQMFeAJVqyX/5j5YrGMzxVg1t2xCVJBKMh49T/IDg5e/G5dRrGamIwPk
+         22yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793630954; x=1794235754;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=0qUp81D/2Ci0HUHkZPw66TOq85Lgn8fgQoyIUETqHdI=;
+        b=FK9fy/dQ1ziq5OxG7kBV5XsQ7ht5qW0hcv02o+yfFiYea04QVvQhsUR0vyVsC7GaVV
+         zHDdXRqpeo+MZp5mOOM1pcxAuLNIClE8JwI5EBt1oro0uzJ7jeeE7kluw6EnSStQdqsF
+         dmqjBmOvJUvVPfm9QLG7QNqm725ep0aTJyBxwk147uSTRoYbcVAkPq3l5oX1zo/suIbH
+         C5QobnpixHwWhYsQPVSySiZZG8Xqh87omeCIvJ7KlkAchhOZxdVQteVrAJ0eTqn072x6
+         suwoQMYJN7cJeLhG5ywiZeg4IqQtPPje1E1uxNuFGCZ65bWvtwqUPI3dsABF/12Schz2
+         VMMw==
+X-Forwarded-Encrypted: i=1; AKwUvBz/n3xBROFy724MyE63ob/tSTSXNZs3k5ZaWWgW0LeMizOH7c4X4dNb6bO+K347jJ4vgw19VLWI/jS7yg==@vger.kernel.org
+X-Gm-Message-State: AFq9FYJWyhjyXif/9gmWmMKmazYiDcjkhYysmRy0BVHLwpwm5HTS1NpM
+	1a3o0jrGF7jUZ76nHUsl8a54+QyaMHTcgtmUeVgCOTAdh/XQT1pvW4VbxmgxJvVBEtc=
+X-Gm-Gg: AYBFou3ojmS7T7z3vbFZ3wXePLqX5os1EjtdOXHzRS6qkVCBe+E5oDmiGvtq3sPYOe2
+	uZjdvwRILn79VrmlnG3p/bYDRmafqCCVnQUew3lN9UqQpVu9vna2y102fRcKFw2lk9CCvea+sEY
+	2gkBvafui+f3TbQHwEr5Mc4JFPfQhjBbQtdSTXWqQBa2U4Fs4Zcskv57fxh9eUvDwuTxUtgcQrq
+	51dbint4wR39hGyzgQ6oLQhU8eX9s3liGq7sDbX/M2ik0JWdUVwc4ETDagaeqH+CIsSsBfTwSpZ
+	HuHxx0tVe10M3/fPH5ieNQ12UxN6n74MDxgGOQetLqDmyZOfZMZihv6TrZkINuxlmU6Th3Hw7L2
+	LVlgEKlWs4lVlypOtz9PpRqNfwz9Y2TBlyibK3ryhAzSAD8j+P/nZonrdRWrEdzDpzfIsJh98xO
+	ek+Yg2jUEtXa4t+tXVBk2zXHvREe9Oa/AMKFaCV5cwrIe4RAeLPvuJWEzteLBZkIQm0q39t7Zll
+	/2QqYU1pV+LCTW5iRTEy8JlrXYBryXPH4QNoohdkDK/HMmgyZ/BfMasGIcCEcOmTptFtanCoua1
+	sPNcoIYQ1f6kt6JrGLjapYUZJzi9DaaLcgdagZVcIE1jCo+qr6U=
+X-Received: by 2002:a05:600c:e547:10b0:4ad:5e09:ae43 with SMTP id 5b1f17b1804b1-4ad5e09ae61mr100166455e9.29.1793630953516;
+        Mon, 02 Nov 2026 06:49:13 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:106d:1080:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4abf5b27e46sm447287005e9.3.2026.11.02.06.49.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 06:49:13 -0800 (PST)
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v5 0/3] iio: adc: add support for the MAX34417 Four-Channel
+ High Dynamic Range Power Accumulator
+Date: Mon, 02 Nov 2026 15:49:03 +0100
+Message-Id: <20261102-topic-sm8x50-iio-max34417-adc-v5-0-0ffa5e5f2d5c@linaro.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -54,241 +94,196 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/22Owa7CIBBFf6WZtRigtGK3Jn6AW+MChkHRWBRaN
- TH+u631uXrLezPnzH1CphQoQ1M8IdEt5BDbIYhZAXgw7Z5YcEMGyWUtBBfsHtOJXVJEnxnGREx
- 7o4zySkj0MGCXRD48PsotbNYr2E1l7u2RsBtl45k1mZhNpsXDWI3a+aSd234/GSYw0bUfdnVf5
- W9WU/w76o9mvFKOcy61WormJn5PMZ7PoWuKurJG+1IRal0TLqSVyBfOoUZfOi0qLKWulw52r9c
- bgbcrXCgBAAA=
-X-Change-ID: 20261101-work-procfs-core-8fa4a4f412cf
-In-Reply-To: <20261102-defizit-jobaussicht-kurios-7016c6e67442@brauner>
-References: <20261102-defizit-jobaussicht-kurios-7016c6e67442@brauner>
-To: linux-fsdevel@vger.kernel.org
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
- Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
- Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
- NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>, 
- Thomas Gleixner <tglx@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
- Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
- Greg Kroah-Hartman <gregkh@suse.de>, 
- Joel Granados <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>, 
- Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
- linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, 
- linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
- linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, 
- ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
- coreteam@netfilter.org, kexec@lists.infradead.org, 
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
- netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
- linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-cifs@vger.kernel.org, linux-fbdev@vger.kernel.org, 
- linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-sh@vger.kernel.org, 
- linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
- sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
- linux-doc@vger.kernel.org, linux-serial@vger.kernel.org, 
- linux-atm-general@lists.sourceforge.net, Takashi Iwai <tiwai@suse.de>, 
- linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
- linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, 
- linux-debuggers@vger.kernel.org, 
- "Christian Brauner (Amutable)" <brauner@kernel.org>, 
- Chuck Lever <cel@kernel.org>
-X-Mailer: b4 0.17-dev
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAN+i6GoC/43PQWrDMBAF0KsErasijcaJlVXvUbKQ5VEypbGC5
+ BiX4LtXSqGkZOEuP3zen7mJTIkpi/3mJhJNnDkOJTQvG+FPbjiS5L5kAQq2yoKRY7ywl/nczo2
+ SzFGe3WwQ9U663ktQltpWNcaEThTjkijwfPffDz85X7sP8mNFa+PEeYzp637ApGvvv1uTlkqi7
+ rFzugse9dsnDy7F15iOoo5N8MjhGgeFs06VLu0gNP6JM7+cVnr1OlO43mwVOkIHYJ84fOCgXeO
+ wcuVVFwyRVeYPtyzLNzfepX3KAQAA
+X-Change-ID: 20260923-topic-sm8x50-iio-max34417-adc-209e880533fb
+To: Jonathan Cameron <jic23@kernel.org>, 
+ David Lechner <dlechner@baylibre.com>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
+ Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Michael Hennerich <Michael.Hennerich@analog.com>
+Cc: linux-iio@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ Neil Armstrong <neil.armstrong@linaro.org>, linux@analog.com, 
+ Conor Dooley <conor.dooley@microchip.com>, 
+ Marius Cristea <marius.cristea@microchip.com>, 
+ Andy Shevchenko <andriy.shevchenko@intel.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6416;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=6jaJPoTGUqrFyROlTBDlWU3tE0Y8ZPvq2MUTpZFqPk4=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBq6KLmjwwnX/WWUJfNGu8V5y/j2BDi/bEowI2Puoqv
+ 0kyKipyJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCauii5gAKCRB33NvayMhJ0QnED/
+ 4xBlLDicDGu2mvg4XKvsrgwqPhS54tZTnleRQKXLkvZoNN5iRyYq9YkfPnr2Zoo6diRW1SZE8cABby
+ GO7fgHiXzU/IFLnlYD6qatrjFQKBM2srs9NWIHdzqmGiV/MTcIYkHeRzvLg9JurZeOgOF/aFl4Mho4
+ Ai/zmVmCbogObPri/o25/HHT6m57ugte5DreusGZeWASA8c6H72hRsoo+4GQcddExo0cP3c8JwCynt
+ ZsGW4DIUtXu9m5zAWlXdRtcHyM4cK+9N9Qr55cIST/vOGSNPMNuXi1qSs5QRTEtq3adLxyaoYsG27A
+ k88A4Dde+Lcq7bWBZ24v+wDQx1wtSTdbPKE4w9SJ9C/6IO2m3GNx8It2JxgZTOF7wjnegofW0uT8QS
+ PZmHj0kZJCp1jnJhA2VNZM+rzog5NtXeR/XaYZxweM6B07v34abQNTKteE4b8AC5o5kcX721a9Dgyq
+ FojBvE0bOGyYvbKqrl1Gg9e1MpP0KVN1Ox/PlRo5mBrnPV6+vNJ4V4Q+i0Yfwt8g1vZzssx3roQAFp
+ FJbLc/wfu9gux5hMCF93PE+XQh2ALK66mCjTcHzDxSl8pWNsyOIIb/Uv+vNCSWrusrylp1nBT6bU4r
+ pwuLlrm4mLVfroT7PK08GYqq3cY+3yIJEEywOQYvfCQpSEtFB0cH+vN8sTKg==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 
-remove_proc_entry() waits until every call into the entry has returned.
-For a seq_file entry that's all of seq_read_iter() including the copy
-to userspace. For everything else it's ->proc_read(), ->proc_write()
-and ->proc_ioctl(), which copy to and from userspace themselves. A
-reader or writer can make a page fault in that copy take as long as it
-wants, e.g. with userfaultfd or by punching holes into a memfd over and
-over. And callers of remove_proc_entry() like to hold locks while they
-wait. addrconf holds RTNL when it removes /proc/net/dev_snmp6/<dev> and
-xt_hashlimit holds hashlimit_mutex which is shared by all network
-namespaces.
+The MAX34417 is a specialized current and voltage monitor used to
+determine power consumption of portable systems. The driver supports
+getting the channels voltage, average power and accumulated average
+power and energy over an I2C/SMBUS serial interface.
 
-An earlier AI generated version bounced the text through a second buffer
-in seq_file so the copy to userspace could happen with the entry
-unpinned. That second buffering is really nasty and complicates
-everything unnecessarily. So after chatting with Jann a bit I decided to
-do what kernfs does instead: the entry's code only ever runs with the
-entry pinned and never touches userspace memory. This series is the
-procfs side of that. The entries are converted in four series on top of
-it, one per area of the tree, which don't depend on each other, and a
-last one drops the __user methods.
+The MAX34417 datasheet only specified on how to calculate the
+accumulated average power, but with the Sample Per Second rate
+we can easily get accumulated Energy in mJ.
 
-seq_file reads: procfs owns the seq_file and only calls into the entry
-with it pinned. An entry declares its seq_operations, or just a show
-function, and the size of its private state in struct proc_ops. procfs
-opens and frees the seq_file and reads and seeks through seq_file
-directly. ->proc_open() and ->proc_release() only deal with whatever
-the entry needs on top of that. proc_create_seq() and friends already
-keep the seq_operations in the entry so they're switched over in one
-go here. That covers most of /proc/net. The open coded single_open()
-and seq_open() users that don't do anything else are converted with a
-coccinelle script, also here. A nice side effect is that opening one of
-these entries no longer allocates a pde_opener, they have no
-->proc_release() of their own anymore.
+By default the IIO driver only supports single-shot Voltage
+and Power sensing, but the accumulation can be enabled by
+enabling the Energy IIO channel which then enables the
+Continuous Accumulation Mode.
 
-Writes: procfs copies in what is written before it pins the entry and
-hands the entry a NUL-terminated kernel copy through ->proc_write_buf().
-The copy is capped at PAGE_SIZE - 1 bytes unless the entry asks for
-more in ->proc_write_size, which is what proc_simple_write() always
-did. Entries that take binary data in pieces, the PCI config space,
-ALSA's data entries, cio_ignore and the rtas flash files, ask for
-PROC_ENTRY_SHORT_WRITES and their writes come up short. Since procfs
-copies in the whole write first, a write that is too large or whose
-buffer can't be read fails before the entry's own checks now,
-permission checks included.
+The counter is common to all channels, so when reading a single
+channel we will copy all accumulators to registers, so in order
+to permit reading individual channels we must accumulate the
+other channels in the driver when Continuous Accumulation Mode
+is enabled.
 
-Reads that don't go through seq_file: an entry fills a kernel buffer in
-->proc_read_buf(), procfs copies that to userspace after unpinning the
-entry and only moves the position if that copy worked, like
-kernfs_file_read_iter(). The buffer is a page unless the entry asks for
-more in ->proc_read_size, and like with kernfs a larger read comes up
-short. Entries whose readers want all of a large file in one read,
-/proc/vmcore, /proc/config.gz and ALSA's data entries, ask for
-PROC_ENTRY_FULL_READS and procfs fills their reads in pieces. These
-entries are read through ->read_iter() now, so sendfile() and splice()
-work for them.
+The get_unaligned_be56() helper is added since we effectly
+get an unaligned 56bit value from the HW.
 
-ioctls: the command number doesn't reliably say what an ioctl copies.
-The PCI ioctls aren't encoded at all, i8k's encode the wrong sizes and
-esas2r uses a range of plain numbers. So an entry lists its commands in
-->proc_ioctl_args with what goes in and what comes back out, like DRM's
-ioctl tables. procfs copies the argument in before it pins the entry,
-calls ->proc_ioctl_buf() with that copy and copies it back out after
-unpinning the entry. A command that isn't in the table fails with
--ENOTTY. 32-bit tasks go through the same table, so the compat hooks go
-away.
+While Analog Devices originally provided an HWMON driver for this
+IC, using IIO makes much more sense because it provides
+much more flexibility to support getting the power values
+and will make it easier to support trigger to dump all
+channels in a single shot and then support the Bulk Update
+feature to update all MAX34417 on the same bus via the
+trigger mechanism.
 
-The limits of reads and writes are remembered in the entry when it is
-registered, the proc_ops go away with the entry and procfs shouldn't
-have to pin it just to look up a number. An entry that declares a
-seq_file and a read or seek method of its own, or one of the new
-methods next to the old one it replaces, fails to register.
+The v3 implementation has been completely revised since
+v1/v2 to better match the capabilities of the MAX34417 and
+allow getting accumulated Energy plus provide single
+channel read without loosing other channels accumulations.
 
-Entries that are never removed, kcore, kmsg, the kpage files and
-/proc/profile, keep reading straight into userspace. procfs never pins
-those, so nothing can wait for them. The last series enforces that.
-
-What this doesn't cover is mmap(). procfs pins the entry around
-->proc_mmap() only and a page fault into the mapping runs the entry's
-vm_ops unpinned. kernfs wraps those. That's for another day.
-
-On a KASAN and lockdep kernel the reader selftest fails without the
-series and passes with it. The other proc selftests behave the same
-with and without the series and so do the entries converted here that I
-could get at in a VM.
-
-This is on top of "proc: fix a few old bugs in /proc handlers".
-
-Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
-Christian Brauner (16):
-      proc: drop the compat file operations
-      proc: add pde_pin() and pde_unpin()
-      proc: make room for more entry flags
-      proc: let procfs own the seq_file of seq_file entries
-      proc: let procfs own the seq_file of proc_create_seq() and friends
-      proc: let procfs own the seq_file of DEFINE_PROC_SHOW_ATTRIBUTE() files
-      treewide: let procfs own the seq_file of simple proc entries
-      selftests/proc: check that a faulting reader doesn't hold up removal
-      seq_file: add seq_preallocate()
-      proc: let procfs own the seq_file of /proc/stat
-      proc: let procfs copy in writes before pinning the entry
-      proc: copy in writes to the network namespace entries before pinning
-      proc: let procfs copy out reads that don't go through seq_file
-      fs/proc/vmcore: let procfs copy out reads
-      proc: let procfs copy ioctl arguments in and out
-      Documentation: seq_file: describe how a /proc file uses seq_file
+Changes in v5:
+- Collected review tags
+- Fixed patch 2 commit message
+- Added sysfs.h include
+- Finished all struct max34417_data with .
+- Added explicit MAX34417_CONTROL_REG: to is_volatile callback
+- Added local *map to all functions, shortening regmap calls
+- Explicited the 1ms UPDATE delay for manual mode
+- Simplified max34417_check_ovf logic
+- Simplified acc_count == 0 logic
+- Used iio_val_s64_decompose
+- Used regmap_update_bits to compine regmap clear and set
+- Added switch instead of if/else for IIO_CHAN_INFO_SCALE
+- Changed max34417_calc_input_correction comment and return type
+- Switch to rsense_uOhm
+- Return -ECHRNG for invalide channel count
+- Link to v4: https://patch.msgid.link/20261028-topic-sm8x50-iio-max34417-adc-v4-0-d4baaf3ee903@linaro.org
 
- Documentation/filesystems/seq_file.rst             |  42 +-
- arch/alpha/kernel/srm_env.c                        |  10 +-
- arch/arm/mm/alignment.c                            |  10 +-
- arch/powerpc/kernel/rtas-proc.c                    |  50 +--
- arch/powerpc/platforms/pseries/lpar.c              |  20 +-
- arch/powerpc/platforms/pseries/lparcfg.c           |  10 +-
- arch/sh/mm/alignment.c                             |  10 +-
- arch/sparc/kernel/led.c                            |  10 +-
- arch/um/kernel/exitcode.c                          |  10 +-
- drivers/acpi/proc.c                                |  12 +-
- drivers/hwmon/dell-smm-hwmon.c                     |  10 +-
- drivers/input/input.c                              |  24 +-
- drivers/macintosh/via-pmu.c                        |  10 +-
- drivers/net/wireless/intel/ipw2x00/libipw_module.c |  10 +-
- drivers/platform/x86/lenovo/thinkpad_acpi.c        |  10 +-
- drivers/platform/x86/toshiba_acpi.c                |  40 +-
- drivers/pnp/pnpbios/proc.c                         |  10 +-
- drivers/s390/block/dasd_proc.c                     |  10 +-
- drivers/s390/cio/blacklist.c                       |  13 +-
- drivers/scsi/scsi_devinfo.c                        |  10 +-
- drivers/scsi/scsi_proc.c                           |  21 +-
- drivers/usb/gadget/function/rndis.c                |  10 +-
- drivers/video/fbdev/via/viafbdev.c                 |  70 +---
- fs/jfs/jfs_debug.c                                 |  10 +-
- fs/ntfs3/super.c                                   |  20 +-
- fs/proc/cpuinfo.c                                  |  10 +-
- fs/proc/generic.c                                  | 126 +++---
- fs/proc/inode.c                                    | 457 ++++++++++++++++-----
- fs/proc/internal.h                                 |  54 ++-
- fs/proc/proc_net.c                                 |  44 +-
- fs/proc/stat.c                                     |   6 +-
- fs/proc/vmcore.c                                   |  14 +-
- fs/seq_file.c                                      |  36 +-
- fs/smb/client/cifs_debug.c                         |  79 +---
- fs/smb/client/dfs_cache.c                          |  10 +-
- include/linux/proc_fs.h                            |  91 +++-
- include/linux/seq_file.h                           |  11 +-
- kernel/irq/proc.c                                  |  30 +-
- kernel/latencytop.c                                |  10 +-
- lib/dynamic_debug.c                                |   6 +-
- mm/slab_common.c                                   |  10 +-
- net/core/pktgen.c                                  |  30 +-
- net/sunrpc/stats.c                                 |  10 +-
- .../selftests/proc/proc-remove-slow-reader.c       | 133 ++++++
- 44 files changed, 837 insertions(+), 792 deletions(-)
+Changes in v4:
+- Fix bindings with Conor review on v2
+ - Rename to Analog Devices and "adi" prefix
+ - Move reg before #*-cells
+ - Remove "label: true"
+ - Make supplies required
+ - Update DT example
+- Rebase on linux-next
+- Fix RSENSE defines
+- Drop dev from max34417_data struct
+- Move acc_count to u64
+- Add regmap writeable/readable/volatile callbacks
+- Use regmap_set/clear_bits() when needed
+- Fix MAX34417_CHANNEL layout
+- Drop useless comments
+- Move i in the "for (int i...") and use i++ instead of ++i
+- Move mutex guard into iio callbacks
+- Use lower_32_bits/upper_32_bits instead of FIELD_GET()
+- Use div_u64() when returning the Power scale to make sure it runs on 32bit systems
+- Reorganize the get_label() callback
+- Use devm_mutex_init
+- Drop fwnode_property_present(node, "reg") before getting reg
+- Rename rsense variable to rsense_microOhm
+- Drop !rsense test
+- Register iio device after device init
+- Add comment about supporting MAX34407
+- Link to v3: https://patch.msgid.link/20261013-topic-sm8x50-iio-max34417-adc-v3-0-d3604ae4a229@linaro.org
+
+Changes in v3:
+- Implement Continuous Accumulate Mode and default to single-shot mode
+- Fix includes
+- Better define Rsense and default rsensd in driver & bindings
+- Define all read length and offsets
+- Define the SPS bits
+- Fix comments first letters
+- Fix max register
+- Add ENERGY channel with shared enable for Continuous Accumulate Mode
+- By default reset the MAX34417 counters for each readout to do a single-shot measure
+- Handle zero counter
+- Add get_unaligned_be56
+- Use get_unaligned_* macros
+- Better handle the DT properties and report errors
+- Reset the MAX34417 at the end of probe
+- Link to v2: https://patch.msgid.link/20260924-topic-sm8x50-iio-max34417-adc-v2-0-9a0609e72f5c@linaro.org
+
+Changes in v2:
+- switch to shunt-resistor-micro-ohms no more required
+- removed gpio.h from example
+- Fixed max34417->MAX34417 in Kconfig and comments
+- Added missing includes and remove unneeded
+- Fixed typos in comments
+- Switched to fsleep()
+- Better aligned max34417_read_power declararation
+- Handled 0 acc_count
+- Switched to GENMASK_ULL() for 32bits systems
+- Added missing empty lines
+- Moved the input correction into a helper
+- Set default input correction for all channels
+- Switched to dev_err_probe() to return from probe
+- Switched to device_for_each_child_node_scoped()
+- Handled invalid shunt-resistor-micro-ohms value
+- Link to v1: https://patch.msgid.link/20260923-topic-sm8x50-iio-max34417-adc-v1-0-41d4ba1bfc41@linaro.org
+
+To: Jonathan Cameron <jic23@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+To: Nuno Sá <nuno.sa@analog.com>
+To: Andy Shevchenko <andy@kernel.org>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+To: Michael Hennerich <Michael.Hennerich@analog.com>
+Cc: linux-iio@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux@analog.com
+
 ---
-base-commit: 65ba8f34ec886ec72b2c07ddc8cf3d815c32869d
-change-id: 20261101-work-procfs-core-8fa4a4f412cf
-prerequisite-change-id: 20261101-work-procfs-bugfixes-054d00028491:v1
-prerequisite-patch-id: 0474af12959624910718795bf86684383664c685
-prerequisite-patch-id: 540aa9ea28adcbc54d8264f66314e29e3b8c9d49
-prerequisite-patch-id: 2f7139d1c972c4439dccca610caa5f1288987a3d
-prerequisite-patch-id: b0031a7c4855b7ec38259c59f30f65101a8fc4b5
-prerequisite-patch-id: 0b7f226abf2b9ff41873a1aa55cf97747647d56b
-prerequisite-patch-id: f63e345f897619af54813958046617c655fb7daf
-prerequisite-patch-id: c0e21e762a2960e3324c5ab04634a7035e515fa6
-prerequisite-patch-id: fd59c71eadd8f39c58b3baea93567bc093bc9b0e
-prerequisite-patch-id: 5d52cc8a5c73e4c5ba16b8e24f51408c17583bf9
-prerequisite-patch-id: 1f9179284e2f3314d4b46ac5e989089a21c7576c
-prerequisite-patch-id: 10397bbf696bee16dc71eb79fff6c5e73842bcbc
-prerequisite-patch-id: 9b44279dcf08912238d2f6438a3328a778a79a0c
-prerequisite-patch-id: 16854b621a3a71dfc365aaf7abaa7f65adfe9f7e
-prerequisite-patch-id: ca42eea21fae1fd1cd3518ab057c74b61ffd68fe
-prerequisite-patch-id: 23255dc2be76b0479c083dbd4c897bfbb533aed5
-prerequisite-patch-id: 82129c687ebf0a41b369893b92f2c038420ab801
-prerequisite-patch-id: 56ad57a99a5bda075a9f4e844368974296744934
-prerequisite-patch-id: 288b3cbaa11e01a778cc3d7beb6c0549aacf59f2
-prerequisite-patch-id: a163b1549608652bfa5bd9ff93efa55b541010c4
-prerequisite-patch-id: 78f067c343177e52d49ddfe9ee2992e602549869
-prerequisite-patch-id: 19c12bc6e3fbed35acc1f657196b1a997f48cdfe
-prerequisite-patch-id: 5800c3076694bad719954b2ad4d7448c6e013bfd
-prerequisite-patch-id: 2a2f63d8843b159594b9eee6ddea028ce76a6270
-prerequisite-patch-id: 40a1951d57906c4a1b98a4bd96a814b80339b9c5
-prerequisite-patch-id: e2141077e69f20a2b27fab69c8d61d0686682f53
-prerequisite-patch-id: c4d6018c26c40dc549d88330d23ce48f872c2b7f
-prerequisite-patch-id: 6de8ec17746031bc6d1d9ac262c5be0f905fcd79
-prerequisite-patch-id: b87bcb167884605bff1fd0f2ed8a88942d07efd5
-prerequisite-patch-id: cfa9a8b4c67e20cfd22d77035bfd21ee96ab3298
-prerequisite-patch-id: abf3482ed2399b7b2e1ee72e937af05bb9200667
-prerequisite-patch-id: 02c175b2dee565a85b3308ecf2ec8e3c9a029e0f
-prerequisite-patch-id: 4ed6b3d3d45de49d4967e88ba4e7f03372775f55
-prerequisite-patch-id: dbe02fe3f784776fda5e7ae99f077bef0cd4b48d
-prerequisite-patch-id: 53edc9a95afff57c4acba40095a8054924261ea2
-prerequisite-patch-id: cf9ce0099005fd3bc31a1e15131d48e315ac3bee
-prerequisite-patch-id: 16a657a5d0046068dbace29e7ea046ac1441f46f
-prerequisite-patch-id: efeb2d6f7df71d5dede2c1d12fe999a28e38aab9
-prerequisite-patch-id: e6ffe2a5c3ee5645f56c8366b568fbc9f140848c
+Marius Cristea (1):
+      unaligned: introduce be56 unaligned accessors
+
+Neil Armstrong (2):
+      dt-bindings: iio: add: document the MAX34417 Four-Channel High Dynamic Range Power Accumulator
+      iio: adc: add driver for the MAX34417 Four-Channel High Dynamic Range Power Accumulator
+
+ .../devicetree/bindings/iio/adc/adi,max34417.yaml  | 103 +++
+ drivers/iio/adc/Kconfig                            |  11 +
+ drivers/iio/adc/Makefile                           |   1 +
+ drivers/iio/adc/max34417.c                         | 787 +++++++++++++++++++++
+ include/linux/unaligned.h                          |  27 +
+ 5 files changed, 929 insertions(+)
+---
+base-commit: 54729cd85a044e8e2ee3f73ddda2d7c2fb39e199
+change-id: 20260923-topic-sm8x50-iio-max34417-adc-209e880533fb
+
+Best regards,
+--  
+Neil Armstrong <neil.armstrong@linaro.org>
 
