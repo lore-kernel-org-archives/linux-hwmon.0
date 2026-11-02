@@ -1,84 +1,48 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.35
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793631884;
-	b=LU5QdybgsWwkDBFA2DiOSR05IARgN1xmuUrECDhCeqlgiEiNmfgljcWJq996iLP/WLqB
-	 aZY1SW3nOIUQwGtn2iWxyv0lJA+v7j5wO164lt1AUsAYfTAKCgs25T+qQWNYOnyCDvaUe
-	 fUL+BpI9I5HsMRwVMjuT/q1BOHZo9yJlmKLEwdUXvYWSwBJCSj7Ud9dV5Atf9CHTvxD0f
-	 GtyoVw1XGsB/yurY5SN6cAGc/WAT1QDH/pfz3kXeZWbTnd0/ySFvp6uhOL0HIMJ08SztK
-	 6hTQ/9y6ey8dEr5bDp6AbhS7RqlMBojla3eFzvLFn2HAQcdy3FKCSmGDzQM8I0sVLOg==
+	t=1793631880;
+	b=Ndbqe+38B497pyLmehcVhMY/NcQKSIgh4xSpu18qUzsn2Q6KShWIxzQoEP3hWFw4FWwL
+	 rUximyxAcb+5KBky7QdQXCZVvaatDwImw0RFV0/aTQ4treq3dlCXJbC3Am/WBD9gloWlo
+	 YQ4bSW6Nem/DwiAq5y6XI0NV6uQ2WOnl3gqhmONSoKSGJIy2jJ9usaS3VaHu7/AQxynWG
+	 7T22+CuUcnN4NGI3KyJgz5xFQTRlJucVSaYnp6gJyz7MvCM2xDfOEAjfjlLSzotlMHY3n
+	 RblfqrUVuhPpycxYpi8VPiG5dZarCE79tTjRFmjNUCKotmKggSjIuaclFgZgwVa+Pkg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793631884;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
-	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
-	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
-	 X-Local-Domain:X-CMAE-Envelope;
-	bh=v/EFnPHaPvgzAcdCipbZrXu35F80MQk6sO8AjpoOnik=;
-	b=QsE19VU0eN+RtY0F428B/k2R0lMB2AiwfKFtZhDmN1bNXRwTaRMeMl6O/7eS39qXp2Ij
-	 V164pBSXtfbh8VlPy9m5Tgi8jE27GY/DWvBlv1owTpUk2S3YPhL+m1XaJCGu7Gw57JMd8
-	 Sb9T1g6QXkNwWnYlz5QsC+OIFuLvlGZPPlxcnwYdla+8u7gRsqqLGfHvCLElaV90fRsG5
-	 vnK1lYbN9vMGwxKRdiEDRhmV16XOt3N120UNKEVGJm/YITpzMplgKQpo6yy/hLfr9ASPy
-	 CAtVCBBxQmyNVs2SafZaVWOEy/uKpeD2CqYlG7ANgyBmifQjAfzLJ7fGD2m/ngr5s5A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793631880;
+	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
+	 X-Mailer;
+	bh=moTp49XZfW2IxIkO6/t4/a2jJtvDF10yNUa6q6hnE3E=;
+	b=Z4BL/wNiGb8QQKtF1hjJNDyfrFsx1CY8rlHPXGQebvTS8WAeWlzO53Akjy0LYWY2bLVf
+	 9DcedJumRgBOLu9waa3is4CevYnnHpVuTnhKq3VwMhyzubHfF1KdUKlFHYr3uV997M4MS
+	 5ac5W7UmvtQjeCAjiIDNai6AYneUFipkWBoQeNN9KPv0A9p5AfdiiurXxz+Usw9a5cKGA
+	 5sWSOiOeoIz8LGklS3HaYbuGZ+HVP6P5BuM0nhlNjYyP3VoxEsdId6vXK+Uga2032dwiE
+	 TqFAPfyWPdLGUXYnfkt/KdfTIF/wfe9WXWtyd+ZQ9Jt/ehMyo6TfwOVP40XEqZycH6w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b="cCMN/SxS";
-	arc=none smtp.remote-ip=35.89.44.35
-Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IiiIdQDE;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75AD06070CA2
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 15:04:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 75AD06070CA2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64A8F6085096;
+	Mon,  2 Nov 2026 15:04:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=cCMN/SxS
-Received: from eig-obgw-6007b.ext.cloudfilter.net ([10.0.30.166])
-	by cmsmtp with ESMTPS
-	id NrjfxCjRbusRSNtaQxpFtU; Mon, 02 Nov 2026 15:04:38 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id NtaPxTR1kkE4RNtaQxxf3w; Mon, 02 Nov 2026 15:04:38 +0000
-X-Authority-Analysis: v=2.4 cv=LuaSymdc c=1 sm=1 tr=0 ts=6ae8a686
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=Bq6zwJu1AAAA:8
- a=QyXUC8HyAAAA:8 a=4TTe3KnR3ll1BDOd3XsA:9 a=CjuIK1q_8ugA:10
- a=KQ6X2bKhxX7Fj2iT9C4S:22 a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=v/EFnPHaPvgzAcdCipbZrXu35F80MQk6sO8AjpoOnik=; b=cCMN/SxSENgXHDe8PRaAlYC6+t
-	0APyhf//lb8VK7INlVcDcbNunKqjoBmZw9POU7N2ZEJOfZzs0n/fL3/2VnyRtyxuXn6ho5r76MULT
-	9z/2B4Pl0OzgKIPBzOvVoxntj43237ma5fBsSW0bvJzcSdhSeYqbL+2iIwXO8fbQWXaWj1YquYKWm
-	fkG8T7VgyUTa4IIVxgLyOBsCQSMusx+s3tId3FMmESQBA5ltKLENnNnEvcAqrFfOWU3/aYxVrmgwM
-	Huv6l9Q8xpFhV3dascxv7cZLKn+eD/T1TqnW4QePVz53gCJVJrJVnWTWB3mFX3cTlNfGSU57RPQAk
-	C49z5Jtw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:58654 helo=server.roeck-us.net)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xNtaP-00000003ql9-1v2S;
-	Mon, 02 Nov 2026 20:34:37 +0530
-Date: Mon, 2 Nov 2026 07:04:36 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Changhuang Liang <changhuang.liang@starfivetech.com>
-Cc: Iwona Winiarska <iwona.winiarska@intel.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, openbmc@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH v4 6/6] hwmon: (peci/dimmtemp) Add support for Granite
- Rapids (GNR)
-Message-ID: <8848aee0-9bdd-49c3-8b51-03eeab488bfa@roeck-us.net>
-References: <20261019114502.55307-1-changhuang.liang@starfivetech.com>
- <20261019114502.55307-7-changhuang.liang@starfivetech.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IiiIdQDE
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 271441F00A1A;
+	Mon,  2 Nov 2026 15:04:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793631880;
+	bh=moTp49XZfW2IxIkO6/t4/a2jJtvDF10yNUa6q6hnE3E=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=IiiIdQDEZtu3zrQxqnMzxL+byWk/RAlCN8/hC422DxTxacxYbFQWlllhBgr+wCmCQ
+	 o9JOkaQkWd0AQIOfZ2O+qkAIOysyokSE2fcTak2VdOZoJKRHLA0f+7hXRqhPBAMdky
+	 vgWDoWlfqaLnAWRNoKk8RC6jFoyccCUDgzz/C6H/mIYktv6mCSN/TWi3bYAQ7NRiTd
+	 5S25YeBcc3fgExVmao12q8Y5BebuiNbZn+zxcQiNl93jyDgvg9mLGIhUCHtUIS5ANV
+	 /YEQs36+1Zxizq9lsuD1fhZ94uGyuaO2p6IZK+qsp1AhT+1p7srUwebEMTN+HJIWDu
+	 Gdu23GXfY3v+w==
+From: Christian Brauner <brauner@kernel.org>
+Date: Mon, 02 Nov 2026 16:01:36 +0100
+Subject: [PATCH RFC 09/22] sh: alignment: let procfs copy in writes
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -88,53 +52,85 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261019114502.55307-7-changhuang.liang@starfivetech.com>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xNtaP-00000003ql9-1v2S
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:58654
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 12
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfAUcJ6SLN9DpS9ws4P/OziMhDwcH+uIpaEHeeCdV4QOmAcMZG+fKU7sowzPA/o8mdbPx9aTE/2nUiPcGqqFyyjMjrEkP81kqX6mdxv10JZx83bqj9CXO
- e0kH88BgVZL+5DImeaAyvkEs6P+OOEeG8getMUpUUrON5GDvFpyhp0xHhIV3LvjivMkYLlowyuaB6rsvuRpT14TWLkClQEl6fOOlqfqEpF8AZE96joEE5smb
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261102-work-procfs-arch-v1-9-c9492ab08480@kernel.org>
+References: <20261102-work-procfs-arch-v1-0-c9492ab08480@kernel.org>
+In-Reply-To: <20261102-work-procfs-arch-v1-0-c9492ab08480@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+ Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
+ Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
+ NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>, 
+ Thomas Gleixner <tglx@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
+ Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
+ Greg Kroah-Hartman <gregkh@suse.de>, 
+ Joel Granados <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>, 
+ Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
+ linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, 
+ linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
+ linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
+ linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, 
+ ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
+ coreteam@netfilter.org, kexec@lists.infradead.org, 
+ linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
+ netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
+ linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-cifs@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-sh@vger.kernel.org, 
+ linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
+ sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+ linux-doc@vger.kernel.org, linux-serial@vger.kernel.org, 
+ linux-atm-general@lists.sourceforge.net, Takashi Iwai <tiwai@suse.de>, 
+ linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
+ linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, 
+ linux-debuggers@vger.kernel.org, 
+ "Christian Brauner (Amutable)" <brauner@kernel.org>, 
+ Chuck Lever <cel@kernel.org>
+X-Mailer: b4 0.17-dev
 
-On Mon, Oct 19, 2026 at 04:45:02AM -0700, Changhuang Liang wrote:
-> Add support for Granite Rapids (GNR) platform in PECI DIMM temperature
-> monitoring driver.
-> 
-> The GNR platform has different DIMM topology from previous generations,
-> with 12 channel ranks (CHAN_RANK_MAX_ON_GNR) and 2 DIMM indexes per
-> channel. Define these new constants and update CHAN_RANK_MAX to use
-> the GNR value since it represents the maximum across all supported
-> platforms.
-> 
-> Since the current peci core does not support domains, accessing GNR's
-> DIMM_TEMP_MAX and DIMM_TEMP_CRIT via PECI commands will be rejected
-> and return completion code 0x90 (invalid request). To handle this, the
-> read_thresholds callback is not defined for GNR, and the visibility
-> logic is updated to skip exposing the max and crit temperature
-> attributes.
-> 
-> The minimum PECI revision required for GNR is 0x42.
-> 
-> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
-> Reviewed-by: Iwona Winiarska <iwona.winiarska@intel.com>
+Implement ->proc_write_buf() so procfs copies in what is written to the
+alignment files before it pins the entry, and take the mode from that
+copy. Writes larger than PAGE_SIZE - 1 bytes fail with -EINVAL now.
 
-Applied.
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+---
+ arch/sh/mm/alignment.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/arch/sh/mm/alignment.c b/arch/sh/mm/alignment.c
+index 2198c6f2ea63..d832249a8e18 100644
+--- a/arch/sh/mm/alignment.c
++++ b/arch/sh/mm/alignment.c
+@@ -133,14 +133,13 @@ static int alignment_proc_show(struct seq_file *m, void *v)
+ }
+ 
+ static ssize_t alignment_proc_write(struct file *file,
+-		const char __user *buffer, size_t count, loff_t *pos)
++		char *buffer, size_t count, loff_t *pos)
+ {
+ 	int *data = pde_data(file_inode(file));
+ 	char mode;
+ 
+ 	if (count > 0) {
+-		if (get_user(mode, buffer))
+-			return -EFAULT;
++		mode = buffer[0];
+ 		if (mode >= '0' && mode <= '5')
+ 			*data = mode - '0';
+ 	}
+@@ -149,7 +148,7 @@ static ssize_t alignment_proc_write(struct file *file,
+ 
+ static const struct proc_ops alignment_proc_ops = {
+ 	.proc_show	= alignment_proc_show,
+-	.proc_write	= alignment_proc_write,
++	.proc_write_buf	= alignment_proc_write,
+ };
+ 
+ /*
+
+-- 
+2.53.0
+
