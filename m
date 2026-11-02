@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.39
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793660010;
-	b=pNo9HjmSNp9kF66tGOD5RzDQjTiwNH7egY/hjE9dXG/hxONLYyEJbQHBUnlHMA0xVVpX
-	 lIWefyD+JBssxPvJnqcqDWhaSjh6nvkt8eVzcYSubOIPrffNfX5hZIFwr0UnbB7vfK1Yg
-	 V4PBA8ostV9AYIPtB12q1fKSlBp/psspLVp7akhvXHdvy4jttfidrzmw0c+rCvPn+Qv4u
-	 dL9lbqr0vW+mn+4J5DfT9ZpYnSiGKoXiGYepDO0UFF/UZkMaeWRdaeQ0c82mIradlhwia
-	 qruQIpIya7iqzGOUrp36P+Ly3JqnYe490rUXoaawlrBnIA4oU3iyPP5WqGVJEIuZkuA==
+	t=1793660015;
+	b=oX4vnxAdu6ujTnN8WGu3DssQyN3E/Hn5zKuC0MPMBEx6E8iWjSQdMlIjnYVRxh9AUW3R
+	 gAWLvjFSRVym4WnCsa/F3LVn/iYS8jmoZk0W8woKXVaE8u+iSU303UknyKyDTihuGUkft
+	 NRHyd7esw/MDCZWhr2CCdKSF9xiOMmsrUqr+MYOzvEPEKalIG3iIG5uxXGa8NHHJJbBKj
+	 Fp5To/S8JvzJ7Ev6PoU1+whf9N6iaHpZjUzdWY+rS5yJPC0OBWRoaIEYu6foRXdZBwjSu
+	 r6+hZphyFMzsaGC2Wkq9qXvxDH4OR+1z9MFg5eFS4no8sRmBpVGwAVp6Gj5zoyKwXPw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793660010;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793660015;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:X-AntiAbuse:
@@ -15,62 +15,61 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-Source-IP:X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
 	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
 	 X-Local-Domain:X-CMAE-Envelope;
-	bh=yHXtJrXr5lm4zId2QI0Ltlen5ZLO91J+XxDZrBAm3ts=;
-	b=Q1m7iKvuCVOZXChQFwf1spJ24kKfB4dOhMcKGrUn4xTNfb7CSYpiGKE+FZWbWGR751Sr
-	 Qr3nFjMICHMXqOu4IoNuWy7RNUUW034wkmRSsOFfmFob+zPv02bxCmwviykR29pgU+tys
-	 LrT2qEPNlAGeByvGyLmzQnYtScCTPMfvrffkYX+JRH3404sayfCN1hT7EwwFHaMsyYYUh
-	 GLam2W+Zrs8OseiCQD3P8DiURYnQ03O1p4MaccoUz8ytsifQ6gTGFNjpjx0edCrOKSlEV
-	 /IIbgZmM0/PJ1SaF2+XLLan8xpo9hOWxNLcGQmnmSikdTlil9+SDPSsyBNgH6CYaWZA==
+	bh=zFf6OOCkLsKAQI/cxS1bFWTt/A4HGycOhzhFJEXXaRw=;
+	b=fmsDEkkZ4fedpetyDsGGXOU9balMiFi+3PYYNz57cRhyNQQ9QgqsFAPXpr3N6SSFM+zG
+	 XOlnQJsbXh8HIviff8kyDoKJxopUhY8iioDb9aE5afVkLbgUYjoHtSZTmcnGjXFbyXAd8
+	 hZl9BiFD3p2x2j5HGXefnkNdnMVIzpl6ROL+R786EYkPInZKtKI/bNWIaVQpWOOUsGx1H
+	 G2a/FrLS45csNvFcpvuNKSIv8ZZqTdgGweTq122FRNQ6XzZha9AVfsdhhxwJp0rjhpR7Y
+	 ujzQJ68CpKSUwpt2hZ54HQMvpH53mmPUQst22E2zpZSRQku43ZKbisMCBeUPbG+Sv8g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=N2l6SaaR;
-	arc=none smtp.remote-ip=35.89.44.39
-Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=YdTTjAT3;
+	arc=none smtp.remote-ip=44.202.169.39
+Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3EC606A326
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 22:53:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5A3EC606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC957606A324
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 22:53:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EC957606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=N2l6SaaR
-Received: from eig-obgw-5004b.ext.cloudfilter.net ([10.0.29.208])
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=YdTTjAT3
+Received: from eig-obgw-6006b.ext.cloudfilter.net ([10.0.30.211])
 	by cmsmtp with ESMTPS
-	id NtVyxfhEkc3XsO0uAxXliL; Mon, 02 Nov 2026 22:53:30 +0000
+	id NrxdxQtGuMylkO0u8x1rer; Mon, 02 Nov 2026 22:53:28 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id O0u9xjLOomTkmO0u9xiccC; Mon, 02 Nov 2026 22:53:29 +0000
-X-Authority-Analysis: v=2.4 cv=eKsTjGp1 c=1 sm=1 tr=0 ts=6ae91469
+	id O0u7xhngXsTgvO0u7xxiVu; Mon, 02 Nov 2026 22:53:27 +0000
+X-Authority-Analysis: v=2.4 cv=DPiP4zNb c=1 sm=1 tr=0 ts=6ae91467
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8 a=_jlGtV7tAAAA:8
- a=ck1_09JoL6EqAymGxmkA:9 a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
+ a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8 a=XPgFqt2qi6FeOqyXoTIA:9
+ a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=yHXtJrXr5lm4zId2QI0Ltlen5ZLO91J+XxDZrBAm3ts=; b=N2l6SaaRYF4b
-	YjQzeNYNe+XFLjYkJ/CS6I2aWHJSndgyb19f7Ue2CaIMazvmGciDyv/yTHiEK2TyesakBCRfNpuZg
-	IogOcwsT0TKbr8f07ri22mCHkXK0k5rmqnecwDY5kjajjNXYOVvaxD075hO2s8s2R4cVKqEJ09l6m
-	32uHtsMeyx1cj5Nt1GlBnt9Ix4sBjnKKLHD3dyVmOkzvwkC89IQbb/WeHXKUIe4XL5hm8gnixohei
-	L7wZJNUZZBVJBWD/6M6X++mZ/BVUug68o7R2dwjg2QGrY6//aSKJSzD3T6vnSuOTLPuk3x/mYHnKd
-	wZ8enHdI9TM03hGHHZaXuQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:33480 helo=server.roeck-us.net)
+	List-Archive; bh=zFf6OOCkLsKAQI/cxS1bFWTt/A4HGycOhzhFJEXXaRw=; b=YdTTjAT3BGR2
+	lZA/exkaczdPxKcAabsrbkReIOOoMZY5GX7ifL/luHcyN1EzHS9YaLKYRGJFglAVEshdblbHYbpxL
+	0DwBNXM8fVhNae1UD3prOnmtYLKmSsTDJFOQPmGvZD1H83KQGKGixXeGixC257nCAed/aKTfG+9PI
+	V8DGCP+Jyu+w2I2tH/fW9HPRjY89gtztkx2xIgVdGG1hqO2HVYa+eKcgHJLb+RQimmKwK82nJeZGJ
+	VbBOLXx8RC4oFSeQNw88Lj7XWMMTIeErdZfR6MjDMmtP1X0Vx7wpvg8i1cPw61ieiZyjasR5eg8L+
+	1pwwvEgP20MVimmJvC1q5A==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:33454 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xO0u9-00000003kOB-03JA;
-	Tue, 03 Nov 2026 04:23:29 +0530
+	id 1xO0u7-00000003kM4-18Bm;
+	Tue, 03 Nov 2026 04:23:27 +0530
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Luca Tettamanti <kronos.it@gmail.com>
-Subject: [PATCH 018/102] hwmon: (asus_atk0110) Use 64-bit jiffies for sensor cache timestamp
-Date: Mon,  2 Nov 2026 14:51:11 -0800
-Message-ID: <20261102225235.334487-19-linux@roeck-us.net>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 016/102] hwmon: (asb100) Use 64-bit jiffies for update timestamp
+Date: Mon,  2 Nov 2026 14:51:09 -0800
+Message-ID: <20261102225235.334487-17-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20261102225235.334487-1-linux@roeck-us.net>
 References: <20261102225235.334487-1-linux@roeck-us.net>
@@ -92,77 +91,66 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xO0u9-00000003kOB-03JA
+X-Exim-ID: 1xO0u7-00000003kM4-18Bm
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:33480
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:33454
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 48
+X-Email-Count: 44
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfPYm/UJzl6/9G/ZLyIs0CxYlcf6GWmoSqlf+cWUfAjL1I4WnKLbZgE+EMsRaF+M1wk38NjT0Ul2GyO25YO0f4Tdqi9ikIohlwImlaiQcGDgvjkv6O56T
- y8KmICaOSs9qZ8yj5fFD0yWXWr9TzxEDPRszC4tYVRzP6TKfZc+8ogKZ2me/vHe2XJeSvkJXtWJFjzaC1xexelh6ytFLLO+XkpK7qIAwn8mcImg0zcry9VZL
+X-CMAE-Envelope: MS4xfIwL0xCeJfab9DWXXpkELtkLgnyeg89g1H7j92iUGOqrtzbCCjlJIeCaZo9dgPKU4JgOqCc4l/KcztcgC01Wa4s8Wx4fJ8DR7aDIr4SD9TV18Ok+/+U7
+ erZsYwCM/NDXPlAxREP9pjZ8lIAkm9HElMWbDWR828WAzN8gb4bnYx3NHy1YHnBUckHqkbwQ+Hyj5amNmluNdjtnxdHTHxoivsj6aWfI5hkumBDIEFcKvoIh
 
-atk_read_value() uses 32-bit jiffies and time_after() to cache sensor
-readings for CACHE_TIME (1 second). On 32-bit architectures, if a sensor
-is not polled for about 24.8 days at HZ=1000, time_after() wraps around
-and prevents new ACPI readings from being taken.
+asb100_update_device() uses 32-bit jiffies and time_after() to track its
+1.5-second sensor cache. On 32-bit architectures, leaving the device
+unpolled for about 24.8 days at HZ=1000 causes time_after() to wrap
+around and stop refreshing sensor registers.
 
-Convert last_updated to u64, use get_jiffies_64() and time_after64(), and
-serialize sensor reads in atk_input_show() with hwmon_lock so 64-bit
-timestamp and cached_value accesses cannot race or tear on 32-bit
-systems.
+Convert last_updated to u64 and use get_jiffies_64() and time_after64()
+under update_lock to prevent 32-bit jiffies wraparound.
 
-Fixes: 2c03d07ad54d ("hwmon: Add Asus ATK0110 support")
-Cc: Luca Tettamanti <kronos.it@gmail.com>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/asus_atk0110.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/hwmon/asb100.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwmon/asus_atk0110.c b/drivers/hwmon/asus_atk0110.c
-index 868c4e14d26a..3cc8e8d287e4 100644
---- a/drivers/hwmon/asus_atk0110.c
-+++ b/drivers/hwmon/asus_atk0110.c
-@@ -164,7 +164,7 @@ struct atk_sensor_data {
- 	u64 limit1;
- 	u64 limit2;
- 	u64 cached_value;
--	unsigned long last_updated; /* in jiffies */
-+	u64 last_updated; /* in jiffies */
- 	bool is_valid;
- 	char const *acpi_name;
- };
-@@ -221,7 +221,8 @@ static ssize_t atk_input_show(struct device *dev,
- 	u64 value;
- 	int err;
+diff --git a/drivers/hwmon/asb100.c b/drivers/hwmon/asb100.c
+index 5f5c94505166..ec4c7e6e68fc 100644
+--- a/drivers/hwmon/asb100.c
++++ b/drivers/hwmon/asb100.c
+@@ -181,7 +181,7 @@ struct asb100_data {
+ 	struct mutex lock;
  
--	err = atk_read_value(s, &value);
-+	scoped_guard(hwmon_lock, dev)
-+		err = atk_read_value(s, &value);
- 	if (err)
- 		return err;
+ 	struct mutex update_lock;
+-	unsigned long last_updated;	/* In jiffies */
++	u64 last_updated;		/* In jiffies */
  
-@@ -634,7 +635,7 @@ static int atk_read_value(struct atk_sensor_data *sensor, u64 *value)
- 	int err;
+ 	/* array of 2 pointers to subclients */
+ 	struct i2c_client *lm75[2];
+@@ -940,8 +940,8 @@ static struct asb100_data *asb100_update_device(struct device *dev)
  
- 	if (!sensor->is_valid ||
--	    time_after(jiffies, sensor->last_updated + CACHE_TIME)) {
-+	    time_after64(get_jiffies_64(), sensor->last_updated + CACHE_TIME)) {
- 		if (sensor->data->old_interface)
- 			err = atk_read_value_old(sensor, value);
- 		else
-@@ -644,7 +645,7 @@ static int atk_read_value(struct atk_sensor_data *sensor, u64 *value)
- 			return err;
+ 	mutex_lock(&data->update_lock);
  
- 		sensor->is_valid = true;
--		sensor->last_updated = jiffies;
-+		sensor->last_updated = get_jiffies_64();
- 		sensor->cached_value = *value;
- 	} else {
- 		*value = sensor->cached_value;
+-	if (time_after(jiffies, data->last_updated + HZ + HZ / 2)
+-		|| !data->valid) {
++	if (time_after64(get_jiffies_64(), data->last_updated + HZ + HZ / 2) ||
++	    !data->valid) {
+ 
+ 		dev_dbg(&client->dev, "starting device update...\n");
+ 
+@@ -990,7 +990,7 @@ static struct asb100_data *asb100_update_device(struct device *dev)
+ 		data->alarms = asb100_read_value(client, ASB100_REG_ALARM1) +
+ 			(asb100_read_value(client, ASB100_REG_ALARM2) << 8);
+ 
+-		data->last_updated = jiffies;
++		data->last_updated = get_jiffies_64();
+ 		data->valid = true;
+ 
+ 		dev_dbg(&client->dev, "... device update complete\n");
 -- 
 2.45.2
 
