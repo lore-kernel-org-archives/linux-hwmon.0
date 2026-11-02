@@ -1,13 +1,13 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793667493;
-	b=sSvWl9nsvgDFfQa1oxlAXEEjaVtoGzlRLBr+QVBxgUcc3uR9cI7ONdBO+Nrt1GuLfzIu
-	 AkhqK7OjLs9G2JTxKoV77wBL6p9RZQ6U/TDItfHkKvUw9am8N3vDV4+jQG1pTIXV1CPnk
-	 SYKv5uZGW/nqydJ9t7XcoQhFF7ZF7BnB9hwwVFIp4IakjzGqvu1tqHhBUFntJg8zlXqNh
-	 DAP7HCMVkwcSYtwuhxMA+dkGoTSucZgKQZqk0tyTNl8akhQHDEtGIg95Gn3rj+dTKxYVy
-	 YcJvgCN7Pegik734aarXNv1JLC8/xJFlFYPUzfCL0kWUuWSR3baZgcwlHTNw+pUCMZA==
+	t=1793668347;
+	b=JjIW0d01NINwbjISGEYjrppUoZsqsL3dFcBQziW0Nr5Hp7fBQz689sx4+hFse8QD9X81
+	 WnRQksWIc1qq2zSJIpvXH2CLKNr5OS//OpUlEMnoBEUT7a4BhQKIx8ZIq/FaI2I6BGJwm
+	 ERfvmfvb60/NWkMLsYzjGMiDE/4VUbcCTbo3uVVR6LLEjt5gCakLHcgF8rWVDO987eSIg
+	 8wncCB768emzrsZVVx1oTeJdKG1W+Sx0izCk7KTFNHAFFEDOeAGvQ/KYob65p2qE4cb/v
+	 W6rrdRcm15WnUf0zGPEYeXeOOzIVYw9Mu3PhtO4eRa9neHrRk/i4Sy4xmOSj5256wAg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793667493;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793668347;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:X-AntiAbuse:
@@ -15,36 +15,36 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-Source-IP:X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
 	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
 	 X-Local-Domain:X-CMAE-Envelope;
-	bh=/lTswKxbP/v+ZrpBTgN6nHxxuAzXfIbmOFmo49fi67U=;
-	b=HECytaOiUR51A4Zsy2trSbomyGiPNgZFvAOWOV3ZnrwAk4+bKEDj3BLIQbLqsxJfcJTZ
-	 S51iD9HgtJHvnPd2ZA0Ve1rcLzHG4ykLBh+Ruby7499XYECxX/VOjXlz0JRn6+oZzjrK+
-	 xv2EFLD8i96JDcuqiiw8rNs65uEr6A9Bo40JXI0U7rjrN2nHrH9ODeHPfTshQikIiPWug
-	 4DL39gxyWdu+CmyFtKUJWk4AdwRebRvr8ncHcGBBw/HGJPRTJFC38lWL6bT3HS8yY4Ofw
-	 2Vktsffg3EOvf/rDk0bx1/kZGFbOCtekBQXza1OPeQCT71xbo4mUxk2jKP3ALuoygDw==
+	bh=cJpBwaEWtU1oNF2McZcKEf7z7MdEsRMyutU6CtYv/eE=;
+	b=G3f9V0NzMU9pX7598f7T2QzvDUfDK5PJrPs/3Dmf3ANF/8a0xbJzQ40ZFps+Wv9KB0JC
+	 1b+PF3UprPiauQ26OgRnPayS6Gs057u1qi173mIpMk6ACJPI6n2N/KVMIeTlxkL1f/0sQ
+	 fyAMsR5gT41tdmrRJ5KAHIIJfzmZ0Q1aF57aobilzrDuSlOOCFc9Jh4YoG0+GkTQBjhrH
+	 OMnwpCiCX7wEI+1ZH9sAA5KYV/RJrPPSCY5IdOZTzdP1NQzwDxbhopmJvgVp4Z0Xi8y86
+	 DRI1uViSI88AhG9F3EIDzBJwgqpLt1ZhU0c1xAI6RXmOLJbgEHJVnAW+Fw9R071hmZQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=124NOrWV;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=spuwmHp4;
 	arc=none smtp.remote-ip=44.202.169.37
 Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F26606A324
-	for <linux-hwmon@vger.kernel.org>; Tue,  3 Nov 2026 00:58:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A4F26606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79CA606A324
+	for <linux-hwmon@vger.kernel.org>; Tue,  3 Nov 2026 01:12:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E79CA606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=124NOrWV
-Received: from eig-obgw-6006b.ext.cloudfilter.net ([10.0.30.211])
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=spuwmHp4
+Received: from eig-obgw-6002b.ext.cloudfilter.net ([10.0.30.203])
 	by cmsmtp with ESMTPS
-	id NsHdx1QcHJFmFO2qpxB8YX; Tue, 03 Nov 2026 00:58:11 +0000
+	id NxpPx2r8wJFmFO34bxBDY1; Tue, 03 Nov 2026 01:12:26 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id O2qoxlENusTgvO2qox0YIa; Tue, 03 Nov 2026 00:58:11 +0000
-X-Authority-Analysis: v=2.4 cv=DPiP4zNb c=1 sm=1 tr=0 ts=6ae931a3
+	id O34bxNNUG63hBO34bxhm1C; Tue, 03 Nov 2026 01:12:25 +0000
+X-Authority-Analysis: v=2.4 cv=CYsI5Krl c=1 sm=1 tr=0 ts=6ae934f9
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8 a=uIQ9F_dSYr64Mygn8EMA:9
+ a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8 a=QQjkmUXfiR782Joob24A:9
  a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
@@ -52,24 +52,24 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=/lTswKxbP/v+ZrpBTgN6nHxxuAzXfIbmOFmo49fi67U=; b=124NOrWVuHJb
-	xEIcxnmJ5eDPPArP/CFLQBs1qqXbMP4RfN9fmkIjwPzR8MvHBlr+E3hJPLIedV9rsNqoYZ8PVEWXR
-	gFTipPW4gzLH+2LZhgG+3b0DfkD5fOKZUdRJDxvsLP6iC7HH5iPXbTMprnZ+Z2jh6fcZgWqSQz5Hw
-	XFk5A4pdbicgulj+2zwKwXcPAn5Qz468MZrcUmnDBsM877Tv5AT/fkcqykwY7E5s8QwfOLezamS1L
-	oO3diBAC7i4CkoiiEsYASUnfdH4jFFt1Dvq8Ifu9c9GgheMWx0hElAQNP7QIphSMywMeJTuRcNDpm
-	p1DqHspOWY6/yScYC2qLwA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:52530 helo=server.roeck-us.net)
+	List-Archive; bh=cJpBwaEWtU1oNF2McZcKEf7z7MdEsRMyutU6CtYv/eE=; b=spuwmHp4BJMY
+	xTJsCTxJ3flWkOBihm36EgdgDynrUL4ukDHeHGJPkrfRz6jWAeQkuhlJPi/243jrVcXBSbGygSE6R
+	IkPhMN80pGi4dhBf1ofpxUd5YDEngJTQnDd7JHyybvu6fVh5H86jRiLB0s8mLB7MbvnN4T0GCnCfH
+	zfnjxwSQQ/2v3cG3+rLeQglBbMAS/uVc9mQAOu0bJWTN7TTn74EjRhbrIN7Tf/WkacXFZkmIJE9Jc
+	weHrsc0RgxayLJf1mJcX3k2kFmnkIFFTx28y0Di1QL5242H3mQPR6Hmun+i3loqTX4yJTK6UWs2fT
+	sZ2LKZmlc6PDlY0CUpZPYw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:38184 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xO0vG-00000003lHg-1UnE;
-	Tue, 03 Nov 2026 04:24:38 +0530
+	id 1xO0wZ-00000003lwF-17Yb;
+	Tue, 03 Nov 2026 04:25:59 +0530
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 044/102] hwmon: (lineage-pem) Use 64-bit jiffies for update timestamp
-Date: Mon,  2 Nov 2026 14:51:37 -0800
-Message-ID: <20261102225235.334487-45-linux@roeck-us.net>
+Subject: [PATCH 072/102] hwmon: (powr1220) Use 64-bit jiffies for ADC update timestamps
+Date: Mon,  2 Nov 2026 14:52:05 -0800
+Message-ID: <20261102225235.334487-73-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20261102225235.334487-1-linux@roeck-us.net>
 References: <20261102225235.334487-1-linux@roeck-us.net>
@@ -91,65 +91,64 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xO0vG-00000003lHg-1UnE
+X-Exim-ID: 1xO0wZ-00000003lwF-17Yb
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:52530
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:38184
 X-Source-Auth: guenter@roeck-us.net
 X-Email-Count: 0
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfISLMIOPszDRMShI80so/Lty7M8fecLXo3fVlbgYo2/C5r9aBxLyvwBj4Avelx1/nZY6dw7Ai4cCpg8SFxxowMzJZNyQGM9d+DJGcmQz1Ilm753y/R4D
- igO0axamRtOu68nDS4w7vezNsW8f+T9ma+u611GcdI2mTlMxkFpUBLUaPeVVfXzwRsJgJotEhdF+eUpGHmIVfvgGXl7EyP7HgzoHj6wxgDAFInSNZyjPquCU
+X-CMAE-Envelope: MS4xfLdY3PzOsa9SJeE0zSUn2faFcSt/eB32IRQ0WvMBwQFWrjWgx8l7tmh7U5iTma31KmoocqRiAKDZaFBL4em4TlqpktNbeqj+tHPswk5f+7tD2iWRXrS4
+ h/xtmXVT5SBMPWqnA1TCkA3PHlBtlncenPHepP+U2dNjX42sUMRwfmpDSXCCtIT5OwDVKKzPCVw8kE144jB0Bf0yiDFFOwbO7DQ8PuMAhgsZam1GeCWzRGTV
 
-On 32-bit architectures, jiffies and time_after() use 32-bit values and
-wrap after ~24.8 days at HZ=1000. If sensors are not polled for longer
-than half the wrap period, time_after() can return false and prevent
-cached sensor values from updating.
+powr1220 uses 32-bit jiffies and time_after() to determine when per-ADC
+channel readings should be refreshed. On 32-bit architectures, if an ADC
+channel is not polled for about 24.8 days at HZ=1000, time_after() wraps
+around and cached readings stop updating.
 
-Convert last_updated to u64 and use get_jiffies_64() and time_after64()
-to avoid wraparound issues on 32-bit systems.
+Switch adc_last_updated[] to u64 and use get_jiffies_64() with
+time_after64() to avoid wrap-around issues on 32-bit systems.
 
-Fixes: 502b5a019920 ("hwmon: Add support for Lineage Compact Power Line PEM devices")
+Fixes: f4ff415564cb ("hwmon: Add support for Lattice's POWR1220 power manager IC")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/lineage-pem.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/hwmon/powr1220.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hwmon/lineage-pem.c b/drivers/hwmon/lineage-pem.c
-index 75a44b0639dc..7487ab1657a8 100644
---- a/drivers/hwmon/lineage-pem.c
-+++ b/drivers/hwmon/lineage-pem.c
-@@ -119,7 +119,7 @@ struct pem_data {
- 	bool valid;
- 	bool fans_supported;
- 	int input_length;
--	unsigned long last_updated;	/* in jiffies */
-+	u64 last_updated;	/* in jiffies */
+diff --git a/drivers/hwmon/powr1220.c b/drivers/hwmon/powr1220.c
+index 6e211601ea26..4a4a2f3b5b87 100644
+--- a/drivers/hwmon/powr1220.c
++++ b/drivers/hwmon/powr1220.c
+@@ -77,7 +77,7 @@ struct powr1220_data {
+ 	u8 max_channels;
+ 	bool adc_valid[MAX_POWR1220_ADC_VALUES];
+ 	 /* the next value is in jiffies */
+-	unsigned long adc_last_updated[MAX_POWR1220_ADC_VALUES];
++	u64 adc_last_updated[MAX_POWR1220_ADC_VALUES];
  
- 	u8 firmware_rev[FIRMWARE_REV_LEN];
- 	u8 data_string[DATA_STRING_LEN];
-@@ -149,7 +149,8 @@ static struct pem_data *pem_update_device(struct device *dev)
+ 	/* values */
+ 	int adc_maxes[MAX_POWR1220_ADC_VALUES];
+@@ -109,7 +109,7 @@ static int powr1220_read_adc(struct device *dev, int ch_num)
+ 	int result;
+ 	int adc_range = 0;
  
- 	mutex_lock(&data->update_lock);
+-	if (time_after(jiffies, data->adc_last_updated[ch_num] + HZ) ||
++	if (time_after64(get_jiffies_64(), data->adc_last_updated[ch_num] + HZ) ||
+ 	    !data->adc_valid[ch_num]) {
+ 		/*
+ 		 * figure out if we need to use the attenuator for
+@@ -151,7 +151,7 @@ static int powr1220_read_adc(struct device *dev, int ch_num)
+ 		reading *= ADC_STEP_MV;
+ 		data->adc_values[ch_num] = reading;
+ 		data->adc_valid[ch_num] = true;
+-		data->adc_last_updated[ch_num] = jiffies;
++		data->adc_last_updated[ch_num] = get_jiffies_64();
+ 		result = reading;
  
--	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
-+	if (time_after64(get_jiffies_64(), data->last_updated + HZ) ||
-+	    !data->valid) {
- 		int result;
- 
- 		/* Read data string */
-@@ -185,7 +186,7 @@ static struct pem_data *pem_update_device(struct device *dev)
- 
- 		i2c_smbus_write_byte(client, PEM_CLEAR_INFO_FLAGS);
- 
--		data->last_updated = jiffies;
-+		data->last_updated = get_jiffies_64();
- 		data->valid = true;
- 	}
- abort:
+ 		if (reading > data->adc_maxes[ch_num])
 -- 
 2.45.2
 
