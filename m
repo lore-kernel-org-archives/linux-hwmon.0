@@ -1,11 +1,11 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793660051;
-	b=RLnuYCldKfcbQgv8LGOA8rXZO8kJrFLAuLKja5GvHyNXr0iZ7mbKtsf8AFaL4IzvZ9MR
-	 f0M4pKzvSjI0tIPnq1W6abQLyWXh/9SIhmEoNpefkqYDLBzcxcCBfg3lJtan8wtkp58zV
-	 VzQVsHE1Rp0awnIyIf071iWBHyJcOruaUbb66rYU7+fKVSM1iol/tNINXx4L33z8tQDei
-	 9yBgI8Fm5Z6akRZiYYa4lKQMqKdF3Tymv9wNwb9nHvNibhU+6Bx6hXnIxpftUCL1wvNoG
-	 o8LNwAV0Bjlmhg7piV9jrdxeKIWGqfB2p7nX7CIbzCRSTut19hi/TeHr+uUdbYIP1+g==
+	b=zSKMZQ8SCPvhbd56YUOvO5KNb0mgL9ZqNZ2IUIKU3cNDB0s998wh494ov24R03E7KG/S
+	 tMKmw5IyVzfE6VEkJroLxhJNyteEqass/xpUvcA607HZ1zbEjMex/9Blm2JPxJcXt1CR/
+	 iYr6+NC8unLV2q7AjFuTZv1Y0fGdxU/bfUjLfynVG6MDhkGmDOCH4KYcpH3V3vQ9AoH+x
+	 dqjFwFsMoXKFextQPNJpXwmRdqTGLNi+Srac5/yJTlyENqZtrIM4ou+O33+bJrIoeFjZS
+	 aMKZOWg3rS02zge11BmwPmbMJz/wLOPAeybuWqz7fWJ8d2RK16fmu5lirgiJi/XL/dA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793660051;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
@@ -15,36 +15,36 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-Source-IP:X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
 	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
 	 X-Local-Domain:X-CMAE-Envelope;
-	bh=4o0naQrb4zxPcxp6o/l4rELf2ry5H4v/frRv5hXXhqk=;
-	b=W3Um21MUqyBomXG4VPKd0l3/l3a10qg8HFjBbi/1xs3Yzi4h2EZgrkIFEPQibJ84KQ/1
-	 a1ZqHfE7l1K9+4+gWVcNhJdHPrZtzvjKRgqoPzSVYcBq5GfTtjlhfNvorPJsEzdQuOKKW
-	 B+jTzlARBtdrwk3hZC2mnSG8hYbQQUr4oDZRVys6AHOF/m/zAyl/J25vpmsdIxRkktMbw
-	 6iM2zR31kFmX7ayiwrwA3QuRD1dwu/Ikz1vlOaRFkv08I/H9fSPkXbYALBoWRF6fFGNkM
-	 2B74hxJAw2Xjz0xDOw2FaUHRwXAvQ2eTzBiXgcuWHG+pCUZkC14S4L56PUw68Cq+tjg==
+	bh=7kwR+Ei6kUbJA+sfhl/MbK0IrtIH9h9hTNu8IpYo+Us=;
+	b=Iofw8/FLAhvVa8MzxpxupYmX4GlrCXY/6epc/8kMrwBxddS3oHK8fECcrKJSQeQ3x4R7
+	 l54lIzJnztn5njEdnmaRDdQbQ5A9ldKhRKXfBa/LCO+SPfFNo0rrimyyvbisynqupBCFb
+	 tir2+8rfInaLXuUDDaz1ZFtFMzkuQGTayR0GKooegiiOT+p/wJ45P/0ddV+jnYC6xmPXV
+	 u9KYqx3X5u213utvjevbf1WV8Z0riNfuTlM5aa9EOkMVes4sozmf8AJKd0XliEe2K/N2W
+	 wnwy+WN1AQLqlP7YRGoVqpexZoyOrOfNTDfw3ajVyoOC6MhYT8aGUcmOZSET3i1itcQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=T872wuV6;
-	arc=none smtp.remote-ip=35.89.44.39
-Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b="a/t0Eskg";
+	arc=none smtp.remote-ip=35.89.44.37
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D851D606A326
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 22:54:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D851D606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814A5606A326
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 22:54:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 814A5606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=T872wuV6
-Received: from eig-obgw-6004b.ext.cloudfilter.net ([10.0.30.210])
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=a/t0Eskg
+Received: from eig-obgw-5004b.ext.cloudfilter.net ([10.0.29.208])
 	by cmsmtp with ESMTPS
-	id NxH9xgcTQc3XsO0uoxXluM; Mon, 02 Nov 2026 22:54:10 +0000
+	id NmxYxLtILv0ndO0upxBS7Y; Mon, 02 Nov 2026 22:54:11 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id O0uoxbSVKe0duO0uoxzREQ; Mon, 02 Nov 2026 22:54:10 +0000
-X-Authority-Analysis: v=2.4 cv=KINaDEFo c=1 sm=1 tr=0 ts=6ae91492
+	id O0uoxjMTnmTkmO0upxidWT; Mon, 02 Nov 2026 22:54:11 +0000
+X-Authority-Analysis: v=2.4 cv=eKsTjGp1 c=1 sm=1 tr=0 ts=6ae91493
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8 a=Q1bZTFlCUlp_ALP3PH8A:9
+ a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8 a=XsESRFL8gdzgaRyLTTQA:9
  a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
@@ -52,24 +52,24 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=4o0naQrb4zxPcxp6o/l4rELf2ry5H4v/frRv5hXXhqk=; b=T872wuV69CDe
-	Nx+LJDHxPMaKG3hsSxwN7PRtCzn712YBzvOz/1o1JN8MCbYwMBNlvpIPWlr9tuIvvhAi6kMrdCG7M
-	jnEq+J/aratrKQujV/moIS0mxIqq+3RakqTDI6b3jgNl2hAftKLQD5uBwQhgG+mikqKcTnlTbgIPa
-	jeCJvaUyCSy2hHezqeFL04Hi5JeJINuBlQ3eMP8Q5RttrY280RjKAL2c4yDFfO3LiTPUI8mMiNqmo
-	nAo/bf4C/EasOAQ9gOOWJfus+0Y6JU+QFWRtMv/rp1cLRzJShQMPkXKubqxbKxNakY8qNsuiUQCQv
-	v5dIhRG2BTtYGx8f34xb7Q==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:50194 helo=server.roeck-us.net)
+	List-Archive; bh=7kwR+Ei6kUbJA+sfhl/MbK0IrtIH9h9hTNu8IpYo+Us=; b=a/t0EskgANuF
+	q3Fu2oBnZto5mlu/WeIItXRcJy5XDaA2E9c+umDw68NntiE/KFBRDe9OV9mK2X/rGcXgw/IMrrAUn
+	ZU1F8CTMRPdnC5bcUEf1egMvab3urQOaF2WVJjlJcx/F3qpBCnLKh+sAamNigRJLAkQB9rXQ9hyVS
+	e3bv/3fDEDDS7VNHKtF2pCXjvVhjxoBPxrPJS51jzGN/13pIOV6fZP/pQYeqvU+jEN7m7ipi5WzhB
+	jQKvqd4ludY/RG+z55HMApoU+uN4tJz0L0a/HWtvqgfcZeGQvmbPV7mSy/1j2QO00puupOFKqPAA4
+	S5kdSX56/oJjcpIylzTryg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:50202 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xO0un-00000003l2t-3Z5d;
-	Tue, 03 Nov 2026 04:24:09 +0530
+	id 1xO0uo-00000003l3T-2PfD;
+	Tue, 03 Nov 2026 04:24:10 +0530
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 032/102] hwmon: (g760a) Use 64-bit jiffies for update timestamp
-Date: Mon,  2 Nov 2026 14:51:25 -0800
-Message-ID: <20261102225235.334487-33-linux@roeck-us.net>
+Subject: [PATCH 033/102] hwmon: (g762) Use 64-bit jiffies for update timestamp
+Date: Mon,  2 Nov 2026 14:51:26 -0800
+Message-ID: <20261102225235.334487-34-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20261102225235.334487-1-linux@roeck-us.net>
 References: <20261102225235.334487-1-linux@roeck-us.net>
@@ -91,65 +91,65 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xO0un-00000003l2t-3Z5d
+X-Exim-ID: 1xO0uo-00000003l3T-2PfD
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:50194
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:50202
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 69
+X-Email-Count: 70
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfKujoR752yd4O+0pdVGHb+8li+Hve/QaN99xB80HmQh8de+96eBka2+S/sirzs3+bZy3E+1ypsk3rm/ZDO1A4HpiIi0XmFz+ZnJQ0R0weqRPPZ/DsUwY
- EGX5utXCOGkTRkiVULPULmRH3t4qRQ81XKOYDo+msTH9GYM1LxO39wGbunm/bhi2VfcZYOiFvwRNXGx8I5U41tM2qmYkcL0xIx2QE5rvFjm2XqysoEu9co/S
+X-CMAE-Envelope: MS4xfMY7cz6b3jN4POnStBwJRalhnQBEFksrCi8yFTVd6KSHch6xk3oSmdDj/jkqrSKKQjDEOm7APKv7lKLUClXHTJs67uCkljzMM+pPUjqkMhty09eeK9tX
+ iiVkEhbo3CZBejmpGjWI9HUU+fgZYqj0TEzWsix6vkP8f+et3kzbXasX2Rbv0c31efhPBpW+C3+0eRLaHzx2TPyyyzd4Nu+vt0UQILZjWtlBhWn9thwmQK+N
 
-On 32-bit architectures, jiffies and time_after() use 32-bit values and
+On 32-bit architectures, jiffies and time_before() use 32-bit values and
 wrap after ~24.8 days at HZ=1000. If the device is not polled for longer
-than half the wrap period, time_after() can return false and prevent
+than half the wrap period, time_before() can return true and prevent
 cached fan values from updating.
 
-Convert last_updated to u64 and use get_jiffies_64() and time_after64()
+Convert last_updated to u64 and use get_jiffies_64() and time_before64()
 to avoid wraparound issues on 32-bit systems.
 
-Fixes: 3bcfa9e47a7d ("hwmon: add support for GMT G760A fan speed PWM controller")
+Fixes: 594fbe713bf6 ("Add support for GMT G762/G763 PWM fan controllers")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/g760a.c | 7 ++++---
+ drivers/hwmon/g762.c | 7 ++++---
  1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hwmon/g760a.c b/drivers/hwmon/g760a.c
-index e2166ee76286..3253e55f1d59 100644
---- a/drivers/hwmon/g760a.c
-+++ b/drivers/hwmon/g760a.c
-@@ -42,7 +42,7 @@ struct g760a_data {
+diff --git a/drivers/hwmon/g762.c b/drivers/hwmon/g762.c
+index 407cf7af4fdd..119a79eb8d4f 100644
+--- a/drivers/hwmon/g762.c
++++ b/drivers/hwmon/g762.c
+@@ -128,7 +128,7 @@ struct g762_data {
  
- 	/* g760a register cache */
- 	unsigned int valid:1;
--	unsigned long last_updated; /* In jiffies */
-+	u64 last_updated; /* In jiffies */
+ 	/* g762 register cache */
+ 	bool valid;
+-	unsigned long last_updated; /* in jiffies */
++	u64 last_updated; /* in jiffies */
  
- 	u8 set_cnt; /* PWM (period) count number; 0xff stops fan */
- 	u8 act_cnt; /*   formula: cnt = (CLK * 30)/(rpm * P) */
-@@ -86,7 +86,8 @@ static struct g760a_data *g760a_update_client(struct device *dev)
+ 	u8 set_cnt;  /* controls fan rotation speed in closed-loop mode */
+ 	u8 act_cnt;  /* provides access to current fan RPM value */
+@@ -202,7 +202,8 @@ static struct g762_data *g762_update_client(struct device *dev)
+ 	int ret = 0;
  
  	mutex_lock(&data->update_lock);
+-	if (time_before(jiffies, data->last_updated + G762_UPDATE_INTERVAL) &&
++	if (time_before64(get_jiffies_64(),
++			  data->last_updated + G762_UPDATE_INTERVAL) &&
+ 	    likely(data->valid))
+ 		goto out;
  
--	if (time_after(jiffies, data->last_updated + G760A_UPDATE_INTERVAL)
-+	if (time_after64(get_jiffies_64(),
-+			 data->last_updated + G760A_UPDATE_INTERVAL)
- 	    || !data->valid) {
- 		dev_dbg(&client->dev, "Starting g760a update\n");
+@@ -236,7 +237,7 @@ static struct g762_data *g762_update_client(struct device *dev)
+ 		goto out;
+ 	data->fan_cmd2 = ret;
  
-@@ -94,7 +95,7 @@ static struct g760a_data *g760a_update_client(struct device *dev)
- 		data->act_cnt = g760a_read_value(client, G760A_REG_ACT_CNT);
- 		data->fan_sta = g760a_read_value(client, G760A_REG_FAN_STA);
- 
--		data->last_updated = jiffies;
-+		data->last_updated = get_jiffies_64();
- 		data->valid = true;
- 	}
- 
+-	data->last_updated = jiffies;
++	data->last_updated = get_jiffies_64();
+ 	data->valid = true;
+  out:
+ 	mutex_unlock(&data->update_lock);
 -- 
 2.45.2
 
