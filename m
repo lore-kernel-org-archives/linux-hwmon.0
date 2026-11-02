@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.33
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793679141;
-	b=KcFiR53q6y+s/25Cpa4TvTFKUKE6eQGhtH76XWTz0E8XVJ/NMJQYaOlk5F3KZPmZO/tf
-	 lOiiRTG70rOvtPRwzay7kbJCMeQHYdWk32engdxMWItpLUFrVQXUdGnbJ/4qhTHP+Zprg
-	 MONyjux67+ig5hrMIuMT2QNwU/n3iSPnzxITMQ2OmPmyxRp+47I2IoauDuHT4qMksJ87b
-	 qKggI5ErQRxfLAa6OGJWpz1S587ht1KrGJlf6ocmXPpO5WLj7Brb0Tx65rkK/WbMXFFY6
-	 x6BgxdTv/HI5gGZKwW2Z7aa/kWTkZAcK+TgP8oE2swx3qOd3tBU5lTmd++k/pT8SfMQ==
+	t=1793687228;
+	b=rswP8n8dy7cgjEdXiMrikyzHev5rptQanyroKtSx+/rECitfYpL8xmHTCuW9rH/WTUgk
+	 ovTbDNec6pUIdG19x48Sto0nomXj4jYu0GEml3YPF7jwxZJrIhOYJ9xdvevJ4GozYOGsT
+	 c8mZwQhBoOlHoWbC7Dp29oBnigVikRvVnwYO9L8hK8U/NwhtGIu35gBC9xBLpiJW8h+Tb
+	 vMobs5N3Z6//Foq1ME98NEE6q2Pz8HgAaSFYJRmHpnCcX+hCHPMFye1mc06QeNwAeXM9e
+	 xniegwTpul9ySTAJ6aDHLRaC+LntLg3XbY33KYKZnnZT5j5GAdZOexm7NurZqtJ2LZA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793679141;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793687228;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:X-AntiAbuse:
@@ -15,63 +15,61 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-Source-IP:X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
 	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
 	 X-Local-Domain:X-CMAE-Envelope;
-	bh=LoP1nm+wtK92U1mRaR+8qZdl0iB22faRIEkDfJ1/WAM=;
-	b=dSCZ2ZwPxRPEDCJWAjsVI1iBWuq0x7sVEMG+sogcW83+1Rms94ubiuagYwg4FL10Lxgz
-	 hVewQo3jyl829OD6lDx39FYpvOYT22YT77Cl/M/3Q3OwgdfqNDIGT2f32gHYeCgz2pvKi
-	 2UWPKtKKuUHygyk9aDvQu71pJIR4hSvew1o8QDZE3fqFvCbIgtB64KtOwtjw0WVXkMHEr
-	 uT5FvxmSzDe6W0tiNFyw9Cfpi/RsCV+eq5nFU36zhE4i2ZPLWP1LUbG5U5ER/AztiihlR
-	 ndLXs7xonkTB/RRrjXYiUspjH7F7YVLXFkYEmAJ17acs2Rm4Odn63jvOLJwAZApoJeA==
+	bh=iZMyxOo+FOjxoMDW77+JGsuZVpdgAUJTgIYFVKEaZYE=;
+	b=XwADa2C33ZgG83Fv4KhSQZQyQYIlzO81lT2+1wn9t2mIyXE91YPmsj9siBh5cULajG8F
+	 vp5ByyOkd/Vl4JbxqgCP7xPL54BQyXk9dlz293OgcQ2HK8SPn/N97zJsF87G4u0yhB2zG
+	 P6VOxJlf9MaPMFprQn33MDj9TWyjZ7RQWy59m6EwUGCjJQu+EiOfcKbyf13jv38VKCDIe
+	 +LbkdBQeyJ/inA/yECYJbHSOXY8EyKiqOyICs3uPoI3J4wlc79K+N4owk9EA6qC6Zwoxg
+	 KjsaPxckFt5VWwK/vfX0Z4I5tZwz7ECP+xPhaQJKA+WOUMIP0JjFwO7KY/35Mv1LXmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=f4MmSN8d;
-	arc=none smtp.remote-ip=35.89.44.33
-Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b="DNexb+X/";
+	arc=none smtp.remote-ip=44.202.169.37
+Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46ABF606A324
-	for <linux-hwmon@vger.kernel.org>; Tue,  3 Nov 2026 04:12:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46ABF606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA34606A329
+	for <linux-hwmon@vger.kernel.org>; Tue,  3 Nov 2026 06:27:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DDA34606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=f4MmSN8d
-Received: from eig-obgw-5006b.ext.cloudfilter.net ([10.0.29.217])
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=DNexb+X/
+Received: from eig-obgw-6004b.ext.cloudfilter.net ([10.0.30.210])
 	by cmsmtp with ESMTPS
-	id O2sdxHn5LaC0UO5sixYUsA; Tue, 03 Nov 2026 04:12:20 +0000
+	id O4nwx4DnrJFmFO7z8xCh7b; Tue, 03 Nov 2026 06:27:07 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id O5shx1e8jNSXiO5sixJ4uG; Tue, 03 Nov 2026 04:12:20 +0000
-X-Authority-Analysis: v=2.4 cv=JvXxrN4C c=1 sm=1 tr=0 ts=6ae95f24
+	id O7z8xciBoKD1BO7z8xn5Bd; Tue, 03 Nov 2026 06:27:06 +0000
+X-Authority-Analysis: v=2.4 cv=N6MpF39B c=1 sm=1 tr=0 ts=6ae97eba
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8 a=_jlGtV7tAAAA:8
- a=XIwaYd1IxY5mdtdSnuIA:9 a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
+ a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8 a=_f5xWJEEkEkW62GEnhMA:9
+ a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=LoP1nm+wtK92U1mRaR+8qZdl0iB22faRIEkDfJ1/WAM=; b=f4MmSN8dHNLq
-	Zo+E3PpE+3Dvy0W7IgFMS/BZ6qmAXNys2IPoaH9Dm9n88mPeJdQpBRPMuJvquOKUTAP/kYhIasRA5
-	blHUID1Aokya4ikghHI2pxGxCj19ZH9rI1uc8BEqKh+tmaw4hfH2R4DLAaFV3fBlcNYnAmuJpeTtf
-	mvYSSm2HHE3r5r9iy5r+YFzWrZm94sr441Urmo184Xi9CMAdMQXPqZmHxWCpxm+99gf9KBRroVthr
-	pyLnaUyAnQvL2VJeFphRV+QWJor1vMYNSndRqMGyJUDIEbpvC9LduwjUkB7enx6x8kAofLVZrBXfM
-	x/jF5h3nsA2lDiU8Y4yPDQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:37828 helo=server.roeck-us.net)
+	List-Archive; bh=iZMyxOo+FOjxoMDW77+JGsuZVpdgAUJTgIYFVKEaZYE=; b=DNexb+X/ytzl
+	Er/P4cN5w1GVxSkfuCSJHksjLMsBpar7ok8gXPXTAb6WTlMyZBPBfKeRSih7oxYuesfZXL6RWvt6X
+	RpwfNJJRbjinulh6M2PLHsxGZUqjLZOfLvLlig+xwHa9aA4PpMkgHCBhtetzlhiFEKTSQont17lFm
+	fBM8k1p8X96tHtoPj2S/VnM29t8kYnxZUgzJ7+vhGJvNNd7YmyBHwpXKl572Xwuv+nw/KJtXmymzE
+	vXpiw/zNTf4hBXc7U5VM+qGqvXtVsPu3IjOhPiMbMlP7dBTbKtgnA0cGTCvsrRlhrIKr46kW9uYT1
+	MgMS0EpbxigF+BbcGr1I0A==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:46938 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xO0wL-00000003llb-3cSQ;
-	Tue, 03 Nov 2026 04:25:45 +0530
+	id 1xO0vt-00000003lZF-2Qud;
+	Tue, 03 Nov 2026 04:25:17 +0530
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Aleksa Savic <savicaleksa83@gmail.com>,
-	Jonas Malaco <jonas@protocubo.io>
-Subject: [PATCH 067/102] hwmon: (nzxt-kraken3) Use ktime for status report validity timestamp
-Date: Mon,  2 Nov 2026 14:52:00 -0800
-Message-ID: <20261102225235.334487-68-linux@roeck-us.net>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 056/102] hwmon: (ltc4245) Use 64-bit jiffies for update timestamp
+Date: Mon,  2 Nov 2026 14:51:49 -0800
+Message-ID: <20261102225235.334487-57-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20261102225235.334487-1-linux@roeck-us.net>
 References: <20261102225235.334487-1-linux@roeck-us.net>
@@ -93,134 +91,74 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xO0wL-00000003llb-3cSQ
+X-Exim-ID: 1xO0vt-00000003lZF-2Qud
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:37828
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:46938
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 0
+X-Email-Count: 1
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfO7+MlcwXmkopwyc+3SLNHAonOKrWCKjGtDP0rpf5GF+FgVUnmEEEJsOLRsOE8hAoF6fTpdsyS5qQuAuIlcNm4kQIu9HjYSzWeHPpybfiRTV1rCBDtym
- JN/CXS3kfhimOR4N2UBTq/XuIOEt5GWGXmQywLrTzT4NgRMnc19kHJGZ4Q19HcUkvcA0TWF9E6IjjkmQO+AgxmfKVTxH2VOEQBukx1P0P8qhnHMxayXXlOay
+X-CMAE-Envelope: MS4xfCSF9FhMDdP0TW/FpD1YgZotL/DniMn2Z3Sev288NA8v4FkpYpg2mDGpaeZfvOCix7jhVYkGcp2+vHBSZP5++SEShznEZZjCYKKi7XeLjvGkk4df/Ktq
+ Qza3X1Gu3yjz7cTF38UEw5q/6SDcL3OsBi533Aw9Z/7mtCg2p9/UJeXtkyF7xwXGmJ/ZDLv+UonoaUsSQwTVWt6CBHxcBEjZ8hseL/ZpLjuCRz1aiez+Iigx
 
-nzxt-kraken3 uses 32-bit jiffies and time_after() with a 2000 ms
-validity window to check whether status report data is stale. On 32-bit
-architectures, if status reports are not updated or polled for about
-24.8 days at HZ=1000, time_after() wraps around and stale readings are
-treated as fresh.
+On 32-bit architectures, jiffies and time_after() use 32-bit values and
+wrap after ~24.8 days at HZ=1000. If sensors are not polled for longer
+than half the wrap period, time_after() can return false and prevent
+cached sensor and GPIO readings from updating properly.
 
-Convert updated to ktime_t using ktime_get(), ktime_add_ms(), and
-ktime_after(), and serialize 64-bit updated accesses using
-status_completion_lock.
+Convert last_updated to u64 and use get_jiffies_64() and time_after64()
+to avoid wraparound issues on 32-bit systems.
 
-Fixes: f3b4b146eb10 ("hwmon: Add driver for NZXT Kraken X and Z series AIO CPU coolers")
-Cc: Aleksa Savic <savicaleksa83@gmail.com>
-Cc: Jonas Malaco <jonas@protocubo.io>
+Fixes: 6e34b187bc21 ("hwmon: Add LTC4245 driver")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/nzxt-kraken3.c | 27 +++++++++++++++++++--------
- 1 file changed, 19 insertions(+), 8 deletions(-)
+ drivers/hwmon/ltc4245.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwmon/nzxt-kraken3.c b/drivers/hwmon/nzxt-kraken3.c
-index a185e8b27532..02703741f1e5 100644
---- a/drivers/hwmon/nzxt-kraken3.c
-+++ b/drivers/hwmon/nzxt-kraken3.c
-@@ -14,6 +14,7 @@
- #include <linux/hwmon.h>
- #include <linux/hwmon-sysfs.h>
- #include <linux/jiffies.h>
-+#include <linux/ktime.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/spinlock.h>
-@@ -105,7 +106,7 @@ struct kraken3_data {
- 	 * was processed after requesting one.
+diff --git a/drivers/hwmon/ltc4245.c b/drivers/hwmon/ltc4245.c
+index d87aa9c32c87..46d521ee5aca 100644
+--- a/drivers/hwmon/ltc4245.c
++++ b/drivers/hwmon/ltc4245.c
+@@ -51,7 +51,7 @@ struct ltc4245_data {
+ 	struct i2c_client *client;
+ 
+ 	bool valid;
+-	unsigned long last_updated; /* in jiffies */
++	u64 last_updated; /* in jiffies */
+ 
+ 	/* Control registers */
+ 	u8 cregs[0x08];
+@@ -88,7 +88,7 @@ static void ltc4245_update_gpios(struct device *dev)
+ 	 * If the last reading was too long ago, then we mark all old GPIO
+ 	 * readings as stale by setting them to -EAGAIN
  	 */
- 	struct completion status_report_processed;
--	/* For locking the above completion */
-+	/* For locking the above completion and updated timestamp */
- 	spinlock_t status_completion_lock;
- 
- 	u8 *buffer;
-@@ -119,7 +120,7 @@ struct kraken3_data {
- 	enum kinds kind;
- 	u8 firmware_version[3];
- 
--	unsigned long updated;	/* jiffies */
-+	ktime_t updated;
- };
- 
- static umode_t kraken3_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr,
-@@ -248,6 +249,17 @@ static int kraken3_read_x53(struct kraken3_data *priv)
- 	return 0;
- }
- 
-+static bool kraken3_is_stale(struct kraken3_data *priv)
-+{
-+	ktime_t updated;
-+
-+	spin_lock_bh(&priv->status_completion_lock);
-+	updated = priv->updated;
-+	spin_unlock_bh(&priv->status_completion_lock);
-+
-+	return ktime_after(ktime_get(), ktime_add_ms(updated, STATUS_VALIDITY));
-+}
-+
- /* Covers Z53 and KRAKEN2023 device kinds */
- static int kraken3_read_z53(struct kraken3_data *priv)
- {
-@@ -256,7 +268,7 @@ static int kraken3_read_z53(struct kraken3_data *priv)
- 	if (ret < 0)
- 		return ret;
- 
--	if (!time_after(jiffies, priv->updated + msecs_to_jiffies(STATUS_VALIDITY))) {
-+	if (!kraken3_is_stale(priv)) {
- 		/* Data is up to date */
- 		goto unlock_and_return;
+-	if (time_after(jiffies, data->last_updated + 5 * HZ)) {
++	if (time_after64(get_jiffies_64(), data->last_updated + 5 * HZ)) {
+ 		for (i = 0; i < ARRAY_SIZE(data->gpios); i++)
+ 			data->gpios[i] = -EAGAIN;
  	}
-@@ -294,7 +306,7 @@ static int kraken3_read(struct device *dev, enum hwmon_sensor_types type, u32 at
- 	struct kraken3_data *priv = dev_get_drvdata(dev);
- 	int ret;
+@@ -130,7 +130,8 @@ static struct ltc4245_data *ltc4245_update_device(struct device *dev)
+ 	s32 val;
+ 	int i;
  
--	if (time_after(jiffies, priv->updated + msecs_to_jiffies(STATUS_VALIDITY))) {
-+	if (kraken3_is_stale(priv)) {
- 		if (priv->kind == X53)
- 			ret = kraken3_read_x53(priv);
- 		else
-@@ -780,6 +792,7 @@ static int kraken3_raw_event(struct hid_device *hdev, struct hid_report *report,
- 	priv->channel_info[0].reported_duty = kraken3_percent_to_pwm(data[PUMP_DUTY_OFFSET]);
+-	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
++	if (time_after64(get_jiffies_64(), data->last_updated + HZ) ||
++	    !data->valid) {
+ 		/* Read control registers -- 0x00 to 0x07 */
+ 		for (i = 0; i < ARRAY_SIZE(data->cregs); i++) {
+ 			val = i2c_smbus_read_byte_data(client, i);
+@@ -152,7 +153,7 @@ static struct ltc4245_data *ltc4245_update_device(struct device *dev)
+ 		/* Update GPIO readings */
+ 		ltc4245_update_gpios(dev);
  
- 	spin_lock(&priv->status_completion_lock);
-+	priv->updated = ktime_get();
- 	if (priv->kind == X53 && !completion_done(&priv->status_report_processed)) {
- 		/* Mark first X-series device report as received */
- 		complete_all(&priv->status_report_processed);
-@@ -794,8 +807,6 @@ static int kraken3_raw_event(struct hid_device *hdev, struct hid_report *report,
+-		data->last_updated = jiffies;
++		data->last_updated = get_jiffies_64();
+ 		data->valid = true;
  	}
- 	spin_unlock(&priv->status_completion_lock);
  
--	priv->updated = jiffies;
--
- 	return 0;
- }
- 
-@@ -886,11 +897,11 @@ static int kraken3_probe(struct hid_device *hdev, const struct hid_device_id *id
- 	hid_set_drvdata(hdev, priv);
- 
- 	/*
--	 * Initialize ->updated to STATUS_VALIDITY seconds in the past, making
-+	 * Initialize ->updated to STATUS_VALIDITY in the past, making
- 	 * the initial empty data invalid for kraken3_read without the need for
- 	 * a special case there.
- 	 */
--	priv->updated = jiffies - msecs_to_jiffies(STATUS_VALIDITY);
-+	priv->updated = ktime_sub_ms(ktime_get(), STATUS_VALIDITY + 1);
- 
- 	ret = hid_parse(hdev);
- 	if (ret) {
 -- 
 2.45.2
 
