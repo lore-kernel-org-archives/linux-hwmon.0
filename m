@@ -1,57 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793631364;
-	b=32cZ5AN+2th4nsiMCpq6/osEKqeXBYC4WZOrPb3V9ma8BEH/hpXjGbyDDgwaGYc1qDGf
-	 YjJw1tKlPFZHv+hjJbHmMofjh25tJb5bzOOTCvSPwZpBPjXZdAyp1L7DEbXMyJPfUHpoV
-	 oVXgrD3boIqu2IlP2fMRVRxOrQAGM8RDV/t0Nkh6saycL+QvT98EDUSyqhyrY2Ylgt+XV
-	 /GUq6CdGR22GgDAg8N7gvZfE+wpPsSePM8upoYKMA9bCm5CL316bJbm7hrNFMSYKjCELs
-	 RNvZcv37e3rKWS1Rl2SuChzo1XcIp4gFTIWhY5jm5G/pMrICin8egzMQDdjDd7skSsA==
+	t=1793631542;
+	b=j4SeQ8fQ3J/pp+Avbeo+n4ig53+VTuVFexhOHpcx2H9WSf5oER6c0CH36BroVFqGAVHR
+	 d9CI9jEIczs2lFUqufrYBmh3OGsSr6rXwW/Qpd5DKDjMRBC9Rua1DvBKLYPi6TUF9Op55
+	 NmSJjAyJm8Q5GGbLML4ktak87/6HTqejPTwpxyKatdVIoO/uZ3+JtU/GfSL5+755AarX4
+	 12CMNflpMtRXkSYw+LgN89BqBf16BvJT8N08YJV7c5ZGrTzTJGsbqvfDu716eMPLMyvn4
+	 S7KA20hvcq7pQ/8NZbSRGvpFIDBvQlW1BlO5k7HnFWraQqai4o+kSLxS2QC1+bDEN2w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793631364;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793631542;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=LQEwADjzH2iDQW3l4RttcDCqnPt6i0xytDhJlAKuDt0=;
-	b=TsyCP37Y/ZCTvBO6lcw8m+5p3MFe9SthSTSSzOowCNaab500MmaWGBc7+dzEROvstY51
-	 zzs6mDEUIDIpJyVABlv//v+wqLaKdogAtGyZVdAtV2Tjz9JfrySQ64nbdftWKZpQrIGCW
-	 hZ7dV5VJjWBEe8fC8mEC396rhKOVQAe6v7gXEema4hB8rQbCgpeCwS799KprSXLkR/89I
-	 3lI7JRVZK8+RJg9Odjbp8KcctsYSK3mdcwCFHveroJl+V3vg5sK8SrkeOsUtJp/KM/ID8
-	 Pwlnkof7W3z/16VFvtOk8OFPJUi9uiIVOKdeIK3od2mtowLY5NgklXC3nRdou4BG2dg==
+	bh=Dv597yS4H1oPJctlJvImKkvY8fbTjE2SGemjSG/ArLc=;
+	b=eJehaXa6KfOpAsjOh7LSdN0ZyWmiPKIUh3iY7WS0Qa3AbOk1bhqNOeV/nSUmM1OCALxm
+	 t7g0GZ73xJAJ7j294hhjGKI05vQMuqSxTEx4dc5FI1NFUlzMMgpb4+2KYghaU35pxQxtp
+	 zdVAG4oiTvKHYbsCT1M+6NZEjy6ZtSzcLSMU0X8JiRNUZkyLLKp8m4ic5LGrTaHy7rUF1
+	 fAmQej1XesobIbOVq7owm4J0AN7TCnInDTaZf7ZR4P597MseIXqAd2lirIjfsvtGT0NVa
+	 u2RSGJiotS4n+h0tWVqgu1P4IYpYFE+zv7wpyCj6NtH05rGXd8iGVpyHUA4jYHPpiSA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QJPLL6gB;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Jh/h1P7o";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF343607BDDE;
-	Mon,  2 Nov 2026 14:56:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB0E3606A5A6
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 14:59:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QJPLL6gB
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43D131F00A1F;
-	Mon,  2 Nov 2026 14:56:03 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Jh/h1P7o
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49D0E1F00A1B;
+	Mon,  2 Nov 2026 14:59:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793631363;
-	bh=LQEwADjzH2iDQW3l4RttcDCqnPt6i0xytDhJlAKuDt0=;
+	s=k20260515; t=1793631541;
+	bh=Dv597yS4H1oPJctlJvImKkvY8fbTjE2SGemjSG/ArLc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=QJPLL6gBGHFUNdipV+bzR8Au68jrr/McYroIbFlpgUA9mC1BIZUoWRJu9pa+P/Y5a
-	 Ugc8KF8nfpFwIzcLWrJ+qfy5ATrjhP+bGpsE35bcqWHTBeHTqjQq2giAJwxBq46n9l
-	 GKZIVTvTPAZirJjFjfK98reEIb5PX9/vDvamr5Z+RdgMUmYKaNF9Igb3lESYLENDii
-	 2n4bahzGQ/l/BH9opsrB95+WZymkYLBelV6RBV8RkYRgDJD32WVupFVSZW47Lxeyrq
-	 vmpT73bNiVKhmB+9as0fO4S8dbSuxEy24pEwFoXGay2mhSTKQNUe7u4g3X/IxUuhOm
-	 UT70v7E5dUDlQ==
-Message-ID: <sashiko-outbox-193619@kernel.org>
+	b=Jh/h1P7o95z0qppKiOhFm7AcjYl4LBQXiIgDpK6R5JcVUVEBJ2l7czpLtAU9C6e3S
+	 xi+2JCWHdR6sp4HakzOUvWdPZGK8nRVQn/8AJC1oJA+JesGJhB4nDy/lgblDGGQJZV
+	 yNovi2lr3kC3Rm18OusYmcQkgKnyl8Rol0LCJLkwWf5t2zplW/IC4ZEY2FepIGsMVs
+	 T6sWIsJNIU5JGOtuYUwrFjDnM/DofnprmKL3Hk0WrnGM4/dND0e9VT/cCLYAksO/bd
+	 tM5Ncfwkg8YNdJYNlgc290elfbyehisDnsQttALVJg+zYjrpMEi+0PngRF4sv2LlIu
+	 D+VaKFw2y7Pgg==
+Message-ID: <sashiko-outbox-193621@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 1/3] dt-bindings: iio: add: document the MAX34417
- Four-Channel High Dynamic Range Power Accumulator
+Subject: Re: [PATCH v5 2/3] unaligned: introduce be56 unaligned accessors
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Neil Armstrong" <neil.armstrong@linaro.org>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org
-In-Reply-To: <20261102-topic-sm8x50-iio-max34417-adc-v5-1-0ffa5e5f2d5c@linaro.org>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20261102-topic-sm8x50-iio-max34417-adc-v5-2-0ffa5e5f2d5c@linaro.org>
 References: <20261102-topic-sm8x50-iio-max34417-adc-v5-0-0ffa5e5f2d5c@linaro.org>
- <20261102-topic-sm8x50-iio-max34417-adc-v5-1-0ffa5e5f2d5c@linaro.org>
+ <20261102-topic-sm8x50-iio-max34417-adc-v5-2-0ffa5e5f2d5c@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 02 Nov 2026 14:56:02 +0000
+Date: Mon, 02 Nov 2026 14:59:00 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -61,82 +60,19 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] dt-bindings: iio: adc: adi,max34417: inconsistent indentation in DT=
-S example
---
+> From: Marius Cristea <marius.cristea@microchip.com>
+>=20
+> The MAX34417, IIO driver, is using some unaligned 56-bit registers.
+> Provide some helper accessors in preparation for the new driver.
+>=20
+> Signed-off-by: Marius Cristea <marius.cristea@microchip.com>
+> [narmstrong: update commit message and move to include/linux/unaligned.h]
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-commit a9428a6f2a12de2abe990a839ca0d1e5820c2ceb
-Author: Neil Armstrong <neil.armstrong@linaro.org>
-
-dt-bindings: iio: add: document the MAX34417 Four-Channel High Dynamic Rang=
-e Power Accumulator
-
-This patch adds a Device Tree binding schema for the Analog Devices
-MAX34417 Four-Channel High Dynamic Range Power Accumulator.
-
-> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,max34417.yaml =
-b/Documentation/devicetree/bindings/iio/adc/adi,max34417.yaml
-> new file mode 100644
-> index 0000000000000..700bc3ca7d7cf
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/adc/adi,max34417.yaml
-> @@ -0,0 +1,103 @@
-
-[ ... ]
-
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        sensor@10 {
-> +              compatible =3D "adi,max34417";
-> +              reg =3D <0x10>;
-> +
-> +              vdd-supply =3D <&max34417_vdd>;
-> +              vio-supply =3D <&max34417_vio>;
-> +
-> +              #address-cells =3D <1>;
-> +              #size-cells =3D <0>;
-> +
-> +              channel@0 {
-> +                  reg =3D <0>;
-> +                  label =3D "ch0";
-> +                  shunt-resistor-micro-ohms =3D <5000>;
-> +              };
-> +
-> +              channel@1 {
-> +                  reg =3D <1>;
-> +                  label =3D "ch1";
-> +             };
-> +
-> +              channel@2 {
-> +                  reg =3D <2>;
-> +             };
-> +        };
-> +    };
-
-[Severity: Low]
-As reported by Krzysztof Kozlowski on v2 [1], the DTS example in
-Documentation/devicetree/bindings/iio/adc/adi,max34417.yaml has inconsistent
-indentation that fails scripts/dtc/dt-check-style --mode strict.
-
-Inside sensor@10, the properties and child channel nodes are indented by 6
-spaces relative to sensor@10 instead of 4 spaces, and the closing braces for
-channel@1 and channel@2 are misaligned by one space relative to their openi=
-ng
-lines.
-
-Should the example use consistent 4-space indentation throughout sensor@10 =
-and
-its child channel nodes?
-
-[1] https://lore.kernel.org/r/20260929-heavy-intelligent-guillemot-da269b@q=
-uoll
+Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261102-topic-sm8x=
-50-iio-max34417-adc-v5-0-0ffa5e5f2d5c@linaro.org?part=3D1
+50-iio-max34417-adc-v5-0-0ffa5e5f2d5c@linaro.org?part=3D2
+
