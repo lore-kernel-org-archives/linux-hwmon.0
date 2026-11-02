@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793660051;
-	b=zSKMZQ8SCPvhbd56YUOvO5KNb0mgL9ZqNZ2IUIKU3cNDB0s998wh494ov24R03E7KG/S
-	 tMKmw5IyVzfE6VEkJroLxhJNyteEqass/xpUvcA607HZ1zbEjMex/9Blm2JPxJcXt1CR/
-	 iYr6+NC8unLV2q7AjFuTZv1Y0fGdxU/bfUjLfynVG6MDhkGmDOCH4KYcpH3V3vQ9AoH+x
-	 dqjFwFsMoXKFextQPNJpXwmRdqTGLNi+Srac5/yJTlyENqZtrIM4ou+O33+bJrIoeFjZS
-	 aMKZOWg3rS02zge11BmwPmbMJz/wLOPAeybuWqz7fWJ8d2RK16fmu5lirgiJi/XL/dA==
+	t=1793660052;
+	b=tB+qnJjh+FbdQfwhKp1CqJn4NBMfEYXwzyHzOEKZKqm//F2qkkLqg4Ug7qjO1KOCk0F7
+	 zh1/r+W/NFWkdFMtqTvyGax7KaYTVzE0vGHzRI7nLcNslZE5JAaVF66BfAp9vDe+NKMTR
+	 6/vnlbz4mvnajgVi97r7rHYdCTlUdUnaDuDdKtiJ2z5aWd+tI9noTTpkZbWwFl2n71j8t
+	 00S1OG0opcC/66iYinPRhQX+dc/kLIx0GTaBPX4fT275nRWxqhGA0haSGHhLOYkeiiHs6
+	 +bE/UDgQbQYG/dhCs/vVbBUcPtTS9qGyRBs558iVf6XSxjidjWuHJht/V0m8g13a9fA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793660051;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793660052;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:X-AntiAbuse:
@@ -15,61 +15,62 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-Source-IP:X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
 	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
 	 X-Local-Domain:X-CMAE-Envelope;
-	bh=7kwR+Ei6kUbJA+sfhl/MbK0IrtIH9h9hTNu8IpYo+Us=;
-	b=Iofw8/FLAhvVa8MzxpxupYmX4GlrCXY/6epc/8kMrwBxddS3oHK8fECcrKJSQeQ3x4R7
-	 l54lIzJnztn5njEdnmaRDdQbQ5A9ldKhRKXfBa/LCO+SPfFNo0rrimyyvbisynqupBCFb
-	 tir2+8rfInaLXuUDDaz1ZFtFMzkuQGTayR0GKooegiiOT+p/wJ45P/0ddV+jnYC6xmPXV
-	 u9KYqx3X5u213utvjevbf1WV8Z0riNfuTlM5aa9EOkMVes4sozmf8AJKd0XliEe2K/N2W
-	 wnwy+WN1AQLqlP7YRGoVqpexZoyOrOfNTDfw3ajVyoOC6MhYT8aGUcmOZSET3i1itcQ==
+	bh=EhqN+eyuy7/CNq9ckaJ0nl+HsLT/45RvX+rCuiP73Pk=;
+	b=5TDssmQisfr4ysyGj55lWASZD2JUc2E7dDIKgPV3BAmy1d27ytOJzX+Uawqiqv+mfYt3
+	 LMMJQa8Ye632n+c3qcY41fodGkyhPyH13p9bDr5H8bf476/r66xxz3e7VlNzv/vsQUHe/
+	 qy1KleyXbq88fKidtO/TYamdoz+WWYGYVR9pWb9sXKotdYGnr2CLgjmFRIyuiMqqBSm3l
+	 9OtMXZDAbOXA1BvOdd0Ohg5AwCmDDiW/yL8UMABP120FuYPezOJc5zhG0YTlJ26+oH6v6
+	 06uNAjwEIL0lbuNYELcQWRwZwZxueF/pqOMnc/WIfWOYeqSt7QOB/ywfvVUN/qNb84Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b="a/t0Eskg";
-	arc=none smtp.remote-ip=35.89.44.37
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=pjepj65b;
+	arc=none smtp.remote-ip=44.202.169.37
+Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814A5606A326
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 22:54:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 814A5606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A30606A326
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 22:54:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 40A30606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=a/t0Eskg
-Received: from eig-obgw-5004b.ext.cloudfilter.net ([10.0.29.208])
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=pjepj65b
+Received: from eig-obgw-5002b.ext.cloudfilter.net ([10.0.29.226])
 	by cmsmtp with ESMTPS
-	id NmxYxLtILv0ndO0upxBS7Y; Mon, 02 Nov 2026 22:54:11 +0000
+	id Nw9kx2RELJFmFO0uqxAWG2; Mon, 02 Nov 2026 22:54:12 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id O0uoxjMTnmTkmO0upxidWT; Mon, 02 Nov 2026 22:54:11 +0000
-X-Authority-Analysis: v=2.4 cv=eKsTjGp1 c=1 sm=1 tr=0 ts=6ae91493
+	id O0upxEl32QfwNO0upxXVgf; Mon, 02 Nov 2026 22:54:11 +0000
+X-Authority-Analysis: v=2.4 cv=bfprUPPB c=1 sm=1 tr=0 ts=6ae91493
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8 a=XsESRFL8gdzgaRyLTTQA:9
- a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
+ a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8 a=_jlGtV7tAAAA:8
+ a=1Ez6V3JJn854t96LNywA:9 a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=7kwR+Ei6kUbJA+sfhl/MbK0IrtIH9h9hTNu8IpYo+Us=; b=a/t0EskgANuF
-	q3Fu2oBnZto5mlu/WeIItXRcJy5XDaA2E9c+umDw68NntiE/KFBRDe9OV9mK2X/rGcXgw/IMrrAUn
-	ZU1F8CTMRPdnC5bcUEf1egMvab3urQOaF2WVJjlJcx/F3qpBCnLKh+sAamNigRJLAkQB9rXQ9hyVS
-	e3bv/3fDEDDS7VNHKtF2pCXjvVhjxoBPxrPJS51jzGN/13pIOV6fZP/pQYeqvU+jEN7m7ipi5WzhB
-	jQKvqd4ludY/RG+z55HMApoU+uN4tJz0L0a/HWtvqgfcZeGQvmbPV7mSy/1j2QO00puupOFKqPAA4
-	S5kdSX56/oJjcpIylzTryg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:50202 helo=server.roeck-us.net)
+	List-Archive; bh=EhqN+eyuy7/CNq9ckaJ0nl+HsLT/45RvX+rCuiP73Pk=; b=pjepj65bGkt9
+	RgHqkAckgnUgKkJW6dXAyqt0izUqgw8fZG51dDebQjKj4ZjC4xbI/Q4XWw80ccFzHszaboNi0RKvg
+	Hfpr4+KtqNg1W5BmgJPzM6UYJP/SfPjm2oAJQ5dDaO7q4KacxOjPUSkYSL3jzFYp1N/Ybrqqjm3ja
+	OvQwh1ifFCuQdRqRxa8eenjhk8/rmn75KeE8pmhnhI+mWTYLC38mZXsNwIgEM2/Y8QrL7lmwcmif/
+	DACOw/oiVkR3DDVQDhzAlUM2R45fNfM1LLxpvZrHnBMj8KJTC/DdKBKuBHJAXTXtqxId+RjdxcHpz
+	FKNa6YiXNlhErwFzfp3a8A==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:50206 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xO0uo-00000003l3T-2PfD;
-	Tue, 03 Nov 2026 04:24:10 +0530
+	id 1xO0up-00000003l43-1ECZ;
+	Tue, 03 Nov 2026 04:24:11 +0530
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 033/102] hwmon: (g762) Use 64-bit jiffies for update timestamp
-Date: Mon,  2 Nov 2026 14:51:26 -0800
-Message-ID: <20261102225235.334487-34-linux@roeck-us.net>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Aleksa Savic <savicaleksa83@gmail.com>
+Subject: [PATCH 034/102] hwmon: (gigabyte_waterforce) Use ktime for status validity timestamp
+Date: Mon,  2 Nov 2026 14:51:27 -0800
+Message-ID: <20261102225235.334487-35-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20261102225235.334487-1-linux@roeck-us.net>
 References: <20261102225235.334487-1-linux@roeck-us.net>
@@ -91,65 +92,88 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xO0uo-00000003l3T-2PfD
+X-Exim-ID: 1xO0up-00000003l43-1ECZ
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:50202
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:50206
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 70
+X-Email-Count: 72
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfMY7cz6b3jN4POnStBwJRalhnQBEFksrCi8yFTVd6KSHch6xk3oSmdDj/jkqrSKKQjDEOm7APKv7lKLUClXHTJs67uCkljzMM+pPUjqkMhty09eeK9tX
- iiVkEhbo3CZBejmpGjWI9HUU+fgZYqj0TEzWsix6vkP8f+et3kzbXasX2Rbv0c31efhPBpW+C3+0eRLaHzx2TPyyyzd4Nu+vt0UQILZjWtlBhWn9thwmQK+N
+X-CMAE-Envelope: MS4xfDokERz+cdNZdXYJcDMM4xzabHKvagVM9JK/MuSchbW/zh03HFkDApCOhrRuhIhRQPJ+eXkszxAFpjEJJn8lFPM9Z4pAQ0tD+2dEk6KsgH387OHP6cdF
+ Bpe4IQrlh/bVpXip9+/80cBeoQ2RqYmS8aOrFE+OcF2BgGSbDm0sdlkNpu/0cCBS9EUxey4YvNo327Z7r56Yo4dguapWXHRX4If6Zs7mRAIVSpaRVC/8hgTS
 
-On 32-bit architectures, jiffies and time_before() use 32-bit values and
-wrap after ~24.8 days at HZ=1000. If the device is not polled for longer
-than half the wrap period, time_before() can return true and prevent
-cached fan values from updating.
+On 32-bit architectures, jiffies and time_after() use 32-bit values and
+wrap after ~24.8 days at HZ=1000. If sensors are not polled for longer
+than half the wrap period, time_after() can return false and prevent
+status reports from being refreshed.
 
-Convert last_updated to u64 and use get_jiffies_64() and time_before64()
-to avoid wraparound issues on 32-bit systems.
+Since STATUS_VALIDITY is defined in milliseconds, convert updated to
+ktime_t and use ktime_get(), ktime_add_ms(), ktime_sub_ms(), and
+ktime_after() to avoid 32-bit jiffies wraparound issues.
 
-Fixes: 594fbe713bf6 ("Add support for GMT G762/G763 PWM fan controllers")
+Fixes: 42ac68e3d4ba ("hwmon: Add driver for Gigabyte AORUS Waterforce AIO coolers")
+Cc: Aleksa Savic <savicaleksa83@gmail.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/g762.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/hwmon/gigabyte_waterforce.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hwmon/g762.c b/drivers/hwmon/g762.c
-index 407cf7af4fdd..119a79eb8d4f 100644
---- a/drivers/hwmon/g762.c
-+++ b/drivers/hwmon/g762.c
-@@ -128,7 +128,7 @@ struct g762_data {
+diff --git a/drivers/hwmon/gigabyte_waterforce.c b/drivers/hwmon/gigabyte_waterforce.c
+index 34471852fe21..85f69353ed45 100644
+--- a/drivers/hwmon/gigabyte_waterforce.c
++++ b/drivers/hwmon/gigabyte_waterforce.c
+@@ -9,6 +9,7 @@
+ #include <linux/hid.h>
+ #include <linux/hwmon.h>
+ #include <linux/jiffies.h>
++#include <linux/ktime.h>
+ #include <linux/module.h>
+ #include <linux/spinlock.h>
+ #include <linux/unaligned.h>
+@@ -67,7 +68,7 @@ struct waterforce_data {
  
- 	/* g762 register cache */
- 	bool valid;
--	unsigned long last_updated; /* in jiffies */
-+	u64 last_updated; /* in jiffies */
+ 	u8 *buffer;
+ 	int firmware_version;
+-	unsigned long updated;	/* jiffies */
++	ktime_t updated;
+ };
  
- 	u8 set_cnt;  /* controls fan rotation speed in closed-loop mode */
- 	u8 act_cnt;  /* provides access to current fan RPM value */
-@@ -202,7 +202,8 @@ static struct g762_data *g762_update_client(struct device *dev)
- 	int ret = 0;
+ static umode_t waterforce_is_visible(const void *data,
+@@ -129,7 +130,7 @@ static int waterforce_get_status(struct waterforce_data *priv)
+ 		return ret;
  
- 	mutex_lock(&data->update_lock);
--	if (time_before(jiffies, data->last_updated + G762_UPDATE_INTERVAL) &&
-+	if (time_before64(get_jiffies_64(),
-+			  data->last_updated + G762_UPDATE_INTERVAL) &&
- 	    likely(data->valid))
- 		goto out;
+ 	spin_lock_irq(&priv->status_report_request_lock);
+-	if (!time_after(jiffies, priv->updated + msecs_to_jiffies(STATUS_VALIDITY))) {
++	if (!ktime_after(ktime_get(), ktime_add_ms(priv->updated, STATUS_VALIDITY))) {
+ 		/* Data is up to date */
+ 		spin_unlock_irq(&priv->status_report_request_lock);
+ 		goto unlock_and_return;
+@@ -288,7 +289,7 @@ static int waterforce_raw_event(struct hid_device *hdev, struct hid_report *repo
+ 	priv->speed_input[1] = get_unaligned_le16(data + WATERFORCE_PUMP_SPEED);
+ 	priv->duty_input[0] = data[WATERFORCE_FAN_DUTY];
+ 	priv->duty_input[1] = data[WATERFORCE_PUMP_DUTY];
+-	priv->updated = jiffies;
++	priv->updated = ktime_get();
+ 	if (!completion_done(&priv->status_report_received))
+ 		complete_all(&priv->status_report_received);
+ 	spin_unlock_irqrestore(&priv->status_report_request_lock, flags);
+@@ -332,11 +333,11 @@ static int waterforce_probe(struct hid_device *hdev, const struct hid_device_id
+ 	hid_set_drvdata(hdev, priv);
  
-@@ -236,7 +237,7 @@ static struct g762_data *g762_update_client(struct device *dev)
- 		goto out;
- 	data->fan_cmd2 = ret;
+ 	/*
+-	 * Initialize priv->updated to STATUS_VALIDITY seconds in the past, making
++	 * Initialize priv->updated to STATUS_VALIDITY in the past, making
+ 	 * the initial empty data invalid for waterforce_read() without the need for
+ 	 * a special case there.
+ 	 */
+-	priv->updated = jiffies - msecs_to_jiffies(STATUS_VALIDITY);
++	priv->updated = ktime_sub_ms(ktime_get(), STATUS_VALIDITY + 1);
  
--	data->last_updated = jiffies;
-+	data->last_updated = get_jiffies_64();
- 	data->valid = true;
-  out:
- 	mutex_unlock(&data->update_lock);
+ 	ret = hid_parse(hdev);
+ 	if (ret) {
 -- 
 2.45.2
 
