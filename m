@@ -1,49 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.39
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793631250;
-	b=H7YJg/ftyPHTKzsN4tfdXhVD+3qg+kc1/GejYgXj6zz2wgopJ6oYepDABjzVdFIcsFui
-	 ksENVNE8Z8Geu8FAhXbDEEWOZW2WCvrxkEyLEy6OsKCk9kTuZePnFeKV13vFAAOMMgMsx
-	 9BWfSVqIcKyUg7txJPA3BNzb3xhhH4FBhPw6oouIc2yhep3ipm8wV+4WqTRG3PhZ+4AkF
-	 L5AVBCJKUIO+PtE2gfBQFeFOzXDG+SfxTJ5ieIkl+aeBlg3/Ut8Ur9ts0DCkAXkXdaVXp
-	 YEF03Zg8kRw6NI1Kvvz885rwcE+Jwz5POPEwUVmTiiNjcr+IF5uNvQVUR6lIuZ1eqIw==
+	t=1793631259;
+	b=j2wW38JaGIwUUE6tRrWd3F5Ebv6O85XE+KZ+guakbhJ6Vvy+x+nQdOjvO+syvzt+bLNe
+	 58ErcB0Tr42IYrmn+GdP04ayALHF6AnmzSxnnWsuQJRHD4upTDKDC7a4P4SkwE8IrU6fq
+	 Q2gEz8+G/dlNrIb0Qrz4mI9T7DQsSTnEPMfMiQQAKE5WOnsROyUFn+m8ok2dfMzdQW1HI
+	 9mHiFwo37TfsB5g1xi6s+wo8jf9HCuwMIKfSj2NvD8qM1oiFgOuV76UlLzgvDPRPE92y2
+	 D/J4vbuHqCA62b2peXQdx+taZT1tY6xeQh9EQgXvTKXGu4MUVT9CDZGdpA09q5xFMDg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793631250;
-	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
-	 X-Mailer;
-	bh=6D+rhj9AMzsL4ZxAMbTTFRqO6BNcfNzlOGN8XoIy1BQ=;
-	b=2GCg/mc9/6AUTHT2gRIauO6of0bto0JieH9xVZq+7ShAP2AyxpUCe1cLOujqQFeXZDoE
-	 lNnERBN4VAxxKmxWs3nP90zWNPhV2ep7m5Ko+hlWn/6Liwg08aCg8ZrqV4rQqJLYXuCTm
-	 YzLcedmIJl+9BK8SO9PrG/KCgj9uL7KcckVuo/GfNTWuoBabia6Ph9hcLQSqPdEoz+Z2O
-	 BlW4Mwe72mCqf4NshKd/QDrIo0nFfPclNlohqlzWHOKU7e5+jbBeNo5FKfgX7d8aN+lkF
-	 cZhyd+aCs/Hyf42OwbC2Hbj3Aikmyr1CilUUWxqPNPj9Pr01RX64TiYQAb+w7Gqo/+g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793631259;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
+	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
+	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
+	bh=VTvXP+zTioKemVlNUIcqYZF1EWN8pXem6vf0/ayEp94=;
+	b=duJzbOYBl7fSo09IjkJZn3EMwhuCDIPxKdSqJ/Vr8qHZ3hY8gCUjsT18oNgsUYYN0OJO
+	 S+KiC4BIlBMhxvNowuTaeZvYM2/Kh0+jXlH5A6Fguj7zOTQJrwxSvb4+Tsgi3Mvle1FdS
+	 gRHs+ZR+NfSpACTkT8B8jqbQ9mjI6FuxQvSnSJcPvXKO8QTFfiBfCXfctsmeTXkFaAjgq
+	 nBDFymMgI895bcyLKx40XG/o7LfUJdvdBAaySrhMEhJVBVugumz03lvjeuh+55YCyZiYs
+	 QGYpzZNA5qrU9Mi502rmPNHWz5QwW98NG/xa7yukOYIZgRjb3LMQ4gpx7Wbr3vUjThA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KxNpZEKk;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=roeck-us.net;
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=1yrvJjWW;
+	arc=none smtp.remote-ip=44.202.169.39
+Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90BA607905F;
-	Mon,  2 Nov 2026 14:54:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E68607A8B1
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 14:54:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 81E68607A8B1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KxNpZEKk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 292341F00A16;
-	Mon,  2 Nov 2026 14:53:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793631249;
-	bh=6D+rhj9AMzsL4ZxAMbTTFRqO6BNcfNzlOGN8XoIy1BQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=KxNpZEKkyph0s1VFnWYugNb2QhC01F2/bH2mO62CWQZ+LGZOjH8D13WJhEvaEvssq
-	 ll1kDcMtrg3ROkFYJi4p7/Ri4zQ67sgTvcwZMysRa8udyqg9CDy7DJ1FOKzlD3OUC5
-	 hck0+uoaMFl0apM+ydUoJxSpyX1BiEd45EYN5ZcmyZZdhFNON3LUDyLw+HmFRG6kWj
-	 hKJyb7cb24m5nGVzK7xwTb/BfbuX6mn66mIH+I2qikOKVjpdkTR++4BkGvLnpQYbfU
-	 N42B37TnDt/oZhvY4ym1lTPmywWw6rqu+aAeSl/T4Fq53VdxKX+t4v7df9GH9Jeepm
-	 bu9oR3VWn5S8Q==
-From: Christian Brauner <brauner@kernel.org>
-Date: Mon, 02 Nov 2026 15:48:53 +0100
-Subject: [PATCH RFC 13/16] proc: let procfs copy out reads that don't go
- through seq_file
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=1yrvJjWW
+Received: from eig-obgw-5001b.ext.cloudfilter.net ([10.0.29.181])
+	by cmsmtp with ESMTPS
+	id NpAlxQJ0qMylkNtQPxy48G; Mon, 02 Nov 2026 14:54:17 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id NtQOxHXzp0ULmNtQOx9SnA; Mon, 02 Nov 2026 14:54:16 +0000
+X-Authority-Analysis: v=2.4 cv=JJw7s9Kb c=1 sm=1 tr=0 ts=6ae8a419
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10
+ a=wzMGUZO3qOQOOVo2cMEA:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
+	List-Archive; bh=VTvXP+zTioKemVlNUIcqYZF1EWN8pXem6vf0/ayEp94=; b=1yrvJjWWSMYA
+	N7/u4fZJItSIGr+C6wL8eLfUVuJWeB+EBF/oxyDKf751tTWLPzONYnWFzqcKs/Xz3ZwwYrWtMml8b
+	FkCLJTalEOTodO+18W3UjUSsjOKzObDHAf5p/jTZH4EKft85h5TWp1W0G/F0l5RT/7NHAdcB+zy27
+	TT6nmtgze6T8SJCI9ogbZ1gCjsice+z171ngVLEyl0R+FUMg2F4E9zGWGRbdUYtpsJd+vM0WewgHa
+	VIVtkt6C4fuVp29P11FHKFM6Jjq9gnUo3bR+0hMe8bL+TMiLzft0c48tq4W4Wxcz6JMJTP+7ZFKMT
+	A9DTmRhzBQkmwzAo1nfrHg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:60166)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xNtQO-00000003ljI-0DfU;
+	Mon, 02 Nov 2026 20:24:16 +0530
+Message-ID: <57516add-01bf-492b-9fd9-2bcb762e3041@roeck-us.net>
+Date: Mon, 2 Nov 2026 06:54:15 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -53,265 +75,117 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC] hwmon: (tps23861) PSE-PD support, extend hwmon driver or
+ move to pse-pd?
+To: Kory Maincent <kory.maincent@bootlin.com>, Andrew Lunn <andrew@lunn.ch>
+Cc: Roman Kuzmitskii <roman@damex.org>, linux-hwmon@vger.kernel.org,
+ netdev@vger.kernel.org, robert.marko@sartura.hr, luka.perkov@sartura.hr,
+ o.rempel@pengutronix.de
+References: <03055ffd-d015-4810-8b8a-678821fa6dcc@damex.org>
+ <92e3383e-26f8-4bed-b487-1c52f6c4f420@roeck-us.net>
+ <8cd41211-b026-4158-8e18-454a9ac0bae4@damex.org>
+ <4d12314e-56db-412c-a558-e4026cd03528@roeck-us.net>
+ <d126b3d3-33b9-405c-9839-db492d874ece@lunn.ch>
+ <9bac0a84-f03d-4fd1-8092-9922c65010bf@bootlin.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <9bac0a84-f03d-4fd1-8092-9922c65010bf@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261102-work-procfs-core-v1-13-75df35e4f8b8@kernel.org>
-References: <20261102-work-procfs-core-v1-0-75df35e4f8b8@kernel.org>
-In-Reply-To: <20261102-work-procfs-core-v1-0-75df35e4f8b8@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
- Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
- Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
- NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>, 
- Thomas Gleixner <tglx@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
- Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
- Greg Kroah-Hartman <gregkh@suse.de>, 
- Joel Granados <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>, 
- Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
- linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, 
- linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
- linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, 
- ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
- coreteam@netfilter.org, kexec@lists.infradead.org, 
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
- netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
- linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-cifs@vger.kernel.org, linux-fbdev@vger.kernel.org, 
- linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-sh@vger.kernel.org, 
- linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
- sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
- linux-doc@vger.kernel.org, linux-serial@vger.kernel.org, 
- linux-atm-general@lists.sourceforge.net, Takashi Iwai <tiwai@suse.de>, 
- linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
- linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, 
- linux-debuggers@vger.kernel.org, 
- "Christian Brauner (Amutable)" <brauner@kernel.org>, 
- Chuck Lever <cel@kernel.org>
-X-Mailer: b4 0.17-dev
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xNtQO-00000003ljI-0DfU
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:60166
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 15
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfBebpj0Lt9bLayjFHs3yhMSLiLvmYvOHKsUIQWMZkYwEIqVDRFV6WJY61BFenpuGYRBcQG8e1JGlvdUDfa0+KwDbb5KqwZmngjMZLFbpLZpjNbVy3/qA
+ 5knEo3+OQwax0Pqn+FXnXuQBmmOXK952WQthzmoRq38YaSphPHzvRAJ1OqSnMEeyo81oMrN58Sx2vt2l948kGQ1bIKRemYSMGZxLrNLi6qqpLK3JE5Rxzhaf
 
-proc_reg_read() and proc_reg_read_iter() pin the entry and call
-->proc_read() or ->proc_read_iter() which copy to userspace
-themselves. Like for seq_file reads and for writes, a reader can make
-a page fault in that copy take as long as it wants and
-remove_proc_entry() waits for it.
+On 11/2/26 01:49, Kory Maincent wrote:
+> 
+> On 11/1/26 20:57, Andrew Lunn wrote:
+>> On Sun, Nov 01, 2026 at 11:09:42AM -0800, Guenter Roeck wrote:
+>>> On 11/1/26 10:50, Roman Kuzmitskii wrote:
+>>>> On 11/2/26 1:38 AM, Guenter Roeck wrote:
+>>>>> On 11/1/26 10:02, Roman Kuzmitskii wrote:
+>>>>>> openwrt reviewers asked me to check with you first which way you prefer:
+>>>>>> 1. extend hwmon driver with PSE-PD (like it is done right now)
+>>>>>> 2. move driver to drivers/net/pse-pd and extend it with PSE-PD
+>>>>>> 3. something else
+> 
+> I am currently working on this topic by extending the tps23881 driver.
+> Please don't do it yourself to avoid working in parallel on the same topic. On the other hand, it would be nice if you can test it.
+> Roman I will add you in CC of my series.
+> 
+>>>>>>
+>>>>> The hardware monitoring "enable" attribute is supposed to enable monitoring,
+>>>>> not to enable some power delivery or network (or any other) port. That "port
+>>>>> enable" feature using the hwmon ABI was sneaked in, and I am inclined to just
+>>>>> remove the upstream driver for severe ABI violation.
+> 
+> Do you think it would be possible to remove the current tps23861 driver and binding? This would break the backward compatibility.
+> I am currently using "tps23861-poe" compatible name binding.
+> 
+... and you probably also use the hwmon "enable" attribute
+to enable and disable ports on this chip. Again, that is an ABI abuse.
+I'll refrain from removing the driver for now, but I will likely
+remove the attribute if//when I find the time to do it.
 
-So do what kernfs does for these reads as well. An entry that implements
-->proc_read_buf() fills a kernel buffer of at most ->proc_read_size
-bytes, a page if the entry doesn't care, and procfs copies it to
-userspace after unpinning the entry. The entry moves the position like
-it did for ->proc_read() but that only sticks if the copy to userspace
-worked, like in kernfs_file_read_iter(). If the copy fails halfway the
-read fails with -EFAULT and the position stays, where
-simple_read_from_buffer() returned what it had copied until then.
-procfs remembers ->proc_read_size in the entry like ->proc_write_size.
-
-Larger reads come up short, like with kernfs. An entry whose readers
-want all of a large file in one read asks for PROC_ENTRY_FULL_READS and
-procfs fills the read in pieces of ->proc_read_size, unpinning the entry
-in between. A piece whose copy fails ends the read with what the pieces
-before it returned. kexec-tools treats any short read of /proc/vmcore
-as fatal for example (cf. [1]).
-
-These entries are read through ->read_iter() so readv(), splice(), aio,
-the RWF flags, kernel_read() and io_uring work for them like for the
-->proc_read_iter() ones. io_uring's nonblocking attempt gets -EAGAIN
-though, like loop_rw_iter() gave it for ->proc_read() entries. Neither
-the allocation nor the entry can honor IOCB_NOWAIT, and io_uring would
-take a short read of a record file for an unfinished one and glue the
-next record to it. So it retries from a worker like before.
-
-An entry that implements ->proc_read_buf() and also declares a seq_file
-or one of the other read methods fails to register.
-
-No users yet.
-
-[1]: https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/tree/util_lib/elf_info.c
-
-Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
----
- fs/proc/generic.c       |  9 ++++++++
- fs/proc/inode.c         | 60 ++++++++++++++++++++++++++++++++++++++++++++++++-
- fs/proc/internal.h      | 11 +++++++++
- include/linux/proc_fs.h | 16 +++++++++++++
- 4 files changed, 95 insertions(+), 1 deletion(-)
-
-diff --git a/fs/proc/generic.c b/fs/proc/generic.c
-index 83d273778a60..fc4d10c92d7c 100644
---- a/fs/proc/generic.c
-+++ b/fs/proc/generic.c
-@@ -476,6 +476,15 @@ static int pde_set_flags(struct proc_dir_entry *pde)
- 		if (proc_ops->proc_flags & PROC_ENTRY_SHORT_WRITES)
- 			pde->flags |= PROC_ENTRY_SHORT_WRITES;
- 	}
-+	if (proc_ops->proc_read_buf) {
-+		if (WARN_ON_ONCE(pde_is_seq_file(pde) || proc_ops->proc_read ||
-+				 proc_ops->proc_read_iter))
-+			return -EINVAL;
-+		pde->flags |= PROC_ENTRY_proc_read_buf;
-+		pde->read_size = proc_ops->proc_read_size ?: PAGE_SIZE;
-+		if (proc_ops->proc_flags & PROC_ENTRY_FULL_READS)
-+			pde->flags |= PROC_ENTRY_FULL_READS;
-+	}
- 	return 0;
- }
- 
-diff --git a/fs/proc/inode.c b/fs/proc/inode.c
-index c0bb40e7ff96..3f29a1663d26 100644
---- a/fs/proc/inode.c
-+++ b/fs/proc/inode.c
-@@ -23,6 +23,8 @@
- #include <linux/sysctl.h>
- #include <linux/seq_file.h>
- #include <linux/slab.h>
-+#include <linux/sched/signal.h>
-+#include <linux/uio.h>
- #include <linux/mount.h>
- #include <linux/bug.h>
- 
-@@ -400,11 +402,67 @@ static loff_t proc_reg_llseek(struct file *file, loff_t offset, int whence)
- 	return rv;
- }
- 
-+/*
-+ * The entry fills a kernel buffer and procfs copies that to userspace after
-+ * unpinning the entry. A reader that faults on its buffer then doesn't hold
-+ * up remove_proc_entry().
-+ */
-+static ssize_t pde_read_buf(struct proc_dir_entry *pde, struct kiocb *iocb,
-+			    struct iov_iter *iter)
-+{
-+	struct file *file = iocb->ki_filp;
-+	char *buf __free(kvfree) = NULL;
-+	ssize_t rv, done = 0;
-+	size_t len, count;
-+	loff_t pos;
-+
-+	if (!iov_iter_count(iter))
-+		return 0;
-+	/* neither the allocation nor the entry can honor IOCB_NOWAIT */
-+	if ((iocb->ki_flags & IOCB_NOWAIT) && !(file->f_flags & O_NONBLOCK))
-+		return -EAGAIN;
-+	len = min_t(size_t, iov_iter_count(iter), pde->read_size);
-+	buf = kvmalloc(len, GFP_KERNEL);
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	/* PROC_ENTRY_FULL_READS fills the read in pieces */
-+	do {
-+		count = min_t(size_t, iov_iter_count(iter), len);
-+		pos = iocb->ki_pos;
-+		if (!pde_pin(pde)) {
-+			rv = -EIO;
-+			break;
-+		}
-+		rv = pde->proc_ops->proc_read_buf(file, buf, count, &pos);
-+		pde_unpin(pde);
-+		if (rv <= 0)
-+			break;
-+		if (WARN_ON_ONCE(rv > count)) {
-+			rv = -EIO;
-+			break;
-+		}
-+		if (copy_to_iter(buf, rv, iter) != rv) {
-+			rv = -EFAULT;
-+			break;
-+		}
-+		iocb->ki_pos = pos;
-+		done += rv;
-+		if (!pde_has_full_reads(pde) || rv < count)
-+			break;
-+		cond_resched();
-+	} while (iov_iter_count(iter) && !fatal_signal_pending(current));
-+
-+	return done ?: rv;
-+}
-+
- static ssize_t proc_reg_read_iter(struct kiocb *iocb, struct iov_iter *iter)
- {
- 	struct proc_dir_entry *pde = PDE(file_inode(iocb->ki_filp));
- 	ssize_t ret;
- 
-+	if (pde_has_proc_read_buf(pde))
-+		return pde_read_buf(pde, iocb, iter);
- 	if (!pde_pin(pde))
- 		return -EIO;
- 	ret = pde->proc_ops->proc_read_iter(iocb, iter);
-@@ -814,7 +872,7 @@ struct inode *proc_get_inode(struct super_block *sb, struct proc_dir_entry *de)
- 		inode->i_op = de->proc_iops;
- 		if (pde_is_seq_file(de))
- 			inode->i_fop = &proc_seq_file_ops;
--		else if (pde_has_proc_read_iter(de))
-+		else if (pde_has_proc_read_iter(de) || pde_has_proc_read_buf(de))
- 			inode->i_fop = &proc_iter_file_ops;
- 		else
- 			inode->i_fop = &proc_reg_file_ops;
-diff --git a/fs/proc/internal.h b/fs/proc/internal.h
-index ed22c6dfb0bf..11bd3fa07705 100644
---- a/fs/proc/internal.h
-+++ b/fs/proc/internal.h
-@@ -52,6 +52,7 @@ struct proc_dir_entry {
- 	void *data;
- 	unsigned int state_size;
- 	unsigned int write_size;
-+	unsigned int read_size;
- 	unsigned int low_ino;
- 	nlink_t nlink;
- 	kuid_t uid;
-@@ -118,6 +119,16 @@ static inline bool pde_has_short_writes(const struct proc_dir_entry *pde)
- 	return pde->flags & PROC_ENTRY_SHORT_WRITES;
- }
- 
-+static inline bool pde_has_proc_read_buf(const struct proc_dir_entry *pde)
-+{
-+	return pde->flags & PROC_ENTRY_proc_read_buf;
-+}
-+
-+static inline bool pde_has_full_reads(const struct proc_dir_entry *pde)
-+{
-+	return pde->flags & PROC_ENTRY_FULL_READS;
-+}
-+
- /* procfs owns the seq_file, see pde_seq_ops */
- static inline bool pde_is_seq_file(const struct proc_dir_entry *pde)
- {
-diff --git a/include/linux/proc_fs.h b/include/linux/proc_fs.h
-index c81c93325044..0f0997898ba3 100644
---- a/include/linux/proc_fs.h
-+++ b/include/linux/proc_fs.h
-@@ -38,6 +38,13 @@ enum {
- 	 * failing with -EINVAL.
- 	 */
- 	PROC_ENTRY_SHORT_WRITES		= 1U << 9,
-+	PROC_ENTRY_proc_read_buf	= 1U << 10,
-+
-+	/*
-+	 * Reads larger than ->proc_read_size are filled in pieces instead of
-+	 * coming up short.
-+	 */
-+	PROC_ENTRY_FULL_READS		= 1U << 11,
- };
- 
- struct proc_ops {
-@@ -84,6 +91,15 @@ struct proc_ops {
- 	 */
- 	ssize_t	(*proc_write_buf)(struct file *, char *, size_t, loff_t *);
- 	unsigned int proc_write_size;
-+	/*
-+	 * procfs calls ->proc_read_buf() to fill a kernel buffer of at most
-+	 * ->proc_read_size bytes, PAGE_SIZE if that's 0, and copies it to
-+	 * userspace afterwards. Larger reads come up short unless the entry
-+	 * asks for PROC_ENTRY_FULL_READS. The position the entry moves to only
-+	 * sticks if the copy works.
-+	 */
-+	ssize_t	(*proc_read_buf)(struct file *, char *, size_t, loff_t *);
-+	unsigned int proc_read_size;
- } __randomize_layout;
- 
- /* definitions for hide_pid field */
-
--- 
-2.53.0
+Guenter
 
