@@ -1,11 +1,11 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.35
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793660023;
-	b=HKcE3W7gr+S0fqhd61PdAUfkUTx6+TIutAkuCaTcKdUVzhy4mQXJOvyZe9q0EatgkJJT
-	 cJROPAy3oLzSUu2yQ2o1IgqLPBb6X46nHwyTHSDMnHKhcQ0oRJF1oQ3SDBR2rPNbJA+RH
-	 hwfbsW4EIT9clDMoZ1XFSBugPfkeRnQPZSmzya7zgN/QzT5boaKC2BYrW1ITj7m69OgnI
-	 clUj7TedkyNrnuvKE+3rOgYK4A4R5cVwOrqk/dXGGJX6R+Aker4lN+Xka4FvvrHEQdiuf
-	 Kr+tz4IY4Rao9QrUpGSnSKxFuTN8PxF1LANsbggcCPw0ryW4YmzjuxEMaISnIdNTZOw==
+	b=xvVC7ddWhupq7v/IS2sgFK5YnEV9e8NC4vAt23dp5O2b3TOWDSuWwIqqyECuuw24f85V
+	 2aY5MlMTMPu0CRBucmPyOpLIYsCXyWIjU6QzAk8ML/7VbJF0/yKc+jkLbErBRN+7+TEGc
+	 QzlZzgyzLAkovRUjY5TT1xz013aKWjXWuGGBEKd1ASz/MZ+gtqbhyiAsWVFKoNsAiwL77
+	 aDeZvS8eOmJg5ZnKfNGPOtEBnpjiZzOS7GDiFMvSQjKUFaG5n/MpAjvpr76KMYk7a4v2j
+	 4GYG0Mxi1qYa6iBpi4FbS1T9pHRzaKSoI+of69W+JOnrdN2iHD1Mw96gmU+cjcE1fdA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793660023;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
@@ -15,37 +15,36 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-Source-IP:X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
 	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
 	 X-Local-Domain:X-CMAE-Envelope;
-	bh=dtm0/GPAUsb4a74CUHitptKevv5lP1RBus9Q/KD6p3E=;
-	b=WWAVB0N89IUHdJQNCdm8ob2PUzVbf17mKEAkIR8XSBKETtfYsvmLQguPT8N4xU1d2cgB
-	 DOnfl29sAQTPydscooyNrBovHnhRV0byN9VGKvpy5Q6HmJ9W6lL2w9czr96LQ6kHulbRn
-	 KRkoC0ajfBzAjnb3WQCvQbKJne73cUuPnlIYwjGKBfwOWbhlkV6/g7Hze0MuJyQ0th6n0
-	 84RzfWxXonl1e/vEKBRgd81MXOSgNupg3KuAOcLfTy57rmv7pfMDNJ6eVTUWTku5CbkZJ
-	 GD6dwYrkMovuxWvD5tgBQsoB8qaKt000kE/ES8wwmsFbjOOZjoWH/48pN5JUAHbzjAA==
+	bh=BtPRldJFEZtcJl4iONdkFUpf8WeMq9Nk9JADj0WcDME=;
+	b=ZC3EUMMgh8+35YjcpRI0FzIB5xM5wchCAMAZqBwkkNnmzoEaIDF8U+6zlH7O6z+CCZcg
+	 Bi981FtM58EA1QS/a6pH9A7+v6uhCjg9jtS7ryLyzhc3MCW7ECjzgRexC4aM6mw9VBDsr
+	 L/ZT1lWFrVZce03YM28q8nKXlK5sp2AnHxmcqek1HB6crPFrdZjiH2ooQusEZzE1uQtwA
+	 D1N5IuH2IWt2fXfJFxpgGzyTcOucBoSHSWg/uVVVmLlZJ2GkBq3YrQnpPuAQMevkcyr0g
+	 UxUBMxTMj1BwcaDiLi1um2VtOD2qr0G9wNyzBnCL31vB/ioViVtbRMJhz0vUC0ryhIA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=an+P51RE;
-	arc=none smtp.remote-ip=44.202.169.39
-Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=hZVD2XIb;
+	arc=none smtp.remote-ip=44.202.169.35
+Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B458606A324
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 22:53:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9B458606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 416AB606A329
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 22:53:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 416AB606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=an+P51RE
-Received: from eig-obgw-5006b.ext.cloudfilter.net ([10.0.29.217])
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=hZVD2XIb
+Received: from eig-obgw-5007b.ext.cloudfilter.net ([10.0.29.167])
 	by cmsmtp with ESMTPS
-	id O0FlxSu17MylkO0uLx1riK; Mon, 02 Nov 2026 22:53:41 +0000
+	id NxG6xYOXGLvgbO0uNxlYqR; Mon, 02 Nov 2026 22:53:43 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id O0uKxt9w8NSXiO0uLxBm6q; Mon, 02 Nov 2026 22:53:41 +0000
-X-Authority-Analysis: v=2.4 cv=JvXxrN4C c=1 sm=1 tr=0 ts=6ae91475
+	id O0uMxPM8VLr2uO0uMxE7Ji; Mon, 02 Nov 2026 22:53:42 +0000
+X-Authority-Analysis: v=2.4 cv=UudjN/wB c=1 sm=1 tr=0 ts=6ae91476
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=VeVZoRYdAAAA:8 a=pGLkceISAAAA:8
- a=_jlGtV7tAAAA:8 a=f3ByIm2xJIOintMknUgA:9 a=TKXEY2ph7vCcqc0JNG1P:22
+ a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8 a=1Ez6V3JJn854t96LNywA:9
  a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
@@ -53,26 +52,25 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=dtm0/GPAUsb4a74CUHitptKevv5lP1RBus9Q/KD6p3E=; b=an+P51RES93c
-	wP49++jQnyPvXBsbqeduSgVl65bLTByzJ/Rb8sjB6Su0+N+22u5IqIKJtorH79Tkyg9BteVdPNSuk
-	v+McBtyUFbutslTO5KlrnQ+C8YebSj3tK14EPn80MIN+WuZzceOzLlvbmdfC8iCJRIc+nQ2B1onFW
-	IezYVcPLUsQhxpXqWEPgcoPIzdzwxQMfVH9HgrhLe7c0gmcEXZx2V2lLBv16xj2VofU9Rj9gAwnRL
-	ocy/Q2Xnma7oVJCkWL41HyuI9GoEK06tOZvvsRzoI1l/BglkJ4mezuI7S+t+3el1FlbdCDueT3lcG
-	njEFZXRzdBz9okh37u6jlg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:33170 helo=server.roeck-us.net)
+	List-Archive; bh=BtPRldJFEZtcJl4iONdkFUpf8WeMq9Nk9JADj0WcDME=; b=hZVD2XIbuRxH
+	xj+03300iklopm/CCXBYTG+p3Jxfh9+Bb9TV804n1a29k2EkEH+0PrJjE7bnI7lINc6Cr7aUtwMA7
+	3cjeI5jQNHaFHKhLsx35HdXEwQeV+pj/YCvW+PBo0PfG4P0OXa+GhAdSqwd6VfbVvXe7f7dgIy3+z
+	jZ1PmK3tQK7L0c/Ki6etbgLd9AQwNO1MzvZ63AO4IAlMGCI8lzgQwJXx2bN4WHQVqAaEj+0Be66e6
+	F2H4D98mGd8XVU89bCtc+HojY8d8ojWMgeFiRnJIwjmS7vU/E9TCc8Q84AvdAQ22kVLHleDKlKGan
+	jNpTHR/1s/HfK3OZGFwxrg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:33190 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xO0uK-00000003kSm-2Gjf;
-	Tue, 03 Nov 2026 04:23:40 +0530
+	id 1xO0uM-00000003kW9-0GhV;
+	Tue, 03 Nov 2026 04:23:42 +0530
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
 Cc: Guenter Roeck <linux@roeck-us.net>,
-	Ed Brindley <kernel@maidavale.org>,
-	Denis Pauk <pauk.denis@gmail.com>
-Subject: [PATCH 020/102] hwmon: (asus_wmi_sensors) Use 64-bit jiffies for source cache timestamps
-Date: Mon,  2 Nov 2026 14:51:13 -0800
-Message-ID: <20261102225235.334487-21-linux@roeck-us.net>
+	Juerg Haefliger <juergh@proton.me>
+Subject: [PATCH 022/102] hwmon: (dme1737) Use 64-bit jiffies for update timestamps
+Date: Mon,  2 Nov 2026 14:51:15 -0800
+Message-ID: <20261102225235.334487-23-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20261102225235.334487-1-linux@roeck-us.net>
 References: <20261102225235.334487-1-linux@roeck-us.net>
@@ -94,70 +92,78 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xO0uK-00000003kSm-2Gjf
+X-Exim-ID: 1xO0uM-00000003kW9-0GhV
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:33170
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:33190
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 53
+X-Email-Count: 56
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfJzOtT6hNUaUvfvYNjKQ3Ch8Q2Ddau+Eg36ykteV1zjX3hsJr7Kr0K4akNZaTI8n7BOHROUYNJYSk1rsTIxr/+ocX6li2lN2ildw59BzGkohfjlgkqwJ
- aNtAGJkpHH1vSBrHglc5l1W9xJGGHTCyeOy4KtzAjAO14PNvEMuyjjkk5Q7HOXvNqj+vP4mrJ0JjVO8wId7rT4Q0X/iMBiLe/RZQ2Qnkv7JeWyJVt1f7lPTj
+X-CMAE-Envelope: MS4xfHNCcU+zeo5HjawoIzA00llzFGkZ+prI7wCaM6PgIr7snQ9OQb/6lNyUobmN5F1dgIrQq8b2pvIW2BR8zVVwj+X6nwNP193sBeLHVAkp6eiRQUKYYi2r
+ 9KnuI2/NfRSZiQEdBz9W81U/yftMANu0W1nTqrw/0kc/EeCFu6z562v2E7EIkThjl/YpOZTq14h9uXSug58ABeky/F8LPpA9rbxOaOGlCaLO7VKLGe8TuPmS
 
-asus_wmi_get_cached_value_or_update() uses 32-bit jiffies and
-time_after() to cache sensor source readings for 1 second. On 32-bit
-architectures, if a sensor source is not polled for about 24.8 days at
-HZ=1000 (or during the first 5 minutes after boot before INITIAL_JIFFIES
-wraps past zero), time_after() evaluates to false and sensor values are
-not updated.
+On 32-bit architectures, jiffies and time_after() use 32-bit values and
+wrap after ~24.8 days at HZ=1000. If sensors are not polled for longer
+than half the wrap period, time_after() can return false and prevent
+Vbat monitoring and cached register values from updating.
 
-Convert source_last_updated[] to u64 and use get_jiffies_64() and
-time_after64() under sensor_data->lock to prevent 32-bit jiffies
-wraparound.
+Convert last_update and last_vbat to u64 and use get_jiffies_64() and
+time_after64() to avoid wraparound issues on 32-bit systems.
 
-Fixes: 548820e21ce1 ("hwmon: (asus_wmi_sensors) Support X370 Asus WMI.")
-Cc: Ed Brindley <kernel@maidavale.org>
-Cc: Denis Pauk <pauk.denis@gmail.com>
+Fixes: 9431996f55f8 ("hwmon: New SMSC DME1737 driver")
+Cc: Juerg Haefliger <juergh@proton.me>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/asus_wmi_sensors.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/hwmon/dme1737.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hwmon/asus_wmi_sensors.c b/drivers/hwmon/asus_wmi_sensors.c
-index 0feab3f62496..e2313a1286b5 100644
---- a/drivers/hwmon/asus_wmi_sensors.c
-+++ b/drivers/hwmon/asus_wmi_sensors.c
-@@ -155,7 +155,7 @@ struct asus_wmi_sensor_info {
- };
+diff --git a/drivers/hwmon/dme1737.c b/drivers/hwmon/dme1737.c
+index 7e839308e58f..b1bd3682c5fb 100644
+--- a/drivers/hwmon/dme1737.c
++++ b/drivers/hwmon/dme1737.c
+@@ -204,8 +204,8 @@ struct dme1737_data {
  
- struct asus_wmi_wmi_info {
--	unsigned long source_last_updated[3];	/* in jiffies */
-+	u64 source_last_updated[3];	/* in jiffies */
- 	int sensor_count;
+ 	struct mutex update_lock;
+ 	bool valid;			/* true if following fields are valid */
+-	unsigned long last_update;	/* in jiffies */
+-	unsigned long last_vbat;	/* in jiffies */
++	u64 last_update;		/* in jiffies */
++	u64 last_vbat;			/* in jiffies */
+ 	enum chips type;
+ 	const int *in_nominal;		/* pointer to IN_NOMINAL array */
  
- 	const struct asus_wmi_sensor_info **info[hwmon_max];
-@@ -423,7 +423,8 @@ static int asus_wmi_get_cached_value_or_update(const struct asus_wmi_sensor_info
+@@ -600,14 +600,16 @@ static struct dme1737_data *dme1737_update_device(struct device *dev)
+ 	mutex_lock(&data->update_lock);
  
- 	mutex_lock(&sensor_data->lock);
- 
--	if (time_after(jiffies, sensor_data->wmi.source_last_updated[sensor->source] + HZ)) {
-+	if (time_after64(get_jiffies_64(),
-+			 sensor_data->wmi.source_last_updated[sensor->source] + HZ)) {
- 		ret = asus_wmi_update_buffer(sensor->source);
- 		if (ret)
- 			goto unlock;
-@@ -432,7 +433,7 @@ static int asus_wmi_get_cached_value_or_update(const struct asus_wmi_sensor_info
- 		if (ret)
- 			goto unlock;
- 
--		sensor_data->wmi.source_last_updated[sensor->source] = jiffies;
-+		sensor_data->wmi.source_last_updated[sensor->source] = get_jiffies_64();
+ 	/* Enable a Vbat monitoring cycle every 10 mins */
+-	if (time_after(jiffies, data->last_vbat + 600 * HZ) || !data->valid) {
++	if (time_after64(get_jiffies_64(), data->last_vbat + 600 * HZ) ||
++	    !data->valid) {
+ 		dme1737_write(data, DME1737_REG_CONFIG, dme1737_read(data,
+ 						DME1737_REG_CONFIG) | 0x10);
+-		data->last_vbat = jiffies;
++		data->last_vbat = get_jiffies_64();
  	}
  
- 	*value = sensor->cached_value;
+ 	/* Sample register contents every 1 sec */
+-	if (time_after(jiffies, data->last_update + HZ) || !data->valid) {
++	if (time_after64(get_jiffies_64(), data->last_update + HZ) ||
++	    !data->valid) {
+ 		if (data->has_features & HAS_VID) {
+ 			data->vid = dme1737_read(data, DME1737_REG_VID) &
+ 				0x3f;
+@@ -777,7 +779,7 @@ static struct dme1737_data *dme1737_update_device(struct device *dev)
+ 				dme1737_write(data, DME1737_REG_ALARM1, 0xff);
+ 		}
+ 
+-		data->last_update = jiffies;
++		data->last_update = get_jiffies_64();
+ 		data->valid = true;
+ 	}
+ 
 -- 
 2.45.2
 
