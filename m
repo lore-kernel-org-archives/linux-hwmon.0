@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.33
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.39
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793661936;
-	b=q71GJ3lsK0DM5wc5YfY1P1CgeWywli56+gekurTEXjH3CORqqNE07Zp+3hv/wmd3jAUj
-	 dekyQHs2xWaFlgPLqly+D1t8O85FjT2NMJxlMr4cHE91NbaZuFunAfxOXtYD3hytHNCqP
-	 jCgFSC+J1vnUNyvySUzMdKdEBvk9JR4J8EvSJZfrckJ8YhaGdypaKhpENtSseuRuaG00T
-	 7JKSDGFVGI2MIxwZ9ieuq+xZVzJl6YJnwrNk8xqYyN4CJ890gmDVIjql6vkf7UeNDyl/T
-	 yKK+RwC8iOaPrXbi2+VO+1v5nyHba2xSm1Gszke+99OK/w+Z5aXRHoEbQggtpe25xmA==
+	t=1793662039;
+	b=lc9t5RxEKHhS+vDfvxSWxDMMkxQFnc+3JLMuBnSHG0ji9eU+tn4mXREQzWj3LZ3b0QYx
+	 NAPyv9RzmlrWVlHptLfAa6NLWUJ2s7wuKB9tXu8OgRYNfUmmuoOtVkwsPEUE4zkBpFpIt
+	 jo3WF2/i2sSbkGA4An9FQ6CywBGCwAwhqO+Nzm1MG+SEKFOYDS+dogDQF71ynCXmcHb4Q
+	 CA9YZsmO+m9Ub6SmNgantK3iBczPPMka/SS9hMlUvgzm9Uh5cdgeLwgTrHSY4hEbwCcsc
+	 hoJAGHbQ7MsYqEQ4KXrlYtv8IxDvufeJtzwLAJAbyFywXsHxrgcBjf+0a8ecfqf+lhA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793661936;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793662039;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:X-AntiAbuse:
@@ -15,36 +15,36 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-Source-IP:X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
 	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
 	 X-Local-Domain:X-CMAE-Envelope;
-	bh=p70EpFidjqcNq14QphttycWkTaSNuVlvIyN0A2pIvhE=;
-	b=b59QlQbrUev52ev+PGtQJ81BkWMbq4Zh2Nf/VCrzKEthUmwU0It8OxFcbd4J/tdisXit
-	 HRc3XOrgae4qJg7SaCbLpRvDTcCfNGYF9aFDamYLo9v7A7v3bE6vHFhGHYQdiE0TDqhbt
-	 wD7Hi/VQjolHaN55nlPW4oEimCxob2XVLoWBmkxiwy8mXIXmBtmNi01kzrln3SyynCZ5k
-	 SBRjv1M+KN58raNT0I18brSiz0H/mfCIAJVmzUnOYiwP7O9+O61tNFyazOVBFYJFAQOW1
-	 lP0zMBSXYPTT4Ct8dKB5MH7Zz6gMM+whcCgHZRLtATyrTGEWA35YFk0mlMHvi/pB4zA==
+	bh=nxMZ0LmZt0uztkbUn6kS+FCCDrOUzP3ax03UQt0Wv/s=;
+	b=ekeFOYt8cWupp/n7mvjz4pj5lDlWY85zo6YYCVNmYoOegXLUSgVzHkKdK4CtsiniGbiy
+	 CjWw1ToD2nE2ymdg/AsrTXQdCF5/o2y5bZax2hmWCtt6Fs4V7t16VTnld3U+opjTW0ouY
+	 WW8qMdxeDJPIB6j3pAtMIWhoX3Zoc1pNpzKCe4bJWGvInUsAgNmKkFHbALuVOdFTMaqik
+	 OvJ9Z9sr30RRWiHMId7+sY5TRpq8MXIlCLXSJryciuUTrxvvLttRkj2MLZGFNeOdRWKMk
+	 M4vDKUEUGUCLeQyGWnqAOu5IItzxUXArFs2ZZxSzjdpkgQJkUm/oWxUYJED8Q2D8s/g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=31QEw9Wr;
-	arc=none smtp.remote-ip=35.89.44.33
-Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=V5z5cYpF;
+	arc=none smtp.remote-ip=35.89.44.39
+Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 518DD606A324
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 23:25:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 518DD606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E56F606A324
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 23:27:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8E56F606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=31QEw9Wr
-Received: from eig-obgw-5004b.ext.cloudfilter.net ([10.0.29.208])
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=V5z5cYpF
+Received: from eig-obgw-5005b.ext.cloudfilter.net ([10.0.29.189])
 	by cmsmtp with ESMTPS
-	id NwKBxGT2JaC0UO1PDxXBct; Mon, 02 Nov 2026 23:25:36 +0000
+	id NrdtxfG9Ic3XsO1QsxXxCR; Mon, 02 Nov 2026 23:27:18 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id O1PDxkBRPmTkmO1PDxjLeh; Mon, 02 Nov 2026 23:25:35 +0000
-X-Authority-Analysis: v=2.4 cv=eKsTjGp1 c=1 sm=1 tr=0 ts=6ae91bef
+	id O1Qrxo5GAvtkxO1QrxMFQs; Mon, 02 Nov 2026 23:27:17 +0000
+X-Authority-Analysis: v=2.4 cv=BbzY0qt2 c=1 sm=1 tr=0 ts=6ae91c55
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8 a=KfZ-awuG1CK3CWSFkaMA:9
+ a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8 a=Ea0D8k5LUWnWhWv78-oA:9
  a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
@@ -52,24 +52,24 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=p70EpFidjqcNq14QphttycWkTaSNuVlvIyN0A2pIvhE=; b=31QEw9WrFS5Q
-	s5I9pNI0q88v/bIxljF2v2EFNSBC7eEhvcdn9nWeH/ambxcE0xKZ80bKlt2dOxR8tcdl7vZXfmtR2
-	Gc+2jzNqTKTpOdJ/GVFUhWnipInsit+s+hQNnyot4Sz3E7vcTJ3gdpoGMEwqm985goDDzBQFPNhb4
-	kilNWK8VEp/vQ5wYAoPQEXUIfR+ola1Uw4jU+14R9wF0Bz+dqchTXvi1x+hvHujJE51sLHcrocCR2
-	x+Ej6+VZibk1Avb4EUQcDcSGKb2bVr5HwsmII9puyDvXuFd3KJb2qsjA6UO/xNG36QJ5PNn/uBvIy
-	ts3Bi9h7uapmX9RvolO8Fg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:37842 helo=server.roeck-us.net)
+	List-Archive; bh=nxMZ0LmZt0uztkbUn6kS+FCCDrOUzP3ax03UQt0Wv/s=; b=V5z5cYpFphTH
+	v9Nj19s0vlU9W4SJZ4xWSwlqrr74oZRM6OPmNX6V7cKRre69kWXedLOKxWfgYa/keJZle8SzvF/Lq
+	6XX7o+/jYl41w87Tct0VgNSRi+usw93t3C/PcCNHkrNDMZcMSix4ylgXOBZNW+sKdktW7PRnnguxh
+	bZMvUpyb/qZIR1reBIjwkC7PyaUpl/CugfeqtQ+DzmoLcTnTTbI5dVeUOQeS7R7uRcCXtZ6VRua95
+	Syl88l4/UvUWLtqOSWDMKPbYVXdW/YBl1vJvobT3Ap15NL10rJv6+G9cpZj25byphQMmJiw9VnAbR
+	105H1u95OCeciUpxyRKsUA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:49882 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xO0wM-00000003ln1-2GM9;
-	Tue, 03 Nov 2026 04:25:46 +0530
+	id 1xO0vT-00000003lOG-3cxR;
+	Tue, 03 Nov 2026 04:24:51 +0530
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 068/102] hwmon: (occ) Use 64-bit jiffies for poll and safe-state timestamps
-Date: Mon,  2 Nov 2026 14:52:01 -0800
-Message-ID: <20261102225235.334487-69-linux@roeck-us.net>
+Subject: [PATCH 049/102] hwmon: (lm85) Use 64-bit jiffies for update timestamps
+Date: Mon,  2 Nov 2026 14:51:42 -0800
+Message-ID: <20261102225235.334487-50-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20261102225235.334487-1-linux@roeck-us.net>
 References: <20261102225235.334487-1-linux@roeck-us.net>
@@ -91,97 +91,82 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xO0wM-00000003ln1-2GM9
+X-Exim-ID: 1xO0vT-00000003lOG-3cxR
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:37842
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:49882
 X-Source-Auth: guenter@roeck-us.net
 X-Email-Count: 0
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfCNgorpJE1pSS8Q7f3D0ZLXEAxe9LolAKX1w06nVErnVdNJnhXn2vTDovEmZT6gH9mLdsbOkUxYZRiU84qxX2CWSNBKI60ZNIWIp8rGoTSo342LcsxaP
- hu/JxgxlfXeI4WX71Y9FN88NzQptbys9bBkL5jhK5qMJfVAAe/k6uf6TcDSw4LODkr8ztfvMDvbCE9uFapArGU80p0j9mLZ+QtFXLERv11QpL6hYAUBK5Eyn
+X-CMAE-Envelope: MS4xfCqz7dStXVo+dcnNyHtZFJNQQhWfuotVRKauspqXjcdRKWYMSAKCSuJ/PFa/aJgKWL0PtCIpoceWasuQlx/H1AR62c69FqKUAZ8AcX5gdJnWlEMkEMbC
+ oPB25m0CweB/MwlrZ2FSl6lj0QhXrjKTD7RZqVtK+D/XcScUy3VAxiZI6RVwRzgYj6zhcw5tr+ebvuXnufGcPJzsyGwKTK/VyEKcTrJsBU9VZic+flMjBCe5
 
-The OCC hwmon driver uses 32-bit jiffies and time_after() for both the
-polling rate limit (next_update) and the 60-second safe-state timeout
-(last_safe). On 32-bit architectures, if the device is not polled for
-about 24.8 days at HZ=1000, time_after() wraps around and sensor polling
-or safe-state timeout detection stops working.
+On 32-bit architectures, jiffies and time_after() use 32-bit values and
+wrap after ~24.8 days at HZ=1000. If sensors are not polled for longer
+than half the wrap period, time_after() can return false and prevent
+cached sensor and configuration values from updating.
 
-Switch next_update and last_safe to u64 and use get_jiffies_64() with
-time_after64() to avoid wrap-around issues on 32-bit systems.
+Convert last_reading and last_config to u64 and use get_jiffies_64() and
+time_after64() to avoid wraparound issues on 32-bit systems.
 
-Fixes: c10e753d43eb ("hwmon (occ): Add sensor types and versions")
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/occ/common.c | 12 ++++++------
- drivers/hwmon/occ/common.h |  4 ++--
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ drivers/hwmon/lm85.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-index 175208d712b0..67e8dd1c77fa 100644
---- a/drivers/hwmon/occ/common.c
-+++ b/drivers/hwmon/occ/common.c
-@@ -164,11 +164,11 @@ static int occ_poll(struct occ *occ)
- 	header = (struct occ_poll_response_header *)occ->resp.data;
- 	if (header->occ_state == OCC_STATE_SAFE) {
- 		if (occ->last_safe) {
--			if (time_after(jiffies,
--				       occ->last_safe + OCC_SAFE_TIMEOUT))
-+			if (time_after64(get_jiffies_64(),
-+					 occ->last_safe + OCC_SAFE_TIMEOUT))
- 				occ->error = -EHOSTDOWN;
- 		} else {
--			occ->last_safe = jiffies;
-+			occ->last_safe = get_jiffies_64();
- 		}
- 	} else {
- 		occ->last_safe = 0;
-@@ -220,9 +220,9 @@ int occ_update_response(struct occ *occ)
- 	}
+diff --git a/drivers/hwmon/lm85.c b/drivers/hwmon/lm85.c
+index 27ef127ccc2c..de223db48b59 100644
+--- a/drivers/hwmon/lm85.c
++++ b/drivers/hwmon/lm85.c
+@@ -295,8 +295,8 @@ struct lm85_data {
  
- 	/* limit the maximum rate of polling the OCC */
--	if (time_after(jiffies, occ->next_update)) {
-+	if (time_after64(get_jiffies_64(), occ->next_update)) {
- 		rc = occ_poll(occ);
--		occ->next_update = jiffies + OCC_UPDATE_FREQUENCY;
-+		occ->next_update = get_jiffies_64() + OCC_UPDATE_FREQUENCY;
- 	} else {
- 		rc = occ->last_error;
- 	}
-@@ -1158,7 +1158,7 @@ int occ_active(struct occ *occ, bool active)
- 			goto unlock;
+ 	struct mutex update_lock;
+ 	bool valid;		/* true if following fields are valid */
+-	unsigned long last_reading;	/* In jiffies */
+-	unsigned long last_config;	/* In jiffies */
++	u64 last_reading;	/* In jiffies */
++	u64 last_config;	/* In jiffies */
+ 
+ 	u8 in[8];		/* Register value */
+ 	u8 in_max[8];		/* Register value */
+@@ -374,7 +374,8 @@ static struct lm85_data *lm85_update_device(struct device *dev)
+ 	mutex_lock(&data->update_lock);
+ 
+ 	if (!data->valid ||
+-	     time_after(jiffies, data->last_reading + LM85_DATA_INTERVAL)) {
++	    time_after64(get_jiffies_64(),
++			 data->last_reading + LM85_DATA_INTERVAL)) {
+ 		/* Things that change quickly */
+ 		dev_dbg(&client->dev, "Reading sensor values\n");
+ 
+@@ -463,11 +464,12 @@ static struct lm85_data *lm85_update_device(struct device *dev)
+ 			data->temp_ext[2] = ext1 >> 4;
  		}
  
--		occ->next_update = jiffies + OCC_UPDATE_FREQUENCY;
-+		occ->next_update = get_jiffies_64() + OCC_UPDATE_FREQUENCY;
- 		rc = occ_parse_poll_response(occ);
- 		if (rc)
- 			goto unlock;
-diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
-index 82f600093c7f..d968c42cd122 100644
---- a/drivers/hwmon/occ/common.h
-+++ b/drivers/hwmon/occ/common.h
-@@ -99,7 +99,7 @@ struct occ {
- 	int (*send_cmd)(struct occ *occ, u8 *cmd, size_t len, void *resp,
- 			size_t resp_len);
+-		data->last_reading = jiffies;
++		data->last_reading = get_jiffies_64();
+ 	}  /* last_reading */
  
--	unsigned long next_update;
-+	u64 next_update;
- 	struct mutex lock;		/* lock OCC access */
- 	struct mutex hwmon_lock;		/* serialize hwmon registration/removal */
+ 	if (!data->valid ||
+-	     time_after(jiffies, data->last_config + LM85_CONFIG_INTERVAL)) {
++	    time_after64(get_jiffies_64(),
++			 data->last_config + LM85_CONFIG_INTERVAL)) {
+ 		/* Things that don't change often */
+ 		dev_dbg(&client->dev, "Reading config values\n");
  
-@@ -112,7 +112,7 @@ struct occ {
- 	int error;                      /* final transfer error after retry */
- 	int last_error;			/* latest transfer error */
- 	unsigned int error_count;       /* number of xfr errors observed */
--	unsigned long last_safe;        /* time OCC entered "safe" state */
-+	u64 last_safe;                  /* time OCC entered "safe" state */
+@@ -538,7 +540,7 @@ static struct lm85_data *lm85_update_device(struct device *dev)
+ 			data->zone[2].hyst = i >> 4;
+ 		}
  
- 	/*
- 	 * Store the previous state data for comparison in order to notify
+-		data->last_config = jiffies;
++		data->last_config = get_jiffies_64();
+ 	}  /* last_config */
+ 
+ 	data->valid = true;
 -- 
 2.45.2
 
