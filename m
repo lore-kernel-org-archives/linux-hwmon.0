@@ -1,11 +1,11 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.35
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793660242;
-	b=BK+CW0h8XKBnFPyHCCOMTaJUABCmeIZmjIhUN+Ms9k4RF/QScFgJObXBl2T3GXmKFmp5
-	 9TFJAu315G5tG3O97IqmBKPvrsbDrCueYOnTxPtQ8BLLTm1kYbXlLWncyupNhkMzn6/oa
-	 z1AjYx0D55leCn3T97zwk8JB2sUf9WiFiGlg/v+f+oYEMyX36YHCspCvRArLBsgD1/3OF
-	 5uN3o6Mq23A4hRNM7Oz16ek+gJaM6eCiOvW7DE4r3H+WmH1XtKxsDNhSxWkCJNQffx66H
-	 i20Fzha4F0PLF0HlpJxdE/PLBuphyNN0oZfYh+nYuWia59fQBZ0oI5yD23+5VNadEfw==
+	b=YU6fBE4h/QSLmH9SWOwWSQlxgSgqEZPqCRnZe6GGVOge4jE2iao2liAWnBt0hx3pPwc+
+	 wiwyBcIU+hwQSpWNSuYS6fP1u4jJjYdZmcUbfeQQ1fX2nKPue5rAz7cNQpJlIom462PIu
+	 D9C3osAoDaimETfMTqh/iru9Dj+XDySeLRoe5BP+dkAXxJ+Zmatz4ps/ln2ZzoxllFcKS
+	 xZYYWboWQhk5X6QFdk0oaMYUdis53Zt2XOlhGUOUOiAmOKLPuDlrl1GRG4enAvCyQH4g2
+	 7eNKa0o+ITwtYYVIrhQ0cBfRYUov2ApmCA1iuSedpb25DuR61CBrzyJQAUUnZo09hVA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793660242;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
@@ -15,36 +15,36 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-Source-IP:X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
 	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
 	 X-Local-Domain:X-CMAE-Envelope;
-	bh=GJYO/j9d9Ui4wPi8clMgzNrA14ZuBXLyn/e6aoSQ2qE=;
-	b=2u8tqavEXKt6k6eAfHGX8lP404KKcZr7CIyhlJBTAt3UT6k+B6HcG6Dk3SDrvTnzGuly
-	 hsg2tq1jVWIdp4VEE7hvegUsZPffQKEhq39Y1irINJWfQqOjA0YiaZ0Lt+hEns/kYs/1t
-	 t55/XT/Nu0kLM06w0Gus/KLyJZBnbGl9+4GF/WVYKjMvk2rTzgYxUp7kEqkSskaedf+qm
-	 Lxqng0ae3GweuN6v2Yuln6S3JRi3nk99SdCOdsbcJII90JrCP5LAgAFnp51cEARCcYY2Z
-	 +uxvNXQsLw2QUZ3duHswjnOwfsZvYK1CvbPDI3+ezHTqc7Qf49MS25kaVoIwbexTPug==
+	bh=qT75s7+BwkjHyhEnBCq49oS5kF9+JIi3U3wqR7zotPk=;
+	b=toss7iqfORPZDJ5fHlVAA7MZB5dfgw+rsIz98ieQicUk4G1vBLmvshd5YHurJ7DhxG3I
+	 pElp1zXwLPFOCKxoyu4JQ5DN3LE5CG5mkEB27DOo+oqW8XjR7JzCLg3YRio1qHzk8FthN
+	 dQ1doRItXgcAlZ2IMgeh9zntzaSGsKbF8q06GXMyXiEg0osIMNb+BcDZsxJjDFAVkJfup
+	 BEKq3iRHxVuykFiODDtKeR6ZKB+EYos7zFWYL0qdpB2lV7xOHp1v7kgDAmBslxlH0altO
+	 ZmXKuVuKEVy4YTAMalU3JtL82ZeC3WEdH9y+596bvH/i6XhoMZnWGp6g6vHmEIAjt9A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b="oP/jMArv";
-	arc=none smtp.remote-ip=44.202.169.37
-Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=oT6JkZ47;
+	arc=none smtp.remote-ip=44.202.169.35
+Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43AE6606A326
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 22:57:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43AE6606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F0EA606A329
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 22:57:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4F0EA606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=oP/jMArv
-Received: from eig-obgw-5007b.ext.cloudfilter.net ([10.0.29.167])
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=oT6JkZ47
+Received: from eig-obgw-6006b.ext.cloudfilter.net ([10.0.30.211])
 	by cmsmtp with ESMTPS
-	id NxIux2jCtJFmFO0xtxAXAX; Mon, 02 Nov 2026 22:57:21 +0000
+	id Nl5QxVxnnLvgbO0xuxlZtx; Mon, 02 Nov 2026 22:57:22 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id O0xsxPRnuLr2uO0xsxEC6Q; Mon, 02 Nov 2026 22:57:21 +0000
-X-Authority-Analysis: v=2.4 cv=UudjN/wB c=1 sm=1 tr=0 ts=6ae91551
+	id O0xtxhtdasTgvO0xtxxnUm; Mon, 02 Nov 2026 22:57:21 +0000
+X-Authority-Analysis: v=2.4 cv=DPiP4zNb c=1 sm=1 tr=0 ts=6ae91551
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8 a=FeMBgV1fbRl20CW5rp8A:9
+ a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8 a=IFMgBmfkWOUqYXIyFksA:9
  a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
@@ -52,24 +52,24 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=GJYO/j9d9Ui4wPi8clMgzNrA14ZuBXLyn/e6aoSQ2qE=; b=oP/jMArvUEHx
-	oioR5UyjI166SB6jKodfd50JRWkhGhpgygljVpCIU2ifkoHthMHcixnhaHm4fDMCORK3aEz2B6Ddl
-	E+lj2bMdrBbPAHCqje//tBNV86udq4asydjAMyMXbKfyTZ8Q6P+ak7dssZLYMjBaLOosv3pD0/GCD
-	O8DWuh7dLgUmq97BncBuTgt4cPpn25RoC/oG468rbq1hsx894ux44ekC2f4Ye+cocveoZ/CElKSkh
-	PqBAAHfSrmnKumqBuw5ERuBdTAgIOaalwb0xGG36Wu8jpRmkwboIPm9Xzo0v0oRQe5ntESe2juJCz
-	p9habtrlgnB3PZYr1S3n/Q==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:55010 helo=server.roeck-us.net)
+	List-Archive; bh=qT75s7+BwkjHyhEnBCq49oS5kF9+JIi3U3wqR7zotPk=; b=oT6JkZ47y1eO
+	nbLX4IB6CKDAcW1MIfZfpzB7fBsGXElGFY7TvOsr5L/fpdo+RUcKd1UFi9yzzu4Y2RhYh4EBtOvWx
+	j91eQxlcxVwd1NNcxY9vbff4HNxrM41ZalikPmsBRX8O/l1Feh17m9ZB3cT/m/KuniuzAliSmsXlS
+	aD5RXoE+maoj5LbwXV/4+TMemAlsEha8moCh3T/rraWAlGdDoahMmMsOhwk7bG+oHzFVgRd3JnYOB
+	7nP0vWwjp+sNOgPM5lLsqBxjr+HyGAhpZP7m8Sww4/g+gfztSUs5DAkHO0o7/cNgRYYj6fplHu4SS
+	JLYn7VFvg53I+CgtH30chA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:55024 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xO0xs-00000003nWt-1RsI;
-	Tue, 03 Nov 2026 04:27:20 +0530
+	id 1xO0xt-00000003nXb-0IWl;
+	Tue, 03 Nov 2026 04:27:21 +0530
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 100/102] hwmon: (w83l785ts) Use 64-bit jiffies for update timestamp
-Date: Mon,  2 Nov 2026 14:52:33 -0800
-Message-ID: <20261102225235.334487-101-linux@roeck-us.net>
+Subject: [PATCH 101/102] hwmon: (w83l786ng) Use 64-bit jiffies for update timestamp
+Date: Mon,  2 Nov 2026 14:52:34 -0800
+Message-ID: <20261102225235.334487-102-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20261102225235.334487-1-linux@roeck-us.net>
 References: <20261102225235.334487-1-linux@roeck-us.net>
@@ -91,18 +91,18 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xO0xs-00000003nWt-1RsI
+X-Exim-ID: 1xO0xt-00000003nXb-0IWl
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:55010
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:55024
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 155
+X-Email-Count: 156
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfKjh3k827w0U2e6njco9/F7ueSG32K4L4ljt+dGEk4JuSi3DWUW5kypgJpqdSZwBzrDd4J4WwqJpGg3vFrbK0oDmoY/xEigrozn/wa2G4d4gzW9cbry9
- qhMMAe697+2BsSZ1CUZ89fVRL/pySxT53QvwhZ0u2EKHwFEDkd/pkvi8iGUn+pXoyRG+eTOGE27/lGvppgnoTan0xzB7Pc7K9cj71ybsI58AhXhFargvT7ZC
+X-CMAE-Envelope: MS4xfJX+ieRwuZrERgtRAJm4Nj/SA82HmxQDADiNHeRLdwJsYwqHClC3jgtVu1yyceAN81tNbLgKLG9IXkboguFnA8GHs9fAMitrtfWw9fflBWiwj2pv1ZbG
+ Tz1wGh4tLPsxSW+8NV3xkIH5b36B8AB7YbH3EBeiHL03KAiwb2xvV7cLLF5ZEym7q5idB9FJgaHhsHZDWN+EBImWVuJjWbmYgy5f5y8RV/Ht+OCGbE0mD233
 
 On 32-bit architectures, time_after() overflows after about 24.8 days
 at HZ=1000 if the sensor is not polled, causing cached sensor values to
@@ -111,43 +111,45 @@ stop updating.
 Switch last_updated to u64 and use get_jiffies_64() with time_after64()
 to avoid 32-bit jiffies wrap-around issues.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Fixes: 85f03bccd6e0 ("hwmon: Add support for Winbond W83L786NG/NR")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/w83l785ts.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/hwmon/w83l786ng.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwmon/w83l785ts.c b/drivers/hwmon/w83l785ts.c
-index e42506a3bcbe..9e7e8ab11f21 100644
---- a/drivers/hwmon/w83l785ts.c
-+++ b/drivers/hwmon/w83l785ts.c
-@@ -99,7 +99,7 @@ struct w83l785ts_data {
- 	struct device *hwmon_dev;
+diff --git a/drivers/hwmon/w83l786ng.c b/drivers/hwmon/w83l786ng.c
+index a72397083cc4..061469fc5b6c 100644
+--- a/drivers/hwmon/w83l786ng.c
++++ b/drivers/hwmon/w83l786ng.c
+@@ -123,7 +123,7 @@ struct w83l786ng_data {
+ 	struct i2c_client *client;
  	struct mutex update_lock;
- 	bool valid; /* false until following fields are valid */
--	unsigned long last_updated; /* in jiffies */
-+	u64 last_updated; /* in jiffies */
+ 	bool valid;			/* true if following fields are valid */
+-	unsigned long last_updated;	/* In jiffies */
++	u64 last_updated;		/* In jiffies */
+ 	unsigned long last_nonvolatile;	/* In jiffies, last time we update the
+ 					 * nonvolatile registers */
  
- 	/* registers values */
- 	s8 temp[2]; /* 0: input, 1: critical limit */
-@@ -260,14 +260,15 @@ static struct w83l785ts_data *w83l785ts_update_device(struct device *dev)
+@@ -164,8 +164,8 @@ static struct w83l786ng_data *w83l786ng_update_device(struct device *dev)
+ 	u8 reg_tmp, pwmcfg;
  
  	mutex_lock(&data->update_lock);
+-	if (time_after(jiffies, data->last_updated + HZ + HZ / 2)
+-	    || !data->valid) {
++	if (time_after64(get_jiffies_64(), data->last_updated + HZ + HZ / 2) ||
++	    !data->valid) {
+ 		dev_dbg(&client->dev, "Updating w83l786ng data.\n");
  
--	if (!data->valid || time_after(jiffies, data->last_updated + HZ * 2)) {
-+	if (!data->valid ||
-+	    time_after64(get_jiffies_64(), data->last_updated + HZ * 2)) {
- 		dev_dbg(&client->dev, "Updating w83l785ts data.\n");
- 		data->temp[0] = w83l785ts_read_value(client,
- 				W83L785TS_REG_TEMP, data->temp[0]);
- 		data->temp[1] = w83l785ts_read_value(client,
- 				W83L785TS_REG_TEMP_OVER, data->temp[1]);
+ 		/* Update the voltages measured value and limits */
+@@ -217,7 +217,7 @@ static struct w83l786ng_data *w83l786ng_update_device(struct device *dev)
+ 		data->tolerance[0] = reg_tmp & 0x0f;
+ 		data->tolerance[1] = (reg_tmp >> 4) & 0x0f;
  
 -		data->last_updated = jiffies;
 +		data->last_updated = get_jiffies_64();
  		data->valid = true;
- 	}
  
+ 	}
 -- 
 2.45.2
 
