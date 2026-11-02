@@ -1,73 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.35
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793632355;
-	b=Td4zL7lbrIqIpZE+HmpDv82TVs/Eiq5H4TdaXdsEZncpnbIxhLgnauII3epXIHzEB/u4
-	 2zlTjIIAlyhDkUpj9vvgRZf0xTw2DuAXM9WtjX8pp9Bz6mU1jY7JSvJhPnVJyq7S8crWU
-	 CDHMo20s9QIRIuqAaz4TKnoIk3Op0SAxl+E8ZilI5FToO6XKDfznLw5Q9xntJOdE7T4TG
-	 Z1HCNIz3EBWSoSTCVkyCIh5ZpJRE5hmJ0hi+zio246y3p4eWNBvH6gIDDDiBwGcFUGGSU
-	 Ynq5stscLKgYD5UnBIAggUYT1KwsE4ThvoIBsQW863us4I9Qlfpv3PGcbXOTC9aL+dA==
+	t=1793632367;
+	b=mnxELNY5rvRM/W/WTb4J7a8oztDSBk0J2kT4Q2ylc3Xxq9PYO+Kh6iYp2ntGoM8EAuNJ
+	 OHUYGOi1Gee96+xXqi4hQ28CoezcUfFJ3FmizexoKz4oblndG52yfIATj3n+jHcTQWG+F
+	 bfpxlK/ZfhyvndT42+sYXfxqxzbJeBw0wAMJIxGdZWRoT8MFWGUosvMxy2eg9LERRwCbv
+	 hCsKKj5E/MKVoBTaSMgOWQixk6xQiakNa6jkszhX28XU1pXYUohgq5KCPk6dSy+L/bQ9T
+	 W1FbcabdguhU6G5RSRDhld7kP4LzsBlwrjKEgV3Wfy/B+INRF+B0jiZ1B8IZbT3tAxA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793632355;
-	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:
-	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=2puUSp7/76IVMJdmyNoOx/+sDBWWUsstBNYgnLqWADw=;
-	b=5dY9b9yy8Nmoid5gLBcWMk1+sNRTFN7x+BwmRVYRHa/nHOdkQmf5qv7vLetL5n2kZsHQ
-	 835+QX7NB+pMxNl0tTl3om2hPNdTaI0O9JScipv0/USU8MDzQK34f121PmRSmpJZZl5Qz
-	 S825g3Jo6EnS8Qln53iW1wJycLZ4dNHBTSy4upTZhWMlfG/1w2ZIPTr+ExogfaS+HZpSG
-	 tvQud1/ysnW8cwWFr0ctsr8lh0GobdRaXkqHMTB7Av9Yq+A6c9nThhyLwvF2Tl6XwE/1A
-	 5+Vprkqanlrd8CrBPog1EjpYgYAvBTZpIXGw0PUo+rhZTccPFFSOfHY+omfMXFYmv2A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793632367;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
+	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
+	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
+	 X-Local-Domain:X-CMAE-Envelope;
+	bh=iT471OHb++350gojiGPG6EeKjyPHbJgzUi1RhBEFrAQ=;
+	b=08ev+kJheru2IL10ZcLSMnNFrjzg8BkbYni7lhUtDHemzS7M7BWD4+tCJHzJBOHITZoL
+	 AXqEKQ9BEQCrgXEtIfOMpXf84Bi565qe5R/FH1iSvPpdKAd/uRk5BBOoM8hQzQ66GXT7P
+	 vqKwk+QgpjzLN1pbufx9v+/dHSYaq691ClodsinW1kk9HCLU8euQTOed8x2RUgmNZEmKD
+	 6HnBnG10s31gaXsOphwpneKEbWoNkA1YvV5Xh7ULQYSVeYeAvncPhUJsYkDPxNzPF3Dhv
+	 7/w7x/rzV2FoN5tfaez3Y/idDXXdsNVsy5u4RdJhsp3O8kmEjwFBtD8+MGGWLiRZaHg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZwDUCVJo;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=roeck-us.net;
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=giKywmcA;
+	arc=none smtp.remote-ip=35.89.44.35
+Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CDDB6077D0A;
-	Mon,  2 Nov 2026 15:12:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769C06074645
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 15:12:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 769C06074645
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZwDUCVJo
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5307B1F00A1C;
-	Mon,  2 Nov 2026 15:12:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793632355;
-	bh=2puUSp7/76IVMJdmyNoOx/+sDBWWUsstBNYgnLqWADw=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=ZwDUCVJoK/7nHnQojOzBxkp2FjSRpwE7clw0MHSk196NF62CqX0QHdom9ke5pUi6A
-	 CQ/qZ2/Z9PFwslBwnM/x8Oi+zQXekkZNYxaZhREbRtRKUhcrLAzSlSQP0MWp22by0j
-	 uaS4m+DQ6tCMBJOpkd6gjqZ4NhhVpXHGkItVs0iYoOAeToCMBpHI4FHF7tzlw/GxMQ
-	 9RE8+bs2Vg6lrnvwkHfv9uPzuMJucMncWhUHPWGxMEK5FkvqynmtmFS9rLqTfvojG6
-	 nxuPoSLOV+NKP/fRzAx94GaCLKE1kyMoErpZ6s3hdCbYXZtKWu45Q8UXdpkQPO0LNX
-	 fyzlfL0nnhszQ==
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 78346F40069;
-	Mon,  2 Nov 2026 10:12:32 -0500 (EST)
-Received: from phl-imap-15 ([10.202.2.104])
-  by phl-compute-10.internal (MEProxy); Mon, 02 Nov 2026 10:12:32 -0500
-X-ME-Sender: <xms:YKjoasOv3RrSExDz8qDcjU4tR13_0-05QeEGoX3KO0yVa5Q_JXv4Qg>
-    <xme:YKjoatzbn5mGakKAVBtj0STq7w315IwVaiSOr1PZHyWjr-j924smg1a8vxFj4fzfB
-    K48KZj80AgeA0WYHPi_tsfySNywJBS-ylsJ6nwa__tOF1VP_nbJh6E>
-X-ME-Proxy-Cause: dmFkZTG3MyPc0XlAqED1F+Wk8KjBXOlJDlrqYVMEspt5uOBtma9QX/RmmeH0ol3hZ7R4Pt
-    fut82mh88oF1LyQRCW33nbTrNcOEyAUw+YUk26GkfZWCIcjpom/KXDW1X6gdSU0NwNs9Bq
-    gINkz2zvGlMfitRfWHXKDI6Xbw/GQquv7KUA0t5cpEv8oYMYn1JumMH2bNPyEFYi0LaaVW
-    gTjD8erO7yhaZEZkFol6hjLhNbWjebLB5/6TWaEUmnBM2W6t/aMCMHdQNTL60i/brSFmlJ
-    F49ErqjhZTzpCwMqPKXuvnpDLZcN6GFwse+QCZtLWlykgmsfpAVJOq0XXxE/SCWzTzMFKB
-    JUaM9iWeqECb2P74jtzsncnIiXpdE66vFDRTMdrSsbc9YOSWDb7a/G9+PJYvvXP06ZeHlU
-    wdJXvhXxPUh//h5dw23rQwMHeL9uK5qTRTaHnBC2dYsDFC2BB8AZen8jTr8Igxl7W0J8gc
-    JBXkzMbIAHZYxFTwjFTh/bPx02ErchhPaik0sF1SyxYm3NjGsZjbnYke7SWKq7uu5k++2Z
-    oqvJnoc6zt6Vy7WaQUa92MIcgZjWZnG+PRUInDn6Qgqh2mFYvj6YLofrIIKHg86v2DJVf4
-    NKBNsWJ4WaOQYWJNsjjR8XWgHsQq09xTQkWrzPk39C6rB/pnIxZW8UGlovtw
-X-ME-Proxy: <xmx:YKjoakzLUwu6PszVzuhRdoM8BHRr1y4l0hyIB0yfPtIg1WdznEjvDA>
-    <xmx:YKjoauKWqW0tLG69qtKnFhRYfgFExDZdV_U52jDX7r0wkSY-r1mYFg>
-    <xmx:YKjoaoxq5L70tsubjuyOO2gHOwQK7gqovlM-p8WnS5Bmxmdja6Ifkg>
-    <xmx:YKjoajrrX1nySaQw0o0jJFW9XYunBjN4_pTDjIVXWXrtSJBHZLxp5w>
-    <xmx:YKjoamWRFNPbVWqwv3QIHyU4eftWpDRXb4td_E77w__vFLI8Ej6FpTZF>
-Feedback-ID: ifa6e4810:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 42C93782738; Mon,  2 Nov 2026 10:12:32 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=giKywmcA
+Received: from eig-obgw-6004b.ext.cloudfilter.net ([10.0.30.210])
+	by cmsmtp with ESMTPS
+	id NqL8xCSWkusRSNtiJxpL3J; Mon, 02 Nov 2026 15:12:47 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id NtiIxO35Ie0duNtiIxoD83; Mon, 02 Nov 2026 15:12:46 +0000
+X-Authority-Analysis: v=2.4 cv=KINaDEFo c=1 sm=1 tr=0 ts=6ae8a86e
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=VwQbUJbxAAAA:8
+ a=HDcbOG6ISNxgg7Lf4R8A:9 a=CjuIK1q_8ugA:10 a=KPbNTLLc3YvdawN95zVk:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=iT471OHb++350gojiGPG6EeKjyPHbJgzUi1RhBEFrAQ=; b=giKywmcAOdywOnZWDIV34vtZLp
+	49pFt/EWUh3NJWUkAQYAIwo3AvRlrZfPJi8oOJ8pf+3fCSSOnPFmgy1R7tYdIcnLofJqnsyz27ksX
+	HrcMx0GapG/RwI1KmGhKdFOPk25mFFRRaznN+RIR0lyZSD3oaXYHuEVl/eICkGhe9l1Zsv7ELmEB3
+	1PjA+7rDCBQXxUHbHgMfWIvc5sUFY1TWrW499Ai6xnNPjGm6uzmsshKoCRMzvB9CARYpXAK4PWzl8
+	gXJNGN8mYTA9beuTul6R2OTK8MJvi9MbrV4HNRXzr8ofT6yaKoZPmP3UxsND1mezbtS/YbUBZ4uOK
+	yViLNRtw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:39546 helo=server.roeck-us.net)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xNtiI-00000003yBZ-0IyJ;
+	Mon, 02 Nov 2026 20:42:46 +0530
+Date: Mon, 2 Nov 2026 07:12:44 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Ismael Ojeda Perez <iojedaperez@proton.me>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (it87) Add support for IT8607E
+Message-ID: <165a18bd-81ac-4a0b-bc52-3c38d468dc44@roeck-us.net>
+References: <179357826986.881874.2370184949108951928@proton.me>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -77,110 +82,83 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: ARCrrC6bRUOw
-Date: Mon, 02 Nov 2026 10:12:12 -0500
-From: "Chuck Lever" <cel@kernel.org>
-To: "Christian Brauner" <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
-Cc: "Linus Torvalds" <torvalds@linux-foundation.org>,
- "Jann Horn" <jannh@google.com>, "Josef Bacik" <josef@toxicpanda.com>,
- "Chris Mason" <mason@kernel.org>, "Jeff Layton" <jlayton@kernel.org>,
- NeilBrown <neil@brown.name>, "Eric Dumazet" <edumazet@kernel.org>,
- "Thomas Gleixner" <tglx@kernel.org>,
- "Alexander Viro" <viro@zeniv.linux.org.uk>,
- "Jonathan Corbet" <corbet@lwn.net>, "Christoph Hellwig" <hch@lst.de>,
- "Greg Kroah-Hartman" <gregkh@suse.de>,
- "Joel Granados" <joel.granados@kernel.org>, "Kees Cook" <kees@kernel.org>,
- "Jan Kara" <jack@suse.cz>, "Jan Kara" <jack@suse.com>,
- linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-s390@vger.kernel.org,
- "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
- linux-um@lists.infradead.org, linux-wireless@vger.kernel.org,
- "Linuxppc Dev" <linuxppc-dev@lists.ozlabs.org>, netdev@vger.kernel.org,
- ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org,
- coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org,
- linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, ibm-acpi-devel@lists.sourceforge.net,
- jfs-discussion@lists.sourceforge.net, linux-alpha@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org,
- linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org,
- linux-sh@vger.kernel.org, linux-usb@vger.kernel.org,
- samba-technical@lists.samba.org, sparclinux@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net,
- "Takashi Iwai" <tiwai@suse.de>, linux-input@vger.kernel.org,
- linux-raid@vger.kernel.org, linux-ext4@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-debuggers@vger.kernel.org,
- stable@vger.kernel.org
-Message-Id: <16f91f93-16b4-49b1-b7fa-cec69759c349@app.fastmail.com>
-In-Reply-To: <20261102-work-procfs-bugfixes-v1-27-59422ed3e465@kernel.org>
-References: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org>
- <20261102-work-procfs-bugfixes-v1-27-59422ed3e465@kernel.org>
-Subject: Re: [PATCH RFC 27/38] sunrpc: make queue_wait a global wait queue again
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <179357826986.881874.2370184949108951928@proton.me>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xNtiI-00000003yBZ-0IyJ
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:39546
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 33
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfLXa+lE2/12Gv6nGTIg4wV/c0ouj7NPcePR3bWjWHS4qSWqNku7zcCIeWMsC/rkebbhFdHaPkC4hMu7lfEVNOPhXv5wPOuDfXkRGvW/hhhJxzUdsVKLq
+ ISVUus8YGNSt+gAjIYTlPQgBT1BiM37lOlXVrcrp5LadEEWUiiXGmvq5crrigr5R7pGb1+dd3OjbmWUEg8mBleWu2bq9w/JFN+cj6JXga2BN6HW50Qe20E2P
 
+On Mon, Nov 02, 2026 at 12:11:12AM +0000, Ismael Ojeda Perez wrote:
+> The IT8607E is the Super I/O of the Intel NUC6i3SYB and, according to
+> Intel's product specification, the NUC6i5SYB (BIOS SYSKLi35.86A). Its
+> environment controller is hidden from ACPI (HHMD._STA returns 0), so the
+> chip is only reachable through the LPC configuration ports, and the ACPI
+> resource check must be bypassed with ignore_resource_conflict=1.
+> 
+> No datasheet is available. The register layout was compared against the
+> IT8603E, and the BIOS fan setup (IT8607PeiInit and FanPei PEI modules of
+> SYSKLi35.86A.0071) was disassembled to confirm it programs the same
+> "newer autopwm" registers (0x68-0x6d for pwm2). Features are therefore
+> copied from the IT8603E.
+> 
+> Tested on a NUC6i3SYB (BIOS SYSKLi35.86A.0042, chip ID 0x8607, rev 2):
+> temperatures agree with coretemp, +3.3V reads 3.31 V, the 3VSB and VBAT
+> inputs read plausible values, fan2 tach and pwm2 respond to the
+> automatic-curve registers (start 74 C, full speed 92 C, as programmed by
+> the BIOS) and to manual mode, and the original values are restored.
+> 
+> The tachometer was not compared with an external tachometer and the
+> voltage scaling was not compared with a multimeter; the values above are
+> only cross-checked against coretemp and the expected rail voltages.
+> 
+> Signed-off-by: Ismael Ojeda Perez <iojedaperez@proton.me>
 
+Applied.
 
-On Mon, Nov 2, 2026, at 9:21 AM, Christian Brauner wrote:
-> Since commit 552d0e17ea04 ("sunrpc: convert queue_wait from global to
-> per-cache-detail waitqueue") poll() and epoll queue their waiters for a
-> channel file on the queue_wait head in struct cache_detail. But the
-> cache_detail can be freed while its channel file is still open and
-> waited on.
->
-> The procfs channel files of a network namespace are removed when the
-> namespace goes away. Removing a procfs file waits for the callers that
-> are in one of its methods right now and then calls ->release on every
-> file that is still open (cf. close_pdeo()). The waiters that poll() and
-> epoll left on the head stay queued until their file is really closed.
-> So:
->
->   sunrpc_exit_net()
->   -> ip_map_cache_destroy()
->      -> cache_unregister_net()
->         -> remove_cache_proc_entries()
->            -> proc_remove()      // ->release, the waiters stay queued
->      -> cache_destroy_net()      // kfree(cd)
->
-> and when poll() returns remove_wait_queue() writes to the freed
-> cache_detail:
->
->   BUG: KASAN: slab-use-after-free in _raw_spin_lock_irqsave+0x4b/0xa0
->   Read of size 1 at addr ff110001131bb570 by task sunrpc-poll-uaf/242
->   Call Trace:
->    remove_wait_queue+0x22/0x1c0
->    poll_freewait+0xc2/0x230
->    do_sys_poll+0x9ba/0xd50
->    __x64_sys_poll+0x165/0x470
->   Freed by task 12:
->    kfree+0x267/0x620
->    sunrpc_exit_net+0x34/0x80
->    ops_undo_list+0x271/0x8d0
->    cleanup_net+0x3f3/0x860
->
-> Closing an epoll instance that watches the file gets there through
-> ep_unregister_pollwait() instead.
->
-> The channel files of a network namespace belong to the root of its
-> user namespace and cache_open() doesn't check for a capability. So an
-> unprivileged user can open the channel file of a namespace of its own
-> from the outside, poll it and let the namespace die.
->
-> Go back to a single static wait queue that never goes away. A wakeup
-> for one cache wakes the waiters of all caches again but cache_poll()
-> reports per cache_detail so that's just a spurious wakeup. procfs
-> should really own the wait queue of its files like kernfs does but
-> that's nothing for stable.
->
-> Reported-by: Chris Mason <mason@kernel.org>
-> Fixes: 552d0e17ea04 ("sunrpc: convert queue_wait from global to 
-> per-cache-detail waitqueue")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+> ---
+> Changes in v2:
+> - Add .reg_pwm = IT87_REG_PWM and .num_temp_map = 4 to the it8607 entry,
+>   copied from it8603. v1 left them out, which would dereference a NULL
+>   reg_pwm on hwmon-next (reported by sashiko-bot, thank you).
+> - v1 had only been run-tested with the it87.c of 6.18. This version was
+>   built from hwmon-next and run on the NUC6i3SYB: all 87 sysfs attributes
+>   read without error, pwm2_enable and pwm2_auto_channels_temp written and
+>   restored, no oops.
+> 
+> v1: https://lore.kernel.org/all/179357707375.834227.595814448085536071@proton.me/
+> 
+> Observation, no change needed: on this BIOS the registers 0x68-0x6d of
+> pwm2 read 81 4a 5c 59 06 02. With the newer-autopwm layout of it87
+> (base+0 fan off temperature, +1 start, +2 max, +3 start pwm, +4 slope,
+> +5 hysteresis) that is: fan off temperature -127 C (0x81, the lowest
+> value, so the fan is never switched off), start 74 C, max 92 C, start
+> pwm 89, slope 6, hysteresis 2. pwm2_auto_point1_temp therefore reads
+> -127000 and pwm2 reads 89, matching the registers.
+> 
+> Based on the hwmon-next branch of groeck/linux-staging.git (file contents
+> as of 2026-11-01). The Super I/O is found at 0x2e, chip ID 0x8607,
+> revision 2, hardware monitor at 0xa40; ACPI reserves that range, hence
+> ignore_resource_conflict=1. Is that acceptable, or would you prefer a DMI
+> quirk for the NUC6 boards?
 
-Acked-by: Chuck Lever <cel@kernel.org>
+No quirk needed, it is up to the user to accept the risk.
 
-
--- 
-Chuck Lever (Come to NFS bake-a-thon! https://nfsv4bat.org)
+Guenter
