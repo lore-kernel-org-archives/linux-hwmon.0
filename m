@@ -1,55 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.33
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793578554;
-	b=UgXrUQGgblXgztZ+BXxXb0ONua2f/Efrigfa9Vltw0Lp1CSy9aTwFwtdbM1x8LFpje8x
-	 B3cA8MTz/Sg/iAfMGgBLycc+QjpBWXWD2pFT7UrfTLMMW+DSkJSn+SfpfIZ3eRvbs7Ib+
-	 JDJ9H1P4cH+5kAOIf0jwTTQUjfjgyl74MxLEeM/QFVBhIrh2cR0DHdWDtcUxaOmdWP53a
-	 zctganxVh1I8iJtiKkyhdncZbdskpPYOODSf+YT/KrY3VGFE5d1Y3YC8psmYVsIRZB/Zo
-	 Tsjf/1FsaMsCcmz75yL9JmHpL4yMtAeDbP0GLz3phKu8+dVq4Ms9mLN/SO3s3GMJOJQ==
+	t=1793580876;
+	b=1nbgh5GMtPrCYsmCLCh1/SSpPdDADvAFwdcc15ylQjFiksbLJLck2L/+47S9pBH2JBmc
+	 2KBVmxA00rXLYwqBUbuj4B7xyz3uYycub5CuOVkSjuVU2y4eUqyU7+CcQrdGijg5PZDCD
+	 uAF7me2nwyL3obSH66nAYt+VFDwJXuQ7y8oMAR+196lRYEpQqUoynBvptCISq+G8Ox0eG
+	 iFwZ6Gf4mFVAoGRxpIJ/YxU/Cve0FFR7fLsAhfVIZZ7zDqbnckHfritL4j37GvMiQ/Ep7
+	 HoQercibjyltypSNCWtwlmaDI8AEIX0V7HHOHXon3Q8TnMF/WNjSDtwIeQh0+QeaVpg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793578554;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=wI38djHFER4sirgSi/9RzocZ3BRmNKkbanvqgWhDxHk=;
-	b=NI5qPwUb/YqvHoVpe6z7yj7v2aYXH9dzWn6MtFDmfmqvYeVGtGSppnOMBVDGcyMhdM8n
-	 xsa28MiQxURxRKsn8pOJr7DB57QnsswTFkYfAkQNsNBxR0oD7BATt8XZYLq7o0e7qbFFs
-	 fwqcL4xiVGpN1JkOCYCtKBCQadtjSls0GYho7kFicxW6lpXRPKt5qdf6D3cUlMTxFPMDn
-	 lEuqBJNftjrbghgFlcTbUubRVoklAeUQKVRBCnPPj+gVt2RcqETyd36zp/HEXgg+73MFV
-	 JI8HuPxWJHspl6b36WzGNNTbmc9LVsuVBep49qswAWh44HE9qHcN4bZL4eUFJrjVx6w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793580876;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
+	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
+	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
+	bh=H2SoAKXT/vqr7w2nSm/rmAWPKWQM7xLa292dOG1fn/w=;
+	b=ktIygZEO0z/WE8j5tXJ6vbumuMvQANM1DrJb4AICxGOtLrAs7RLcKCy5xikUu5zAVdSR
+	 fAIZklDTHp+oHZJm5F4WyC8hmy6KYJKvN2UZrSg2NvD4FCYduD0wu5ABtSl+Brh8N76h7
+	 EbKOe2g7migNBunlwYIBy3vyzwLIOIkpH/aGGmTUdnhNZaz+fZohN4zT2OttfPt69xd3E
+	 gSxp9hhVi9FpK5yrsLyc3pduNf/t5C+pCmfOdnHUEUFOIWTsJjJPBhkDFCDVq30KwAyVV
+	 2ZqFKRtSaun2SwwX16HTRiRjpoOC48bZ2djEadGX7FQCLjNnUO99U1+b8dpFW8i+ukQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ID0orXuu;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=roeck-us.net;
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=FOSQDiX+;
+	arc=none smtp.remote-ip=35.89.44.33
+Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05F87606A324
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 00:15:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC957606A327
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2026 00:54:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CC957606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ID0orXuu
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 860C51F000C1;
-	Mon,  2 Nov 2026 00:15:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793578553;
-	bh=wI38djHFER4sirgSi/9RzocZ3BRmNKkbanvqgWhDxHk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ID0orXuumk0NN0YQ8gIHUdhv9s/jZejtwVrX6w5ZaCbfjuyTP8GFtJ7cuk6XBTsyO
-	 47AYgTJBd0bl7c2UWGBdiHSz9NK4lQ8+Tbr8Z+7+arfO34h5sWKlgNbq/yEA5PweiP
-	 JPdwm3W2Xsn0Xfk5MCGdrThZFmBWrUijEsrLDU8MydEBVw+wBx8tm5NefZRzzHe3pR
-	 TVwA7VlymnCz2l31yALhO+iI+rML2YpGJMynf1DhGhP/oUYHcaqbEh9yU1q64QKL7D
-	 vvKyAF7SadsAbu3hrvGOVJPQA1wUsU+NKYDDhWsTS2eEdjIopFSoe0U3uXPe5CWB4g
-	 10gvwos622u8w==
-Message-ID: <sashiko-outbox-192791@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] hwmon: (it87) Add support for IT8607E
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ismael Ojeda Perez" <iojedaperez@proton.me>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <179357826986.881874.2370184949108951928@proton.me>
-References: <179357826986.881874.2370184949108951928@proton.me>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 02 Nov 2026 00:15:53 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=FOSQDiX+
+Received: from eig-obgw-5007b.ext.cloudfilter.net ([10.0.29.167])
+	by cmsmtp with ESMTPS
+	id NW6OxC9a3aC0UNgJgxOn3T; Mon, 02 Nov 2026 00:54:28 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id NgJfxnpL3Lr2uNgJgxhEMT; Mon, 02 Nov 2026 00:54:28 +0000
+X-Authority-Analysis: v=2.4 cv=UudjN/wB c=1 sm=1 tr=0 ts=6ae7df44
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=UZ1dQ18DKJ-JX__J:21 a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10
+ a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=9QabFCZFbTkBYawswR4A:9 a=QEXdDO2ut3YA:10
+ a=KPbNTLLc3YvdawN95zVk:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
+	List-Archive; bh=H2SoAKXT/vqr7w2nSm/rmAWPKWQM7xLa292dOG1fn/w=; b=FOSQDiX+gAYu
+	V1PzeH6PIKAjAHRqgOaJPDSCOQY/VIISOWNTzoJYRjWmWKYQ6bMsOsJS2tIYkbTSV0Y6ouKJKUGGx
+	aYQSiX+gUa4sI0woxjwX9NS3nF9TkYi6JoyP6GMoPzfkYalzbkfMHhYcxZ6lE5s1UNu1ANjUj+cxK
+	UowiZ20fItkleUK8uiIQercZwhKRxmXyZszmtgK7sE1Yjd0V5qlLvRg0dpGi6kC/MOWYWvbiT/Rip
+	viFrbjeWgTPUWEEsJBIkxUMD46oMZiofBfgsaRdx5U/S0E6IV5RQNcBhe1lXYMZ8mdh2v4kgnagR2
+	z3Mq/nmRWz0Dq1ZceZghyQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:52602)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xNgJf-00000004G5i-32IR;
+	Mon, 02 Nov 2026 06:24:27 +0530
+Message-ID: <9f791ff0-4b5f-48ab-9484-70aa290a6886@roeck-us.net>
+Date: Sun, 1 Nov 2026 16:54:26 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -58,34 +75,201 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 5/7] hwmon: sy7636a: read the temperature only while
+ the rails are on
+To: sashiko-reviews@lists.linux.dev, Pablo Mazzini <pmazzini@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+References: <20261101223125.302001-1-pmazzini@gmail.com>
+ <20261101223125.302001-6-pmazzini@gmail.com>
+ <sashiko-outbox-192738@kernel.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <sashiko-outbox-192738@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xNgJf-00000004G5i-32IR
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:52602
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 1
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfKgxmCJZa097Mp9TM4TaUIONTDXU1iYtqIotPVXnRbFHMKqogSjFY1uDJZwsFeQ4g9NCX/rJ+LacepSvNW15aa2IbmipOL3BeyhSyV36FP6VTZ1IGMJc
+ ygHTFp1AkpiTXWxE1GFHqQvBNQWPb69R755b2CzYnxqGJ3jrBrORoUdxHagv0xnu9oIwx3FTfAKe7mhs3vI60X9mWcIUTQP/lNlaOi8PJIenu3tIFrwYImgH
 
-> The IT8607E is the Super I/O of the Intel NUC6i3SYB and, according to
-> Intel's product specification, the NUC6i5SYB (BIOS SYSKLi35.86A). Its
-> environment controller is hidden from ACPI (HHMD._STA returns 0), so the
-> chip is only reachable through the LPC configuration ports, and the ACPI
-> resource check must be bypassed with ignore_resource_conflict=3D1.
->=20
-> No datasheet is available. The register layout was compared against the
-> IT8603E, and the BIOS fan setup (IT8607PeiInit and FanPei PEI modules of
-> SYSKLi35.86A.0071) was disassembled to confirm it programs the same
-> "newer autopwm" registers (0x68-0x6d for pwm2). Features are therefore
-> copied from the IT8603E.
->=20
-> Tested on a NUC6i3SYB (BIOS SYSKLi35.86A.0042, chip ID 0x8607, rev 2):
-> temperatures agree with coretemp, +3.3V reads 3.31 V, the 3VSB and VBAT
-> inputs read plausible values, fan2 tach and pwm2 respond to the
-> automatic-curve registers (start 74 C, full speed 92 C, as programmed by
-> the BIOS) and to manual mode, and the original values are restored.
->=20
-> The tachometer was not compared with an external tachometer and the
-> voltage scaling was not compared with a multimeter; the values above are
-> only cross-checked against coretemp and the expected rail voltages.
->=20
-> Signed-off-by: Ismael Ojeda Perez <iojedaperez@proton.me>
+On 11/1/26 14:51, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] hwmon: sy7636a: returning -ENODATA when rails are off disables thermal zone
+> --
+> 
+> commit 72fc8d76dc4f0fe2ee1ec4e02805a6f20803ef65
+> Author: Pablo Mazzini <pmazzini@gmail.com>
+> 
+> hwmon: sy7636a: read the temperature only while the rails are on
+> 
+> This commit stops enabling the VCOM regulator at probe, registers the hwmon
+> device under the chip name "sy7636a", and reads the fault flag alongside the
+> thermistor in a single bulk transfer, returning -ENODATA when power good is
+> not set.
+> 
+>> diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
+>> index f01f368d68e5f..475aff997c2d2 100644
+>> --- a/drivers/hwmon/sy7636a-hwmon.c
+>> +++ b/drivers/hwmon/sy7636a-hwmon.c
+>> @@ -14,7 +14,6 @@
+>>   #include <linux/module.h>
+>>   #include <linux/platform_device.h>
+>>   #include <linux/regmap.h>
+>> -#include <linux/regulator/machine.h>
+>>   
+>>   #include <linux/mfd/sy7636a.h>
+>>   
+>> @@ -22,14 +21,22 @@ static int sy7636a_read(struct device *dev, enum hwmon_sensor_types type,
+>>   			u32 attr, int channel, long *temp)
+>>   {
+>>   	struct regmap *regmap = dev_get_drvdata(dev);
+>> -	int ret, reg_val;
+>> -
+>> -	ret = regmap_read(regmap,
+>> -			  SY7636A_REG_TERMISTOR_READOUT, &reg_val);
+>> +	u8 buf[2];
+>> +	int ret;
+>> +
+>> +	/*
+>> +	 * Read power good and the thermistor in one transfer: the thermistor is
+>> +	 * only sampled while the rails are on, and power good comes after the
+>> +	 * first sample
+>> +	 */
+>> +	ret = regmap_bulk_read(regmap, SY7636A_REG_FAULT_FLAG, buf, sizeof(buf));
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> -	*temp = (s8)reg_val * 1000;
+>> +	if (!(buf[0] & SY7636A_FAULT_FLAG_PG))
+>> +		return -ENODATA;
+> 
+> [Severity: High]
+> Will returning -ENODATA in sy7636a_read() when SY7636A_FAULT_FLAG_PG is
+> cleared cause the thermal core to permanently disable the attached thermal
+> zone when the rails remain off?
+> 
+> In drivers/hwmon/sy7636a-hwmon.c, sy7636a_info sets HWMON_C_REGISTER_TZ:
+> 
+> static const struct hwmon_channel_info * const sy7636a_info[] = {
+> 	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
+> 	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
+> 	NULL
+> };
+> 
+> In arch/arm/boot/dts/nxp/imx/imx7d-remarkable2.dts, the epd-thermal zone
+> binds to &sy7636a with a 30-second polling delay while the vcom regulator only
+> specifies regulator-boot-on:
+> 
+> 	thermal-zones {
+> 		epd-thermal {
+> 			thermal-sensors = <&sy7636a>;
+> 			polling-delay-passive = <30000>;
+> 			polling-delay = <30000>;
+> 
+> When the thermal zone is polled while the EPD rails are off, the call chain
+> __thermal_zone_device_update() -> __thermal_zone_get_temp() ->
+> hwmon_thermal_get_temp() -> sy7636a_read() passes -ENODATA to
+> thermal_zone_recheck() in drivers/thermal/thermal_core.c:
+> 
+> static void thermal_zone_recheck(struct thermal_zone_device *tz, int error)
+> {
+> 	if (error == -EAGAIN) {
+> 		thermal_zone_device_set_polling(tz, THERMAL_RECHECK_DELAY);
+> 		return;
+> 	}
+> 
+> 	if (tz->recheck_delay_jiffies == THERMAL_RECHECK_DELAY)
+> 		dev_info(&tz->device, "Temperature check failed (%d)\n", error);
+> 
+> 	thermal_zone_device_set_polling(tz, tz->recheck_delay_jiffies);
+> 
+> 	tz->recheck_delay_jiffies += max(tz->recheck_delay_jiffies >> 1, 1ULL);
+> 	if (tz->recheck_delay_jiffies > THERMAL_MAX_RECHECK_DELAY) {
+> 		thermal_zone_broken_disable(tz);
+> 
+> Because thermal_zone_recheck() only treats -EAGAIN as a non-fatal retry and
+> treats -ENODATA as a sensor failure, it logs an error, switches to
+> exponential backoff polling starting at 250 ms, and after roughly 5.5 minutes
+> with the rails off calls thermal_zone_broken_disable(), which sets the thermal
+> zone mode to THERMAL_DEVICE_DISABLED so thermal monitoring remains disabled
+> even after the rails are turned back on.
+> 
 
-Sashiko has reviewed this patch and found no issues.
+-ENODATA is really meant for temporary conditions, not for permanent conditions.
+It may also be returned if a sensor is explicitly disabled, for example with the
+'enable' attribute. If the rail is never enabled, it might make sense to filter
+out affected temperature sensors in the is_visible function.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/179357826986.881874=
-.2370184949108951928@proton.me?part=3D1
+Other than that, there is not much we can do. Returning -EAGAIN from the
+driver would be inappropriate and might trigger a hard (immediate) retry
+loop if reported to userspace. Converting -ENODATA to -EAGAIN in
+hwmon_thermal_get_temp() might be an option but, again, -ENODATA
+should be a temporary condition. The retry mechanism in the thermal
+subsystem essentially works as expected - it disables the thermal zone
+if the recheck delay is above 120 seconds, and if a sensor was still
+not readable after that time it is unlikely that it recovers on its own.
+
+Thanks,
+Guenter
 
