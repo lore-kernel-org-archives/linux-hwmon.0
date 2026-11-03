@@ -1,57 +1,123 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793696366;
-	b=po99mxFG9YEav/f5ybrbd1z3Mxg4VgmBYJfzCvs0Lihoitno3VbkDly0nHoP/TPUDaVV
-	 9/JLlzmOUvHj7tkDS9wcQyalx7DpX0CZ+4gx3XzGRzEiw0840sDMC7j8DrgVT4z8SKftA
-	 RjHinaq9gnnNK+anhtROwBV5p4C3QUA+mJC0gVe55BYy21NWfz4w8fSfaxnlK2W2Knnnh
-	 StoKk7w7rj/dGLsONu8eG818czbNJBLBS1AGG4YhUp4XJWwTo+9PlVLOXaTpQcpElcaIz
-	 nRn01I7DWChT/1XBZpuGBwwAhFhL3dI4+wEXruL0lD1GpNtNsE09JJWvIP89S1aNTRQ==
+	t=1793696521;
+	b=z/VZsJGeyB/inKIpNhLxwNf6RksVOtNqWIIRYWYyi0mz24/fKNHjz1OpbEAoHuK+BdD/
+	 BlH/PZloM2SoipPNDN8ogj7u+rqQ+xCmaP5o0LokEKuFLYvhfqGiX/HitTpiHxGLKQ3Xb
+	 nXDje9ZXRrofxHzgbWYcZjw3EkVUCwPz9TVvkIvB88JGPKqswZYcRAEN41bOEOWhSuyqE
+	 b7TkN9iH8O0k4JmiS8HUT6+RH0HJS+Wztkktr+Mv6wkIqpNlkknmmAQ/aOdSPBnW/DMgJ
+	 p33pJEBmJ7Dh1aDeHdcJlI46A98A1JY1VArfDMH8mOVZ0LhxnT7BH/TkyZes1f4qwhw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793696366;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=EDuH9Cj6iHQYdRvsNQHBOSRZ77zk+KQTpmXeNSrerjw=;
-	b=Soa8Ubd+cl6DDK6Oj2HvdjEwqRuReoS0+j0fXfCxXf9Y6BbduTH4q68TmYXrLupOYxDN
-	 rsW1AXFO+01WNlP9G8DVcSTVBoD9B4uZVFwNqtKuuTHpsiTUCwZvpAZAMg1pWuvzeCiQc
-	 vnCmK2DVUVFGwLeU9nSDUmv+qfrYPSPlonHFG1m5nOigAsswaQZc82tTnd7HutlqQzjhM
-	 gfz+9DWYDRCX96psA9j+2mrpVFRs5get56b+BecEp23Ea6RN329hsm1Rjg5c6A8HUUeFk
-	 TWTsQvaDeW34wUtO40PmKPF9AWt8nu/K5B3HfE35MOgEEOXbI1gFjbvgVtNAm5wtTMg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793696521;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=gRmsv6wYjLEKSbJo7laqPxMeUO7+qbOgDtXmMnI1ci8=;
+	b=RnChG/T07SJEN7vaWw1PCGdBfjEJcuQsU6kgGcPFEiedxXuvL/WW+GOLCxGgAcf5Fl9L
+	 DNa4pRB0l9AEdbD1udqDYO/rL2MoN08x/CXVv+yYJWBmada5TUDUknfsJQ3GknQy+TqRF
+	 RcfZf6EhwVntjEPC0a+nD8UHQiujeHmUj2pjLUM8P/wNGOaRMHO8+apOcFutgZwofQv65
+	 0bv5zlWnCicxuOSH5+FfvdZF4iaXRy7Yn6nTyxYCu8IkF9p0SGHwE7C/e+CbCytXCLbcd
+	 n48UdeCC1ZtGdoGz2/ip5d/sP4Ff8Llh860S5ZKxcVXAc+Dr1GYdsGA0TMGB769bWSg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aaFRGRfR;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aOod8gK4;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597AE606A327;
-	Tue,  3 Nov 2026 08:59:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF86606A324;
+	Tue,  3 Nov 2026 09:02:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aaFRGRfR
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E43B91F00919;
-	Tue,  3 Nov 2026 08:59:24 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aOod8gK4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA3111F00A17;
+	Tue,  3 Nov 2026 09:01:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793696365;
-	bh=EDuH9Cj6iHQYdRvsNQHBOSRZ77zk+KQTpmXeNSrerjw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=aaFRGRfRClEyKtnvMiMmsW8lUCZeieNtsqVEnHibPwF3rUB7fPm6CmsAmj3lNvoD6
-	 JI3p5TtAZTdJFhUwHsLivmwtV7xN3yfYl4FB52K4JnBCLGwyvpyR2cT/6ctiJGmNyA
-	 W6YDO9GUXbSvMIpVJ7QEYSFyG7Q5+cFtF/bfqSACr/dcF7C8ncUXblQEMquAUq8qnT
-	 F9EwKY8EfIQe2CPWQ9vpjFHIAqkBs9NeU4ZVtpWiVdRjzip8oQpwadiARec/qVjnWg
-	 UpAEygrVQ9X5Su6QESn5O3WQHBPSdAJF0N0jJ5JzEZHrA5d3snTEzDgxnbCGfGdpbI
-	 MYAO43FiCjAEQ==
-Message-ID: <sashiko-outbox-194910@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: (pmbus/max20830) Add support for
- MAX20810, MAX20815, LTM4739, LTM4740
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Carlos Jones" <carlosjr.jones@analog.com>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org
-In-Reply-To: <20261103084331.449-3-carlosjr.jones@analog.com>
-References: <20261103084331.449-1-carlosjr.jones@analog.com>
- <20261103084331.449-3-carlosjr.jones@analog.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 03 Nov 2026 08:59:24 +0000
+	s=k20260515; t=1793696520;
+	bh=gRmsv6wYjLEKSbJo7laqPxMeUO7+qbOgDtXmMnI1ci8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=aOod8gK4JSK2Ag27WxT99LyvRofFK9DbXWyzfXSQIIf7Xg4koKKnrNIso/kNNwiYI
+	 hmcdBHH6VNgX8n8QapIRx8MWsoreYz0pOWior4BagJt1cjt9iC1CJs/m5IMjQ+bAV1
+	 /NO67C3tkf6pejfDtujB40AmVq/aD/6G/+eRwueRluYlkviCRpoxqe13QaSpF2/5/7
+	 LOfPT2uonKdxlTPC5I3idwrAuTvq1sdJQG/BtsbRH7zGF98qTtgOQub64SgjZk55T0
+	 W8umapeltmRUFwlt6Qw1H+iwErchf2tc6lKWZugjBLMEQQh77uuj93BS+mMl09mB8x
+	 L/EstnUikfb6w==
+Date: Tue, 3 Nov 2026 09:01:43 +0000
+From: Lee Jones <lee@kernel.org>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+	Jiri Pirko <jiri@resnulli.us>, Ivan Vecera <ivecera@redhat.com>,
+	Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Olivier Moysan <olivier.moysan@foss.st.com>,
+	Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Thierry Reding <thierry.reding@kernel.org>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	Srinivas Kandagatla <srini@kernel.org>,
+	Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>,
+	Ulf Hansson <ulfh@kernel.org>,
+	Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Chanh Nguyen <chanh@os.amperecomputing.com>,
+	Alistair Francis <alistair@alistair23.me>,
+	Julius Werner <jwerner@chromium.org>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Dmitry Osipenko <digetx@gmail.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Ray Jui <ray.jui@broadcom.com>,
+	Scott Branden <scott.branden@broadcom.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	chrome-platform@lists.linux.dev, linux-gpio@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-sound@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-tegra@vger.kernel.org, mfd@lists.linux.dev,
+	linux-arm-msm@vger.kernel.org, linux-mmc@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Use hex unit address patterns
+Message-ID: <20261103090143.GF13023@google.com>
+References: <20261102135330.2493332-1-robh@kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -60,64 +126,47 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261102135330.2493332-1-robh@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] hwmon: (pmbus/max20830) Kconfig help text not updated for new chips
---
+On Mon, 02 Nov 2026, Rob Herring (Arm) wrote:
 
-commit a48cd701bd54f337809702615b2dcd55ba0b47a3
-Author: Carlos Jones Jr <carlosjr.jones@analog.com>
+> Unit-addresses by default (and most commonly) are hexadecimal. There's a
+> number of cases using decimal patterns. Fix all of them, limiting the
+> pattern to match the 'reg' limits if there are any.
+> 
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
+>  .../bindings/display/xylon,logicvc-display.yaml      |  2 +-
+>  .../devicetree/bindings/dpll/dpll-device.yaml        |  2 +-
+>  .../bindings/embedded-controller/google,cros-ec.yaml |  4 ++--
+>  .../intel,ixp4xx-network-processing-engine.yaml      |  2 +-
+>  Documentation/devicetree/bindings/gpio/gpio-mxs.yaml |  4 ++--
+>  .../devicetree/bindings/hwmon/maxim,max31790.yaml    |  2 +-
+>  .../devicetree/bindings/iio/adc/st,stm32-adc.yaml    |  2 +-
+>  .../bindings/iio/adc/st,stm32-dfsdm-adc.yaml         |  6 +++---
+>  .../bindings/input/touchscreen/cypress,tt21000.yaml  |  2 +-
+>  .../memory-controllers/ddr/jedec,sdram-channel.yaml  | 12 ++++++------
+>  .../bindings/memory-controllers/ingenic,nemc.yaml    |  2 +-
+>  .../memory-controllers/nvidia,tegra20-emc.yaml       |  4 ++--
 
-hwmon: (pmbus/max20830) Add support for MAX20810, MAX20815, LTM4739, LTM4740
+>  .../devicetree/bindings/mfd/st,stm32-lptimer.yaml    |  2 +-
+>  .../devicetree/bindings/mfd/st,stm32-timers.yaml     |  2 +-
 
-This commit adds support for the MAX20810, MAX20815, LTM4739, and LTM4740
-step-down switching regulators to the max20830 PMBus driver by matching
-their IC_DEVICE_ID strings ("MAX20810B" and "MAX20815B") and updating
-Documentation/hwmon/max20830.rst.
+Acked-by: Lee Jones <lee@kernel.org>
 
-> diff --git a/drivers/hwmon/pmbus/max20830.c b/drivers/hwmon/pmbus/max2083=
-0.c
-> index 4d25a084af096..39cce250beca4 100644
-> --- a/drivers/hwmon/pmbus/max20830.c
-> +++ b/drivers/hwmon/pmbus/max20830.c
-> @@ -20,7 +20,15 @@ struct max20830_data {
->  	u32 vout_rfb2;
->  };
-> =20
-> +/*
-> + * IC_DEVICE_ID strings matched at probe. The LTM4739/LTM4740 uModules
-> + * report their MAX die ID with a "B" suffix, not the "LTM47xx" names in
-> + * their datasheets (being corrected); the plain datasheet IDs are not
-> + * matched, as no such part has been observed.
-> + */
->  static const char * const supported_chip_ids[] =3D {
-> +	"MAX20810B",	/* LTM4739 */
-> +	"MAX20815B",	/* LTM4740 */
->  	"MAX20830",
->  	"MAX20830C",
->  	"MAX20840C",
+>  .../devicetree/bindings/misc/qcom,fastrpc.yaml       |  2 +-
+>  .../bindings/mmc/mmc-controller-common.yaml          |  2 +-
+>  .../bindings/net/cortina,gemini-ethernet.yaml        |  2 +-
+>  .../bindings/phy/brcm,cygnus-pcie-phy.yaml           |  2 +-
+>  .../devicetree/bindings/phy/brcm,sata-phy.yaml       |  2 +-
+>  .../bindings/phy/socionext,uniphier-usb2-phy.yaml    |  2 +-
+>  .../devicetree/bindings/sound/qcom,q6asm-dais.yaml   |  2 +-
+>  .../bindings/sound/qcom,q6dsp-lpass-ports.yaml       |  2 +-
+>  .../devicetree/bindings/thermal/sprd-thermal.yaml    |  2 +-
+>  23 files changed, 33 insertions(+), 33 deletions(-)
 
-[Severity: Low]
-This isn't a bug, but when adding support for MAX20810, MAX20815, LTM4739,
-and LTM4740 in supported_chip_ids[] and Documentation/hwmon/max20830.rst,
-should the SENSORS_MAX20830 entry in drivers/hwmon/pmbus/Kconfig also be
-updated?
-
-Currently drivers/hwmon/pmbus/Kconfig only lists the previously supported
-models:
-
-config SENSORS_MAX20830
-	tristate "Analog Devices MAX20830 and compatibles"
-	help
-	  If you say yes here you get hardware monitoring support for Analog
-	  Devices MAX20830, MAX20830C, and MAX20840C.
-
-Documentation/hwmon/submitting-patches.rst asks that Kconfig information be
-kept up to date when adding functionality to existing drivers, similar to
-commit 4cdcd4789fb6 ("hwmon: (max20830) Add support for MAX20830C and
-MAX20840C").
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261103084331.449-=
-1-carlosjr.jones@analog.com?part=3D2
+-- 
+Lee Jones
