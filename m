@@ -1,48 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793719131;
-	b=tHgLfxBqB3OVYSTbTVuR4b30dEoUnAL9GiPZBjsGtxWP2LmCOdyhnzDuzw8aV67qxJu+
-	 OqvR1pzkDbvj/YnTPMoUc60nlk58kn79UuOdMJh9+ou8w+1y+dwdqijQeIm991OtVu+Rq
-	 ePKC0NuCDvbQSaM1GB988tNCH7eMLeLntboAGrthjNN/R7nxteb05QTlnEFTr9U/zkC+R
-	 yAofY4FgyroyA8LcXBIsqC01SveaM/mDc7o8h4Ca3RfZ/aTSnnQgBuYTD7ahBdpibSReC
-	 ShxH68CuHuA7ekWNzdEbt+mXajVcTkQ02osCyp7a3B258cqyLDOPIFrS0VSfOlOHWWw==
+	t=1793719142;
+	b=T9vlr78RMeT//9TDfDUhOr8Xm32KhviMkxer8kELI/N94HzeyxRoJYPsQTsM/sadMwUc
+	 Sv/yWOO3cks96RJglar0z3kkgDLY0EpisJ/DL+tO3oBxRMAz4J09df7aFY9FbEYJSCj10
+	 AyqoUonDA9ZntOLUlnV9+3xy1KmnLU+7F4G7AaToeJ7QrCsNSyB/nT+J8Yr9KJe1gi8Ig
+	 XfoN7deSMB+mfAmySFT2jCEWS6MZvpsf3bG14Al6UfyL+kuBOSalSHR7vXj8nLGbx0o9k
+	 ZXFrIq8yc+eGJqHI929sCmBU8JKHfL1FgmdfG0MJPyIk8yehIPXWqfPOpsZQVFXbfRA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793719131;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793719142;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=Bc8aT4Z6get1K0vbpp5ygtanM/hIwI+PelNNb0VgB7c=;
-	b=mtXPuqtX4jmWHuPTnUJp5WMiDcrBAjULAoqzcagKStFaOzHRViFtmNFsPL5lnTuXAdgc
-	 osWYd/7r9GUgW0uzvvmr0aEW9VXh772nO5GGWe8W/vLHf9OpzKXX+z0kL5G1R/D75+6GT
-	 Xr2LsdliHD6AeBI+95m562i5YosYCaUpcFluESpI9nR9hBlPJFtpYd1ISPGU7Fv0jJeim
-	 FYtChRzTwfc+ESh/hXpdUSWiSDsumM+PjTYTSu1iVE/7DQ8c2L4X5hQ42RzUSAMYtUwgO
-	 j84EL7wmu9afc5BudIIky0Qf9u3/sdU27piGNpxus5M7fI5z/VNSC3ZhylQOVjkMvew==
+	bh=odwwA5dfKcUGiw60p2ABSqsoXHD3TJfwohDjWQjtLjY=;
+	b=GFHmFDwhgxJpD1v2rjb0U9YxiLfRWJX87WiE1C8aRBCx0o8V4RXk5noIRDwDN58G7K9E
+	 B/UhHeM7fGakpKgdc0eMjiBVBXWToo1SRl2Yo42DSlGiMBY+nYj3SalGmdl55Lbgddeoe
+	 pJqqPEe5AJAY35heb+4jDG5le5Mf/sDq6E3bbD3bdWiGPH8Cwn0vuHQCm5q8tK6Spqgx6
+	 CSoC+xZyCeYZoXSJ3tcdpIyCJHAn6K2oi1RqCM9ZxCLusEDXwBfJcVuODAO9zJy/lMdzN
+	 K0qNd5w7i4wpCEnShKQYWPtIoHCU7vdRFN+OqzVy1QLJReQplxvzz03MU4uG8vU+IRQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="CoJeH/FT";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jROEVxEx;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9EB2606B258;
-	Tue,  3 Nov 2026 15:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6FB860A2613;
+	Tue,  3 Nov 2026 15:19:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CoJeH/FT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 856681F0093A;
-	Tue,  3 Nov 2026 15:18:48 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jROEVxEx
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D56581F00A16;
+	Tue,  3 Nov 2026 15:18:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793719130;
-	bh=Bc8aT4Z6get1K0vbpp5ygtanM/hIwI+PelNNb0VgB7c=;
+	s=k20260515; t=1793719141;
+	bh=odwwA5dfKcUGiw60p2ABSqsoXHD3TJfwohDjWQjtLjY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=CoJeH/FTtYurhrEu7pHCjreAy8kglbRPwM3Bp2MFbNXs5sfimskiQ6GdFaw2b46h5
-	 LFYZjIjC0HLk9VtZElPrV+LCrvrtO/TXriYCzcHxI7ww7m4DuMtGSua9gCijZ8ag5C
-	 C1QyPEjg//XpCtccxJ83qTFkU2bPqiwCZUATJ82pjvzmj0HhclIwZdtkBZ4X0D4FpB
-	 W2kjXVSW4Jh+gJKkh7n8hluL4QKxxLPc9zkayoPnR79tHeS7TL9oS5+LArhquuyOcO
-	 R0f20W9hUcQSALMEMf5u4F5ldJdbIIx8/qJHUPE3ePz+MiGIzk37ns/uj3hE88ZoNC
-	 wd/gwuy246nxg==
-Message-ID: <sashiko-outbox-195591@kernel.org>
+	b=jROEVxExIThFpbsqA5xAGqUr9cswA8n2qHqo/aORqRE3FqTOEu/Om15ERmPiYGlIu
+	 7g8q1aer7mGKtPa4BqJW1SZkElmqfbsX5POPH2ZXnXV8g7aCzKJTWAAN/zeDNaVUwi
+	 kOyemUyjCavVCYeryJNauavuuGZorazBlwZhrNEkZ71VuyzAeAKZS7rSdw1kZNZ28p
+	 oTmkBcf0kJ37lxjbSjKNMU9ItQ3w+BlCooP4cmHM0J5+lHMYE5pCxdn7eLYdpg+45U
+	 WKo06U7ovfEEyFZ2fAApo+ge7BawSBRBymU5M7v3K7NHSLfSZkLVc/EQaw+9hkcs1y
+	 +QDI9KvU2B7Jg==
+Message-ID: <sashiko-outbox-195596@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC 11/23] selftests/proc: check that a faulting writer
- doesn't hold up removal
+Subject: Re: [PATCH RFC 16/23] fbdev: viafb: let procfs copy in writes
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Christian Brauner" <brauner@kernel.org>
 Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.com>, "Josef
@@ -51,18 +50,16 @@ Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.
  Gleixner" <tglx@kernel.org>, "Al Viro" <viro@zeniv.linux.org.uk>, "Jonathan
  Corbet" <corbet@lwn.net>, "Christoph Hellwig" <hch@lst.de>, "Greg
  Kroah-Hartman" <gregkh@suse.de>, "Joel Granados" <joel.granados@kernel.org>, "Kees
- Cook" <kees@kernel.org>, "Jan Kara" <jack@suse.cz>, "Jan Kara" <jack@suse.com>, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-serial@vger.kernel.org, "Takashi
- Iwai" <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, "Chuck
- Lever" <cel@kernel.org>, tytso@mit.edu, dmitry.torokhov@gmail.com, "Petr
- Pavlu" <petr.pavlu@suse.com>, "Anna Schumaker" <anna@kernel.org>, yukuai@fygo.io, "Heiko
+ Cook" <kees@kernel.org>, "Jan Kara" <jack@suse.cz>, "Jan Kara" <jack@suse.com>, linux-s390@vger.kernel.org, coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, linux-m68k@lists.linux-m68k.org, linux-serial@vger.kernel.org, "Takashi
+ Iwai" <tiwai@suse.de>, linux-ext4@vger.kernel.org, "Chuck Lever" <cel@kernel.org>, tytso@mit.edu, "Heiko
  Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
  Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
-In-Reply-To: <20261102-work-procfs-drivers-v1-11-a994bd4d3b1a@kernel.org>
+In-Reply-To: <20261102-work-procfs-drivers-v1-16-a994bd4d3b1a@kernel.org>
 References: <20261102-work-procfs-drivers-v1-0-a994bd4d3b1a@kernel.org>
- <20261102-work-procfs-drivers-v1-11-a994bd4d3b1a@kernel.org>
+ <20261102-work-procfs-drivers-v1-16-a994bd4d3b1a@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 03 Nov 2026 15:18:48 +0000
+Date: Tue, 03 Nov 2026 15:18:59 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -72,92 +69,18 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] selftests/proc: fail and leak scsi_debug host without CONFIG_SCS=
-I_PROC_FS
---
+> Implement ->proc_write_buf() for the files in /proc/viafb so procfs
+> copies in what is written before it pins the entry, and parse what was
+> written from that copy. Writes larger than PAGE_SIZE - 1 bytes fail with
+> -EINVAL now, the output device files refused anything over 63 bytes
+> already. kstrtou8_from_user() looked at the first 10 bytes of what was
+> written to dfph and dfpl, now the whole write is parsed.
+>=20
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
-commit d0cceed0cde591b286c7977ad630183fc653ded2
-Author: Christian Brauner <brauner@kernel.org>
-
-selftests/proc: check that a faulting writer doesn't hold up removal
-
-This commit adds a procfs selftest that uses userfaultfd and scsi_debug to
-verify that a writer faulting during copy-in does not block removal of a
-/proc/scsi/scsi_debug/<host> entry and fails with -EIO once the fault is
-resolved.
-
-> diff --git a/tools/testing/selftests/proc/proc-remove-slow-writer.c b/too=
-ls/testing/selftests/proc/proc-remove-slow-writer.c
-> new file mode 100644
-> index 0000000000000..f69ca75ba87cb
-> --- /dev/null
-> +++ b/tools/testing/selftests/proc/proc-remove-slow-writer.c
-> @@ -0,0 +1,203 @@
-
-[ ... ]
-
-> +/* the numbers of the hosts in /proc/scsi/scsi_debug as a bitmap */
-> +static int list_hosts(unsigned long *hosts)
-> +{
-> +	struct dirent *d;
-> +	DIR *dir;
-> +
-> +	memset(hosts, 0, MAX_HOSTS / 8);
-> +	dir =3D opendir(HOST_DIR);
-> +	if (!dir)
-> +		/* the directory comes with the first host and goes with the last */
-> +		return errno =3D=3D ENOENT ? 0 : -errno;
-
-[ ... ]
-
-> +FIXTURE_SETUP(host)
-> +{
-> +	unsigned long before[MAX_HOSTS / HOST_BITS];
-> +	unsigned long after[MAX_HOSTS / HOST_BITS];
-> +
-> +	self->host =3D -1;
-> +	if (access(ADD_HOST, W_OK) && system("modprobe -q scsi_debug add_host=
-=3D0"))
-> +		SKIP(return, "no scsi_debug");
-> +	if (access(ADD_HOST, W_OK))
-> +		SKIP(return, ADD_HOST ": %s", strerror(errno));
-> +
-> +	/* host numbers are reused, so look for the one that's new */
-> +	ASSERT_EQ(list_hosts(before), 0);
-> +	ASSERT_EQ(add_host(1), 0);
-> +	ASSERT_EQ(list_hosts(after), 0);
-> +	self->host =3D new_host(before, after);
-> +	ASSERT_GE(self->host, 0);
-> +	snprintf(self->path, sizeof(self->path), HOST_DIR "/%d", self->host);
-> +}
-> +
-> +FIXTURE_TEARDOWN(host)
-> +{
-> +	if (self->host >=3D 0 && !access(self->path, F_OK))
-> +		add_host(-1);
-> +}
-
-[Severity: Medium]
-What happens if the test runs on a kernel where scsi_debug is available
-(CONFIG_SCSI_DEBUG is enabled), but CONFIG_SCSI_PROC_FS is disabled?
-
-The sysfs attribute /sys/bus/pseudo/drivers/scsi_debug/add_host is still
-present and writable without CONFIG_SCSI_PROC_FS, while /proc/scsi is never
-created. In FIXTURE_SETUP(host), list_hosts(before) sees ENOENT on
-/proc/scsi/scsi_debug and returns 0, add_host(1) creates a new scsi_debug
-host in the kernel, and list_hosts(after) still sees ENOENT and returns 0
-with an empty bitmap.
-
-As a result, new_host(before, after) returns -1 and ASSERT_GE(self->host, 0)
-fails the test instead of skipping for the missing prerequisite. Because
-FIXTURE_SETUP(host) aborts with self->host still set to -1, the newly
-created scsi_debug host is never removed by add_host(-1) and remains leaked.
-
-Should FIXTURE_SETUP(host) check that /proc/scsi exists and skip before
-calling add_host(1)?
+Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261102-work-procf=
-s-drivers-v1-0-a994bd4d3b1a@kernel.org?part=3D11
+s-drivers-v1-0-a994bd4d3b1a@kernel.org?part=3D16
+
