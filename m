@@ -1,47 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.32
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793713655;
-	b=ZTkMbTOo+Cmq2mzpQ0TcuXFLdHFs37V63Puay4rCIS+YUdJ9spogPW4Ukm4AZjiYmr3o
-	 RIXsXR98LRIEhBszCK8GWkLbxxyg/0bA57liZxvHHLCTtLceLnj9kzT54S7F+yskfhTK7
-	 viVNUEWaGrb/UmhqcyQO8ifdHRYKUUI3nEK37sFUf/I0Nst+khflcAafPirU+CatQImCP
-	 5UX5DeLaS4nIgsbCZwSNCaCaRPSzKYQXlv1wFxKX6ZtR2mTaAprs3vRO7n4vCEuu86mUS
-	 iZIJMQnFF6Dl4TlvkyDdV39q61LrZqOtSde4HulhYRi857ihhsItIYZZ+a0aW+7HPrA==
+	t=1793714739;
+	b=FYlr5MhoOUcz6nK1A/VRtvQTV6XfTC86uXVCfj0IlxXVj5qeDX5QmUNlOsGpYmiua0cB
+	 dFifPgWpT90o5EYl690sRBHvgEuAcgahPZbj2g98+ZUQlonQ9/9i28rzMHa0X3PhdsjgK
+	 yYkq2l63nRFG9ZlwExAdTfweRKuWtKxL8s3BOdzA225QsJAglEUuZAEq0ryQgWQvV4NPo
+	 AjGTb9a+oztIYTcSNDGfHr7dKzwN31q6oG49kub0WbsziIOJfoBYrw4qpuwT+BloqrzQ4
+	 0ZyPioE6QzkGnvQKGmXWE4RpO85w4GfGa52H2WTdSy7ZVObyeVh/zV9irxFlMc3ZK2A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793713655;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=IlW72iIWbiNKVVKAKjmvhf6OHeHdv2iqNZzbYttgQIg=;
-	b=SwDKYidSzazswigdUO/uTTNE9rypJDpJxRk2P8rudmjU0SEg0CYW3gOiCzGmdAcTEwF7
-	 Mm1YDcZuFcpbhTJIjNQ6301BVolhcnYD2zvtpGaufjmXBatdTnqNbSirCw+MPjaLDsRtp
-	 1hWMDwnNBpn0FOSRXW2NydOYurThDClFlbBxpfKObm3xo6ngkpEyMh+2JYu2ifnqQaFAW
-	 QtF6rpVEvRf12J0lmKjYzwhYXInLjepD+ZhltU3cFJQqTpuLobtFV23HOwhvvNBTE0nRM
-	 Ho7dISxKv4os5LFcI6sFWtaJ37TxINRed+PvNbhr2kayQt1noSPK65FYEpqQWPdeDDg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793714739;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
+	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
+	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
+	 X-Local-Domain:X-CMAE-Envelope;
+	bh=WUmT6CAUiVXyDquHcVLXStJkH7YVniXYY2fst0uJG/c=;
+	b=zeU2TxZk+U8MxbUe2/KfcAKDQ/y75Yixloze11owwIr1p3CtgygR6kftcOz7xERL+xlg
+	 9bsD2iDGq9Ycqqov/vEMui1JRsO7iJgld1ptYIczxY5+ndEx1oAHPrmVF4goE6cOmONrZ
+	 XKJBUSbW4fmOglMUrJiqemS4PCVfzrvSq3u0X3tzc6BAl+xMcyldQAhccbBvFHT8I4j/f
+	 yoFgnQv2z+Xst43wrk0xCkr9pmhwnPWzNmWtYN2EsNuYsj76fpKWP36Y4pDQklnbYJqGK
+	 DqCOiV6oKO0GARyKowFeOcVqRBs0t4c1VVzIzSwGTdr5qXu80W8XdlBMHZiPwYafMPQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hikZKFPF;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=roeck-us.net;
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=KsZuoxiW;
+	arc=none smtp.remote-ip=44.202.169.32
+Received: from omta033.useast.a.cloudfilter.net (omta033.useast.a.cloudfilter.net [44.202.169.32])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6C2606A328
-	for <linux-hwmon@vger.kernel.org>; Tue,  3 Nov 2026 13:47:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5226606EE8B
+	for <linux-hwmon@vger.kernel.org>; Tue,  3 Nov 2026 14:05:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C5226606EE8B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hikZKFPF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1C631F000C1;
-	Tue,  3 Nov 2026 13:47:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793713655;
-	bh=IlW72iIWbiNKVVKAKjmvhf6OHeHdv2iqNZzbYttgQIg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=hikZKFPFsuWCvPqO/B4K5lI3K1iNUDJPwGt8NzZB6rv5kZSWnb8n/QdpBKhoCIb8A
-	 1GECjoVsrYUucNFo6hg5hrhQirlIgaLr1BtPAGHOA7FU5INRJV+RPziIHn+uPSUIJK
-	 2rOm6E+4osDHFHt5LfbgMLtwo2DCCNQkV67TnmkcsXziUGuW7N3IOG3CHclchoeAp/
-	 SVN9Uw+XNWCfs7q8lPQdRFNslMKxE4E7WyxUBpSJE5KbgAQhJ1gppH7PtNdaVlszr+
-	 oOG74n1STQ6t4rPStdlrf5OKEDoyJz33Y0RANqhquSFmi00HM7e6xOT5WAo2xv9dqz
-	 Egl68jLDySnNA==
-Message-ID: <e1576fcc-b31b-4305-9145-7df0ecba5919@kernel.org>
-Date: Tue, 3 Nov 2026 14:47:31 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=KsZuoxiW
+Received: from eig-obgw-5001b.ext.cloudfilter.net ([10.0.29.181])
+	by cmsmtp with ESMTPS
+	id ODTxxylRDPG7QOF8mx9kSU; Tue, 03 Nov 2026 14:05:32 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id OF8WxlY3YNBINOF8WxJySW; Tue, 03 Nov 2026 14:05:16 +0000
+X-Authority-Analysis: v=2.4 cv=fvzcZE4f c=1 sm=1 tr=0 ts=6ae9ea2b
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=EUspDBNiAAAA:8
+ a=oz-p-7aixD_jC9KcsVQA:9 a=CjuIK1q_8ugA:10 a=KPbNTLLc3YvdawN95zVk:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=WUmT6CAUiVXyDquHcVLXStJkH7YVniXYY2fst0uJG/c=; b=KsZuoxiWiTV6WuFXC5es94x3+k
+	CDj/0sZQMEWDWX00zYQk+T0f5REShQl9QtXfwXvt8yVOFxiKJecLVAt59UMTnnTuxDWGqY7Un58gB
+	oSVCyuQA5APzw09m7EmALSTiiH7AKCR4ZQJzwCi7nh4o3g8F+a1G6Q7up4XSgSTwuoMvRLrvRAXh/
+	qG2jrL6BaAt3lK4KJqpw3APVPi+xl1HbM71t54gjHtOaIP4pYE/zncshe+Ng33cTB5kN8XIzaFA7Q
+	YPiP9pEiEGD44mHyEQabSToc5tN35XQN8VgEhgWTT7ICKVmPqbEsJ4tqKmEfk1CHrgWXHjOLaE7Tq
+	3VC4tbYA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:36386 helo=server.roeck-us.net)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xOF8V-00000002ZBT-2orD;
+	Tue, 03 Nov 2026 19:35:15 +0530
+Date: Tue, 3 Nov 2026 06:05:14 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Kevin Jia <kjia@nexthop.ai>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add TDK FS160x and FS1006
+Message-ID: <9bc4cc83-c96c-4d06-aaae-e18b033ed489@roeck-us.net>
+References: <20261030-fs1603-v3-0-6f8963a74def@nexthop.ai>
+ <20261030-fs1603-v3-1-6f8963a74def@nexthop.ai>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -51,114 +87,42 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (nct6775) Add support for NCT5525
-To: Anton Lundin <glance@ac2.se>, linux-hwmon@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>, Zev Weiss <zev@bewilderbeest.net>
-References: <20261103132948.144216-1-glance@ac2.se>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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
-In-Reply-To: <20261103132948.144216-1-glance@ac2.se>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261030-fs1603-v3-1-6f8963a74def@nexthop.ai>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xOF8V-00000002ZBT-2orD
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:36386
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 2
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfPDXdX/cEOggtrrpdqv0Kjsii/1DtC+SbHAPKCy/T3AhTr1o06iBc1y/wkMlpG1O/DrpgU33NBsgaZhBjeX6J75dbpkDxgA54sD7BvfUf0RbzajxDdL5
+ 4SZqS67JO8XihecZkZaIra4FOFAo0O0BQgFmaotG0X4oLFruGE/6X/qjg6ggCyU1nt4zQP+c1hmf/FxeMXKTi8gE3JlMmWTfd2p5MA90UVkeBPW676poxBNn
 
-On 03/11/2026 14:29, Anton Lundin wrote:
-> Extend nct6775 driver to support NCT5525.
+On Fri, Oct 30, 2026 at 08:35:37PM +0000, Kevin Jia wrote:
+> Add the TDK FS1603, FS1604, FS1606 and FS1006 uPOL converters. They have
+> no ID register, so each part and factory preset has its own compatible,
+> including the 3.3 V and 5.0 V presets of the FS1006. The FS1604, FS1006
+> and FS1606-2500 encode telemetry the same way as the FS1603 and fall back
+> to it. The base FS1606 reports in 10 mV steps and the FS1606-0600 needs
+> an output current correction, so neither has a fallback.
 > 
-> Assisted-by: Copilot:GPT-5.6-Terra
+> Signed-off-by: Kevin Jia <kjia@nexthop.ai>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
-Please run scripts/checkpatch.pl on the patches and fix reported
-warnings. After that, run also 'scripts/checkpatch.pl --strict' on the
-patches and (probably) fix more warnings. Some warnings can be ignored,
-especially from --strict run, but the code here looks like it needs a
-fix. Feel free to get in touch if the warning is not clear.
+Applied.
 
-
-> Signed-off-by: Anton Lundin <glance@ac2.se>
-> ---
->  .../bindings/hwmon/nuvoton,nct6775.yaml       |   1 +
-
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC. It might happen, that command when run on an older
-kernel, gives you outdated entries. Therefore please be sure you base
-your patches on recent Linux kernel.
-
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline) or work on fork of kernel
-(don't, instead use mainline). Just use b4 and everything should be
-fine, although remember about `b4 prep --auto-to-cc` if you added new
-patches to the patchset.
-
-You missed at least devicetree list (maybe more), so this won't be
-tested by automated tooling. Performing review on untested code might be
-a waste of time.
-
-Please kindly resend and include all necessary To/Cc entries.
-
-
->  Documentation/hwmon/nct6775.rst               |  10 +-
->  drivers/hwmon/nct6775-core.c                  | 130 +++++++++++++++++-
->  drivers/hwmon/nct6775-i2c.c                   |   6 +-
->  drivers/hwmon/nct6775-platform.c              |  12 ++
->  drivers/hwmon/nct6775.h                       |   3 +-
->  6 files changed, 156 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
-> index 244470282890..16c21f1f46ef 100644
-> --- a/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
-> @@ -25,6 +25,7 @@ properties:
->        - nuvoton,nct6797
->        - nuvoton,nct6798
->        - nuvoton,nct6799
-> +      - nuvoton,nct5525
-
-Also, to spare you one review cycle - don't break the order.
-
-
-Best regards,
-Krzysztof
+Thanks,
+Guenter
