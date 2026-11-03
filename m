@@ -1,66 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.16
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793719157;
-	b=pDU6mN+1uYZ29yyrOaurYbL7mZa0VebQ3tp15FHiJbzuHk4Rd96yCS5HmjbezKki/B39
-	 R4N/YVnIxt+kPPOSLBNtqW2Tm4mmwK+rhdFEGZ3T5DLK2TqAEz1gZjtXmqr+5GaGKh0As
-	 26JifgKa4dHUNItuYLTSBAAltBy6QaLhkG/xZCnSnqam94moHqW5c6XI+f049Yb1kpxHv
-	 2zvDDZDNNpIT/I0te1xoIKmcEpZ38tBjfDC7qduzg1+5Df9BrmlM/A03zl6sIqBkp4Zrm
-	 a/LCtLwrrfWMWftB8IqrouipmRQ4nBfSYsBCWc4MqiV8AJc9cKHmSHe8qKyeUxIxb1w==
+	t=1793722393;
+	b=pQRufnk1QMCdom8f+fzQ1cy+euvsTZq0nd5D2uR8XpygezKv3cmmiv9g8YGyomla/uXK
+	 n/CoS16lh594xCmCF6zgUBvp6hmpCjq0t0HA57WFswlk7/dwo5+yPLo+gqzl8STYfaWJX
+	 Hu41IX/gQ1WSogQ1jC7Rhk4WCRLPtRz6cTjpHd58os9rU1bei01L0dMmIq8xSQr+GV6Rg
+	 X7zqUZc/lyYs2ey/HiQg/ej0/hKdGjs4ii6PWazxihhmouO1sdX3U1LxW1mw+ihP0Rd2b
+	 yAsGnpa68Y1aC49hsDHnM3ZO/AaUbn5fYoH475uh9ywfLuUEuSXcTVlp88X14L0v3BQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793719157;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=08+d1qfvreEkjdhfCWoVI27IHQFdkJLNOAr+NI9qWps=;
-	b=JyV4Mc/NAOgNmfxu2Q6TMKw6+pNEfQLeWbyjjEqB9YjZFxuB/DO4zEPea9E0hYhSA0yW
-	 /DuiH+aZkkivDxR63zVTNIwYs39h90FpJaK07uyTPCuh7bn/L9mv8MrBx9xsuOyAFs6fV
-	 X9Adtx+yK8CAv6ZnSg4v1lry2OLDPTIXiO1qLvhf7tkTzpa3sh1P8Ly6iyeW5jZGxhYTC
-	 zopifz+lbA8o2zoxvmX10UijRA6+VIGWbEWsE3aVwONLHcwKUH9qjAbPT3FIqHi7Mb3WV
-	 DiQ2yW9HTc29AKWD2vT4h16pnfwyMaeC7qAQKeEY8BE3OcSQ3wsHQSXfU3y7C0LGPTQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793722393;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To:Organization;
+	bh=ZUdSHGLaZ0x2ZTr7S5xk6f6VQ65wPDkIQdbNaQyecVU=;
+	b=W5a149CeJ0TlZP3YrdlF1+PYZ38MKG5lJx/zZ0uQ2R5/y7JlCt9jZ/idDtodaF93m1zb
+	 pH88thDjtEo6Le+/egPzMH2C4dQ6sza386WThKH//rbJer3BH/6SX4GsYeT48HZSR4PPh
+	 R6F2FbBEEvCiUWrkOMryuoAhTFiNgeO2eruPB24tkyO87uAObakEXNVNiG2ZQ6eZibayc
+	 CyDvMXUUXdc/WdEghfX8uKWBZq2x2cNw4n6eIvavULP730nhb+9DmjSFwQPmqdBgsy7vd
+	 VJFz3hM6pUmwekdbARzuhxJeWxhjIfQQysNDUFG50EchWL1JT3X6ge7jGzOMO85cqbQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=i1r9+8r2;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=mbFndIz1;
+	arc=none smtp.remote-ip=198.175.65.16
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A378260A5BE6;
-	Tue,  3 Nov 2026 15:19:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE5FA6082BFF;
+	Tue,  3 Nov 2026 16:13:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AE5FA6082BFF
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=i1r9+8r2
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D73B51F000C1;
-	Tue,  3 Nov 2026 15:19:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793719156;
-	bh=08+d1qfvreEkjdhfCWoVI27IHQFdkJLNOAr+NI9qWps=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=i1r9+8r2Wy5ZjOv4fJ1GoSbUdruq+AKDakXdPym36omcIQj5oI3RDvQXQkk7K2pOH
-	 aZOYNjI9zOi+rkLqyjgQUDVNg8zZ4OIRXHIivKTwUb8xi0sYaUhL8HtOq4hFDxlnsC
-	 ugaWfdP1eR4O/X8dqLwIEm3+bKrgwf1ndJQeP/YdlN8NK359AzrXxLprhNHYW/1Dpp
-	 vL847jEpl/4GoCymsogWvpPgMP5lTJjt0Z9FMjl/iXXQhlwp8eo243i8ta6gWDAkpG
-	 R/CGZIXSyz6k4CMqZUTFX4EjDGUfogAbrkZmxlVgTnJiWhIG78B81lpdbWmuce6I3g
-	 Nyv+90V+AsLYQ==
-Message-ID: <sashiko-outbox-195603@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC 23/23] ALSA: info: drop the ioctl hook of data
- entries
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Christian Brauner" <brauner@kernel.org>
-Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.com>, "Josef
- Bacik" <josef@toxicpanda.com>, "Chris Mason" <mason@kernel.org>, "Jeff
- Layton" <jlayton@kernel.org>, NeilBrown <neil@brown.name>, "Eric Dumazet" <edumazet@kernel.org>, "Thomas
- Gleixner" <tglx@kernel.org>, "Al Viro" <viro@zeniv.linux.org.uk>, "Jonathan
- Corbet" <corbet@lwn.net>, "Christoph Hellwig" <hch@lst.de>, "Greg
- Kroah-Hartman" <gregkh@suse.de>, "Joel Granados" <joel.granados@kernel.org>, "Kees
- Cook" <kees@kernel.org>, "Jan Kara" <jack@suse.cz>, "Jan Kara" <jack@suse.com>, linux-s390@vger.kernel.org, coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, linux-m68k@lists.linux-m68k.org, linux-serial@vger.kernel.org, "Takashi
- Iwai" <tiwai@suse.de>, linux-ext4@vger.kernel.org, "Chuck Lever" <cel@kernel.org>, tytso@mit.edu, "Heiko
- Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
- Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
-In-Reply-To: <20261102-work-procfs-drivers-v1-23-a994bd4d3b1a@kernel.org>
-References: <20261102-work-procfs-drivers-v1-0-a994bd4d3b1a@kernel.org>
- <20261102-work-procfs-drivers-v1-23-a994bd4d3b1a@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 03 Nov 2026 15:19:14 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=mbFndIz1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793722393; x=1825258393;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ij5ApUrtJjGnjtt0TprVV+c5oLMaSpv55TOI5b/crAI=;
+  b=mbFndIz1bUutQvFVJS646OzipwOd9+SL9YU/FGZESGV8TV0Q3Ka1MXuM
+   No9AbhB0POXqH8WSOvf1aWumagBvhqpN6OmCs0BkEyRXVo1kHuqpKZlAY
+   uzx9DVEO49KDc7501GW4ixSrMrdWD86jnKi0n4sBGN8+IQz/kTy3+XieD
+   FwCUwi9XPSP1NavSo0eKMLoIXAaMggTndUrdNooiAeupjvQGEAJhGgVkl
+   MLOJxNgn7p/e5glro2TbhYMmIBCW8Of/QFMQZdKvCixwQWHvd0Geq4Nlb
+   pqPjvAezdBQ8nIpZFAqwYwdNNw2hQP55hJVZtnhT5M8WCjNj7kLEDK4Kw
+   Q==;
+X-CSE-ConnectionGUID: Y9q/uQuTTCWBEYu2Y00vKQ==
+X-CSE-MsgGUID: uOcEEqzrSnahL+T/2iHKYw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11955"; a="2446662"
+X-IronPort-AV: E=Sophos;i="6.27,193,1787036400"; 
+   d="scan'208";a="2446662"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2026 08:13:12 -0800
+X-CSE-ConnectionGUID: bEkUO765QH2MUg9RIn00cw==
+X-CSE-MsgGUID: VlNKxX4pT5iLTAzgkZqpUQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,193,1787036400"; 
+   d="scan'208";a="6527577"
+Received: from ettammin-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.245.108])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2026 08:13:09 -0800
+Date: Tue, 3 Nov 2026 18:13:06 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Ariana Lazar <ariana.lazar@microchip.com>
+Cc: Jonathan Cameron <jic23@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Marius Cristea <marius.cristea@microchip.com>
+Subject: Re: [PATCH v5 2/5] iio: core: add IIO_CHARGE channel type
+Message-ID: <auoIEpE7KQ87wGDm@ashevche-desk.local>
+References: <20261103-pac1711-v5-0-71c20101a52e@microchip.com>
+ <20261103-pac1711-v5-2-71c20101a52e@microchip.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -69,14 +86,37 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261103-pac1711-v5-2-71c20101a52e@microchip.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-> No driver implements ->ioctl() of struct snd_info_entry_ops.
->=20
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+On Tue, Nov 03, 2026 at 04:37:12PM +0200, Ariana Lazar wrote:
+> Add a new channel type for Coulomb counters, which accumulate current
+> measurements over time. The sysfs attribute is in_chargeY_raw and after
+> applying in_chargeY_scale, the value exposed is in milliCoulombs,
+> following the SI convention used by the IIO subsystem.
+> 
+> This new channel type will first be used by the pac1711 driver to report
+> Coulomb counter measurements.
 
-Sashiko has reviewed this patch and found no issues.
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_charge_raw
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_chargeY_raw
+> +KernelVersion:	7.4
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261102-work-procf=
-s-drivers-v1-0-a994bd4d3b1a@kernel.org?part=3D23
+7.5 at the best.
+
+> +Contact:	linux-iio@vger.kernel.org
+> +Description:
+> +		Raw charge value read from the channel. The device acts as
+> +		a Coulomb counter by accumulating current measurements over
+> +		time. Units after application of scale are milliCoulombs. X
+> +		is the IIO index of the device.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
