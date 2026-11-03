@@ -1,71 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=130.239.18.156
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793724048;
-	b=CgzKZpbQwpeMyWBrDi3KTT8fRkUVee/dxY1YSESOlpM9HqXYFhEyzXSufHp5OtRB1N/B
-	 A/ZHwzFZmtS74ANAWgC0Qdsc3p2vzRylSVBxSKYBE7bsG2Gj6WudOa/ckoc4g6FMzl14f
-	 Fp3UbMS9IQqLMJbkChwM8lUYx3U3q3lruxNMyRaiyHFlYLHkdfcf//WWMfPFQAAvuno70
-	 4JrkgtgBgazZaYrhUd/21+O7+4sqAeo882O6FaHSzexo2rBtGyuoNHpBtpovmECHpJmVN
-	 4JutxRAGbthilE38FZR/J6ASMYU0RpdDdfZ6m9svUbEJ3t59kzanEJYiTnqDOiIl+SQ==
+	t=1793727231;
+	b=HBPXc4CTWg6AL2leOhNd+JdDO1oD4ho9jyvjH/2Kre8Y97KpKr6mBYQDKGTpVHKnf1/t
+	 ccOQ+WIdJ+u+Z0bmgvQ80a84aqL01qBFUi3hc4pVswyMG/aELnREoG3NC1hNPhoTwO1N4
+	 k7gXZCs1gBmfVZjNuLNSKtwpTG5YOHheNdd0pAnCCaDokbnkN8oHH9ifEz6P9H4B+eW8a
+	 /h5Iqhx/AVQkQtXUftqn9I0kXxmofgR4Kamf5PvaIsDZsbiFjhbat2EPO3NyT8TciBv+h
+	 rwz5Kvc4QZnv5/55NcD9f5Hd//gBX3FwBo10XddjHvPrlyJXaNWdSJS9Xsel7WtoHnA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793724048;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=3/pwRZodtv5H9vRDvB09UF4TkDVIqcbW+/AB21sxSLI=;
-	b=FgyyR37QKb6g5dDdoFRb1gjKRZNCoqtQQHPr4EDCmDUoVNupZJbg/rsVv82hHIy/yzp5
-	 9lBMfEDCTRINmv0TyVbjfwkqLv5YKdu4rAG9JM8slUFsltrZ2F+XNEHYVeVGZfqCBQm7G
-	 ymfKy8KbiBBZ4wiywYpty0GXOYte6gseR6p6f7iVC+zpd4B44yDfEWTDVNZMu5Q6Q+aaw
-	 syAm87otK0QsTriSolo7NJN2cTz0o1zQIEEZvsMJ1eKnL+hIx7xRa+wIKElSn51gx7514
-	 hKQRyutHDFSjwqNKHaPoZdr4tTjC0KGfgeJqyTbdiiCtJxSFXN8LAC/Xa9Z/7TKCJPQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793727231;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=rXmDXcARzX0O5DkeUil04GxgnetOTJkg180BZgB6TM8=;
+	b=neXFfW9PyDwQcnooZcW/c6e0MHdt/CxBkGcWUtoJ+W6Odc+D2fNRa1iiBrBHmFkoRuWD
+	 PURONAq/6j1/zhx7zymlE3MCiQFadKNVVWIoZ8vOl2oPZz/dO+Tr4RQNKmHBfHIWKRB/p
+	 dkRBKSsWM3+Sl6pHyhXUsPjgG6WyMIKodMhn/yQz0lQ6oi/L1YnP55TXs3CfYqrdiNzWN
+	 77pCIYMTQodDHl+NTirHApsJOdx5ZXAA0psEutao/0adhOqmIHIfVzXdre3tgMrBKzUXK
+	 TRZlEdl5DGmhVSSSUWXyQR5BCwuTf8YHq19PORfp17f3z5krU/58p/9AMTbxstnGAcA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kcCk3E9D;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=ac2.se;
+	spf=pass smtp.mailfrom=ac2.se;
+	dkim=pass header.d=ac2.se header.i=@ac2.se header.a=rsa-sha256 header.s=default header.b=ji92g2hu;
+	arc=none smtp.remote-ip=130.239.18.156
+Received: from mail.acc.umu.se (mail.acc.umu.se [130.239.18.156])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0055D606D836;
-	Tue,  3 Nov 2026 16:40:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F673606A330
+	for <linux-hwmon@vger.kernel.org>; Tue,  3 Nov 2026 17:33:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F673606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ac2.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ac2.se
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kcCk3E9D
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BE5F1F00919;
-	Tue,  3 Nov 2026 16:40:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793724047;
-	bh=3/pwRZodtv5H9vRDvB09UF4TkDVIqcbW+/AB21sxSLI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=kcCk3E9DDzqb581VxJ5reyHZgYV3mxqJrzazBrWKk/8awLxY14WY1qQjIrfNtyW9+
-	 +fgInAFIOA8pbj4OnlZMuT+n3NlUcuq2yEYeXQNrWe8ebUqvrivCfRVtWDr/3yvXbz
-	 /BWBSYNXk+FF83ZDTD4OKx7IKTkClzRWexwwPPed/RG1Xv+LYlKNqShYqAnmueVcHC
-	 gTpUG+UUL6OOUv1NGnTCJgrYlEvrsdp0yuuXL06dDPAQlPxzRqYs0ah3iWC0gI9/Bt
-	 TyO0WuPIBe1MXUewf/anvSyELn8SkDADqP4mdxifTwWZEneQ2Nc7h/8SBuhSMroZc5
-	 ZN0fxv3D5A0Jw==
-Date: Tue, 3 Nov 2026 17:40:36 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: sashiko-reviews@lists.linux.dev
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
-	Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
-	Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
-	Eric Dumazet <edumazet@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
-	Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados <joel.granados@kernel.org>, 
-	Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
-	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, coreteam@netfilter.org, 
-	kexec@lists.infradead.org, linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
-	linux-usb@vger.kernel.org, samba-technical@lists.samba.org, sparclinux@vger.kernel.org, 
-	linux-m68k@lists.linux-m68k.org, linux-serial@vger.kernel.org, Takashi Iwai <tiwai@suse.de>, 
-	linux-input@vger.kernel.org, linux-raid@vger.kernel.org, linux-ext4@vger.kernel.org, 
-	linux-modules@vger.kernel.org, Chuck Lever <cel@kernel.org>, tytso@mit.edu, 
-	dmitry.torokhov@gmail.com, Petr Pavlu <petr.pavlu@suse.com>, 
-	Anna Schumaker <anna@kernel.org>, yukuai@fygo.io, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>
-Subject: Re: [PATCH RFC 32/38] selftests/proc: check a sysctl listing while
- entries come and go
-Message-ID: <20261103-unwichtig-puten-tauglich-389f0d95257d@brauner>
-References: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org>
- <20261102-work-procfs-bugfixes-v1-32-59422ed3e465@kernel.org>
- <sashiko-outbox-195504@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=ac2.se header.i=@ac2.se header.a=rsa-sha256 header.s=default header.b=ji92g2hu
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by amavisd-new (Postfix) with ESMTP id 8BED644B92;
+	Tue,  3 Nov 2026 18:33:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ac2.se; s=default;
+	t=1793727226; bh=oJk/fXUkfJdDx2eXj2yYL9tfoLm5ga41i/wpcz/MPdg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ji92g2huLF3DMsXPECV7mn7ySAfpSDnlNYs3Q5Fg7tdO8cH1qixO+oy39zuCS5rSw
+	 bnjcfPaTYCws9w4hcm9MSSRXAGrpNasCmUgN/Jvr+IO+gvzwWZbIRWIcdF9FZt/SQq
+	 PDhTBrm4CIxL0i6LMaX7po/J1Jx0hLCsY9LSv7rk=
+Received: by mail.acc.umu.se (Postfix, from userid 24471)
+	id 0507E44B93; Tue,  3 Nov 2026 18:33:46 +0100 (CET)
+Date: Tue, 3 Nov 2026 18:33:45 +0100
+From: Anton Lundin <glance@ac2.se>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, Zev Weiss <zev@bewilderbeest.net>
+Subject: Re: [PATCH] hwmon: (nct6775) Add support for NCT5525
+Message-ID: <auoa+d1nBZeD3U7s@accum.se>
+References: <20261103132948.144216-1-glance@ac2.se>
+ <9e1f1a68-ef65-4e38-9396-48836ff50979@roeck-us.net>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -77,9 +62,51 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <sashiko-outbox-195504@kernel.org>
+In-Reply-To: <9e1f1a68-ef65-4e38-9396-48836ff50979@roeck-us.net>
 
-On Tue, Nov 03, 2026 at 02:48:31PM +0000, sashiko-bot@kernel.org wrote:
-> - [Low] selftests/proc: proc-sysctl-readdir-churn duplicates proc-readdir-churn
+On 03 november, 2026 - Guenter Roeck wrote:
 
-My appetite for churn due to "low" issues in tests is low.
+> On 11/3/26 05:29, Anton Lundin wrote:
+> > Extend nct6775 driver to support NCT5525.
+> > 
+> > Assisted-by: Copilot:GPT-5.6-Terra
+> > Signed-off-by: Anton Lundin <glance@ac2.se>
+> 
+> 
+> I don't havea datasheet for this chip, but I do have to say
+> that this seems to be off just form chip numbering perspective.
+> From the registers it looks like the chip is mostly compatible
+> with the NCT61xx series, but NCT55xx chips are typically scaled-down
+> variants of MCT67xx series chips.
+
+Yes, its quite close. My first quick-n-dirty stab in the dark was to
+just alias it to NCT6116, and that worked surprisingly well.
+
+> I _will_ need to see a datasheet
+> to confirm, or at the very least independent confirmation that the
+> driver is correct.
+
+I have a datasheet which I could send you if you'd like, or if you
+rather request it yourself from Nuvoton.
+
+> Some more comments inline.
+
+i'll go through it and send a v2.
+
+> > --- a/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+> > +++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+> > @@ -25,6 +25,7 @@ properties:
+> >         - nuvoton,nct6797
+> >         - nuvoton,nct6798
+> >         - nuvoton,nct6799
+> > +      - nuvoton,nct5525
+
+I mostly added devicetree bindings because I saw that all the other
+variants the driver supports had them, but then I noticed that nct6126
+was missing.
+
+I won't consume the devicetree bindings, so should I rather leave that
+out until there's a consumer for it?
+
+
+//Anton
