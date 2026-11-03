@@ -1,78 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793687228;
-	b=rswP8n8dy7cgjEdXiMrikyzHev5rptQanyroKtSx+/rECitfYpL8xmHTCuW9rH/WTUgk
-	 ovTbDNec6pUIdG19x48Sto0nomXj4jYu0GEml3YPF7jwxZJrIhOYJ9xdvevJ4GozYOGsT
-	 c8mZwQhBoOlHoWbC7Dp29oBnigVikRvVnwYO9L8hK8U/NwhtGIu35gBC9xBLpiJW8h+Tb
-	 vMobs5N3Z6//Foq1ME98NEE6q2Pz8HgAaSFYJRmHpnCcX+hCHPMFye1mc06QeNwAeXM9e
-	 xniegwTpul9ySTAJ6aDHLRaC+LntLg3XbY33KYKZnnZT5j5GAdZOexm7NurZqtJ2LZA==
+	t=1793688876;
+	b=hzgqnxm3zgzuf0aUiAo+TwbFOHepCXmvsaus4+O16k1bbnO3tlMmS7GNAK/SQbdP73Wx
+	 xzOwuyw17pzLskYehOZKR01L4HyqMkAwrhloAtnQYaLWRgX5Rs/yrtIHrweYslhVn6IcK
+	 5eqreAaTkJs7AG6hEGnM44Bx1G2OzTfXuk+OMdgcjYlJEbhMEwrN+GEiyDeuvQrQThuPC
+	 Ouk0Qu8+orBy7D4vdsbuDAohgoazM3TDZGQOq89zItMIirS0tNttMsfXc/Dh5VDgdO4mg
+	 13lD5Y/t/jfmnd6XcL+jeZEx6/Imiv0ZTsk8HzaRaTu+LUKiTj28eRMK++TurW7lIWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793687228;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:
-	 X-Source-IP:X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
-	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
-	 X-Local-Domain:X-CMAE-Envelope;
-	bh=iZMyxOo+FOjxoMDW77+JGsuZVpdgAUJTgIYFVKEaZYE=;
-	b=XwADa2C33ZgG83Fv4KhSQZQyQYIlzO81lT2+1wn9t2mIyXE91YPmsj9siBh5cULajG8F
-	 vp5ByyOkd/Vl4JbxqgCP7xPL54BQyXk9dlz293OgcQ2HK8SPn/N97zJsF87G4u0yhB2zG
-	 P6VOxJlf9MaPMFprQn33MDj9TWyjZ7RQWy59m6EwUGCjJQu+EiOfcKbyf13jv38VKCDIe
-	 +LbkdBQeyJ/inA/yECYJbHSOXY8EyKiqOyICs3uPoI3J4wlc79K+N4owk9EA6qC6Zwoxg
-	 KjsaPxckFt5VWwK/vfX0Z4I5tZwz7ECP+xPhaQJKA+WOUMIP0JjFwO7KY/35Mv1LXmg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793688876;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:Autocrypt:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=pI+R0vssS3+rBEwGlEmrhAJtAWwC+K6R2fL7Q2wxluc=;
+	b=kHpHcYPZNySrVpcXOaZLKz7xVjV1Av85dZ82VFATW6ctQdNLvHkXM8xPm8vTEwpgtxuC
+	 PzvUVZcMmuK4xW9wuQUrRhISAEDM/i2eLIbmqaHah1ydPBfvqtdCLKxILkTz/bClasLEb
+	 02/LAN95Mz+aVP9ZIR9IYM7nDdFt7t1Zl+JJIuoupoibtIcnfINE5AVg7WrJGidH1jGI4
+	 829cycOww4c4If2fp9RJAZeSjSVW50H8YBv7rAHGwNexqAYmGBxmtJ1E4ZwXseO87faFy
+	 jrFAKpILH896Zgxs8XETeVpx2YPPDQbndp4cA+JCgBmecLIy2XG4qj3v57PsvEJEw6g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b="DNexb+X/";
-	arc=none smtp.remote-ip=44.202.169.37
-Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HVwwGpgK;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA34606A329
-	for <linux-hwmon@vger.kernel.org>; Tue,  3 Nov 2026 06:27:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DDA34606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3EAD606A334;
+	Tue,  3 Nov 2026 06:54:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=DNexb+X/
-Received: from eig-obgw-6004b.ext.cloudfilter.net ([10.0.30.210])
-	by cmsmtp with ESMTPS
-	id O4nwx4DnrJFmFO7z8xCh7b; Tue, 03 Nov 2026 06:27:07 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id O7z8xciBoKD1BO7z8xn5Bd; Tue, 03 Nov 2026 06:27:06 +0000
-X-Authority-Analysis: v=2.4 cv=N6MpF39B c=1 sm=1 tr=0 ts=6ae97eba
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8 a=_f5xWJEEkEkW62GEnhMA:9
- a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=iZMyxOo+FOjxoMDW77+JGsuZVpdgAUJTgIYFVKEaZYE=; b=DNexb+X/ytzl
-	Er/P4cN5w1GVxSkfuCSJHksjLMsBpar7ok8gXPXTAb6WTlMyZBPBfKeRSih7oxYuesfZXL6RWvt6X
-	RpwfNJJRbjinulh6M2PLHsxGZUqjLZOfLvLlig+xwHa9aA4PpMkgHCBhtetzlhiFEKTSQont17lFm
-	fBM8k1p8X96tHtoPj2S/VnM29t8kYnxZUgzJ7+vhGJvNNd7YmyBHwpXKl572Xwuv+nw/KJtXmymzE
-	vXpiw/zNTf4hBXc7U5VM+qGqvXtVsPu3IjOhPiMbMlP7dBTbKtgnA0cGTCvsrRlhrIKr46kW9uYT1
-	MgMS0EpbxigF+BbcGr1I0A==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:46938 helo=server.roeck-us.net)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xO0vt-00000003lZF-2Qud;
-	Tue, 03 Nov 2026 04:25:17 +0530
-From: Guenter Roeck <linux@roeck-us.net>
-To: linux-hwmon@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 056/102] hwmon: (ltc4245) Use 64-bit jiffies for update timestamp
-Date: Mon,  2 Nov 2026 14:51:49 -0800
-Message-ID: <20261102225235.334487-57-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20261102225235.334487-1-linux@roeck-us.net>
-References: <20261102225235.334487-1-linux@roeck-us.net>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HVwwGpgK
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57D471F000C1;
+	Tue,  3 Nov 2026 06:54:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793688875;
+	bh=pI+R0vssS3+rBEwGlEmrhAJtAWwC+K6R2fL7Q2wxluc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=HVwwGpgKph2PTCR3kNBpzgeJl9Fiv96ILTSVlqr7otzEN5KOe+3Oq36TZyy3FWiTn
+	 B5JC9rU3ADl82tq64bDRGFlV2NLyjhAO9fPnLejhbwzeG1Z9dc6ee0GVq9fDWJMr9G
+	 uEn9b1MhNhFVniqfmxfA0bqOs/QBhcC6kPjZ8hJFtdA34IHlyTNGGcCj68Y62ICtjk
+	 Ouq+kpEpWGx9PHR9MkFKZswgqiZXimSJHDR7+eldSuTYGotHgFLXgZCx0dKYEpIAcw
+	 6pYXyTE/pVVs21IvMkWqyQ4k+6ZNZ7Rqbrs3FA5NB7/Klj97W0Huza14rR1CDkHC3E
+	 tLDaFtIRr3wRA==
+Message-ID: <a0736b1b-707e-4f24-8249-c7363c673a43@kernel.org>
+Date: Tue, 3 Nov 2026 07:54:21 +0100
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -82,83 +51,140 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xO0vt-00000003lZF-2Qud
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:46938
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 1
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfCSF9FhMDdP0TW/FpD1YgZotL/DniMn2Z3Sev288NA8v4FkpYpg2mDGpaeZfvOCix7jhVYkGcp2+vHBSZP5++SEShznEZZjCYKKi7XeLjvGkk4df/Ktq
- Qza3X1Gu3yjz7cTF38UEw5q/6SDcL3OsBi533Aw9Z/7mtCg2p9/UJeXtkyF7xwXGmJ/ZDLv+UonoaUsSQwTVWt6CBHxcBEjZ8hseL/ZpLjuCRz1aiez+Iigx
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 19/23] tty: sysrq: let procfs copy in writes to
+ /proc/sysrq-trigger
+To: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+ Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>,
+ Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>,
+ NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
+ Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>,
+ Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados
+ <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>,
+ Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>,
+ linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+ linux-um@lists.infradead.org, linux-wireless@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+ ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org,
+ coreteam@netfilter.org, kexec@lists.infradead.org,
+ linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
+ netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net,
+ linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-cifs@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-sh@vger.kernel.org,
+ linux-usb@vger.kernel.org, samba-technical@lists.samba.org,
+ sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+ linux-doc@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-atm-general@lists.sourceforge.net, Takashi Iwai <tiwai@suse.de>,
+ linux-input@vger.kernel.org, linux-raid@vger.kernel.org,
+ linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-debuggers@vger.kernel.org, Chuck Lever <cel@kernel.org>
+References: <20261102-work-procfs-drivers-v1-0-a994bd4d3b1a@kernel.org>
+ <20261102-work-procfs-drivers-v1-19-a994bd4d3b1a@kernel.org>
+Content-Language: en-US
+From: Jiri Slaby <jirislaby@kernel.org>
+Autocrypt: addr=jirislaby@kernel.org; keydata=
+ xsFNBE6S54YBEACzzjLwDUbU5elY4GTg/NdotjA0jyyJtYI86wdKraekbNE0bC4zV+ryvH4j
+ rrcDwGs6tFVrAHvdHeIdI07s1iIx5R/ndcHwt4fvI8CL5PzPmn5J+h0WERR5rFprRh6axhOk
+ rSD5CwQl19fm4AJCS6A9GJtOoiLpWn2/IbogPc71jQVrupZYYx51rAaHZ0D2KYK/uhfc6neJ
+ i0WqPlbtIlIrpvWxckucNu6ZwXjFY0f3qIRg3Vqh5QxPkojGsq9tXVFVLEkSVz6FoqCHrUTx
+ wr+aw6qqQVgvT/McQtsI0S66uIkQjzPUrgAEtWUv76rM4ekqL9stHyvTGw0Fjsualwb0Gwdx
+ ReTZzMgheAyoy/umIOKrSEpWouVoBt5FFSZUyjuDdlPPYyPav+hpI6ggmCTld3u2hyiHji2H
+ cDpcLM2LMhlHBipu80s9anNeZhCANDhbC5E+NZmuwgzHBcan8WC7xsPXPaiZSIm7TKaVoOcL
+ 9tE5aN3jQmIlrT7ZUX52Ff/hSdx/JKDP3YMNtt4B0cH6ejIjtqTd+Ge8sSttsnNM0CQUkXps
+ w98jwz+Lxw/bKMr3NSnnFpUZaxwji3BC9vYyxKMAwNelBCHEgS/OAa3EJoTfuYOK6wT6nadm
+ YqYjwYbZE5V/SwzMbpWu7Jwlvuwyfo5mh7w5iMfnZE+vHFwp/wARAQABzSFKaXJpIFNsYWJ5
+ IDxqaXJpc2xhYnlAa2VybmVsLm9yZz7CwXcEEwEIACEFAlW3RUwCGwMFCwkIBwIGFQgJCgsC
+ BBYCAwECHgECF4AACgkQvSWxBAa0cEnVTg//TQpdIAr8Tn0VAeUjdVIH9XCFw+cPSU+zMSCH
+ eCZoA/N6gitEcnvHoFVVM7b3hK2HgoFUNbmYC0RdcSc80pOF5gCnACSP9XWHGWzeKCARRcQR
+ 4s5YD8I4VV5hqXcKo2DFAtIOVbHDW+0okOzcecdasCakUTr7s2fXz97uuoc2gIBB7bmHUGAH
+ XQXHvdnCLjDjR+eJN+zrtbqZKYSfj89s/ZHn5Slug6w8qOPT1sVNGG+eWPlc5s7XYhT9z66E
+ l5C0rG35JE4PhC+tl7BaE5IwjJlBMHf/cMJxNHAYoQ1hWQCKOfMDQ6bsEr++kGUCbHkrEFwD
+ UVA72iLnnnlZCMevwE4hc0zVhseWhPc/KMYObU1sDGqaCesRLkE3tiE7X2cikmj/qH0CoMWe
+ gjnwnQ2qVJcaPSzJ4QITvchEQ+tbuVAyvn9H+9MkdT7b7b2OaqYsUP8rn/2k1Td5zknUz7iF
+ oJ0Z9wPTl6tDfF8phaMIPISYrhceVOIoL+rWfaikhBulZTIT5ihieY9nQOw6vhOfWkYvv0Dl
+ o4GRnb2ybPQpfEs7WtetOsUgiUbfljTgILFw3CsPW8JESOGQc0Pv8ieznIighqPPFz9g+zSu
+ Ss/rpcsqag5n9rQp/H3WW5zKUpeYcKGaPDp/vSUovMcjp8USIhzBBrmI7UWAtuedG9prjqfO
+ wU0ETpLnhgEQAM+cDWLL+Wvc9cLhA2OXZ/gMmu7NbYKjfth1UyOuBd5emIO+d4RfFM02XFTI
+ t4MxwhAryhsKQQcA4iQNldkbyeviYrPKWjLTjRXT5cD2lpWzr+Jx7mX7InV5JOz1Qq+P+nJW
+ YIBjUKhI03ux89p58CYil24Zpyn2F5cX7U+inY8lJIBwLPBnc9Z0An/DVnUOD+0wIcYVnZAK
+ DiIXODkGqTg3fhZwbbi+KAhtHPFM2fGw2VTUf62IHzV+eBSnamzPOBc1XsJYKRo3FHNeLuS8
+ f4wUe7bWb9O66PPFK/RkeqNX6akkFBf9VfrZ1rTEKAyJ2uqf1EI1olYnENk4+00IBa+BavGQ
+ 8UW9dGW3nbPrfuOV5UUvbnsSQwj67pSdrBQqilr5N/5H9z7VCDQ0dhuJNtvDSlTf2iUFBqgk
+ 3smln31PUYiVPrMP0V4ja0i9qtO/TB01rTfTyXTRtqz53qO5dGsYiliJO5aUmh8swVpotgK4
+ /57h3zGsaXO9PGgnnAdqeKVITaFTLY1ISg+Ptb4KoliiOjrBMmQUSJVtkUXMrCMCeuPDGHo7
+ 39Xc75lcHlGuM3yEB//htKjyprbLeLf1y4xPyTeeF5zg/0ztRZNKZicgEmxyUNBHHnBKHQxz
+ 1j+mzH0HjZZtXjGu2KLJ18G07q0fpz2ZPk2D53Ww39VNI/J9ABEBAAHCwV8EGAECAAkFAk6S
+ 54YCGwwACgkQvSWxBAa0cEk3tRAAgO+DFpbyIa4RlnfpcW17AfnpZi9VR5+zr496n2jH/1ld
+ wRO/S+QNSA8qdABqMb9WI4BNaoANgcg0AS429Mq0taaWKkAjkkGAT7mD1Q5PiLr06Y/+Kzdr
+ 90eUVneqM2TUQQbK+Kh7JwmGVrRGNqQrDk+gRNvKnGwFNeTkTKtJ0P8jYd7P1gZb9Fwj9YLx
+ jhn/sVIhNmEBLBoI7PL+9fbILqJPHgAwW35rpnq4f/EYTykbk1sa13Tav6btJ+4QOgbcezWI
+ wZ5w/JVfEJW9JXp3BFAVzRQ5nVrrLDAJZ8Y5ioWcm99JtSIIxXxt9FJaGc1Bgsi5K/+dyTKL
+ wLMJgiBzbVx8G+fCJJ9YtlNOPWhbKPlrQ8+AY52Aagi9WNhe6XfJdh5g6ptiOILm330mkR4g
+ W6nEgZVyIyTq3ekOuruftWL99qpP5zi+eNrMmLRQx9iecDNgFr342R9bTDlb1TLuRb+/tJ98
+ f/bIWIr0cqQmqQ33FgRhrG1+Xml6UXyJ2jExmlO8JljuOGeXYh6ZkIEyzqzffzBLXZCujlYQ
+ DFXpyMNVJ2ZwPmX2mWEoYuaBU0JN7wM+/zWgOf2zRwhEuD3A2cO2PxoiIfyUEfB9SSmffaK/
+ S4xXoB6wvGENZ85Hg37C7WDNdaAt6Xh2uQIly5grkgvWppkNy4ZHxE+jeNsU7tg=
+In-Reply-To: <20261102-work-procfs-drivers-v1-19-a994bd4d3b1a@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 32-bit architectures, jiffies and time_after() use 32-bit values and
-wrap after ~24.8 days at HZ=1000. If sensors are not polled for longer
-than half the wrap period, time_after() can return false and prevent
-cached sensor and GPIO readings from updating properly.
+On 02. 11. 26, 16:07, Christian Brauner wrote:
+> Implement ->proc_write_buf() so procfs copies in what is written before
+> it pins the entry, and handle the keys from that copy. Writes larger
+> than PAGE_SIZE - 1 bytes fail with -EINVAL now. They used to trigger the
+> first key, or all of them in bulk mode. procfs allocates the copy, which
+> is as small as the write, opening the file allocated as much already.
+> 
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
-Convert last_updated to u64 and use get_jiffies_64() and time_after64()
-to avoid wraparound issues on 32-bit systems.
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
 
-Fixes: 6e34b187bc21 ("hwmon: Add LTC4245 driver")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/ltc4245.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+> ---
+>   drivers/tty/sysrq.c | 9 +++------
+>   1 file changed, 3 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
+> index f4571d05b496..99363e1b59ed 100644
+> --- a/drivers/tty/sysrq.c
+> +++ b/drivers/tty/sysrq.c
+> @@ -1200,17 +1200,14 @@ EXPORT_SYMBOL(unregister_sysrq_key);
+>    * However, if the first character is an underscore,
+>    * all characters are processed.
+>    */
+> -static ssize_t write_sysrq_trigger(struct file *file, const char __user *buf,
+> +static ssize_t write_sysrq_trigger(struct file *file, char *buf,
+>   				   size_t count, loff_t *ppos)
+>   {
+>   	bool bulk = false;
+>   	size_t i;
+>   
+>   	for (i = 0; i < count; i++) {
+> -		char c;
+> -
+> -		if (get_user(c, buf + i))
+> -			return -EFAULT;
+> +		char c = buf[i];
+>   
+>   		if (c == '_')
+>   			bulk = true;
+> @@ -1225,7 +1222,7 @@ static ssize_t write_sysrq_trigger(struct file *file, const char __user *buf,
+>   }
+>   
+>   static const struct proc_ops sysrq_trigger_proc_ops = {
+> -	.proc_write	= write_sysrq_trigger,
+> +	.proc_write_buf	= write_sysrq_trigger,
+>   	.proc_lseek	= noop_llseek,
+>   };
+>   
+> 
 
-diff --git a/drivers/hwmon/ltc4245.c b/drivers/hwmon/ltc4245.c
-index d87aa9c32c87..46d521ee5aca 100644
---- a/drivers/hwmon/ltc4245.c
-+++ b/drivers/hwmon/ltc4245.c
-@@ -51,7 +51,7 @@ struct ltc4245_data {
- 	struct i2c_client *client;
- 
- 	bool valid;
--	unsigned long last_updated; /* in jiffies */
-+	u64 last_updated; /* in jiffies */
- 
- 	/* Control registers */
- 	u8 cregs[0x08];
-@@ -88,7 +88,7 @@ static void ltc4245_update_gpios(struct device *dev)
- 	 * If the last reading was too long ago, then we mark all old GPIO
- 	 * readings as stale by setting them to -EAGAIN
- 	 */
--	if (time_after(jiffies, data->last_updated + 5 * HZ)) {
-+	if (time_after64(get_jiffies_64(), data->last_updated + 5 * HZ)) {
- 		for (i = 0; i < ARRAY_SIZE(data->gpios); i++)
- 			data->gpios[i] = -EAGAIN;
- 	}
-@@ -130,7 +130,8 @@ static struct ltc4245_data *ltc4245_update_device(struct device *dev)
- 	s32 val;
- 	int i;
- 
--	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
-+	if (time_after64(get_jiffies_64(), data->last_updated + HZ) ||
-+	    !data->valid) {
- 		/* Read control registers -- 0x00 to 0x07 */
- 		for (i = 0; i < ARRAY_SIZE(data->cregs); i++) {
- 			val = i2c_smbus_read_byte_data(client, i);
-@@ -152,7 +153,7 @@ static struct ltc4245_data *ltc4245_update_device(struct device *dev)
- 		/* Update GPIO readings */
- 		ltc4245_update_gpios(dev);
- 
--		data->last_updated = jiffies;
-+		data->last_updated = get_jiffies_64();
- 		data->valid = true;
- 	}
- 
+
 -- 
-2.45.2
-
+js
+suse labs
