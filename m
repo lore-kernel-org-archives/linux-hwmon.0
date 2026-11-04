@@ -1,110 +1,143 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793822002;
-	b=ECuKG9HJ8gW2JjDJkubf4neGKb6WwQJfOZRuzRAKDupmrREc3sfNUCZzP+p/Isddiaiv
-	 g9YN93iF2douLixEmxtLx3TDBb3vh/OqQRqgw6NYBsjkeySzcxUXg6RESmW86CGdfXqk7
-	 XHA/BriDZ731eCWi1f8/oIwkg9OLI+ThIcGntgkoMpdcQYG5V0Y9A1NgAeiO6ydiGx3p6
-	 xSwYj5zZS9XpbvHAvwie36zI4JCGvJq408pc3E1DTKsLiZSp/nv+FJciEd+oFWZkIU7fC
-	 7KzXqK3UtVAng6WihomI3kj/0/eBixpAAln58KRNAJhKHCZG2sCCxGnfkRWMI4elvtg==
+	t=1793822018;
+	b=lDeTG6mKuC6zu2Jx4NiMfQo/HOltJZV0QfLIeSdSSoj9ueMOXxfdpwSbQaELMsAxiJr1
+	 YAUkAxyGbiGL6CKiKHJBYmRNNFFpkGTfPhU75Gt4arlnoHi877wJ3dp3GZhp35TQSSglJ
+	 cye9UPTthMXj+RNBw8Sy2MqeO0m9FtDsOQ5urLeJmiW8AkuUwd6siFFlYbfeVLww1f/JN
+	 LyRTpnfVBpXomSRqEBtwRhd/Il6a4EWowzzSHmSBKnNuNOSVL0S7+xJa6Pi2CJiwno5Pz
+	 1YTuE8unMfK3SFC5t5RgIa10da0bLjugUBZyx4GRAvZGoC4II7JYeiC/DPyBtx8FpYA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793822002;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=4FMH8RRbXwyOGE4j1ACekL014/FVLGRJa3NjwiBwv4k=;
-	b=JNBAmi0sONZBtWaEDcB8QgzjptMG+xE0AmdIQDA9RaR6h9UXHlHDZ1a3MjBZWdViHUV4
-	 eEibfLOVv+xUfrzDoPJCl9tiaYHX9mHh5+Lbd5u56teHdfAxoJ3Vm4ITlZ9Ho+hoqDDWM
-	 b7m8ht7zVuCuIiv5Nw4VY5U3G5Zkdjun+PZCVnDt3712xhx8ufv06fyOZdsD068u9nHk7
-	 FrNdpPojZjxPjJyKtOehCyQ0dW31nP8w1ozce9DWK9BEKcW/RVAv/OrNlzjIeu4l6Khh8
-	 ef3YpLqGtUhj+xTKO5tMei3BVq+joFQ0YI2IjysakxuOyt8RYk9c544ZSeawHhKO6NA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793822018;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=j77TQJheY9BNkuAUNT0wTTk7+HF7XEvTQj5keMW7u/I=;
+	b=238hIq3g9sQyXyNrcba1IVBpkD6TEU7SrcpmIBF/f6eLJoXBKdCjuYwiBkWlSKEbVJpJ
+	 Y2vprkQFLxpc15Fj7i/cwOaSwAOW1tGWr+T6FKVtYumqSRnJSsPVZp+coxnNqlFM9mADt
+	 xBcFwMXEVvxhgKCktR5j3nwJv7M1REX9FwB54XvaMtOTE4K7OO+BGc+X7lUzlWvht4JtT
+	 BrWP6CbEK9F5Z3JqTkG+xM6c1MlmD8BPIL6uvbW4v+WBeozHWROv0DSn32Q/f6dKdIFqK
+	 vRPT0bPbwWEBTksJAPiuoKkDHSLRGf3cyMK3c62vC5OBfoCsCBIfaKaJt2jIKSLd6rA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gqnu7WCa;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=snwKVTUy;
+	arc=none smtp.remote-ip=74.125.82.50
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E17E2609693B;
-	Wed,  4 Nov 2026 19:53:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02AA60960A8
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Nov 2026 19:53:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C02AA60960A8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gqnu7WCa
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1749F1F00919;
-	Wed,  4 Nov 2026 19:53:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793822001;
-	bh=4FMH8RRbXwyOGE4j1ACekL014/FVLGRJa3NjwiBwv4k=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=gqnu7WCank0HPKzxIIuR0c+Y7qFDIfOx4OhXQRsH+bwXeorJsZ7tfbWZNyh3GbhMt
-	 NxTOPufkaHrp11YLfNa93/yXQ6n5h0z6fpBeg6Ly2XOx7LhglEYilynsq/HFu5e5m3
-	 ATdWLZ7uW1x0Y8xMKxBVUpJaU7+YU0ZruYzah//QhnYRcr/O7neJgjfCiw3cbGeL0f
-	 /scHMQ7wD59wgQWjLWITDYTvE8W4dpcfUNiJQWmwj5fEXCsq8JXV17jYeqe34cF0gX
-	 jLq6ATZZOpXLQz2og6LqAuxsn4M17sNhw8oW2RQKUyiL2Rz59/u2T2Au+Zeqcz04DQ
-	 gpufF/LrdsChg==
-From: Christian Brauner <brauner@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Jann Horn <jannh@google.com>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Chris Mason <mason@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	NeilBrown <neil@brown.name>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Christoph Hellwig <hch@lst.de>,
-	Greg Kroah-Hartman <gregkh@suse.de>,
-	Joel Granados <joel.granados@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Jan Kara <jack@suse.com>,
-	linux-kernel@vger.kernel.org,
-	linux-nfs@vger.kernel.org,
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=snwKVTUy
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-15ea896ddc8so1943073c88.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 04 Nov 2026 11:53:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793822017; x=1794426817; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=j77TQJheY9BNkuAUNT0wTTk7+HF7XEvTQj5keMW7u/I=;
+        b=snwKVTUy9LvBIeZYEhCXzEnRQp2wodIFGKY4wUJ7ztWzLVbTd1bI4nr3mGXqrQXFPO
+         83/HtfEisb8NH+6TKxRanc+LHldo4EqJ43kuJQJyWdqbEb2qaKJ6REpFD/Jt5EslTB+S
+         zscnal0Mvh+NX91kiP+siOH9v7tqEITC6j8TarPFAWvrj5zWcfX48CLTn8neQnUjk0aG
+         DdWT6beozrR7hgNmLfQYYUBVHi+K7i2h0gb1c9TLmiQO015gt7sDVMBLhaHB5Rgu8J3E
+         vDvOsMZkyxTj1DF9F5rnA3mHVh2Jx0j8rAylzbJGVo40aem9854GCIhJgMsA/lSZgxl8
+         K73A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793822017; x=1794426817;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=j77TQJheY9BNkuAUNT0wTTk7+HF7XEvTQj5keMW7u/I=;
+        b=0yA7dxJEJ5EaiPGooERIQThCfe13i98sVE2X0d/qhRwYdXeFRKgC+CvCMFscy9HpN3
+         YLQkA8U+2bGtwHiS6SiOQOlhxQwQxL9kSn6O69LSTcGqCctM7HZLI04iaxerN1/7xlYn
+         bMndz/+/f1VdznA15KIhX+DJ4V2euc02rH4WcUFLntMg6j9pvt+SyCDNG8u8XtJU+fuk
+         3c4ay+SNwaUb0NN2HmXM3N1Jj+rjS94d5hplrD9dfiFtcBPxEKtpIrTAuakrt33jG0Jf
+         mico2TRnUpqZx4xNFv7MQlDxuRCGt14zaxv+Vf1c/sbFeY1AC2WBA1J1Iuyqxvattx/n
+         fyXw==
+X-Forwarded-Encrypted: i=1; AKwUvBwpJ4O0R3XBfClXB8rThnj0IWoeKmMzBogXmcQRaDBwArVyAv2B/u8PaZSBZsrPm0u1OmGs9t2g/26DZw==@vger.kernel.org
+X-Gm-Message-State: APuU4Z+QIR2K58nH497R4Gs8RHI/Wzt80403eOcaFlg0MPRuPXcfkqXv
+	wDOM8eh82P1DyQH5PyydUBO4iBRJGYXshcoJcMHZnphB35Ku6MRwmVk=
+X-Gm-Gg: AYBFou1apIZGin+GF7dXjM1TOXMWtEvmlCneYxtGS0Ds9mhnksYiMumJnGLeiYG1DCQ
+	GSYk20gW10lgHRiDuIXEei9OL3NfDHdKPcV4HYe0p/P+irCtDO4jayh6hDi7HTrTVf1niuKunLa
+	wgM899IrMYF7W7ANYWHxnqwT77pTlztexSmuz+wYAERKHYo1wyQHhI3RNFdbXGmu0burnNDq2jC
+	cNPvgDo3FzYMokx57yHw2xKZveP0TmbzX8wmC8PwVtKQn1KB59iohn+/sz0Lwo2vkYhIDbZohz4
+	VoBdtkVwihXyRYwLkMoKj57l4idzn/672F5V6wvBHZFeBbmBlgBy0J0VI9ZuD313+0Ri/MC2h2x
+	RmBfOM5c3mAoAXZypaac8LGj+CvikNv8viXY0aMnEgUEQJ3lYjDu01zaQ8qNyk2R36sP6VxktnX
+	L2ImlHZZFJuvgUbNXQFx1H63/sOSK/b3voyMF1vy/A5UXGWdFcHMrnr5FnJP+h1umwdX42ArnB5
+	l3+2K3CpxUauUtae6D57GdimRaXVrVDp0i+GodCvLBFXRXZ2bYI86+VKrLdJyWlptf65Oi2ko2K
+	6AjE2bMdmrq7bvvllm5sHxg1RCtLFuRjNK3LF5wf5B6hAoB7f+VNZEfagh/jANbR
+X-Received: by 2002:a05:701b:4241:20b0:143:2968:564c with SMTP id a92af1059eb24-1ac5b9cb040mr26455364c88.26.1793822016817;
+        Wed, 04 Nov 2026 11:53:36 -0800 (PST)
+Received: from at-Standard-PC-Q35-ICH9-2009 ([106.194.66.249])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b245c2d69asm9239684c88.11.2026.11.04.11.53.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2026 11:53:36 -0800 (PST)
+From: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>
+To: jic23@kernel.org
+Cc: alexandre.belloni@bootlin.com,
+	andy@kernel.org,
+	asahi@lists.linux.dev,
+	atharvatiwarilinuxdev@gmail.com,
+	bhelgaas@google.com,
+	bp@alien8.de,
+	brgl@kernel.org,
+	dave.hansen@linux.intel.com,
+	dlechner@baylibre.com,
+	dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com,
+	griffin@kroah.com,
+	hansg@kernel.org,
+	hpa@zytor.com,
+	ilpo.jarvinen@linux.intel.com,
+	j@jannau.net,
+	jarkko@kernel.org,
+	jmorris@namei.org,
+	keyrings@vger.kernel.org,
+	lee@kernel.org,
+	lenb@kernel.org,
+	linusw@kernel.org,
 	linux-acpi@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	linux-wireless@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	netdev@vger.kernel.org,
-	ntfs3@lists.linux.dev,
-	platform-driver-x86@vger.kernel.org,
-	coreteam@netfilter.org,
-	kexec@lists.infradead.org,
-	linux-pci@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	netfilter-devel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	ibm-acpi-devel@lists.sourceforge.net,
-	jfs-discussion@lists.sourceforge.net,
-	linux-alpha@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-cifs@vger.kernel.org,
-	linux-fbdev@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-sh@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	samba-technical@lists.samba.org,
-	sparclinux@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-doc@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-atm-general@lists.sourceforge.net,
-	Takashi Iwai <tiwai@suse.de>,
-	linux-input@vger.kernel.org,
-	linux-raid@vger.kernel.org,
-	linux-ext4@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-debuggers@vger.kernel.org,
-	"Christian Brauner (Amutable)" <brauner@kernel.org>,
-	Chuck Lever <cel@kernel.org>
-Subject: [PATCH RESEND v2 14/30] profiling: let procfs copy in writes to /proc/profile
-Date: Wed,  4 Nov 2026 20:53:06 +0100
-Message-ID: <20261104-work-procfs-fs-v2-14-319e0f9a8aae@kernel.org>
-In-Reply-To: <20261104-work-procfs-fs-v2-0-319e0f9a8aae@kernel.org>
-References: <20261104-work-procfs-fs-v2-0-319e0f9a8aae@kernel.org>
+	linux-iio@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-leds@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux@roeck-us.net,
+	mfd@lists.linux.dev,
+	mingo@redhat.com,
+	neal@gompa.dev,
+	nuno.sa@analog.com,
+	paul@paul-moore.com,
+	pavel@kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	rafael@kernel.org,
+	roberto.sassu@huawei.com,
+	serge@hallyn.com,
+	sre@kernel.org,
+	sven@kernel.org,
+	tglx@kernel.org,
+	wim@linux-watchdog.org,
+	x86@kernel.org,
+	zohar@linux.ibm.com
+Subject: [RFC PATCH 14/14] mfd/macsmc: add ioctl to access smc keys
+Date: Wed,  4 Nov 2026 14:53:17 -0500
+Message-ID: <20261104195317.8284-1-atharvatiwarilinuxdev@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261101013817.22d67ea7@jic23-hlaptop>
+References: <20261101013817.22d67ea7@jic23-hlaptop>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -114,55 +147,21 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1504; i=brauner@kernel.org; h=from:subject:message-id; bh=acPYXqQQVYOg2sB+M+GQAGt+iBO20XAT2Sfl3M0drAc=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWS97rHOf25YKDbxbO9Bg6IFQW80Jrk2dVu9Wx+89J/Uj +nLeu/rdpSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEykIZiRYcq1Of62b8t3Tr08 3yy0w/fMvbrULi7+T2u03cst/b77X2BkOMOyo3gzb8Wco9XFOhk9DzgWqprLqslOEzaU3DZxl4A KIwA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
 
-Implement ->proc_write_buf() so procfs copies in what is written before
-it pins the entry, and take the multiplier from that copy. Writes
-larger than PAGE_SIZE - 1 bytes fail with -EINVAL now.
+> If this isn't matching some legacy interface, then we need more
+> on what these do.  Maybe they are suited to some other kernel
+> interface? In particular they might need the various controls
+> on how destructive they are that something like fwctl brings.
+> 
+> Generally an arbitrary opaque path to firmware isn't a good idea...
+> 
+> Jonathan
 
-Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
----
- kernel/profile.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+Here its required, if we write CPU/GPU Pstates and PPT to
+some keys (MSTS MSPC HE0N), we can reduce the temp by 10C
+And We can fix the dreaded PROCHOT signals on macs, Giving
+Same temps as macOS.
 
-diff --git a/kernel/profile.c b/kernel/profile.c
-index 820d5ec909d4..dc2db66a77d2 100644
---- a/kernel/profile.c
-+++ b/kernel/profile.c
-@@ -189,16 +189,14 @@ int __weak setup_profiling_timer(unsigned mult)
-  * Writing a 'profiling multiplier' value into it also re-sets the profiling
-  * interrupt frequency, on architectures that support this.
-  */
--static ssize_t write_profile(struct file *file, const char __user *buf,
--			     size_t count, loff_t *ppos)
-+static ssize_t write_profile(struct file *file, char *buf, size_t count,
-+			     loff_t *ppos)
- {
- #ifdef CONFIG_SMP
- 	if (count == sizeof(int)) {
- 		unsigned int multiplier;
- 
--		if (copy_from_user(&multiplier, buf, sizeof(int)))
--			return -EFAULT;
--
-+		memcpy(&multiplier, buf, sizeof(int));
- 		if (setup_profiling_timer(multiplier))
- 			return -EINVAL;
- 	}
-@@ -209,7 +207,7 @@ static ssize_t write_profile(struct file *file, const char __user *buf,
- 
- static const struct proc_ops profile_proc_ops = {
- 	.proc_read	= read_profile,
--	.proc_write	= write_profile,
-+	.proc_write_buf	= write_profile,
- 	.proc_lseek	= default_llseek,
- };
- 
-
--- 
-2.53.0
-
+But you and Sasha are right, that exposing all keys is a
+bad idea, so i have restricted writing to some keys only.
