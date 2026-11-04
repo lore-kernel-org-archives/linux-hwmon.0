@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.39
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793833943;
-	b=lUZA06V/CUmQySVfpWtAcobGTGqVVfsnfscO3omgXFo7RzwnlLej57G+8iEVEANTmgle
-	 PKMprvcZM8EKRyEFMepNE89UmmQr3XOVcrRRSyjORwT3WUSg+7z9uXt7pMNZzsWDLxKDv
-	 bI7ONFiv001cS/GaZq8CfGDeB3KWdYDbTm+KoDtxEx7LI7BkdhAwOlP7g6qnluivbUNVe
-	 d73NaWk8WTkbhUlovID31O2QSuTsxS377gza6e6zzIjtoRAExyw/zDz0+HWdZds0VIoph
-	 bh2rF+0hdqFlm37J4wOifnMnsbMJHB8uDbJvyCaSWoNZyWqtey5GbW6V7CWZ2PJ1oTA==
+	t=1793834452;
+	b=3GsnkCdwaGCxb4Sx0PJ8D+SjONyJ4xHHq+1b1LyOkRLBhQ+hj+/hUC3z2ynIfUoTmwPd
+	 /YB+1Y8EVMHRoZNjjM0WVwAy4llFfonBFWPOGaYxuMPJaeaqpgJNKduZGZEbP1nKgl86f
+	 Aqgb50BgaNwk97IVCwrU/8yAQSwjnOBN4tjVKsCe8oUgWLUqaAeEDF8KNauGy2+yKPNIS
+	 9rNcC1/0z1lCRLddKIM9XL06iehE1U0AZwIfyFij+Q6YoNtY0HWmy3R62bNScbqxNLcU6
+	 cSIKPiy8I6GNg013c3RQsuNveTakUVcBnizVClBhSgwQ1khasXzFLYj4Eyqi4j8ChAg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793833943;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793834452;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
 	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
@@ -15,57 +15,58 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
 	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=Tt8f6xDLrLqin799RWKKR1n45eTMaTLPMr99emxaFKs=;
-	b=1tsyJ2uTRl1sRmUj7z4heHZT7Dc95ehi8yYKTeF/inogLftu/ueU4eAWYTgRna9CEjwQ
-	 /KxC0cUDeo5NbK9zGquvroY3g0oX/fbTJnoXW6rxBC7B9em9ng3eq6SwIjBjmFeARDSvv
-	 4IjZGZmwIAQ3IsDDw4LXLUc0I3abmRraGJvpwSfxeYhWkTCMMQD61f736ozHbrqx0cA4a
-	 a2rMm4RkcQYWgw8i4OvVbbdjGiCBV9VXOt/pV9ELHzO3E1dvYoE/egLuGDkmMgODv/di1
-	 qhNUvpUFC7tEm0leHrvQ/06N8XXfJpv/ANx9b2T5S49fYPT9zdbigei1aA2ov9HgNJg==
+	bh=8ioPBLXoKsZSCxTIuHLWWhHJhXU/FTy/hw4maw0vQoQ=;
+	b=SAnva1vUaiJhIorTpcrnFkvSK+Sf+nwI0Eh9bzHUf/KO1Xmoa48VuDRq3VM/vjrmRqRX
+	 6frZZGaKlE5Id4IEx1zc/1/gJkm4e8RGxNhnzgcTuP1OjXWbx/Cig72JE6AA26jztjkla
+	 iy5eJ6eAwxHbLyCiiBg2zQFdkh7eGSZ5/LbD+IGPOEWn4X+oLqwXTXeKjhe3o/TykW0fd
+	 VqQd4AqfqJ5CDMqgqudjfwob/VDVjNr7Qm2pFzsqcCmoIa9fG8NdjMdaVZDO3wCBG70ur
+	 PTqizmbY9CH4pZ3CXIxrIi2722WKh3xu6SWLwsXzg/mbq9+sXD72i2cgBhUhixV3PnA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=jk0v2RLd;
-	arc=none smtp.remote-ip=44.202.169.39
-Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=Gn1xrYC2;
+	arc=none smtp.remote-ip=35.89.44.39
+Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88B0C606A31B
-	for <linux-hwmon@vger.kernel.org>; Wed,  4 Nov 2026 23:12:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 88B0C606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE59F606A31B
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Nov 2026 23:20:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CE59F606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=jk0v2RLd
-Received: from eig-obgw-5004b.ext.cloudfilter.net ([10.0.29.208])
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=Gn1xrYC2
+Received: from eig-obgw-6006b.ext.cloudfilter.net ([10.0.30.211])
 	by cmsmtp with ESMTPS
-	id OgeuxkrsoOOJnOk9VxUsdn; Wed, 04 Nov 2026 23:12:21 +0000
+	id OiGAxtxfzyb4YOkHjxDP11; Wed, 04 Nov 2026 23:20:51 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id Ok9UxktnOuJrPOk9VxMCjU; Wed, 04 Nov 2026 23:12:21 +0000
-X-Authority-Analysis: v=2.4 cv=WLZ/XmsR c=1 sm=1 tr=0 ts=6aebbbd5
+	id OkHixa1TB3MEFOkHjxFHaJ; Wed, 04 Nov 2026 23:20:51 +0000
+X-Authority-Analysis: v=2.4 cv=HJrDFptv c=1 sm=1 tr=0 ts=6aebbdd3
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=Ikd4Dj_1AAAA:8
- a=4tplyJ8CkqBLgWwfL5gA:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8
+ a=ICjA5wv23ds22tp88nIA:9 a=QEXdDO2ut3YA:10 a=oR4HUqRzxioTCyxudRYx:22
+ a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=Tt8f6xDLrLqin799RWKKR1n45eTMaTLPMr99emxaFKs=; b=jk0v2RLd7V7t
-	5Isf0VkvVhm1CuU1Q3RSiK99/KOewZDK8dBIY/NTEWbfgyJ4fdhWKlqFCTr1VRa57ejBKBgiMl3lV
-	A3/PNCXXbStbhwVugNt35kbhfLLtsbNFg5bQcaiOPWqYwn8/zqOYqh64z9uH8E5v0ULcP56wBOqqQ
-	+asIZgOTLyqGTq2MPy3SSmu8OfXCqlZxjj0zrg40AInLXepr89CJtfXuo0efQ7dQMJgVziAm/24dB
-	YTB17xeRw2s8WVVK14fR7EbhscLTjwz5H7gIK+46zt39K6OtjMHxpkMCRN4axqj99K6NiVqoRkB9v
-	SJ6k8Zu7oP8J8BfRPUtcWQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:45402)
+	List-Archive; bh=8ioPBLXoKsZSCxTIuHLWWhHJhXU/FTy/hw4maw0vQoQ=; b=Gn1xrYC2uGjp
+	bqKKFTTS4WIXZgyiBILwrchjjx89kZxtorGqvtK/hStfakwqaVudE41JTRjB4g3SA1qvneppQfLNw
+	TqMWK5rNQklxO0MdL/aLjLlQCjtEzPUtGMZKNi+LfTExisDKZwCtRE4cZzK1IwbmktM7K611RF75y
+	h+mwkHDyW+0jxeYNKa6c8o54eomgotSugnh6Nt58/JMDKKptbeZKKaJvr9XDhZ8kr0V0tyipopDbL
+	ej7jFEIo813V4HqI2kd+5XpC+IiO6C+luzBeSRzk1oN9kSnxnUgUOQkD4jHoVKuMUGo3R7oRIpdkG
+	H7/wNGD19k0em/wdBzSf4w==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:60068)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xOk9U-00000001X8O-2xzN;
-	Thu, 05 Nov 2026 04:42:20 +0530
-Message-ID: <1171e691-dea8-4ebf-8bbb-9d524974fd1c@roeck-us.net>
-Date: Wed, 4 Nov 2026 15:12:19 -0800
+	id 1xOkHi-00000001byH-28C7;
+	Thu, 05 Nov 2026 04:50:50 +0530
+Message-ID: <5612f56c-fec6-47fd-b2d1-9d21bcf56124@roeck-us.net>
+Date: Wed, 4 Nov 2026 15:20:49 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -76,10 +77,13 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (pmbus/mp2975) Get vout fault limits dynamically
-To: Felix Radensky <fradensky@nvidia.com>
-Cc: Vadim Pasternak <vadimp@nvidia.com>, linux-hwmon@vger.kernel.org
-References: <20261104093213.2422350-1-fradensky@nvidia.com>
+Subject: Re: [PATCH 2/2] hwmon: pwm-fan: use managed timer shutdown
+To: Kirtikumar Anandrao Ramchandani <kirtiar15502@gmail.com>,
+ Hans de Goede <hansg@kernel.org>
+Cc: Matti Vaittinen <mazziesaccount@gmail.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20261105-kasync-devm-timer-1-kirtiar15502@gmail.com>
+ <CADZg-m3OJAhUi8EzBeMQbcKKVTkBBN70mnkGmJzkj2t54xFxDQ@mail.gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -125,7 +129,7 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20261104093213.2422350-1-fradensky@nvidia.com>
+In-Reply-To: <CADZg-m3OJAhUi8EzBeMQbcKKVTkBBN70mnkGmJzkj2t54xFxDQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -136,97 +140,83 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xOk9U-00000001X8O-2xzN
+X-Exim-ID: 1xOkHi-00000001byH-28C7
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:45402
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:60068
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 1
+X-Email-Count: 5
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfCkTz9gVRCo9Vpg9au3iE1N0vRvPYnGt/GWcQABeYWzDRMZ/YEmxT45kSCxiNvOooIXH8eWViW2D2JLLxhoMaczfNuwPnmtMlfSeochTZtbaP7886QFt
- vNodDzh9ObHjGXl6NVBwnqyC8L9N/g4zdn0eSpEhu29Jh/2f+FQi63hB4a1Js0/xAiHhWhDBao3ZuYWGKCMRtT8LRxVRq227je9kh5C+lt7qj1oh/fFuhtbm
+X-CMAE-Envelope: MS4xfKlV89b7Z18B9ehUiOkY93n5l9rwnnGTlGfj3x5Aj5MVay/ny5KryMuYuDxdPqfFjvrxc79x3PHF+xPCxCmx0CR10grayF1GIP2Tv7xringDoQlGOEpb
+ eNd3e5LqoNvIHwMkl3CbtHg/MIBiURvteQTkLZGMynsI6SL9XLOl0xu4XnAuYEqrcCwOkJDcqP3fKORS93V6h4G+dB0NugULp3tB/O3FNvcJSIsQQeMGhXyC
 
-On 11/4/26 01:32, Felix Radensky wrote:
-> The over- and under-voltage fault limits of the tracking mode are
-> relative to the voltage reference, which follows the VID/AVS requests
-> issued to the device and therefore changes at runtime.
+On 11/4/26 15:03, Kirtikumar Anandrao Ramchandani wrote:
+> Replace the private devres timer cleanup action with
+> devm_timer_autoshutdown(). Keep initialization and action registration at
+> their existing positions, preserving the cleanup order. The system
+> shutdown path continues to call timer_shutdown_sync() directly.
 > 
-> The driver reads the voltage reference once during probe and derives the
-> limits from that snapshot, which the PMBus core caches in addition. As a
-> result in2_crit and in2_lcrit reflect the operating point at probe, rather
-> than the thresholds the device enforces. On systems where the device
-> supplies the CPU core voltage, in2_crit was reported anywhere between
-> 1.15V and 1.70V across identical systems, causing false over-voltage
-> reports once the CPU voltage exceeded the value latched at probe.
-> 
-> Read the voltage reference and the over-voltage offset selector whenever
-> a limit is requested, and mark both limits with pmbus_set_update(), so
-> that the core does not cache them. The voltage reference is available on
-> page 3 only. Let the core change the page, so that the page it caches
-> matches the device, except for a single rail configuration, for which the
-> core does not issue PAGE commands. Retry a failed page change once in that
-> case, since the core would not set the page again later on. Likewise, set
-> the rail page again if the change to page 3 fails, since the device can
-> then be on page 3 while the core still caches the rail page.
-> 
+> Signed-off-by: Kirtikumar Anandrao Ramchandani <kirtiar15502@gmail.com>
 
-This does not explain why the retry would be necessary or even make sense.
+I fail to see how this would improve the code. This looks like just
+a random change to me with no real benefit. It just replaces
+devm_add_action_or_reset() with devm_timer_autoshutdown().
 
-> With the selector read at runtime, a device configured with an
-> unsupported selector no longer fails to probe. The OVP1 threshold, which
-> does not depend on the selector, is reported for it instead, with a
-> warning.
-> 
-> Clamp the under-voltage limit to zero, since the offset can exceed a low
-> voltage reference, while a negative value would be reported as a read
-> error.
-> 
-> Fixes: 2c6fcbb21149 ("hwmon: (pmbus) Add support for MPS Multi-phase mp2975 controller")
-> Signed-off-by: Felix Radensky <fradensky@nvidia.com>
-> Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
-> ---
-> Tested on a switch platform carrying twelve MP2975 devices, twenty one
-> rails in total.
-> 
-> On the rail supplying the CPU core voltage in2_crit followed the CPU,
-> reading 1150mV at idle and up to 1720mV under load, where the unpatched
-> driver reported a constant 1195mV, derived from the reference latched at
-> probe. in2_crit and in2_lcrit, which are obtained through separate page 3
-> excursions, agreed on the same voltage reference within the P-state jitter
-> between the two reads.
-> 
-> The remaining rails have a static reference, and reported the same limits
-> as before the change.
-> 
-> A single rail device, for which the PMBus core never writes PAGE, was
-> exercised with 400 page 3 excursions, with no page 3 register value
-> observed in place of the sensor values. A dual rail device, for which the
-> core changes the page, was exercised with 800 page 3 excursions, each
-> followed by a read of the other rail, with no page 3 or other rail
-> register value observed in place of the sensor values.
-> 
-> A single failed page change is recovered from: the rail page is set again
-> if the change to page 3 fails, a failed change back from page 3 leaves the
-> core caching page 3, so that it writes PAGE on the next access, and a
-> direct PAGE write, used for a single rail configuration, is retried once.
-> Repeated failures can still leave the device on a page the core does not
-> expect, as is the case for page changes made by the core itself.
-> Recovering from these within the driver would take state and write
-> callbacks of its own, and still would not cover block reads, so it is not
-> attempted here.
-> 
-> I would like this patch to be considered as is, since it fixes the
-> reported limits independently of the above. If you think it necessary,
-> I am happy to follow up with a separate patch to pmbus_set_page(), which
-> invalidates the cached page when a page change fails, so that the next
-> access writes PAGE again.
-> 
-
-There is still no explanation why it would be necessary to try setting
-the page (but not any other commands) multiple times.
+It also seems logically wrong: devm functions should be associated with
+some initialization or action (such as devm_kzalloc -> kfree), and not
+require a separate cleanup. I'd expect to see a devm_timer_setup()
+or similar instead, if at all.
 
 Guenter
+
+> ---
+>   drivers/hwmon/pwm-fan.c | 12 +++---------
+>   1 file changed, 3 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+> index 9cabbe9f8..6b02c2687 100644
+> --- a/drivers/hwmon/pwm-fan.c
+> +++ b/drivers/hwmon/pwm-fan.c
+> @@ -8,6 +8,7 @@
+>    */
+> 
+>   #include <linux/delay.h>
+> +#include <linux/devm-helpers.h>
+>   #include <linux/hwmon.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/module.h>
+> @@ -493,13 +494,6 @@ static void pwm_fan_cleanup(void *__ctx)
+>   	}
+>   }
+> 
+> -static void pwm_fan_timer_cleanup(void *__ctx)
+> -{
+> -	struct pwm_fan_ctx *ctx = __ctx;
+> -
+> -	timer_shutdown_sync(&ctx->rpm_timer);
+> -}
+> -
+>   static int pwm_fan_probe(struct platform_device *pdev)
+>   {
+>   	struct thermal_cooling_device *cdev;
+> @@ -650,7 +644,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>   	}
+> 
+>   	if (ctx->tach_count > 0) {
+> -		ret = devm_add_action_or_reset(dev, pwm_fan_timer_cleanup, ctx);
+> +		ret = devm_timer_autoshutdown(dev, &ctx->rpm_timer);
+>   		if (ret)
+>   			return ret;
+> 
+> @@ -710,7 +704,7 @@ static void pwm_fan_shutdown(struct platform_device *pdev)
+>   {
+>   	struct pwm_fan_ctx *ctx = platform_get_drvdata(pdev);
+> 
+> -	pwm_fan_timer_cleanup(ctx);
+> +	timer_shutdown_sync(&ctx->rpm_timer);
+>   	pwm_fan_cleanup(ctx);
+>   }
 
