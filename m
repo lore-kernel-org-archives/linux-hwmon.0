@@ -1,107 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793780811;
-	b=ek7gkmKzn6tMErW+1HUMtOc8xusrxQNs3IDYvflNMw2nlZp/rxh3fnntup89sCmAU/A8
-	 WlULq5ZHJ7SBjjAzg+umNWrppiILj/daxzE/AYu/vmkZ17FMclnyuZrsoJSu3XhWZcBiu
-	 gRATVVW5yG93B7tntuCGSUalopRJ9X3V32jj46GC0HiIfTpfEteLKaup0KKuiLd76R+/q
-	 qxIiFcBBcj7e4p7hTLMxPbSHrWi7MzF7MVbm2Hy1DbDdFIJRX6rN3/KGK4LZcDYavic5q
-	 AOegypH9ka0QLTveTgSYvTWtYU99R7s3QlPmFWEqjXuYwjpkSglIU0EPlv24bsPhFOg==
+	t=1793781199;
+	b=ci4lNtR0lEOM5XMD95IKNcKFToi9SjEM6bns+SV/tr2MKlAJrpzX4I1B8yYBNtRQlOZQ
+	 El7ZJsDIikZh8nM4sTcYbTZXj4PJu1QZyZQ71YulwRvMzbRimDTa73KccAwHHs40ASQX7
+	 f1UWbpYcQl2RWbNhnI7784kOw4Bt7+RnVIt+VdmSTDtT0+FFGfcemR9bM+My2KPcujVOz
+	 21F7T8uoNnCm5YjAjsCLG6SglVmaa0T9xGyUCyeCGFx90rjYGyc8u724iDDflRDYO9iB7
+	 rBUqvG0GCwJMy7biBBd/YAitOStXdtjqf3wWc4boZQh47u2vmPM6eDwHu117iJNJyUQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793780811;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793781199;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
-	 In-Reply-To;
-	bh=tvLMSn5HFpx5poOdSsb+2hYTyzg/cMkxA4fwRXRdGto=;
-	b=qqogyEaPiU2pufnVpEhNRkXz1U2c6JctXBvZYXNBnc4NBI0iHjtBBg7iIqCfmkHZi8V3
-	 SGi7e//xst3MhesWOG8srtDPvWqR1ZCbeC9dDtp2zRY0+9IaLqznQ7m3ILYyrF8NeEzeq
-	 qalt9bSSYSczQs8QmektmH5geEXtld7hA0yXYox3PL0TpYI6gLHFDYMj2p+ebHEuFEzif
-	 1dwNoIW0F7ppjfdlVfmjCppvMGHzNAobtFaf8LJ4RTVS2Q0ojyG3CakyzDCRsPpTZKllZ
-	 uva5i7vZKD+ZUVOhqgnhucWexieZ7TJhwms7l+GkMrImUGzz7D0fkrhUfCwvnyesAlw==
+	 Message-ID:Date:MIME-Version:User-Agent:From:Reply-To:Subject:To:Cc:
+	 References:Content-Language:Autocrypt:Organization:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=cb4Xh9aZZNBfvBhmip68fxld1JZtIcdH9x4WHMmXxfI=;
+	b=I6vXMXwKcoG6mpuJxtLj9Ww7T0760RQ5vAHGmkuJQIXTJ7dOPa8sE+W/boDDqlV5lnJj
+	 iWldcZlNTveQp4r9TAnrjOItKubx+Z29C2jImcpdV6m61D2lKeD0tpmQ2juvMQQGCTPgk
+	 I0rQg5fYcTIsMbtDB66UA8PZ+vS8Dda7w9omHr8GzXaHDz6b7XmvejmYPAjf55WhaNVQY
+	 zy/dhbSZY3wqCCvz9znCpILTh2CuBjjbhgQ37uSLLd01ZVFoIblIUIQFJ7bhItr8NQw/W
+	 /90WMlcs6uIwx4Tn4BZe4XjnL2gfzW76huuL/+vvDoJCNO3H7kBRtiYeguNiU0zi9lA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linaro.org;
 	spf=pass smtp.mailfrom=linaro.org;
-	dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=absP1XAP;
-	arc=none smtp.remote-ip=209.85.208.170
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+	dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=LJSx1YrR;
+	arc=none smtp.remote-ip=209.85.221.46
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2271606A32F
-	for <linux-hwmon@vger.kernel.org>; Wed,  4 Nov 2026 08:26:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D2271606A32F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 547B4606A329
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Nov 2026 08:33:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 547B4606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=absP1XAP
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-3ab27b4924aso3560521fa.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 04 Nov 2026 00:26:49 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=LJSx1YrR
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-48c4d870d54so238412f8f.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 04 Nov 2026 00:33:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1793780808; x=1794385608; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=tvLMSn5HFpx5poOdSsb+2hYTyzg/cMkxA4fwRXRdGto=;
-        b=absP1XAP5WyJOO4ydTiMHBpJYvH3qYUqCNKFKPJeOXvzrGlpB5o48crUhH22VhMAHr
-         pmHB4al1ucv287GKq4CfijCKii8jUsKxqTOSz4QUOd6VtSDWc1xKFgSpn9XBe4pNjxNL
-         9i13TJeXMRPbll+uxMSvUa5dzZpp/4xucAKPFsG7lyJSoh340Jp7z/DJ4qHMPsyc++au
-         VDLS1acj4vMhmwAeCvFFROED4SJJNI5Qhzeg5+lndFhUOrZzDKQ/eLBV9UbYOyt6Yf9L
-         jRbzqThMzuC1APpLwrz3wbqcOe91cbG8iUxrkil++rXHPYbIt+StjJUhVqLMufSqIZhx
-         zeug==
+        d=linaro.org; s=google; t=1793781197; x=1794385997; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :autocrypt:content-language:references:cc:to:subject:reply-to:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=cb4Xh9aZZNBfvBhmip68fxld1JZtIcdH9x4WHMmXxfI=;
+        b=LJSx1YrRDtfxmDS6br0cC4dvIZ11gWmkIetcRfRoMDmhzdBXmok/v9otSQT/+SVnag
+         maYz6bLghQyEx69WP21/CJM3IyXsPw7fq8eF7cMwf1nVxYQOKWRQL6eB0sFpR9V2lMcO
+         vZru0+2maq9fqklwak/pl8D3SpXKLUtZ2g8d4zZrfjjARzisOTb9gGEqHn0g1PEzeeeX
+         HucSqz8CGpAQTbdl24gfSwHekLb+Cu8TjVAdWsWwFYBYZDwfhoGoWNT5XqVwrgy2swsJ
+         Hkc/bG+3M407Phgnks6EC65G8dp67EalZ6ZqBS432VPeN+dQtGaXvfJ6+4DvSlhrxYrc
+         nM0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793780808; x=1794385608;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=tvLMSn5HFpx5poOdSsb+2hYTyzg/cMkxA4fwRXRdGto=;
-        b=xoiEZcoShs1US9kPWQnJ8e1867KozLghAsW9PUh6X7EZZbpAFs22xG4Bgrr7NYvIXb
-         VKkwcSr/D7VuQTnrANbeOriJedCYs7AXPjM6o+hmd2X2pZtRXDJgoa6TC4BHEEM3Zk5a
-         wc4ubb4ciy35bJmPZro6lmiVVgl9MadaTjsGANCOUHypzpww2SV0LVXtOWrJpQE5a99d
-         UNDoJL5exeVGWnMdk3hZRP5azVzWgh8OOlG9kVtxRCHCSjxhr9y1wSgW8cFP0LEffEdI
-         VdrCAKkjMbLQqN+I7qSGk0jjYhXBdlbLhvYkUvZRtBITvVwTigalqDDNEIECvlAdShw3
-         5k+g==
-X-Forwarded-Encrypted: i=1; AKwUvByRzccuMFHONPgfNAFVSEibuZLOaF4NRW98Rh4cgeDTNHLkQwsczVbN2xq593Pn8csXXmwLcTO8oD51Eg==@vger.kernel.org
-X-Gm-Message-State: APuU4Z/NneVvB+9N1rUEd3PVNDyHCJQSu+jApNqlC6jUipk0mDk/cBhq
-	YpK5EGVLg/gWeCfdDJgoW+nI+KmTMi5noRnlet3b7JJ/nDCuLom4w90c4oOC/+T/cZk=
-X-Gm-Gg: AYBFou271B7i/15sNmCM0pzEvmaduCO+8wsb+dqt59Bder4RwmECRT4VfDM77Vugalc
-	9o1y3rava0wzF2RNQKETpZkfM4Fkk3Rmvj7gJRICWLwq548tK2cf4FN+1bEBzwsd9Pn/8VbP8av
-	RjMJKdPlIwpxtkBQXMQvyIKkven0VdwO8fgfYASnLdYfy1FsZ4G3tpilegHf8GxQo/JlH5Bq88D
-	obS7R56NLSwNzcLYndRQg95sNJj9NA/NfY1EW3QLgonVqtsahMnctPg9qYYMJYL6Wb0WLOcrutB
-	zBvm/Qxwt0VRxqi6hiBOMu/LHNhf298g8T4vRb3EwsdMHaPk9kJJU/w6E3iNkEK7uLXbt1K+j4B
-	ckFEPK7RueNsM5yoOA9tmlHCqBVteiGtIA9JMgTaAGV1DsL64+nXgCc4zJTgAUfAy+zucNEPc2I
-	lDxRdzZZVZHgHO1LlvHIo7znmq4RqxkRdQ3k7Eyz63u/m/jdnlclqO9XX9rTKJ44HeXHKpXkjHN
-	Owu5gD+eGv7Ikorlm8fx8pDFf/a96yg4OXvajsNiuvigJgDGCYAOTs4MVlesAKcXX9g5gcC3WTb
-	xes0QhpPSk7Lhe1Vv9cEwVqkJbxZ3iRWNs6j+RNuJp9V1kJF4stEFLY=
-X-Received: by 2002:a05:6512:2243:b0:5bf:a77e:7231 with SMTP id 2adb3069b0e04-5bfd956a2c7mr5805640e87.26.1793780807863;
-        Wed, 04 Nov 2026 00:26:47 -0800 (PST)
-Received: from nuoska (78-27-71-225.bb.dnainternet.fi. [78.27.71.225])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5bff38c2690sm269858e87.57.2026.11.04.00.26.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 00:26:47 -0800 (PST)
-Date: Wed, 4 Nov 2026 10:26:45 +0200
-From: Mikko Rapeli <mikko.rapeli@linaro.org>
-To: Konrad Dybcio <konradybcio@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Hans de Goede <hansg@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Abel Vesa <abelvesa@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	linux-kbuild@vger.kernel.org, linux-yocto@lists.yoctoproject.org,
-	Bruce Ashfield <bruce.ashfield@gmail.com>
-Subject: Kconfig dependency loop LEDS_CLASS -> EC_ASUS_GLYMUR -> THERMAL ->
- POWER_SUPPLY -> HID_NVIDIA_SHIELD -> LEDS_CLASS (was Re: [PATCH v4 2/4]
- platform: arm64: Add a driver for the EC found on ASUS Glymur machines )
-Message-ID: <aursRfQRr0AOL1Oi@nuoska>
-References: <20261015-topic-asus_ec-v4-0-af6305ffcb10@oss.qualcomm.com>
- <20261015-topic-asus_ec-v4-2-af6305ffcb10@oss.qualcomm.com>
+        d=1e100.net; s=20260707; t=1793781197; x=1794385997;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :autocrypt:content-language:references:cc:to:subject:reply-to:from
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=cb4Xh9aZZNBfvBhmip68fxld1JZtIcdH9x4WHMmXxfI=;
+        b=NX5QyrtxFVZjcygxZLRV/f4bAmOAgeMfquEq4Pk4UOHwhQ2LLLr1erR47ZR/39Wwyv
+         vbcBK1psS+QuR5crCLdXQ4LAWZQ5RIAtHyy1jlqj7rlDzgIGW43PEjlgaoa2RPriYPUx
+         1TPdYgpevQyjL4tWSHW71ZRQwbn9XqeWwkQCJLjD/mkEeeMdNojCT7XYk4RkPCfypd4W
+         gTzdbLilhHZzjkm0FVOd8yke8ejYHGsjFCaH7S9LBf59r3YgM+vhyVbEQCOOtgTyLfrS
+         lt+ir++9lDOiycunmRDJ3f4dVhB5ae9LsGc+ESsx58gBYEyw9YhfvNUrl7Tq4+rlgzJa
+         o9Tw==
+X-Forwarded-Encrypted: i=1; AKwUvByr6SIRtBCyP7fmWRzkPM8bMx/9xZwBjcWgSONE66nMgArU3aphKSKJ98+atEHETW1A9IuZ3iCLBT+Brg==@vger.kernel.org
+X-Gm-Message-State: APuU4Z/IEzRzBbrblyj20AD0pOllcXdsLpvBx9eprKJMxoIYbSRjpP8o
+	O7PavmEc2nriLfHawnwC5h8FT879CbEhnZZMtmlrIGZAqqQD3bMLEUt0YZ3b2kc8ORXEJJBT0N1
+	qW9NB
+X-Gm-Gg: AYBFou0PlOCLhx3fDMU3Ts/Rab8PjKJtqeSMsAp0PFq7rLqZ6i3AtLeVyF5GCw0Wmiq
+	prVRzGwQuVUWJMbf4kv5BxJ3KKlgTPmspeIgVdYucItTDx3YmtLxv41PaLzg1i+w5BY7CSyTyCV
+	l8PyZ/52FTNdqW5eJTwJkctG0ZlSNrPZEdEj1S0FeEheI77ypluCkp8psGNPexeTOnNg4e0qBic
+	Ay/ihMcuTp9cIVXeY41IYBMNo/F9TYAw0I7Fbe/o51H6BnPD9aAlYyZ0r5GRoIB3s2OmGjBh66n
+	2v+i6azinhQeXlvxQsWJdK6DGVX0O/n5O+0+K2Gb5WQH6SvUqJPZ/iniI1MxWePU5cEB1Lc1UrI
+	Ft6bjZ0WLRAAwyIi20j6fQFjHNbRqWF8WGlZd/AvJk2TjMPgX1FjLbEEydSnrm/dDlT6+K83u4k
+	p9/BbROj/nXehMZfHmAJ7SjcDKpSs6hXSsvdQINGpF+Ua75vtb6DuJM6fVDeDzG/gqNluReonA1
+	U9e0O0IaN7MxovOhZb9NcWHoh5qEu/hSyKdPvMsuPJ04z1gT0YEW/Y543X9WaaGNdd3e9In89Zd
+	CI8kiqmfq2Lmvn+gYCO3qQhzAsOox7QFc1mDih7vsCBAhLU4yCwNNYjoy4jwmhWugwRAVhgSWo4
+	SAuJYsdot
+X-Received: by 2002:a05:6000:41c8:b0:488:8437:b8b7 with SMTP id ffacd0b85a97d-48e6e2bc714mr34536225f8f.7.1793781196603;
+        Wed, 04 Nov 2026 00:33:16 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:106d:1080:6762:47bb:1e06:ff70? ([2a01:e0a:106d:1080:6762:47bb:1e06:ff70])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48feda20567sm2741237f8f.51.2026.11.04.00.33.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Nov 2026 00:33:16 -0800 (PST)
+Message-ID: <676555ed-aa24-4654-a8bd-0606f1436396@linaro.org>
+Date: Wed, 4 Nov 2026 09:33:15 +0100
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -111,317 +94,259 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20261015-topic-asus_ec-v4-2-af6305ffcb10@oss.qualcomm.com>
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v5 3/3] iio: adc: add driver for the MAX34417 Four-Channel
+ High Dynamic Range Power Accumulator
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Michael Hennerich <Michael.Hennerich@analog.com>, linux-iio@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux@analog.com
+References: <20261102-topic-sm8x50-iio-max34417-adc-v5-0-0ffa5e5f2d5c@linaro.org>
+ <20261102-topic-sm8x50-iio-max34417-adc-v5-3-0ffa5e5f2d5c@linaro.org>
+ <20261104023032.0a21da0d@jic23-hlaptop>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <20261104023032.0a21da0d@jic23-hlaptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-(Adding linux-kbuild@vger.kernel.org, linux-yocto@lists.yoctoproject.org and
-yocto kernel maintainer Bruce)
+On 11/4/26 03:30, Jonathan Cameron wrote:
+> On Mon, 02 Nov 2026 15:49:06 +0100
+> Neil Armstrong <neil.armstrong@linaro.org> wrote:
+> 
+>> The MAX34417 is a specialized current and voltage monitor used to
+>> determine power consumption of portable systems. The driver support
+>> getting the channels voltage, average power, accumulated average
+>> power and energy over an I2C/SMBUS serial interface.
+>>
+>> The MAX34417 datasheet only specified on how to calculate the
+>> accumulated average power, but with the Sample Per Second rate
+>> we can easily get accumulated Energy in mJ.
+>>
+>> By default the IIO driver only supports single-shot Voltage
+>> and Power sensing, but the accumulation can be enabled by
+>> enabling the Energy IIO channel which then enables the
+>> Continuous Accumulation Mode.
+>>
+>> The counter is common to all channels, so when reading a single
+>> channel we will copy all accumulators to registers, so in order
+>> to permit reading individual channels we must accumulate the
+>> other channels in the driver when Continuous Accumulation Mode
+>> is enabled.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> 
+> The use of the regmap_noinc stuff to deal with the variable
+> size 'registers' is novel.  Might be worth just adding a little
+> commentary on that to somewhere. Perhaps the regmap_config as a comment.
+> 
+> Other than that, just a question about why we need the postfixes
+> for the labels. That seems superfluous.
+> 
+> Thanks,
+> 
+> Jonathan
+> 
+> 
+>> diff --git a/drivers/iio/adc/max34417.c b/drivers/iio/adc/max34417.c
+>> new file mode 100644
+>> index 000000000000..e679cf142141
+>> --- /dev/null
+>> +++ b/drivers/iio/adc/max34417.c
+> 
+>> +
+>> +static const struct regmap_config max34417_regmap_config = {
+>> +	.reg_bits	= 8,
+>> +	.val_bits	= 8,
+> As noted above. This isn't really true.  You are just use noinc
+> reads to pretend it is.  Those are normally only used for
+> fifo registers so I think we should have a comment here talking
+> about that choice.
 
-Hi,
+Well, reg_bits is 8, but val_bits is 8 for the control & status registers,
+for the data registers the value bits is variable, so it's kind of true.
 
-On Thu, Oct 15, 2026 at 10:55:30AM +0200, Konrad Dybcio wrote:
-> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
->=20
-> Some Qualcomm Snapdragon X2 Elite (Extreme)-based ASUS laptops (at
-> least the Zenbook A14 and A16) expose a custom, somewhat
-> Qualcomm reference-derived EC interface. Introduce a driver to
-> communicate with said EC, allowing for fan speed reporting, keyboard
-> backlight setting and receiving of a number of miscellaneous sideband
-> events.
->=20
-> Assisted-by: LLM
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> ---
->  drivers/platform/arm64/Kconfig          |  16 +
->  drivers/platform/arm64/Makefile         |   1 +
->  drivers/platform/arm64/asus-glymur-ec.c | 616 ++++++++++++++++++++++++++=
-++++++
->  3 files changed, 633 insertions(+)
->=20
-> diff --git a/drivers/platform/arm64/Kconfig b/drivers/platform/arm64/Kcon=
-fig
-> index e32e01b2a9bd..84c475c62990 100644
-> --- a/drivers/platform/arm64/Kconfig
-> +++ b/drivers/platform/arm64/Kconfig
-> @@ -33,6 +33,22 @@ config EC_ACER_ASPIRE1
->  	  laptop where this information is not properly exposed via the
->  	  standard ACPI devices.
-> =20
-> +config EC_ASUS_GLYMUR
-> +	tristate "ASUS Zenbook A16 (Qualcomm) Embedded Controller driver"
-> +	depends on ARCH_QCOM || COMPILE_TEST
-> +	depends on I2C
-> +	depends on HWMON
-> +	depends on INPUT
-> +	depends on PM
-> +	depends on THERMAL || THERMAL=3Dn
-> +	select NEW_LEDS
-> +	select LEDS_CLASS
-> +	help
-> +	  Say M or Y here to enable the EC driver for the Qualcomm Snapdragon-
-> +	  based ASUS Zenbook A16 (UX3607OA) and similar machines. It provides
-> +	  temperature sensors readout, fan monitoring, keyboard and EC event
-> +	  reporting.
-> +
+But I should add the readable_noinc_reg callback, yes it's not FIFOs,
+but both 3 data registers have different data width which should be
+read using the noinc to use i2c_smbus_read_i2c_block_data().
 
-With this new EC_ASUS_GLYMUR driver in 7.4-rc1 there now exists a kconfig d=
-ependency loop
-in arm64 builds:
+I can provide my custom register read/write copied from regmap-i2c if
+you find it better to avoid abusing regmap...
 
-LEDS_CLASS -> EC_ASUS_GLYMUR -> THERMAL -> POWER_SUPPLY -> HID_NVIDIA_SHIEL=
-D -> LEDS_CLASS
+> 
+> It is pretty neat so I'm not against it but it might rather
+> surprise anyone looking at the datasheet!
+> 
+> 
+> 
+>> +	.max_register	= MAX34417_BULK_VOLTAGE_READOUT_REG,
+>> +	.writeable_reg	= max34417_writeable_reg,
+>> +	.readable_reg	= max34417_readable_reg,
+>> +	.volatile_reg	= max34417_volatile_reg,
+>> +	/* No cache since the only non-volatile register is read-only */
+>> +};
+> 
+> 
+> 
+>> +
+>> +static int max34417_read_label(struct iio_dev *indio_dev,
+>> +			       struct iio_chan_spec const *chan,
+>> +			       char *label)
+>> +{
+>> +	struct max34417_data *max34417 = iio_priv(indio_dev);
+>> +	const char *input_label = max34417->input_label[chan->channel];
+>> +
+>> +	if (input_label) {
+>> +		switch (chan->type) {
+>> +		case IIO_VOLTAGE:
+>> +			return sysfs_emit(label, "%s-voltage\n", input_label);
+> 
+> Why add the postfix? The channel type will turn up in the file name anyway.
+> I don't think anything prevents us having the same label for channels of
+> different types.  Is this a copy of something elsewhere?
 
-In Yocto distro we use additional tools[1] to check that kconfig elements i=
-n fragments actually
-get applied in the final .config etc and one of the checks is for dependenc=
-y loops which now
-fails with 7.4-rc1, full log below[2].
+It sounded better, but you're right I'll drop those.
 
-To me it looks like EC_ASUS_GLYMUR correctly depends on LEDS_CLASS and that=
- enabling this
-driver by default on arm64 with LEDS_CLASS is correct. And also HID_NVIDIA_=
-SHIELD correctly
-depends on LEDS_CLASS. Thus I don't think the drivers are doing anything wr=
-ong and thus
-on the Yocto kernel QA check side the dependency loop check should be relax=
-ed since they
-now can exists in the kernel tree.
+> 
+> 
+>> +		case IIO_POWER:
+>> +			return sysfs_emit(label, "%s-power\n", input_label);
+>> +		case IIO_ENERGY:
+>> +			return sysfs_emit(label, "%s-energy\n", input_label);
+>> +		default:
+>> +			return 0;
+>> +		}
+>> +	}
+>> +
+>> +	switch (chan->type) {
+>> +	case IIO_VOLTAGE:
+>> +		return sysfs_emit(label, "channel%d-voltage\n", chan->channel);
+> Same applies here.  The postfix seems excessive.
+>> +	case IIO_POWER:
+>> +		return sysfs_emit(label, "channel%d-power\n", chan->channel);
+>> +	case IIO_ENERGY:
+>> +		return sysfs_emit(label, "channel%d-energy\n", chan->channel);
+>> +	default:
+>> +		return 0;
+>> +	}
+>> +}
+> 
+>> +
+>> +static int max34417_probe(struct i2c_client *client)
+>> +{
+>> +	struct device *dev = &client->dev;
+>> +	struct max34417_data *max34417;
+>> +	struct iio_dev *indio_dev;
+>> +	struct regmap *map;
+>> +	int rc;
+>> +
+>> +	map = devm_regmap_init_i2c(client, &max34417_regmap_config);
+>> +	if (IS_ERR(map))
+>> +		return dev_err_probe(dev, PTR_ERR(map), "regmap_init failed\n");
+>> +
+>> +	indio_dev = devm_iio_device_alloc(dev, sizeof(*max34417));
+>> +	if (!indio_dev)
+>> +		return -ENOMEM;
+>> +
+>> +	rc = devm_regulator_get_enable(dev, "vdd");
+>> +	if (rc)
+>> +		return dev_err_probe(dev, rc, "failed to get vdd regulator\n");
+>> +
+>> +	rc = devm_regulator_get_enable(dev, "vio");
+>> +	if (rc)
+>> +		return dev_err_probe(dev, rc, "failed to get vio regulator\n");
+>> +
+>> +	max34417 = iio_priv(indio_dev);
+>> +	max34417->regmap = map;
+>> +	max34417->indio_dev = indio_dev;
+>> +
+>> +	rc = devm_mutex_init(dev, &max34417->lock);
+>> +	if (rc)
+>> +		return rc;
+>> +
+>> +	/* Set default input correction for all channels */
+>> +	for (int i = 0; i < MAX34417_CHANNEL_COUNT; i++)
+>> +		max34417->input_correction[i] =
+>> +			max34417_calc_input_correction(MAX34417_DEFAULT_RSENSE);
+>> +
+>> +	device_for_each_child_node_scoped(dev, node) {
+>> +		u32 rsense_uOhm, index;
+>> +
+>> +		rc = fwnode_property_read_u32(node, "reg", &index);
+>> +		if (rc)
+>> +			return dev_err_probe(dev, rc, "failure reading reg property of %pfwP\n",
+>> +					     node);
+>> +
+>> +		if (index >= MAX34417_CHANNEL_COUNT)
+>> +			return dev_err_probe(dev, -ECHRNG, "invalid reg %d of %pfwP\n",
+>> +					     index, node);
+>> +
+>> +		if (fwnode_property_present(node, "label")) {
+>> +			rc = fwnode_property_read_string(node, "label",
+>> +							 &max34417->input_label[index]);
+>> +			if (rc)
+>> +				return dev_err_probe(dev, rc,
+>> +						"failure reading label property of %pfwP\n",
+> 
+> Don't worry about going a bit longer - stcik to aligning after (
+> Or.. Maybe use a helper function for the per channel parsing.
 
-Do you agree to this or is there maybe some way to remove the kernel side k=
-config dependency
-loop to and from LEDS_CLASS?
+Ack
 
-Cheers,
+Thanks,
+Neil
 
--Mikko
+> 
+> 
+>> +						node);
+>> +		}
+>> +
+>> +		if (fwnode_property_present(node, "shunt-resistor-micro-ohms")) {
+>> +			rc = fwnode_property_read_u32(node, "shunt-resistor-micro-ohms",
+>> +						      &rsense_uOhm);
+>> +			if (rc)
+>> +				return dev_err_probe(dev, rc,
+>> +						"failure reading shunt property of %pfwP\n",
+>> +						node);
+>> +
+>> +			if (rsense_uOhm < MAX34417_MIN_RSENSE ||
+>> +			    rsense_uOhm > MAX34417_MAX_RSENSE)
+>> +				return dev_err_probe(dev, -EINVAL,
+>> +						     "invalid shunt value %d of %pfwP\n",
+>> +						     rsense_uOhm, node);
+>> +
+>> +			max34417->input_correction[index] =
+>> +				max34417_calc_input_correction(rsense_uOhm);
+>> +		}
+>> +	}
 
-[1] symbol_why.py and kconfig parsing library from https://git.yoctoproject=
-=2Eorg/yocto-kernel-tools/
-    detects this loop
-
-[2]
-2026-11-03 12:00:42 - ERROR    - Command "/builds/Linaro/trustedsubstrate/g=
-pit/build$ /builds/Linaro/trustedsubstrate/gpit/bitbake/bin/bitbake -c buil=
-d core-image-sato-sdk" failed:
-ERROR: linux-yocto-dev-7.4-rc1+git-r0 do_kernel_configcheck: config analysi=
-s failed when running 'symbol_why.py --dotconfig /builds/Linaro/trustedsubs=
-trate/gpit/build/tmp/work/genericarm64-poky-linux/linux-yocto-dev/7.4-rc1+g=
-it/linux-genericarm64-standard-build/.config --mismatches --classify': Trac=
-eback (most recent call last):
-  File "/builds/Linaro/trustedsubstrate/gpit/build/tmp/work/genericarm64-po=
-ky-linux/linux-yocto-dev/7.4-rc1+git/recipe-sysroot-native/usr/bin/symbol_w=
-hy.py", line 879, in <module>
-    conf =3D kconfiglib.Kconfig( kconf, show_errors, show_errors )
-  File "/builds/Linaro/trustedsubstrate/gpit/build/tmp/work/genericarm64-po=
-ky-linux/linux-yocto-dev/7.4-rc1+git/recipe-sysroot-native/usr/bin/kconfigl=
-ib.py", line 948, in __init__
-    self._init(filename, warn, warn_to_stderr, encoding)
-    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/builds/Linaro/trustedsubstrate/gpit/build/tmp/work/genericarm64-po=
-ky-linux/linux-yocto-dev/7.4-rc1+git/recipe-sysroot-native/usr/bin/kconfigl=
-ib.py", line 1122, in _init
-    check_dep_loop_sym(sym, False)
-    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
-  File "/builds/Linaro/trustedsubstrate/gpit/build/tmp/work/genericarm64-po=
-ky-linux/linux-yocto-dev/7.4-rc1+git/recipe-sysroot-native/usr/bin/kconfigl=
-ib.py", line 6691, in _check_dep_loop_sym
-    else _check_dep_loop_sym(dep, False)
-         ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
-  File "/builds/Linaro/trustedsubstrate/gpit/build/tmp/work/genericarm64-po=
-ky-linux/linux-yocto-dev/7.4-rc1+git/recipe-sysroot-native/usr/bin/kconfigl=
-ib.py", line 6691, in _check_dep_loop_sym
-    else _check_dep_loop_sym(dep, False)
-         ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
-  File "/builds/Linaro/trustedsubstrate/gpit/build/tmp/work/genericarm64-po=
-ky-linux/linux-yocto-dev/7.4-rc1+git/recipe-sysroot-native/usr/bin/kconfigl=
-ib.py", line 6691, in _check_dep_loop_sym
-    else _check_dep_loop_sym(dep, False)
-         ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
-  [Previous line repeated 7 more times]
-  File "/builds/Linaro/trustedsubstrate/gpit/build/tmp/work/genericarm64-po=
-ky-linux/linux-yocto-dev/7.4-rc1+git/recipe-sysroot-native/usr/bin/kconfigl=
-ib.py", line 6695, in _check_dep_loop_sym
-    return _found_dep_loop(loop, sym)
-  File "/builds/Linaro/trustedsubstrate/gpit/build/tmp/work/genericarm64-po=
-ky-linux/linux-yocto-dev/7.4-rc1+git/recipe-sysroot-native/usr/bin/kconfigl=
-ib.py", line 6799, in _found_dep_loop
-    raise KconfigError(msg)
-kconfiglib.KconfigError:=20
-Dependency loop
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-LEDS_CLASS (defined at drivers/leds/Kconfig:23), with definition...
-
-config LEDS_CLASS
-	tristate "LED Class Support"
-	depends on NEW_LEDS
-	help
-	  This option enables the LED sysfs class in /sys/class/leds.  You'll
-	  need this to do anything useful with LEDs.  If unsure, say Y.
-
-(select-related dependencies: (ADB_PMU_LED && PPC_PMAC && ADB_PMU && MACINT=
-OSH_DRIVERS) || (INPUT_WISTRON_BTNS && X86_32 && !UML && INPUT_MISC && INPU=
-T) || (SENSORS_APPLESMC && INPUT && X86 && HWMON) || (IR_REDRAT3 && USB && =
-RC_DEVICES && RC_CORE) || (IR_TTUSBIR && USB && RC_DEVICES && RC_CORE) || (=
-IR_WINBOND_CIR && ((X86 && PNP) || COMPILE_TEST) && HAS_IOPORT && RC_DEVICE=
-S && RC_CORE) || (HT16K33 && FB && I2C && INPUT && BACKLIGHT_CLASS_DEVICE &=
-& AUXDISPLAY) || (BACKLIGHT_ADP8860 && I2C && BACKLIGHT_CLASS_DEVICE && HAS=
-_IOMEM) || (BACKLIGHT_ADP8870 && I2C && BACKLIGHT_CLASS_DEVICE && HAS_IOMEM=
-) || (BACKLIGHT_LM3639 && I2C && BACKLIGHT_CLASS_DEVICE && HAS_IOMEM) || (S=
-ND_HDA_GENERIC && SND_HDA_GENERIC_LEDS && SND_HDA && SND && SOUND) || (SND_=
-USB_TONEPORT && SND_USB && USB && SND && SOUND) || (HID_MSI && USB_HID && H=
-ID && HID_SUPPORT) || (HID_WACOM && USB_HID && HID && HID_SUPPORT) || (HUAW=
-EI_WMI && ACPI_BATTERY && ACPI_EC && ACPI_WMI && INPUT && X86_PLATFORM_DEVI=
-CES) || (ACER_WMI && BACKLIGHT_CLASS_DEVICE && SERIO_I8042 && INPUT && (RFK=
-ILL || RFKILL =3D n) && ACPI_EC && ACPI_WMI && (ACPI_VIDEO || ACPI_VIDEO =
-=3D n) && HWMON && X86_PLATFORM_DEVICES) || (ASUS_LAPTOP && ACPI && BACKLIG=
-HT_CLASS_DEVICE && INPUT && (RFKILL || RFKILL =3D n) && (ACPI_VIDEO || ACPI=
-_VIDEO =3D n) && X86_PLATFORM_DEVICES) || (ASUS_WIRELESS && ACPI && INPUT &=
-& X86_PLATFORM_DEVICES) || (ASUS_WMI && ACPI_WMI && ACPI_BATTERY && INPUT &=
-& HWMON && BACKLIGHT_CLASS_DEVICE && (RFKILL || RFKILL =3D n) && HOTPLUG_PC=
-I && (ACPI_VIDEO || ACPI_VIDEO =3D n) && (SERIO_I8042 || SERIO_I8042 =3D n)=
- && X86_PLATFORM_DEVICES) || (EEEPC_LAPTOP && ACPI_EC && INPUT && (RFKILL |=
-| RFKILL =3D n) && (ACPI_VIDEO || ACPI_VIDEO =3D n) && HOTPLUG_PCI && BACKL=
-IGHT_CLASS_DEVICE && X86_PLATFORM_DEVICES) || (DELL_LAPTOP && DMI && BACKLI=
-GHT_CLASS_DEVICE && ACPI_BATTERY && (ACPI_VIDEO || ACPI_VIDEO =3D n) && (RF=
-KILL || RFKILL =3D n) && (DELL_WMI || DELL_WMI =3D n) && SERIO_I8042 && DEL=
-L_SMBIOS && X86_PLATFORM_DRIVERS_DELL && X86_PLATFORM_DEVICES) || (FUJITSU_=
-LAPTOP && ACPI && INPUT && BACKLIGHT_CLASS_DEVICE && ACPI_BATTERY && (ACPI_=
-VIDEO || ACPI_VIDEO =3D n) && X86_PLATFORM_DEVICES) || (HP_ACCEL && INPUT &=
-& ACPI && SERIO_I8042 && X86_PLATFORM_DRIVERS_HP && X86_PLATFORM_DEVICES) |=
-| (IDEAPAD_LAPTOP && ACPI && ACPI_BATTERY && RFKILL && INPUT && SERIO_I8042=
- && BACKLIGHT_CLASS_DEVICE && (ACPI_VIDEO || ACPI_VIDEO =3D n) && (ACPI_WMI=
- || ACPI_WMI =3D n) && X86_PLATFORM_DEVICES) || (LENOVO_WMI_HOTKEY_UTILITIE=
-S && ACPI_WMI && X86_PLATFORM_DEVICES) || (THINKPAD_ACPI && ACPI_EC && ACPI=
-_BATTERY && INPUT && (RFKILL || RFKILL =3D n) && (ACPI_VIDEO || ACPI_VIDEO =
-=3D n) && BACKLIGHT_CLASS_DEVICE && I2C && DRM && X86_PLATFORM_DEVICES) || =
-(YOGABOOK && ACPI_WMI && INPUT && I2C && X86_PLATFORM_DEVICES) || (SAMSUNG_=
-LAPTOP && (RFKILL || RFKILL =3D n) && (ACPI_VIDEO || ACPI_VIDEO =3D n) && A=
-CPI_BATTERY && BACKLIGHT_CLASS_DEVICE && X86_PLATFORM_DEVICES) || (ACPI_TOS=
-HIBA && ACPI_EC && ACPI_BATTERY && ACPI_WMI && BACKLIGHT_CLASS_DEVICE && IN=
-PUT && (SERIO_I8042 || SERIO_I8042 =3D n) && (ACPI_VIDEO || ACPI_VIDEO =3D =
-n) && (HWMON || HWMON =3D n) && (RFKILL || RFKILL =3D n) && IIO && X86_PLAT=
-FORM_DEVICES) || (LG_LAPTOP && ACPI && ACPI_BATTERY && INPUT && X86_PLATFOR=
-M_DEVICES) || (SYSTEM76_ACPI && ACPI_EC && ACPI_BATTERY && HWMON && INPUT &=
-& X86_PLATFORM_DEVICES) || (TOPSTAR_LAPTOP && ACPI && INPUT && X86_PLATFORM=
-_DEVICES) || (X86_ANDROID_TABLETS && I2C && SPI && SERIAL_DEV_BUS && GPIOLI=
-B && PMIC_OPREGION && ACPI && EFI && PCI && X86_PLATFORM_DEVICES) || (SEL33=
-50_PLATFORM && ACPI && GPIOLIB && PINCTRL_BROXTON && X86_PLATFORM_DEVICES) =
-|| (EC_ASUS_GLYMUR && (ARCH_QCOM || COMPILE_TEST) && I2C && HWMON && INPUT =
-&& PM && (THERMAL || THERMAL =3D n) && ARM64_PLATFORM_DEVICES) || (EC_LENOV=
-O_THINKPAD_T14S && (ARCH_QCOM || COMPILE_TEST) && I2C && INPUT && ARM64_PLA=
-TFORM_DEVICES) || (EC_LENOVO_YOGA_SLIM7X_GEN11 && (ARCH_QCOM || COMPILE_TES=
-T) && I2C && INPUT && HWMON && ARM64_PLATFORM_DEVICES))
-
-=2E..depends on EC_ASUS_GLYMUR (defined at drivers/platform/arm64/Kconfig:3=
-6), with definition...
-
-config EC_ASUS_GLYMUR
-	tristate "ASUS Zenbook A16 (Qualcomm) Embedded Controller driver"
-	select NEW_LEDS
-	select LEDS_CLASS
-	depends on (ARCH_QCOM || COMPILE_TEST) && I2C && HWMON && INPUT && PM && (=
-THERMAL || THERMAL =3D n) && ARM64_PLATFORM_DEVICES
-	help
-	  Say M or Y here to enable the EC driver for the Qualcomm Snapdragon-
-	  based ASUS Zenbook A16 (UX3607OA) and similar machines. It provides
-	  temperature sensors readout, fan monitoring, keyboard and EC event
-	  reporting.
-
-=2E..depends on THERMAL (defined at drivers/thermal/Kconfig:6), with defini=
-tion...
-
-menuconfig THERMAL
-	bool "Thermal drivers"
-	help
-	  Thermal drivers offer a generic mechanism for
-	  thermal management. Usually it's made up of one or more thermal
-	  zones and cooling devices.
-	  Each thermal zone contains its own temperature, trip points,
-	  and cooling devices.
-	  All platforms with ACPI or Open Firmware thermal support can use
-	  this driver.
-	  If you want this support, you should say Y here.
-
-(select-related dependencies: (ACPI_VIDEO && BACKLIGHT_CLASS_DEVICE && INPU=
-T && ACPI_WMI && ACPI) || (ACPI_PROCESSOR && (X86 || ARM64 || LOONGARCH || =
-RISCV) && ACPI) || (ACPI_THERMAL && ACPI_PROCESSOR && ACPI) || (AB8500_BM &=
-& AB8500_CORE && AB8500_GPADC && IIO =3D y && OF && POWER_SUPPLY) || (DRM_E=
-TNAVIV && DRM_ETNAVIV_THERMAL && DRM && MMU && DRM && HAS_IOMEM) || (DRM_NO=
-UVEAU && ACPI && X86 && DRM && PCI && DRM && HAS_IOMEM) || (MMC_SDHCI_OMAP =
-&& (ARCH_OMAP2PLUS || ARCH_KEYSTONE || COMPILE_TEST) && MMC_SDHCI_PLTFM && =
-OF && MMC))
-
-(imply-related dependencies: (ACPI_VIDEO && BACKLIGHT_CLASS_DEVICE && INPUT=
- && ACPI_WMI && ACPI) || (ACPI_PROCESSOR && (X86 || ARM64 || LOONGARCH || R=
-ISCV) && ACPI) || (ACPI_THERMAL && ACPI_PROCESSOR && ACPI) || (AB8500_BM &&=
- AB8500_CORE && AB8500_GPADC && IIO =3D y && OF && POWER_SUPPLY) || (DRM_ET=
-NAVIV && DRM_ETNAVIV_THERMAL && DRM && MMU && DRM && HAS_IOMEM) || (DRM_NOU=
-VEAU && ACPI && X86 && DRM && PCI && DRM && HAS_IOMEM) || (MMC_SDHCI_OMAP &=
-& (ARCH_OMAP2PLUS || ARCH_KEYSTONE || COMPILE_TEST) && MMC_SDHCI_PLTFM && O=
-F && MMC))
-
-=2E..depends on POWER_SUPPLY (defined at drivers/power/supply/Kconfig:2), w=
-ith definition...
-
-menuconfig POWER_SUPPLY
-	bool "Power supply class support"
-	help
-	  Say Y here to enable power supply class support. This allows
-	  power supply (batteries, AC, USB) monitoring by userspace
-	  via sysfs and uevent (if available) and/or APM kernel interface
-	  (if selected below).
-
-(select-related dependencies: ARM64 || (X86_AMD_PSTATE && ACPI && X86 && CP=
-U_FREQ) || (ACPI_AC && ACPI) || (ACPI_BATTERY && ACPI) || (ACPI_SBS && X86 =
-&& ACPI_EC && ACPI) || (AB8500_CORE && ABX500_CORE && MFD_DB8500_PRCMU && H=
-AS_IOMEM) || (DRM_AMDGPU && DRM && PCI && DRM && HAS_IOMEM) || (DRM_NOUVEAU=
- && DRM && PCI && DRM && HAS_IOMEM) || (DRM_RADEON && DRM && PCI && (AGP ||=
- !AGP) && DRM && HAS_IOMEM) || (HID_BATTERY_STRENGTH && HID && HID_SUPPORT)=
- || (HID_ASUS && USB_HID && LEDS_CLASS && (ASUS_WMI || ASUS_WMI =3D n) && H=
-ID && HID_SUPPORT) || (HID_CORSAIR && USB_HID && LEDS_CLASS && HID && HID_S=
-UPPORT) || (HID_LOGITECH_HIDPP && HID_LOGITECH && HID && HID_SUPPORT) || (H=
-ID_NINTENDO && NEW_LEDS && LEDS_CLASS && USB_HID && HID && HID_SUPPORT) || =
-(HID_NVIDIA_SHIELD && USB_HID && BT_HIDP && LEDS_CLASS && HID && HID_SUPPOR=
-T) || (HID_PLAYSTATION && LEDS_CLASS_MULTICOLOR && HID && HID_SUPPORT) || (=
-HID_SONY && USB_HID && NEW_LEDS && LEDS_CLASS && HID && HID_SUPPORT) || (HI=
-D_STEAM && HID && HID_SUPPORT) || (HID_PULSAR && USB_HID && HID && HID_SUPP=
-ORT) || (HID_WACOM && USB_HID && HID && HID_SUPPORT) || (HID_WIIMOTE && LED=
-S_CLASS && HID && HID_SUPPORT) || (USB_CONN_GPIO && GPIOLIB && USB_SUPPORT)=
- || (APPLE_MFI_FASTCHARGE && USB && USB_SUPPORT) || (TYPEC_TCPM && USB && T=
-YPEC && USB_SUPPORT) || (TYPEC_TPS6598X && I2C && TYPEC && USB_SUPPORT) || =
-(DELL_LAPTOP && DMI && BACKLIGHT_CLASS_DEVICE && ACPI_BATTERY && (ACPI_VIDE=
-O || ACPI_VIDEO =3D n) && (RFKILL || RFKILL =3D n) && (DELL_WMI || DELL_WMI=
- =3D n) && SERIO_I8042 && DELL_SMBIOS && X86_PLATFORM_DRIVERS_DELL && X86_P=
-LATFORM_DEVICES) || (HP_WMI && ACPI_EC && ACPI_WMI && INPUT && (RFKILL || R=
-FKILL =3D n) && X86_PLATFORM_DRIVERS_HP && X86_PLATFORM_DEVICES) || (X86_AN=
-DROID_TABLETS && I2C && SPI && SERIAL_DEV_BUS && GPIOLIB && PMIC_OPREGION &=
-& ACPI && EFI && PCI && X86_PLATFORM_DEVICES) || (SEL3350_PLATFORM && ACPI =
-&& GPIOLIB && PINCTRL_BROXTON && X86_PLATFORM_DEVICES))
-
-=2E..depends on HID_NVIDIA_SHIELD (defined at drivers/hid/Kconfig:908), wit=
-h definition...
-
-config HID_NVIDIA_SHIELD
-	tristate "NVIDIA SHIELD devices"
-	select POWER_SUPPLY
-	depends on USB_HID && BT_HIDP && LEDS_CLASS && HID && HID_SUPPORT
-	help
-	  Support for NVIDIA SHIELD accessories.
-	 =20
-	  Supported devices:
-	  - Thunderstrike (NVIDIA SHIELD Controller 2017)
-
-=2E..depends again on LEDS_CLASS (defined at drivers/leds/Kconfig:23)
-
-ERROR: Logfile of failure stored in: /builds/Linaro/trustedsubstrate/gpit/b=
-uild/tmp/work/genericarm64-poky-linux/linux-yocto-dev/7.4-rc1+git/temp/log.=
-do_kernel_configcheck.519198
-ERROR: Task (/builds/Linaro/trustedsubstrate/gpit/build/../core/meta/recipe=
-s-kernel/linux/linux-yocto-dev.bb:do_kernel_configcheck) failed with exit c=
-ode '1'
-2026-11-03 12:00:42 - ERROR    - Command "/builds/Linaro/trustedsubstrate/g=
-pit/bitbake/bin/bitbake -c build core-image-sato-sdk" failed with error 1
-section_end:1793707242:step_script
