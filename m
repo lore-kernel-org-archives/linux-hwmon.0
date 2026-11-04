@@ -1,90 +1,146 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.13
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793822729;
-	b=vE5qBmhX74C/tilv3qvLOC70migR+Q9VA/dvh26uoNL9v/yj/sJ9TXCJXYLGum8GVW6N
-	 MMLowSI8Ac/vuiWykygjDKV92zLoBoKCXzOwK5MX15cQBRZJwIslhwViLCLOOs21GqA7z
-	 PNFVCET4UWZRHX+VhrKn/QvnbOPuaip2swCYSXwoBIrD3jchf4g62ISKeP5lmUt6XKVXG
-	 UuJZqeJ0ljrNIh5lBZvQkrOUdlYhNbOPqkZsUbMqtxgSlklPUhEQZg37n27Xv2aLwkYkD
-	 p5JBCPVsXTjG5Hi0BnJdkZr7q1vlfOOQOV0hpIckqajCmgv6WcudGGFrab+bmlJ40+A==
+	t=1793824362;
+	b=sj1kAh2qDVRnOqBQ7wG3dx7JOSO/9XFoy3dIRsF780QBc8XTMyWAXaVeTWZtKizbM/nL
+	 6L+FM3g7614G94aYlro74Khc2ZhnTwLQUfpsdjQPJtyQvTgNdcnnEF184VKEUXhDp0sHx
+	 MQxh0I9FMGRheLjkx7oxcyCPIE9aOGxwltZ9wvOX6Fu6u13jvaclr7LngNSHMlV8EuQpx
+	 QSOxsUvcUqwojojp/xoM8atquu4OxFxoyx110wV4stBN2dENwtZ1u4OaVYmYNjqEeURA0
+	 o/UU+bVGfC/lFZ5iP3erXmRiA9jL74JRRFzKLY8Q7plv7Po1uj2DxesyrF2YTRJQtHg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793822729;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Received:X-Forwarded-Encrypted:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=LCqiLHf1DIbfKNXx3ccWkvqxBhOdwo3yYkazQxIGarg=;
-	b=1Zd5qpL11gIAm6b3h2bx/PbUcOE2yj54kBazPyiJm/VaPMTVFlEP/CVx2IroaY7GdLa8
-	 xK8p6LI5wNwAKWPd+Lpj0cSXIQ/qq2AYv2PS1TBjRWGncPod3xUsN29Y8xflT/618ILNc
-	 Q4hmCThIdNXQBWFvrXNrqhSz2tco2k3F1Vh59oqWTAuzGqUDzZ/wFVIILh+3QZbgqtSP6
-	 NLYe2+f4YN6U9Vx+PugZFcm/Sf7kPphg44c5KEWDYhMhykMoDlzwMllIKmzi3hC6nNbVE
-	 W1O4smsQomPAPZMgLYaJ6Q3grnzM+pCC9ZCe9IzXmKT/ttFYKnifKXvzLIDYsPKSHkQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793824362;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To:Organization;
+	bh=/lO0mL+cBkndSMWtbQjIRUpGnu/CrhJuhEAaumulM8U=;
+	b=YVC3Mn/VC7P76FJ15bd2We3Gd6k7YVGKx+NuVKS4Gf4LD01XwHJzBU7q9uZJc8FGkkKd
+	 mS8Ei/PgcbZyF4cIUaMnk3O4x90hZnpkH+5eD2Qhff4g8Q+qeoQiqpRgde5++csGj6dT3
+	 SVkbZMpqdf9sF/5FMqQgMQlssxTlrfd9dk90RtJi/T9k0X+24StqUhFgEQqLJ3DXvyK/e
+	 2HvNUwWSj1z3zzKGOsYZbSzEjBB1nenCTGNFJKyTcrNkzHgGk9ZWVxWfxdjTgDUT1ubaS
+	 NrylY7fDJiZpeCvET0m8GXzNhyfi82su0eRvAV1vaNqe1b04+y9FDog46ckuxMDI7Nw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=linux-foundation.org;
-	spf=pass smtp.mailfrom=linuxfoundation.org;
-	dkim=pass header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=google header.b=fI2nmlcI;
-	arc=none smtp.remote-ip=209.85.218.45
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=linux.intel.com;
+	spf=pass smtp.mailfrom=linux.intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=azykdYLR;
+	arc=none smtp.remote-ip=192.198.163.13
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B65C1606EEAA
-	for <linux-hwmon@vger.kernel.org>; Wed,  4 Nov 2026 20:05:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B65C1606EEAA
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE163606A84E;
+	Wed,  4 Nov 2026 20:32:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CE163606A84E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=google header.b=fI2nmlcI
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-c4550d8ab15so175926766b.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 04 Nov 2026 12:05:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1793822727; x=1794427527; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LCqiLHf1DIbfKNXx3ccWkvqxBhOdwo3yYkazQxIGarg=;
-        b=fI2nmlcItpwZxqRsmDWssHJaMT2IN8dLg7E1xDQbx0Et/5dAwJ3lC+28bQvSn3TcBy
-         jCCz6aP+hY985kmEWKQ8J3n3DZJgb7Mf7tqsXWxEtttRySDwTo9j3SEkofmGPUukuzUB
-         aTxGLiQfrDGmJiexVo8c15QHheFgr9P51oFII=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793822727; x=1794427527;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=LCqiLHf1DIbfKNXx3ccWkvqxBhOdwo3yYkazQxIGarg=;
-        b=y/FzufaeJcJJjQfBOozwkOLJImI5Tr2qAeerGzRlGI0/tZcGzAryqdvCfAvtuoQNVt
-         3dgQI/LUWLb9/LUQPScaCqUY/DxnzUDHLOyYCnhvo0vX7OZ+bBBcFenAg/TwH66QiQr/
-         1fgkHP3pmIm18rC2LpaBXmsoXmXu/y5/g759Dr3qt3OxjSmSKbED+WJLrqu/mChHcpRz
-         KkhJqp8Hw+vJyIXnrNkei0U2uSA9GXGfif9ihrDrhAzjZRC5dIYOwcj6AyDkfmj+4tXb
-         CgNt2gFlWNE4tb0slmnPLcX0GTJ/ngdDs+jXl0trE7wMlI93/QvwwgLDe66qcW6ycNCc
-         SEQQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzm3XQoJU2WAA6cZgQoDAaYYOJ+WPEnWyBNzFBbr5oRiGzNwTuyneckmv1kMd6S1wG+0f5T9FT6bSWQfA==@vger.kernel.org
-X-Gm-Message-State: APuU4Z/LpP3T4iDLaEpuTvmYmFI9OAUVnyTSSJ5FTYYOnu5TmwYjh8hF
-	x5wWdLLLLDxgp22hjNHr5QzEoqPT4GYDmY1gUkgsPXZ5t2TQw+BdZPEmPoY1M4O05/lv8vH6ZTE
-	Mym/ay6KEcg==
-X-Gm-Gg: AYBFou2fdmtIJgY0KreEtLKV1RsKxc6DBnPuC+mfW47ORogU+kcnn5BeMAbc4f0Z+2w
-	IpTr8RtJm1+6Tl++Y8xpuHnIUiRBZ6C99kRbKEY29hPsnIHm157sAfuSHUrDxUd3OtUx1BSxIXh
-	MZE4sHszvXOms9vtY5TPzEW+1sX2il+7K9ewhxq1WVKSwFih9PTjDqb7pg+2xAGGiM+TP3R5Qeo
-	e62eIPUyZFJGZ1NpgGRWDx5EQNmyTpos59ISityhQbB33YP2YPHKI9Aa/M2HqiDP3CTUk8TohLO
-	m2DRE5fikt05dmX3BZedaI1YyyV4mZLC9XvLFDUFKhM0p04a5AwSnj26+boRXC9qjbftBPJZEo3
-	4RmAYkxiEyraRsJQc+bQTm37uDe+m9nBGsML3gt2iKExlrIMetXVZcKfNueK5aC2vRZnnecwI9p
-	51Uolv3Y3N59hCma67TtZbCJhS/1cfgoEfPyPzX8asQ/pVdvQHd0y2cDade3QaBnDo9RtQ8fIFP
-	UWrauoccueswMZee+iMgzdNeHOOCHg2RLE/gbpO6Zcy1UJyrQcoChnnCCH9k0+6+27HyuvyzhZC
-	E8IRj/m/2jHjyXkJoywvXek+WKO09Z6/O5UL/x58IWRfCkHc0eXpG9GOPUlCu/9btRfrFwcY58/
-	YNvE=
-X-Received: by 2002:a17:907:fdcb:b0:c27:420b:7c79 with SMTP id a640c23a62f3a-c4ca7af1d9emr1505836666b.48.1793822727060;
-        Wed, 04 Nov 2026 12:05:27 -0800 (PST)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c4d0e468326sm101335066b.55.2026.11.04.12.05.25
-        for <linux-hwmon@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Nov 2026 12:05:26 -0800 (PST)
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c423b145922so162302166b.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 04 Nov 2026 12:05:25 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AKwUvBxbMHjLo2RnzGKADivd8gY67yZi9jVqMRRW6Jw+6Bl6hVQaORSUTFnWromL+noZM57I6IX4kS5E2pf6MQ==@vger.kernel.org
-X-Received: by 2002:a17:907:60c8:b0:c49:a4b1:9cb1 with SMTP id
- a640c23a62f3a-c4ca795fa50mr1973235866b.3.1793822725121; Wed, 04 Nov 2026
- 12:05:25 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=azykdYLR
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793824362; x=1825360362;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6f8UgVjKpQ2wVNTwKjGWI3IG5kYob1To5ZXvPuHXznw=;
+  b=azykdYLRMV+Zru+0A7b/DkYuNubzZsIpW/0gDE9PhJBscjZ8sZlhtsj3
+   QSkQ+XOSIQbg7vjgJ+33BRRniLnHeWYLHEoaE9wACUvKv5NJPqvkTyM5p
+   Hc1yJrjIP5rHWLT6QrceUqs+NOdL9qk8Kn1EbVREctTyq4JUxn67nKSBx
+   rNmxngRxfJ7OdkgwXr+zXCORu11/VV/Id7JDlhO24Qo+fFg429CxtKopk
+   Elaww18k4nm/RtUKhNfWA8DNxc0Z32200kbc4EJ130OjwTOqiZPdTkhxI
+   02/j9tCw7B2WZjRk+uJWZihEgThCcz1IyHVLsEUz3qy/xM4WniYXhxzGF
+   A==;
+X-CSE-ConnectionGUID: rMJT0IByQKOFP/qWIL8mYA==
+X-CSE-MsgGUID: GDELmCUWSnGbypNy/YupbQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11956"; a="2590678"
+X-IronPort-AV: E=Sophos;i="6.27,195,1787036400"; 
+   d="scan'208";a="2590678"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2026 12:32:41 -0800
+X-CSE-ConnectionGUID: oeRVokCFTSG70c80N5OpXQ==
+X-CSE-MsgGUID: cq871yY0SA+tQsjaqT4Xmg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,195,1787036400"; 
+   d="scan'208";a="6690148"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.24])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2026 12:32:23 -0800
+Date: Wed, 4 Nov 2026 22:32:20 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: "Rob Herring (Arm)" <robh@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+	Jiri Pirko <jiri@resnulli.us>, Ivan Vecera <ivecera@redhat.com>,
+	Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Olivier Moysan <olivier.moysan@foss.st.com>,
+	Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Thierry Reding <thierry.reding@kernel.org>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	Lee Jones <lee@kernel.org>, Srinivas Kandagatla <srini@kernel.org>,
+	Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>,
+	Ulf Hansson <ulfh@kernel.org>,
+	Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Chanh Nguyen <chanh@os.amperecomputing.com>,
+	Alistair Francis <alistair@alistair23.me>,
+	Julius Werner <jwerner@chromium.org>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Dmitry Osipenko <digetx@gmail.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Ray Jui <ray.jui@broadcom.com>,
+	Scott Branden <scott.branden@broadcom.com>,
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	chrome-platform@lists.linux.dev, linux-gpio@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-sound@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-tegra@vger.kernel.org, mfd@lists.linux.dev,
+	linux-arm-msm@vger.kernel.org, linux-mmc@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Use hex unit address patterns
+Message-ID: <auuWVGsyb3RrOIfh@ashevche-desk.local>
+References: <20261102135330.2493332-1-robh@kernel.org>
+ <20261104-vigorous-flat-dingo-3e5bd2@quoll>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -94,51 +150,45 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261104-work-procfs-v2-0-b45cd5789ac5@brauner> <20261104-work-procfs-fs-v2-0-319e0f9a8aae@kernel.org>
-In-Reply-To: <20261104-work-procfs-fs-v2-0-319e0f9a8aae@kernel.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 4 Nov 2026 12:05:08 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wj9Y9NcOesBBm+jhPjYa7qO00fD7g7uwX+H-k0-R2difA@mail.gmail.com>
-X-Gm-Features: AclHuK9j_YIgrwhhpWOlnull6heAULBd4dgTqoOhUQQjFm_MgoIgrL1vgPfefvI
-Message-ID: <CAHk-=wj9Y9NcOesBBm+jhPjYa7qO00fD7g7uwX+H-k0-R2difA@mail.gmail.com>
-Subject: Re: [PATCH RESEND v2 00/30] proc: convert the fs, kernel and mm
- entries (Part 5/7)
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>, 
-	Josef Bacik <josef@toxicpanda.com>, Chris Mason <mason@kernel.org>, 
-	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, Greg Kroah-Hartman <gregkh@suse.de>, 
-	Joel Granados <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, 
-	linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, ntfs3@lists.linux.dev, 
-	platform-driver-x86@vger.kernel.org, coreteam@netfilter.org, 
-	kexec@lists.infradead.org, linux-pci@vger.kernel.org, 
-	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, ibm-acpi-devel@lists.sourceforge.net, 
-	jfs-discussion@lists.sourceforge.net, linux-alpha@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
-	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
-	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, 
-	samba-technical@lists.samba.org, sparclinux@vger.kernel.org, 
-	linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
-	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
-	linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-debuggers@vger.kernel.org, Chuck Lever <cel@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261104-vigorous-flat-dingo-3e5bd2@quoll>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Wed, 4 Nov 2026 at 11:49, Christian Brauner <brauner@kernel.org> wrote:
->
-> Part 5/7 of "proc: move procfs to what kernfs does", on top of part 2
+On Wed, Nov 04, 2026 at 06:32:43PM +0100, Krzysztof Kozlowski wrote:
+> On Mon, Nov 02, 2026 at 07:53:22AM -0600, Rob Herring (Arm) wrote:
+> > Unit-addresses by default (and most commonly) are hexadecimal. There's a
+> > number of cases using decimal patterns. Fix all of them, limiting the
+> > pattern to match the 'reg' limits if there are any.
 
-Christian - way too many patches, re-sent much too often, cc'd to way
-too many people.
+...
 
-Nobody is going to read these repeated resends, and all you are doing
-is clogging up peoples mailboxes.
+> > --- a/Documentation/devicetree/bindings/display/xylon,logicvc-display.yaml
+> > +++ b/Documentation/devicetree/bindings/display/xylon,logicvc-display.yaml
+> > @@ -123,7 +123,7 @@ properties:
+> >          const: 0
+> >  
+> >      patternProperties:
+> > -      "^layer@[0-9]+$":
+> > +      "^layer@[0-9a-f]+$":
+> 
+> These two lines are looking good.
+> 
+> Andy, it's okay if I give Rb tag?
 
-             Linus
+Yes, again a pointer to 34d1e754155b ("dt-bindings: iio: drop unneeded quotes").
+
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+
+I expect to see
+
+ Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com> # xylon
+
+or something that matches the piece you reviewed.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
