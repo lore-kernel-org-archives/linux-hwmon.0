@@ -1,72 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793832990;
-	b=Upxa4F+mbWX3Ys2O1xoEsR+RtOKsNE73QhcuOvGSdHwBXs77D/4/1zyFJ+bP5abi+eQ8
-	 TSfb0G74JvDq3fSu5BPyrPg8RTwCNaAvaMPP23DuI/BF8BcGtvvfcswnDk1kWODQQaJwt
-	 Rjc128vAc80xXeKhy8iutA51X2XPcjkcz/m8po8dBFw0fZsdCfjoR05SnrRwnWY5uTadI
-	 qv+yKasYEJPSQEYcYp4rXt4nRwbnUD+h6GBYGpk3ZLP1wNt8if8XcwXJr32CKpgMGcDf2
-	 Yo2NARTwagi6AXV07/aEXZW3n6/lh7G/NQJuH7VrSeTXWGpp2i+WOgq/rV2n5Iq4Rjg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793832990;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
-	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
-	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
-	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=BVSlivO0NT5LNZI1ueIGCNvTYScZ1EWmEWcTYGB4ijY=;
-	b=iX9ow4oOqEc/bvg8XdafHe1gYTcJudHREu2VQmc151BpX9ouAtwauXxl4Szn9OJu99nd
-	 T5dAKi9apVq/z8S/LW8k64fA3pjXr2lYEZ+Gs8aUSDCs1X2ONn4zc+l9wf2TgRQjualVJ
-	 RGQP8meoHDeCHKcX8ZsrjdWNpEGAZTrEuHbSYnEtIT8djVJwnznqWVp90z9ytTu7GZyOQ
-	 GoHM9jV+jDBFXyDbNOA3b0G3KldTx98lSV3oX+ZwISJuFzH73HhSDi9HlJ/m+bHkmDcKU
-	 CrfTyg+Mx4n5YAFu+4CdulHhAj+7CKIsOMHxdMu/vDv6TEhWOWtOI2h8CwTm3w1Wnqg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=k3wfvMt4;
-	arc=none smtp.remote-ip=35.89.44.37
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.47
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793833414;
+	b=Bo1GkfnuX9Lzcyyt4LRW/TqTTtUoA/J5sBH8QXBNfRSszBuayY1axnnwf0vIKulK7o2v
+	 20dGwkHNOjJAdqqHknAkns+F5fZHfFgEJLt+WUYaZ5+B2OVEbOyij2pBHOa/dJWiRtOPu
+	 6Ly1vo5el9inAP9k3oFo89YgEUSxzB87cs70jESogVsGG6/iBF4Hg8Qw020rkuM8GLIqu
+	 K+Y0YHbIZ/PwpjFnPWAaKcwsMia40vwbunmpN4JInF5LWQk+LcCjvh1AX5IJFJmBdJBKJ
+	 XXxNXoMzGomerTz+hkvhanhs0MaCnkNwg1o1TFCCCLmzIhTfuIBk0u1+F7Zbj3JkIVw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793833414;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Received:From:MIME-Version:Date:X-Gm-Features:Message-ID:Subject:To:
+	 Cc:Content-Type;
+	bh=E3/qpbZQVNV3lMpL8sax6liyRC8rCnhmkYMiRpukkUM=;
+	b=lB7ATOcRKF3qW8ktvFRShuKEkM6A1Q2qw5bmEcioHH162eN143FOsHNodZZnzmkkUhas
+	 1oXx/tAqjalo77YIBOZgoplNuFpumtpN1Uf2qp9u5Xz+u2JUXiWtOL9yEphYvRt5CnNs/
+	 AqOZuAsPdJzSiNATcomVtKvNDK9dz6mrdmYlHx6hFZoCDloEbaDLMaLOdlCif8vu+W6hX
+	 d8/a9V1f0VR/BrlSrOIu9OQhPzClGVKY0FIEv3xmM5L7AzYtoOL2eBzQEiCA9Yh+TMBlc
+	 xF0SpkljOk6N64NBSHqHyGw2WMeI8P/HMDlStv2oGKT+rrRIWlpezWm9kU1aRmAa7Ug==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Wu4+VLWG;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.47
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA48A606A329
-	for <linux-hwmon@vger.kernel.org>; Wed,  4 Nov 2026 22:56:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BA48A606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F0D1606EE97
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Nov 2026 23:03:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F0D1606EE97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=k3wfvMt4
-Received: from eig-obgw-5002b.ext.cloudfilter.net ([10.0.29.226])
-	by cmsmtp with ESMTPS
-	id ObX2xXjzTVK9UOju9xJFyf; Wed, 04 Nov 2026 22:56:29 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id Oju8xBIJ0gk6fOju9xgZKJ; Wed, 04 Nov 2026 22:56:29 +0000
-X-Authority-Analysis: v=2.4 cv=KM9aDEFo c=1 sm=1 tr=0 ts=6aebb81d
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=VwQbUJbxAAAA:8
- a=iox4zFpeAAAA:8 a=A5ctjimnlw7kqC9GiE4A:9 a=QEXdDO2ut3YA:10 a=LP3-5Lh9zdkA:10
- a=WzC6qhA0u3u7Ye7llzcV:22 a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=BVSlivO0NT5LNZI1ueIGCNvTYScZ1EWmEWcTYGB4ijY=; b=k3wfvMt43HLH
-	o5IG+l01Z2G80GAZzp/PNoN/sIzKUSjCy4c4j0ca8xEsdSXfoydWJVjhMvt9ib1gkXxGnRuKR/xZY
-	f/h5zhJuv8K4RfJRImTi68GLumWVPTGbK1gzcQx4UbxOlYHOqHngO09zT5G9Er9S54vxr1PH2v4z1
-	v0a8EeYu9jTvOgvOjKZmNddYvfwICDLgMo+cEbFY+jobEvAT1F8SWk7XqSeIMe5KsifMege2KGx8f
-	eU9xwGE8gA0ITVUtdDBbpQzbSI+tH9WGsiIks6bNznPpxnDsA/ZbkEtEmXLcT9gKUphc3VV5Dbw/u
-	wx3owxMD58aIMaf7ay8wrQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54826)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xOju5-00000001O41-43MB;
-	Thu, 05 Nov 2026 04:26:26 +0530
-Message-ID: <ae9a4df9-b1f2-4f00-ab86-d9cf8d9bc387@roeck-us.net>
-Date: Wed, 4 Nov 2026 14:56:22 -0800
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Wu4+VLWG
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-4a76f63b243so84610fac.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 04 Nov 2026 15:03:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793833413; cv=none;
+        d=google.com; s=arc-20260327;
+        b=WB4fBCn44PU9MeAvON3a7s0ITmJjehgbaGVtreUOm0b6PVS//6Z7CFvShvr8hBLcXu
+         A5s/htTBGnkw/VbEmRE+EKdl9QswcypSpxtA9VuGOzhhbokcetlpNW62chiIwb0UAOZq
+         SKTtTorDAGMrQYuqD4fMI6viGyaw1S6ZGRWbhC7vqCYUGgeTPTjJcbHgdlrPWoWonvT9
+         pzbjikX/bWte3AGjVJrySQ1z+lLgv1NmW4QLIXidC7jMKOLq0mJ/fJCDRCHUMrWdVMow
+         ErjPcv2rMi5KBzotjYqln8l5K2zv5i0LpaepOuaW6Nf8l1oWkdGm/g4MAZD2a/25ZnmG
+         hdeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:mime-version:from:dkim-signature;
+        bh=E3/qpbZQVNV3lMpL8sax6liyRC8rCnhmkYMiRpukkUM=;
+        fh=GNwwPjUiN4n9G3Jn+HqDW8Vpr69vCV8GpXZl0N0Q/pI=;
+        b=e5RpItK4lI2723+287+VfI0Pwk4nODqtnDILkE4wnCC+269UzUaKQOhGOEdPjVgytw
+         vM3dsIIw81RxSfbLyTiRNu1gm5lKrJ5NhLWpTo7iXvdQM3wDAmzGSNPbvOCYA5l35k/u
+         QZArEMyP89/e0txYEQxs7VtuonAEbJza/HOS2a/6ev/i2GZknD3ntOvvUC2/9JzpryW4
+         pnh8TwfGsPw9PrOjNC8ru1C+rbH9maxWF7shhERBqKCb1IhBO3tvFzebDRpBu3JFfVYk
+         bIie3WQinOpzedfqJlHoqPv7jjbyTTf8d3kbj3LOjhmwtpiw5qlgQrmivQpL+Fpk6g8z
+         l7kQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793833413; x=1794438213; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:mime-version:from:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=E3/qpbZQVNV3lMpL8sax6liyRC8rCnhmkYMiRpukkUM=;
+        b=Wu4+VLWGmMjjBoxRHJtRMJhfwRcobe8fdS8Amtqz9PKv/C+h/sWuWwSi61WZeR/N1o
+         0rLNvMQpZDoBcjl6hckr5Xks0iLQ51BnGOfVwmLlRz7xZEDIwgFtK8ktILHfgzTkZk8o
+         tbdYdFQdelddvOjrEUnSRtU+SsFkDsIpTf3hSYCH4vqRp/0LgMIO1kP+GGG9TV2sgsr/
+         V0ewFvLUbPDIlNrGitUpkwTMuFzisoEPauD7ODjrQ1TFBysqkgdYUx2ybwMlFl6GOKug
+         8cvaRBaqp64VsYQMSc0GXj3rQhpTk8jeTpBKrAJYPyfjoUNhvPydnznmdjYFv8aGBTDP
+         8PAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793833413; x=1794438213;
+        h=content-type:cc:to:subject:message-id:date:mime-version:from
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=E3/qpbZQVNV3lMpL8sax6liyRC8rCnhmkYMiRpukkUM=;
+        b=zp8KaVqdPXDwYqeIjAqJb+GY0uhQ6ofo/sMmXKofIeIZh/zBTxtph/zIx/wh0KJYJW
+         UsZyWT4EgM0lH7HK6eI9kExyhXqAMk2BSvZAbH2+Ni4qHjAkrp+ZvA4PXFRzxq/PCyy6
+         fj0nFLnVIwkEuMQPZIBqXhUrgu68c7oFJXf4GHy/+9MxrZ8rq491xa5QzssgzTE4TiUU
+         T3eqFwBknMRcdRKTMBQvj+TQdOQd+ZbeT/9CjJAU25DPKZXhFu8ZNTAsk+6Hm6JQcaHO
+         vBT6R5FnIg35n6PiR2WDWzRSmdEgoMsaE7D0bqfNeD1bylFXgqS5zM+KEmChoaeI/8Gy
+         3UQA==
+X-Forwarded-Encrypted: i=1; AKwUvBysIk5X/3x0KPBI1JmB9E9BAnJeHyPjHo1br0rcEUwf9lguDCyNrCFW+CsZz/Q5Uev79eoiS5yBh3Dycg==@vger.kernel.org
+X-Gm-Message-State: APuU4Z/oRufth4oopgYfFarAknN51unF0deJXkJHvY9PcfK4X5iyCVU+
+	sejBs3Fgj3AxAhhQad1uQ6SBvJgIyjsnKE+cwWoN3FvbnPX7Es6vkhkcR0Zh3I3VX0f2/MugZ6U
+	wi4cR8nO7XZjxGzyd8XXanVVJxLhvn1k=
+X-Gm-Gg: AYBFou19/G/7YhpI9Nh+ExakuCP3EsMLB1q/200Tfjzxn/r280FvXRN9SwUTrhK4faI
+	106lHZ8SIcJGD+txTE7tvVz2S3hJbds/l6XxwEKu6eqo8btI90lO0JdEQbmyf+2q+7ooXl6nvYU
+	VXlBnK0tvRt5e1Ct3sJ9p4q960YzNxPHdSe93bvbV66fh9ac22MjzFHTr1/1UNNmrzoqSFoIE3Q
+	sKC9V2RSwPyqCFRE25kc3Ml8Pd4xN5zCLzg4YI6sOJfyJTfLi5B8canmgBA2ole0ODCFf1nDUWp
+	+5EPr//do/H9UBJUUgLTtxm0AaKkR7mNs2jkGat2xZ/kCdRtjvyDAWOBH4tNSVJPv3H/5O2KDN0
+	oq4REho5LwbkyT2TD7YKWTfS004MIW5Q/pfL0PqDEFTVU2el9GU2ZMWyHjA/hbKT+5EO5ius=
+X-Received: by 2002:a05:6808:1513:b0:53c:4502:971d with SMTP id
+ 5614622812f47-567be6c8a4dmr544823b6e.36.1793833412958; Wed, 04 Nov 2026
+ 15:03:32 -0800 (PST)
+Received: from 41474967715 named unknown by gmailapi.google.com with HTTPREST;
+ Wed, 4 Nov 2026 18:03:32 -0500
+Received: from 41474967715 named unknown by gmailapi.google.com with HTTPREST;
+ Wed, 4 Nov 2026 18:03:32 -0500
+From: Kirtikumar Anandrao Ramchandani <kirtiar15502@gmail.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -76,191 +106,62 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 0/4] hwmon: Add fan tachometer support for Raspberry
- Pi RP1
-To: Andrea della Porta <andrea.porta@suse.com>
-Cc: Gary Guo <gary@garyguo.net>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Florian Fainelli <florian.fainelli@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
- <ukleinek@kernel.org>, Ray Jui <rjui@broadcom.com>,
- Scott Branden <sbranden@broadcom.com>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Gregor Herburger <gregor.herburger@linutronix.de>,
- Stanimir Varbanov <svarbanov@suse.de>, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-References: <cover.1792748690.git.andrea.porta@suse.com>
- <7df58d42-517c-4936-88b0-9d044d30882c@roeck-us.net>
- <auBzvB8TsvIK8Hik@apocalypse>
- <53a4b4bb-271c-4d2d-a9e4-cec4e0ce214b@roeck-us.net>
- <DMFPE71J8205.3FZKD5BKW3U7C@garyguo.net>
- <b02b4f0b-ad2c-453a-b69c-a0865a333d62@roeck-us.net>
- <auIotAwnOWKNApjp@apocalypse> <aus2Ra_sLySMZU1i@apocalypse>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <aus2Ra_sLySMZU1i@apocalypse>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xOju5-00000001O41-43MB
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54826
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 24
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfFC1WAA/+i49PRiBAnlFbtN3E60kG0ho3grEnENmraT+Sww5612HDSqf3uibM3xyhBGZY9kXZETptpZyuOufMVIhBqjFVJVhH3kc1zSXC+m3abhdq0tz
- w/MitbdawZ70N9I6FHmrv9W2356cni3uHTuYIdsHGq1tBiSm5yV07FniUjCLhPsuLC8JOjM5Nf9x22dZ5WyYZvoxm2CF2+k4HglyISsKVoJbrqeIVXyxAfxX
+Date: Wed, 4 Nov 2026 18:03:32 -0500
+X-Gm-Features: AclHuK-E5HhSsymovm6gqqi0LHwYAX2YAQzu1NYpLgCPDxd0d2GuBDjgyNjYCSk
+Message-ID: <CADZg-m3Mnk_QJ44HrH4SkCm+pN5QteeQv8zY9Q7EE7RQv65O8A@mail.gmail.com>
+Subject: [PATCH 1/2] devres: add managed timer shutdown helper
+To: Hans de Goede <hansg@kernel.org>, Guenter Roeck <linux@roeck-us.net>
+Cc: Matti Vaittinen <mazziesaccount@gmail.com>, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 11/4/26 05:42, Andrea della Porta wrote:
-> Hi,
-> 
-> On 17:54 Wed 28 Oct     , Andrea della Porta wrote:
->> On 09:13 Tue 27 Oct     , Guenter Roeck wrote:
->>> On Tue, Oct 27, 2026 at 10:51:15PM +0800, Gary Guo wrote:
->>>> On Tue Oct 27, 2026 at 9:48 PM CST, Guenter Roeck wrote:
->>>>> On Tue, Oct 27, 2026 at 10:49:48AM +0100, Andrea della Porta wrote:
->>>>>> Hi Guenter,
->>>>>>
->>>>>> Yes, I also proposed that in the cover letter because auxbus seems also a viable
->>>>>> solution.
->>>>>>
->>>>>> The current implementation is a consequence to the discussion about the companion
->>>>>> PWM driver, from here (and the revisions that followed):
->>>>>>
->>>>>> https://lore.kernel.org/all/cover.1775223441.git.andrea.porta@suse.com/
->>>>>>
->>>>>> To give a short and hopefully coherent view of the decisions, here's a breakdown:
->>>>>>
->>>>>> - first proposal: PWM driver + fan hwmon (to read the RPM), all in the same driver
->>>>>>
->>>>>> - V2: Uwe preferred to split the PWM driver from the hwmon one, so the hwmon was
->>>>>>    dropped from teh PWM driver in favor of a future (fan) driver. To accomplish this,
->>>>>>    I moved from readl/writel to regmap + syscon.
->>>>>>
->>>>>> - V8: Gary proposed to export a function to read the fan RPM as a viable
->>>>>>    solution. As a result, the regmap/syscon was dropped as it was no longer needed
->>>>>>    and the function has been exported from the PWM driver
->>>>>>
->>>>>> - new patchset for fan driver: the now independent hwmon moodle just call the
->>>>>>    exported function from thw PWM driver.
->>>>>>
->>>>>> If the auxiliary bus is indeed the preferred approach, I'd like to ensure we are
->>>>>> all aligned, as this would also require refactoring the PWM driver.
->>>>>>
->>>>>
->>>>> Let's say it that way: If you don't want to implement the auxiliary driver,
->>>>> and you insist using the exported function, I would prefer for you to go back
->>>>> to the first solution. The one thing I really dislike is conceptually broken
->>>>> code, and I consider the current approach broken. Your call, but the one thing
->>>>> I won't accept is the code with the exported function.
->>>>
->>>> I agree on the auxiliary driver part. However, I don't think EXPORT_SYMBOL_NS is
->>>> an issue, and regmap is not the right fit here:
->>>>
->>>> - Previous version of the PWM1 patch series publish regmap using
->>>>    of_syscon_register_regmap, but this cannot be undone -- which needs to happen
->>>>    on PWM device unbind (the RP1 PWM device is itself platform device, but RP1
->>>>    chip itself is PCIe device which must be removable).
->>>>
->>>> - The tachometer register is not its own separate register, but rather (re)using
->>>>    the phase control register. The phase control is not implemented in the RP1
->>>>    PWM driver on the list yet, so this is currently a simple register read -- I
->>>>    can see that RP1 PWM driver need to take special care to about the tachometer
->>>>    reading if the phase control is implemented.
->>>>
->>>>    For the two reasons above, I think the way that tachometer is read should
->>>>    really be an implementation detail of the PWM driver and not for the hwmon
->>>>    driver to worry about, so I suggested using EXPORT_SYMBOL_NS.
->>>>
->>>> - EXPORT_SYMBOL_NS is the documented way for exposing functionality from parent
->>>>    device to auxiliary drivers: https://docs.kernel.org/driver-api/auxiliary_bus.html
->>>>
->>>
->>> Let's agree to disagree, and keep the code in the pwm subsystem.
->>
->> And auxiliary bus it will be. I propose the following:
->>
->> - drivers/pwm/pwm-rp1.c: create an auxiliary device for the fan. The function to read
->>    the RPM will not be exported, but a function pointer will be passed through the
->>    private data to the fan driver. No need for regmap. To be taken by Uwe.
->>
->> - drivers/hwmon/rp1-hwmon.c: The auxiliary driver is probed against the device registered
->>    by the pwm driver. No imported function. To be taken by Guenter.
->>
->> In this way, we decouple the two drivers and we leverage the auxiliary bus paradigm.
->> Also, no DT node needed for the fan.
->>
->> Do we all agree on this approach?
-> 
-> A gentle reminder about this inquiry. Before refactoring both the PWM and the fan
-> driver I'd like to be sure that the proposed approach is at least acceptable.
-> 
+Provide a devres action for initialized timers. The action calls
+timer_shutdown_sync(), draining the callback and rejecting later rearming
+before device-managed storage is released.
 
-This is just as bad as the exported symbol, as it creates a cross-module dependency
-which I would strongly prefer to avoid. Given that this is actually suggested
-in the guidance for auxiliary drivers (shiver), lets just keep the EXPORT_SYMBOL_NS
-approach after all.
+Use devm_add_action_or_reset() so a failed action registration shuts the
+timer down immediately.
 
-Guenter
+Signed-off-by: Kirtikumar Anandrao Ramchandani <kirtiar15502@gmail.com>
+---
+ include/linux/devm-helpers.h | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
+diff --git a/include/linux/devm-helpers.h b/include/linux/devm-helpers.h
+index 708ca9131..ffe8b68b7 100644
+--- a/include/linux/devm-helpers.h
++++ b/include/linux/devm-helpers.h
+@@ -24,8 +24,33 @@
+  */
+
+ #include <linux/device.h>
++#include <linux/timer.h>
+ #include <linux/workqueue.h>
+
++static inline void devm_timer_shutdown(void *res)
++{
++	timer_shutdown_sync(res);
++}
++
++/**
++ * devm_timer_autoshutdown - Shut down an initialized timer on resource release
++ * @dev: Device whose lifetime the timer is bound to
++ * @timer: Initialized timer to shut down
++ *
++ * Register a timer_shutdown_sync() action. Register this action before
++ * arming the timer, and after resources that its callback may access.
++ * The timer is shut down immediately if action registration fails.
++ *
++ * The callback's resources must remain live until shutdown completes. Any
++ * independent user of the timer must stop before the timer's storage is
++ * released. Devres actions run in reverse registration order.
++ */
++static inline int devm_timer_autoshutdown(struct device *dev,
++					  struct timer_list *timer)
++{
++	return devm_add_action_or_reset(dev, devm_timer_shutdown, timer);
++}
++
+ static inline void devm_delayed_work_drop(void *res)
+ {
+ 	cancel_delayed_work_sync(res);
