@@ -1,59 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793801262;
-	b=N6O1TsGNnxHhn6cKUInHLTmfrrk6XDwHOQTMb3vBkZPzVPPTOuBqnvCN+Vkn4fgrcbSm
-	 EYiGu+c2EhVo44Myydv2N4lr/AK4SjITf1YJR29Qow9VFneB2SG158OaiJ6SWZu4hKpfo
-	 ABRDCGfMgRaM+A2Ft2pnqLwd6o2RMZuluQ5GjM1uhY6rqQ2mht5TmQkgqrsB7M173l6er
-	 Is9Fj53MpP5gxblWvqtLqfW7zOhDh0YsOorHQIgmFC6Gyd9MVYWFdUflYMQsOW/mEgT7o
-	 ZvCdQ+txalTs7MdQ1NFiGGDfNu1bllFkfoOTSH7x7kNxIcnaG7eDyJKl4A0xMsccnmg==
+	t=1793803477;
+	b=qaIRwhjc4OxBkTAd+muXf7Et/+nUQo8lwoYLSOIdStZYbnnS7rds9ENz0uFXEV+a6GsS
+	 TLQ1IiE7ASf3s935RBFrdOMCi/hLRlMFwCMMmqwRNAnvqbvT3cSsRksgKqvdTuF5LPcii
+	 9ekFfBHd+h/9IcNMEM2WapvLsTMUvdBPM5qt2sLdHGh/4wVbDCEP0lGEZDIsfiktpEIkH
+	 jIzDB2ZnH8ePC11PxxpSMVv1okVNRpWg6QRh6dZE8xFGczrS+73TAKFRPR6XFMxLahJD9
+	 XYNE/HmYq90G1HIEo8zgdoEkc+C38Ck8m7ja7krm6fxpK/OEJPRYVaPadRjSQ+bRRpQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793801262;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=FL6m0RtLAqJq1qmlWsGMqjCbKXb+q2hr1SV7q87y5tk=;
-	b=1g6053c0MPS4g6boQX18vjPyEwsvuhzbsx13dgEEAfDo+YQj26O+5vZL8wEzBg4Lyk3w
-	 g9m/YrNQZsT63CifCIOzWDvebFg6go0j3cWWs1+qZ5/NeOnUJ663yWUDWGERuYuvs2zNs
-	 0JtMW+KWO5us9FkOba67+u4fPiCRcltTzdjkgM1aSM/mjXFQNpzBcHfqDh30Byx7U30yu
-	 Mv65ffn0Z0msmE5c4zNZJlXLW764Gnrlbd0ZbKME0bXNdO5IEg+3QAwyDw6vdvB1TSkzB
-	 mYZcqaNaxZ7O5+mbVmgHWa2T0HW8vdkIJnAQsnw8WMFEdKdXKBKOwORNpuqrm3G1zyg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793803477;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
+	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
+	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
+	bh=biqFWrHHGUpDuzb1SMRN7uOcyRrGYjR2AxbuvKi8mAU=;
+	b=DvQRssPisr795ZUb+QAUJm/uRc9thRxj6jRNCWYBM3+TsFp6NRUAdTb7fPq1GoFF97At
+	 wbXjb6o8S+VlPj0U4/dLSojuIRT+xD9ngu66fH2SLQCr4v+uMxUHjGnj1gn+0VKSXkc8i
+	 51xbEw9HVZ7OlmxWC/UHWGnYtAImGoT4jVjVWzRebnVL/D0b7poQZcBWup85rq/ddoqK4
+	 4srT1fj7k+qoeC/pKSJguqJ9m2Q8o3i6whF8Yx+XVRNKm8VPUSCh3SAb0hPEJrPrqMvVd
+	 wuMtsThULBa7nFOUkfXnEUHNRFpYE78ozuhCFk83PG9iP5iyCjAvAdptWDw6yniVx/A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AECCAsZL;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=roeck-us.net;
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b="gSLr/Xby";
+	arc=none smtp.remote-ip=44.202.169.37
+Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 68FE1606A329;
-	Wed,  4 Nov 2026 14:07:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F3B606A326
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Nov 2026 14:44:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 64F3B606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AECCAsZL
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 2C1441F00919;
-	Wed,  4 Nov 2026 14:07:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793801262;
-	bh=FL6m0RtLAqJq1qmlWsGMqjCbKXb+q2hr1SV7q87y5tk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=AECCAsZL4gphmtv4Bgo0R5lpISjZoiy2Bo6laSy52d7WH+iup1b+fpOA6Jfex3lgT
-	 SgOTPz1MkSFFRaNCCZxzQQrWZzrnMabflCizdUt/AiHfjaQTrbs2EuIHROwwn7+TZj
-	 4oth8onrwjrS4aBPKD20HeXE2rLFYWVX+rYrci6ZaAVoXwjm8JyVnOQRDlbJ1adx1O
-	 pMPRzL1qR9W6Kn+OVlqJFkjGaW3rilUvcLQIj6h723qgS+u1z9uM58nLX21JYH7GSv
-	 5BbeWPVIKmIvBDqxbh6MKsKIbXxMjvdkmYrxyyB3ZucDhEcM3C9QjpjrQRt2RcZNsY
-	 ee0WvfPVl736g==
-Date: Wed, 4 Nov 2026 15:07:38 +0100
-From: Bartosz Golaszewski <brgl@kernel.org>
-To: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-Cc: Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>, 
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Linus Walleij <linusw@kernel.org>, linux-gpio@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH 3/3] gpio: gpio-ltc4283: Add support for the LTC4284 Swap
- Controller
-Message-ID: <qamxos4qxi24qqb3g644fgmap7yksoxlusszwoklmkdgexngtx@xfmd6iemag2h>
-References: <20261104-staging-ltc4284-v1-0-49fce67ebc48@analog.com>
- <20261104-staging-ltc4284-v1-3-49fce67ebc48@analog.com>
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=gSLr/Xby
+Received: from eig-obgw-5002b.ext.cloudfilter.net ([10.0.29.226])
+	by cmsmtp with ESMTPS
+	id OcDCxCDCbJFmFOcE7xQtXs; Wed, 04 Nov 2026 14:44:35 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id OcE6xwf9zgk6fOcE7xTpDs; Wed, 04 Nov 2026 14:44:35 +0000
+X-Authority-Analysis: v=2.4 cv=KM9aDEFo c=1 sm=1 tr=0 ts=6aeb44d3
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8 a=_jlGtV7tAAAA:8
+ a=H_7rOOZNw-gYM5RDhToA:9 a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=biqFWrHHGUpDuzb1SMRN7uOcyRrGYjR2AxbuvKi8mAU=; b=gSLr/XbyCzp5Bi4IRrpQrsmly3
+	ZbWl+CQqby8tuFyHXsqV86sWqIBTvVkHSukUR65n1BAiyEzpr+IO0lVSxj1M+Dh9kagvHcYw3e9lb
+	Ss02ix35KKLIo4Fh40J4ltVYlsC7plNL+00KpFaURAJEOBsZfeIbcByvYzep36DI8fdEXCSy2yInM
+	2yli8g5ZuKMYF5sBTpQTiFZ1tkkyt0YxbHoE1rwiO1jjzOlOff5UDdJ68aF6fnfZ1DHmHXFGA7rHP
+	Ty+oyTwpiLIR/XPhzC/hZd6C08hzOngYPpw8p8gxZjlgqzxx90r4CJrGlCJ5cov3rqtQH5d3vsCjp
+	ZEC//Jig==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:51048 helo=server.roeck-us.net)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xOcE6-00000001Uxx-26ft;
+	Wed, 04 Nov 2026 20:14:34 +0530
+From: Guenter Roeck <linux@roeck-us.net>
+To: linux-hwmon@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Aleksa Savic <savicaleksa83@gmail.com>
+Subject: [PATCH] hwmon: (asus_rog_ryujin) Fix timeout when reading 0% duty cycle
+Date: Wed,  4 Nov 2026 06:44:32 -0800
+Message-ID: <20261104144432.3199070-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -63,43 +80,106 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261104-staging-ltc4284-v1-3-49fce67ebc48@analog.com>
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xOcE6-00000001Uxx-26ft
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:51048
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 14
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfBq0IIocMaGMdUuJAHCXZLSBf4AsFb+lcLdbvUDuSKPI5TTcFmgCO+WHJDTJcGyoVq/hZDXFDrBYHAVKdcbGeD5fswLlN1kxpaorD9cIUUVO95TytYlr
+ /Cvo6RXn7ousrsBpXwE0S25sZcHAFU1o/1w43CUuvPOK3QMeAxUKDfROM843jqkohaKHzZI2e6zaUPQf+MV+GDnl++8jLPBNHRYvZTLcucmlbAN96PbBEO2W
 
-On Wed, Nov 04, 2026 at 11:30:02AM +0800, Alexis Czezar Torreno wrote:
-> Similar to LTC4283, LTC4284 has up to 8 pins that can be configured
-> as GPIOs and behaves the same.
-> 
-> Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-> ---
->  drivers/gpio/Kconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index 55e4280029d86e7701d9a043c89537f60bb70c6e..de9226619ef2f77fdded123657a14c15cbba07b1 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -1864,11 +1864,11 @@ config GPIO_AD7768
->  	  called gpio-ad7768.
->  
->  config GPIO_LTC4283
-> -	tristate "Analog Devices LTC4283 GPIO support"
-> +	tristate "Analog Devices LTC4283 and similar devices GPIO support"
->  	depends on SENSORS_LTC4283
->  	help
->  	  If you say yes here you want the GPIO function available in Analog
-> -	  Devices LTC4283 Negative Voltage Hot Swap Controller.
-> +	  Devices LTC4283 and similar devices Negative Voltage Hot Swap Controller.
->  
->  	  This driver can also be built as a module. If so, the module will
->  	  be called gpio-ltc4283.
-> 
-> -- 
-> 2.34.1
->
+The device uses the same zero-duty report format for both legitimate 0%
+duty GET responses and SET confirmation ACKs on cooler and controller
+duty channels. To distinguish them, rog_ryujin_raw_event() checks
+!completion_done() on cooler_duty_set and controller_duty_set, assuming
+this is only true while a SET command is awaiting confirmation.
 
-Is there something missing from this commit? The commit message suggests
-there would be some code changes?
+However, init_completion() initializes the completion count to zero, so
+!completion_done() evaluates to true from probe until the first SET
+command completes. Likewise, if rog_ryujin_execute_cmd() fails to send a
+command, times out, or is interrupted after reinit_completion(), the
+completion remains uncompleted. When a valid 0% duty GET response then
+arrives, rog_ryujin_raw_event() consumes it as a SET confirmation and
+leaves the pending *_duty_received completion uncompleted, causing
+rog_ryujin_execute_cmd() to wait 1.5 seconds and fail with -ETIMEDOUT.
 
-Bart
+Mark all completions as done with complete_all() after initialization in
+rog_ryujin_probe(), and complete status_completion on error in
+rog_ryujin_execute_cmd(), so !completion_done() is only true while a
+command is actively awaiting a response.
+
+Fixes: ed3e03790c5c ("hwmon: Add driver for ASUS ROG RYUJIN II 360 AIO cooler")
+Cc: Aleksa Savic <savicaleksa83@gmail.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/asus_rog_ryujin.c | 27 +++++++++++++++++++++++----
+ 1 file changed, 23 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/hwmon/asus_rog_ryujin.c b/drivers/hwmon/asus_rog_ryujin.c
+index ba188e867934..111e0099fd9c 100644
+--- a/drivers/hwmon/asus_rog_ryujin.c
++++ b/drivers/hwmon/asus_rog_ryujin.c
+@@ -207,16 +207,23 @@ static int rog_ryujin_execute_cmd(struct rog_ryujin_data *priv, const u8 *cmd, i
+ 	/* Send command for getting data */
+ 	ret = rog_ryujin_write_expanded(priv, cmd, cmd_length);
+ 	if (ret < 0)
+-		return ret;
++		goto out_complete;
+ 
+ 	ret = wait_for_completion_interruptible_timeout(status_completion,
+ 							msecs_to_jiffies(STATUS_VALIDITY));
+ 	if (ret == 0)
+-		return -ETIMEDOUT;
+-	else if (ret < 0)
+-		return ret;
++		ret = -ETIMEDOUT;
++	if (ret < 0)
++		goto out_complete;
+ 
+ 	return 0;
++
++out_complete:
++	spin_lock_irqsave(&priv->status_report_request_lock, flags);
++	if (!completion_done(status_completion))
++		complete_all(status_completion);
++	spin_unlock_irqrestore(&priv->status_report_request_lock, flags);
++	return ret;
+ }
+ 
+ static int rog_ryujin_get_status(struct rog_ryujin_data *priv)
+@@ -630,6 +637,18 @@ static int rog_ryujin_probe(struct hid_device *hdev, const struct hid_device_id
+ 	init_completion(&priv->cooler_duty_set);
+ 	init_completion(&priv->controller_duty_set);
+ 
++	/*
++	 * Start completions in the completed state so rog_ryujin_raw_event()
++	 * only sees !completion_done() while rog_ryujin_execute_cmd() is
++	 * awaiting a response.
++	 */
++	complete_all(&priv->cooler_status_received);
++	complete_all(&priv->controller_status_received);
++	complete_all(&priv->cooler_duty_received);
++	complete_all(&priv->controller_duty_received);
++	complete_all(&priv->cooler_duty_set);
++	complete_all(&priv->controller_duty_set);
++
+ 	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "rog_ryujin",
+ 							  priv, &rog_ryujin_chip_info, NULL);
+ 	if (IS_ERR(priv->hwmon_dev)) {
+-- 
+2.45.2
+
