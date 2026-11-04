@@ -1,111 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793781453;
-	b=BOhy0JIDs6qa7h0x0ssESg+ag4ghGeKiDTf3fgoneZgH3oQg7fFNbENVjR6pc2kE6hwH
-	 36z9CcGTjls38V1JGfChawU4XZ5YjhbPnl3HzdkXAVaKIQ3K5424AwpPFUiVqoVI2NCxd
-	 1MrEZgrRDInML0LXL/jBX2f0wISJFo+X2QwR3jXakhWF+ZUV4FmR1bLDD2EC1PeQfSwqa
-	 lazfxAFz79IKPi1jSfsE2enV9KsXw0iZBX0FCNDcHz60u9T/ismfrPRqzB0Xfd36y+qpc
-	 oZQIvW1m5/Dzauy/PSyuBL2xZONeHLIBqB+ZBu/UChKosp40OnGIsEkPYN+Bt0pu3HQ==
+	t=1793781909;
+	b=jXER054wXfeyFrUK1NFxUz4fTCOUwTq9PvQeJvIGVbK4IfZpeJ4rm23kfDi+DRWjMKeM
+	 1MkspkzDfdRf+AJw4/r0PG8RnfKirmGwX/Trazy5IXw4E8WdAEykNCnO3wy0C5L8FWbZt
+	 sBMvPQXmM3fnawuutEiVZWg9xcxKni7HmT0yU1hZopqCt5gfKa7S4rSRj3Z7u0vcHW48G
+	 CmFmxe7sghm72Rxc+8OGYG7sBLNIOh6coZL7qi9sEzZGxx27XRAuxDrUYLw8ENvjwP/da
+	 kuMGoACl54gWH3x6unaNpE/bapb9KNAKx40P4EKxZgHYNaDZxK3+dcXSszDD37UrsRw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793781453;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Proofpoint-GUID:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-ORIG-GUID:
-	 X-Authority-Analysis:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=KVKN9kg/Uqv6XDovB+Zs1e25cxjcx32C++i9N3htlzs=;
-	b=ePIzevSobMjHD4Aq/+qHx4UpKzZLPUppFMEMiQINYuuA2CEF0xlI21UQ8MT9MPKMBo33
-	 b8EHxeF8FDd5RxMWiI2JpcHEdDCO7/Lq/mbyKGZhn5ZzgpbRXhQ7wT4s6xuSF50gdK5ts
-	 5f1ONT1wYpsLh0oSmxttPwUkEFoWn/xEeD1/lm+MViYaon6A4Ug+gGhGJfH6o8v0FD0ea
-	 AHM8MEkdT8p1SxqTa7xjfZjCgMPznkUKLONVceYGMq+0JqhVC/4ZHgE7iQS7vf3z2lU+F
-	 CujutSlELhyYOIyhIHheoFJY2SG434DKekkMFbqKV/2t8xO7BEr3ehVtbTX4AzW9xFw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793781909;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:From:Reply-To:Subject:To:Cc:
+	 References:Content-Language:Autocrypt:Organization:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=sewKb4uzrc83cn/bmcIRxi4zBM4CwiMJbeIGg3rMpL8=;
+	b=zhbDcCL8OT/VWqwp10cWFSvdSyZ2+xf2Qddz54WUzXgi/a998tKCEC6YGg9TkXWSHhe4
+	 CowTOikb+r/IA0ZVvPR41iHPEPGksazqGMfPxqmcyTntnEAFgBtxe0nJzjHqFfoGBYSou
+	 l2FS9Ui9AEV3DVWVphKdo1/mkSFOGkGxnbJ4StkMfRbdqWcn/lvEGTEm7aM+n//oAtJiX
+	 IWcpDjIMrroylzDW/ukMG93f0qEygV6I6YWMx0CW4qvyw2Gsxe9xyFeazTCmwbZacCgic
+	 dOXl4j0UPOdx7/nqMp2d8vXDrJDKQ9s9cmhBR56tuEMr7Fu0Iw+MY9ZRnEG3aW24gqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=oss.qualcomm.com;
-	spf=pass smtp.mailfrom=oss.qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=ZklL7L7Z;
-	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=SR0beHqp;
-	arc=none smtp.remote-ip=205.220.180.131
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linaro.org;
+	spf=pass smtp.mailfrom=linaro.org;
+	arc=none smtp.remote-ip=209.85.128.43
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E55B1606A31B
-	for <linux-hwmon@vger.kernel.org>; Wed,  4 Nov 2026 08:37:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E55B1606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=ZklL7L7Z;
-	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=SR0beHqp
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A48Kix0175447
-	for <linux-hwmon@vger.kernel.org>; Wed, 4 Nov 2026 08:37:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	KVKN9kg/Uqv6XDovB+Zs1e25cxjcx32C++i9N3htlzs=; b=ZklL7L7ZCWzQ2sZv
-	tFpS+HVTme9ImWkasA4By92hM/ckOxk1UZQ8dB8KKqny2rV56YPm02nuXkapFpa0
-	/93w5AX3YB6/kSHOCKGY5PMWQinMs4bkaFtqyLBeykadLqLEb+0GHIvAN4/XKl42
-	7maxi98XZ4EyhRQc+FU78lpXJr//wyijsjg8MJ2trwdY8N9o3d5RJ8rKw/TUYhfN
-	touLwV6tCFBe12u0myVNKQR2g1hIOMZBpyE5Jhu+leDxLqJSWcbAdFm6J4ihWtLx
-	HZNV3xfDGU9p6alhIBG+iplWJVDNRx9hMh7P4NMH+uGiFC9OmsYdeEKEshaHsiR1
-	+N0GzQ==
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hqmjbu2j5-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-hwmon@vger.kernel.org>; Wed, 04 Nov 2026 08:37:31 +0000 (GMT)
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-536708d1a3eso1382741cf.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 04 Nov 2026 00:37:31 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E43AD606A33B
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Nov 2026 08:45:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E43AD606A33B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a20bde60a0so2911085e9.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 04 Nov 2026 00:45:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1793781451; x=1794386251; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=KVKN9kg/Uqv6XDovB+Zs1e25cxjcx32C++i9N3htlzs=;
-        b=SR0beHqpbclrsxfec93AMxzw9QKXVpjS1WpzP218AT5Xj97T0x+G+ypmj3Va7cZ1kf
-         ZLgqtCK+apakHbojRjXVq2AdVQ2eZy7YnfL/XyyJQgEuFkAup5HZKe65T+KaGMi58ouo
-         oOKVe0XBEKHuo27jOimkkcS8+vrv65ABsmRNyDDkKvbygb8MxlxCmm1viHvgIpu06TxX
-         y7kvH0OjSsDp5pt9StUfaYprediGs5fDEwf/z1pXcr8wXRbKfAOrCMsjL7VkeDGaLKFg
-         u78OhaU+74FfVgF90IIg7vwee8Eu5cKIx7yh8L+o3K6cTCktIvl/+/0c/YHa4cIJ2SV+
-         K0bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793781451; x=1794386251;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1793781904; x=1794386704; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :autocrypt:content-language:references:cc:to:subject:reply-to:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=KVKN9kg/Uqv6XDovB+Zs1e25cxjcx32C++i9N3htlzs=;
-        b=HMulRPKQo4yD96VeX0PrzHsLIhqE41+fGPjD3Uu9wZWxzyryw9z3oBfwzkb1th8CvE
-         5wvbxIpbSrhDQC0w6mjm8DydY6Kk1UVw0s2S1bq+EA9bgLslvVQIswCERThcwkUHEI8e
-         6n3HwNu6sY4OV2bYe+2OIoHfJC4Ye+c2nZSoa8kmN9mGDZ/bXbXGsF3/PQKQBa+eBq6b
-         zcoS7aPOMH91ipIpqgplMd2azMO2IObTNBjyW5RBjGqAECLRSVucwas5ITPzCpJZN4tN
-         A9Rn2r7xADfP4Hi3BPobrIuA0t1in2EuXJq9yCgtXGlbsEw5SKxC9sy6+SiwZOko8jf8
-         QsPA==
-X-Forwarded-Encrypted: i=1; AKwUvBzyA/OmwoOVn1rbtWIfiuYRaT7DUbyWk50H0DULX4uxSYh3fJkAKZnUVeXbvS++x47FycynZRJ2UrTQ+Q==@vger.kernel.org
-X-Gm-Message-State: APuU4Z9Jg9ktcKiWKEZnM7ak68p7fZUKJCEVVJNfbkxJgv98M8cUR7pl
-	X7P10q69B8wmUJq0gLDB7/ef11Zkd2lOeipGiUnuu+M+ldnN5SBzZKdnVt8hqcxyRLvE6ecms+V
-	KBAatF5ghnDxE/DHb/rilTm0WbKJAmaWDyzQHHqWbpNEvaFeISqolDc/PBRz6irfGHA==
-X-Gm-Gg: AYBFou26rzebV42HgFriT/jP4dEroem1iIkIOm9T5UGMr6c9vzWxYIDK1/aDmBTNq/X
-	7XROvKJQHIc6rItcqguA0PF4petIVcxpUp33CeMaICFLiEQmwY6WHFhCWeJB+ptztv1HZhtRFgA
-	gKraaRsvgxGJ1YORvw6qBdmTjnEnxqZlwzY6LVu6FJ/TweN/O2QWr3T6QF1/L8AdL8Cip6RjSBJ
-	a6X6YIW/D5PAqbWA6IxZJEoKucMRj0HaxjFLKBChCXE1/PIW1cUCnsCPixlA2sCiOMXNJOuPwIM
-	ZpF2exSRXKrtyoUOhx60MoCL9CRZUHdKG0qjReSXM7VgKJ41V6HbEQuq1QgAjgPDji/ebI9Nl60
-	dMjW/8gwnjB/VTbH6Q0I2gTLFS/qEKB9JCmbe5ZsvDkCJ2rfMd8mpmr2WBCICNa1Fw4kN
-X-Received: by 2002:a05:620a:cd8:b0:944:12fe:c8f1 with SMTP id af79cd13be357-94421367ed6mr2481150985a.0.1793781451220;
-        Wed, 04 Nov 2026 00:37:31 -0800 (PST)
-X-Received: by 2002:a05:620a:cd8:b0:944:12fe:c8f1 with SMTP id af79cd13be357-94421367ed6mr2481148285a.0.1793781450641;
-        Wed, 04 Nov 2026 00:37:30 -0800 (PST)
-Received: from [192.168.226.1] ([178.235.128.140])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b55abd5569sm538339a12.5.2026.11.04.00.37.28
+        bh=sewKb4uzrc83cn/bmcIRxi4zBM4CwiMJbeIGg3rMpL8=;
+        b=lhZds9+ZHwK2V+PeQ/IRFU1kXExrO5GO1gRGTuSzj1vnh9JwwsDjztEp3smuuajVSn
+         Fs1EAO3XXiTA3NnJdHzOcJpycWTRy9kG00n2sBOg9Vmn7PXRdVkSqB9p4F3nKQiblY0z
+         SwGrz04AwE+znAnaNeEkdNCD0uuaTp7rtglwRGTB3nBw6av+wwZXBfLu+h56HppsF5j+
+         DDH7Bz+GAwRRVxTxz/G87v/PNGXk39mQ/jF+Dok4V2r4siGCRqybjBbt6LeMhNkVgH7L
+         LdZ0ZmwdcQxFo3TqDzzIv644MdqZE5R1gBUYriTgi9BoLhRoq3cFdqD4ddF8EbmhqnXh
+         2m8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793781904; x=1794386704;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :autocrypt:content-language:references:cc:to:subject:reply-to:from
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=sewKb4uzrc83cn/bmcIRxi4zBM4CwiMJbeIGg3rMpL8=;
+        b=h2wFSheKnFqVxdxBYdGjEiVoknnBNLbKqJm9is18JOJGJIV3JS5gELfrXqqIrJBjP6
+         qZyi1IIYqYqZMhxKCdqIMhnXN//iUM3v53mzUjP/EWgm8uPwZduB81EIHu2FwBU9vHB5
+         QR1gBsmGg6Wi0Rovo5zQoWw+hbEJcesJuGz6iGhyvG39wvsBqbeN+Fau5YzyXboEjWZ6
+         sp+lG7A/ENPQIKdSrOXOAzf5M+3NenzVGm72SViiBLG11qf0rN/zq0jYyc6S6opW40TG
+         PDAoXWSkod+L7y41jYsrqiI+p4432iBYoz15h6GudNtHrePlXNrnlA0funIK7mqpk+7k
+         zgYQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzeGK83Cg0I7B51uS9CSTID6qoo7qyzm/KrHgp7dnr1KuyTxqgqg9TlsrI6+cAPdF+dj4YnCXSQFmt0ag==@vger.kernel.org
+X-Gm-Message-State: APuU4Z++zFrIs5fqxKwj5bYTJJdWpU71HBw4ZX3b9ziKWlXYh+MxN91o
+	bLRpii6u3shNQmihlMQnbGNV35VxsVcZ/Yf70++bn+UqkCQEzAtJsx2pKCp5mdjsUnWuLaYpWGC
+	T4Fh3
+X-Gm-Gg: AYBFou0p44REdpvaWZxVDOyYgz51HUoklZliDuW90G7yVZ2Mg6U5QBdAWi91jY1Fu6h
+	kmoakJJ0jA4fQlUZRg16hthw8//4imbGO6YIMnZChbTLsbIzevv0WyINJ2ZvuiXYBFw7vp97LlH
+	FNmg0tTcrRpQSosbCVv4G1YXltylhaYW8NUzFPdXqpQIJBWnAlCijJjiIdRmhxdcH3Ph3BaIx9z
+	MbJ8fv/Rf1I4XYiU41r8yO6M1DXdZr6aN8l0eiww7c9iEZDpNi32cliACKUnZtd8Ru9697k+BIh
+	AJ4NWod4YI6xRh9A73Ot6VY8XZZgscg+FjYYJU15qMVATD6L8raXrnomdz9zsBBLAI4qs4cK4e7
+	mZ0DffgrZHQT5novvtGXC89NNki1qxCxjhfG9Jx9WTkaihSHmsNu0GOxS1HwtSrKVjBqPU3foDu
+	yfZvw0t8sfsAcokEzT537HUqPp58kOBeHn5wjidp9QuZ8Va5kqynA65Af+NyRFAI5v4s/IFnL6p
+	LWjeTICIv+mWAlAFytmhEzKa9vTgC9gCyj8VQvS/9gFrFKHyJ5hmQfbeXXUZMwWt3jf0quFh1mc
+	HxORWH5ik7lxgirw/t5zwUWu63bo6hv1uZ5vDAO8OywfVjwPlUyw+8Okj5O/0XBmg4/LFYFhxtg
+	Z6FMIE1w=
+X-Received: by 2002:a05:600c:628d:b0:4a2:397:73e9 with SMTP id 5b1f17b1804b1-4ac17d1995amr354869205e9.18.1793781904156;
+        Wed, 04 Nov 2026 00:45:04 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:106d:1080:6762:47bb:1e06:ff70? ([2a01:e0a:106d:1080:6762:47bb:1e06:ff70])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b43cff3fcdsm37072035e9.11.2026.11.04.00.45.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Nov 2026 00:37:29 -0800 (PST)
-Message-ID: <a759d346-3fea-4a01-a80f-de354746a288@oss.qualcomm.com>
-Date: Wed, 4 Nov 2026 09:37:27 +0100
+        Wed, 04 Nov 2026 00:45:03 -0800 (PST)
+Message-ID: <01fe2a71-ba6f-470b-b6bf-e536a1013b09@linaro.org>
+Date: Wed, 4 Nov 2026 09:45:02 +0100
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -116,83 +92,95 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: Kconfig dependency loop LEDS_CLASS -> EC_ASUS_GLYMUR -> THERMAL
- -> POWER_SUPPLY -> HID_NVIDIA_SHIELD -> LEDS_CLASS (was Re: [PATCH v4 2/4]
- platform: arm64: Add a driver for the EC found on ASUS Glymur machines )
-To: Mikko Rapeli <mikko.rapeli@linaro.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Hans de Goede <hansg@kernel.org>,
-        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Abel Vesa <abelvesa@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-yocto@lists.yoctoproject.org,
-        Bruce Ashfield <bruce.ashfield@gmail.com>
-References: <20261015-topic-asus_ec-v4-0-af6305ffcb10@oss.qualcomm.com>
- <20261015-topic-asus_ec-v4-2-af6305ffcb10@oss.qualcomm.com>
- <aursRfQRr0AOL1Oi@nuoska>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <aursRfQRr0AOL1Oi@nuoska>
-Content-Type: text/plain; charset=UTF-8
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v5 0/3] iio: adc: add support for the MAX34417
+ Four-Channel High Dynamic Range Power Accumulator
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Michael Hennerich <Michael.Hennerich@analog.com>, linux-iio@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux@analog.com,
+ Conor Dooley <conor.dooley@microchip.com>,
+ Marius Cristea <marius.cristea@microchip.com>,
+ Andy Shevchenko <andriy.shevchenko@intel.com>
+References: <20261102-topic-sm8x50-iio-max34417-adc-v5-0-0ffa5e5f2d5c@linaro.org>
+ <20261104021700.14e69abb@jic23-hlaptop>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <20261104021700.14e69abb@jic23-hlaptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: S8i6tFwtPkdM8i92SrEzbw-OEk4zTsWQ
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTA0MDAzNCBTYWx0ZWRfX67EFvaB9HOU2
- NoHm4aQyyH8hQWs/YdZzlzWcacNBKT2A0ice8C2FC51VED6fXP8b8VP6/7DUEg67S1HHbTvsr0S
- i8QMPgq6A1G2jLZzQ5237g6rPiuTVGI4dWSeJmB8E7ek1xrfKarKBbDnP3Zle1fjVqNsBRZ++85
- JZ6RkcIIazNM6MJRvL6LPjBo6cvWfZQ6CnG53V63GP2BUP1aq3oyMlCiwKXyQ9EZX/Eo9FOIACl
- AG29/Zj36Yw+RX8ZT5H7agf31sBu/WAyorPyzwZDm/VaI6Vd8gLv70F7E9Q/RJ2UmlCUr34kXI6
- +SI8UyEaTSLVPfnLCe6jTAyKrZJeoJdHh7DIsQadroEMA8ylWNx3F/TRRbZOIP1/tSy3Z6aP2ih
- Z7HcRye+dHPz41kkOmiZciOCNgejsSq3LwIN3+b0MtRvxTpZo1z4VgXxlIb7djqCDkjeTT4+VOa
- pd42nZWDW5CzU0x6G8A==
-X-Proofpoint-ORIG-GUID: S8i6tFwtPkdM8i92SrEzbw-OEk4zTsWQ
-X-Authority-Analysis: v=2.4 cv=NMhAaE6g c=1 sm=1 tr=0 ts=6aeaeecb cx=c_pps
- a=JbAStetqSzwMeJznSMzCyw==:117 a=PRfkaYvzSr8QmIIGAkY2Sg==:17
- a=WnbzyOWOUeW_Ihyr:21 a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=yx91gb_oNiZeI1HMLzn7:22
- a=VwQbUJbxAAAA:8 a=Byx-y9mGAAAA:8 a=iGHA9ds3AAAA:8 a=dNOK39mv2ItteVrz7R4A:9
- a=QEXdDO2ut3YA:10 a=uxP6HrT_eTzRwkO_Te1X:22 a=nM-MV4yxpKKO9kiQg6Ot:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTA0MDAzNCBTYWx0ZWRfX4g5A2YnR9wG+
- 68VIgaWwhOZf0CES8yVlPu9tRJFuRK2kfOfontyPeEmUIbBn1c4xRxTH1UFiD2tIrDZWajW5yKD
- QCR1OLkoCX/sV9p9CKXl7SytIogswos=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-04_02,2026-11-03_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 spamscore=0 lowpriorityscore=0 clxscore=1015
- impostorscore=0 suspectscore=0 phishscore=0 adultscore=0 malwarescore=0
- bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2610300000
- definitions=main-2611040034
 
-On 11/4/26 9:26 AM, Mikko Rapeli wrote:
-> (Adding linux-kbuild@vger.kernel.org, linux-yocto@lists.yoctoproject.org and
-> yocto kernel maintainer Bruce)
+Hi,
 
-[...]
-
-> With this new EC_ASUS_GLYMUR driver in 7.4-rc1 there now exists a kconfig dependency loop
-> in arm64 builds:
+On 11/4/26 03:17, Jonathan Cameron wrote:
+> On Mon, 02 Nov 2026 15:49:03 +0100
+> Neil Armstrong <neil.armstrong@linaro.org> wrote:
 > 
-> LEDS_CLASS -> EC_ASUS_GLYMUR -> THERMAL -> POWER_SUPPLY -> HID_NVIDIA_SHIELD -> LEDS_CLASS
+>> The MAX34417 is a specialized current and voltage monitor used to
+>> determine power consumption of portable systems. The driver supports
+>> getting the channels voltage, average power and accumulated average
+>> power and energy over an I2C/SMBUS serial interface.
+> https://sashiko.dev/#/patchset/20261102-topic-sm8x50-iio-max34417-adc-v5-0-0ffa5e5f2d5c%40linaro.org
 > 
-> In Yocto distro we use additional tools[1] to check that kconfig elements in fragments actually
-> get applied in the final .config etc and one of the checks is for dependency loops which now
-> fails with 7.4-rc1, full log below[2].
-> 
-> To me it looks like EC_ASUS_GLYMUR correctly depends on LEDS_CLASS and that enabling this
-> driver by default on arm64 with LEDS_CLASS is correct. And also HID_NVIDIA_SHIELD correctly
-> depends on LEDS_CLASS. Thus I don't think the drivers are doing anything wrong and thus
-> on the Yocto kernel QA check side the dependency loop check should be relaxed since they
-> now can exists in the kernel tree.
-> 
-> Do you agree to this or is there maybe some way to remove the kernel side kconfig dependency
-> loop to and from LEDS_CLASS?
+> Sashiko had views and the dt one at least checks out.
 
-https://lore.kernel.org/lkml/20261029021330.460192-1-haiyuewa@163.com/
+I'll fix the bindings one.
 
-Konrad
+But for the other reports:
+- [Medium] iio: adc: max34417: shared accumulators clobbered on CAM power/energy read
+
+This is a tough one, today if either we read power or energy, we erase the accumulated
+power+count in the context, the context accumulator is only here to make sure we don't
+loose data from other channels, like if we had a single HW channel.
+This simulates this, if we had a single HW channel, at each UPDATE we would get back
+to 0 in hardware anyway if we did read the power or energy.
+
+- [Medium] iio: adc: max34417: missing 1 ms delay between UPDATE commands
+
+It's unclear if we need to wait 1ms in CAM mode, I think we should but should we block
+from the read if we are under the 1ms ?
+
+- [Medium] iio: adc: max34417: scale truncation and mJ unit in max34417_read_raw()
+
+Ok this one may be real, should we return Joules or milliJoules ? If so we could
+fix our precision issue.
+
+- [Medium] iio: adc: max34417: missing UPDATE before CAM in max34417_setup_cam_mode()
+
+It's highly improbable, but I'll fix it.
+
+- [Low] iio: adc: max34417: reuse max34417_reset_smm() in max34417_trigger_smm()
+
+I'll check if it's worth it
+
+Thanks,
+Neil
