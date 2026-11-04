@@ -1,57 +1,184 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793763674;
-	b=aGjohW0jnVMlrfkKr6P+bYrqNW/g2eM4+EaA/CvpbZsM/DgvlHZgHevJWKbD3CCm+XYB
-	 4ITNMbOzfoyzcim1qV5Z0pd0zloEr/r01Q8EjondWRkLLS93d7RufijPd51jQKPBWtSFC
-	 nGaxriGzbxxWNyqlcJ6ePHiljkcGssDAvHasYzmkYsxifC8ssdX6/MnRBahN1/fK5MHfK
-	 Q4yiIIicHnGb3GnBcLDCADDlo/xY6sNcpQnUr8Y3zr0sv3OugcAMC5swQPgMfVnI9GMJt
-	 t3ZdZNXzEARNM1FWHR3hR2V3T+1L7juzVkf+6kAsIx4FmKsplp3ZCLWQFtO1PUuUQNg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793763674;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=ZfU3QDJk03w7Octfw0qxWRtbR9li0uNTEHM66lL57Rw=;
-	b=fGP/S4t2QnMWRaz/4nlhAQLGzqNqjDfsOFf5se6FZ3N/Yq9Q6z/+ACLXNqRO+UeUZPYD
-	 lqoUpYRIGi6A8rk1mbIrbnd4BBtH/nWJhVvEkDKTCSj4oY2RXmxdF6eCo/gNcn2SMv+b8
-	 gpxhkeHS5JzV0MKnoHP5Zq1MlchuDaBL8MAlqiDHUF9fWMctNet4dQ8Fk1NI508VwnZXx
-	 RgR+nAzleL5HbfKIXZ1aDhgibtqqlPEJXam9cR8ATER5wZuPA/RGGg6tiq6oreuH2vWKF
-	 W6yoMA+GJ/5T8IxsoT0HsIH6lmZ8+rHlIfJuFIaXRwvKFaUeCbtC3K58MUQdMih08lA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jWwBnn4m;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=148.163.135.77
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793765179;
+	b=jb61MKQd22e2XT06YvhZHDtIhuioBjlRwyfnBUokqFZJkP7GOzOJ09ByoqkAqnysrRen
+	 PFrczQ7tBzYNnRiB12h4Of/Lj3DMcvkulWisKd2St8jPElqPquOnUf2snjcnGZc4psE7W
+	 iYhQizDCRIxO7C8Mngg+3/Jfr405DvQb1rnUG3gjPtHy0AAbHaJpNDRewVz8vvlBpYN+J
+	 9JW9kYRHvSt2eyX7B2YoNdAVJmMYRlzVz+Op0OIxaVmETpKJ5RyaXQNtUnEH5zMnUbLiV
+	 7wtjHXfd66T423nVweoC7NRw+uGHFiKOpzRfMYeyB2FrOGjS0zxquoSKgcl/ZtS2hUw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793765179;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:Received:
+	 Received:Received:From:To:CC:Subject:Thread-Topic:Thread-Index:Date:
+	 Message-ID:References:In-Reply-To:Accept-Language:Content-Language:
+	 X-MS-Has-Attach:X-MS-TNEF-Correlator:x-ms-publictraffictype:
+	 x-ms-traffictypediagnostic:x-ms-office365-filtering-correlation-id:
+	 x-ms-exchange-senderadcheck:x-ms-exchange-antispam-relay:
+	 x-microsoft-antispam:x-microsoft-antispam-message-info:
+	 x-forefront-antispam-report:
+	 x-ms-exchange-antispam-messagedata-chunkcount:
+	 x-ms-exchange-antispam-messagedata-0:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version:
+	 X-Exchange-RoutingPolicyChecked:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-originalarrivaltime:
+	 X-MS-Exchange-CrossTenant-fromentityheader:
+	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
+	 X-MS-Exchange-CrossTenant-userprincipalname:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:X-Authority-Analysis:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
+	bh=gd6ts8k+0IfdjG0vpUozm9tUa9gA+wDck2ckN+A8Cl4=;
+	b=48EM8gknXh/JgXwUH4L3y6ihgpyhIQ64ZOgdeNgRmAK/qsoj+QO1jF9DMH6zWfgaUBqw
+	 6v22/K6rNUsrmBNxuKolqnn7bq0h1UWHYISRZYsztIj/9PNZdLayj9TPR3n2WNZq2qJTA
+	 OSATeA6M3/LykM2+HrQ1/PIvsjY2c6psD4Qkh0vuEpLPuK6bVhGWbwg5ZzKFPjks/+Jmb
+	 7XOHK3PhiCT2/r5rW3mq4z22NAKhQaU382zUopko2PL42OQlY04M99tdVoACwJjow228x
+	 MNE56V59d33wMKiNXueLWGek/xhpmXx7BZb/Psk+zn0CtMZf/dPZzBK/hf2J7JTgZpg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=analog.com;
+	spf=pass smtp.mailfrom=analog.com;
+	dkim=pass header.d=vtelectron.com header.i=@vtelectron.com header.a=rsa-sha256 header.s=DKIM header.b=UDx2EtRK;
+	dkim=pass header.d=analog.com header.i=@analog.com header.a=rsa-sha256 header.s=DKIM header.b=E3eV7tnv;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=148.163.135.77
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D24C606A326;
-	Wed,  4 Nov 2026 03:41:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A0E606A326;
+	Wed,  4 Nov 2026 04:06:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 89A0E606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jWwBnn4m
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA57F1F00A1D;
-	Wed,  4 Nov 2026 03:41:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793763674;
-	bh=ZfU3QDJk03w7Octfw0qxWRtbR9li0uNTEHM66lL57Rw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jWwBnn4m0xNDpMNIssO8VXvnPz+xcMLbgysyEVhGGKlk1nsylAMTHyaNKY4OgsEgD
-	 Et76499H8KH6FWiaAw2Uwoc76uvafEIxrLSKhhl+dhd7my+IFOh2hT4PfDG+/3jxaT
-	 e5CPvVuZhh8+kVGjNpYKA0dvrA2CXMucde9dg739jJusd7CjxR0ufc2mT7nM2wcdXs
-	 7U1FGrjFV9w6WUKOiLEHcom9tsaRbEnYwNzFQdE09gA9PfMPIm4VyN/q0PqY68r4gL
-	 NgxeqJ58C4uOgT1vse6CICSjj5B/DrD/bV6U0oPmIYbvSySt1QfquTuvk/9Ud8MUMQ
-	 hvi1wdhkSVKOg==
-Message-ID: <sashiko-outbox-196619@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/3] hwmon: ltc4283: Add support for the LTC4284 swap
- controller
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexis Czezar Torreno" <alexisczezar.torreno@analog.com>
-Cc: linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org
-In-Reply-To: <20261104-staging-ltc4284-v1-2-49fce67ebc48@analog.com>
+	dkim=pass (2048-bit key, unprotected) header.d=vtelectron.com header.i=@vtelectron.com header.a=rsa-sha256 header.s=DKIM header.b=UDx2EtRK;
+	dkim=pass (2048-bit key, unprotected) header.d=analog.com header.i=@analog.com header.a=rsa-sha256 header.s=DKIM header.b=E3eV7tnv
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A43HLWU1936764;
+	Tue, 3 Nov 2026 23:06:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vtelectron.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	DKIM; bh=gd6ts8k+0IfdjG0vpUozm9tUa9gA+wDck2ckN+A8Cl4=; b=UDx2EtR
+	KW9EQyGlFVzD8ZE52Ad83GvF+YbeYlSHzVs8WIEC/AyK1/7OX5V3ImoPMGoeORAV
+	8sOEPS1FuCHHmg4pQU9r7U3u8r3U5Vgl89h2b/zYrQmIny7SuENXSpYry6blYrBg
+	eKIYbysanL4IhQN+pYBoThlxo9n2lzNs1AapnnKDO0Z8In0w3QZHaKO+xQJhw8WM
+	2bdx1GasRY9cNjSyicgyfT4GByVDrJ9rAL5Lr6/jNoJBNH86ENSDjj1OfdleWTdA
+	JPouaKg7TgJvUsddLJ9TgsviqsgVFwJV6iBcyNR2WPHDd4kjDl7KE1VHPiZg3LJM
+	4oxySAIMEeCCwyQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=DKIM; bh=gd6ts
+	8k+0IfdjG0vpUozm9tUa9gA+wDck2ckN+A8Cl4=; b=E3eV7tnvRUuBd00HIsoXg
+	4z6Lwibt+CC9qW82/gMSs44chsqjJhmTMozPHmghBlopDbrhyPy76HqsgLVpMQdK
+	v7nn3sPiXnQlh56TryBh+85jooD3yOHPRQlxbF2Cgd4o13J9rYl2PTbrrnwrvWzX
+	lLKAJXoLsGmL+HKBleACOSFg3pxrirhx7RmkQqERiDjNk7PXI5JMRvzrSGyA2bXK
+	tUe+zsQuXv/4+QCv+z4eytIn0+v+1+pa6tk/quFN3AbVOWVvUvSErzchOLI55Wxl
+	QMzkC0/HJ61+vsgbpTkKbbkRecANgo8YunXF5JsDCXQaiRWq4BX5an7z3k5sbxIU
+	w==
+Received: from bl2pr02cu003.outbound.protection.outlook.com (mail-eastusazon11011034.outbound.protection.outlook.com [52.101.52.34])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 4hqh16456v-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 03 Nov 2026 23:06:16 -0500 (EST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bafvZUM++yNYIw++k5VPenbOUm2CKPm2JBVsdReX4xpXoUClKCblRRdeVgLJX7/Ps0eh0W5Ngfxg4+fUhFJAq8YgMJmDwkEk/0LP73zFwzuiH9su1Dz4A50rRN4CwZT3sA7M1V28egSy6Ja26lrrDr/yonuKGmJY/O2xfWg/idZLvDI7UBen8yZVijGVhArEFlDJ0ulvTPMWWjeyBJXNEsogK5eqySevToj8wiDI3MYLM6PysuX9+aHrvTLvITwjy3951lZZBlHQVer5LcPM1LMRXLxuJ3KB0Y587seEwxJAGGhazprcVKBQA//m470wj5HilUPo0UYld6aSQBZxlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gd6ts8k+0IfdjG0vpUozm9tUa9gA+wDck2ckN+A8Cl4=;
+ b=NblHw7IDxTd6w0kcSDsOzxeriPHxeLOWQslJVaG7/l+ySiGykYdrVFqKxDGAeOB8IEMnU53DWC7CdrP5ZZ+2/0TxdYyLwp++fTKwyxtUOpiPFGU6Fh4wYroTbUE3CkRjzcjpF82Y0gt7O1z+sYesslwC9xlbKz1PVRe8uvcdEUFJOs6WZCYNql4HfMqVxj5HXhJIdrtclcV5uQaJQeX13QLk0k5/fbEUNAnq/TJD4ptUcHnP4w674+OuzKO5ZjLEIEdiFrwYaT8fHOVtb+8hWbeZ3twbUL/BHMtfKNXNBqNnmVRLsJ2y3pELAvKnQKIcw3gEKibCB8Wf9+mvWQYN8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
+ dkim=pass header.d=analog.com; arc=none
+Received: from PH0PR03MB6351.namprd03.prod.outlook.com (2603:10b6:510:ab::18)
+ by SA6PR03MB7567.namprd03.prod.outlook.com (2603:10b6:806:43e::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.8; Wed, 4 Nov 2026
+ 04:06:14 +0000
+Received: from PH0PR03MB6351.namprd03.prod.outlook.com
+ ([fe80::1578:4572:29b5:2442]) by PH0PR03MB6351.namprd03.prod.outlook.com
+ ([fe80::1578:4572:29b5:2442%5]) with mapi id 15.21.0592.007; Wed, 4 Nov 2026
+ 04:06:14 +0000
+From: "Torreno, Alexis Czezar" <alexisczezar.torreno@analog.com>
+To: "sashiko-reviews@lists.linux.dev" <sashiko-reviews@lists.linux.dev>
+CC: "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "robh@kernel.org"
+	<robh@kernel.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>
+Subject: RE: [PATCH 1/3] dt-bindings: hwmon: ltc4283: add ltc4284
+Thread-Topic: [PATCH 1/3] dt-bindings: hwmon: ltc4283: add ltc4284
+Thread-Index: AQHdbAzfnJo8jtVgE0WD9mxm0YLL+rcdRDIAgAAFgxA=
+Date: Wed, 4 Nov 2026 04:06:13 +0000
+Message-ID:
+ <PH0PR03MB63510EDCF229B247474764C8F1682@PH0PR03MB6351.namprd03.prod.outlook.com>
 References: <20261104-staging-ltc4284-v1-0-49fce67ebc48@analog.com>
- <20261104-staging-ltc4284-v1-2-49fce67ebc48@analog.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 04 Nov 2026 03:41:13 +0000
+ <20261104-staging-ltc4284-v1-1-49fce67ebc48@analog.com>
+ <sashiko-outbox-196618@kernel.org>
+In-Reply-To: <sashiko-outbox-196618@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analog.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR03MB6351:EE_|SA6PR03MB7567:EE_
+x-ms-office365-filtering-correlation-id: 9d02b0e7-d736-4c58-141e-08df3a28f7d5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|23010399003|376014|1800799024|366016|38070700021|260925021911599003|260925022911599003|260925021311599003|11063799006|4143699003|56012099006|261009223027099003|261026121527099003|261022105027099003|261028144727099003|261026140227099003|10067099003|22082099003|18002099003|3023799007;
+x-microsoft-antispam-message-info:
+ hYgeq90O8xbMTm+BJxDK14Ur/1fKs7WBFx9JzRVGt/tJisdxyhuKDJVYCsVbY3cmK1I8ADUyjT4nm2MB/IevyYsPrIUWqUHc0AY4rRR1tBN14YBogN8NA3Sylj9Zz4yIZylKd1hCpPnAa2smMa5lAvAUFo+DPDFI2eKqhK4whPPtGlJ2PyzMTG3pRekM7dScG4l1t0UaH6VFSDgPkMjqQOfATrOoZjtc31O74Mca7OZM+ygcVOl/YQmwAU2XYeRdwYvBbJ+g3xQfpQQMY7JvZrPVB62TJdDf/WlSItTNNbkYbMSqBVTAJ1CN+O2T+fCtyhtK/JEQF/7CBOgx1E7KQypRhFiNwIJcK5A2qUg5ynT7OU+Ebh0tY2paHoNO5MlqLFgKwaYjp/sv8cMHkJlR2dFy+OZB+f2t4J4wArsnBW5n/fRSfaLleDoxBITqQoEVFMY6ZKFDKGTKr4O9sYBcknLXxcYuVID3345wkzovts+HtnrC2w29q51lw7Tt/AsG3ym1sURlUNpUuVxSHpGmkRGfUPJXadjW7vVIBXG9hI3Wh5PYVHFY7d3vDRHyKT9waIImLH8nZW8eCHEf3uxqL3BuVwt4NkP3Mp6bVVGrrWhtA8G2YqaMoGF3J3gm+wRPtYEQXrvKEtqyhJ6mrDrdfkJOADJZFuNM0ILkOk3YQ8VjSAUzxqgfihmFe8y9NnDkuWStg7qj2k7mtF/UZiFYdE/wYR1W3+amGHEP2ddx9HQ=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR03MB6351.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(1800799024)(366016)(38070700021)(260925021911599003)(260925022911599003)(260925021311599003)(11063799006)(4143699003)(56012099006)(261009223027099003)(261026121527099003)(261022105027099003)(261028144727099003)(261026140227099003)(10067099003)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?cEhkbXkxbU03UEE0YzdlSFRJN2JkV2dvbmpYalpWaUcrNE5tL25xeFhaUUtM?=
+ =?utf-8?B?b2lRRWl5TnlMQ3VKQmxrK053WFhYcFdrZVBvd2duaHZhbkFJOFhrOE9scGhR?=
+ =?utf-8?B?VUZjZkl4c1JUcndSYzIyWjBzRFYzak1HS3dCdU1pc0IrS3ozR1lxeE4zTFE5?=
+ =?utf-8?B?cytMSFdKNlNrOHRLTXFBL2NjdWRuWC9ZZWFyc3NBR3BsSTYrSVZLNkI5UHY4?=
+ =?utf-8?B?L0c3Uk96ZEswRUhqZEdnWityL0pxUjVoV01wOWhadWZobGg3SlFZSzQ2aFV5?=
+ =?utf-8?B?SVNSdjlMZG9UV2V0NEFtVEh2aFZVOVQ2OFBjU2E4R1ZnSkQxazhxZ0l5MkVJ?=
+ =?utf-8?B?Sm0yVTBNWTRORGV6SjBmUy8yM1VRRm9qUjhLaXMvMUZXMDZNRURseWQxK21N?=
+ =?utf-8?B?SFUxbTVrUnBSd2lhWnVyOW8zY0JYUUVsTGZFbjZ2OVRMWGphbXR0bHArV3cr?=
+ =?utf-8?B?N2NjaG1qRlltSWUzUVYxVTQ4Q1llS0Q2aGxXRUpNWXVpaG93ZE9YVUtQeXI0?=
+ =?utf-8?B?bmttZCsrRFdmZHBNVlFEOElqZC8vOXJIZkNGT3Nmc2VXb3VyMU1rck5WNVpX?=
+ =?utf-8?B?TFQ2YS9EaU01bER3eC9hVnRHTTN0RlM3OURpUmNzaG1DZE9DaWlYS2FGemRv?=
+ =?utf-8?B?VlRGMjdDdGppUGcyWnhVSlQ0bWVkTGMzaWwrNEZzd29Zd1Q5cGhvSkZRZVlQ?=
+ =?utf-8?B?RDVNWVRUbHJIRXFYeDB4c1pkZk1DUURXQ25LS3ZuRjU3Y2RjbmRmVGcxc3Fy?=
+ =?utf-8?B?QzY1bUxteXc5MkFEendOT1FXQis4dmJRZ2ZrU1ovbzlMTS95aSt1VVNJK2Nq?=
+ =?utf-8?B?Mk5tQzgxL3JvaFJkTWg4aW9GNlloNnZveFI3VnE2cGFwdGlWVzlUeGU0dmpH?=
+ =?utf-8?B?TWZUTmRxTjhqejlLcTd1RmhrRllZUklWOHFtc3RSUXRsNTZYQkZXWmMwQmZt?=
+ =?utf-8?B?KzE0NnNBVlN0Z2hhSFIvOUlXTGpxeXZDd3k5ZlArRUllZVorT21FYnhGOXJH?=
+ =?utf-8?B?dk9rTXF2YUhxa2M1RmtyaG5zOFQ0aFBYckhwWmtRS1hmR24xRG9IeXYyazBp?=
+ =?utf-8?B?YTZ3OXRLbFNtNEljUmJ5SGNDeVg2THRpUmFGL0lET2IzQmlndFEwMVpsNmhF?=
+ =?utf-8?B?WFNWUXpVNS9SaFMvZjNTa2NFbTRYblBGczZEN2xadCtpTlpvWUhwamZFdnJu?=
+ =?utf-8?B?N2lKZHRVTWpLdUcxUW5wNnlJNU9JZG9KUWw0MzJidGhOSVM4VDdkQzJrakZB?=
+ =?utf-8?B?YkFRS3RzeXJOL3JIN054M0FVd09UYnNXRkpsY0hlRWVTTGNIRVdFMldZT2Uz?=
+ =?utf-8?B?aHhQWlh3VVlRUDNBdTViWVJJY3ZOZjJ6TEpQcWxiZWtKeExMNmhvZi9FaWlk?=
+ =?utf-8?B?OGMzUkg1bmFUVkdHTGE3YkMrekE2REM3SmNWQnVHN2FJay9EYm82ckZFTlN3?=
+ =?utf-8?B?ZWxPNTdiR0ZQVGRQa04wOU95NjZ3R29EVmg0T1JIN0o0emZUdGlHYjFUQlNJ?=
+ =?utf-8?B?WnUwUndTZFV5c3gxaVZkM1lBdXF2VkxrVDRJNWI5elljZzloRCtqR1JiTW1s?=
+ =?utf-8?B?MU05Njk5ZTNrY1NCVU1JUlAvYWtrUWZYaDlvWDN5OUwzN2RsTHRhSHRjL1NV?=
+ =?utf-8?B?UmJ4R2FQYlF2Y0JHQi9KMlpvdW9rbGRPa2duZ0tXWWsraUlZZXMwbGh6UzhJ?=
+ =?utf-8?B?cEl4ZEllQXlQQjBvaTNoL21tb3poeE55cmFhZDlqQUwrS3E3OWkwaEJOYzJE?=
+ =?utf-8?B?bUt4YVJOWUt6Wi9VN0lRK0tGbk5iZGpIbEFscVJ5amh6dFY4dzM4WUxHQWRR?=
+ =?utf-8?B?dzYrRDMzTXk0emZrSWRkaDRJbXYyQW1SekZGQk5rNTFvSkpPeE1XaFFhcnVZ?=
+ =?utf-8?B?aEZTYm43ZnNWNlorM2dHcHdPUzFtajhpY1djTzNOL285b01rS3lPSzF1Z09h?=
+ =?utf-8?B?aDBwbXJNVFNTdDNuRGhlWm5KNFgrNkNEYXFNZkJoTmF1MCt1UzJ1bURtMTZF?=
+ =?utf-8?B?UlFobWw3NjNDeTQ3S09BNngrOFhDMDF1SjU3eExJSlFCRm1GcFlQNzJBY2Np?=
+ =?utf-8?B?SWd3akdRdWhnQ2tMaWJRalk4U2J6UExPMEdVdE1EL1JWeHpXRHRtNDNJdXZH?=
+ =?utf-8?B?MndFZUpOUjdIRnRxb0kxcmwvWmRRMnBNdndNUHZIWnhnelZHV1Y5dWFaaENC?=
+ =?utf-8?B?TXFOZjRxajhsUFo5M2Z5WjJwYWpzamVoS0R0QXUrWDM2WkRCcjRyNjhhZS9O?=
+ =?utf-8?B?YU80QUZVNW96UThSU0FteFRtaWEraGFZSjg5Nkg4UVorcXZobndjQ3h0M0Jr?=
+ =?utf-8?B?dkRnTStWQmEyd3laNEs0Ynp4M2pJc1NYMUZaQnV6VnZRTklaWG1uMjVxbWNW?=
+ =?utf-8?Q?BntrYk4kCE+YBxGA=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -60,398 +187,106 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+X-Exchange-RoutingPolicyChecked:
+	wr+D3PcUXhMGBG69ds9OsMj4JJqQI9P6kF69vshXkE7VRbyx920upQigFqfAvxMInWyoANTsqNri4MFOttNUzrTBKBTV3fB8HqH/dZrvuRTddR7/J7SgDvgrdJKQN5pPvuP5LPQPbfzEvfPJzBSQu3A1CHHyx73lkUKyXCbxDhxcUW1ID0gGGUiULuCkGwThLGt8A4xDl82Du9RJRZTsDOVNHzTpKWued1UJHyJrDirb8RUQ6eZJj/DRblbj0Thi/Bpt8rDFyB4rhbAVmDIhP+x5HuP7DHyH85MvWVPel6jsjgweOr6HKyvdytk8tJfP7ZWz3A+glZw2OErSO90EfA==
+X-OriginatorOrg: analog.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR03MB6351.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9d02b0e7-d736-4c58-141e-08df3a28f7d5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Nov 2026 04:06:14.0826
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KJVFeMTG0WzkcZ6FVqV7A9dtjNa1gkZzMH0Suk9PJ/ugLkBur2qke0xhLkj3XG6rxHUaYxvkGDStL46/mvhJagEDyBQz6xANjA9TfpXYd0w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA6PR03MB7567
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTA0MDAxNiBTYWx0ZWRfX4F67V1+BDKsx
+ 0Y5iPMa6DE94lOoREoWH0wb3dQi6+qD0MIDFnbozXUvBlvTtYRWNy8/X4f9SyfeJ54o25Ek3WGN
+ mEfcFYKP0Vg6ExjE5SgwoaUJoG/6o2JXxETCgaHMlJathW3tH2Vu
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTA0MDAxNiBTYWx0ZWRfXz8p2OHALmDv8
+ d0TrICOiQxxkpEVSoGENZ8x72Je5mYt/7wM0eKgm9L20UoDYiJcqIALX2hv60eTiFMD+2IwPKJ7
+ U6/sJApv8V+XBHnL1I2WDXXnv5q5yukk/n3Rp9XeKVroMQCi1zBoeJP0KDGSreUbQghgSdZG9q9
+ luxX3cb3wqFNIC/3zioBE0/EKfvFK1Zxr+cpdahgByNXZjVKuUPPdGPaCctej90vqyymuzITZI9
+ xKh3oo5pw4VzSMsOJ/wo6eYmg0wVuwZU2G2Ap5uUDnD7h1DvDlH1xwRyAeIxEojxQm5l4/SHFrB
+ 1AkhTUdkfQWIB38Vt47ZLaGT1DNDD9TiLLaAe+MMx7Q56a7rbLle5qm79hOdHcdjBitEoLAXyuL
+ F9zHJVDNeyml0zzugVmBjuC9NOY+mneSIYolEsMZhi+AGt182avDG+VvH48p3U/g9jOWhfVRp15
+ fReqTiYIGEXFk6H/bSw==
+X-Proofpoint-ORIG-GUID: QncC8osB80jcqg8YQg8zko9b8R_e5pLd
+X-Proofpoint-GUID: QncC8osB80jcqg8YQg8zko9b8R_e5pLd
+X-Authority-Analysis: v=2.4 cv=QtHLTlyd c=1 sm=1 tr=0 ts=6aeaaf38 cx=c_pps
+ a=8o+REoaIO3XrXU6fRoneHA==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=0sLvza09kfJOxVLZPwjg:22
+ a=uXIjobp8t2wMuQ0fPvqm:22 a=gAnH3GRIAAAA:8 a=zjPpCkIGgXIpaTFMz8cA:9
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-04_01,2026-11-03_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 bulkscore=0 adultscore=0 clxscore=1015 priorityscore=1501
+ impostorscore=0 spamscore=0 malwarescore=0 phishscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2610300000 definitions=main-2611040016
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
-- [Low] hwmon: ltc4283: positional initializers in ltc4283_i2c_id table ent=
-ries
-- [Low] hwmon: ltc4283: duplicated channel info table and chip-ID helpers
-- [Low] hwmon: ltc4283: missing default resistor fallback in ltc4283_setup()
-- [Low] hwmon: ltc4283: commit message omits functional differences for LTC=
-4284
---
-
-commit 07a1775aa285e31dccd905e19fc784e472406b97
-Author: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-
-hwmon: ltc4283: Add support for the LTC4284 swap controller
-
-This commit adds support for the Analog Devices LTC4284 negative voltage hot
-swap controller to the ltc4283 hwmon driver, including dual current sense
-channels and separate ADC power sense resistor handling.
-
->     hwmon: ltc4283: Add support for the LTC4284 swap controller
->    =20
->     Support the LTC4284 Hot Swap Controller. It is very Similar to LTC428=
-3 but
->     for higher power. The device features programmable current limit with
->     foldback and independently adjustable inrush current to optimize the
->     MOSFET safe operating area (SOA). The SOA timer limits MOSFET tempera=
-ture
->     rise for reliable protection against overstresses.
->    =20
->     An I2C interface and onboard ADC allow monitoring of board current,
->     voltage, power, energy, and fault status.
->    =20
->     Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-
-[Severity: Low]
-This isn't a bug, but the commit message mostly repeats generic hot-swap
-controller features already shared with the LTC4283.
-
-Could the changelog also describe the functional differences added to the
-driver for the LTC4284, specifically the two current sense channels (SENSE1
-and SENSE2) with separate sense resistors (rsense and rsense2) and the
-dedicated ADC sense resistor (radc) used for power and energy calculations?
-
-> diff --git a/drivers/hwmon/ltc4283.c b/drivers/hwmon/ltc4283.c
-> index 9ec409bc26482..d27c211146152 100644
-> --- a/drivers/hwmon/ltc4283.c
-> +++ b/drivers/hwmon/ltc4283.c
-[ ... ]
-> @@ -173,7 +192,19 @@ enum {
->  #define LTC4283_ADIO34_MAX \
->  	LTC4283_ADC_2_MAX_DIFF(LTC4283_CHAN_ADIO34 - LTC4283_CHAN_ADIN12)
-> =20
-> +enum ltc4283_chip_id {
-> +	ID_LTC4283,
-> +	ID_LTC4284,
-> +};
-> +
-> +struct ltc4283_chip_info {
-> +	enum ltc4283_chip_id id;
-> +	const char *name;
-> +	const struct hwmon_chip_info *hwmon_info;
-> +};
-> +
->  struct ltc4283_hwmon {
-> +	const struct ltc4283_chip_info *info;
->  	struct regmap *map;
->  	struct i2c_client *client;
->  	unsigned long gpio_mask;
-> @@ -182,12 +213,118 @@ struct ltc4283_hwmon {
->  	unsigned long power_max;
->  	/* in millivolt */
->  	u32 vsense_max;
-> -	/* in tenths of microohm*/
-> +	/* in tenths of microohm - For LTC4283 SENSE or LTC4284 SENSE1 */
->  	u32 rsense;
-> +	/* in tenths of microohm - For LTC4284 SENSE2 only */
-> +	u32 rsense2;
-> +	/* in tenths of microohm - For LTC4284 ADC power measurement */
-> +	u32 radc;
->  	bool energy_en;
->  	bool ext_fault;
->  };
-> =20
-> +static u32 ltc4283_get_rsense(const struct ltc4283_hwmon *st, u32 channe=
-l)
-> +{
-> +	if (channel)
-> +		return st->rsense2;
-> +
-> +	return st->rsense;
-> +}
-> +
-> +static u32 ltc4283_get_rpower(const struct ltc4283_hwmon *st)
-> +{
-> +	/* For LTC4284, ADC uses radc. For LTC4283, ADC uses rsense. */
-> +	if (st->info->id =3D=3D ID_LTC4284)
-> +		return st->radc;
-> +
-> +	return st->rsense;
-> +}
-> +
-> +static u8 ltc4283_get_sense_reg(const struct ltc4283_hwmon *st, u32 chan=
-nel)
-> +{
-> +	if (st->info->id =3D=3D ID_LTC4283)
-> +		return LTC4283_SENSE;
-> +
-> +	if (!channel)
-> +		return LTC4284_SENSE1;
-> +
-> +	return LTC4284_SENSE2;
-> +}
-> +
-> +static u8 ltc4283_get_sense_min_reg(const struct ltc4283_hwmon *st, u32 =
-channel)
-> +{
-> +	if (st->info->id =3D=3D ID_LTC4283)
-> +		return LTC4283_SENSE_MIN;
-> +
-> +	if (!channel)
-> +		return LTC4284_SENSE1_MIN;
-> +
-> +	return LTC4284_SENSE2_MIN;
-> +}
-> +
-> +static u8 ltc4283_get_sense_max_reg(const struct ltc4283_hwmon *st, u32 =
-channel)
-> +{
-> +	if (st->info->id =3D=3D ID_LTC4283)
-> +		return LTC4283_SENSE_MAX;
-> +
-> +	if (!channel)
-> +		return LTC4284_SENSE1_MAX;
-> +
-> +	return LTC4284_SENSE2_MAX;
-> +}
-> +
-> +static u8 ltc4283_get_sense_min_th_reg(const struct ltc4283_hwmon *st, u=
-32 channel)
-> +{
-> +	if (st->info->id =3D=3D ID_LTC4283)
-> +		return LTC4283_SENSE_MIN_TH;
-> +
-> +	if (!channel)
-> +		return LTC4284_SENSE1_MIN_TH;
-> +
-> +	return LTC4284_SENSE2_MIN_TH;
-> +}
-> +
-> +static u8 ltc4283_get_sense_max_th_reg(const struct ltc4283_hwmon *st, u=
-32 channel)
-> +{
-> +	if (st->info->id =3D=3D ID_LTC4283)
-> +		return LTC4283_SENSE_MAX_TH;
-> +
-> +	if (!channel)
-> +		return LTC4284_SENSE1_MAX_TH;
-> +
-> +	return LTC4284_SENSE2_MAX_TH;
-> +}
-> +
-> +static u8 ltc4283_get_curr_alarm_reg(const struct ltc4283_hwmon *st)
-> +{
-> +	if (st->info->id =3D=3D ID_LTC4284)
-> +		return LTC4283_ADC_ALM_LOG_4;
-> +
-> +	return LTC4283_ADC_ALM_LOG_1;
-> +}
-> +
-> +static u8 ltc4283_get_curr_alarm_high_mask(const struct ltc4283_hwmon *s=
-t, u32 channel)
-> +{
-> +	if (st->info->id =3D=3D ID_LTC4283)
-> +		return LTC4283_SENSE_HIGH_ALM;
-> +
-> +	if (!channel)
-> +		return LTC4284_SENSE1_HIGH_ALM;
-> +
-> +	return LTC4284_SENSE2_HIGH_ALM;
-> +}
-> +
-> +static u8 ltc4283_get_curr_alarm_low_mask(const struct ltc4283_hwmon *st=
-, u32 channel)
-> +{
-> +	if (st->info->id =3D=3D ID_LTC4283)
-> +		return LTC4283_SENSE_LOW_ALM;
-> +
-> +	if (!channel)
-> +		return LTC4284_SENSE1_LOW_ALM;
-> +
-> +	return LTC4284_SENSE2_LOW_ALM;
-> +}
-
-[ ... ]
-
-> @@ -974,15 +1133,32 @@ static int ltc4283_read_labels(struct device *dev,
->  static int ltc4283_set_max_limits(struct ltc4283_hwmon *st, struct devic=
-e *dev)
->  {
->  	u32 temp =3D st->vsense_max * DECA * MICRO;
-> +	u32 resistor =3D ltc4283_get_rpower(st);
->  	int ret;
-> =20
-> -	ret =3D ltc4283_write_in_byte(st, LTC4283_SENSE_MAX_TH, LTC4283_ADC1_FS=
-_uV,
-> -				    st->vsense_max * MILLI);
-> -	if (ret)
-> -		return ret;
-> +	if (st->info->id =3D=3D ID_LTC4283) {
-> +		ret =3D ltc4283_write_in_byte(st, LTC4283_SENSE_MAX_TH, LTC4283_ADC1_F=
-S_uV,
-> +					    st->vsense_max * MILLI);
-> +		if (ret)
-> +			return ret;
-> +	} else {
-> +		/* LTC4284: Set max limits for SENSE1 and SENSE2 */
-> +		ret =3D ltc4283_write_in_byte(st, LTC4284_SENSE1_MAX_TH,
-> +					    LTC4283_ADC1_FS_uV,
-> +					    st->vsense_max * MILLI);
-> +		if (ret)
-> +			return ret;
-> +
-> +		ret =3D ltc4283_write_in_byte(st, LTC4284_SENSE2_MAX_TH,
-> +					    LTC4283_ADC1_FS_uV,
-> +					    st->vsense_max * MILLI);
-> +		if (ret)
-> +			return ret;
-> +	}
-> =20
->  	/* Power is given by ISENSE * Vout. */
-> -	st->power_max =3D DIV_ROUND_CLOSEST(temp, st->rsense) * LTC4283_ADC2_FS=
-_mV;
-> +	st->power_max =3D DIV_ROUND_CLOSEST(temp, resistor) * LTC4283_ADC2_FS_m=
-V;
-> +
->  	return ltc4283_write_power_byte(st, LTC4283_POWER_MAX_TH, st->power_max=
-);
->  }
-> =20
-> @@ -1271,6 +1447,45 @@ static int ltc4283_setup(struct ltc4283_hwmon *st,=
- struct device *dev)
->  	 */
->  	st->rsense /=3D CENTI;
-> =20
-> +	/*
-> +	 * For LTC4284, rsense is for SENSE1, rsense2 for SENSE2, and radc is
-> +	 * the effective sense resistance for ADC+- pin.
-> +	 */
-> +	if (st->info->id =3D=3D ID_LTC4284) {
-> +		ret =3D device_property_read_u32(dev, "adi,rsense2-nano-ohms",
-> +					       &st->rsense2);
-> +		if (ret)
-> +			return dev_err_probe(dev, ret,
-> +					     "Failed to read adi,rsense2-nano-ohms\n");
-> +
-> +		if (st->rsense2 < LTC4283_MIN_RSENSE || st->rsense2 > LTC4283_MAX_RSEN=
-SE)
-> +			return dev_err_probe(dev, -EINVAL,
-> +					     "adi,rsense2-nano-ohms(%u) too small or too large [%u %u]\n",
-> +					     st->rsense2, LTC4283_MIN_RSENSE, LTC4283_MAX_RSENSE);
-> +
-> +		st->rsense2 /=3D CENTI;
-> +
-> +		ret =3D device_property_read_u32(dev, "adi,radc-nano-ohms",
-> +					       &st->radc);
-> +		if (ret)
-> +			return dev_err_probe(dev, ret,
-> +					     "Failed to read adi,radc-nano-ohms\n");
-> +
-> +		if (st->radc < LTC4283_MIN_RSENSE || st->radc > LTC4283_MAX_RSENSE)
-> +			return dev_err_probe(dev, -EINVAL,
-> +					     "adi,radc-nano-ohms(%u) too small or too large [%u %u]\n",
-> +					     st->radc, LTC4283_MIN_RSENSE, LTC4283_MAX_RSENSE);
-> +
-> +		st->radc /=3D CENTI;
-
-[Severity: Low]
-In ltc4283_setup(), st->rsense is initialized to LTC4283_MIN_RSENSE before
-calling device_property_read_u32(dev, "adi,rsense-nano-ohms", &st->rsense) =
-so
-that the driver can probe without firmware properties:
-
-	st->rsense =3D LTC4283_MIN_RSENSE;
-	ret =3D device_property_read_u32(dev, "adi,rsense-nano-ohms",
-				       &st->rsense);
-	if (!ret) {
-		if (st->rsense < LTC4283_MIN_RSENSE || st->rsense > LTC4283_MAX_RSENSE)
-			return dev_err_probe(...);
-	}
-
-When an LTC4284 device is instantiated via ltc4283_i2c_id without firmware
-properties, won't ltc4283_probe() -> ltc4283_setup() fail because
-device_property_read_u32() is required to succeed for adi,rsense2-nano-ohms
-and adi,radc-nano-ohms instead of defaulting to LTC4283_MIN_RSENSE?
-
-> +
-> +		/* Enable SENSE1 and SENSE2 */
-> +		ret =3D regmap_set_bits(st->map, LTC4283_ADC_SELECT_2,
-> +				      LTC4284_SENSE1_SELECT_MASK |
-> +				      LTC4284_SENSE2_SELECT_MASK);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->  	ret =3D device_property_read_u32(dev, "adi,current-limit-sense-microvol=
-t",
->  				       &st->vsense_max);
->  	if (!ret) {
-> @@ -1558,6 +1773,91 @@ static const struct hwmon_channel_info * const ltc=
-4283_info[] =3D {
->  	NULL
->  };
-> =20
-> +static const struct hwmon_channel_info * const ltc4284_info[] =3D {
-[ ... ]
-> +	HWMON_CHANNEL_INFO(curr,
-> +			   HWMON_C_INPUT | HWMON_C_LOWEST | HWMON_C_HIGHEST |
-> +			   HWMON_C_MAX | HWMON_C_MIN | HWMON_C_MIN_ALARM |
-> +			   HWMON_C_MAX_ALARM | HWMON_C_CRIT_ALARM |
-> +			   HWMON_C_RESET_HISTORY | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LOWEST | HWMON_C_HIGHEST |
-> +			   HWMON_C_MAX | HWMON_C_MIN | HWMON_C_MIN_ALARM |
-> +			   HWMON_C_MAX_ALARM | HWMON_C_CRIT_ALARM |
-> +			   HWMON_C_RESET_HISTORY | HWMON_C_LABEL),
-> +	HWMON_CHANNEL_INFO(power,
-> +			   HWMON_P_INPUT | HWMON_P_INPUT_LOWEST |
-> +			   HWMON_P_INPUT_HIGHEST | HWMON_P_MAX | HWMON_P_MIN |
-> +			   HWMON_P_MAX_ALARM | HWMON_P_MIN_ALARM |
-> +			   HWMON_P_RESET_HISTORY | HWMON_P_LABEL),
-> +	HWMON_CHANNEL_INFO(energy,
-> +			   HWMON_E_ENABLE),
-> +	HWMON_CHANNEL_INFO(energy64,
-> +			   HWMON_E_INPUT),
-> +	NULL
-> +};
-
-[Severity: Low]
-This isn't a bug, but there is quite a bit of duplication here:
-
-1. ltc4284_info[] copies all 16 voltage channels, the power channel, and the
-energy channels from ltc4283_info[] just to add a second current channel.
-Could both current channels be defined in ltc4283_info[] and channel 1 hidd=
-en
-for ID_LTC4283 in ltc4283_is_visible() / ltc4283_curr_is_visible(), similar
-to how ltc4283_in_is_visible() hides voltage channels?
-
-2. Eight separate helper functions (ltc4283_get_sense_reg(),
-ltc4283_get_sense_min_reg(), ltc4283_get_sense_max_reg(),
-ltc4283_get_sense_min_th_reg(), ltc4283_get_sense_max_th_reg(),
-ltc4283_get_curr_alarm_reg(), ltc4283_get_curr_alarm_high_mask(), and
-ltc4283_get_curr_alarm_low_mask()) branch on st->info->id. Could these
-register addresses and masks be stored in struct ltc4283_chip_info instead?
-
-3. ltc4283_set_max_limits() branches on st->info->id =3D=3D ID_LTC4283 to s=
-elect
-LTC4283_SENSE_MAX_TH vs LTC4284_SENSE1_MAX_TH instead of reusing
-ltc4283_get_sense_max_th_reg(st, 0).
-
-4. ltc4283_setup() repeats the property read, [LTC4283_MIN_RSENSE,
-LTC4283_MAX_RSENSE] range check, and division by CENTI three times for
-adi,rsense-nano-ohms, adi,rsense2-nano-ohms, and adi,radc-nano-ohms. Could
-that be factored into a small helper?
-
-[ ... ]
-
-> @@ -1769,13 +2090,15 @@ static int ltc4283_probe(struct i2c_client *clien=
-t)
->  }
-> =20
->  static const struct of_device_id ltc4283_of_match[] =3D {
-> -	{ .compatible =3D "adi,ltc4283" },
-> +	{ .compatible =3D "adi,ltc4283", .data =3D &chip_info_ltc4283 },
-> +	{ .compatible =3D "adi,ltc4284", .data =3D &chip_info_ltc4284 },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, ltc4283_of_match);
-> =20
->  static const struct i2c_device_id ltc4283_i2c_id[] =3D {
-> -	{ "ltc4283" },
-> +	{ "ltc4283", (kernel_ulong_t)&chip_info_ltc4283 },
-> +	{ "ltc4284", (kernel_ulong_t)&chip_info_ltc4284 },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(i2c, ltc4283_i2c_id);
-
-[Severity: Low]
-This isn't a bug, but should the modified and new entries in ltc4283_i2c_id=
-[]
-use named initializers (.name and .driver_data) to match I2C subsystem
-conventions?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104-staging-lt=
-c4284-v1-0-49fce67ebc48@analog.com?part=3D2
+PiBbRXh0ZXJuYWxdDQo+IA0KPiBUaGFuayB5b3UgZm9yIHlvdXIgY29udHJpYnV0aW9uISBTYXNo
+aWtvIEFJIHJldmlldyBmb3VuZCAyIHBvdGVudGlhbCBpc3N1ZShzKSB0bw0KPiBjb25zaWRlcjoN
+Cj4gLSBbTWVkaXVtXSBkdC1iaW5kaW5nczogaHdtb246IGx0YzQyODM6IHJlcXVpcmluZyByc2Vu
+c2UyIGJyZWFrcyBzaW5nbGUtZHJpdmVyDQo+IG1vZGUNCj4gLSBbTG93XSBkdC1iaW5kaW5nczog
+aHdtb246IGx0YzQyODM6IGx0YzQyODQgZXhhbXBsZSBzZW5zZSByZXNpc3RvcnMgYmVsb3cgbWlu
+DQo+IDUwMDAwDQo+IC0tDQo+IA0KPiBjb21taXQgOTY3NmIyOTRjZjJhZDExNjhlNWNlMGQ4ZGU1
+YzBjZDU4ZTY4ZDllZA0KPiBBdXRob3I6IEFsZXhpcyBDemV6YXIgVG9ycmVubyA8YWxleGlzY3pl
+emFyLnRvcnJlbm9AYW5hbG9nLmNvbT4NCj4gDQo+IGR0LWJpbmRpbmdzOiBod21vbjogbHRjNDI4
+MzogYWRkIGx0YzQyODQNCj4gDQo+IFRoaXMgY29tbWl0IGFkZHMgZGV2aWNlIHRyZWUgYmluZGlu
+ZyBzdXBwb3J0IGZvciB0aGUgQW5hbG9nIERldmljZXMgTFRDNDI4NA0KPiBuZWdhdGl2ZSB2b2x0
+YWdlIGhvdCBzd2FwIGNvbnRyb2xsZXIgdG8gdGhlIGFkaSxsdGM0MjgzIHNjaGVtYSwgaW5jbHVk
+aW5nIG5ldw0KPiBwcm9wZXJ0aWVzIGZvciBpdHMgc2Vjb25kIHNlbnNlIHJlc2lzdG9yIGFuZCBB
+REMgcmVzaXN0YW5jZS4NCj4gDQoNCi4uLg0KDQo+ID4gKw0KPiA+ICsgIGFkaSxyc2Vuc2UyLW5h
+bm8tb2htczoNCj4gPiArICAgIGRlc2NyaXB0aW9uOg0KPiA+ICsgICAgICBWYWx1ZSBvZiB0aGUg
+U0VOU0UyIGN1cnJlbnQgc2Vuc2UgcmVzaXN0b3IuIFRoaXMgcmVzaXN0b3IgaXMgY29ubmVjdGVk
+DQo+ID4gKyAgICAgIGJldHdlZW4gU0VOU0UyKyBhbmQgU0VOU0UyLSBwaW5zLg0KPiA+ICsNCg0K
+Li4uDQoNCj4gPiAgYWxsT2Y6DQo+ID4gKyAgLSBpZjoNCj4gPiArICAgICAgcHJvcGVydGllczoN
+Cj4gPiArICAgICAgICBjb21wYXRpYmxlOg0KPiA+ICsgICAgICAgICAgY29udGFpbnM6DQo+ID4g
+KyAgICAgICAgICAgIGNvbnN0OiBhZGksbHRjNDI4NA0KPiA+ICsgICAgdGhlbjoNCj4gPiArICAg
+ICAgcmVxdWlyZWQ6DQo+ID4gKyAgICAgICAgLSBhZGkscnNlbnNlMi1uYW5vLW9obXMNCj4gPiAr
+ICAgICAgICAtIGFkaSxyYWRjLW5hbm8tb2htcw0KPiA+ICsgICAgZWxzZToNCj4gPiArICAgICAg
+cHJvcGVydGllczoNCj4gPiArICAgICAgICBhZGkscnNlbnNlMi1uYW5vLW9obXM6IGZhbHNlDQo+
+ID4gKyAgICAgICAgYWRpLHJhZGMtbmFuby1vaG1zOiBmYWxzZQ0KPiANCj4gW1NldmVyaXR5OiBN
+ZWRpdW1dDQo+IEFzIG5vdGVkIGluIHRoZSBiaW5kaW5nIGRlc2NyaXB0aW9uIGFib3ZlLCB0aGUg
+TFRDNDI4NCBzdXBwb3J0cyBmb3VyIGhhcmR3YXJlDQo+IG9wZXJhdGluZyBtb2RlcyBjb25maWd1
+cmVkIHZpYSB0aGUgTU9ERSBwaW4sIGluY2x1ZGluZyBzaW5nbGUgZHJpdmVyIG1vZGUuDQo+IA0K
+PiBJbiBzaW5nbGUgZHJpdmVyIG1vZGUsIG9ubHkgdGhlIGZpcnN0IE1PU0ZFVCBwYXRoIChHQVRF
+MSBhbmQgU0VOU0UxKy9TRU5TRTEtDQo+ICkgaXMgdXNlZCwgYW5kIG5vIHNlY29uZCBzZW5zZSBy
+ZXNpc3RvciBpcyBwb3B1bGF0ZWQgYmV0d2VlbiBTRU5TRTIrIGFuZA0KPiBTRU5TRTItLg0KPiAN
+Cj4gSWYgYWRpLHJzZW5zZTItbmFuby1vaG1zIGlzIHVuY29uZGl0aW9uYWxseSByZXF1aXJlZCBp
+biB0aGUgYWxsT2YgYmxvY2sgZm9yDQo+IGFkaSxsdGM0Mjg0LCB3b3VsZG4ndCBib2FyZHMgd2ly
+ZWQgaW4gc2luZ2xlIGRyaXZlciBtb2RlIGZhaWwgc2NoZW1hIHZhbGlkYXRpb24NCj4gdW5sZXNz
+IHRoZXkgc3BlY2lmeSBhIG5vbmV4aXN0ZW50IGFkaSxyc2Vuc2UyLW5hbm8tb2htcyBwcm9wZXJ0
+eT8NCj4gDQoNCkkgc3VwcG9zZSBJIGNhbiBtYWtlIHJzZW5zZTIgb3B0aW9uYWwgKCsgY29ycmVz
+cG9uZGluZyBkcml2ZXIgY29kZSBjaGFuZ2UpPw0KT3IgY2FuIGl0IGJlIGtlcHQgYXMgaXM/DQoN
+Cj4gPiBAQCAtMjY5LDQgKzMwMywxOSBAQCBleGFtcGxlczoNCj4gPiAgICAgICAgICAgICAgI2dw
+aW8tY2VsbHMgPSA8Mj47DQo+ID4gICAgICAgICAgfTsNCj4gPiAgICAgIH07DQo+ID4gKw0KPiA+
+ICsgIC0gfA0KPiA+ICsgICAgaTJjIHsNCj4gPiArICAgICAgICAjYWRkcmVzcy1jZWxscyA9IDwx
+PjsNCj4gPiArICAgICAgICAjc2l6ZS1jZWxscyA9IDwwPjsNCj4gPiArDQo+ID4gKyAgICAgICAg
+c3dhcC1jb250cm9sbGVyQDIwIHsNCj4gPiArICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJhZGks
+bHRjNDI4NCI7DQo+ID4gKyAgICAgICAgICAgIHJlZyA9IDwweDIwPjsNCj4gPiArDQo+ID4gKyAg
+ICAgICAgICAgIGFkaSxyc2Vuc2UtbmFuby1vaG1zID0gPDEwMDA+Ow0KPiA+ICsgICAgICAgICAg
+ICBhZGkscnNlbnNlMi1uYW5vLW9obXMgPSA8MTAwMD47DQo+ID4gKyAgICAgICAgICAgIGFkaSxy
+YWRjLW5hbm8tb2htcyA9IDw1MDA+Ow0KPiA+ICsgICAgICAgIH07DQo+IA0KPiBbU2V2ZXJpdHk6
+IExvd10NCj4gSW4gZHJpdmVycy9od21vbi9sdGM0MjgzLmMsIGx0YzQyODNfc2V0dXAoKSB2YWxp
+ZGF0ZXMgdGhlIHNlbnNlIHJlc2lzdG9yDQo+IHByb3BlcnRpZXMgYWdhaW5zdCBbTFRDNDI4M19N
+SU5fUlNFTlNFLCBMVEM0MjgzX01BWF9SU0VOU0VdLCB3aGVyZQ0KPiBMVEM0MjgzX01JTl9SU0VO
+U0UgaXMgNTAwMDAgbmFuby1vaG1zICg1MCBtaWNyby1vaG1zKSBhbmQNCj4gTFRDNDI4M19NQVhf
+UlNFTlNFIGlzIDE2Nzc3MjE1OTkgbmFuby1vaG1zOg0KPiANCj4gICAgIGlmIChzdC0+cnNlbnNl
+IDwgTFRDNDI4M19NSU5fUlNFTlNFIHx8IHN0LT5yc2Vuc2UgPiBMVEM0MjgzX01BWF9SU0VOU0Up
+DQo+ICAgICAgICAgcmV0dXJuIGRldl9lcnJfcHJvYmUoZGV2LCAtRUlOVkFMLA0KPiAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICJhZGkscnNlbnNlLW5hbm8tb2htcygldSkgdG9vIHNtYWxs
+IG9yIHRvbyBsYXJnZSBbJXUgJXVdXG4iLA0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHN0LT5yc2Vuc2UsIExUQzQyODNfTUlOX1JTRU5TRSwgTFRDNDI4M19NQVhfUlNFTlNFKTsNCj4g
+DQo+IFRoZSBleGFtcGxlIGFib3ZlIHNldHMgYWRpLHJzZW5zZS1uYW5vLW9obXMgPSA8MTAwMD4s
+IGFkaSxyc2Vuc2UyLW5hbm8tDQo+IG9obXMgPSA8MTAwMD4sIGFuZCBhZGkscmFkYy1uYW5vLW9o
+bXMgPSA8NTAwPiAoMSBtaWNyby1vaG0gYW5kIDAuNSBtaWNyby0NCj4gb2htKSwgd2hpY2ggd2ls
+bCBjYXVzZSBsdGM0MjgzX3NldHVwKCkgdG8gZmFpbCBwcm9iZSB3aXRoIC1FSU5WQUwuDQo+IA0K
+DQpUaGlzIHdhcyBqdXN0IHJhbmRvbSBudW1iZXJzIHRvIHNob3cgdGhlIGV4YW1wbGUuIEkgY2Fu
+IGNoYW5nZSB0aGUgdmFsdWVzDQp0byBhIG1vcmUgcmVhbGlzdGljIHNhbXBsZSBpZiBwcmVmZXJy
+ZWQuIA0K
