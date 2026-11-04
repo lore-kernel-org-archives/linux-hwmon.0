@@ -1,102 +1,106 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.47
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.42
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793833414;
-	b=Bo1GkfnuX9Lzcyyt4LRW/TqTTtUoA/J5sBH8QXBNfRSszBuayY1axnnwf0vIKulK7o2v
-	 20dGwkHNOjJAdqqHknAkns+F5fZHfFgEJLt+WUYaZ5+B2OVEbOyij2pBHOa/dJWiRtOPu
-	 6Ly1vo5el9inAP9k3oFo89YgEUSxzB87cs70jESogVsGG6/iBF4Hg8Qw020rkuM8GLIqu
-	 K+Y0YHbIZ/PwpjFnPWAaKcwsMia40vwbunmpN4JInF5LWQk+LcCjvh1AX5IJFJmBdJBKJ
-	 XXxNXoMzGomerTz+hkvhanhs0MaCnkNwg1o1TFCCCLmzIhTfuIBk0u1+F7Zbj3JkIVw==
+	t=1793833418;
+	b=fpW4dXNUqRYiVCbZOrCBuYeWZ9LBYpj+ayuSE4SPhPbxZaza0J1Ysi2SgK0lEGENBAsZ
+	 fdKKkozRL/h/tOTRAMryUlyRZ8wOuTYr3WM0gbfP7+de31yBfhWD1g4C16Ce7Vr1mnkI0
+	 khRiKrNtUnrotnmj9/X+EBpD01/3CDnnauaHRlUwMEtKcPLctmu46u28HpTeur/fiPCDc
+	 yy+vEn6ecHwJptO6RcDr950RItK0u5GPRi1InICtFMPeBsfkGM0k7hyEFr+jMM/C2KBct
+	 85sjmjRac5sJ3L/V1ElnbAR4v4jdRTY10gdogrqfxVo4TWw2YKxsoFVfalTTDVTfytg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793833414;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793833418;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Received:From:MIME-Version:Date:X-Gm-Features:Message-ID:Subject:To:
-	 Cc:Content-Type;
-	bh=E3/qpbZQVNV3lMpL8sax6liyRC8rCnhmkYMiRpukkUM=;
-	b=lB7ATOcRKF3qW8ktvFRShuKEkM6A1Q2qw5bmEcioHH162eN143FOsHNodZZnzmkkUhas
-	 1oXx/tAqjalo77YIBOZgoplNuFpumtpN1Uf2qp9u5Xz+u2JUXiWtOL9yEphYvRt5CnNs/
-	 AqOZuAsPdJzSiNATcomVtKvNDK9dz6mrdmYlHx6hFZoCDloEbaDLMaLOdlCif8vu+W6hX
-	 d8/a9V1f0VR/BrlSrOIu9OQhPzClGVKY0FIEv3xmM5L7AzYtoOL2eBzQEiCA9Yh+TMBlc
-	 xF0SpkljOk6N64NBSHqHyGw2WMeI8P/HMDlStv2oGKT+rrRIWlpezWm9kU1aRmAa7Ug==
+	 Received:From:In-Reply-To:References:MIME-Version:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=TASN3SRwvlxH6Ri9XmKZPLPt+xWrnD4iUlUH+1j2Dqc=;
+	b=p1JiXzqx5+oEHGFZS8TM4aKRpwN5Mb75NzAv3PbVL/GaM0BqYhOQINU6oFFUKA6Ip8Uw
+	 NHQAaaGETe04zKQwmtp3eQcRPUo9beB5KClqtAPR/CpbpJn90MUUpWgEr0dHVZWfaM9dc
+	 AWglgsVV2cq2Kfj0hrvBMVyN0LvVdLr3oXT5fximvUQr/zeh+QwfyrvlF5B6avBCTOwBU
+	 hOvZxXaKAIdQ1Gbvyv/vg7ub0oh855GVZFoxePXgXZ+LbrZbmlmVgOzpFq9N2DC7oDu12
+	 brF0zxlMwZJKjjt8h448Paq4WwO1As1zc6DaK3lHJZ3MHpaNGzJvGzzfhPD55iggl+w==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Wu4+VLWG;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.47
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=j0m0znIs;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.42
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F0D1606EE97
-	for <linux-hwmon@vger.kernel.org>; Wed,  4 Nov 2026 23:03:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F0D1606EE97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50FB4606EEB0
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Nov 2026 23:03:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 50FB4606EEB0
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Wu4+VLWG
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-4a76f63b243so84610fac.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 04 Nov 2026 15:03:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793833413; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=j0m0znIs
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-483a66818edso686853fac.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 04 Nov 2026 15:03:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793833417; cv=none;
         d=google.com; s=arc-20260327;
-        b=WB4fBCn44PU9MeAvON3a7s0ITmJjehgbaGVtreUOm0b6PVS//6Z7CFvShvr8hBLcXu
-         A5s/htTBGnkw/VbEmRE+EKdl9QswcypSpxtA9VuGOzhhbokcetlpNW62chiIwb0UAOZq
-         SKTtTorDAGMrQYuqD4fMI6viGyaw1S6ZGRWbhC7vqCYUGgeTPTjJcbHgdlrPWoWonvT9
-         pzbjikX/bWte3AGjVJrySQ1z+lLgv1NmW4QLIXidC7jMKOLq0mJ/fJCDRCHUMrWdVMow
-         ErjPcv2rMi5KBzotjYqln8l5K2zv5i0LpaepOuaW6Nf8l1oWkdGm/g4MAZD2a/25ZnmG
-         hdeg==
+        b=WMeYUbSJ6mg3fNiulinYQtjhlCMz5efwqGPX9LEVWeP4WIYHs/XOVxP950dEW0zybs
+         z0BxWlSoU/5AOnIZ5/rfLTkJS+0kYlq6o2BEcYSPx1wWafg3fA3DT1al50D/4VA1yWHt
+         wFYeM6Se7vnF34ccvxHzSlMNetcgrvUl/txIUt8Lh42eqwavEz6QS+L2PAKFM2Kq7dRi
+         fvKZcmYTlqEEehHIDyKX4r/HbtMRlVaqV8mu9kFbRNsRO8eocHrhjqqENi1bvHO4jQH7
+         ejzwD/Wqqc+t1Eel0Lz75s5SvTesiH66MA41nIHe77c0bqmYZphBFBWwBadGdGttCLcH
+         FfXA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:mime-version:from:dkim-signature;
-        bh=E3/qpbZQVNV3lMpL8sax6liyRC8rCnhmkYMiRpukkUM=;
-        fh=GNwwPjUiN4n9G3Jn+HqDW8Vpr69vCV8GpXZl0N0Q/pI=;
-        b=e5RpItK4lI2723+287+VfI0Pwk4nODqtnDILkE4wnCC+269UzUaKQOhGOEdPjVgytw
-         vM3dsIIw81RxSfbLyTiRNu1gm5lKrJ5NhLWpTo7iXvdQM3wDAmzGSNPbvOCYA5l35k/u
-         QZArEMyP89/e0txYEQxs7VtuonAEbJza/HOS2a/6ev/i2GZknD3ntOvvUC2/9JzpryW4
-         pnh8TwfGsPw9PrOjNC8ru1C+rbH9maxWF7shhERBqKCb1IhBO3tvFzebDRpBu3JFfVYk
-         bIie3WQinOpzedfqJlHoqPv7jjbyTTf8d3kbj3LOjhmwtpiw5qlgQrmivQpL+Fpk6g8z
-         l7kQ==;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=TASN3SRwvlxH6Ri9XmKZPLPt+xWrnD4iUlUH+1j2Dqc=;
+        fh=yNiwBQcIB5uupr2r1sAfgnZZ9FUxn8ir9SmPmYax5d0=;
+        b=JuMcAmQBQ5owNfy7xjvfDn/z32l7Hz3GU9qvKVwn2JlZcOfAu/LfrJhSRbbX/vja6c
+         dVlTyabBiMEWSftXTJB0b6hPFgQrgtRMpDwHX8Geg3N7TnBwiqDFCP+X5xmbl+m90vDp
+         9o1ClLrBJbPt+xkMBqjDGSw1L6C78Vd0KZsu6RHbtJ5Z1xmLBP9616uW+cOy/Y6UNXdR
+         sosOxT2FwrZYOVBx7Vn8T9546oOPQS2YNWPuNHTTfwsi5Q76tM4RzGPFTK/agI5gIhwo
+         Kjknv31YtDPqfoetPD8ujFJp3nfJp6j/RIhEPLHXSH8r8eDRmQdfsO6V59IfXxm0Srhb
+         P6+g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793833413; x=1794438213; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:mime-version:from:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=E3/qpbZQVNV3lMpL8sax6liyRC8rCnhmkYMiRpukkUM=;
-        b=Wu4+VLWGmMjjBoxRHJtRMJhfwRcobe8fdS8Amtqz9PKv/C+h/sWuWwSi61WZeR/N1o
-         0rLNvMQpZDoBcjl6hckr5Xks0iLQ51BnGOfVwmLlRz7xZEDIwgFtK8ktILHfgzTkZk8o
-         tbdYdFQdelddvOjrEUnSRtU+SsFkDsIpTf3hSYCH4vqRp/0LgMIO1kP+GGG9TV2sgsr/
-         V0ewFvLUbPDIlNrGitUpkwTMuFzisoEPauD7ODjrQ1TFBysqkgdYUx2ybwMlFl6GOKug
-         8cvaRBaqp64VsYQMSc0GXj3rQhpTk8jeTpBKrAJYPyfjoUNhvPydnznmdjYFv8aGBTDP
-         8PAg==
+        d=gmail.com; s=20260707; t=1793833417; x=1794438217; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=TASN3SRwvlxH6Ri9XmKZPLPt+xWrnD4iUlUH+1j2Dqc=;
+        b=j0m0znIsup/qWIeqK4wvvhVN9ewaBu36TG4pQfrMscHx/qzUVos0TO4uX1F7xbjGml
+         DOm4sASZXe/m3skCbRgVlUyXNWxBhsHV7hj/hywd8QR6CLOr3ynRwFv/fQ5IZZHXFI7I
+         MJE2OhvBqiDzTqUOEozYfh0Z3qwg/D2ERD6oDj7IByy4bxmTtiNb/1eqvLKFHFqKZrWV
+         OtYR5zrYLUM24OCkUR2vWBXOs4Y9N1MlEDPP8QzWHPu0euO/YCuyrFySDYop8X04DNXH
+         iwmiAopm1uCyKBvyQRL2RKGkSPnAnv8UO5yc03V0eW7i3L9rFyJtvl6oEEnoB1h/AXgC
+         GSXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793833413; x=1794438213;
-        h=content-type:cc:to:subject:message-id:date:mime-version:from
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=E3/qpbZQVNV3lMpL8sax6liyRC8rCnhmkYMiRpukkUM=;
-        b=zp8KaVqdPXDwYqeIjAqJb+GY0uhQ6ofo/sMmXKofIeIZh/zBTxtph/zIx/wh0KJYJW
-         UsZyWT4EgM0lH7HK6eI9kExyhXqAMk2BSvZAbH2+Ni4qHjAkrp+ZvA4PXFRzxq/PCyy6
-         fj0nFLnVIwkEuMQPZIBqXhUrgu68c7oFJXf4GHy/+9MxrZ8rq491xa5QzssgzTE4TiUU
-         T3eqFwBknMRcdRKTMBQvj+TQdOQd+ZbeT/9CjJAU25DPKZXhFu8ZNTAsk+6Hm6JQcaHO
-         vBT6R5FnIg35n6PiR2WDWzRSmdEgoMsaE7D0bqfNeD1bylFXgqS5zM+KEmChoaeI/8Gy
-         3UQA==
-X-Forwarded-Encrypted: i=1; AKwUvBysIk5X/3x0KPBI1JmB9E9BAnJeHyPjHo1br0rcEUwf9lguDCyNrCFW+CsZz/Q5Uev79eoiS5yBh3Dycg==@vger.kernel.org
-X-Gm-Message-State: APuU4Z/oRufth4oopgYfFarAknN51unF0deJXkJHvY9PcfK4X5iyCVU+
-	sejBs3Fgj3AxAhhQad1uQ6SBvJgIyjsnKE+cwWoN3FvbnPX7Es6vkhkcR0Zh3I3VX0f2/MugZ6U
-	wi4cR8nO7XZjxGzyd8XXanVVJxLhvn1k=
-X-Gm-Gg: AYBFou19/G/7YhpI9Nh+ExakuCP3EsMLB1q/200Tfjzxn/r280FvXRN9SwUTrhK4faI
-	106lHZ8SIcJGD+txTE7tvVz2S3hJbds/l6XxwEKu6eqo8btI90lO0JdEQbmyf+2q+7ooXl6nvYU
-	VXlBnK0tvRt5e1Ct3sJ9p4q960YzNxPHdSe93bvbV66fh9ac22MjzFHTr1/1UNNmrzoqSFoIE3Q
-	sKC9V2RSwPyqCFRE25kc3Ml8Pd4xN5zCLzg4YI6sOJfyJTfLi5B8canmgBA2ole0ODCFf1nDUWp
-	+5EPr//do/H9UBJUUgLTtxm0AaKkR7mNs2jkGat2xZ/kCdRtjvyDAWOBH4tNSVJPv3H/5O2KDN0
-	oq4REho5LwbkyT2TD7YKWTfS004MIW5Q/pfL0PqDEFTVU2el9GU2ZMWyHjA/hbKT+5EO5ius=
-X-Received: by 2002:a05:6808:1513:b0:53c:4502:971d with SMTP id
- 5614622812f47-567be6c8a4dmr544823b6e.36.1793833412958; Wed, 04 Nov 2026
- 15:03:32 -0800 (PST)
+        d=1e100.net; s=20260707; t=1793833417; x=1794438217;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=TASN3SRwvlxH6Ri9XmKZPLPt+xWrnD4iUlUH+1j2Dqc=;
+        b=FLSyaFwCeMifsE0RzZN6Pw5sccgK/7kNTIppKaJZJenw//bf3IjYiaebyoR76HdxhJ
+         L96ISFGqPZcWe5hbhOt68YknzDs4xzItDUv0ewJoMc2zFWvwQkgaHipDXx3JvCCBx5nI
+         RZsmIlDWvVlarCV/0YujTyR+93EUkHSqH8KsieVYNr2FjmADIAO9wbjBTqYs5QD4Yb9o
+         iD0cv5AhcB6dS2t3VwBHx8N/RGeCvUpoKhbEOsCfwYKdcNq7pdlhCUoXn745qScrMZsZ
+         YqksRUYF5gZZV4tNuef7WG1unsuv3YmtNtuBXtfKiEglSwBPIYszOitZxX61SvTnrGGg
+         zkpQ==
+X-Forwarded-Encrypted: i=1; AKwUvByuSXvGAyludggpJOEO82+nvLMBlzMrSi6bYVb4RTHhHxdxRxaYehdkoFPpVBhPwrskC7PFmFSU7TJijw==@vger.kernel.org
+X-Gm-Message-State: APuU4Z8qHOgclZdrfPPl5zMaA20rICdR/GhACCiYOTphoWZTzmhvmWsS
+	GcCBE1m8tT8BWP9DOcj5DQMTYV8+fps94lopN021XqkZRNLFWqm4YHqV7EtNz+DNRR9ccr7SrwQ
+	SkqTXHK7HH827bryERM2erOBythrfX5o=
+X-Gm-Gg: AYBFou2wgVrYxPtrUCNqoigR8K73WEKCuRDjoTcV/1G95BBTUa933jgOzGrCjYTsCHr
+	1DtrO4/7/ZyHBrBlI61HkktW2w7FImK5x9wtiZdXFuY/AC4UvncvwinY+HR/ZHjtSVzg5lijKlo
+	wRx/c9LVTFlhsm7Thl3r6xqdJlR/unwtLCLjp5iPZeGzZbFZmwwTWUW0AigJyTrz0PJiZNpP2vK
+	swdKbXOmZrpfvEyQ8xFHvUBL88nvrkxj2geM7B3v4XJFgFMi2mYltiNkdxp6Wgp0sZMORv+Akzf
+	fCtlYbdaqSnlYcY70or8/EGqpiWJKTBxkbJlxvKeObHn4ACc/3cSBzygt63zpQqQ7eYEH0COG91
+	cv3pJrqocrNB+m23gd/GNi6HYLovsX6x9YFQl0S9aoKCFgguQgQKI1ztictAyI4JBbCllCKk=
+X-Received: by 2002:a05:6808:15a7:b0:4f4:4eef:52cc with SMTP id
+ 5614622812f47-5640de2513bmr12203189b6e.43.1793833417236; Wed, 04 Nov 2026
+ 15:03:37 -0800 (PST)
 Received: from 41474967715 named unknown by gmailapi.google.com with HTTPREST;
- Wed, 4 Nov 2026 18:03:32 -0500
+ Wed, 4 Nov 2026 18:03:36 -0500
 Received: from 41474967715 named unknown by gmailapi.google.com with HTTPREST;
- Wed, 4 Nov 2026 18:03:32 -0500
+ Wed, 4 Nov 2026 18:03:36 -0500
 From: Kirtikumar Anandrao Ramchandani <kirtiar15502@gmail.com>
+In-Reply-To: <20261105-kasync-devm-timer-1-kirtiar15502@gmail.com>
+References: <20261105-kasync-devm-timer-1-kirtiar15502@gmail.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -106,62 +110,65 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Date: Wed, 4 Nov 2026 18:03:32 -0500
-X-Gm-Features: AclHuK-E5HhSsymovm6gqqi0LHwYAX2YAQzu1NYpLgCPDxd0d2GuBDjgyNjYCSk
-Message-ID: <CADZg-m3Mnk_QJ44HrH4SkCm+pN5QteeQv8zY9Q7EE7RQv65O8A@mail.gmail.com>
-Subject: [PATCH 1/2] devres: add managed timer shutdown helper
+Date: Wed, 4 Nov 2026 18:03:36 -0500
+X-Gm-Features: AclHuK8_mptZYAXia0N85GcfAK4F984qFw3tZGgYmiv7d0zdmwUYqklPkOQLZe0
+Message-ID: <CADZg-m3OJAhUi8EzBeMQbcKKVTkBBN70mnkGmJzkj2t54xFxDQ@mail.gmail.com>
+Subject: [PATCH 2/2] hwmon: pwm-fan: use managed timer shutdown
 To: Hans de Goede <hansg@kernel.org>, Guenter Roeck <linux@roeck-us.net>
 Cc: Matti Vaittinen <mazziesaccount@gmail.com>, linux-hwmon@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Provide a devres action for initialized timers. The action calls
-timer_shutdown_sync(), draining the callback and rejecting later rearming
-before device-managed storage is released.
-
-Use devm_add_action_or_reset() so a failed action registration shuts the
-timer down immediately.
+Replace the private devres timer cleanup action with
+devm_timer_autoshutdown(). Keep initialization and action registration at
+their existing positions, preserving the cleanup order. The system
+shutdown path continues to call timer_shutdown_sync() directly.
 
 Signed-off-by: Kirtikumar Anandrao Ramchandani <kirtiar15502@gmail.com>
 ---
- include/linux/devm-helpers.h | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ drivers/hwmon/pwm-fan.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/devm-helpers.h b/include/linux/devm-helpers.h
-index 708ca9131..ffe8b68b7 100644
---- a/include/linux/devm-helpers.h
-+++ b/include/linux/devm-helpers.h
-@@ -24,8 +24,33 @@
+diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+index 9cabbe9f8..6b02c2687 100644
+--- a/drivers/hwmon/pwm-fan.c
++++ b/drivers/hwmon/pwm-fan.c
+@@ -8,6 +8,7 @@
   */
 
- #include <linux/device.h>
-+#include <linux/timer.h>
- #include <linux/workqueue.h>
+ #include <linux/delay.h>
++#include <linux/devm-helpers.h>
+ #include <linux/hwmon.h>
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
+@@ -493,13 +494,6 @@ static void pwm_fan_cleanup(void *__ctx)
+ 	}
+ }
 
-+static inline void devm_timer_shutdown(void *res)
-+{
-+	timer_shutdown_sync(res);
-+}
-+
-+/**
-+ * devm_timer_autoshutdown - Shut down an initialized timer on resource release
-+ * @dev: Device whose lifetime the timer is bound to
-+ * @timer: Initialized timer to shut down
-+ *
-+ * Register a timer_shutdown_sync() action. Register this action before
-+ * arming the timer, and after resources that its callback may access.
-+ * The timer is shut down immediately if action registration fails.
-+ *
-+ * The callback's resources must remain live until shutdown completes. Any
-+ * independent user of the timer must stop before the timer's storage is
-+ * released. Devres actions run in reverse registration order.
-+ */
-+static inline int devm_timer_autoshutdown(struct device *dev,
-+					  struct timer_list *timer)
-+{
-+	return devm_add_action_or_reset(dev, devm_timer_shutdown, timer);
-+}
-+
- static inline void devm_delayed_work_drop(void *res)
+-static void pwm_fan_timer_cleanup(void *__ctx)
+-{
+-	struct pwm_fan_ctx *ctx = __ctx;
+-
+-	timer_shutdown_sync(&ctx->rpm_timer);
+-}
+-
+ static int pwm_fan_probe(struct platform_device *pdev)
  {
- 	cancel_delayed_work_sync(res);
+ 	struct thermal_cooling_device *cdev;
+@@ -650,7 +644,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 	}
+
+ 	if (ctx->tach_count > 0) {
+-		ret = devm_add_action_or_reset(dev, pwm_fan_timer_cleanup, ctx);
++		ret = devm_timer_autoshutdown(dev, &ctx->rpm_timer);
+ 		if (ret)
+ 			return ret;
+
+@@ -710,7 +704,7 @@ static void pwm_fan_shutdown(struct platform_device *pdev)
+ {
+ 	struct pwm_fan_ctx *ctx = platform_get_drvdata(pdev);
+
+-	pwm_fan_timer_cleanup(ctx);
++	timer_shutdown_sync(&ctx->rpm_timer);
+ 	pwm_fan_cleanup(ctx);
+ }
