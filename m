@@ -1,75 +1,75 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793852160;
-	b=Nv3xN9OpsBFD4PFHaDlH4cYxG2UtouTegpyFQXZKTDUGFr7T7fMCmrcmeoFc2zJBbF5G
-	 hePNnP6wYuWjC2uCAe7XwH/50m2q9pJ5l2YoG4Q2em3agUHOTeSAet12JVX2qV+IZ0WW0
-	 +uI443iHC2u14k2XObYKHe/fwdz/rVS224OmchmglCwHursQFl4mQfUssJj0kcfp1W+14
-	 HCHdSybeACjjamvE++dpnaP4LSmFilAcxzcfGF7oql2EDNg2dYQK1CFOX33oGQP7A8RQE
-	 ea7SxzAG2NYW/+1hLbabB6VzCghbtS82exot+KZYk/ysacKthbTzCiS8+7FUDQ79yuA==
+	t=1793854127;
+	b=bnogvpksARqTDqtH1eXf/b2/HnP/2oIHwKRZF4BVYE/vcet9f5UtDJ8jC0CKQ5hv+XWU
+	 VVPse7K2/eSnyuVoPdDWfMxiipe4B7CrxZR4S+fJiy8D8P+hxVPmwKlkFzwzeQkJ2gSX1
+	 iiK6lnPlvKAgHkJkdB+pZuaUSjX1NP7EfTlnwR3qZE2io7gRJQEorsqyexpWRqVtSm8SE
+	 NxAgP14ZSxq/H6rvR8ezO/7hq6LKq8KE58u4H+NqJFU7/txFzlesLjo0S94YWsqu18SjO
+	 ofHCBEj9LVL2liAPJB2iG2URNi2Feyu1t4evVewGd7H9xPWjjfRVZtw3BriHbQ1SPXw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793852160;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793854127;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
 	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
 	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=dNQLnnz11qHKvLiS1T9tl3SzeapcPq8bf9vbdgRsqKI=;
-	b=BiFmIMaWQHK55b/S9i/hYFFiKlSmXWvXGBbt7G+rc66bnEhSU5RE78N9i170aSCa56CP
-	 MLOaU9eBk8ARfZ3JdZPNtEHpkE8xcSdVfB69Yk51T0L8PiVyPoYWXpZ0c9esXFxE+gZWD
-	 k6FZtx3FVgahJ7Glem7TnqWMsRKBKnVLL+YYbCsnT3FRbR0svK2/D2ussDF07mtnrXdKH
-	 8lBgHgtTxXsKRqAWgqVDRq77zjMpPwdUcM4Q9QeBZhtxVh4t1TgcfLhXt3uxybGWER3V2
-	 4Qky4YHo1bn6UVsBJ2scwrP2Swwbkt3MpC355oJSV6s8CIdxbfR7ov7tAkrpUmuwYCQ==
+	bh=1YgHePDWKP9w0ydF4EH2CRyGLg5W+poiJeyoSgzoB8o=;
+	b=QX1LTN+HXthBVYkrOd8gBUaVcJeQAVHP+SlxI1SDLprP2nU/SwrT5OB9CVpwPEp4rVcK
+	 h9jzJDINMjsb1kwcEbbskKjyR2XwhZ1btjcRsdSOJtIbPXANHNWGbiSQgs3F8eSqvVTCS
+	 /TPXiNdqI0NJdhO5BZOgHTHCKjrtdmh8g4vpRIHBJVxiCNDK8lbWswMj+utfyTPOZHFiT
+	 s9SrmpJ6bGlPhlllLJb7xA1zddMSqD/aSPhwbzIEndN2RASkmYjr2n3jY4XUfX/Ifdbiy
+	 MmR/21/oFggkLUCKNMCApy/oGK7g4ApjaUwR4QqOvMQdeA9VQCz0qEXlH5ujmWlNqcA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=MTzU+TkN;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b="VWMYCY/5";
 	arc=none smtp.remote-ip=35.89.44.37
 Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479D2606A32D
-	for <linux-hwmon@vger.kernel.org>; Thu,  5 Nov 2026 04:16:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 479D2606A32D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C9B606A336
+	for <linux-hwmon@vger.kernel.org>; Thu,  5 Nov 2026 04:48:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49C9B606A336
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=MTzU+TkN
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=VWMYCY/5
 Received: from eig-obgw-5007b.ext.cloudfilter.net ([10.0.29.167])
 	by cmsmtp with ESMTPS
-	id Oi5TxZbxOVK9UOotLxKhR8; Thu, 05 Nov 2026 04:16:00 +0000
+	id Oi5TxZbxTVK9UOpP4xKovn; Thu, 05 Nov 2026 04:48:46 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id OotLx1aTixqjjOotLxnH4E; Thu, 05 Nov 2026 04:15:59 +0000
-X-Authority-Analysis: v=2.4 cv=bZxrUPPB c=1 sm=1 tr=0 ts=6aec02ff
+	id OpP4x2QB7xqjjOpP4xnyoU; Thu, 05 Nov 2026 04:48:46 +0000
+X-Authority-Analysis: v=2.4 cv=bZxrUPPB c=1 sm=1 tr=0 ts=6aec0aae
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=VwQbUJbxAAAA:8 a=vPC9aCB5EIUscj87Q6QA:9
- a=KPbNTLLc3YvdawN95zVk:22
+ a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8 a=_jlGtV7tAAAA:8
+ a=6ncjbjqT17sfS6AjvkMA:9 a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
 	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
 	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=dNQLnnz11qHKvLiS1T9tl3SzeapcPq8bf9vbdgRsqKI=; b=MTzU+TkNFfkqncdtvu/PbpH/he
-	RQrM8hgY60rxNgTV/fctkNhAWZzJebHA75Zg/ibgKci15h+AmAuwuQnNxoUOf8x2z1P4OPhNZkyy6
-	0FUkExMQJ9K1/pvDGbFVWLwsU6DCseDO+CF2A+az0C0YRzD55+M+IOB4csyVJjB0oP1ocGLYMPWwl
-	E36pvtH6LKl5MHmFq2oWjAfdtgarYJ2NSCY39MQm1vSYoVVYJGn3bFoWuzfhqC7bHKtphoMyBySdB
-	Kmg/Vo1myxqaNh/bI7dmf3A2lafniyt9JX54bTXrDcEd1cD2DxSm/R0pJsZQZoYMDayJ7iB2L1PR4
-	lD6PH/jQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:51402 helo=server.roeck-us.net)
+	bh=1YgHePDWKP9w0ydF4EH2CRyGLg5W+poiJeyoSgzoB8o=; b=VWMYCY/5cxctcNSf1vrU5Ihr6r
+	k3b+7EkbVlPBYK3KtPcalfpELMskQGR53pBqs1xT+FPaKAs/QjFVJ4PAjOmPaN2kyIooit5ybuFn3
+	GjE3GKL3x27TRWQXu15egexjW7rr8Mk/eGncRUVMq/M9uF3kbLIeH0f8ODllKiih0fE+0KdqrWi8/
+	XaUwTOakFoesEXhbO5G1Dd65lh0JY5tbCcL73Sw34f3KVvLFCbnsxOMoTdu2NZz39FNpGohXSkHQZ
+	TUrOMjo8SLpque1HaBujdPzleYjIXlVgMxMIRi6oby5DeDHuMOyUFelhJYDeOTBXeHyWSecITBS27
+	NP9XbczQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:33302 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xOotK-00000004Do8-3nFP;
-	Thu, 05 Nov 2026 09:45:59 +0530
+	id 1xOpP3-000000005ka-3rPT;
+	Thu, 05 Nov 2026 10:18:46 +0530
 From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v7.4-rc2
-Date: Wed,  4 Nov 2026 20:15:58 -0800
-Message-ID: <20261105041558.3259881-1-linux@roeck-us.net>
+To: linux-hwmon@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Aleksa Savic <savicaleksa83@gmail.com>
+Subject: [PATCH] hwmon: (asus_rog_ryujin) Update cached duty cycle after cooler PWM write
+Date: Wed,  4 Nov 2026 20:48:43 -0800
+Message-ID: <20261105044843.3262037-1-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -89,171 +89,91 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xOotK-00000004Do8-3nFP
+X-Exim-ID: 1xOpP3-000000005ka-3rPT
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:51402
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:33302
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 26
+X-Email-Count: 29
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfI1qMzA8r1nMb0EcgXTXHaSpF/L302Md/JTjudaiheDfMDcGsjl/pDJyh1Vk9msYO+htcb1AkCMVtAe9uYOv9dHuJ96hYB/uY/CdGpaLPuCAh3J12uc/
- GZjI4Xy6WrF4eWCzS0Th1I856xNeXHX3nQeX9MFT8w/Nbvc7wYAukXDeofecNeW9mPblGH8lZf5WgeTmlfIu3damMC5VS42r7QjjwaWcNunw/l8hiHNX6RBP
+X-CMAE-Envelope: MS4xfIiV9BIdtdITfzdf3CsiBwCeVXRz3pX3p9Ia07CDbCW3ob6MBSFhRdg82yT39HxXo1jHV601FBosJgGWo5Y7lAiGOW1jE2MZgjg1sZW23tO5eU/bt8rz
+ 3scF2X0VrbSKBI7E/QEt4ccd2QpU2lcfInApFLBeb4LswZO4hRS4AOBrDdZ8GC1o5GN4UiqgaCvWB/AWEQ9TdrD+NaSseBRvCRnIpqJW1GUhhRKFX6eA95xL
 
-Hi Linus,
+In rog_ryujin_write_fixed_duty(), writing a PWM duty cycle to channel 0
+(pump) or channel 1 (internal fan) returns directly from
+rog_ryujin_write_cooler_duty(), skipping the priv->duty_input[channel]
+update at the end of the function. Because the function first fetches
+the pre-write cooler duty via get_cooler_duty_cmd and SET confirmation
+reports do not update priv->duty_input, subsequent sysfs reads within
+the STATUS_VALIDITY (1500 ms) cache window return stale duty values (or,
+on Ryujin III when switching pump source at the reported duty, the
+temporary neighbouring duty written by rog_ryujin_select_pump_source()).
 
-Please pull hwmon fixes for Linux v7.4-rc2 from signed tag:
+Furthermore, rog_ryujin_write_fixed_duty() overwrote val in place with
+rog_ryujin_pwm_to_percent(val), so even before the early return was
+introduced, priv->duty_input[channel] stored a 0-100 percentage rather
+than the 0-255 PWM value expected by rog_ryujin_read().
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.4-rc2
+Keep the 0-100 percentage in a separate local variable and fall through
+on success so priv->duty_input[channel] caches the written 0-255 PWM
+value until the next status refresh.
 
-Thanks,
-Guenter
-------
+Fixes: ed3e03790c5c ("hwmon: Add driver for ASUS ROG RYUJIN II 360 AIO cooler")
+Fixes: b4306c0c8e24 ("hwmon: (asus_rog_ryujin) Rely on subsystem locking")
+Cc: Aleksa Savic <savicaleksa83@gmail.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/asus_rog_ryujin.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-The following changes since commit 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4:
+diff --git a/drivers/hwmon/asus_rog_ryujin.c b/drivers/hwmon/asus_rog_ryujin.c
+index 695e74cf71e4..7b80c46a0930 100644
+--- a/drivers/hwmon/asus_rog_ryujin.c
++++ b/drivers/hwmon/asus_rog_ryujin.c
+@@ -420,6 +420,7 @@ static int rog_ryujin_select_pump_source(struct rog_ryujin_data *priv, u8 *set_c
+ static int rog_ryujin_write_fixed_duty(struct rog_ryujin_data *priv, int channel, int val)
+ {
+ 	u8 set_cmd[SET_CMD_LENGTH];
++	int duty;
+ 	int ret;
+ 
+ 	if (channel < 2) {
+@@ -437,18 +438,18 @@ static int rog_ryujin_write_fixed_duty(struct rog_ryujin_data *priv, int channel
+ 		set_cmd[RYUJIN_SET_COOLER_CHANNEL_OFFSET] = priv->info->duty_channel;
+ 
+ 		/* Cooler duties are set as 0-100% */
+-		val = rog_ryujin_pwm_to_percent(val);
++		duty = rog_ryujin_pwm_to_percent(val);
+ 
+ 		if (channel == 0) {
+ 			/* Cooler pump duty */
+-			set_cmd[RYUJIN_SET_COOLER_PUMP_DUTY_OFFSET] = val;
++			set_cmd[RYUJIN_SET_COOLER_PUMP_DUTY_OFFSET] = duty;
+ 			set_cmd[RYUJIN_SET_COOLER_FAN_DUTY_OFFSET] =
+ 			    rog_ryujin_pwm_to_percent(priv->duty_input[1]);
+ 		} else if (channel == 1) {
+ 			/* Cooler internal fan duty */
+ 			set_cmd[RYUJIN_SET_COOLER_PUMP_DUTY_OFFSET] =
+ 			    rog_ryujin_pwm_to_percent(priv->duty_input[0]);
+-			set_cmd[RYUJIN_SET_COOLER_FAN_DUTY_OFFSET] = val;
++			set_cmd[RYUJIN_SET_COOLER_FAN_DUTY_OFFSET] = duty;
+ 		}
+ 
+ 		if (priv->info->duty_channel) {
+@@ -457,7 +458,9 @@ static int rog_ryujin_write_fixed_duty(struct rog_ryujin_data *priv, int channel
+ 				return ret;
+ 		}
+ 
+-		return rog_ryujin_write_cooler_duty(priv, set_cmd);
++		ret = rog_ryujin_write_cooler_duty(priv, set_cmd);
++		if (ret < 0)
++			return ret;
+ 	} else {
+ 		/*
+ 		 * Controller fan duty (channel == 2). No need to retrieve current
+-- 
+2.45.2
 
-  Linux 7.4-rc1 (2026-11-01 13:26:31 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v7.4-rc2
-
-for you to fetch changes up to e395bbf3ddf1b3175fd3bddaead63a2909b33694:
-
-  hwmon: (asus_rog_ryujin) Fix timeout when reading 0% duty cycle (2026-11-04 06:43:35 -0800)
-
-----------------------------------------------------------------
-hwmon fixes for v7.4-rc2
-
-* acpi_power_meter: Check for 32-bit and 64-bit unknown ACPI values,
-  Fix missing locking in sysfs show callbacks and resume, and Prevent
-  spurious power alarm when power is unknown
-
-* aquacomputer_d5next: Avoid truncating scaled sensor readings, Check
-  maxcollection when probing AQUAERO devices, and reject short status
-  reports
-
-* asus_rog_ryujin: Fix pump control source on the Ryujin III, and Fix
-  timeout when reading 0% duty cycle
-
-* asus_wmi_sensors: Avoid global struct mutation
-
-* chipcap2: Series of fixes addressing various bugs in the driver
-
-* coretemp: Check for NULL platform device in hotplug callbacks,
-  Fix 32-bit jiffies wraparound in show_temp() hnd Set nr_cores only
-  after core_data allocation succeeds
-
-* corsair-cpro: Cache fan target only after a successful command
-
-* gpd-fan: Reset both fans to automatic on duo boards, and
-  Update the speed cache before dropping the PM reference
-
-* hp-wmi-sensors: Avoid global struct mutation, Fix unbounded loops in
-  scale_numeric_sensor(), and Serialize alarm flag read-and-clear with
-  state->lock
-
-* lm75: Fix setting polarity mask for chips with 16-bit config register
-
-* lm87: Fix drvdata type confusion in vrm_show() and vrm_store()
-
-* nct6683: Fix incorrect struct cast in show_pwm() and store_pwm()
-
-* peci/dimmtemp: Fix devres leak and UAF on concurrent unbind
-
-* pmbus core: Check return value from pmbus_thermal_add_sensor(),
-  Register the thermal sensors with a 0-based index, and Fix return value
-  check from thermal zone registration, and release devres allocated memory
-  after devm_thermal_of_zone_register error
-
-* pmbus/q54sj108a2: Add missing NULL pointer check
-
-* sht15: Stop deferred work before releasing its resources
-
-* sht4x: Convert update_interval to jiffies in pending data check
-
-* tmp108: Fix initial conversion delay and wait until ready
-
-----------------------------------------------------------------
-Alexei Solcanu (1):
-      hwmon: (gpd-fan) Reset both fans to automatic on duo boards
-
-Baek Kyu, Kim (2):
-      hwmon: (corsair-cpro) Cache fan target only after a successful command
-      hwmon: (gpio-fan) Update the speed cache before dropping the PM reference
-
-Guenter Roeck (22):
-      hwmon: (aquacomputer_d5next) Check maxcollection when probing AQUAERO devices
-      hwmon: (asus_wmi_sensors) Avoid global struct mutation
-      hwmon: (hp-wmi-sensors) Avoid global struct mutation
-      hwmon: (hp-wmi-sensors) Fix unbounded loops in scale_numeric_sensor()
-      hwmon: (lm87) Fix drvdata type confusion in vrm_show() and vrm_store()
-      hwmon: (nct6683) Fix incorrect struct cast in show_pwm() and store_pwm()
-      hwmon: (peci/dimmtemp) Fix devres leak and UAF on concurrent unbind
-      hwmon: (pmbus/q54sj108a2) Add missing NULL pointer check
-      hwmon: (pmbus) Check return value from pmbus_thermal_add_sensor()
-      hwmon: (pmbus) Release devres allocated memory after devm_thermal_of_zone_register error
-      hwmon: (pmbus) Fix return value check from thermal zone registration
-      hwmon: (lm75) Fix setting polarity mask for chips with 16-bit config register
-      hwmon: (tmp108) Fix initial conversion delay and wait until ready
-      hwmon: (coretemp) Check for NULL platform device in hotplug callbacks
-      hwmon: (coretemp) Set nr_cores only after core_data allocation succeeds
-      hwmon: (coretemp) Fix 32-bit jiffies wraparound in show_temp()
-      hwmon: (sht4x) Convert update_interval to jiffies in pending data check
-      hwmon: (acpi_power_meter) Fix missing locking in sysfs show callbacks and resume
-      hwmon: (acpi_power_meter) Prevent spurious power alarm when power is unknown
-      hwmon: (acpi_power_meter) Check for 32-bit and 64-bit unknown ACPI values
-      hwmon: (hp-wmi-sensors) Serialize alarm flag read-and-clear with state->lock
-      hwmon: (asus_rog_ryujin) Fix timeout when reading 0% duty cycle
-
-Javier Carrasco (11):
-      hwmon: chipcap2: fix command error diagnostics
-      hwmon: chipcap2: fix off-by-one in command mode retry loop
-      hwmon: chipcap2: fix be16 handling
-      hwmon: chipcap2: defer probe when IRQs are unavailable
-      hwmon: chipcap2: fix IRQ teardown ordering
-      hwmon: chipcap2: disable device after hwmon teardown
-      hwmon: chipcap2: enable IRQ processing when regulator is already enabled
-      hwmon: chipcap2: balance regulator state
-      hwmon: chipcap2: do not discard pending alarms on disable
-      hwmon: chipcap2: serialize access to the alarm indicators
-      hwmon: chipcap2: synchronize ready IRQ state
-
-Jiale Yao (1):
-      hwmon: (aquacomputer_d5next) reject short status reports
-
-Myeonghun Pak (1):
-      hwmon: (sht15) Stop deferred work before releasing its resources
-
-Vas Zayarskiy (1):
-      hwmon: (aquacomputer_d5next) Avoid truncating scaled sensor readings
-
-Vincent Jardin (1):
-      hwmon: (pmbus/core) Register the thermal sensors with a 0-based index
-
-Zac Lanzon (1):
-      hwmon: (asus_rog_ryujin) Fix pump control source on the Ryujin III
-
- Documentation/hwmon/asus_rog_ryujin.rst |   6 +
- drivers/hwmon/acpi_power_meter.c        | 100 +++++++++++-----
- drivers/hwmon/aquacomputer_d5next.c     |  58 ++++++++--
- drivers/hwmon/asus_rog_ryujin.c         |  81 ++++++++++++-
- drivers/hwmon/asus_wmi_sensors.c        |  13 +--
- drivers/hwmon/chipcap2.c                | 196 +++++++++++++++++++++-----------
- drivers/hwmon/coretemp.c                |  26 +++--
- drivers/hwmon/corsair-cpro.c            |   3 +-
- drivers/hwmon/gpd-fan.c                 |   1 +
- drivers/hwmon/gpio-fan.c                |   7 +-
- drivers/hwmon/hp-wmi-sensors.c          |  31 ++---
- drivers/hwmon/lm75.c                    |   9 +-
- drivers/hwmon/lm87.c                    |   7 +-
- drivers/hwmon/nct6683.c                 |   4 +-
- drivers/hwmon/peci/dimmtemp.c           |  21 ++--
- drivers/hwmon/pmbus/pmbus_core.c        |  58 ++++++----
- drivers/hwmon/pmbus/q54sj108a2.c        |   2 +
- drivers/hwmon/sht15.c                   |  22 ++--
- drivers/hwmon/sht4x.c                   |   4 +-
- drivers/hwmon/tmp108.c                  |  26 ++---
- 20 files changed, 465 insertions(+), 210 deletions(-)
