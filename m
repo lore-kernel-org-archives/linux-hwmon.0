@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793907006;
-	b=dWNx4/B3g9EWNTwYOSU2vxDXS0b2fhXwUDez2zITRWe2FJTYQ9bG6tv5VhcH6+CZ92px
-	 EG+9BXYEpelgHu4KN0pv9bRO8rCio6bUHUU5ljDGXkzE0bUXLiHeiYKL9ewb79DVnUTbq
-	 ONKOUGvFS33MECjU3er13YhCdxl1YcZfZOeuvGSBwbuMi5bUx1R5issc2TdtJtHuMyV8B
-	 csMtsBby/40HKEHXlhqpk0Tkm6+UuAElkf4RJvNjfIS+bKzuzk+FEwM7Qv/tSLviwUp/Z
-	 sPficZur/doDTiRiovdRvGCnPDm4yFahE8/84PtWF7mls5bTQjIDvQpug8wmJ5Yn41Q==
+	t=1793907020;
+	b=3H9OkWWhK4p9tp4VpM0FIVbuq5z1MR2GROuAiDGSNRZpRYGiGpdDX6HuS2KWBubs23lg
+	 og89IalqkehlDC23Oll8IE/nt8M1+TDQBrxWbgPJqKsvE4/82mHgnKdG9427gMfS4u+mM
+	 xGOOkgOsiJ6cUmYgQ34ynILQ8VL0LEuYeixhArRECpzUNpdMQldCtrRUsQO/70FJKL6ZD
+	 c3FvtSlzG7+gjSwtrucmQam2h6OEkt9pKM/pEz34wP+De+Kkq2HZUr3CDm1FaRWGUMtAR
+	 aDy/0c5iBn1U3Q8SD0GRKt073KyMNMXZu4IQTd7KCZDG1+wF+mqREOAIT0EraWvvMHg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793907006;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793907020;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=hsy7qPadddcHp1yz4RskpjuPCs9z+iyUZQjRxWR0tno=;
-	b=Q8Swup0DCIWAl4qVWDGt73vWJ7tMz6Oa8f8P46S269G8VD4aH/ASV5+oaGidM6vd2hEU
-	 5r9ZhhR8vOrNa/DPVygsThhw2le1/j31Lgtvtb9DB4or/qkEnsKToBYAzQGd+qITQ1Q0N
-	 3JsyRI/gwiCsctRJ2pWIco6Ygy4VE4OKbxB79ApdpMPw7k8gX8kcMWQERNSbxu5kYqp5D
-	 Z5m2E8vo4g71LlK5aqDKJ29sQf25970FtdNypwLVyU/lCaIxk9SB6ZoLqbV0hgChPicwt
-	 +fbTUYcJdVtAMLHdsLEpU23vWmrYE7meCMTOjpHd2MUHPr3q5XUYy862GC8zQihxHfA==
+	bh=y9V1CIpIY4360pJxVlHm+5yZoVNA43rbHggh2CYfgcQ=;
+	b=ggSStX3K3IMgM9SvO9DgJ8+przSCwikNA5+IcRkgWtUAId4tF/XsCXB0M345fLnescnb
+	 YH3SrEtKBrPyix6PxJXz0DCBun/XbQ+ScMD4zW07DxusNA+Qi9YvEuE0MrF9Cldt0sYJ5
+	 tXURrrV1/KwZL+QwJCLBAB4Ya7CESNhVlroMAyj9z+GKWwttS/Gy60u1tU66g+8taLXDQ
+	 5oxkezkIsMXeyj30WTr5arURmlIf4ftNLtIm9lYVleE8NJ0OZ1SEDaZwrHOyOcuo75vpa
+	 NT/Dk3w4y6VuBzA31wmrp5Yw63K3DoErIp3ttPAbWOQJS4n6QBg5XsyLmXus5pCccBA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n1pRV84z;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U6caPqpR;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88D8606D823;
-	Thu,  5 Nov 2026 19:30:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95457606B050;
+	Thu,  5 Nov 2026 19:30:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n1pRV84z
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D006D1F000C1;
-	Thu,  5 Nov 2026 19:30:03 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U6caPqpR
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF0FC1F00A16;
+	Thu,  5 Nov 2026 19:30:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793907005;
-	bh=hsy7qPadddcHp1yz4RskpjuPCs9z+iyUZQjRxWR0tno=;
+	s=k20260515; t=1793907020;
+	bh=y9V1CIpIY4360pJxVlHm+5yZoVNA43rbHggh2CYfgcQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=n1pRV84zJKUUtgUv1TYLImkQPkvmaqLjvwYZrx2oyTCwObzhdrQFqivFQJG2KSTyQ
-	 eTIbvYnu/am2gKJ0v2gg99xx3HGgCRhK3jtKYYV/hEN32FiOkUwOd5qfCd1EvNlRbU
-	 /wDWKpQlTW9sg368vKkBt979aVtHTwB7aqgs1lZ3cZ7yuOwpmH/5K72S+3ZXzvHDZJ
-	 zCVaJA/NGoQ3f5O/ZIg5OD8CZV38pYz/7PwHfRkFO2BSCEBpwk5KemMFv7yST4FY/7
-	 ke1edsHonMb+SJ+aejvls7v7xGnvSnNsG3bwmscXuAXx4DTCqwdtiudcPMpO6x6AMq
-	 QMz7+TNSVPVMQ==
-Message-ID: <sashiko-outbox-199900@kernel.org>
+	b=U6caPqpRAcq7s3jABurFLTYAOyQNLF7KNwFcz7vL0owaKAFz2/Kmb1CSUDdsXURja
+	 KndJt79cCtvWCvNOTwi2inAusJtSM7xFcxVXh2P+h26yFHpcllhdCgktUZVCkwtiG9
+	 /H3yjzLcrbjdiUSj7RiWzxjqFY9BFACxF6rXGygYvdaL3HgamlM8WqSmnW73wwg/9a
+	 HWJvJwieWwnyodMNwSKhOSyeyO8OGNd1qplxfETbINtVIeYgtd4CJo1Ro5mX0HKNqx
+	 xq+lWhJhP5SWQhNMI4K00P+V9JGUm/enmo6/5lUN5kqo3zAD4JBvrPHNPgj7bQqo45
+	 NaifRmjsniAKg==
+Message-ID: <sashiko-outbox-199907@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RESEND v2 37/51] proc/vmcore: don't let vmcore_cleanup()
- run twice at once
+Subject: Re: [PATCH RESEND v2 44/51] proc: sysctl: resume readdir after the
+ last name it returned
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Christian Brauner" <brauner@kernel.org>
 Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.com>, "Josef
@@ -55,12 +55,12 @@ Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.
  Iwai" <tiwai@suse.de>, linux-ext4@vger.kernel.org, "Chuck Lever" <cel@kernel.org>, tytso@mit.edu, "Heiko
  Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
  Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
-In-Reply-To: <20261104-work-procfs-bugfixes-v2-37-021c84d852e0@kernel.org>
+In-Reply-To: <20261104-work-procfs-bugfixes-v2-44-021c84d852e0@kernel.org>
 References: <20261104-work-procfs-bugfixes-v2-0-021c84d852e0@kernel.org>
- <20261104-work-procfs-bugfixes-v2-37-021c84d852e0@kernel.org>
+ <20261104-work-procfs-bugfixes-v2-44-021c84d852e0@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Nov 2026 19:30:03 +0000
+Date: Thu, 05 Nov 2026 19:30:18 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -70,26 +70,31 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> vmcore_cleanup() has a single caller, fadump's release_mem_store() on
-> powerpc. That checks fw_dump.dump_active without a lock and calls
-> vmcore_cleanup() without one, and kernfs only serializes the writers of
-> one open file. So two tasks that write to
-> /sys/kernel/fadump/release_mem through different files run
-> vmcore_cleanup() at the same time.
+> proc_sys_readdir() counts the entries of a directory and resumes a
+> listing at the number getdents64() stopped at. The entries are sorted
+> by name, so one that is registered or unregistered in between shifts
+> everything behind it by one. Listing /proc/sys/net/ipv4/conf with a
+> buffer that holds ".", ".." and "all" and registering a device whose
+> name sorts before "all" makes the next call return "all" a second time.
+> Unregistering one that sorted before the position makes it skip an
+> entry instead. So a listing that takes more than one call shows a name
+> twice, or not at all. Even the 64k buffer of ls needs a second call to
+> find the end of the directory, so a device that comes up right then
+> repeats the last entry.
 >=20
-> The first one removes /proc/vmcore and waits for its readers in
-> proc_remove(). The second one finds the entry already unlinked, returns
-> from proc_remove() right away and frees vmcore_list, the ELF headers
-> and the device dumps while those readers still walk them. Or both of
-> them free the same lists at once.
+> So remember the name of the last entry a call emitted in the file and
+> resume at the first usable entry after it, like kernfs resumes after
+> the node it stopped at. The entry itself can't be pinned across calls,
+> unregistering waits for that. If the position was moved by a seek in
+> between the listing counts from the start like before, seeking to an
+> arbitrary position has never been better than that.
 >=20
-> Serialize vmcore_cleanup() with a mutex of its own. It can't be
-> vmcore_mutex, removing /proc/vmcore calls release_vmcore() which takes
-> it. The second caller then finds nothing left to free.
+> That also takes one walk down the tree to resume instead of a walk over
+> every entry in front of the position with a round trip through
+> sysctl_lock for each of them.
 >=20
-> Reported-by: Chris Mason <mason@kernel.org>
-> Fixes: b500afff11f6 ("fadump: Invalidate registration and release reserve=
-d memory for general use.")
+> Fixes: 77b14db502cb ("[PATCH] sysctl: reimplement the sysctl proc support=
+")
 > Cc: stable@vger.kernel.org
 > Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
@@ -97,5 +102,5 @@ Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104-work-procf=
-s-bugfixes-v2-0-021c84d852e0@kernel.org?part=3D37
+s-bugfixes-v2-0-021c84d852e0@kernel.org?part=3D44
 
