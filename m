@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793906956;
-	b=rDTulH9prtHpT9YocdGYKGjpNVQFDNAKrpxcGlCWfZbIVHxDnQdj6ZfYTFkwuD1Lx66N
-	 ASXEHMGR8OW8F2DzUm8rIEyLaCImsu+H0zNVEdsjqKAAhw1+inLjuFfXtVzBMMD9S0bWE
-	 bEjmR2kYAdB0dRBniVi39qj9BMQy7zhyTG5+ofO49PrA/4eAj4Amv9AcIuKXVAniIwyIb
-	 vGuwsclhplVCQln1hyk7el8j6yxdWvzfZWsOA1AOGRCa92vjcv+tDVtsX1iQlBUcYuxpC
-	 xzAJf8atvtk9A6qzCD37/HWUebS8pfdyC6YJtCQFViddGNEqFYmp7aN9VVPODVwxHxg==
+	t=1793906963;
+	b=erm50YEz/LKFRIWu3e0kFmi4/s641aBM3VsFAb+XdXTfrcV2jehzUh1sEr/nlb78utZA
+	 D7O/vw/s4fcFkqPlzIUst83DQLEUxH16ikaAMkPsw9KoQHWX1Dz08LvSeZfSgeR2knEZH
+	 YaMLEadqTEqIGLMZ4l7Gn6/Kysn8mLaq+OEda2fG1JXFyCCinefwpSmcskJfA+diWD+yC
+	 XJ5psidSZTsMn9FJhFieLz5G8ISjjW/pLbryB4SmsyDR9/cjNKfUazy3p1FRf99lITF01
+	 L4ziAMAssSa2IPaFWZU5LB3Q9Xhm3FKZ/wRgNIlCYMlqF1xarD0rz5s4k2nyWjs/OBw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793906956;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793906963;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=Nyk6A7Xm43ba6GqhnkPuqyLDv4V2ioid2McoXcJIDec=;
-	b=gj2mNxlfLw3MoH6E0N1dMFPQ0nletsV7/nLK+9hCpiTh26/1qHNofbxVm0bORs7yUqg5
-	 ohZz46aJwlAwYvAFxRKj2L/vX7Y++lDQyib6Fbkh6WOUqtv9aMD0j+GhhirSogFLVr05j
-	 BL+rG80uu8zgyvWcB53kS7wlHhbytvhy5Q+2Ou5QTL8fi7WcY8oCnygsTHrxK+gKBXfBK
-	 2CENwgsij1F3lSXyyySImzEqnfuiO8IOctVGjeJZkojoPh69rFYqx4sDjCAmttDuLK0Ze
-	 C2RPEgfdbyfTpCTELv4aVGIDzk7ixbGO8GcFr+4t9kWNhiTz9Eq7teJGlT0nzr99xsA==
+	bh=3aycYEBDbjdfc7/kYe/T64Q9jvyJ2iWA9tEfOPLcA+E=;
+	b=eaIIks8+f6Gd0RN1tt/OS3fWcIdMzSjJPk9xLLy58wxgKhL+NSovFbdYlOUfXNjFNGly
+	 7TawfQuBEfHt9WwRyDB53VLoz3Z8QdHqcqbzG5WtV2/is5QjHs3oabN213/y0vjm61xiV
+	 lTK9DuefvW4tGqRtczBG04Is5k/d4t3Q9zL+MQPMd28k+i537VoJXg+R5xqbmdK5jeKoO
+	 uprQo6xakWL1/8v9usmcOptPFJt/p3uvyk2RWrFt9W8eM3V5FI59kzYbsdFpSQ0XpNoge
+	 pTIyphEnlvm72bX3z8mH0Q/7uo4gOSc07ZDhxYaQl+0tCJUr2ljBQpzLnvQiNTTLn3g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FKfmSIG1;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="MKTd/AG4";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C62606EE8D;
-	Thu,  5 Nov 2026 19:29:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B12886082BCF;
+	Thu,  5 Nov 2026 19:29:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FKfmSIG1
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB75C1F000C1;
-	Thu,  5 Nov 2026 19:29:14 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MKTd/AG4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F10DE1F000C1;
+	Thu,  5 Nov 2026 19:29:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793906956;
-	bh=Nyk6A7Xm43ba6GqhnkPuqyLDv4V2ioid2McoXcJIDec=;
+	s=k20260515; t=1793906962;
+	bh=3aycYEBDbjdfc7/kYe/T64Q9jvyJ2iWA9tEfOPLcA+E=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FKfmSIG1UN/LwBVQXjOkvO7J6MY6CD67myw1qrW+OIpPGU2VpRAVBUgr+00ywjUWT
-	 wLAm/Bi+zzx7OZ9FQjICLzYsmc1028tuWSIQeurLxH8ygiIABX308i+7xPLywURc/W
-	 7ILU32xExlaMpEA2rjZnORa7iwKiD+dh6YvkbgZ7JZXLtf1bwIEbU7n8vEFRB7/ma6
-	 Tswhvw73a0gcOElR+tDfQALqyP4oqfrfBTv8JnT2i6bX4N7GoCW5irT/YJ10btLD9v
-	 GZ/E7p4fjablgkPiTgV19jmiyQHA7eshOJIpKb/a+kzle33JJ/83PDvWIIc14A1u69
-	 eI/S8mKdJSVKA==
-Message-ID: <sashiko-outbox-199876@kernel.org>
+	b=MKTd/AG4bVwkR+b2GF208LnMZfWrUlqFbm1pMBbSDD3WYnbXwqUy5VQ+lWyM6SNJu
+	 lz/dclSSpegfq5SEGEfBf6625Y4g8OyF4QW4OLSTxiOfTue470fGd1TPQdSpTqnj43
+	 ICV2RKLESKaBxJNaibArgn3ldui1C2dpKkNatkQarCY+t3PhxnSOeaKuRbWfL6/xAE
+	 ZShLGqZSqpc+z4DdGoHy5h26wpa023m96jQ73G3zVSjOVmGegLWzLyUhy4LNOhpUwH
+	 uKO6G2AHPC0IQqrlvprv/L1ZgqClTdg3drPRJPRNRieMLhpDrh7lJjuN+buWWBl5ZP
+	 SWx5hlboXGHTA==
+Message-ID: <sashiko-outbox-199879@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RESEND v2 13/51] sched/psi: don't drop the last byte of
- a trigger write
+Subject: Re: [PATCH RESEND v2 16/51] PNP: isapnp: don't read past the end of
+ the buffer on a large pread()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Christian Brauner" <brauner@kernel.org>
 Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.com>, "Josef
@@ -52,15 +52,16 @@ Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.
  Corbet" <corbet@lwn.net>, "Christoph Hellwig" <hch@lst.de>, "Greg
  Kroah-Hartman" <gregkh@suse.de>, "Joel Granados" <joel.granados@kernel.org>, "Kees
  Cook" <kees@kernel.org>, "Jan Kara" <jack@suse.cz>, "Jan Kara" <jack@suse.com>, linux-s390@vger.kernel.org, coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, linux-m68k@lists.linux-m68k.org, linux-serial@vger.kernel.org, "Takashi
- Iwai" <tiwai@suse.de>, linux-ext4@vger.kernel.org, "Chuck Lever" <cel@kernel.org>, tytso@mit.edu, "Heiko
+ Iwai" <tiwai@suse.de>, linux-ext4@vger.kernel.org, "Chuck Lever" <cel@kernel.org>,
+ =?utf-8?b?UmFmYWVsIEouIFd5c29ja2kgKEludGVsKQ==?= <rafael@kernel.org>, tytso@mit.edu, "Heiko
  Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
  Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
-In-Reply-To: <20261104-work-procfs-bugfixes-v2-13-021c84d852e0@kernel.org>
+In-Reply-To: <20261104-work-procfs-bugfixes-v2-16-021c84d852e0@kernel.org>
 References: <20261104-work-procfs-bugfixes-v2-0-021c84d852e0@kernel.org>
- <20261104-work-procfs-bugfixes-v2-13-021c84d852e0@kernel.org>
+ <20261104-work-procfs-bugfixes-v2-16-021c84d852e0@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Nov 2026 19:29:13 +0000
+Date: Thu, 05 Nov 2026 19:29:20 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -70,17 +71,17 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> psi_write() copies at most 32 bytes of the write into its buffer and
-> terminates the buffer by overwriting its last byte. For a write shorter
-> than 32 bytes that is the last byte the writer sent. A trigger written
-> without a trailing newline loses its last digit then, "some 150000
-> 1000000" turns into "some 150000 100000", and a shorter one like
-> "some 150 10000" fails with -EINVAL because the window doesn't fit
-> anymore. Only writes that end in a newline parse as intended.
+> isapnp_proc_bus_read() truncates the position to an int. A pread() at
+> an offset like 0xfffffc00 turns it negative, the check against the size
+> of the configuration space passes, and the loop then puts everything
+> from that position up to byte 256 into the reader's buffer, no matter
+> how few bytes were asked for.
 >=20
-> Copy at most 31 bytes and terminate behind them.
+> Keep the position as a loff_t and clamp the count against what is left
+> of the configuration space.
 >=20
-> Fixes: 0e94682b73bf ("psi: introduce psi monitor")
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Reviewed-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
 > Cc: stable@vger.kernel.org
 > Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
@@ -88,5 +89,5 @@ Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104-work-procf=
-s-bugfixes-v2-0-021c84d852e0@kernel.org?part=3D13
+s-bugfixes-v2-0-021c84d852e0@kernel.org?part=3D16
 
