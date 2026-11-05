@@ -1,129 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793882195;
-	b=Ou+2wGsVzn7Z6SNv9XPpgKZIcN4U1wCJG1VpAOKi1SmWp5onJbrGNZdJEvozkLm2NwVJ
-	 NpHGpQsTMZGRHi4ADPfAKQvrcEhKQbFjGBaVmg1JUtGEWMo2zu+h7AxBN+gLL1mWAtDDT
-	 169ZyhpNwZYSCnh9w9AiiHBx6AM90dRM8ZOFb7WcqSSKl7PemKOC32SkSFDGSU3Jxuf1h
-	 voH4dC8CwY92b2w589oImM1bTcipbX2SpeFWKVYazstzKprfDt/nRMwE2QKBXGWoiSoHQ
-	 DPDcrbPHjRjb+VR/9vTr7B4zZVy8Af+/UEMlBYa8Fk8LBTLMI2aHlZYbImZez4Fkj8Q==
+	t=1793882575;
+	b=U60wKUEGIwcg//FraHFJl7dFPNxNTWzvVswSnzsps9kqqWiGFKdwdTH331pI1JaOWjRh
+	 1/W0HiADv0Y3xRvDyoThHwNSqqd6hM5mjjTRg2SrVAHeMEvP11R11eY3WUw6EbIN5FZU/
+	 uNaPFJDUsJMf/C8eej5tUEDv7v3bhHN/lAWlNyWY5N03B3tjQVNImaFqtmLKDTcCIPYzp
+	 RJUiZG0YYV0TZPqsX/xse8WqH+mtEnvRyGQuxi3zQH3+xRrkD5Zmqu5w8xWUF9ASQimGO
+	 YTon0cq+0OJhhgI8ICjcqhJlwGukxDzS/s4yHOmxxTBkfBsheyZERzNjy0wvjeUhSTg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793882195;
-	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
-	 DKIM-Signature:Received:Received:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:X-Spamd-Result:X-Rspamd-Server:X-Rspamd-Action:
-	 X-Spam-Flag:X-Spam-Score:X-Spam-Level:X-Rspamd-Queue-Id;
-	bh=DpjKnWhAHhajlU0N8yPm40hOORTtvriSHlYmNC33ga8=;
-	b=RbwwUhaA/Pii3DB2MbvmPooi4HQozb4wv93GyhL9w+1mnuIb53SNMAUg1+J7Ub9sdHaz
-	 pKeQzuU9CADjko+4nANGHQ+oWT1OMVqSmE/H8rCk/pQbYNq2eh8m6mBcktqa35lqVWxU2
-	 HVATF+zwWkgiWxoBSE9V06eqXPQaE3KdYT0l53Kigfxn7K4fBiLDDn8NTPA3fOgsOhUBn
-	 2lKQgpfotvuXrQW3D/mdYxVIawB0R2ayTyO0b865LzEdAMWEa0BKdq7QlcUZqqUj8yBim
-	 JLj5dZhvsnMzJlrvWJ6eVT9JgUbWlKqPC8I9E8pOYhvCiV1AjB5e8AQj49ftC74O7cQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793882575;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key;
+	bh=1Ne75eyG2UyJXHCI/3L+TP/oCHE9qyAF9KYGixpkjUI=;
+	b=PtNhGjBGqXr51wTnBS27ojw+nb24vsWl9chzzAW2A5G4yIN5qe479yGNMa6S2eN4awTD
+	 gxbHidYki1YGLBtBbVo9YD1iBM/GNpzX0GRbIapMjQzFOhTPjZ0sBwrplMVTogkLNPB0j
+	 2qj+07To4BXJwRffXg60zT1rmqIerXF7/pq39FTW2hLIvft5lgdFSz0JZTUeABsmX7hES
+	 8auziz8e7K4WChZRJzY5BCqqypmxcTU2/fwRPLV85QkoGejy+hOst1dTPJSD0Kv6sFvF+
+	 MRqmIrtFrlFql4a0gajCdzx1gJT0WiYQALVLvArhAWSmNySNBW5dpXLOo9nU2JvmXzQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=suse.cz;
-	spf=pass smtp.mailfrom=suse.cz;
-	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=JZx76L+g;
-	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b="8/5XD6W9";
-	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=T3Jse+8w;
-	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=BYgAZw+U;
-	arc=none smtp.remote-ip=195.135.223.130
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linaro.org;
+	spf=pass smtp.mailfrom=linaro.org;
+	dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b="Iq/RsRJ4";
+	arc=none smtp.remote-ip=209.85.128.44
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212C9606A32F;
-	Thu,  5 Nov 2026 12:36:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 212C9606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79805606EE8D
+	for <linux-hwmon@vger.kernel.org>; Thu,  5 Nov 2026 12:42:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 79805606EE8D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=JZx76L+g;
-	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=8/5XD6W9;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=T3Jse+8w;
-	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=BYgAZw+U
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 2C5F621E5A;
-	Thu,  5 Nov 2026 12:36:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1793882193; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DpjKnWhAHhajlU0N8yPm40hOORTtvriSHlYmNC33ga8=;
-	b=JZx76L+ggOq++v50JrM+txlftOOqxJaKF/tK8uhPwld5Q9GnNQfLXM1whyLb1DsMeHXH/C
-	/uTr5WEx4MoDADem0Lt2IRl8UnJCEvNjej74YyT5VZBSM782Vk2aNTEZTgyxnuBLnPZ/fS
-	Mhf/U17g3frl5lC6gN/6C/6ftmbFF2E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1793882193;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DpjKnWhAHhajlU0N8yPm40hOORTtvriSHlYmNC33ga8=;
-	b=8/5XD6W9JBZBD7IT0Gng8T7errG+mfSR55zIjyH58gQPHLQ3a+6mBXLPeQK6OumZ9O/ASJ
-	a0+wPfZoC8vZgnDQ==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=T3Jse+8w;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=BYgAZw+U
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1793882192; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DpjKnWhAHhajlU0N8yPm40hOORTtvriSHlYmNC33ga8=;
-	b=T3Jse+8wWvU2m0agalLdcO3u4gc4aSPygpqteqhLhNd/aBjFrhyiDCC1i0Lv+iYh3z1s6e
-	fnA2+Jf6Yg0jKvkbvYGo3ERh6eFq09U2ijwb8SlUT+DSbyddzL3tu06qm3Tz++uFh8zr+9
-	+TrYzUca/b6bladItMQ0Kk0+pK0H3fw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1793882192;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DpjKnWhAHhajlU0N8yPm40hOORTtvriSHlYmNC33ga8=;
-	b=BYgAZw+Ujm4L/dnuxqWK1yrVNISlV/1cL+J702exe7XcXF17FVJLhwkbWz39x0ZpRyHhhI
-	iDaH9TFqNTx9SSCA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 05AD3133F6;
-	Thu,  5 Nov 2026 12:36:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id AKP0Nk947Go1MAAAD6G6ig
-	(envelope-from <jack@suse.cz>); Thu, 05 Nov 2026 12:36:32 +0000
-Received: by quack.suse.cz (Postfix, from userid 1000)
-	id 9532FB6E6; Thu, 05 Nov 2026 13:36:31 +0100 (CET)
-Date: Thu, 5 Nov 2026 13:36:31 +0100
-From: Jan Kara <jack@suse.cz>
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
-	Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
-	Eric Dumazet <edumazet@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
-	Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados <joel.granados@kernel.org>, 
-	Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
-	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	netdev@vger.kernel.org, ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
-	coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, 
-	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
-	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
-	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
-	sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
-	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
-	linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, linux-debuggers@vger.kernel.org, 
-	Chuck Lever <cel@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH RFC 37/38] proc: don't pin a symlink's entry while
- readlink() copies it out
-Message-ID: <krgvwwpug6brspfpubssohr6cknwd2wtkrxo6uqaoalfi2ay4v@3dtbsctwca3n>
-References: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org>
- <20261102-work-procfs-bugfixes-v1-37-59422ed3e465@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=Iq/RsRJ4
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4a35a60499eso14324385e9.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 05 Nov 2026 04:42:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1793882573; x=1794487373; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=1Ne75eyG2UyJXHCI/3L+TP/oCHE9qyAF9KYGixpkjUI=;
+        b=Iq/RsRJ4FsBgNrS+n61bnnkncfY3sB1utDJz4yKMa8JmxtntKvltA7XUnIUJlt0kpA
+         QMFuu+8SAgTWPRaT7UvfwS5VivCUqcB/2qfMqThFc4z3B1I6eERj7as7Ylf1yWfyTzNI
+         S1ZKyvYz1AZhQFycQHFAtuireiThe7zLVuv/N51Csjb9LggQWMvcxAt8KnICGFYTQnfz
+         pDzUixOyPM9CSnPzxdbbvnG06wwxondl8WwHBFBrhyKgaIa7qyRxyOEG5J6MXx7548jK
+         uXuijpg/ZS0Y+yQPXD5R5cgaoyvTnkBblpitcCRcBrJ0GcZVY4tWysEYijBtCxFVcXok
+         h36g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793882573; x=1794487373;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=1Ne75eyG2UyJXHCI/3L+TP/oCHE9qyAF9KYGixpkjUI=;
+        b=mQ1cbF5QWSupkRzQDw66gvI49oXRvdE7SAZkXDVJP9vcBOiJQiiiQSmwcs8fEUHni9
+         WODkaDtVi47UISbWQQn7o0Vj33jvXnnD3YFTwQkaqkxBmYKor0nVCs0zzk2SKVAIoJAl
+         b1utSp2Fb7nliGtlr3PPtZi6RTt4oYLcxBqriFo+S7D7p/oXrbsa/Wfxr02kvxuWOZEu
+         v0zr83q8zoK9JHVDqxYQDbD+SKrxiYHCqCVUXGxwlG22NT+7u/fAUln32a6EemmCnTII
+         4CnhFP5DgHg+Zq2WeD3oScq/8E4xdDMV696u4f/QjFzDAlbJv2BPLoGYGBZMeJ4UiVh5
+         +6GQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwK1JjYrBRtE1m768J6jm6cm2mrY+7XxZdrszWMrQ4Huf0+T74bw5aNdZVNmjdJ5FXdNfGNtjUO2nthbg==@vger.kernel.org
+X-Gm-Message-State: APuU4Z92FsKgAvMSc0NKAz4/KDryDTv0q9U7+P2Rwd/md5kHYay2XvjK
+	oYS8kLQd3qN57fgL9WiWeeUja+bjwiuv4rVEO0Pe5svaDLwrkZHAktNSas6I3MyFsq2LtuvswZE
+	7Ao4j
+X-Gm-Gg: AYBFou1QdzCtgAGgznf6twdYdLnUju5JIzElwf4DAWYJi+hQFibZTFylNlA14REI+2P
+	JHBFu7gqFCI2lZNt5xmb+eyql5eVrZ2X6O/ki1o4m/4zhN4rNSMK3ssMwanPDNYTlQEoLw2rnyk
+	KNxsHoyltwU4rgAnMGNZsDRMXtXlpa9u1Zl9BlB+dy9VvFjnjCNAgqQcU+pOCjbaQ938rHW0KRs
+	nOp6IYZdNoSJzxYumqUknFGCn0OvcoQnde0rl5NBdeCvMU8O0/hL6TxG1UCjmci/ELqc6vyYG3y
+	CHevyGx0HTt1DqhxMn0WCw/KhE8hENNoBZFWjWVCUEgzX/ZKDLsBiXtRWSLxWFKRQ6qSAPol+3k
+	41OTgu6fO7z+o9Ne7PmPumO53iyKPQwA0gMZDb7eix4wNCL4USwqkPY9ZxbEFBOFZNula1Gx7r8
+	t0G5juEtWKBcC1lZO1+H2LtsspATfhpsRRx0NySEU8BGCGIoPhwRDUDtdFwCJN2zgvfkUEnYZqE
+	CDBW4ywsB8U/F30IK04c3F/hj2+uJLKrca4Ma8aNNlECG0qDC1tSCp/iSuXjNeDQSRD/+u1G7il
+	Ez4ZaGVI5Z02ukmrODUms8AG6RLghYZ4+5LO2P/RlKI4
+X-Received: by 2002:a05:600c:3b88:b0:4a1:cf60:dcc3 with SMTP id 5b1f17b1804b1-4ac187a6ffcmr448518465e9.29.1793882572597;
+        Thu, 05 Nov 2026 04:42:52 -0800 (PST)
+Received: from arrakeen-2.home ([2a01:e0a:106d:1080:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b57373f7f1sm73487895e9.15.2026.11.05.04.42.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Nov 2026 04:42:52 -0800 (PST)
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v6 0/3] iio: adc: add support for the MAX34417 Four-Channel
+ High Dynamic Range Power Accumulator
+Date: Thu, 05 Nov 2026 13:42:45 +0100
+Message-Id: <20261105-topic-sm8x50-iio-max34417-adc-v6-0-63b4e8279633@linaro.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -133,107 +94,211 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261102-work-procfs-bugfixes-v1-37-59422ed3e465@kernel.org>
-X-Spamd-Result: default: False [-11.51 / 50.00];
-	SUSE_INTERNAL_BYPASS(-9.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCVD_TLS_LAST(0.00)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	ARC_NA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	R_RATELIMIT(0.00)[to_ip_from(RLpnapcpkwxdkc5mopt1ezhhna)];
-	TO_MATCH_ENVRCPT_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[60];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.cz:dkim,suse.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
-X-Spam-Score: -11.51
-X-Spam-Level: 
-X-Rspamd-Queue-Id: 2C5F621E5A
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAMZ57GoC/43PQW7DIBAF0KtErEs1DODYXfUeVRYYhoSqMRG4l
+ qPIdy+kUhvVC3f5pa/3Z24sUwqU2cvuxhJNIYc4lNA87Zg9meFIPLiSGQI20KHkY7wEy/O5nTX
+ wECI/m1kqJfbcOMsROmpb0FL6nhXjksiH+e6/Hb5z/uzfyY4VrY1TyGNM1/sBk6i9/25NggNXw
+ qneiN5bJV4/wmBSfI7pyOrYhI+c2uKwcJ2B0qU9em1XnPzhBIjN62ThnGxAGVIGsVtx6oHDdot
+ TlSuvGi+JOpArTv9yxdvidOHAe6NJe3R/nl2W5QvEWufUGQIAAA==
+X-Change-ID: 20260923-topic-sm8x50-iio-max34417-adc-209e880533fb
+To: Jonathan Cameron <jic23@kernel.org>, 
+ David Lechner <dlechner@baylibre.com>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
+ Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Michael Hennerich <Michael.Hennerich@analog.com>
+Cc: linux-iio@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ Neil Armstrong <neil.armstrong@linaro.org>, linux@analog.com, 
+ Conor Dooley <conor.dooley@microchip.com>, 
+ Marius Cristea <marius.cristea@microchip.com>, 
+ Andy Shevchenko <andriy.shevchenko@intel.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7272;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=LlEAGHxTmhCT5Msd7aVO4EmAR3EMf33/+99ZdmDLrbY=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBq7HnKlfP9xl0hE98PNnbXKlRlkcWKbuLo0lWcBbXi
+ NLXyT22JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCaux5ygAKCRB33NvayMhJ0RtpD/
+ 46dOeyJve/cyfLReO5da4Z4mHdX6/zl6GdHvnxYLnKOcMe8bDYcgwakiF5wrc0hqPVLBCM3dnRv11U
+ VaMlrBuFauKiq7JKfSKTrtPQWmITBDLvLr7MH7Gb/tWGH4NxvSUIFU2dmDXDOP218CXkso3aYjJYvO
+ MFrT0b5a0dks2qZp1yOrp+N68D2YwOF044pdGf8c1VHzBq8gu7Q659gIeO3r7rGWVyDOMvn52J9KWh
+ p+JQ8INYVj4vMGSXH8MPo2ZBgeTq5CbLmUrATwilnXe7O3ru5aycdqHMwn6U7dGhFuzQxxRgKg1k2Z
+ ghpr8rUxugKlwtaJaPdDl3QDvDnFJxhFPVT2qhmrIyfbszTDLeWfV7M2pP2Twic3pit4Y3UylM71YF
+ q7mUZDyuGNXOZ4JGewO59J39B2y//73x3RmsTmtW1gCZtMcx6s37htMrW5SJEuZLTN0w7FHBikeS8k
+ MnTdvaP2VA2Yquo9AXaJZ4hapSu5T6O3aBnY0c2T/mSyse5jl7AAusQ/XoGlYxySAcLrv4D9odlWQi
+ dMsFCqYXFYSAW0XP92VxTKm69oYxIUj7lEKbBCtdQKqAHeCZ/oHz2p9X8aQsus08gA2SWZgR+nIY2l
+ EX+Ju+kvvmLbOtCV157do2r3KiuduqxkxJ7DZz5bWalf1OKncIwBW6od3JpQ==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 
-On Mon 02-11-26 15:43:28, Christian Brauner wrote:
-> proc_get_link() pins the entry with use_pde() and the delayed call
-> unpins it. vfs_readlink() copies the link to userspace in between. So a
-> page fault in that copy holds up remove_proc_entry() just like the
-> copies of reads and writes do, and the callers hold locks while they
-> wait. /proc/asound/<id> is removed with snd_card_mutex and info_mutex
-> held when a card changes its id.
-> 
-> The pin doesn't keep anything alive. proc_symlink() copies the target
-> and pde_free() frees it with the entry, and the inode holds a reference
-> to the entry. What the pin does is keep a removed symlink from being
-> followed. So check ->in_use instead and drop the delayed call. That
-> also takes an atomic pair off every traversal of /proc/net and
-> /proc/mounts.
-> 
-> Fixes: 7e0e953bb0cf ("procfs: fix race between symlink removals and traversals")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+The MAX34417 is a specialized current and voltage monitor used to
+determine power consumption of portable systems. The driver supports
+getting the channels voltage, average power and accumulated average
+power and energy over an I2C/SMBUS serial interface.
 
-Looks good. Feel free to add:
+The MAX34417 datasheet only specified on how to calculate the
+accumulated average power, but with the Sample Per Second rate
+we can easily get accumulated Energy in Joules.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+By default the IIO driver only supports single-shot Voltage
+and Power sensing, but the accumulation can be enabled by
+enabling the Energy IIO channel which then enables the
+Continuous Accumulation Mode.
 
-								Honza
+The counter is common to all channels, so when reading a single
+channel we will copy all accumulators to registers, so in order
+to permit reading individual channels we must accumulate the
+other channels in the driver when Continuous Accumulation Mode
+is enabled.
 
-> ---
->  fs/proc/inode.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/fs/proc/inode.c b/fs/proc/inode.c
-> index 9933f03ab9fb..2d65f3c8ec03 100644
-> --- a/fs/proc/inode.c
-> +++ b/fs/proc/inode.c
-> @@ -629,19 +629,19 @@ static const struct file_operations proc_iter_file_ops_compat = {
->  };
->  #endif
->  
-> -static void proc_put_link(void *p)
-> -{
-> -	unuse_pde(p);
-> -}
-> -
->  static const char *proc_get_link(struct dentry *dentry,
->  				 struct inode *inode,
->  				 struct delayed_call *done)
->  {
->  	struct proc_dir_entry *pde = PDE(inode);
-> -	if (!use_pde(pde))
-> +
-> +	/*
-> +	 * No pin. The link lives with the entry, which the inode holds, and a
-> +	 * reader could fault while vfs_readlink() copies it out. Just don't
-> +	 * follow a removed one.
-> +	 */
-> +	if (unlikely(atomic_read(&pde->in_use) < 0))
->  		return ERR_PTR(-EINVAL);
-> -	set_delayed_call(done, proc_put_link, pde);
->  	return pde->data;
->  }
->  
-> 
-> -- 
-> 2.53.0
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+The get_unaligned_be56() helper is added since we effectly
+get an unaligned 56bit value from the HW.
+
+While Analog Devices originally provided an HWMON driver for this
+IC, using IIO makes much more sense because it provides
+much more flexibility to support getting the power values
+and will make it easier to support trigger to dump all
+channels in a single shot and then support the Bulk Update
+feature to update all MAX34417 on the same bus via the
+trigger mechanism.
+
+The v3 implementation has been completely revised since
+v1/v2 to better match the capabilities of the MAX34417 and
+allow getting accumulated Energy plus provide single
+channel read without loosing other channels accumulations.
+
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v6:
+- Fixed sashiko comments
+  - Fixed the binding example indentation
+  - Added a timestamp to make sure we don't call UPDATE in less than 1ms
+  - Switched ENERGY to return Joules instead of mJ, simplifying the scale formlula and use IIO_VAL_FRACTIONAL_LOG2
+- Dropped using SMM and using the default mode, simplifies the process for same result
+- Added software overflow check
+- Switch to s64/s32 everywhere to make sure we don't mess the sign since we return signed int values
+- Added readable_noinc_reg to mark the data regs as noinc
+- Added explicit comments on the OVF check, UPDATE sequencing and byte0 content
+- Dropped the channel type in the channel label
+- Moved the DT channel probe into a separate function
+- Link to v5: https://patch.msgid.link/20261102-topic-sm8x50-iio-max34417-adc-v5-0-0ffa5e5f2d5c@linaro.org
+
+Changes in v5:
+- Collected review tags
+- Fixed patch 2 commit message
+- Added sysfs.h include
+- Finished all struct max34417_data with .
+- Added explicit MAX34417_CONTROL_REG: to is_volatile callback
+- Added local *map to all functions, shortening regmap calls
+- Explicited the 1ms UPDATE delay for manual mode
+- Simplified max34417_check_ovf logic
+- Simplified acc_count == 0 logic
+- Used iio_val_s64_decompose
+- Used regmap_update_bits to compine regmap clear and set
+- Added switch instead of if/else for IIO_CHAN_INFO_SCALE
+- Changed max34417_calc_input_correction comment and return type
+- Switch to rsense_uOhm
+- Return -ECHRNG for invalide channel count
+- Link to v4: https://patch.msgid.link/20261028-topic-sm8x50-iio-max34417-adc-v4-0-d4baaf3ee903@linaro.org
+
+Changes in v4:
+- Fix bindings with Conor review on v2
+ - Rename to Analog Devices and "adi" prefix
+ - Move reg before #*-cells
+ - Remove "label: true"
+ - Make supplies required
+ - Update DT example
+- Rebase on linux-next
+- Fix RSENSE defines
+- Drop dev from max34417_data struct
+- Move acc_count to u64
+- Add regmap writeable/readable/volatile callbacks
+- Use regmap_set/clear_bits() when needed
+- Fix MAX34417_CHANNEL layout
+- Drop useless comments
+- Move i in the "for (int i...") and use i++ instead of ++i
+- Move mutex guard into iio callbacks
+- Use lower_32_bits/upper_32_bits instead of FIELD_GET()
+- Use div_u64() when returning the Power scale to make sure it runs on 32bit systems
+- Reorganize the get_label() callback
+- Use devm_mutex_init
+- Drop fwnode_property_present(node, "reg") before getting reg
+- Rename rsense variable to rsense_microOhm
+- Drop !rsense test
+- Register iio device after device init
+- Add comment about supporting MAX34407
+- Link to v3: https://patch.msgid.link/20261013-topic-sm8x50-iio-max34417-adc-v3-0-d3604ae4a229@linaro.org
+
+Changes in v3:
+- Implement Continuous Accumulate Mode and default to single-shot mode
+- Fix includes
+- Better define Rsense and default rsensd in driver & bindings
+- Define all read length and offsets
+- Define the SPS bits
+- Fix comments first letters
+- Fix max register
+- Add ENERGY channel with shared enable for Continuous Accumulate Mode
+- By default reset the MAX34417 counters for each readout to do a single-shot measure
+- Handle zero counter
+- Add get_unaligned_be56
+- Use get_unaligned_* macros
+- Better handle the DT properties and report errors
+- Reset the MAX34417 at the end of probe
+- Link to v2: https://patch.msgid.link/20260924-topic-sm8x50-iio-max34417-adc-v2-0-9a0609e72f5c@linaro.org
+
+Changes in v2:
+- switch to shunt-resistor-micro-ohms no more required
+- removed gpio.h from example
+- Fixed max34417->MAX34417 in Kconfig and comments
+- Added missing includes and remove unneeded
+- Fixed typos in comments
+- Switched to fsleep()
+- Better aligned max34417_read_power declararation
+- Handled 0 acc_count
+- Switched to GENMASK_ULL() for 32bits systems
+- Added missing empty lines
+- Moved the input correction into a helper
+- Set default input correction for all channels
+- Switched to dev_err_probe() to return from probe
+- Switched to device_for_each_child_node_scoped()
+- Handled invalid shunt-resistor-micro-ohms value
+- Link to v1: https://patch.msgid.link/20260923-topic-sm8x50-iio-max34417-adc-v1-0-41d4ba1bfc41@linaro.org
+
+To: Jonathan Cameron <jic23@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+To: Nuno Sá <nuno.sa@analog.com>
+To: Andy Shevchenko <andy@kernel.org>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+To: Michael Hennerich <Michael.Hennerich@analog.com>
+Cc: linux-iio@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux@analog.com
+
+---
+Marius Cristea (1):
+      unaligned: introduce be56 unaligned accessors
+
+Neil Armstrong (2):
+      dt-bindings: iio: add: document the MAX34417 Four-Channel High Dynamic Range Power Accumulator
+      iio: adc: add driver for the MAX34417 Four-Channel High Dynamic Range Power Accumulator
+
+ .../devicetree/bindings/iio/adc/adi,max34417.yaml  | 103 +++
+ drivers/iio/adc/Kconfig                            |  11 +
+ drivers/iio/adc/Makefile                           |   1 +
+ drivers/iio/adc/max34417.c                         | 845 +++++++++++++++++++++
+ include/linux/unaligned.h                          |  27 +
+ 5 files changed, 987 insertions(+)
+---
+base-commit: 54729cd85a044e8e2ee3f73ddda2d7c2fb39e199
+change-id: 20260923-topic-sm8x50-iio-max34417-adc-209e880533fb
+
+Best regards,
+--  
+Neil Armstrong <neil.armstrong@linaro.org>
+
