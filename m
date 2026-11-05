@@ -1,55 +1,66 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793903373;
-	b=n+AbENLEAWfPDJ/iMr1eMtEHRqWGRM4mGniNqb6NiEoAoUGOryCTsvC1JOBW0gUB4lrl
-	 dQkiyF7/c91aQR5AspSF+7eOTzhF14Q2UlUeqnQzj3KO1lOJ6Ky4S9CrTQUPjlmr6Rauv
-	 kKDC9WPuNT31oXvvU0SGCMmWZ3PVezEegCyJ/AcLvSEwaq+rxHRblr+kxj7qzIHY10DlE
-	 cPctL5aj9voUR1ey385FewfNAT+xS1cBnyKQcWFZCKNtADR+spRT6q2ni9BgkLjuSIjRP
-	 1KXhdo052sCap0kyqn+icvM5YS8ji/KZIhdJlb69o95o+bP//nTVXRHIHoE/e+qFKYw==
+	t=1793906934;
+	b=W4VsGG0YcUFNWt52bEgwnHTTHSXFlWb0c1XUbn0pyIx01bFOJztFqq+U6m/A8HlPAIFx
+	 HLRiXdYs7PsiFpal7Ivo056AECN+dBZvtCasaMdNA4BahSP7SRgfb+nIjPxk0M+1N/NCv
+	 hqE4q5yt+SUiNkxyoQm1gs5epsyc4epSr8raR6GCVIxklVmjj1GR5FnMrLw22UeseKHi4
+	 S3wqhETpkv0ygenGqRIXUwjyTUxXWGJubY1H4i5RbQGzkywbMiZHoyh9AwdQeJH9PMirK
+	 LTD4ZdRH6WS3ol/SK1NZx2MVpvj7QnR1DdhG7jS9nwEU8hz+pcNZSn26ClmfAOwrVyw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793903373;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	a=rsa-sha256; c=relaxed/relaxed; t=1793906934;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=+kHXh4RlBBhg9fLviYWiXZqY6C0Y/ucPoStMG3e8BrE=;
-	b=cJPEo9dZZc9wn2i8IEQovMLJuI1om4ST4o5ypQMCvEHZ2RDtgkaA0k/pz+v840HxW5Vi
-	 ueqX14Ns1gbrQbO0UCx1c0YklEVmd34pOG8GQrfNoig+QKj6Dt0uDGnpHxJDBrh59qgeA
-	 QX0nukwMP2t/q1jlF+uKMxrgUFba+DAHH8g+8Ftpfzeb/IQIZgA7c5viACblkB87l+7GT
-	 ItvICOVfcNSn3zctvYBSmkUCBuPE1GZZGrTnpkfKfQRXEPe16KgInUxieuezeIDX2nWAE
-	 +W77sk/PBVKPIOzFrgV4c3kO+JcvdysvMKHABOjsOfxMkfLLDK0qldnQmuGhDEDIEow==
+	bh=Dl7+6TE3klHc2brN+bZbN2jvo5bJeOK9y0vggKbBQEw=;
+	b=Z+0xtmtj1bzxUfDd1/gPpiFrsuzpUym6eRk65dz/ZPNV9EKKwYlkyrAXI2om9zDUcWh9
+	 TYJOjzaXF862EIaqZhnnjwQoeJRy9S3yD8UJDZgpmnmumd5ehIxPFAb3b+dhw9KvBBp1z
+	 loXTJAUtiZtj0+E84ojRVtB/UxHFKpbeOokXcFT9owVlRUCKV9z1/SrLNjFmOs2nVC2tg
+	 8XHjbxVWhYVNEbtM5D+o9jTbJdO9EBb7sUt9TtCzAhWq+0q5rFL7u5wjSLQ2cZgWgys5h
+	 IamwR4oVCSdBkRkemsMX2LVY6N5J9nGCux+xU5OpOHWrOHb78zl/H9lAOfno5bQ7xFQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dPkvj+S1;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jS5u1c3K;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A49606A31B
-	for <linux-hwmon@vger.kernel.org>; Thu,  5 Nov 2026 18:29:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63869606D82D;
+	Thu,  5 Nov 2026 19:28:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dPkvj+S1
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5973A1F000C1;
-	Thu,  5 Nov 2026 18:29:32 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jS5u1c3K
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73A841F00919;
+	Thu,  5 Nov 2026 19:28:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793903372;
-	bh=+kHXh4RlBBhg9fLviYWiXZqY6C0Y/ucPoStMG3e8BrE=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=dPkvj+S1PZJcfZxgqddPDZJYsNE7pm6OqnYo3od+gx9OWBLxmX/rvGHkH+X/Mxcz1
-	 X81U+YhK6Dp1gW4gPWG9qJde8ODcD1mvEQ2UD+wfhEhbHorJC1BqGag8KoHRq4wn9u
-	 4wRJgSS0lPyc2vgfV1TcgbqJhnaMLTAs7PaUJiBXQhPlKyQ/C5Ik28d/WVlkOdYZIn
-	 PX/tJV+5DKizEtmeCBK15IChRI3XluZNGhowd7Da1v1ipJ2zoKboSbSmesYlzawPo1
-	 FPhoFkCOC0vxnOzsUVg7U7C3u7GczTzm9CKWN/72wrSVe5163yUsMCvRw4ZJwAhzwy
-	 IXMlkJFHHVK5w==
-Message-ID: <sashiko-outbox-199767@kernel.org>
+	s=k20260515; t=1793906934;
+	bh=Dl7+6TE3klHc2brN+bZbN2jvo5bJeOK9y0vggKbBQEw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=jS5u1c3K7ImMy0Crh/Iyk2SB/21MWY/WEpvgJVP8JqocmivL2vqyijNAqT7WiHjiW
+	 6Ua6xCh3Ij5H7KLcgaQqR8ixyHADZco61udOB+jlfTExiv59U4z+85rPVir6KFx0I1
+	 ObSC7TmsTyRLViUk/SGlKk2mUSVLDinXNea60PUpTBUb3+Z2hC3lUIZS8S2tOJbqUr
+	 AKLtI1OGNz8Uwoag5jqRzukuHqTD25SiOWs27vYk4NAWf9jGI4TCW+iBo9EUmmHNnG
+	 9mVPo4N3xUODMaacXqbONIqxB5Wjo2lV603RHlVY2XtZFGaIEcNZr1t9RV/1OvaXBn
+	 v83WwqOK20reg==
+Message-ID: <sashiko-outbox-199866@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (gpio-fan) Fix runtime PM imbalance in probe and
- teardown
+Subject: Re: [PATCH RESEND v2 03/51] ALSA: cs46xx: hand the region to the
+ region proc files
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Guenter Roeck" <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-In-Reply-To: <20261105182427.2369928-1-linux@roeck-us.net>
-References: <20261105182427.2369928-1-linux@roeck-us.net>
+To: "Christian Brauner" <brauner@kernel.org>
+Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.com>, "Josef
+ Bacik" <josef@toxicpanda.com>, "Chris Mason" <mason@kernel.org>, "Jeff
+ Layton" <jlayton@kernel.org>, NeilBrown <neil@brown.name>, "Eric Dumazet" <edumazet@kernel.org>, "Thomas
+ Gleixner" <tglx@kernel.org>, "Al Viro" <viro@zeniv.linux.org.uk>, "Jonathan
+ Corbet" <corbet@lwn.net>, "Christoph Hellwig" <hch@lst.de>, "Greg
+ Kroah-Hartman" <gregkh@suse.de>, "Joel Granados" <joel.granados@kernel.org>, "Kees
+ Cook" <kees@kernel.org>, "Jan Kara" <jack@suse.cz>, "Jan Kara" <jack@suse.com>, linux-s390@vger.kernel.org, coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, linux-m68k@lists.linux-m68k.org, linux-serial@vger.kernel.org, "Takashi
+ Iwai" <tiwai@suse.de>, linux-ext4@vger.kernel.org, "Chuck Lever" <cel@kernel.org>, tytso@mit.edu, "Heiko
+ Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
+ Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
+In-Reply-To: <20261104-work-procfs-bugfixes-v2-3-021c84d852e0@kernel.org>
+References: <20261104-work-procfs-bugfixes-v2-0-021c84d852e0@kernel.org>
+ <20261104-work-procfs-bugfixes-v2-3-021c84d852e0@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Nov 2026 18:29:31 +0000
+Date: Thu, 05 Nov 2026 19:28:52 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -59,40 +70,19 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> In gpio_fan_probe(), gpio_fan_stop() is registered conditionally as a
-> devres action before runtime PM is initialized, while gpio_fan_stop()
-> unconditionally calls pm_runtime_disable(). This breaks runtime PM
-> disable_depth and usage_count invariants across several paths:
+> snd_cs46xx_proc_init() stores the chip in the private data of the five
+> region entries, but snd_cs46xx_io_read() reads that back as the region,
+> so a read of /proc/asound/cardN/CS46xx_BA0 and friends copies from
+> whatever sits at the region's offset in struct snd_cs46xx instead of
+> the mapped registers. Store the region.
 >=20
-> - On alarm-only devices without control GPIOs, gpio_fan_stop() is never
->   registered, leaving pm_runtime_enable() unbalanced on unbind and
->   triggering "Unbalanced pm_runtime_enable!" on subsequent binds.
-> - When control GPIOs are present and devm_add_action_or_reset(), hwmon
->   registration, or fan_alarm_init() fails, gpio_fan_stop() runs before
->   pm_runtime_enable(), incrementing disable_depth to 2 (leaving runtime
->   PM permanently disabled on re-probe) and, if speed_index > 0,
->   underflowing usage_count via pm_runtime_put_sync().
-> - If pm_runtime_resume_and_get() fails when speed_index > 0, it drops
->   its reference while speed_index remains non-zero, causing
->   gpio_fan_stop() to call pm_runtime_put_sync() and underflow
->   usage_count.
-> - Registering the hwmon device before enabling runtime PM exposes sysfs
->   attributes that can invoke set_fan_speed() before runtime PM state is
->   initialized.
->=20
-> Initialize runtime PM upfront with pm_runtime_set_suspended() and
-> devm_pm_runtime_enable(), remove pm_runtime_disable() from
-> gpio_fan_stop(), and acquire the initial active runtime PM reference
-> before registering gpio_fan_stop() and the hwmon device.
->=20
-> Fixes: 0d01110e6356 ("hwmon: (gpio-fan) Add regulator support")
-> Reported-by: Sashiko <sashiko@sashiko.dev>
-> Link: https://sashiko.dev/#/bug/linux-349aa3ba-30c3-4c3c-b47e-f52839af2b8d
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
 Sashiko has reviewed this patch and found no issues.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261105182427.2369=
-928-1-linux@roeck-us.net?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104-work-procf=
+s-bugfixes-v2-0-021c84d852e0@kernel.org?part=3D3
 
