@@ -1,47 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793906951;
-	b=XDP+RfMhwBL5+i1PQ/qZhX9CHjcvlAujYcRVV6ZM1pic5zTa+8Pp7VVO0aePD9H6+Xh9
-	 viUBmHO04bnrKzcVLlVN3d3epIgGHQSsFtJYX+X6oANpDCXwjoMhgfdbDHpHXt6mfhXBE
-	 rkdBxtaZXQfTL2k30f0gF+wH/T6OPwZ9+21QqTrjWlJLzB6BbeXNUniHWcQCQ4SMDVO9u
-	 cogPWsKFUJh239jfnYYz+3ZhfyqGE9nHSm5hz1KdDK5W47Kv0wFvGeydmWDuJ94TsirQO
-	 LDUKqFbfs4JsGX7xXPQsdJSm3kdUjtCBRZFBv009VEOXU5nE/ICwdV9YpnLascZkTAw==
+	t=1793906947;
+	b=amv/o+/U5+5NqjaaQ+VTYS9WY6JyqMxVtJ8GrP+jOLLzB3WUQeSJYqViAvT0QH+qNm6l
+	 IFMAGxiFPqfvxSGANlhID9bX/fYflNBHtuhFM0XQynezrWoOE1xumthp144iUXF+rtKq1
+	 v4nzV61GiAVZmwhT2JA7efRxEuAh8eD15NL5KmrrtDS1iulhwlPX/MdvfP+bX2CdCnS5k
+	 CZwJSAT5NAG71d6Fw9AQG/5wvc425kOgiNXoWRKf+z3KHV1ns/Zo1jkGDt+YvDlVoFr+H
+	 J/qovnGoC8/wo+H+6sigUNl8zhRDIKJcUXFKFtEvVXl9bMgOIcmtwEdtCCN59cgtAOw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793906951;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793906947;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=s2I1/DcyfONVmWbtskFJJxiXW4AP+/HerBsQu/u2rpU=;
-	b=0ETkRwK614Zeh26MYI+dqUUXJtQ4ebPXjR3vz9SwQ3R709Tu54dAdCbh0kVWCrL7/Cf4
-	 HI1itQF6PkpBoFtYsPg1ZHh0i9o8lhtDkFfEAENF68/Kg5nw+iBlZDhFoERHQgnGxp//b
-	 tZxjTjy4d92fzveCowBamczvRTK6nsQPKCfMQWuIh5yx3q48wEQbPNRXKZTImtVYd/kp0
-	 zC8crN8mns7TjqF4ledJ+23V+18EuGsvNr5pcaHrmLrRXyVUbzK89qiU0UoudXign9A6r
-	 GOsVLfcqhS5+Bhy5//W6l1YuoxrJ/NU1kpvDAWGhueZal7hJN0wAC6GgOTcrKxsnZhw==
+	bh=EJ5x6oSnf+RrWzbB6XOjg/oJy0lPZOuvIIJGGMYahYs=;
+	b=cYgsEZsQytSExXg5AKNCdg1IeTFT0xeDzc4MuVr+TznEbF1x+8XZcRPuZ59R5skhy74I
+	 3aH56/gq2UEy/HzDa89ZYDUNvQOAszQu9UuGa1fXE4hnqFtXbwfk4yQHjNoxSBc2dPGAh
+	 sumMc0JYkrPTerdVzGLqSqHXZqSEpmfVTKSVjrcvA91m7HU7SJgRYKeDrVnQUY/gRU4OS
+	 +L/F4zvQjItRpP1KV7KEA1qBfJMf/0/s8ma99bjmmibmAj+YRpN7MQP0bb0l4NB4b78GT
+	 NimHWMGPXR0S7snk1Pblw1nn1ZTVscHWOOdL/gB5syxDMkSmW7FUTLHg37ORel2zvrw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hob1t0Fy;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hhwYqi2Q;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F40606D805;
-	Thu,  5 Nov 2026 19:29:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4AD3606EEAD;
+	Thu,  5 Nov 2026 19:29:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hob1t0Fy
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB2771F000C1;
-	Thu,  5 Nov 2026 19:29:09 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hhwYqi2Q
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA3DA1F00A02;
+	Thu,  5 Nov 2026 19:29:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793906951;
-	bh=s2I1/DcyfONVmWbtskFJJxiXW4AP+/HerBsQu/u2rpU=;
+	s=k20260515; t=1793906946;
+	bh=EJ5x6oSnf+RrWzbB6XOjg/oJy0lPZOuvIIJGGMYahYs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hob1t0FySRzo9Ad4NeX/wxJ636XvG0pYfHERcgRJc+Sg4Icctgz0x9vaAElTM9XlC
-	 DeKuv9MiuNdLOq07xSluaDzV5JfNZv10Cdb4YpMe3kNCTfqfHICUGtyJeiRHHklAiG
-	 o++YqHIytjB4pY2nCoSP0oV0ptT5uhCu20e3Yv4WPkXDuLDrzC8G5BMKr5LZKXdO/g
-	 3o/pp7jpt539+SMQvv32EonKmKe+Ve9RvbbFiZGIicJZ9ffcoawscdTJSTVjbDcbdg
-	 3IMhMWg4He6bnLDFELiozvAEzPh6t3NkjMUHVvLrqfosjL7JmUxVl7OEAfd/jNb3w5
-	 bT+XCtkRbrOvQ==
-Message-ID: <sashiko-outbox-199874@kernel.org>
+	b=hhwYqi2QU+5PCxcWnPTB3hxrvFDBanBpjqltnKnowdGwOrQnCfcILl/BCmwovaNzo
+	 wp68GIO/nSzr/nY+0O2mYBFsgas/t8X9pDclsi8l3rtLr8f9yNbcTsGRq+iy4MJ65n
+	 iPM2oWsFb0Z85B1qPfkhGzqkfncZWH+JeXHP4yd2t4cuJpVO4Y7yY85ohQIrqcGzeA
+	 C7/bMiWsDMhTh5YJuMjMHWRP5Zy9sUTojv9oJFEyBgQPOPeojiiAhYUcSybcJI2n7t
+	 19ML9X1uaSQk/DmhtxZof8n0vxdU5xWdxA5OrGQzUPOsV+PQEYss0Ieh46MVONkx2a
+	 deUWye+6T8JuA==
+Message-ID: <sashiko-outbox-199872@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RESEND v2 11/51] sparc: led: consume the whole write
+Subject: Re: [PATCH RESEND v2 09/51] profiling: report it when /proc/profile
+ can't be created
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Christian Brauner" <brauner@kernel.org>
 Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.com>, "Josef
@@ -54,12 +55,12 @@ Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.
  Iwai" <tiwai@suse.de>, linux-ext4@vger.kernel.org, "Chuck Lever" <cel@kernel.org>, tytso@mit.edu, "Heiko
  Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
  Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
-In-Reply-To: <20261104-work-procfs-bugfixes-v2-11-021c84d852e0@kernel.org>
+In-Reply-To: <20261104-work-procfs-bugfixes-v2-9-021c84d852e0@kernel.org>
 References: <20261104-work-procfs-bugfixes-v2-0-021c84d852e0@kernel.org>
- <20261104-work-procfs-bugfixes-v2-11-021c84d852e0@kernel.org>
+ <20261104-work-procfs-bugfixes-v2-9-021c84d852e0@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Nov 2026 19:29:09 +0000
+Date: Thu, 05 Nov 2026 19:29:04 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -69,17 +70,18 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> led_proc_write() looks at the first eight bytes of a write and returns
-> that many, so a writer that loops until everything is written, stdio
-> does, sends the rest as a second command. That one is unknown and
-> switches the LED off. Return the whole count, the rest is ignored.
+> create_proc_profile() returns 0 whether proc_create() worked or not, so
+> a write to /sys/kernel/profiling that turned profiling on but didn't
+> get the file reports success and there is no file to read the profile
+> from. Return -ENOMEM like the other failures of that write do.
 >=20
-> Fixes: ee1858d3122d ("[SPARC]: Add sun4m LED driver.")
+> Fixes: 22b8ce94708f ("profiling: dynamically enable readprofile at runtim=
+e")
 > Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
 Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104-work-procf=
-s-bugfixes-v2-0-021c84d852e0@kernel.org?part=3D11
+s-bugfixes-v2-0-021c84d852e0@kernel.org?part=3D9
 
