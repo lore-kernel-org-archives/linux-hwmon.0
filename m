@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793906947;
-	b=amv/o+/U5+5NqjaaQ+VTYS9WY6JyqMxVtJ8GrP+jOLLzB3WUQeSJYqViAvT0QH+qNm6l
-	 IFMAGxiFPqfvxSGANlhID9bX/fYflNBHtuhFM0XQynezrWoOE1xumthp144iUXF+rtKq1
-	 v4nzV61GiAVZmwhT2JA7efRxEuAh8eD15NL5KmrrtDS1iulhwlPX/MdvfP+bX2CdCnS5k
-	 CZwJSAT5NAG71d6Fw9AQG/5wvc425kOgiNXoWRKf+z3KHV1ns/Zo1jkGDt+YvDlVoFr+H
-	 J/qovnGoC8/wo+H+6sigUNl8zhRDIKJcUXFKFtEvVXl9bMgOIcmtwEdtCCN59cgtAOw==
+	t=1793906954;
+	b=PU1vPAXeR35sW1CYV/IggLEm9Jm0Xce3H5g0BjVo5Ff4XDhdnHAMh55NVlWX755vglmd
+	 /OR1z0eJzHU3sUV+xXYOPGjcLDWvi2kdCDlWax7L9kmWgtZP4n0KpoUrV6w4+7i6UgUwe
+	 AbzxPzEQ8Znir1PknfYs2GoY8gOoPe75+njmdxPflVlRVtHnHq/J98ynwOyiuU2bwWIjJ
+	 oBVkOuaI+sqIHiqyuPej490ItC14a9gA1oEjXJOZZrn6c5pRbikx6yh9DxTCPJKfyOU6K
+	 zB0LBzax7Y0YliJ+6wPfRd0VFnsJ8WXZXKCJRDI6yBkhuVFGpfPiG3pdCr1dCKaVPmg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793906947;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793906954;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=EJ5x6oSnf+RrWzbB6XOjg/oJy0lPZOuvIIJGGMYahYs=;
-	b=cYgsEZsQytSExXg5AKNCdg1IeTFT0xeDzc4MuVr+TznEbF1x+8XZcRPuZ59R5skhy74I
-	 3aH56/gq2UEy/HzDa89ZYDUNvQOAszQu9UuGa1fXE4hnqFtXbwfk4yQHjNoxSBc2dPGAh
-	 sumMc0JYkrPTerdVzGLqSqHXZqSEpmfVTKSVjrcvA91m7HU7SJgRYKeDrVnQUY/gRU4OS
-	 +L/F4zvQjItRpP1KV7KEA1qBfJMf/0/s8ma99bjmmibmAj+YRpN7MQP0bb0l4NB4b78GT
-	 NimHWMGPXR0S7snk1Pblw1nn1ZTVscHWOOdL/gB5syxDMkSmW7FUTLHg37ORel2zvrw==
+	bh=qYpt67HnextFoZu9a0KvUobhiMrlWn0ba92Ucxvlod0=;
+	b=lsdeqi2Cm8LCz9GVj1YSdRbKmOLlElSpJnYUqsRN8Y2x00cyhBmos0rf4cubLifFAMQj
+	 8Mi8Q3u7BEEQnIGw/SBwRt51A99PuNHHkdJuIE/vuyJ8vjnpH1eS90bfoXonF4VoLYKtV
+	 n6oZ8d1lg4ssdj4vbMSfYawAsepN+SLO2Hr/E5leaF3z9E1/Qjq4oLYD50/RIwB1qHBeC
+	 C43LBPEnVbmAuWETz1ySifjPV4QR1KFym/VIrVs4XU8KooS2E27hhCtvu+DyaNeJmsFeY
+	 3PlifL8HnDjgSfWJ+mWZTLJ4KZWGPuTdUtOVJ1Tc6LdQySKn3vheld4QjQCTH+Nq0Aw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hhwYqi2Q;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=i9LZ2DKZ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4AD3606EEAD;
-	Thu,  5 Nov 2026 19:29:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9404606D82D;
+	Thu,  5 Nov 2026 19:29:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hhwYqi2Q
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA3DA1F00A02;
-	Thu,  5 Nov 2026 19:29:04 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=i9LZ2DKZ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB4D81F00A02;
+	Thu,  5 Nov 2026 19:29:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793906946;
-	bh=EJ5x6oSnf+RrWzbB6XOjg/oJy0lPZOuvIIJGGMYahYs=;
+	s=k20260515; t=1793906953;
+	bh=qYpt67HnextFoZu9a0KvUobhiMrlWn0ba92Ucxvlod0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hhwYqi2QU+5PCxcWnPTB3hxrvFDBanBpjqltnKnowdGwOrQnCfcILl/BCmwovaNzo
-	 wp68GIO/nSzr/nY+0O2mYBFsgas/t8X9pDclsi8l3rtLr8f9yNbcTsGRq+iy4MJ65n
-	 iPM2oWsFb0Z85B1qPfkhGzqkfncZWH+JeXHP4yd2t4cuJpVO4Y7yY85ohQIrqcGzeA
-	 C7/bMiWsDMhTh5YJuMjMHWRP5Zy9sUTojv9oJFEyBgQPOPeojiiAhYUcSybcJI2n7t
-	 19ML9X1uaSQk/DmhtxZof8n0vxdU5xWdxA5OrGQzUPOsV+PQEYss0Ieh46MVONkx2a
-	 deUWye+6T8JuA==
-Message-ID: <sashiko-outbox-199872@kernel.org>
+	b=i9LZ2DKZwHnYK5IpY8mSgV5ajhfjdPLY2QdoXn1KOHQtU3MNPMIIkqzWJ+l61PaHV
+	 U4dn1Zre5ud+JMQhyzSRt0SahDPp8PERyeSmTGAPSvYaVGithpx7UUiCiDIS5aP7o8
+	 yiknyv3w+lNWb8nJUJPnGF9DnIsx87AjkTzdJfhMDt1aWvCVUScDfBwaHfX8FD/oDj
+	 FjUdNKDwK332+g6e7b3tL5KcI0s45HVKxfoQTPNCErl+nxaNU2QdXrNYqhlAfGWWfV
+	 VnoGmeqjnxuET0EKbWs+mWU2b1yq1VMOdgFBtgPIpmMZpWj0oHgAkiQaF9fwq+c8bn
+	 4Bjmd0UpxAgSw==
+Message-ID: <sashiko-outbox-199875@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RESEND v2 09/51] profiling: report it when /proc/profile
- can't be created
+Subject: Re: [PATCH RESEND v2 12/51] powerpc/rtas: consume the whole write
+ to /proc/powerpc/rtas/progress
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Christian Brauner" <brauner@kernel.org>
 Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.com>, "Josef
@@ -55,12 +55,12 @@ Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.
  Iwai" <tiwai@suse.de>, linux-ext4@vger.kernel.org, "Chuck Lever" <cel@kernel.org>, tytso@mit.edu, "Heiko
  Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
  Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
-In-Reply-To: <20261104-work-procfs-bugfixes-v2-9-021c84d852e0@kernel.org>
+In-Reply-To: <20261104-work-procfs-bugfixes-v2-12-021c84d852e0@kernel.org>
 References: <20261104-work-procfs-bugfixes-v2-0-021c84d852e0@kernel.org>
- <20261104-work-procfs-bugfixes-v2-9-021c84d852e0@kernel.org>
+ <20261104-work-procfs-bugfixes-v2-12-021c84d852e0@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Nov 2026 19:29:04 +0000
+Date: Thu, 05 Nov 2026 19:29:11 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -70,18 +70,17 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> create_proc_profile() returns 0 whether proc_create() worked or not, so
-> a write to /sys/kernel/profiling that turned profiling on but didn't
-> get the file reports success and there is no file to read the profile
-> from. Return -ENOMEM like the other failures of that write do.
+> ppc_rtas_progress_write() shows the first 255 bytes of a write and
+> returns that many, so a writer that loops until everything is written
+> shows the rest as a second message. Return the whole count, the rest is
+> ignored.
 >=20
-> Fixes: 22b8ce94708f ("profiling: dynamically enable readprofile at runtim=
-e")
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 > Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
 Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104-work-procf=
-s-bugfixes-v2-0-021c84d852e0@kernel.org?part=3D9
+s-bugfixes-v2-0-021c84d852e0@kernel.org?part=3D12
 
