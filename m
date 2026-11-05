@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793907033;
-	b=SLzSrfrelbArrch2r5R46yKsUKS1grN4HbDsNPKqehPgdHeqquviCxscOKlF2IfX17Wt
-	 PilbEt8GYXawJd46dRTx7wIttvlkPatE0LLYpirTyoxq5QHL+4I80KnRU02p/p6W0yTOv
-	 /U9jpScoRUVVNHopD2dzd4njE5vNse0TZA1gquYBe34JIkBNDL+TigVZsKUbPn93SZ40D
-	 +dfZSH/7wb+XDO3LveJrdiZkIm+9JAfKbLtjkizrY1gvE1Kql4s72B0YV7/D+ScgiYRQr
-	 Muh2eyZOImOBhsaSzzOQagE/XSjpNpGoZrl/DICxlxydQ1RgSrMtuK0478p/cK4PKXQ==
+	t=1793907029;
+	b=K7PAqft9wIMdljuXKRG7d++VGFwzhkFLJma8GppuDBmR7RDfowE42Epa2oB4XzYM6N6t
+	 xHxJfcCNXouQB7MYOb6nGNX6eR8wUR8QJNLy2d/EkugM1V7m4aepJMvfTm00EJcGDdUky
+	 VOwxKs+9x17XnMuvp6BFbNj97XDfwMCWOD1/GJMYaZmWPPoV80+1DdXtLoWjnY9N1+M5+
+	 RCY/DcL7oSEzszyWGdyYQebHwDz31pNiZCwdgtxcBrfrLTDEQXGtlEIPis8ajXhxrveO3
+	 7+P9mPW5R6nriQ/hVAIpWlN7gCtrS1A4GFdf9encxmvcPr3AAmkQ616xORxJtQr0Buw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793907033;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793907029;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=GA0+/owkDdniY30l313rN8euuBjyhEchmg5u4LglfRs=;
-	b=haT0/IgouyeLGanopHzx/H2TPQ7aPPB/JVu3xbJ6ypWtUx/cWeHbNhGYJjdtLy2WScRS
-	 BChJIY1/sfk1uSZ6GDfNcsACQhwdgNtVTp+KZJQAjscwu4AKVXLFFKx080LqHYYT3Lzib
-	 zaae7AAaTlmC+5AMYSjDEUUfgxAzUScAD+s7sazkfnUYM43RUS3iEm1qawDQ00va+PpuO
-	 tlNigNl0tt9ky67Sgxau5znI+oUT7+9qt9Fzo+plFMUGW6fYmccVj1500OIlZ5Ut8Gm6l
-	 DDxNk9kGbBudMzLABc/aH/Mk9C6lAy73/8g/pWlq35NmhPEMcZeGTN4T+dS4TLabojA==
+	bh=TUEa7eIRLkYlG50VJyzFVsWpbL0zjSyXV5JMm1JJ87k=;
+	b=RRA2GTDcIPQHue/19b5cKK2TayYvmMJFuumie/Y0d1BC2t2UcFMmjwzxEa41juGRtlyQ
+	 AZ51TKYi1j9S6qy+UduCq8zgGI7f09VfrAOd9Yz+V+MtZDdSnA4/NxZDHNOTWyzklqOuu
+	 wG+qmTx/RRZ4h/IjrLk+BxX+SaPXNtxuN/Z1UdGntdEOW8YvWnNRTfj+PLaFfXJh2biZc
+	 cbLQNKYpPr9/A71UwxUHf0RNLuz6F2Edp39wE1rhB9n1zIrJLBwjZWvmF2yNgiqCILoSG
+	 L55VCfa5R15U0g5+h5E2tqgdsZ9iDWxyhVYCuoGOSvfw3wSOLpIfxdmtsj7G9yqyBQQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ckZU7d4Q;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="EzE5K//c";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B654606C8A4;
-	Thu,  5 Nov 2026 19:30:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FCA606A336;
+	Thu,  5 Nov 2026 19:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ckZU7d4Q
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 472581F000C1;
-	Thu,  5 Nov 2026 19:30:31 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EzE5K//c
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54F291F00A02;
+	Thu,  5 Nov 2026 19:30:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793907032;
-	bh=GA0+/owkDdniY30l313rN8euuBjyhEchmg5u4LglfRs=;
+	s=k20260515; t=1793907028;
+	bh=TUEa7eIRLkYlG50VJyzFVsWpbL0zjSyXV5JMm1JJ87k=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ckZU7d4QUH1rI3q+4mXcCPdzjI6S3s0l6AJ0++PpkI/VthC4KY9jc1TUbXEy7w09a
-	 QS42jHvzTWmhpuR4sNrCVakO0luPXYf1Pep1PJq3hRlnM+G5j7LV9MiNuMbPYmYvh8
-	 szoCOMpIPlXI4pmYgqd4WZv3emt2hKmkx/g4Acbw06/hy66OKKSy4eyXseR+7sXoS4
-	 h0IZpdjtLDWYruhg3kAkHHame5PmfbBbyj3BLPwhrZvYj7hO9dMH7e37xj2nGdqfxY
-	 8c7pfm36HFDGPa1muEyl/868i4Nqv0yBIOEge1rhlL08kefXVk1eQWlAc5aoAoUcje
-	 mrqw0O6Z+CNMQ==
-Message-ID: <sashiko-outbox-199913@kernel.org>
+	b=EzE5K//cJCfees6tq1n/aL2ZXIFBE5phY+UQOmHq0vN8UPvYS/t9kkzR12V91SBSS
+	 mhS7JX+wWb8SSFsgjQLGWb/WG0xY7lURsW1aoepv/YNSVEiw0q1fXhrM33YsC2iYcX
+	 Y+waIrwUG/i8Vo4xsrxYyrlh/w1ZXi6PT5QOp69R3v0bZCzhRKgl7jMf/20Nx+KlzW
+	 0im/yzY5zXpuAl+QtNTMGdrxcjVY3ep9xLEZXfFos47R/RaVosKingXECZ1lFQe2/a
+	 3/8aSX9eI5PmGSLMxslCDj4GFhqROFpYezwD6KMYwTFTCdln5UIo/LVBxVD2dGdOQo
+	 DMN8N2/pVc/WQ==
+Message-ID: <sashiko-outbox-199911@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RESEND v2 50/51] proc: don't pin a symlink's entry while
- readlink() copies it out
+Subject: Re: [PATCH RESEND v2 48/51] proc: sysctl: don't hold the tables
+ while readdir copies to userspace
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Christian Brauner" <brauner@kernel.org>
 Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.com>, "Josef
@@ -55,12 +55,12 @@ Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.
  Iwai" <tiwai@suse.de>, linux-ext4@vger.kernel.org, "Chuck Lever" <cel@kernel.org>, tytso@mit.edu, "Heiko
  Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
  Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
-In-Reply-To: <20261104-work-procfs-bugfixes-v2-50-021c84d852e0@kernel.org>
+In-Reply-To: <20261104-work-procfs-bugfixes-v2-48-021c84d852e0@kernel.org>
 References: <20261104-work-procfs-bugfixes-v2-0-021c84d852e0@kernel.org>
- <20261104-work-procfs-bugfixes-v2-50-021c84d852e0@kernel.org>
+ <20261104-work-procfs-bugfixes-v2-48-021c84d852e0@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Nov 2026 19:30:30 +0000
+Date: Thu, 05 Nov 2026 19:30:26 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -70,22 +70,26 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> proc_get_link() pins the entry with use_pde() and the delayed call
-> unpins it. vfs_readlink() copies the link to userspace in between. So a
-> page fault in that copy holds up remove_proc_entry() just like the
-> copies of reads and writes do, and the callers hold locks while they
-> wait. /proc/asound/<id> is removed with snd_card_mutex and info_mutex
-> held when a card changes its id.
+> proc_sys_readdir() holds the directory's table for the whole readdir
+> and the table of each entry while dir_emit() copies its name to
+> userspace. Unregistering a table waits until nobody uses it anymore. So
+> a getdents64() whose buffer faults for as long as it wants keeps
+> unregister_sysctl_table() waiting, just like a stalled read() does.
+> Listing /proc/sys/net/ipv6/conf/<dev>/ that way holds up the removal of
+> the device under RTNL.
 >=20
-> The pin doesn't keep anything alive. proc_symlink() copies the target
-> and pde_free() frees it with the entry, and the inode holds a reference
-> to the entry. What the pin does is keep a removed symlink from being
-> followed. So check ->in_use instead and drop the delayed call. That
-> also takes an atomic pair off every traversal of /proc/net and
-> /proc/mounts.
+> So don't take any table into use for a listing. A header counts what
+> refers to its memory, the inodes made for it, and unregistering doesn't
+> wait for those. readdir takes one of those references on the entry it is
+> at instead, which keeps the header around and nothing else. Under
+> sysctl_lock, where unregistering erases an entry, it finds the entry,
+> copies its name, follows a link to the entry it stands for and pins
+> that. Then it looks the dentry up, creates the inode if there is none,
+> [ ... ]
+> directory was done.
 >=20
-> Fixes: 7e0e953bb0cf ("procfs: fix race between symlink removals and trave=
-rsals")
+> Fixes: 77b14db502cb ("[PATCH] sysctl: reimplement the sysctl proc support=
+")
 > Cc: stable@vger.kernel.org
 > Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
@@ -93,5 +97,5 @@ Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104-work-procf=
-s-bugfixes-v2-0-021c84d852e0@kernel.org?part=3D50
+s-bugfixes-v2-0-021c84d852e0@kernel.org?part=3D48
 
