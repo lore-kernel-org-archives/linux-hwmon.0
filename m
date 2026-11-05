@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793906982;
-	b=b3ku1UO5puDDsTKiVuLvefb6wNzGNx+G7Rb5t/OQIziV5BLMsqc0yOPafHMuD8kCPu+r
-	 qXvQVU0XtAgpT2y6J3p1U/7jCTA2nnablBilIeezd+WkgS+Rh/unhtDJ5ASBcFRaXPN08
-	 Ls79Ok8DRw9egyY+wMYZ4Rzsk5ZuVrIkZaDTy/DFRs1QtNOCp2m0kaVTdvhBRXllnAkPk
-	 yASZh2yYksI42NP9RRDvD80yxdbWPM38wv/DMRtoOt+49TAU/1NBbCNKCdpKuUGEkXZxs
-	 EPY43y4k9eeFPyGuM6kBqK8bNhLmMiR5CHFHseZcXhgyjXX4NLlGXY/Avj78Fl5R9bQ==
+	t=1793906973;
+	b=P2TFmx4rxmTgkDxF6mnphQzONVGmgs9p5agui8+BHul8QyPgZkJQXvmpPLq7BM36cB1P
+	 FKinvN5+DW1B6hmsRVKcEnKYvuTI+XNdHCeGmprqVB2HMrcFagMpzLeTHzvMSlCaWTk3z
+	 n/gmrtRupXtD8xpFYTdfEHX347H7gMqtvFACIwBHDbHvb6nf1HcDrX3LA8C/tu8usato8
+	 6p01Qy4n/7MVu9aFLgxb/pTDuF9yIm8Zo5+Sntm7h2Ya4jAQb12vsvC+4ej3wxuHvcmT6
+	 ncd8HwFVoirQvzAJaRjTXretVlHWmmLF7Y/EVnMFq6CTfHmZdyAhQjZDQ2QY2RD5udQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793906982;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793906973;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=P6jpmRzymPT4r1qFhmwUt7rLPG9nXrVikl3aWyHy3zY=;
-	b=P7FP32pNscn0xM+Tmk2L3XVPVIKVgBFtjlVO8V9T5sUbIFIL9eifqNbeS49gRBM1CnuV
-	 W/8X2zDqPn//4z3iDUKRrTdHxVrWgPSwBI3ETb0w862Pr2Mn3AsUvkrUKLkG73nfMdqtw
-	 0EmtNo3VWcaa1QkSUKHbjJudN7d1cDdi/Z9AwCOhNnZ5IS8VQzsVp5W9817+JGRHL5ijZ
-	 GNR8OWdCiqCUoeecHwgDewPBpCKCVsFkG92WoA78Uu15x3UkNynzwOB46MocRwANJcHDT
-	 XOAusIZ55cFfqOBvOoQYSwUUlAC4qTzmsACzb1LCQpfYHGig0Hqjk3noTQjsqU4T8aA==
+	bh=cpvz9ZtguPBJKqyMAgbWcY7C2hCaojY5Py1Q5FojWTs=;
+	b=X+B4yOVTJFrqofycIqwaKa4bNeOjoqadoSoTod+8j3atmBYFL86o3C06ZFFP/LpVguEs
+	 B0/A2zwVIZrrLw8claU5J9tjBAboeBoyMLe3cAo9LolBHHaSG2yIzzQi/lwkrQet7J5QT
+	 F6VFHDsQzgTkXFU0RkEsF3u59TOAJIdh0wGZWs13sxYRESNX1l7RVGSmVTx9L4Tyu0AWl
+	 q+G4ynGjjVqzxu5R2p/F+DZi5gcIpR3kjQVF4FP7S5QM7ZnF7TUXXu4prUQukc4RKXF30
+	 tDbgX527WbnNZ57+rG2TLF/uBgHAonrUJqULi+fIbIyGoaQHecmvUW5YYrWMbljwiBg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BI6MttIY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BOfP7Od+;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB308606D811;
-	Thu,  5 Nov 2026 19:29:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C7D606D825;
+	Thu,  5 Nov 2026 19:29:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BI6MttIY
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 506931F00919;
-	Thu,  5 Nov 2026 19:29:40 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BOfP7Od+
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 134461F000C1;
+	Thu,  5 Nov 2026 19:29:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793906981;
-	bh=P6jpmRzymPT4r1qFhmwUt7rLPG9nXrVikl3aWyHy3zY=;
+	s=k20260515; t=1793906972;
+	bh=cpvz9ZtguPBJKqyMAgbWcY7C2hCaojY5Py1Q5FojWTs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=BI6MttIYsBkE0g/vJZ+tIbuQi6n//HrvnT15RjmT0kcJcNcEhPSua8MjhEkmvdLBy
-	 YJ4Cl9rhWrU2J4FNfrV5LG8LjKzdoOPXpIy3l02i150qUa6eO1W62hdcJOzlm/8UaO
-	 8YRGUFIFXaZzA8K6X+GpP9ZjU4yKSbKfjjhUBmROBGXgTGgeHdxAb0ylhCvZ99pGHi
-	 UTdy2yICxI8TI6rIlwVdpTX04WIt3mGVdeNnVRbumQIyZHqUl/9zhk34Qq091tX8nL
-	 V7uPEQ77IY3Dtg208+RDdYXIh08xvxvfPijNAYM2aPAEKdPQWQJs9yilg/Hiqm9By0
-	 dV7TqpBHd20kg==
-Message-ID: <sashiko-outbox-199889@kernel.org>
+	b=BOfP7Od+3tLJPOZc6sJbk/iLsFM1pPigpKtu4EQBqXBmK4HkwMVGsC2uatKkm7neV
+	 EZ4GcLTMhwZ+sdTg+l2zRyMfToDRW4O2bKOf7mCtsJMA51Ax7pZjywuAfUHV7l60zK
+	 Sq/7GgR7KGam9IZjFxY6zw2jbOAXhkbhSEU2lGdOVZHC7JPVzuBeZnUlY5cQtQQYdl
+	 iiukn37YQzkrqyS1hBEVPe7zdS+O4S3+0pn1wEE9gINxcvysTW1fGYhITb0tpHtKwa
+	 cAg3ROO4tJ+Nh87XueHg8st2idaQa151qlYERsBEmm8rL/XGHPNW+Z4eSSH/K5f+18
+	 l7+JcMjs+vnog==
+Message-ID: <sashiko-outbox-199884@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RESEND v2 26/51] scsi: core: NUL-terminate what is
- written to the host proc files
+Subject: Re: [PATCH RESEND v2 21/51] powerpc/rtasd: zero the error log
+ buffer
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Christian Brauner" <brauner@kernel.org>
 Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.com>, "Josef
@@ -55,12 +55,12 @@ Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.
  Iwai" <tiwai@suse.de>, linux-ext4@vger.kernel.org, "Chuck Lever" <cel@kernel.org>, tytso@mit.edu, "Heiko
  Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
  Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
-In-Reply-To: <20261104-work-procfs-bugfixes-v2-26-021c84d852e0@kernel.org>
+In-Reply-To: <20261104-work-procfs-bugfixes-v2-21-021c84d852e0@kernel.org>
 References: <20261104-work-procfs-bugfixes-v2-0-021c84d852e0@kernel.org>
- <20261104-work-procfs-bugfixes-v2-26-021c84d852e0@kernel.org>
+ <20261104-work-procfs-bugfixes-v2-21-021c84d852e0@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Nov 2026 19:29:39 +0000
+Date: Thu, 05 Nov 2026 19:29:30 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -70,11 +70,10 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> proc_scsi_host_write() copies what is written into a page and hands it
-> to ->write_info() without terminating it. ppa and imm parse it with
-> strncmp() and simple_strtoul(), which read on past what was written into
-> whatever the page held before. Terminate the copy. A write is at most
-> PROC_BLOCK_SIZE bytes, so the page always has room for that.
+> rtas_log_read() hands out a whole slot of the error log but
+> pSeries_log_error() only fills in the sequence number and the event,
+> which is usually a lot shorter. The rest of the slot is whatever
+> vmalloc() left there. Use vzalloc().
 >=20
 > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 > Cc: stable@vger.kernel.org
@@ -84,5 +83,5 @@ Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104-work-procf=
-s-bugfixes-v2-0-021c84d852e0@kernel.org?part=3D26
+s-bugfixes-v2-0-021c84d852e0@kernel.org?part=3D21
 
