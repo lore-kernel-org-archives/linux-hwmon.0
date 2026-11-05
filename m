@@ -1,47 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793907004;
-	b=q/rOt2p1xcGTt+qw/jJIXEnasQDw4sGfyFqkhy0do5AJKxIcAX6bB/cwqieWAQ/vu0+s
-	 9+lPa8Z42FuMNWypAPZ3BweexnMCfFBbxfwi1IKJOpD7th6PHa2Fe0+cV/ylcfaju3ZB9
-	 liF3I4Lymnt1kH4x81g6dyPEXEzvr8/AAX7LS6PKe+jVziLKzq13c8TWjedV5o+/DHmff
-	 Dw3z4Kjv2kLmC6E8CZS0cWNxScVZBYadfMBEkcJ02cPi70tY8snZOzWyVQjvLGEF+/nS9
-	 P6oXkR4B/nzvMLz/oiXE+e9g/OoPP+P8oNYsm7ekuD4ZooK7GlPoVIRl6p/yYYULUyw==
+	t=1793907008;
+	b=qQmeMlQ3YsLRUqxW8FH0z+IVZjst6RGUds/kyydcunp882+6XrKt0F9YjHKrsjCEmhzt
+	 pGB2aY2Gtfpvo+Q4GP89smhjmL7JMGlkPr0eY8ya8KgyywXspdwGfPlVWZ4nd4BwQHijq
+	 K3kW+REj19VUEDSyL5cf7rRGukJUqegkXm9dfS/K42exNn0/eWtRteylj7eouuFV0xG6H
+	 1eXb/ARyLDczXzPYba+AVF2AG2zfeV0yN6Ha0K4EZISXCaAODtsAltXuGWQ61KHoevu9i
+	 80GDB7S8lvfacC4+77zYxfCcmrt3h/ScodLEQjQdy7TIJmT4Sxzr4UDVVbgXKYvKyvQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793907004;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793907008;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=bT7cdtBA3g4ZjNdxCADmBOubkwzRkbH+TQ0hoqO6tiY=;
-	b=fabEpdKLLxh6bMqs/EpdPyd2tRq/1uXeRE3/Cth9yk08k1snbqxEEzc9pVofI/qEtgm8
-	 7gawkova9bRviP5d30RkSbZ74KNlGSvj6b0sKX+Xtt69ZJly3pMGXPDyPbRKRdKhN1eyG
-	 jURGt6RAC5pkSUKeoOWmrC+cAxXUgMbBeFCE/UQ8UtC+1+7Y4Cj9h61KDDcnHJrjXLIBo
-	 m1nnm0CCCD8uVxlY8sU8uW9QUzh7FttL2Mtt08NuzXx/chOxIQABsktq7FeoujbAApKc1
-	 05dPqJ0+5op+6/bu0nPxPrH7axV7Q4PFEWZCs9CHaFOuzJ2cM9jMQOAwlNwsaZ5BL6A==
+	bh=7PHyXsRCh8nUckWf/52BHUGTboWFHsh+IL6ljZbS9tU=;
+	b=aCw5FDdkb7Z718oI5KGPjcbctDAO0D5c+Y+OZ8BiRBV6J6OhWBvrWSDdSdR0Y9GjxsbM
+	 2zsSzDZsbUU3oG9GljtEbz7qPU0YZ8vQNBb84/OW07CXv1RtT7rRKVTJxBQ6e9EUWCDri
+	 qoKegnwAfXnfE9/sVpwV6xbBYPvHWOYLIYYPzID4jzG+Rp2KV2Ufv+khbARFBT5PoOmT8
+	 aeJMR3e79eTecU+IfNpjGHFmjOVaummhoEUNnj+SKClq4wOKWw/yff32402+UARptHYEq
+	 /yTEnOWzRQBqSfCFZWvvnn7dsA6tDxgvJHF+NLd0vSABSa2Lz05HKPTH5rJIY29hnVw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZFkFtso3;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EzbFf2vH;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC9D60A5BDA;
-	Thu,  5 Nov 2026 19:30:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0904606A335;
+	Thu,  5 Nov 2026 19:30:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZFkFtso3
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 551AC1F00A17;
-	Thu,  5 Nov 2026 19:30:01 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EzbFf2vH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 058331F00A17;
+	Thu,  5 Nov 2026 19:30:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793907003;
-	bh=bT7cdtBA3g4ZjNdxCADmBOubkwzRkbH+TQ0hoqO6tiY=;
+	s=k20260515; t=1793907007;
+	bh=7PHyXsRCh8nUckWf/52BHUGTboWFHsh+IL6ljZbS9tU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZFkFtso3C96AnTUnqfat70nSvPWig/+mlWw5M0UhnuCp5QJxgxNGQrORhQlrQkJ/y
-	 hC3IYuBkO3IUK23KYNgrztoNyDYmU4MR+D9gL2C8VjvK7vkMSvevOunoGmfWD0JNml
-	 vsF9OIiPC1HM3aRMk6Mbu6p74Dq5+9CvuKroZEovRvm/WILib1QicWaO1x2FWXQ/Gh
-	 4URR7CizufYYPnmywgHmy0LbSoLzZeP9pgnBeUiBSkH3rjb0o92yRGCn9Np6O+kLCX
-	 Go0H2HcVBVV+M9zicMMj4k9ffVIUnGBdI26ePeddA9J3Se+pxAShijM1YnU9ctvKg+
-	 O8G91Qj2o2VRQ==
-Message-ID: <sashiko-outbox-199899@kernel.org>
+	b=EzbFf2vH4rdYmLSxg3HKN+VvXLe/yE1Tm+i03FhW8mezL4sHWQcUkoSNnFKVwq0bi
+	 AzCp++9TnQnkMVuRyQ7av+BkhgA/SJE164Miit54lB2OO3Lai0csSIQhWlpUru6waD
+	 +VBsr4BCGwCfqkHgRxJDlwr2XEGmEoMwpsrj5goVIQBSCqw3VOFqGx53PTILkt5ust
+	 nbutmvvSCT+eOLEdguPUYLn5ci6I+dEQYyb70GenJ18ODID+H7xgdB1VM3a+sCkvVh
+	 WEBmPTJH++5VB3kciDdK1xZpG8yPpTWbkTU6g4v0sBHmmzlPDXWv2561dDq3nEbTxS
+	 FmCid2KQ7rxdA==
+Message-ID: <sashiko-outbox-199901@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RESEND v2 36/51] proc: don't let NOMMU map procfs files
+Subject: Re: [PATCH RESEND v2 38/51] powerpc/crash_dump: check
+ ioremap_cache() in copy_oldmem_page()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Christian Brauner" <brauner@kernel.org>
 Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.com>, "Josef
@@ -54,12 +55,12 @@ Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.
  Iwai" <tiwai@suse.de>, linux-ext4@vger.kernel.org, "Chuck Lever" <cel@kernel.org>, tytso@mit.edu, "Heiko
  Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
  Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
-In-Reply-To: <20261104-work-procfs-bugfixes-v2-36-021c84d852e0@kernel.org>
+In-Reply-To: <20261104-work-procfs-bugfixes-v2-38-021c84d852e0@kernel.org>
 References: <20261104-work-procfs-bugfixes-v2-0-021c84d852e0@kernel.org>
- <20261104-work-procfs-bugfixes-v2-36-021c84d852e0@kernel.org>
+ <20261104-work-procfs-bugfixes-v2-38-021c84d852e0@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Nov 2026 19:30:00 +0000
+Date: Thu, 05 Nov 2026 19:30:05 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -69,26 +70,18 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> Every procfs file has a ->mmap since commit 786d7e1612f0 ("Fix
-> rmmod/read/write races in /proc entries"), whether the entry has a
-> ->proc_mmap or not. On NOMMU validate_mmap_request() takes that to mean
-> the file can be mapped. procfs has no ->mmap_capabilities so a regular
-> file gets NOMMU_MAP_COPY, and a private mapping never calls ->mmap at
-> all. Instead do_mmap() takes nommu_region_sem for writing and
-> do_mmap_private() reads the file into the copy with kernel_read().
+> copy_oldmem_page() maps a page of the old kernel that isn't in the
+> linear mapping with ioremap_cache() and copies from it without checking
+> whether the mapping worked. If it didn't, the copy reads from an offset
+> into the NULL page. That oopses unless the copy happens to be a user
+> copy, whose exception table entries turn the fault into a short copy.
 >=20
-> Reading /proc/maps takes nommu_region_sem as well:
->=20
->   mmap(NULL, 4096, PROT_READ, MAP_PRIVATE, open("/proc/maps", O_RDONLY), =
-0)
->=20
->   do_mmap()                          // down_write(&nommu_region_sem)
->   -> do_mmap_private()
->      -> kernel_read()
-> [ ... ]
+> Return -ENOMEM like the other architectures do. read_from_oldmem()
+> turns that into -EFAULT like any other short copy.
 >=20
 > Reported-by: Chris Mason <mason@kernel.org>
-> Fixes: 786d7e1612f0 ("Fix rmmod/read/write races in /proc entries")
+> Fixes: 54c32021eb6f ("[PATCH] powerpc: Add arch-dependent copy_oldmem_pag=
+e")
 > Cc: stable@vger.kernel.org
 > Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
@@ -96,5 +89,5 @@ Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104-work-procf=
-s-bugfixes-v2-0-021c84d852e0@kernel.org?part=3D36
+s-bugfixes-v2-0-021c84d852e0@kernel.org?part=3D38
 
