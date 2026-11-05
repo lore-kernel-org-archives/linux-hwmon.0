@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793908670;
-	b=unpM3fga6C8AXcpJ9AdYyJL/P68DY13u2ZjZOwgSCCRwG9t6BhAcU7e/4pbhv9EJ13ur
-	 iNGWyV58ouRV8v+pBAubJPFJVyOB4T2AS0qUzA8IlCq90d9rQ3zK7SJHrPWKxOvRonS0J
-	 vmyZ8mr12a6g835x6U8KgvPc8acMOPZBXN3ukWNrzxLpV22xu/Lbu1pSZYhdIyhFXDBaH
-	 YZZ7kV5OSpm01VPk/zF/D0trbGktyvHUCEZg/BIghg50O7hIWD9CQAkZjlmcfKTduH7Is
-	 kW2oZe/XuUBxXfED8ZsgWPM91l7hRyK6pAc6Nzjp94pBuzdJfAc+wOgEAUdkMXAYFFA==
+	t=1793908672;
+	b=zDe2IDpXuyACYKAZuK5hZm0UTTMeQxRtzyyNNnZ5usiGpPVDh04z1EdvjjJ6p7Zc7mYE
+	 ZeP21Ib8OnPojky54RogrWpGQNHuMvcUHuxbnaTWBbMbsgUZ51kiW86e7ouhjqVTuEZUO
+	 DZYW3j0Ugk6xAyV+nJ452k3/ZqTF2P6xUcVpwZ6tAS9FOyA7yxZZishQxbltjrWDQ8nNe
+	 es8I4a82Apyd7GyXqkepKBCoJDtpSYUbtAU6okN3ekJzp1xAR9LpMVmsZIq0wftrTeUmp
+	 rlA07KBpVp02XsLj6eYQ8Kv+iwm4TLJp1ru9vvuVnYp3IZ0CyD6Nnm0icdktKhgAB2g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793908670;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793908672;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=NRKKgBaULAjA+HtCrE2b2BaKHLWg/IWOGmXDRpIt4CQ=;
-	b=0Z0U5Z+JFPaj+61mJZ9dQSlbkqS7YO6qLZP/f45hQl+ICZhqZnT7WqueLXuDJtaC2caQ
-	 fDHOWWLJIg4j2C+XXAVbIjwhbrtrqdHQRdJcdocEDJ3tELEQEQGdxqSmeM0pQmezWcnsW
-	 2iRQl3CyKhX+NnHYqKzjZd4epPutc/3O9vePVJssQN//5BnNnhjQZCxXzs9Jj8snWzU23
-	 iZk7xo6ubrweWozwY5Ec6LRIIBTvPyiI1E2aXpeJWdTey144DNIXhbPcJn0DWFTTtJCv0
-	 HiJywAhyEhda++i2FaaMZ7o8Nnkyvd6JVeg984My6N6zpGPc4qZhBFk1RAq/vAB3ZOg==
+	bh=wH1L4MEaZ7mTO1+v+czsA7Bd7wFLluxTEf1+OMXx/G8=;
+	b=qsgCR4qWce5rECWWrccARThdcDpekG1pwPjgETVUHguhCjHLD+HLmgRgKoNpzxO+HuYi
+	 iAddTZDS8+te4ELjMhojvClh4eGQ8pCT1QQRpKi0awUqXBeCFMWdXEkNCQBavtXAbWu5/
+	 IcrCDb/gvdFlSCRqQoEBdc6sX0V31wDHpxiGSKHTXFarbJp9mUkaNiDqQwGn9bhrOhnGJ
+	 EgtnPnzhE17w2TyqMoXNGdZz6pwpxlBV1IcBsrogseJVutxlTsyP7JuASLD0JI45f2JyR
+	 wkeOythxAl38xAuLdp3lwFTcprZmxLaREN/pR1w/5wCHsMv2fkiOBmGWuXeEHWtVCtQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zhykm1PJ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="K7L/GY8E";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D1F4606A33B;
-	Thu,  5 Nov 2026 19:57:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B2C4606A33D;
+	Thu,  5 Nov 2026 19:57:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zhykm1PJ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC1571F00904;
-	Thu,  5 Nov 2026 19:57:48 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K7L/GY8E
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 888531F008A2;
+	Thu,  5 Nov 2026 19:57:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793908670;
-	bh=NRKKgBaULAjA+HtCrE2b2BaKHLWg/IWOGmXDRpIt4CQ=;
+	s=k20260515; t=1793908672;
+	bh=wH1L4MEaZ7mTO1+v+czsA7Bd7wFLluxTEf1+OMXx/G8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Zhykm1PJUY5wvMtL/zZjQkbyq1PyvwZC0EOgbc/mXkTXjW5jEDUFBHmJDkJa40t3l
-	 GIpVPB7pCfyT4P5CA6CEZXejqjXrq+ic8kl3YEXNxI1//5Q5Py0E0a8kNnqcjW6hPi
-	 K09iDwRpN/qRrfyGrXfrtzedYO2f0xYg0e0CVFZSUsUaxT5QaMI//WK8iMNBQsmWUg
-	 QYwurgr8Y9JSYLqma2wGeJtJYAI+2EiMBA6btZmAUfr8ngEY8HBKKYPS4KNStW+JAC
-	 Nmg8t5UHwTP7n5VK7s22hm26muMFtPD72IEuPBkcb9I0XmHhmyLKRTBgGvV//TFzuF
-	 uHK+79shUVmhw==
-Message-ID: <sashiko-outbox-200044@kernel.org>
+	b=K7L/GY8EBAiMFhQN1jBxInyHUo7dNUqa1zvrbYPCV3cNlvaj0uRTG8m5XSXkg5qBH
+	 NxQgrlhnCqVof6ukdE4MBihCdgWAaKYJdSh5pmD/29Ml4etIsfQcRmUKoFVe1cyGDP
+	 q11+nFgfYJfO3maFGRlex7SnG2VtLRY23TP7Hza/2OShi8+SVSRRCqK/F/Ot8puN7A
+	 BIImj1rK3ldK8sG8OeFyPl3Ecx00bVxpaKA4ZbgnFfd+/z05CVTEd+m93B57VhW2YZ
+	 NWYy1/qXl35HEznR9p8aOsKL+D5Ca0SsAiDZCtE/ab89zfKkPK8dJVNfErjO5zAKnp
+	 FWuqFZDvwWXBA==
+Message-ID: <sashiko-outbox-200045@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RESEND v2 10/30] genirq/proc: let procfs copy in the
- affinity masks
+Subject: Re: [PATCH RESEND v2 11/30] latencytop: let procfs copy in writes
+ to /proc/latency_stats
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Christian Brauner" <brauner@kernel.org>
 Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.com>, "Josef
@@ -55,12 +55,12 @@ Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.
  Iwai" <tiwai@suse.de>, linux-ext4@vger.kernel.org, "Chuck Lever" <cel@kernel.org>, tytso@mit.edu, "Heiko
  Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
  Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
-In-Reply-To: <20261104-work-procfs-fs-v2-10-319e0f9a8aae@kernel.org>
+In-Reply-To: <20261104-work-procfs-fs-v2-11-319e0f9a8aae@kernel.org>
 References: <20261104-work-procfs-fs-v2-0-319e0f9a8aae@kernel.org>
- <20261104-work-procfs-fs-v2-10-319e0f9a8aae@kernel.org>
+ <20261104-work-procfs-fs-v2-11-319e0f9a8aae@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Nov 2026 19:57:48 +0000
+Date: Thu, 05 Nov 2026 19:57:50 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -70,12 +70,10 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> Implement ->proc_write_buf() for smp_affinity, smp_affinity_list and
-> default_smp_affinity so procfs copies in what is written before it pins
-> the entry, and parse the masks from that copy. A list of CPUs can be
-> longer than a page on large machines, so the files take as much as
-> memdup_user_nul() could copy in before. Anything larger fails with
-> -EINVAL instead of -ENOMEM.
+> Implement ->proc_write_buf() so procfs copies in what is written before
+> it pins the entry. The write only clears the statistics and doesn't look
+> at what was written anyway. Writes larger than PAGE_SIZE - 1 bytes fail
+> with -EINVAL now.
 >=20
 > Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
@@ -83,5 +81,5 @@ Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104-work-procf=
-s-fs-v2-0-319e0f9a8aae@kernel.org?part=3D10
+s-fs-v2-0-319e0f9a8aae@kernel.org?part=3D11
 
