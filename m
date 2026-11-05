@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793907327;
-	b=DQSeC3AteVh+fHqDSe7VwbphJO72Q8X1PJzviVZtYGad5f6NAsnx2w4CAn9z0xzf9pBS
-	 AM8Uosn7eCl0svaY7UktzgRJELwUoIc2AyULXeo/BSr4SP6bhln65BWylyWDb1mQ3xVty
-	 WCRYOiOmOPVvPGrM+cB5NeNkc3v4txdyPzBV2pJBCRZyqJk/jQeGQK3gtNF69YHGjRW/z
-	 mqglL6zHUWmlS+XMuXYK+NGPltNYXfj8tj30gufoB2qkCpNxG94NvvW7hW7l+BIhvWytk
-	 7tmkMQuOdXFAk+FE1Zmguw9ix8uSedKvVvqjQdZ2Pb9/kLWIlhAdlyWmqt3yN7UhOhQ==
+	t=1793907318;
+	b=OvvBUujklDjmbBH5ADOmO1kiBTjgGQzmBvWGceNszoZKszyVBQJB1x/VOwgrRem9Durs
+	 1E/qutwzYoYvdcUQ35nsbZQYNiS+h5Jj+7wxxRWnVT9wT7gYPurRoU/bryg2AW+YaYxLG
+	 tSswtlMWLS04f77+bBjCbmnGuRex4TUHUI59MhMGDw9FORYBzSFbOJ9J3YI8Yj5pex0x3
+	 zDurUEJXFzqK/Ew++1ArSrumGs9ryLJlbuHXRZm55HVxHfL3MiNexEivur1/tMpDxHbFk
+	 O1/G5AQmh0Wy+Kfv+6x1669nn+jimxwhAulgYkOKmgg0Pgvq9hGqzoqZOBXiolLokHA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793907327;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793907318;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=F/UoW+sOc2HdnM1BLVR1TjnkTw0OxVwi9/ME7zIv1Lo=;
-	b=oIJ7mgnsww67ngbs6F7CTQoNCeAaKEGOBTTxnxy8AEx3exud8xkJyxr/s82pmZTT0lPW
-	 bImn2hM4LfWh5VFXvpuFg/ujNLTNqt3qnGEvFPe8dvdAhqrTdogXHqpZdyB7pmdBEW3B2
-	 79vOX6S3rNvNPvdm2OFlzuw7EsYs5S7tgwdFgQWm5jUHDbn8fH2WYZ+TSbKhbB0QlMhQ0
-	 qU3PWXzGZcbAelS6pTsOO1Zm1ZeUIs65wN2cq5T13dJ5J7zefhWr4GJgbhF7ZeWh1RkPW
-	 +e8GL1iREQv0FmlfwoODPCyXhWpm/sZfTd/OzXQA12MTONA9Ga3CtRMQg5SbA4xI2Xg==
+	bh=AP/9HXvjjFp+N4Xnk9ZhfHtJP84zQAgGJz8O2YcoyD0=;
+	b=eJjXZQDwWMm/b/zsXXStvQqp52DD+LZXmEguX/8BzV4rC5mi+ArTJm6SmANkP74xuwey
+	 Vhz4OSFrlo+AkrmBb7JzMqdkXsyReOlup//ykMSFgs9yHu2xhxWAVX9guYYnl0Ah0bO2e
+	 sycapWiCInmsql3VNRx5c+K5goPWT1D3mQLhUkFubEirR++9cnvyPNsjMrm2AXFvjNJGt
+	 mJkJ7yXMloSV7wvKmMVQDpBsBO5z1sQ8d7uRLxVisQH8hI6qfaJgic09Cihq/9qfc3ukw
+	 0rjDPolaG3fsC3rj2KG+c5YHhqQPA/88V1zIJOYiQQeXYbhWZiY0RUJSdVB9uh8xxLg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eZgst+9B;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VV39f5So;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC3C6077B6B;
-	Thu,  5 Nov 2026 19:35:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE45D607728A;
+	Thu,  5 Nov 2026 19:35:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eZgst+9B
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E6CC1F0089F;
-	Thu,  5 Nov 2026 19:35:25 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VV39f5So
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AEA91F0089E;
+	Thu,  5 Nov 2026 19:35:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793907326;
-	bh=F/UoW+sOc2HdnM1BLVR1TjnkTw0OxVwi9/ME7zIv1Lo=;
+	s=k20260515; t=1793907317;
+	bh=AP/9HXvjjFp+N4Xnk9ZhfHtJP84zQAgGJz8O2YcoyD0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=eZgst+9BEKBGQHd6Yc4SSsgM2sHlKEuR0T5yhpRyV1N8f90zfue+56ibafby4dJx+
-	 Eg7Fvfmkb3cTym9vc5ROZ1rrKuIJSTFrgExCYgbnf0y+ziiRmsVjJ9dxed4HuCBV4q
-	 5uL5mVp/rQjF5m8Ui+9Qt0p0mBIGHNfu0qpzxmjQeaQJJuOzK8OPu6qkpRNMhhgbiK
-	 p2ylt7pkb1GuM6sMhTPZ1tVcwsvhXExLew8xUld1v7W90+Wv7p7+DVJm3TEvGfvofh
-	 dDCTWZx814OVrrDoYCBbr8yfs9b51aisCQZMr3QWJ7ecXsS+4grEMPZvNyNDiyx1P7
-	 YK8pP0IzbL1vQ==
-Message-ID: <sashiko-outbox-199936@kernel.org>
+	b=VV39f5So1g49N7W3UbazXSKQL1BbkHKsfLDbb5QZyU2fOrbmB53+C4PMQy1tfCByM
+	 YeDx/jfn/yLKwX+us/mZVBJDDA91+KXxpBNNXFRm3QKM0f7cji3TwH5M8nHjoaQe5/
+	 PdhGk3yZ3xaL42g/7f8054+A4X+UPyrne9kb4i1NQQwmr+H3CYFASt7DcN/tUrZHBj
+	 2/O1yXa6ry8ceB9fU543h/I4a9F+hfGsT5rjTvnX1LOe375Qwsz5tsvk/2r3vt3BEP
+	 3JguqV1jlUZuRL/eoYBu9vyZZu4WXiGAEVe3tKSHV+xvGFYZJ3KO+vhvrhYxYSS0a4
+	 ypRBTWf9dhnXg==
+Message-ID: <sashiko-outbox-199932@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RESEND v2 06/23] proc: make room for more entry flags
+Subject: Re: [PATCH RESEND v2 02/23] proc: add pde_pin() and pde_unpin()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Christian Brauner" <brauner@kernel.org>
 Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.com>, "Josef
@@ -54,12 +54,12 @@ Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.
  Iwai" <tiwai@suse.de>, linux-ext4@vger.kernel.org, "Chuck Lever" <cel@kernel.org>, tytso@mit.edu, "Heiko
  Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
  Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
-In-Reply-To: <20261104-work-procfs-core-v2-6-76ace653a773@kernel.org>
+In-Reply-To: <20261104-work-procfs-core-v2-2-76ace653a773@kernel.org>
 References: <20261104-work-procfs-core-v2-0-76ace653a773@kernel.org>
- <20261104-work-procfs-core-v2-6-76ace653a773@kernel.org>
+ <20261104-work-procfs-core-v2-2-76ace653a773@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Nov 2026 19:35:24 +0000
+Date: Thu, 05 Nov 2026 19:35:15 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -69,9 +69,11 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> ->flags of struct proc_dir_entry is a u8 and the next patches need more
-> flags than it has room for, so make it a u16. Bit 6 stays free,
-> vfs-7.5.mount takes it for PROC_ENTRY_CANT_MOUNT.
+> Every call into an entry that can go away is wrapped in use_pde() and
+> unuse_pde(), and a permanent entry is called straight away. The read,
+> write, poll, ioctl, mmap and lseek methods all spell that out as the
+> same if-else. The next patches add a few more callers. So put it into
+> pde_pin() and pde_unpin() and use them everywhere.
 >=20
 > No functional changes.
 >=20
@@ -81,5 +83,5 @@ Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104-work-procf=
-s-core-v2-0-76ace653a773@kernel.org?part=3D6
+s-core-v2-0-76ace653a773@kernel.org?part=3D2
 
