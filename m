@@ -1,57 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=130.239.18.156
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=80.241.56.152
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793973019;
-	b=LfVQix0jyLKlyDz8EdSfUyze0ZSWoqF/75rCgQPdFEj05H9vg9JzVCFfvQsTAWzSAKg3
-	 taxE5mPn+FK0qpjF6+NcsuGg6+jiYMoRppyhd4wYtFVLj60K/Il8HzqcM2GB3RxR5P1uJ
-	 xvNdUw34G9WQ1l46nQDKEQxtsxreu3G2btI69xttNEfpkWOd/gMkKegV0Y4d4zoruijTH
-	 tYKXecKqKWi/QM9iLsH05KRPmPOGR6yXadX51oXGpIf/wc6vvuy+qmpcoOABp+OorrhTG
-	 Ma7sZyNtYgHcRT5BYiY/CjA7AKjAwh6liNdhmi4iA+QJt38S1OOQpbEV5j7pIKvN7Rg==
+	t=1793975864;
+	b=zsJOGPgewOn2x31807gjcor8ZotbFJfk9ddhsEby/eBzWbjzMbB+qKotd8nBFTXgbbnj
+	 ZznFxpeVTQlhzgdccIzIua5+bS81HHv4pMfrvIzWO8Ff/m3+yMIxHB7Pj0vE750a5Lt/i
+	 Y9LHKATTW5Oc9CfvkJA675gnIiTb8+10RlrL8cBFUtPOQVuxSwyl1GJsUVkY3rX9U36EM
+	 NjQQtviJUGkIl2cHMUR+MR6Cl8yWhR26zZ2xY0DkzlE8tHRgBQy2GMzjhihymgwGg4hHM
+	 OUGPWrVCgBvitrGJws+IFyqbU82VNiW8XIqwFQy3X6Ezd3NoklUT3NBnooqZpgzBMDA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793973019;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=ANBlmTwShaEwErG21jXGNj3PDZf6DNbvT/J2U/bYhqM=;
-	b=tOgqzuWKyywpy8f3lB2aA01m4jgF/g4Do2aV1iVnHWIIj/W/WV2hNq4lPZ6F8LC63Ixc
-	 fQXKL1YIpgIWhyK16N19UCdDsfZ9SmRIRPt3AeMPHCdhkB6pN5D4Y1wsFaxQU/syXlcMx
-	 jpn1ykXbErwScQGfL1jfNuKyDibwzXcI1QfLGCNMv5MEJIYtbu6IFuDm7ztSbwpYwKZNu
-	 KphPkipses30axlPARNOx8CDsQjHUTRpZ7VWAwXwf/n3jYa/IHGXyHrkd70grj7swKxcS
-	 i0aCwvPbptz+urieytZzcXSx8PHPH02YwZ7UXVaDO3Nd4j7SvVYw15YUgkWTovOCxow==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793975864;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Rspamd-Queue-Id;
+	bh=qIn6iBBvwXhLiMImP4GzSaCyCI76Sq1bYbjqgztngUw=;
+	b=YPcfzQ9riNTp6Vmgewx+FdscHox1KDI9hpJo+9aAxGkuaYM5gBeJobBvGVXHpz5K+WLD
+	 OP34ro4hWBIsErxOV5extKIMhT5OsNvXjxWdls0JY8bwXRdYXyavaLWJZp+QIvJMjbPEV
+	 3nWZL2RK8ALZSh3iB7HNKY7rt7YFP06idr6k/aZPgKPO8LwAA3iH9RUJ+02tllw23HT3D
+	 2vXdZGvfCpShPK/l/8WrhipWXUIctRjfD8CpbVoVrq/w6+b8hTcSOg5fO6NlNTWkP6E0/
+	 4vRfxYTLSxw7YXkP/QoftG1rXy32qOyp14TDAFP1UjwZAlztyzFczrI541D7eDDrf0Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=ac2.se;
-	spf=pass smtp.mailfrom=ac2.se;
-	dkim=pass header.d=ac2.se header.i=@ac2.se header.a=rsa-sha256 header.s=default header.b=TaYOOPFU;
-	arc=none smtp.remote-ip=130.239.18.156
-Received: from mail.acc.umu.se (mail.acc.umu.se [130.239.18.156])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=bojanowski.me;
+	spf=pass smtp.mailfrom=bojanowski.me;
+	dkim=pass header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=OTisjvxT;
+	arc=none smtp.remote-ip=80.241.56.152
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB35606A326
-	for <linux-hwmon@vger.kernel.org>; Fri,  6 Nov 2026 13:50:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AAB35606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ac2.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ac2.se
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4188606A332;
+	Fri,  6 Nov 2026 14:37:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A4188606A332
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bojanowski.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bojanowski.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=ac2.se header.i=@ac2.se header.a=rsa-sha256 header.s=default header.b=TaYOOPFU
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by amavisd-new (Postfix) with ESMTP id ABE8944B92;
-	Fri,  6 Nov 2026 14:50:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ac2.se; s=default;
-	t=1793973014; bh=DWVp2FdiDTw4PVB+k91ShmuvJ9Kry/xwhloNL8qMzms=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TaYOOPFUIsdXTkPnpDQETA8u/5JNVUtcmByYP6v4xfQ8Q5VaYaGjvtK0y13DSvi/z
-	 S/yKdvs2f/qewFhTFe17mFu+TGoX8ErRdYcmkd3qB39G27wsB111RYEE3ipZJcIGtM
-	 5Ui4Etu9pz3zEntDfkfTmGK3nqLgb3vhwxs8iliE=
-Received: by mail.acc.umu.se (Postfix, from userid 24471)
-	id CC6CD44B93; Fri,  6 Nov 2026 14:50:13 +0100 (CET)
-Date: Fri, 6 Nov 2026 14:50:13 +0100
-From: Anton Lundin <glance@ac2.se>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, Zev Weiss <zev@bewilderbeest.net>
-Subject: Re: [PATCH] hwmon: (nct6775) Add support for NCT5525
-Message-ID: <au3bFWAf/Vkaqq8/@accum.se>
-References: <20261103132948.144216-1-glance@ac2.se>
- <9e1f1a68-ef65-4e38-9396-48836ff50979@roeck-us.net>
- <au3L9FJUVRDuIsVN@accum.se>
+	dkim=pass (2048-bit key, unprotected) header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=OTisjvxT
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4jLhbl6qlXzKnCG;
+	Fri, 06 Nov 2026 15:37:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bojanowski.me;
+	s=MBO0001; t=1793975859;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qIn6iBBvwXhLiMImP4GzSaCyCI76Sq1bYbjqgztngUw=;
+	b=OTisjvxTd2an8DdXIXhyIGWKBwehjYMFZbL14TnbolqPVHJ/ux63fJaZhKwbhJboRFA9zy
+	P8FZpkrZxQ5rp2QmmDqRYNUprmq24QdaNhiN2mH+CwCloapIMe77g4xjhLQp6AZcHvhWIB
+	oyOmLmmBz+ADGgnCQ6sIRY1wahgXMWdSf5Pw5ZNQFsccU4cJi/Tm3QAg1BzaAkPBJitv89
+	789ZD3kaQEZptlmdwMyBdVrnW1dUpc7xZI35u+NnsGD0RqGsWUXG8aK9UoEeEYd1B78W1Q
+	OSUt24NelqfqS62ViWX/JnuiE7+8xeca1XUuhgxn+0KU6XMRcluHbLhAVxRfSQ==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of tomasz@bojanowski.me designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=tomasz@bojanowski.me
+From: Tomasz Bojanowski <tomasz@bojanowski.me>
+To: Hamza Mahfooz <someguy@effective-light.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] hwmon: (nct6683) Add fan control support for MSI boards with NCT6687D-R
+Date: Fri,  6 Nov 2026 15:36:32 +0100
+Message-ID: <20261106143632.19966-1-tomasz@bojanowski.me>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261004153250.516730-1-someguy@effective-light.com>
+References: <20261004153250.516730-1-someguy@effective-light.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -61,43 +77,28 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <au3L9FJUVRDuIsVN@accum.se>
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4jLhbl6qlXzKnCG
 
-On 06 november, 2026 - Anton Lundin wrote:
+On Sun, Oct 04, 2026 at 11:32:48AM -0400, Hamza Mahfooz wrote:
+> Patch 1 reports the duty cycle of the system fans, and patch 2 adds fan
+> control support for the CPU, pump and system fan headers.
 
-> On 03 november, 2026 - Guenter Roeck wrote:
-> 
-> > On 11/3/26 05:29, Anton Lundin wrote:
-> > > Extend nct6775 driver to support NCT5525.
+Tested on an MSI MAG B850M MORTAR WIFI (MS-7E61, BIOS 1.A68, NCT6687D
+EC firmware version 0.0 build 03/10/25), with nct6683.c from
+hwmon-next built out of tree against kernel 7.2.15.
 
-...
+pwm1, pwm2 and pwm13 to pwm16 are writable and have pwmN_enable,
+all set to 2 after loading the driver. Writes were tested on pwm16
+(SYS Fan 1):
 
-> > > @@ -1191,6 +1224,10 @@ bool nct6775_reg_is_word_sized(struct nct6775_data *data, u16 reg)
-> > >   		  (reg >= 0x59 && reg < 0x69 && (reg & 1)) ||
-> > >   		  reg == 0xe0 || reg == 0xe2 || reg == 0xe4 ||
-> > >   		  reg == 0x111 || reg == 0x121 || reg == 0x131;
-> > > +	case nct5525:
-> > > +		return reg == 0x20 || reg == 0x22 || reg == 0x28 ||
-> > > +		  reg == 0x59 || reg == 0x5b || reg == 0xe0 || reg == 0xe2 ||
-> > > +		  reg == 0xe8 || reg == 0x111 || reg == 0x121;
-> > 
-> > Sashiko has some valid concerns here.
-> 
-> This is the same as for nct6106, nct6116 and nct6126.
-> 
-> As far as I see it, we would need to look if we're in speed-cruise mode
-> or thermal-cruise mode, and adjust if we read word sized or not.
-> 
-> Any preference on how that should be done or should I just make
-> something up?
+  pwm16_enable  pwm16  fan16_input
+  2                98     926 RPM  (initial, BIOS curve)
+  1               255    2083 RPM  (after 8 s)
+  1                80     767 RPM  (after 10 s)
+  2                 -     911 RPM  (10 s after switching back)
 
-After stearing it down for a while it became pretty clear how to solve
-it.
+Setting pwm16_enable back to 2 restores the BIOS fan curve.
+pwm4 (EZ Conn header JAF_1) remains read-only.
 
-The code already handles it correctly, it's just that the register is
-always read as word sized which is wrong.
-
-
-//Anton
+Tested-by: Tomasz Bojanowski <tomasz@bojanowski.me>
