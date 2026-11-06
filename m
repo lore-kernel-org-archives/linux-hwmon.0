@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793954352;
-	b=rf2eaBz0EN7fcmWQ0z7+RHPvgg0Uh849ccyzVudHEK3KUAY9CvUymd5Vs25tfDCCQ0d2
-	 njYWomm2cnCn9Hcx5rAhxN56OcZbDTa2kcQ4vNgqq2OA/kaki0tZxDWwfj4Zs4anlsjZ/
-	 7BI5O0HA8MpKG0R47SzQ/HP/fhdS4CfFlkIHv3UoMZP4NGo+fvErJ84r8ccZmy4ud8SU2
-	 kB8po9Gg0D5pkCz+BrydoGF2sLHkk8b74sPznrAICYPedOmzWi1MRUvldtB2/nPixshAz
-	 T1kmizwLEjLnZS4zcMWduy11LsJb3mrAPG6hG/6G6WPq5eTkGf07OmM4iJ5670hgtWg==
+	t=1793954626;
+	b=iO51ytfFT7DnVgieV8QOC3AsYZ2Hm00/eXZl3h4QBOSQ3lwsQ8bvptu55t+/t4Qik3qK
+	 R7Mog6gmyOY4ieZHi4inRmKl9y0iAh1POkVvzaQJlGdU5dmJUgiGVAMMT2unehVNpjGNj
+	 OuGFAuakfJ/CO5SA9kNWUBaj2vaNt55q7QVJec4FOjqQaabyqnsKnBmzP1Nny12yK+O1U
+	 SWVOUw1TobPUA50hKtBpTN5cDTFPl2Ytd/eHmCiT0BD/xPPUh7bK9y9/Vn6uvxAy158B2
+	 qhSXPLERq/4BnF2B1S9/AdzBvOe46TgS2lt+RCki2eRkmHVLH5j7WYK3QtR67JAY+Ng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793954352;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793954626;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=d1+OkghnGiRcx8h2ATHYPlUGg6cThrk9pXEfDHGzYa4=;
-	b=Sxte0GJYpv77awpZnDZD2aesa6thGHINXUMVV5ZBZeTQDj41psiR3DFGIqBo9nD30Qpm
-	 E/nUfkflFhGyGpFp5ZAVw3E9LhVaVarwL0KtEPmP4qyqj+k2Ktdg32BzxiCGD2LQXKX74
-	 YY6LbtWNg6cO0awwfKtzq2lzkAH0AuZ6aU4vqh3vXNOYKX3iA583IHuh48mShwASDwUK/
-	 6wyCRnjhjlrBVkjpuRSZEaGO1HEyz53Ip2AJYeM6OvwcqKE8a12sowd+rsLq6JJ7ggFxJ
-	 w7pNq3UKrTDGxa22R5qONXk/RhnwXFVWzPA1pXTBVd2kp1uDp0U8vaaCGHgwM9Rlyow==
+	bh=HyGKIigqdSLl423M+2chQYvAFa3Ss1JLLb2uMO2fNSc=;
+	b=XYRzy+kiVFpsmqAp1SgVG1tfxk2kC7E58AfzIXHAmPFMtT9H4ub2WRyji3SmMNvftieS
+	 MMfE34joOLQk54UIYu4r0u3TPEaicfomTJJHnQRFdxtCLG847Ibg8umaXUDEZw4BptRTK
+	 UgXssQVvNhYNmpIkKHzclA4pYOAVvAv+HyWrHlRr/BVCZxvu1QhuSgKM+BoHTimXty6BL
+	 IUh3+ruWMvEOC3ua5bIif/NWQqrPFFjUBX3TyDHuGr9/X0IzK2TIHL7cCYscIeQ6r+mNM
+	 PfMyAIvMXsYGsvIbMNIPckhXDzaQUswxstzOf8C1gCJW6NCbG6RaVYzaQ5jOEWp4vYw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VykRMMpy;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dkfUEY8i;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A750606A326;
-	Fri,  6 Nov 2026 08:39:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4100606A326;
+	Fri,  6 Nov 2026 08:43:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VykRMMpy
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82A981F0089F;
-	Fri,  6 Nov 2026 08:39:11 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dkfUEY8i
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F09E91F0089F;
+	Fri,  6 Nov 2026 08:43:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793954352;
-	bh=d1+OkghnGiRcx8h2ATHYPlUGg6cThrk9pXEfDHGzYa4=;
+	s=k20260515; t=1793954625;
+	bh=HyGKIigqdSLl423M+2chQYvAFa3Ss1JLLb2uMO2fNSc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VykRMMpy2J/zka5F5sMSZq2iuvkJo4QydSnoD5/qKwbvZHHCNsmhgRlrVDc/MM1xO
-	 5/qpdJnnMYLFXhACnMKBSEXrRK/K4yQk5kr636KvFmt7S+NRtu06k3i6gaNDguBJ4+
-	 oBK8W5/exaAq+xEVSADHveSy4KDcZxi6IZlgRJRGNtb796Zwl495tH/N614Ak17kik
-	 B75/NSTPY2osg8fL1e8fnfJ5uWMYmZiiV3GSbkG2HDql/40mKce3xTm8kXRA2ZTlR4
-	 c1XaUcw5BQYWQ2tB5iF5IuJV6UnL1o9ra7zOq9bAl+erTuRMR5+r/MX4OoKnT2KIcQ
-	 9iYR2I9ctE4/Q==
-Message-ID: <sashiko-outbox-201080@kernel.org>
+	b=dkfUEY8i/AScvuLID9+umPJImGqvKmczriKploG6xeK/XKneSrc9duIDZG2lHmDGu
+	 /tpvMGdXOQzyQcR8v65zS5AmEThOg4LJUjUJ+cz8oClMsqCRNWJMYVtOEew1U37Bp8
+	 /FEZlaS1is1q8t9gn06gaQuUB2bYlug/YbFMoEVTLSlWtgSNqSFvGpQBoCjwwh1ZIp
+	 RoR2qfDjvrIEIvT7Tbea+QDfQ03mF3mS6JIRyVCaGDb5VamzUnaNanO2WAA0ITMf6F
+	 umYWesoN4wL274VnViOR0AAukAqic7hNyN1cw9lqO83PXrmlgNEiJ5zekrXft42pDJ
+	 DU9MxLRaHB+fA==
+Message-ID: <sashiko-outbox-201085@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 3/7] mfd: bcmbca-pmb: Add a shared BCMBCA PMC3 PMB
- transport
+Subject: Re: [PATCH v3 2/7] dt-bindings: soc: Describe the BCM6846 Processor
+ Monitor Bus
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Linus Walleij" <linusw@kernel.org>
 Cc: mfd@lists.linux.dev, devicetree@vger.kernel.org, linux-clk@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org, lee@kernel.org
-In-Reply-To: <20261106-xg6846b-bcmbca-xrdp-reset-v3-3-d6adeb71afc9@kernel.org>
+In-Reply-To: <20261106-xg6846b-bcmbca-xrdp-reset-v3-2-d6adeb71afc9@kernel.org>
 References: <20261106-xg6846b-bcmbca-xrdp-reset-v3-0-d6adeb71afc9@kernel.org>
- <20261106-xg6846b-bcmbca-xrdp-reset-v3-3-d6adeb71afc9@kernel.org>
+ <20261106-xg6846b-bcmbca-xrdp-reset-v3-2-d6adeb71afc9@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 06 Nov 2026 08:39:11 +0000
+Date: Fri, 06 Nov 2026 08:43:44 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -61,71 +61,203 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] mfd: bcmbca_pmc3_pmb: debugfs stall, WARN_ON, and HW read in
-  regmap init
+Thank you for your contribution! Sashiko AI review found 5 potential
+issues to consider:
+- [Low] dt-bindings: hwmon: brcm,bcm6846-pmb-pvtmon uses
+  additionalProperties with $ref
+- [Low] dt-bindings: soc: brcm,bcm6846-pmb ordered after dependent
+  brcm,bcm6846-pmc
+- [Low] dt-bindings: soc: brcm,bcm6846-pmb examples violate
+  dt-check-style strict rules
+- [Low] dt-bindings: soc: bcm: driver-model child nodes in
+  brcm,bcm6846-pmb
+- [Low] dt-bindings: soc: bcm6846-pmb: expand PMB as Power Management
+  Bus
 --
 
-commit df29cb4d33202540fcf38b25c63a3a8cd862dcfb
+commit 6ce40c3812dd052e5e8e3945888002592aa196c2
 Author: Linus Walleij <linusw@kernel.org>
 
-mfd: bcmbca-pmb: Add a shared BCMBCA PMC3 PMB transport
+dt-bindings: soc: Describe the BCM6846 Processor Monitor Bus
 
-This commit adds an MFD driver for the Broadcom BCMBCA PMC3 Processor
-Monitor Bus (PMB) that exposes a shared uncached regmap to child devices.
+This commit adds Device Tree binding schemas and header constants for the
+Broadcom BCM6846 Processor Monitor Bus (PMB) and its clock, hwmon, power,
+and reset child controllers.
 
-> diff --git a/drivers/mfd/bcmbca_pmc3_pmb.c b/drivers/mfd/bcmbca_pmc3_pmb.c
+> diff --git a/Documentation/devicetree/bindings/hwmon/brcm,bcm6846-pmb-pvt=
+mon.yaml b/Documentation/devicetree/bindings/hwmon/brcm,bcm6846-pmb-pvtmon.=
+yaml
 > new file mode 100644
-> index 0000000000000..8ebcbc26a502d
+> index 0000000000000..9bf52cf097a32
 > --- /dev/null
-> +++ b/drivers/mfd/bcmbca_pmc3_pmb.c
+> +++ b/Documentation/devicetree/bindings/hwmon/brcm,bcm6846-pmb-pvtmon.yaml
+> @@ -0,0 +1,42 @@
+[ ... ]
+> +allOf:
+> +  - $ref: /schemas/thermal/thermal-sensor.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: brcm,bcm6846-pmb-pvtmon
+> +
+> +  clocks:
+> +    maxItems: 1
+> +    description: PVTMON acquisition clock
+> +
+> +  resets:
+> +    maxItems: 1
+> +    description: PVTMON analog-acquisition reset
+> +
+> +  '#thermal-sensor-cells':
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - clocks
+> +  - resets
+> +  - '#thermal-sensor-cells'
+> +
+> +additionalProperties: false
+
+[Severity: Low]
+Should this schema use unevaluatedProperties: false instead of
+additionalProperties: false?  Because it references
+/schemas/thermal/thermal-sensor.yaml# via allOf, additionalProperties: false
+prevents properties defined only in the referenced schema from being
+evaluated cleanly.
+
+> diff --git a/Documentation/devicetree/bindings/mfd/brcm,bcm6846-pmc.yaml =
+b/Documentation/devicetree/bindings/mfd/brcm,bcm6846-pmc.yaml
+> index d4c927cabb3f4..77fbf92926ab3 100644
+> --- a/Documentation/devicetree/bindings/mfd/brcm,bcm6846-pmc.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/brcm,bcm6846-pmc.yaml
+> @@ -60,6 +60,11 @@ examples:
+>              compatible =3D "brcm,bcm6846-pmb";
+>              reg =3D <0x20100 0x200>;
+> =20
+> +            pmb_power: power-controller {
+> +                compatible =3D "brcm,bcm6846-pmb-power";
+> +                #power-domain-cells =3D <1>;
+> +            };
+> +
+>              pmb_clk: clock-controller {
+>                  compatible =3D "brcm,bcm6846-pmb-clock";
+>                  clocks =3D <&osc50m>;
+
+[Severity: Low]
+Should this commit be ordered before commit "dt-bindings: mfd: Describe the
+BCM6846 PMC complex"?
+
+That earlier commit introduces brcm,bcm6846-pmc.yaml referencing
+/schemas/soc/bcm/brcm,bcm6846-pmb.yaml# and including
+dt-bindings/clock/brcm,bcm6846-pmb.h and
+dt-bindings/reset/brcm,bcm6846-pmb.h before this commit adds them, which
+breaks make dt_binding_check bisectability at the parent commit.  In
+addition, the commit message here still states that it describes the PMC and
+only mentions the power controller child, omitting the clock, reset, and
+PVTMON schemas and headers introduced in this patch.
+
+> diff --git a/Documentation/devicetree/bindings/soc/bcm/brcm,bcm6846-pmb.y=
+aml b/Documentation/devicetree/bindings/soc/bcm/brcm,bcm6846-pmb.yaml
+> new file mode 100644
+> index 0000000000000..134a8a676dbd0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/bcm/brcm,bcm6846-pmb.yaml
+> @@ -0,0 +1,90 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/bcm/brcm,bcm6846-pmb.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom BCM6846 Processor Monitor Bus
+> +
+> +maintainers:
+> +  - Linus Walleij <linusw@kernel.org>
+> +
+> +description:
+> +  The Processor Monitor Bus (PMB) connects the third generation Power
+> +  Management Controller (PMC3) to the control registers of miscellaneous
+> +  independent hardware blocks.
+
+[Severity: Low]
+As reported by William Zhang on v2 [1], PMB stands for Power Management Bus
+rather than Processor Monitor Bus.  The commit subject, commit message, and
+all five new binding schemas in this patch still expand PMB as Processor
+Monitor Bus.
 
 [ ... ]
 
-> +static bool bcmbca_pmb_precious_reg(struct device *dev, unsigned int reg)
-> +{
-> +	/* Do not let debugfs probe unimplemented or firmware-owned registers. =
-*/
-> +	return true;
-> +}
+> +  power-controller:
+> +    type: object
+> +    $ref: /schemas/power/brcm,bcm6846-pmb-power.yaml#
 > +
-> +static struct regmap *bcmbca_pmb_regmap_init(struct bcmbca_pmb *pmb)
-> +{
-> +	const struct regmap_config config =3D {
-> +		.reg_bits =3D 32,
-> +		.val_bits =3D 32,
-> +		.reg_stride =3D 1,
-> +		.max_register =3D BCMBCA_PMB_REG(3, 255, 65535),
-> +		.cache_type =3D REGCACHE_NONE,
-> +		.precious_reg =3D bcmbca_pmb_precious_reg,
+> +  clock-controller:
+> +    type: object
+> +    $ref: /schemas/clock/brcm,bcm6846-pmb-clock.yaml#
+> +
+> +  reset-controller:
+> +    type: object
+> +    $ref: /schemas/reset/brcm,bcm6846-pmb-reset.yaml#
+> +
+> +  hwmon:
+> +    type: object
+> +    $ref: /schemas/hwmon/brcm,bcm6846-pmb-pvtmon.yaml#
 
-[Severity: Medium]
-Does marking every register precious in bcmbca_pmb_precious_reg() while
-setting max_register to BCMBCA_PMB_REG(3, 255, 65535) (0x03ffffff) with
-reg_stride =3D 1 cause a 67M-iteration stall, a WARN_ON(), and an unintended
-hardware read when the regmap debugfs files are read?
+[Severity: Low]
+As reported by Philipp Zabel on RFC [2], should #power-domain-cells,
+#clock-cells, #reset-cells, #thermal-sensor-cells, and the reference clock
+live directly on the brcm,bcm6846-pmb node instead of using four addressless
+child nodes?
 
-When the debugfs "registers" or "range" file is read,
-regmap_debugfs_get_dump_start() scans all 67,108,864 addresses from 0 to
-map->max_register under map->cache_lock.  Because regmap_printable() is
-false for every address, map->debugfs_off_cache stays empty,
-WARN_ON(list_empty(&map->debugfs_off_cache)) fires on every read, and
-regmap_debugfs_get_dump_start() returns base (0).  regmap_read_debugfs()
-then starts its loop at start_reg (0) without checking regmap_printable()
-on the first iteration and calls regmap_read(map, 0, &val), issuing a
-hardware PMB read to BCMBCA_PMB_REG(0, 0, 0).
+Neither power-controller nor reset-controller has any DT resources of its
+own, and the power, clock, reset, and hwmon drivers all access shared 32-bit
+BPCM zone control and PVTMON_CONFIG registers over the parent PMB keyhole
+interface.  Folding the provider cells into the brcm,bcm6846-pmb node avoids
+encoding the Linux MFD sub-driver split into the Device Tree ABI while still
+allowing the MFD driver to instantiate child devices internally.
 
-In addition, because neither readable_reg nor writeable_reg is set, reading
-the debugfs "access" file causes regmap_access_show() to format all
-67,108,864 addresses into a single_open() seq_file buffer until a >1 GiB
-allocation fails with -ENOMEM.
+[ ... ]
 
-Omitting max_register and precious_reg from config (leaving max_register
-at 0 without max_register_is_0) avoids creating the debugfs "registers",
-"range", and "access" files while bcmbca_pmb_op() continues to validate
-the bus and offset bounds.
+> +        pmb_power: power-controller {
+> +            compatible =3D "brcm,bcm6846-pmb-power";
+> +            #power-domain-cells =3D <1>;
+> +        };
+> +
+> +        pmb_clk: clock-controller {
+> +            compatible =3D "brcm,bcm6846-pmb-clock";
+> +            clocks =3D <&osc50m>;
+> +            clock-names =3D "ref";
+> +            #clock-cells =3D <1>;
+> +        };
+> +
+> +        pmb_reset: reset-controller {
+> +            compatible =3D "brcm,bcm6846-pmb-reset";
+> +            #reset-cells =3D <1>;
+> +        };
+> +
+> +        hwmon {
+> +            compatible =3D "brcm,bcm6846-pmb-pvtmon";
+> +            clocks =3D <&pmb_clk BCM6846_CLK_PVTMON>;
+> +            resets =3D <&pmb_reset BCM6846_RESET_PVTMON>;
+> +            #thermal-sensor-cells =3D <0>;
+> +        };
+> +    };
+
+[Severity: Low]
+Does this example (and the matching example in brcm,bcm6846-pmc.yaml) trigg=
+er
+unused-labels and child-name-order warnings under scripts/dtc/dt-check-style
+--mode=3Dstrict?  The pmb_power label is never referenced in the example, a=
+nd
+the unaddressed child nodes under the PMB node are not in alphabetical order
+(clock-controller, hwmon, power-controller, reset-controller).
+
+[1] https://lore.kernel.org/r/CAHi4H7GOMM9K6XG15vPyFMLOza3QQ7QPxUkCi85jA_e9=
+D6YbKg@mail.gmail.com
+[2] https://lore.kernel.org/r/f1c24a603964302ec1462b1cea790a2a7079fb3d.came=
+l@pengutronix.de
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261106-xg6846b-bc=
-mbca-xrdp-reset-v3-0-d6adeb71afc9@kernel.org?part=3D3
+mbca-xrdp-reset-v3-0-d6adeb71afc9@kernel.org?part=3D2
