@@ -1,94 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.228
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=80.241.56.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793984603;
-	b=U0vjskoGC8uASSkFXlK52T1bjO3SBlzqTJn5cGAhU30wE3n4NOuMG72jAvxJjpBI7UNH
-	 bx8uS+INEIRnxZRecSwsFFs4xpnq2hdVF4tJ7dEWMsyXpDkRu5UOLDqi6mYDMagNbVwjg
-	 u86ufDX2detUOKqRc0OQz0KDsHU5+eERVUTe4CWhfniUhRsoRuIpE9tg7sgkblsjQ/vVe
-	 45jMmPunl/Gn9PjWKdOmc2rGExO4zZMLzUp70iuAzvD3MjHuEEf/+wKpsufcEXbXk0AJ7
-	 csUnU0KJn0O2Tk2FjrRiAHQPq6lokuDguQP8eMhuuTCdOrbvj+jWt3eCVleETgLYMWg==
+	t=1793990654;
+	b=M6f2zFXtYUzcCDu7gCTKlEWs0qYqoJP4e9JiPsC2G03oyrBBBajMowtzEZ11HIvgC0d8
+	 2+vS+NOCSwIuua9xJ6GonaXY1FvaXaBas98J3mkX7mqmHJxD+pI2RZtsDPLLdguSwSkRm
+	 u6+KW9SNqFI9k/M6czjZcnP/2CtmABloQrF0qrEMxIOyJjb1ieZrhvfzV9E4kyp445H+J
+	 nLAWgkJ9gXXkgmEVo4UxZ5Ru6mEO9mMpuROGGuHLr18XVwYmOAGizDqyvv0By3CH2ihKY
+	 Wo3SuNWYi4xHg13pYdvMIaaR6jkL3HomaOfgFD/xMIn8K5MF0q+Tmm8Mt6d5i6q6PfA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793984603;
-	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:X-Relaying-Domain:
-	 X-CFilter-Loop:Received:DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Received:X-Received:MIME-Version:References:In-Reply-To:From:Date:
-	 X-Gm-Features:Message-ID:Subject:To:Cc:X-DetectorID-Processed:
-	 Content-Type;
-	bh=sGA6rV4Wb5BX1BR2RoYxmTXBq5ib+5ATFcUNlhapiGo=;
-	b=5jgZVvm2dK50h9q+Oi/eREfTZkwbibTgSVoG1U/zyjTEYwoYgXYQGrXHJKb2doNsZ1E6
-	 fL52F41B5aFj3gSG5noCGNed319GonHVTFq+8ZoJAeCdEsEC8ZoWezw5SkUJo2NdlC1Tp
-	 SGhcS3Ztmet7mtbMf0Lc8x1zCPluKFNj9YAUnBIbFk+ER/bg6OsgMWN9BbrpnCHuAVUKx
-	 lrLMluoHYo96d7nqRlZ57tGplprUWDMg/iQuGqqHrHElYdZ3QIvKBOV4iPuU9JWB/bb6A
-	 4NqhQJT1IGhO5G6YbS9hrag/vfshXa7BNdGE4gMCUcVBdZP4u1s9LZ75DVxy7WFtBXA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793990654;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-Rspamd-Queue-Id;
+	bh=G6imxDnM+jHmS/bPugKJ9w5lPtzVnIQlF/zM6XhCb6w=;
+	b=R9TyUgH9Wo/OPE5ToB1XCkB907tk6taPkUAvKg7k+n8eH3i6tRA3xKhO45WnulnOSJ1e
+	 vPDfEXGxbsq1tISKqQcb7HmLB81ITKs6onDS1ulg93p8grajqjhUV5HghfTD+Ba/UvjGf
+	 rEh3m5wVV94mE/CXbf3OAZmPxSTz//qzRtf88lzqCcSdShey9TbLVHfJ8Z4Yj45PvRZlB
+	 rkAfqf8uRxXKiabcPtAr5jp9GtXb/O1/kzySjFeeQr3zYVk3v36yvdR0h2Gl/HGYGI3k1
+	 yI6f4IaNNCEpWkHoavl2hi+5HIDt6fStRmumxGuIyWPDNaRQ8pv9ZHUBd0qpOzHCNGQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=broadcom.com;
-	spf=fail smtp.mailfrom=broadcom.com;
-	dkim=pass header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=google header.b=DT87wXw8;
-	arc=none smtp.remote-ip=209.85.210.228
-Received: from mail-pf1-f228.google.com (mail-pf1-f228.google.com [209.85.210.228])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=bojanowski.me;
+	spf=pass smtp.mailfrom=bojanowski.me;
+	dkim=pass header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=ZNb1uE9t;
+	arc=none smtp.remote-ip=80.241.56.171
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A05606A32D
-	for <linux-hwmon@vger.kernel.org>; Fri,  6 Nov 2026 17:03:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 90A05606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33FFC606A326;
+	Fri,  6 Nov 2026 18:44:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 33FFC606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bojanowski.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bojanowski.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=google header.b=DT87wXw8
-Received: by mail-pf1-f228.google.com with SMTP id d2e1a72fcca58-8a4c72951b8so532332b3a.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 06 Nov 2026 09:03:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793984602; x=1794589402;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:dkim-signature:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=sGA6rV4Wb5BX1BR2RoYxmTXBq5ib+5ATFcUNlhapiGo=;
-        b=nS6vJJd5gobR+M5hWQzk8mPkKCpi0w+HRXvGcmJSH2BTc26b+VrLray7uqMuLQp+FL
-         VWSE/H7aQyaDleafl2hQAkRFeIey9H1YgrGCzwTAjlsoURYdKWZfyjnyhP1xSou++Z2Y
-         bJttExS3U7GjQj5HyetiM8lbHApzZobI1CVteF+E/4A+YqUG18T0PRUbnvyksvqvRjNw
-         lkKVFFm1G/VIS05bLAyN5AxhItNcjcuqrjSWFx4IHFvbg2MnqogLPoTePcBeNYK3BdEV
-         iVomPjoZsgXg4Cak3OJgKDz770ggAbWX8vtQ3NXHTugvf/PfdrfKb69zyqamPHnzTM15
-         jn/A==
-X-Forwarded-Encrypted: i=1; AKwUvBzOqA3CmGcJ/f9CPp/cJLYvSzj75YMDV+Od54RNsHRyOFdqfQCFfgVH/UBP5Z5vb88CGQjTBT9UEqVD7g==@vger.kernel.org
-X-Gm-Message-State: APuU4Z8nLspq4eB1o1ZsqEB47n0TsZuLIerVSlHeC1LP+cnSMnLd1xeo
-	2fl+vc5A+2bjamIvZdq0eOHpvrpKMwsmP8LwRuqudT7yJ66nYcd8Idzq/5+k0KRwOD0pUMaySNT
-	gxtNGzCvrPTlmk3HuzM3AWHKXlLCl8dTdw32NP3J0B+CnTHQTVthMkjvy1qA0BQosnZHIK4zX1Y
-	Ewumi3DrW9PDbYUDVeZSX5URo/dUZzNRfq0uPV4oDQlBVvbdl5vqPKh62gWFfyPb2GXnv2AC8Cl
-	GbgLRTtJxvfLhmrv5E=
-X-Gm-Gg: AYBFou0vwqI4OFEA4wJsVrvKqJBptOt+But4TMr6O6PRKyz8ZoGPRKnMgRgTIl77xqh
-	QLpYu7UgUgrepfND/B5MrPQRqZvXiMTwm2P3jKMqIgyFzAXL9/BJxpNg0arGP78HcFNDpivvojq
-	1lCtGLtJ7kqUzDLEUdLHLDouPqOMKGXV+xkx4Y8I7HAamT3CipZ6OuHxhaitWNSAr5b6L7yXVwg
-	ZD4nuah6tp9iSRPuZuTKnfO6OJzBtWu6f2K+b4eMQ4ir+bBpw/19minUYv7eHdaHUr8hzNjJ+on
-	iA4LqmBI+s/vn0Q1o/c+R++9Xc1gQq+hNhCKXENfzPot9S1K6GWJ+J38O9Dnk+lEfJIsmejSeB6
-	CyVuvaxdagilb5Byy2LVqlRbZ48FTt0okJn4MmrZ1tv2BLzDe71Qa3eZDC6dXpQ9dP3nvFbtXZx
-	tMKsQ8eDroTZN8NH/fze/mIux3VFeSk/GWXo0M
-X-Received: by 2002:a05:6a00:3987:b0:89f:d449:753c with SMTP id d2e1a72fcca58-8b37ab9eed7mr3050577b3a.10.1793984601603;
-        Fri, 06 Nov 2026 09:03:21 -0800 (PST)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-13.dlp.protect.broadcom.com. [144.49.247.13])
-        by smtp-relay.gmail.com with ESMTPS id d2e1a72fcca58-8b351a87c77sm35548b3a.0.2026.11.06.09.03.20
-        for <linux-hwmon@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 06 Nov 2026 09:03:21 -0800 (PST)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-844bc76180bso1049627a34.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 06 Nov 2026 09:03:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1793984600; x=1794589400; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=sGA6rV4Wb5BX1BR2RoYxmTXBq5ib+5ATFcUNlhapiGo=;
-        b=DT87wXw8FKETI/BjSAlErBY2v9BLK9YeVaMIda2iHNAX9tfqqSPe38P+nls/Ij8NNT
-         3ql1GmX4Lza/CXojdamW+ij/1ZJ5fAfWIbfJnSIJj6NtnFQzzsQdnAW4jCOfpEgem2tT
-         A6FYmNw4LZrfZsuKAndpNaFS+gbzkFULwSFX4=
-X-Forwarded-Encrypted: i=1; AKwUvBxHVWQxszXnuOG+0jtMdxAzxsdtImKMzVRZJN7nRkNKLrppqPKvkoHiXfih4YhhF3Z7unAXoGfQ7OUfkw==@vger.kernel.org
-X-Received: by 2002:a05:6808:509f:b0:504:5fe1:c8d4 with SMTP id 5614622812f47-567e1848b93mr2236527b6e.59.1793984599614;
-        Fri, 06 Nov 2026 09:03:19 -0800 (PST)
-X-Received: by 2002:a05:6808:509f:b0:504:5fe1:c8d4 with SMTP id
- 5614622812f47-567e1848b93mr2236457b6e.59.1793984599023; Fri, 06 Nov 2026
- 09:03:19 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=ZNb1uE9t
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4jLp433DmLzMlby;
+	Fri, 06 Nov 2026 19:44:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bojanowski.me;
+	s=MBO0001; t=1793990643;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=G6imxDnM+jHmS/bPugKJ9w5lPtzVnIQlF/zM6XhCb6w=;
+	b=ZNb1uE9tMNNvfdMiDniIlARldyap0DnzywLvvZc4R3MSHjRbe5NAf/5G6Y36ENPAZb4sxM
+	s1YK/p7XTNt/5Z394MFeMR9IZcYPexoBuRomrYswQ3vBjiEpamccFrHSxtLYJwN7KIGNu5
+	1pGW6R7SrfgGpx3lCvGSICQqn+6N8XwBYh/VzmRVcYcRVrB01GdpzmyeAzJqprwMDhekOQ
+	mLfP7N5f4EdV8iOBCtOiHnjaBngtzETWXISHOa8AtinZUNXXcE+sW+zkIE7OP3ftuJd1am
+	BYaBzk2BzHDMWrFrrUZ1cPf3Kh0eEW4VqdGF/kqRY1PEj8Qcs4QCipLLdP8Idg==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of tomasz@bojanowski.me designates 2001:67c:2050:b231:465::1 as permitted sender) smtp.mailfrom=tomasz@bojanowski.me
+From: Tomasz Bojanowski <tomasz@bojanowski.me>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: Add driver for MSI Mystic Light controller voltage sensors
+Date: Fri,  6 Nov 2026 19:43:57 +0100
+Message-ID: <20261106184357.27763-1-tomasz@bojanowski.me>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -98,591 +74,477 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261106-xg6846b-bcmbca-xrdp-reset-v3-0-d6adeb71afc9@kernel.org> <20261106-xg6846b-bcmbca-xrdp-reset-v3-2-d6adeb71afc9@kernel.org>
-In-Reply-To: <20261106-xg6846b-bcmbca-xrdp-reset-v3-2-d6adeb71afc9@kernel.org>
-From: William Zhang <william.zhang@broadcom.com>
-Date: Fri, 6 Nov 2026 09:03:06 -0800
-X-Gm-Features: AclHuK9KamAO3QPKzJP168ypI7DJfpGe4hh3kd82BD64aNtSumXkCrA5JKntFqU
-Message-ID: <CAHi4H7E+064hC+Jk25gDz7qRgkDe=VHeLuHQ705A1h9Tei8etg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/7] dt-bindings: soc: Describe the BCM6846 Processor
- Monitor Bus
-To: Linus Walleij <linusw@kernel.org>
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Anand Gore <anand.gore@broadcom.com>, Kursad Oney <kursad.oney@broadcom.com>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Brian Masney <bmasney+clk@redhat.com>, Jerome Brunet <jbrunet+clk@baylibre.com>, 
-	Guenter Roeck <linux@roeck-us.net>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, Ulf Hansson <ulfh@kernel.org>, 
-	Benjamin Larsson <benjamin.larsson@genexis.eu>, mfd@lists.linux.dev, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-clk@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000d3de27065f9e9625"
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4jLp433DmLzMlby
 
---000000000000d3de27065f9e9625
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MSI 800-series motherboards have a USB microcontroller (0db0:0076) that
+drives the RGB LED headers. Besides the LEDs, it measures a few voltage
+rails that are not monitored by the Super I/O chip, and reports them in
+HID feature report 0xf0.
 
-On Fri, Nov 6, 2026 at 12:27=E2=80=AFAM Linus Walleij <linusw@kernel.org> w=
-rote:
->
-> The third generation Power Management Controller (PMC3) accesses SoC
-> block control and reset registers through the Processor Monitor Bus
-Power Management Bus.   Need to update all the instances in this patch seri=
-es.
+Add a driver that reads this report and exposes the rails as standard
+hwmon voltage attributes with labels. The values are cached for one
+second. The driver never writes to the device, and it starts the HID
+device with HID_CONNECT_HIDRAW, so user space tools that control the
+LEDs through hidraw keep working.
 
-> (PMB). Describe the BCM6846 PMC and PMB.
->
-> Describe the power controller child and all supported power domain IDs,
-> including the combined XRDP, Runner and WAN domain.
->
-> Signed-off-by: Linus Walleij <linusw@kernel.org>
-> ---
-> I considered even just using the PMB but the PMC has more stuff and
-> it seems natural to let it live in a simple-mfd node.
-> ---
->  .../bindings/clock/brcm,bcm6846-pmb-clock.yaml     | 39 ++++++++++
->  .../bindings/hwmon/brcm,bcm6846-pmb-pvtmon.yaml    | 42 ++++++++++
->  .../devicetree/bindings/mfd/brcm,bcm6846-pmc.yaml  |  5 ++
->  .../bindings/power/brcm,bcm6846-pmb-power.yaml     | 44 +++++++++++
->  .../bindings/reset/brcm,bcm6846-pmb-reset.yaml     | 31 ++++++++
->  .../bindings/soc/bcm/brcm,bcm6846-pmb.yaml         | 90 ++++++++++++++++=
-++++++
->  MAINTAINERS                                        |  8 ++
->  include/dt-bindings/clock/brcm,bcm6846-pmb.h       | 42 ++++++++++
->  include/dt-bindings/power/brcm,bcm6846-pmb.h       | 12 +++
->  include/dt-bindings/reset/brcm,bcm6846-pmb.h       | 11 +++
->  10 files changed, 324 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/clock/brcm,bcm6846-pmb-clo=
-ck.yaml b/Documentation/devicetree/bindings/clock/brcm,bcm6846-pmb-clock.ya=
-ml
-> new file mode 100644
-> index 000000000000..519606522c8b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/brcm,bcm6846-pmb-clock.yaml
-> @@ -0,0 +1,39 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/brcm,bcm6846-pmb-clock.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Broadcom BCM6846 PMB clocks
-> +
-> +maintainers:
-> +  - Linus Walleij <linusw@kernel.org>
-> +
-> +description:
-> +  The Processor Monitor Bus (PMB) provides access to the RDP and BIU PLL
-> +  outputs, the Runner clock, the crystal output, the PVTMON acquisition
-> +  clock and the clock gates in block power-control zones. Clock indices
-> +  are defined in dt-bindings/clock/brcm,bcm6846-pmb.h.
-> +  The PLLs and crystal output use a 50 MHz reference clock.
-> +  Zone clocks require their associated blocks to be powered.
-> +
-> +properties:
-> +  compatible:
-> +    const: brcm,bcm6846-pmb-clock
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    const: ref
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - clock-names
-> +  - '#clock-cells'
-> +
-> +additionalProperties: false
-> diff --git a/Documentation/devicetree/bindings/hwmon/brcm,bcm6846-pmb-pvt=
-mon.yaml b/Documentation/devicetree/bindings/hwmon/brcm,bcm6846-pmb-pvtmon.=
-yaml
-> new file mode 100644
-> index 000000000000..9bf52cf097a3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/brcm,bcm6846-pmb-pvtmon.yam=
-l
-> @@ -0,0 +1,42 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/brcm,bcm6846-pmb-pvtmon.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Broadcom BCM6846 PMB process, voltage and temperature monitor
-> +
-> +maintainers:
-> +  - Linus Walleij <linusw@kernel.org>
-> +
-> +description:
-> +  The process, voltage and temperature monitor (PVTMON) is a child of
-> +  the Processor Monitor Bus (PMB) controller and uses its indirect
-> +  register interface. It measures die temperature and seven voltages,
-> +  including a diagnostic test input.
-> +
-> +allOf:
-> +  - $ref: /schemas/thermal/thermal-sensor.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: brcm,bcm6846-pmb-pvtmon
-> +
-> +  clocks:
-> +    maxItems: 1
-> +    description: PVTMON acquisition clock
-> +
-> +  resets:
-> +    maxItems: 1
-> +    description: PVTMON analog-acquisition reset
-> +
-> +  '#thermal-sensor-cells':
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - resets
-> +  - '#thermal-sensor-cells'
-> +
-> +additionalProperties: false
-> diff --git a/Documentation/devicetree/bindings/mfd/brcm,bcm6846-pmc.yaml =
-b/Documentation/devicetree/bindings/mfd/brcm,bcm6846-pmc.yaml
-> index d4c927cabb3f..77fbf92926ab 100644
-> --- a/Documentation/devicetree/bindings/mfd/brcm,bcm6846-pmc.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/brcm,bcm6846-pmc.yaml
-> @@ -60,6 +60,11 @@ examples:
->              compatible =3D "brcm,bcm6846-pmb";
->              reg =3D <0x20100 0x200>;
->
-> +            pmb_power: power-controller {
-> +                compatible =3D "brcm,bcm6846-pmb-power";
-> +                #power-domain-cells =3D <1>;
-> +            };
-> +
->              pmb_clk: clock-controller {
->                  compatible =3D "brcm,bcm6846-pmb-clock";
->                  clocks =3D <&osc50m>;
-> diff --git a/Documentation/devicetree/bindings/power/brcm,bcm6846-pmb-pow=
-er.yaml b/Documentation/devicetree/bindings/power/brcm,bcm6846-pmb-power.ya=
-ml
-> new file mode 100644
-> index 000000000000..891eb0f347e6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/brcm,bcm6846-pmb-power.yaml
-> @@ -0,0 +1,44 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/brcm,bcm6846-pmb-power.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Broadcom BCM6846 Processor Monitor Bus power controller
-> +
-> +maintainers:
-> +  - Linus Walleij <linusw@kernel.org>
-> +
-> +description: |
-> +  The power controller is a child of the Processor Monitor Bus (PMB)
-> +  controller and accesses BPCM power zones through the parent regmap.
-> +  A domain includes all power zones of a block. The XRDP domain groups
-> +  XRDP, its three Runner cores and WAN, matching the vendor power sequen=
-ce.
-> +
-> +  Domain IDs are defined in dt-bindings/power/brcm,bcm6846-pmb.h:
-> +    BCM6846_PD_PERIPH: peripheral block (bus 0, device 0, four zones)
-> +    BCM6846_PD_MEMC: memory controller (bus 1, device 8, one zone)
-> +    BCM6846_PD_USB20: USB 2.0 (bus 1, device 10, four zones)
-> +    BCM6846_PD_XRDP: XRDP (bus 1, device 12, three zones), Runner cores
-> +      (bus 1, devices 14, 15 and 16, one zone each) and WAN
-> +      (bus 1, device 11, three zones)
-> +    BCM6846_PD_PCIE0: PCIe 0 (bus 0, device 18, one zone)
-> +    BCM6846_PD_PCIE1: PCIe 1 (bus 0, device 19, one zone)
-> +
-> +  Peripheral and memory domains remain powered because they provide
-> +  resources required for system operation. CPU and PLL blocks use differ=
-ent
-> +  register layouts and are outside the scope of this provider.
-> +
-> +properties:
-> +  compatible:
-> +    const: brcm,bcm6846-pmb-power
-> +
-> +  '#power-domain-cells':
-> +    const: 1
-> +    description: Power domain ID from dt-bindings/power/brcm,bcm6846-pmb=
-.h
-> +
-> +required:
-> +  - compatible
-> +  - '#power-domain-cells'
-> +
-> +additionalProperties: false
-> diff --git a/Documentation/devicetree/bindings/reset/brcm,bcm6846-pmb-res=
-et.yaml b/Documentation/devicetree/bindings/reset/brcm,bcm6846-pmb-reset.ya=
-ml
-> new file mode 100644
-> index 000000000000..d2a85266e36a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/reset/brcm,bcm6846-pmb-reset.yaml
-> @@ -0,0 +1,31 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/reset/brcm,bcm6846-pmb-reset.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Broadcom BCM6846 Processor Monitor Bus reset controller
-> +
-> +maintainers:
-> +  - Linus Walleij <linusw@kernel.org>
-> +
-> +description:
-> +  The reset controller is a child of the Processor Monitor Bus (PMB)
-> +  controller and uses its indirect register interface.
-> +
-> +  Each reset specifier identifies a logical reset group, which may span
-> +  several blocks that must be reset together.
-> +
-> +properties:
-> +  compatible:
-> +    const: brcm,bcm6846-pmb-reset
-> +
-> +  '#reset-cells':
-> +    const: 1
-> +    description: Reset group ID from dt-bindings/reset/brcm,bcm6846-pmb.=
-h
-> +
-> +required:
-> +  - compatible
-> +  - '#reset-cells'
-> +
-> +additionalProperties: false
-> diff --git a/Documentation/devicetree/bindings/soc/bcm/brcm,bcm6846-pmb.y=
-aml b/Documentation/devicetree/bindings/soc/bcm/brcm,bcm6846-pmb.yaml
-> new file mode 100644
-> index 000000000000..134a8a676dbd
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/bcm/brcm,bcm6846-pmb.yaml
-> @@ -0,0 +1,90 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/bcm/brcm,bcm6846-pmb.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Broadcom BCM6846 Processor Monitor Bus
-> +
-> +maintainers:
-> +  - Linus Walleij <linusw@kernel.org>
-> +
-> +description:
-> +  The Processor Monitor Bus (PMB) connects the third generation Power
-> +  Management Controller (PMC3) to the control registers of miscellaneous
-> +  independent hardware blocks.
-> +
-> +  The controller provides configuration, arbitration and four keyhole
-> +  interfaces for indirect register access.
-> +
-> +  Child nodes describe independent hardware blocks accessed over the PMB=
-.
-> +  These provide global resources and even resources for each other.
-> +
-> +properties:
-> +  compatible:
-> +    const: brcm,bcm6846-pmb
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: PMB configuration, keyhole and address mapping register=
-s
-> +
-> +  power-controller:
-> +    type: object
-> +    $ref: /schemas/power/brcm,bcm6846-pmb-power.yaml#
-> +
-> +  clock-controller:
-> +    type: object
-> +    $ref: /schemas/clock/brcm,bcm6846-pmb-clock.yaml#
-> +
-> +  reset-controller:
-> +    type: object
-> +    $ref: /schemas/reset/brcm,bcm6846-pmb-reset.yaml#
-> +
-> +  hwmon:
-> +    type: object
-> +    $ref: /schemas/hwmon/brcm,bcm6846-pmb-pvtmon.yaml#
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - power-controller
-> +  - clock-controller
-> +  - reset-controller
-> +  - hwmon
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/brcm,bcm6846-pmb.h>
-> +    #include <dt-bindings/reset/brcm,bcm6846-pmb.h>
-> +
-> +    /* Processor Monitor Bus */
-> +    bus@ffb20100 {
-> +        compatible =3D "brcm,bcm6846-pmb";
-> +        reg =3D <0xffb20100 0x200>;
-> +
-> +        pmb_power: power-controller {
-> +            compatible =3D "brcm,bcm6846-pmb-power";
-> +            #power-domain-cells =3D <1>;
-> +        };
-> +
-> +        pmb_clk: clock-controller {
-> +            compatible =3D "brcm,bcm6846-pmb-clock";
-> +            clocks =3D <&osc50m>;
-> +            clock-names =3D "ref";
-> +            #clock-cells =3D <1>;
-> +        };
-> +
-> +        pmb_reset: reset-controller {
-> +            compatible =3D "brcm,bcm6846-pmb-reset";
-> +            #reset-cells =3D <1>;
-> +        };
-> +
-> +        hwmon {
-> +            compatible =3D "brcm,bcm6846-pmb-pvtmon";
-> +            clocks =3D <&pmb_clk BCM6846_CLK_PVTMON>;
-> +            resets =3D <&pmb_reset BCM6846_RESET_PVTMON>;
-> +            #thermal-sensor-cells =3D <0>;
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f14f9910911c..e11fc5064dc5 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -5447,7 +5447,15 @@ N:       bcm[9]?6878
->  BROADCOM BCMBCA PMC3 PMB DRIVER
->  M:     Linus Walleij <linusw@kernel.org>
->  S:     Maintained
-> +F:     Documentation/devicetree/bindings/clock/brcm,bcm6846-pmb-clock.ya=
-ml
-> +F:     Documentation/devicetree/bindings/hwmon/brcm,bcm6846-pmb-pvtmon.y=
-aml
->  F:     Documentation/devicetree/bindings/mfd/brcm,bcm6846-pmc.yaml
-> +F:     Documentation/devicetree/bindings/power/brcm,bcm6846-pmb-power.ya=
-ml
-> +F:     Documentation/devicetree/bindings/reset/brcm,bcm6846-pmb-reset.ya=
-ml
-> +F:     Documentation/devicetree/bindings/soc/bcm/brcm,bcm6846-pmb.yaml
-> +F:     include/dt-bindings/clock/brcm,bcm6846-pmb.h
-> +F:     include/dt-bindings/power/brcm,bcm6846-pmb.h
-> +F:     include/dt-bindings/reset/brcm,bcm6846-pmb.h
->
->  BROADCOM BDC DRIVER
->  M:     Justin Chen <justin.chen@broadcom.com>
-> diff --git a/include/dt-bindings/clock/brcm,bcm6846-pmb.h b/include/dt-bi=
-ndings/clock/brcm,bcm6846-pmb.h
-> new file mode 100644
-> index 000000000000..548a18ed7959
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/brcm,bcm6846-pmb.h
-> @@ -0,0 +1,42 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +#ifndef _DT_BINDINGS_CLOCK_BRCM_BCM6846_PMB_H
-> +#define _DT_BINDINGS_CLOCK_BRCM_BCM6846_PMB_H
-> +
-> +#define BCM6846_CLK_RDPPLL_CH0 0
-> +#define BCM6846_CLK_RDPPLL_CH1 1
-> +#define BCM6846_CLK_RDPPLL_CH2 2
-> +#define BCM6846_CLK_RDPPLL_CH3 3
-> +#define BCM6846_CLK_RDPPLL_CH4 4
-> +#define BCM6846_CLK_RDPPLL_CH5 5
-> +#define BCM6846_CLK_BIUPLL_CH0 6
-> +#define BCM6846_CLK_BIUPLL_CH1 7
-> +#define BCM6846_CLK_BIUPLL_CH2 8
-> +#define BCM6846_CLK_BIUPLL_CH3 9
-> +#define BCM6846_CLK_BIUPLL_CH4 10
-> +#define BCM6846_CLK_BIUPLL_CH5 11
-> +#define BCM6846_CLK_RUNNER     12
-> +#define BCM6846_CLK_XTAL_OUT   13
-> +#define BCM6846_CLK_PVTMON     14
-> +#define BCM6846_CLK_PERIPH_ZONE0       15
-> +#define BCM6846_CLK_PERIPH_ZONE1       16
-> +#define BCM6846_CLK_PERIPH_ZONE2       17
-> +#define BCM6846_CLK_PERIPH_ZONE3       18
-> +#define BCM6846_CLK_MEMC               19
-> +#define BCM6846_CLK_USB_ZONE0  20
-> +#define BCM6846_CLK_USB_ZONE1  21
-> +#define BCM6846_CLK_USB_ZONE2  22
-> +#define BCM6846_CLK_USB_ZONE3  23
-> +#define BCM6846_CLK_WAN_ZONE0  24
-> +#define BCM6846_CLK_WAN_ZONE1  25
-> +#define BCM6846_CLK_WAN_ZONE2  26
-> +#define BCM6846_CLK_XRDP_ZONE0 27
-> +#define BCM6846_CLK_XRDP_ZONE1 28
-> +#define BCM6846_CLK_XRDP_ZONE2 29
-> +#define BCM6846_CLK_RUNNER0    30
-> +#define BCM6846_CLK_RUNNER1    31
-> +#define BCM6846_CLK_RUNNER2    32
-> +#define BCM6846_CLK_PCIE0              33
-> +#define BCM6846_CLK_PCIE1              34
-> +#define BCM6846_CLK_BIU                35
-> +
-> +#endif
-> diff --git a/include/dt-bindings/power/brcm,bcm6846-pmb.h b/include/dt-bi=
-ndings/power/brcm,bcm6846-pmb.h
-> new file mode 100644
-> index 000000000000..abdd01c94bc5
-> --- /dev/null
-> +++ b/include/dt-bindings/power/brcm,bcm6846-pmb.h
-> @@ -0,0 +1,12 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +#ifndef _DT_BINDINGS_POWER_BCM6846_PMB_H
-> +#define _DT_BINDINGS_POWER_BCM6846_PMB_H
-> +
-> +#define BCM6846_PD_PERIPH      0
-> +#define BCM6846_PD_MEMC                1
-> +#define BCM6846_PD_USB20               2
-> +#define BCM6846_PD_XRDP                3
-> +#define BCM6846_PD_PCIE0               4
-> +#define BCM6846_PD_PCIE1               5
-> +
-> +#endif
-> diff --git a/include/dt-bindings/reset/brcm,bcm6846-pmb.h b/include/dt-bi=
-ndings/reset/brcm,bcm6846-pmb.h
-> new file mode 100644
-> index 000000000000..ce68adb10108
-> --- /dev/null
-> +++ b/include/dt-bindings/reset/brcm,bcm6846-pmb.h
-> @@ -0,0 +1,11 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +#ifndef _DT_BINDINGS_RESET_BRCM_BCM6846_PMB_H
-> +#define _DT_BINDINGS_RESET_BRCM_BCM6846_PMB_H
-> +
-> +/* XRDP packet engine and its three Runner cores. */
-> +#define BCM6846_RESET_XRDP     0
-> +
-> +/* Process, voltage and temperature monitor analog acquisition reset. */
-> +#define BCM6846_RESET_PVTMON   1
-> +
-> +#endif
->
-> --
-> 2.56.0
->
+The rails and their position in the report depend on the motherboard,
+which is identified by the MSI board code at the start of the USB serial
+number. For now only the MAG B850M MORTAR WIFI (MS-7E61) is supported.
+On other boards the driver still binds to the device, so that hidraw
+remains available (hid-generic does not take a device that is listed in
+another driver's id_table), but it does not register a hwmon device.
 
---000000000000d3de27065f9e9625
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+The report layout was determined by analysing the vendor's Windows
+software and confirmed on hardware.
 
-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
-PRi27wH/XHTDMdyL0Org+kxniXue6MSNJvcQwaLO/UQrmgTygBlVGa+Qg9ZFfS00xvuqeYH7tImO
-48WiXeu9rgn5KTH0IWP1+R74KIgxJQ+65la+caZvxwC9V3ik5p/LOGA2qS4GEjGuaYF8QKhRTR4h
-/QBSktqZLbzVxpjJXrqFTA2BLlYRp9hPhqNxbn46WuLufpMWhFtjUoQi/8fRRWRsMAY0o1J0f+kB
-6EI8FoxPTOpvuLRonqHIWMHk5YRnDdqJ3G5Oc8zmV+UCAwEAAaOCAd4wggHaMA4GA1UdDwEB/wQE
-AwIFoDAMBgNVHRMBAf8EAjAAMIGTBggrBgEFBQcBAQSBhjCBgzBGBggrBgEFBQcwAoY6aHR0cDov
-L3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyNnNtaW1lY2EyMDIzLmNydDA5Bggr
-BgEFBQcwAYYtaHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyNnNtaW1lY2EyMDIzMGUG
-A1UdIAReMFwwCQYHZ4EMAQUDAzALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgoDAjA0MDIGCCsGAQUF
-BwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzBBBgNVHR8EOjA4MDag
-NKAyhjBodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjZzbWltZWNhMjAyMy5jcmwwJQYD
-VR0RBB4wHIEad2lsbGlhbS56aGFuZ0Bicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQw
-HwYDVR0jBBgwFoAUACk2nlx6ug+vLVAt26AjhRiwoJIwHQYDVR0OBBYEFHjI7pbQZurVKsSRE/a9
-7gUEyVCkMA0GCSqGSIb3DQEBCwUAA4ICAQCFA4fU1GnG8sY7kyUXp5tle+VeWveoWb272jPauU5R
-w+udkhVXmnR0Kg7RgkCD00PLTKHNRyegXXDMArs3N9NhO3s9eSp9KjDh+h3WuQWCJH3QBHLGW0qE
-fyV87wUtBIy/QsHwO4S8OlOZiXECR7V1EGIF6t3s0W+3UzgYeHL+Ttuhda+2wIVY0EbS0eNH9Vob
-4YG17VTBBe7hyobXFpd9d1JGENFzIWncPUshOE0Wv7KlkrRc6aBOpL4p5xO1pHi9h9w8utyHkMoV
-nefXixkn5YVHnuV/jbSF/IM4Mlqt0E+n/TRp2c0eR+1AauZKENV2syNBo4aMa0BkmikBjLSnDjt/
-TYQdwHNWdV495n71idvueWwTFUhUsnudYcnh42eZENopBOYjVu2WhsffyrNz0hsuR85LriqSuBbf
-drd9DMo3DgtfJ7hh4sEAhSw/x/Br86rfLBftZMU02htlnkOI9Tp1QuDsr9+MsqY6AjKeXAy67m7H
-TVAZ9uyO9N20yU0p7igESOWKR1ccL1TPA1jrSHK18Y75ot5199FNWeE/UKoDKSML39iPZho9XPh/
-/RlsfRFiVOPrI5Gwi4YfIfi0jjEWf310/CYEmA5jrp5gUQSdo/+FgfXLKDFiEHCf5b3B1l70r6bR
-WkDCNNacYJWZtSp87i6jmw+l5xx7OkEJ9DGCAlcwggJTAgEBMGIwUjELMAkGA1UEBhMCQkUxGTAX
-BgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKDAmBgNVBAMTH0dsb2JhbFNpZ24gR0NDIFI2IFNNSU1F
-IENBIDIwMjMCDD2ooFIye/WiO3KgZTANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQg
-BRebSBOrs+WPDt3JIYNTjfaIHomXCpQ20eXn61sLoTswGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEH
-ATAcBgkqhkiG9w0BCQUxDxcNMjYxMTA2MTcwMzIwWjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFl
-AwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEApILCgNdJjmAE2kwULCh0+qwjcAo2UJaMSYGq
-xW3+2wpr/IrRIZcGndoGizLWbB4ioDTMZ0Eodd9PY9aAjSiY88DBg3NCXsjKs1qeYxNMMtpIOJ1R
-CYl5oQgcRVTrTZGhtoyOsObAdqRaFeZFZPHoLOOo35+sggHq63eIiug1Bg/UIzYmkDFJFNkc3fsu
-L2/ZBXPy02LeLMlRlVgKX4nPK9Y3+iojE+ON6jd19sIi2jVeFVCIXuZbAE7o0k2RSqBivHjZNpFT
-nhkwNNBxFy6e5Wdt01oRW8GU8otnckJTheBA76BPIwFmewF+M3pjkkVpybTozbHHfXxQnW0OtHz5
-zg==
---000000000000d3de27065f9e9625--
+Tested on an MSI MAG B850M MORTAR WIFI (MS-7E61, BIOS 1.A68), with the
+driver built out of tree against kernel 7.2.15. The readings (CPU 1P8
+1.79 V, CHIP Core 1.04 V, VDD MISC 1.10 V) are stable and plausible for
+the respective rails, repeated reads within one second are served from
+the cache, and hidraw access works while the driver is bound. Binding and
+unbinding the driver repeatedly hands the device back to hid-generic
+without errors.
+
+Signed-off-by: Tomasz Bojanowski <tomasz@bojanowski.me>
+---
+ Documentation/hwmon/index.rst            |   1 +
+ Documentation/hwmon/msi_mystic_light.rst |  58 +++++
+ MAINTAINERS                              |   7 +
+ drivers/hwmon/Kconfig                    |  11 +
+ drivers/hwmon/Makefile                   |   1 +
+ drivers/hwmon/msi_mystic_light.c         | 291 +++++++++++++++++++++++
+ 6 files changed, 369 insertions(+)
+ create mode 100644 Documentation/hwmon/msi_mystic_light.rst
+ create mode 100644 drivers/hwmon/msi_mystic_light.c
+
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index a8ea421128b5..7ce1a6f42ddc 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -213,6 +213,7 @@ Hardware Monitoring Kernel Drivers
+    mpq82d00
+    mpq8646
+    mpq8785
++   msi_mystic_light
+    nct6683
+    nct6775
+    nct7363
+diff --git a/Documentation/hwmon/msi_mystic_light.rst b/Documentation/hwmon/msi_mystic_light.rst
+new file mode 100644
+index 000000000000..d58186b83ce8
+--- /dev/null
++++ b/Documentation/hwmon/msi_mystic_light.rst
+@@ -0,0 +1,58 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
++
++Kernel driver msi_mystic_light
++==============================
++
++Supported devices:
++
++* MSI Mystic Light USB controller (USB ID 0db0:0076), found on MSI
++  800-series motherboards
++
++  Voltage sensors are supported on:
++
++  - MSI MAG B850M MORTAR WIFI (MS-7E61)
++
++Author: Tomasz Bojanowski <tomasz@bojanowski.me>
++
++Description
++-----------
++
++On MSI 800-series motherboards the RGB LED headers ("Mystic Light") are
++driven by a microcontroller attached over USB. The controller also measures
++a few voltage rails that are not monitored by the Super I/O chip (see
++nct6683). This driver reports these voltages.
++
++Which rails are present, and where they are found in the sensor report,
++depends on the motherboard. The board is identified by the MSI board code
++at the start of the USB serial number (for example ``7E61``). On boards
++without a known layout the driver binds to the device, but does not
++register a hwmon device.
++
++The driver only reads HID feature report 0xf0. It never writes to the
++controller. The hidraw interface remains available, so user space tools
++that control the LEDs keep working.
++
++Usage Notes
++-----------
++
++The sensor values are cached for one second. A rail that reads 0 is
++reported as unavailable (-ENODATA).
++
++Sysfs entries
++-------------
++
++=============== =========================================================
++in[0-2]_input   Voltage in millivolts
++in[0-2]_label   Rail name
++=============== =========================================================
++
++MSI MAG B850M MORTAR WIFI (MS-7E61)
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++======= ========= ==========================
++Channel Label     Typical value
++======= ========= ==========================
++in0     CPU 1P8   1.79 V
++in1     CHIP Core 1.04 V
++in2     VDD MISC  1.10 V
++======= ========= ==========================
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 873a8beb15b6..8f02d3f3c3f1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19093,6 +19093,13 @@ L:	platform-driver-x86@vger.kernel.org
+ S:	Maintained
+ F:	drivers/platform/x86/msi-laptop.c
+ 
++MSI MYSTIC LIGHT HARDWARE MONITORING DRIVER
++M:	Tomasz Bojanowski <tomasz@bojanowski.me>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/hwmon/msi_mystic_light.rst
++F:	drivers/hwmon/msi_mystic_light.c
++
+ MSI WMI SUPPORT
+ L:	platform-driver-x86@vger.kernel.org
+ S:	Orphan
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 3ae676a56d95..313f095e82ca 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1570,6 +1570,17 @@ config SENSORS_MR75203
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called mr75203.
+ 
++config SENSORS_MSI_MYSTIC_LIGHT
++	tristate "MSI Mystic Light USB controller voltage sensors"
++	depends on USB_HID
++	help
++	  If you say yes here you get support for the voltage sensors of the
++	  MSI Mystic Light USB controller (0db0:0076) found on MSI 800-series
++	  motherboards.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called msi_mystic_light.
++
+ config SENSORS_ADCXX
+ 	tristate "National Semiconductor ADCxxxSxxx"
+ 	depends on SPI_MASTER
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index be3eb0992a0d..ec4b0de8cf47 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -187,6 +187,7 @@ obj-$(CONFIG_SENSORS_MLXREG_FAN) += mlxreg-fan.o
+ obj-$(CONFIG_SENSORS_MENF21BMC_HWMON) += menf21bmc_hwmon.o
+ obj-$(CONFIG_SENSORS_MINISFORUM_UM780XTX) += minisforum-um780xtx.o
+ obj-$(CONFIG_SENSORS_MR75203)	+= mr75203.o
++obj-$(CONFIG_SENSORS_MSI_MYSTIC_LIGHT) += msi_mystic_light.o
+ obj-$(CONFIG_SENSORS_NCT6683)	+= nct6683.o
+ obj-$(CONFIG_SENSORS_NCT6694)	+= nct6694-hwmon.o
+ obj-$(CONFIG_SENSORS_NCT6775_CORE) += nct6775-core.o
+diff --git a/drivers/hwmon/msi_mystic_light.c b/drivers/hwmon/msi_mystic_light.c
+new file mode 100644
+index 000000000000..39dde9d9e82d
+--- /dev/null
++++ b/drivers/hwmon/msi_mystic_light.c
+@@ -0,0 +1,291 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * hwmon driver for the voltage sensors of the MSI Mystic Light USB
++ * controller (0db0:0076) found on MSI 800-series motherboards
++ *
++ * The microcontroller that drives the RGB LED headers of these boards also
++ * measures a few voltage rails that are not monitored by the Super I/O chip.
++ * They are returned in HID feature report 0xf0. This driver only reads that
++ * report and never sends anything else to the device. The hidraw interface
++ * is kept, so user space LED control keeps working.
++ *
++ * The rails and their position in the report depend on the motherboard.
++ * The board is identified by the MSI board code in the first four
++ * characters of the USB serial number, for example "7E61" for the
++ * MAG B850M MORTAR WIFI (MS-7E61). On boards without a known layout the
++ * driver binds to the device, but does not register a hwmon device.
++ *
++ * Copyright (C) 2026 Tomasz Bojanowski <tomasz@bojanowski.me>
++ */
++
++#include <linux/hid.h>
++#include <linux/hwmon.h>
++#include <linux/jiffies.h>
++#include <linux/module.h>
++#include <linux/slab.h>
++#include <linux/string.h>
++#include <linux/unaligned.h>
++
++#define USB_VENDOR_ID_MSI_MB		0x0db0
++#define USB_PRODUCT_ID_MYSTIC_LIGHT	0x0076
++
++#define MSI_ML_SENSOR_REPORT_ID		0xf0
++#define MSI_ML_SENSOR_REPORT_SIZE	64
++
++/* Every sensor report starts with this header (after the report ID) */
++#define MSI_ML_SENSOR_CMD_OFFSET	1
++#define MSI_ML_SENSOR_CMD		0xa0
++#define MSI_ML_SENSOR_PAGE_OFFSET	9
++#define MSI_ML_SENSOR_PAGE_HI		0x01
++#define MSI_ML_SENSOR_PAGE_LO		0xfc
++
++#define MSI_ML_BOARD_CODE_LEN		4
++#define MSI_ML_MAX_IN			3
++#define MSI_ML_CACHE_TIME		HZ
++
++struct msi_ml_board {
++	const char *code;		/* MSI board code, start of USB serial */
++	int num_in;
++	const char *const *in_label;
++	const u8 *in_offset;		/* little endian u16 in mV */
++};
++
++/* MAG B850M MORTAR WIFI (MS-7E61) */
++static const char *const msi_ml_7e61_in_label[] = {
++	"CPU 1P8", "CHIP Core", "VDD MISC",
++};
++
++static const u8 msi_ml_7e61_in_offset[] = { 23, 17, 25 };
++
++static const struct msi_ml_board msi_ml_boards[] = {
++	{
++		.code = "7E61",
++		.num_in = ARRAY_SIZE(msi_ml_7e61_in_label),
++		.in_label = msi_ml_7e61_in_label,
++		.in_offset = msi_ml_7e61_in_offset,
++	},
++};
++
++struct msi_ml_data {
++	struct hid_device *hdev;
++	struct device *hwmon_dev;
++	const struct msi_ml_board *board;
++	u8 *buf;			/* report buffer, must be DMA safe */
++	u16 in[MSI_ML_MAX_IN];		/* mV, 0 = no reading */
++	unsigned long updated;		/* jiffies */
++	bool valid;
++};
++
++static const struct msi_ml_board *msi_ml_find_board(struct hid_device *hdev)
++{
++	int i;
++
++	if (strnlen(hdev->uniq, sizeof(hdev->uniq)) < MSI_ML_BOARD_CODE_LEN)
++		return NULL;
++
++	for (i = 0; i < ARRAY_SIZE(msi_ml_boards); i++) {
++		if (!strncasecmp(hdev->uniq, msi_ml_boards[i].code,
++				 MSI_ML_BOARD_CODE_LEN))
++			return &msi_ml_boards[i];
++	}
++
++	return NULL;
++}
++
++/*
++ * Read the sensor report, at most once per MSI_ML_CACHE_TIME. Only called
++ * from the hwmon read callback, which the hwmon core serializes, so no
++ * additional locking is needed for the buffer and the cached values.
++ */
++static int msi_ml_update(struct msi_ml_data *priv)
++{
++	const struct msi_ml_board *board = priv->board;
++	u8 *buf = priv->buf;
++	int i, ret;
++
++	if (priv->valid && time_before(jiffies, priv->updated + MSI_ML_CACHE_TIME))
++		return 0;
++
++	memset(buf, 0, MSI_ML_SENSOR_REPORT_SIZE);
++	buf[0] = MSI_ML_SENSOR_REPORT_ID;
++
++	ret = hid_hw_raw_request(priv->hdev, MSI_ML_SENSOR_REPORT_ID, buf,
++				 MSI_ML_SENSOR_REPORT_SIZE, HID_FEATURE_REPORT,
++				 HID_REQ_GET_REPORT);
++	if (ret < 0)
++		return ret;
++	if (ret != MSI_ML_SENSOR_REPORT_SIZE)
++		return -EPROTO;
++
++	if (buf[0] != MSI_ML_SENSOR_REPORT_ID ||
++	    buf[MSI_ML_SENSOR_CMD_OFFSET] != MSI_ML_SENSOR_CMD ||
++	    buf[MSI_ML_SENSOR_PAGE_OFFSET] != MSI_ML_SENSOR_PAGE_HI ||
++	    buf[MSI_ML_SENSOR_PAGE_OFFSET + 1] != MSI_ML_SENSOR_PAGE_LO)
++		return -EPROTO;
++
++	for (i = 0; i < board->num_in; i++)
++		priv->in[i] = get_unaligned_le16(buf + board->in_offset[i]);
++
++	priv->updated = jiffies;
++	priv->valid = true;
++
++	return 0;
++}
++
++static umode_t msi_ml_is_visible(const void *data,
++				 enum hwmon_sensor_types type, u32 attr,
++				 int channel)
++{
++	const struct msi_ml_data *priv = data;
++
++	if (type == hwmon_in && channel < priv->board->num_in)
++		return 0444;
++
++	return 0;
++}
++
++static int msi_ml_read(struct device *dev, enum hwmon_sensor_types type,
++		       u32 attr, int channel, long *val)
++{
++	struct msi_ml_data *priv = dev_get_drvdata(dev);
++	int ret;
++
++	ret = msi_ml_update(priv);
++	if (ret)
++		return ret;
++
++	/* A rail that reads 0 has no valid measurement */
++	if (!priv->in[channel])
++		return -ENODATA;
++
++	*val = priv->in[channel];
++
++	return 0;
++}
++
++static int msi_ml_read_string(struct device *dev, enum hwmon_sensor_types type,
++			      u32 attr, int channel, const char **str)
++{
++	struct msi_ml_data *priv = dev_get_drvdata(dev);
++
++	*str = priv->board->in_label[channel];
++
++	return 0;
++}
++
++static const struct hwmon_ops msi_ml_hwmon_ops = {
++	.is_visible = msi_ml_is_visible,
++	.read = msi_ml_read,
++	.read_string = msi_ml_read_string,
++};
++
++static const struct hwmon_channel_info *const msi_ml_info[] = {
++	HWMON_CHANNEL_INFO(in,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL),
++	NULL
++};
++
++static const struct hwmon_chip_info msi_ml_chip_info = {
++	.ops = &msi_ml_hwmon_ops,
++	.info = msi_ml_info,
++};
++
++static int msi_ml_probe(struct hid_device *hdev, const struct hid_device_id *id)
++{
++	struct msi_ml_data *priv;
++	int ret;
++
++	priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->buf = devm_kzalloc(&hdev->dev, MSI_ML_SENSOR_REPORT_SIZE, GFP_KERNEL);
++	if (!priv->buf)
++		return -ENOMEM;
++
++	priv->hdev = hdev;
++	priv->board = msi_ml_find_board(hdev);
++	hid_set_drvdata(hdev, priv);
++
++	ret = hid_parse(hdev);
++	if (ret)
++		return ret;
++
++	/* Keep the hidraw interface for user space LED control */
++	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
++	if (ret)
++		return ret;
++
++	if (!priv->board) {
++		hid_info(hdev, "no sensor layout for board code \"%.4s\"\n",
++			 hdev->uniq);
++		return 0;
++	}
++
++	ret = hid_hw_open(hdev);
++	if (ret)
++		goto fail_stop;
++
++	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev,
++							  "msi_mystic_light",
++							  priv,
++							  &msi_ml_chip_info,
++							  NULL);
++	if (IS_ERR(priv->hwmon_dev)) {
++		ret = PTR_ERR(priv->hwmon_dev);
++		goto fail_close;
++	}
++
++	return 0;
++
++fail_close:
++	hid_hw_close(hdev);
++fail_stop:
++	hid_hw_stop(hdev);
++	return ret;
++}
++
++static void msi_ml_remove(struct hid_device *hdev)
++{
++	struct msi_ml_data *priv = hid_get_drvdata(hdev);
++
++	if (priv->board) {
++		hwmon_device_unregister(priv->hwmon_dev);
++		hid_hw_close(hdev);
++	}
++
++	hid_hw_stop(hdev);
++}
++
++static const struct hid_device_id msi_ml_table[] = {
++	{ HID_USB_DEVICE(USB_VENDOR_ID_MSI_MB, USB_PRODUCT_ID_MYSTIC_LIGHT) },
++	{ }
++};
++MODULE_DEVICE_TABLE(hid, msi_ml_table);
++
++static struct hid_driver msi_ml_driver = {
++	.name = "msi_mystic_light",
++	.id_table = msi_ml_table,
++	.probe = msi_ml_probe,
++	.remove = msi_ml_remove,
++};
++
++static int __init msi_ml_init(void)
++{
++	return hid_register_driver(&msi_ml_driver);
++}
++
++static void __exit msi_ml_exit(void)
++{
++	hid_unregister_driver(&msi_ml_driver);
++}
++
++/* When built into the kernel, register after the HID bus is initialized */
++late_initcall(msi_ml_init);
++module_exit(msi_ml_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Tomasz Bojanowski <tomasz@bojanowski.me>");
++MODULE_DESCRIPTION("Hwmon driver for MSI Mystic Light USB controller voltage sensors");
+
+base-commit: 9926f611495c8f046caf5f8f46dbd4d401337550
+-- 
+2.56.0
+
