@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.39
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793980560;
-	b=IHL5r2xTbi5D7O3oU90vgUkt84ROYaysBAMk7T6LRXIO0wrABq+v7oXZFuaLv8T7PTn7
-	 Yc8YttP0phmKS86J0vQmQ5wF/mf2NakDIcB28khJ25GzHuzL2JxtmRBvKZWHbLo8hmxlk
-	 MT9yvaAxgca+gKzt6AanesSm/McZj9KbZaTt87zkwv4w3HWskHr9HMEbGBuXAr3ezH9K+
-	 76AYlZyn8cG7HD4uXTIi3bKvVMGZjKmpD32s0g7k27GEg+QXy21HjsgVyY5OaWDVijwUv
-	 aevdhGMjMxG9gPrxmlbE/CIiFapnUK9NfcX3lFmJ1NsOPsA661R/aybnd0hy6ojvUyA==
+	t=1793981367;
+	b=rDAB1bTYPsoEzPB/MfKUZ88OwHlxbLGNuAgGHaRjNOt2jMMZxVpXwRGDwmbC1MSpUIV3
+	 NXD122xG5qJmpWhG5Ke1eR+SmeoQHJUjPiiMENZgpHuljtq8qftxc463QFI15TjSHmuWu
+	 XAd1JsTj5b4JnsW03llfiL6OpfPCHFsbaNa9MUgch1/SOLM8UM5u3ekEXZQK6q1vUziAu
+	 TORncQGbiEpMYxz9c3xxoQPDBZFbf/QeVnM+FZrcYHUGMSnLOmeQIvbXJp2G29975phSL
+	 O3FpEJvmygvmnBqK0mMnueC4TxE8pR6/wrGrCJrMlV7Mlje10UGY0DzTAtGPEcSaYcQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793980560;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793981367;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
 	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
@@ -15,57 +15,57 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
 	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=1/ltzpSaW2mwptDqIcYpWL76IXk6qZn6m4iuuayJHtQ=;
-	b=YdsO6ZsKkD+4G6mUoUgljFxGtWkx451r5+Wpk2rtCvUNdxXBot1l/S80whbtoe7u77rh
-	 087T0AQt+qawlhfsx+ZqyLXLItq4fePONg/VeXPS86vImW04g4v3T0WjqTE/rHCJN9WFo
-	 b5HHQqF/o2nU2U3RAA4cnff1ek42VwcCbirf4zGfu216rliLsy7h4nfpTLkWng0SC4hr0
-	 o+PuTHdQaJUN16UJ2CC+ZPWWaF6pfd0iXjpDcbROPLrHfhaAKf8X7VY91tGCMlvEjhIhl
-	 pP4re0YjFRt0khA2TRqlHK1NRnT3JG5H+F1mR2GjzAMk/nLVzYRi0BjAmx04XZJ8mVg==
+	bh=z9TrKZBy3IADbNyGVPxsgwxIWichVJrvDYo3o5q0/sU=;
+	b=i4hyh2wX0zGzj9Xjbb48VzhBEp9wEfzLF+iFkWFceV/5mrLXs2eAMdNxFwLI5MqxLXyQ
+	 xgKyEQPPbTr9SWoSbAn0JS+lnAf7yOxqF/Bh8bwq9Y4MbNV87kEcvvvxORDqXUkIvkqpU
+	 t3kiuvssTv87kr5EmTjfCYMqVsOC48u+8i7dav3lKj3jX4IDvdHTCt9yxipugtnobmf5S
+	 sFuWiw+jWrMRc8pf1JLwg2beapjiikPZk8AIRtMlscDG0icVTdaBNvxfCOv7v8V9HE2Up
+	 VJK+D63MbVfCCCpHS6GcVC/4C2oe1p82Hkk82LrUML//FAD7qnb5NJFyZ/E/kvYofsw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=MDilh82r;
-	arc=none smtp.remote-ip=44.202.169.37
-Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=hJqN28xW;
+	arc=none smtp.remote-ip=35.89.44.39
+Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10239606A330
-	for <linux-hwmon@vger.kernel.org>; Fri,  6 Nov 2026 15:55:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 10239606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1717606BFB5
+	for <linux-hwmon@vger.kernel.org>; Fri,  6 Nov 2026 16:09:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D1717606BFB5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=MDilh82r
-Received: from eig-obgw-6001b.ext.cloudfilter.net ([10.0.30.143])
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=hJqN28xW
+Received: from eig-obgw-5002b.ext.cloudfilter.net ([10.0.29.226])
 	by cmsmtp with ESMTPS
-	id P5y8xJNKRJFmFPMIIxlKCs; Fri, 06 Nov 2026 15:55:59 +0000
+	id PIc0x1ASfyb4YPMVKxTBO5; Fri, 06 Nov 2026 16:09:26 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id PMIIxK3XgmASCPMIIxwlAF; Fri, 06 Nov 2026 15:55:58 +0000
-X-Authority-Analysis: v=2.4 cv=XJkwSRhE c=1 sm=1 tr=0 ts=6aedf88e
+	id PMVJxPymsgk6fPMVJxecbe; Fri, 06 Nov 2026 16:09:25 +0000
+X-Authority-Analysis: v=2.4 cv=KM9aDEFo c=1 sm=1 tr=0 ts=6aedfbb6
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
  a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10
- a=Yx1vOqRYCXWc8j4kn48A:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
+ a=ylj4B6tQnjUDn4mwXYIA:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=1/ltzpSaW2mwptDqIcYpWL76IXk6qZn6m4iuuayJHtQ=; b=MDilh82rsGLG
-	tLAUY6y2yCXtyaE4RFIo+Of959sxJVe5D2j3wMDxvk3rbEKj7SEc9VfWKdd9zgLQx3xT4/yg7/Stc
-	b8cLKQ9BCSiIeB9ARVqTQFOqKRaIyY/7CYZMRWWn9o1/xrDOwGmFcF1q+z5oRMx1U5oAyQQjnsfYn
-	5E57JqHg0/G1EmdeU2SjgOKW4d1IPUrNBSpPYs9XcgwquxTlioGJaLl7qs/oC3P+SyW3utfiHnllo
-	5j+nz74zzJr07Kowpo/7oyazaxu32zTCRV88d7ddLUmphVyLHO3vFtIbgJaBSSZ4s9QqCT5kgJD63
-	1TVQyKxDWgVNTWEPxGVMOA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:48988)
+	List-Archive; bh=z9TrKZBy3IADbNyGVPxsgwxIWichVJrvDYo3o5q0/sU=; b=hJqN28xW0Wjd
+	ZToz8KO/9qzpdVen0qHpijnxS0SYt1j7cAmDH1DSglsSmqptSwxEPhm5HimgDf7UnHSOqc9jBLDCw
+	R6nD7bjCiskWohWsiqqrj4pnX6NeLrsHlVqTPE6be+hjxJmxS4PkQtuCkczKRBXpHKe4UCGf5oAcl
+	0AtMv2wopcz280WAm4+Yu3BTHn9vCFFc0NOAkTTqqGdHHEUU28yLDYs9JVlknyliR1Ey+oDDCPV+A
+	46mAc3LcmFFNkwUG7ksyhEzEP+EdTgVwfZObrG+mZwSHdPxJoYcTuQpizCHVtANJRcMdquDF284LZ
+	cjbITtHAO8JuQBF0rHNjGw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:45084)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xPMIH-00000000HmF-3nOM;
-	Fri, 06 Nov 2026 21:25:57 +0530
-Message-ID: <0f3669ae-a42a-4021-aa3d-c04f5931f242@roeck-us.net>
-Date: Fri, 6 Nov 2026 07:55:56 -0800
+	id 1xPMVJ-00000000ObN-1SEa;
+	Fri, 06 Nov 2026 21:39:25 +0530
+Message-ID: <cd150425-262a-4a74-9f78-5ff581e27846@roeck-us.net>
+Date: Fri, 6 Nov 2026 08:09:24 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -76,12 +76,10 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (nct6775) Add support for NCT5525
-To: Anton Lundin <glance@ac2.se>
-Cc: linux-hwmon@vger.kernel.org, Zev Weiss <zev@bewilderbeest.net>
-References: <20261103132948.144216-1-glance@ac2.se>
- <9e1f1a68-ef65-4e38-9396-48836ff50979@roeck-us.net>
- <au3L9FJUVRDuIsVN@accum.se>
+Subject: Re: hwmon: (nct6683) in_from_reg() never applies the 32 mV scale
+To: Tomasz Bojanowski <tomasz@bojanowski.me>
+Cc: linux-hwmon@vger.kernel.org, Hamza Mahfooz <someguy@effective-light.com>
+References: <20261106144247.30507-1-tomasz@bojanowski.me>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -127,7 +125,7 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <au3L9FJUVRDuIsVN@accum.se>
+In-Reply-To: <20261106144247.30507-1-tomasz@bojanowski.me>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -138,115 +136,75 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xPMIH-00000000HmF-3nOM
+X-Exim-ID: 1xPMVJ-00000000ObN-1SEa
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:48988
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:45084
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 13
+X-Email-Count: 2
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfLmZtfuufkR0ZDfbxiVnO+UW+v3/6DDBYd3eV6CpCkrXlsPaaRp6CMFSELxz/eY4qLwvGj92fkStpc+Gvo/fcE66PE6T3rONTZkZ8RSi0LajEbtW1e6H
- kphiIoJHep3b5obxHCfQVOow7l9RMYbABOF3khL9bIKZlsP5Y5y4sS62WosviBPwiDO+MSk1C5cflc2E4TqpSYJ5m3W73GV08kDlyGEzqRqOqtu+sRQwmO+t
+X-CMAE-Envelope: MS4xfMfdJqbZ7teLNKYhUEPXEcCE0I3yAYcvTTxw4/W/pm6BUyuHmCTDS7t73ngZYIAoHipXV7MBofqdpJm4kiyVwHpDqeKsqSBXwtUSuTUItEnp0CZJM0o2
+ 8x0yDSWyyPr3hG+R+t9L66QA8w38y/eh7lvL9d/qhdBqTwfQ1Lao+bSMRCC/cOgRejpj1eFdn1azpX6UJVvAlg1eUwUeU0pvghgaAz92VK5UMMbIFr+WPv2o
 
-On 11/6/26 04:45, Anton Lundin wrote:
-> On 03 november, 2026 - Guenter Roeck wrote:
-> 
->> On 11/3/26 05:29, Anton Lundin wrote:
->>> Extend nct6775 driver to support NCT5525.
->>>
->>> Assisted-by: Copilot:GPT-5.6-Terra
->>> Signed-off-by: Anton Lundin <glance@ac2.se>
->>
->>
->> I don't havea datasheet for this chip, but I do have to say
->> that this seems to be off just form chip numbering perspective.
->>  From the registers it looks like the chip is mostly compatible
->> with the NCT61xx series, but NCT55xx chips are typically scaled-down
->> variants of MCT67xx series chips. I _will_ need to see a datasheet
->> to confirm, or at the very least independent confirmation that the
->> driver is correct.
->>
->> Some more comments inline.
-> 
-> I've now reviewed all the comments and reworked the code. There are some
-> things I'm still thinking about and I kindly ask for some guidance.
->   
->>>    };
->>>    /* Common and NCT6775 specific data */
->>> @@ -840,6 +842,33 @@ static const u16 NCT6106_REG_TEMP_CRIT[32] = {
->>>    static const u16 NCT6106_REG_TSI_TEMP[] = { 0x59, 0x5b, 0x5d, 0x5f, 0x61, 0x63, 0x65, 0x67 };
->>> +/* NCT5525D specific data */
->>> +
->>> +static const u16 NCT5525_REG_IN_MAX[] = {
->>> +	0x92, 0x94, 0x96, 0x9a, 0x9c, 0x9e, 0xa0, 0xa2 };
->>> +static const u16 NCT5525_REG_IN_MIN[] = {
->>> +	0x93, 0x95, 0x97, 0x9b, 0x9d, 0x9f, 0xa1, 0xa3 };
->>> +static const u16 NCT5525_REG_IN[] = {
->>> +	0x01, 0x02, 0x03, 0x05, 0x06, 0x07, 0x08, 0x09 };
->>> +
->>
->> The above are equivalent to the NCT6106 definitions.
->> Please do not duplicate definitions unless necessary.
-> 
-> I've now remodeled this into:
-> 
-> +       case nct5525:
-> ...
-> +               data->REG_VIN = &NCT6106_REG_IN[1];
-> +               data->REG_IN_MINMAX[0] = &NCT6106_REG_IN_MIN[1];
-> +               data->REG_IN_MINMAX[1] = &NCT6106_REG_IN_MAX[1];
-> 
-> It's not the prettiest, but it works. Is that acceptable?
-> 
-No, just keep as is. I missed that the first voltage (register 0x00)
-isn't supported on this chip (assuming that is true).
+Hi,
 
->>> +static const u16 NCT5525_REG_FAN[] = { 0x20, 0x22, 0x28 };
->>> +static const u16 NCT5525_REG_FAN_MIN[] = { 0xe0, 0xe2, 0xe8 };
->>> +static const u16 NCT5525_REG_FAN_PULSES[] = { 0xf6, 0xf6, 0xf5 };
->>> +static const u16 NCT5525_FAN_PULSE_SHIFT[] = { 0, 2, 6 };
->>> +
->>
->> This suggests compatibility with NCT6116, with fans index 2 and 3 not populated.
->> Would it be possible to model it that way ?
+On 11/6/26 06:42, Tomasz Bojanowski wrote:
+> Hi Guenter,
 > 
-> I'll rework it into that. The data sheet even calls it fan5 in one
-> place, HM_Rev_Pulse_Fan5_Sel.
+> in_from_reg() uses a 32 mV LSB for the VCC, VSB, AVSB and VBAT
+> sources, but show_in_reg() (drivers/hwmon/nct6683.c:704 in
+> hwmon-next) passes it the monitor channel instead of the source:
 > 
-> All the registers aligns nicely with this, so I think it's the right
-> call.
+>    int index = sattr->index;
+>    int nr = sattr->nr;
+>    ...
+>    in_from_reg(data->in[index][nr], data->in_index[index])
 > 
-> The only interesting bit will be that the fan names are now 1 2 and 5.
+> Here index is the attribute (input, min, max) and nr the sensor
+> number, so the second argument should presumably be data->in_src[nr].
+> data->in_index[] holds monitor channel numbers (0-31), which never
+> match the 0x60-0x64 source codes, so all voltages are scaled by
+> 16 mV. The code has been like this since the driver was added in
+> commit 41082d66bfd6 ("hwmon: Driver for NCT6683D").
 > 
-> In the data sheet they're SYSFAN, CPUFAN and AUXFAN.
+> On an MSI MAG B850M MORTAR WIFI (MS-7E61, customer ID 0x20d, EC
+> firmware build 03/10/25) the current 16 mV scaling gives plausible
+> values for these sources:
 > 
->>> @@ -1191,6 +1224,10 @@ bool nct6775_reg_is_word_sized(struct nct6775_data *data, u16 reg)
->>>    		  (reg >= 0x59 && reg < 0x69 && (reg & 1)) ||
->>>    		  reg == 0xe0 || reg == 0xe2 || reg == 0xe4 ||
->>>    		  reg == 0x111 || reg == 0x121 || reg == 0x131;
->>> +	case nct5525:
->>> +		return reg == 0x20 || reg == 0x22 || reg == 0x28 ||
->>> +		  reg == 0x59 || reg == 0x5b || reg == 0xe0 || reg == 0xe2 ||
->>> +		  reg == 0xe8 || reg == 0x111 || reg == 0x121;
->>
->> Sashiko has some valid concerns here.
+>    in8   VCC    3.31 V
+>    in9   VSB    3.34 V
+>    in10  AVSB   3.34 V
+>    in12  VBAT   3.10 V
 > 
-> This is the same as for nct6106, nct6116 and nct6126.
+> With the argument fixed, they would read about 6.6 V, 6.7 V, 6.7 V
+> and 6.2 V, so on this firmware the 32 mV scale does not apply.
 > 
-> As far as I see it, we would need to look if we're in speed-cruise mode
-> or thermal-cruise mode, and adjust if we read word sized or not.
+> What is the correct scale on the Intel and Mitac boards the driver
+> was written for? If it is 16 mV there as well, the 32 mV case could
+> be removed. Otherwise the argument could be fixed, with an exception
+> for the MSI customer IDs. Which would you prefer?
 > 
-> Any preference on how that should be done or should I just make
-> something up?
-> 
+I assume it is just a bug. VCC shows correctly on my boards (all MSI),
+so I assume I just never noticed.
 
-Problem is that the second register is shared across tolerance_h and target_speed_h.
-I don't know (and have no time to figure out) if the code handles this correctly.
+The underlying problem is that, according to the datasheets, the basic
+LSB is really 8 mV, not 16mV as the code suggests. 16mV LSB only applies
+to ADC, AVCC, VBAT, 3VSB and 3VCC. There is no 32mV LSB anywhere.
 
-Fix appreciated if needed.
+Patch(es) to fix the problem are welcome.
+
+> Separately: I have worked out the format of the fan curves in the EC
+> on these MSI boards. Each fan channel has a 7-point temperature/duty
+> curve, a bitmap selecting its temperature source, and a mode register
+> (duty cycle or RPM target). Would support for
+> pwmN_auto_point[1-7]_{temp,pwm} and pwmN_auto_channels_temp for
+> customer ID 0x20d be of interest, as a follow-up to Hamza's fan
+> control series?
+> 
+Sure.
 
 Thanks,
 Guenter
