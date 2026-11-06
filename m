@@ -1,73 +1,66 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=80.241.56.152
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793975864;
-	b=zsJOGPgewOn2x31807gjcor8ZotbFJfk9ddhsEby/eBzWbjzMbB+qKotd8nBFTXgbbnj
-	 ZznFxpeVTQlhzgdccIzIua5+bS81HHv4pMfrvIzWO8Ff/m3+yMIxHB7Pj0vE750a5Lt/i
-	 Y9LHKATTW5Oc9CfvkJA675gnIiTb8+10RlrL8cBFUtPOQVuxSwyl1GJsUVkY3rX9U36EM
-	 NjQQtviJUGkIl2cHMUR+MR6Cl8yWhR26zZ2xY0DkzlE8tHRgBQy2GMzjhihymgwGg4hHM
-	 OUGPWrVCgBvitrGJws+IFyqbU82VNiW8XIqwFQy3X6Ezd3NoklUT3NBnooqZpgzBMDA==
+	t=1793976200;
+	b=3LKLgLC0RPx80VDFmbXnpXiQm/DbZypZJ+42/CtDtyImzfsO5/GgiER3tnI4Nech533Z
+	 tEQKd+/QePzQL57lh5N/ABxqbHa/Z9jDG+zrkqSmq0kRWAYMWLyJMVJOX++MNg7CZ6xms
+	 5aSANXu5e3BrDDmIKYOJokLbKiYrPJkYX7K6gmQs7MMKJi5H7D94rBAhATm1aR8OXtCHK
+	 vsGnKHZd1iCD/HfTKZNLpKkFbV13SBLwgeoUz4k17FHPFPY7Eqjk8EFsXuj3P8ork39Io
+	 hTngcLmRuQoaAQdj2GStcC1chR6hPrkG92oVKaNehx4L0zm/PcePycSY8YdeI01N0vg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793975864;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793976200;
 	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Rspamd-Queue-Id;
-	bh=qIn6iBBvwXhLiMImP4GzSaCyCI76Sq1bYbjqgztngUw=;
-	b=YPcfzQ9riNTp6Vmgewx+FdscHox1KDI9hpJo+9aAxGkuaYM5gBeJobBvGVXHpz5K+WLD
-	 OP34ro4hWBIsErxOV5extKIMhT5OsNvXjxWdls0JY8bwXRdYXyavaLWJZp+QIvJMjbPEV
-	 3nWZL2RK8ALZSh3iB7HNKY7rt7YFP06idr6k/aZPgKPO8LwAA3iH9RUJ+02tllw23HT3D
-	 2vXdZGvfCpShPK/l/8WrhipWXUIctRjfD8CpbVoVrq/w6+b8hTcSOg5fO6NlNTWkP6E0/
-	 4vRfxYTLSxw7YXkP/QoftG1rXy32qOyp14TDAFP1UjwZAlztyzFczrI541D7eDDrf0Q==
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-Rspamd-Queue-Id;
+	bh=PIXvqTLthi+TW5QMnh9QGSkJaQvwP3Krn3zx1RpC6GA=;
+	b=Ogz+b0fN0srnFDJwGAV2P9r8b3i14MZpcRQr/B7UHZuXfRXx8d2Tazm2SwfBtK+bV9is
+	 4OFarifL/OLUWqX4B/x75ljvjLl9pOE4MVLHW1gk5bO2TpsfXViy42Q5nm6tcQDCyrWvq
+	 jlb/nTPmH2YcCGzH+WMlWbOTBnAD8NWerghnOgZLVYPcnRqNjWau9Qr3AqRrSIAyNXQRP
+	 N4xuc6wAgwiTqFwe53GHThj/H7lUnV4ZFLzeb1cTMu6Ar4m87LRCWaI1REZmRPAuC26Q3
+	 yDjmgl9kxOn1JualRFpOh++SNq8ZXFiMBB3ry94NsPdzssj0k5tSWtIR2ETUl4OZCVQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=bojanowski.me;
 	spf=pass smtp.mailfrom=bojanowski.me;
-	dkim=pass header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=OTisjvxT;
+	dkim=pass header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=MstbhqoV;
 	arc=none smtp.remote-ip=80.241.56.152
 Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4188606A332;
-	Fri,  6 Nov 2026 14:37:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A4188606A332
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB738606D827
+	for <linux-hwmon@vger.kernel.org>; Fri,  6 Nov 2026 14:43:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB738606D827
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bojanowski.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bojanowski.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=OTisjvxT
+	dkim=pass (2048-bit key, unprotected) header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=MstbhqoV
 Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4jLhbl6qlXzKnCG;
-	Fri, 06 Nov 2026 15:37:39 +0100 (CET)
+	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4jLhkD32KkzKnBt;
+	Fri, 06 Nov 2026 15:43:16 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bojanowski.me;
-	s=MBO0001; t=1793975859;
+	s=MBO0001; t=1793976196;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qIn6iBBvwXhLiMImP4GzSaCyCI76Sq1bYbjqgztngUw=;
-	b=OTisjvxTd2an8DdXIXhyIGWKBwehjYMFZbL14TnbolqPVHJ/ux63fJaZhKwbhJboRFA9zy
-	P8FZpkrZxQ5rp2QmmDqRYNUprmq24QdaNhiN2mH+CwCloapIMe77g4xjhLQp6AZcHvhWIB
-	oyOmLmmBz+ADGgnCQ6sIRY1wahgXMWdSf5Pw5ZNQFsccU4cJi/Tm3QAg1BzaAkPBJitv89
-	789ZD3kaQEZptlmdwMyBdVrnW1dUpc7xZI35u+NnsGD0RqGsWUXG8aK9UoEeEYd1B78W1Q
-	OSUt24NelqfqS62ViWX/JnuiE7+8xeca1XUuhgxn+0KU6XMRcluHbLhAVxRfSQ==
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=PIXvqTLthi+TW5QMnh9QGSkJaQvwP3Krn3zx1RpC6GA=;
+	b=MstbhqoV0BN1clSkxja/u4k7T8XoHsCJOcWGqNDPx0COXM4m+WZBndhKgnpM+BqbknEXEW
+	gca6Js1m0dACk+KtCyVtP3mcjT/KdrQSTdDzD6lJXTeMVpXwvXYLv8El6Um7IXnR8UiGw6
+	cglCqQbK2LEZVbsxXpIk1Cn8pTYk2CfNV/jPvbQe7+E19nz288QNGcc0n5xy5qLeupzTY+
+	ewM06B/829hhpfL631JhWOpcH49pMVrip5QaI026RaWFotFhYIfOl4ryaN47ZDOvzS4yry
+	J4gIZjc3xn8EH3NZkiKIp0KPBlzx0Zf0H3VYxol3lEjurD34CGfSrRqiEb6YSA==
 Authentication-Results: outgoing_mbo_mout;
 	dkim=none;
 	spf=pass (outgoing_mbo_mout: domain of tomasz@bojanowski.me designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=tomasz@bojanowski.me
 From: Tomasz Bojanowski <tomasz@bojanowski.me>
-To: Hamza Mahfooz <someguy@effective-light.com>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] hwmon: (nct6683) Add fan control support for MSI boards with NCT6687D-R
-Date: Fri,  6 Nov 2026 15:36:32 +0100
-Message-ID: <20261106143632.19966-1-tomasz@bojanowski.me>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	Hamza Mahfooz <someguy@effective-light.com>
+Subject: hwmon: (nct6683) in_from_reg() never applies the 32 mV scale
+Date: Fri,  6 Nov 2026 15:42:47 +0100
+Message-ID: <20261106144247.30507-1-tomasz@bojanowski.me>
 X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261004153250.516730-1-someguy@effective-light.com>
-References: <20261004153250.516730-1-someguy@effective-light.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -78,27 +71,50 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4jLhbl6qlXzKnCG
+X-Rspamd-Queue-Id: 4jLhkD32KkzKnBt
 
-On Sun, Oct 04, 2026 at 11:32:48AM -0400, Hamza Mahfooz wrote:
-> Patch 1 reports the duty cycle of the system fans, and patch 2 adds fan
-> control support for the CPU, pump and system fan headers.
+Hi Guenter,
 
-Tested on an MSI MAG B850M MORTAR WIFI (MS-7E61, BIOS 1.A68, NCT6687D
-EC firmware version 0.0 build 03/10/25), with nct6683.c from
-hwmon-next built out of tree against kernel 7.2.15.
+in_from_reg() uses a 32 mV LSB for the VCC, VSB, AVSB and VBAT
+sources, but show_in_reg() (drivers/hwmon/nct6683.c:704 in
+hwmon-next) passes it the monitor channel instead of the source:
 
-pwm1, pwm2 and pwm13 to pwm16 are writable and have pwmN_enable,
-all set to 2 after loading the driver. Writes were tested on pwm16
-(SYS Fan 1):
+  int index = sattr->index;
+  int nr = sattr->nr;
+  ...
+  in_from_reg(data->in[index][nr], data->in_index[index])
 
-  pwm16_enable  pwm16  fan16_input
-  2                98     926 RPM  (initial, BIOS curve)
-  1               255    2083 RPM  (after 8 s)
-  1                80     767 RPM  (after 10 s)
-  2                 -     911 RPM  (10 s after switching back)
+Here index is the attribute (input, min, max) and nr the sensor
+number, so the second argument should presumably be data->in_src[nr].
+data->in_index[] holds monitor channel numbers (0-31), which never
+match the 0x60-0x64 source codes, so all voltages are scaled by
+16 mV. The code has been like this since the driver was added in
+commit 41082d66bfd6 ("hwmon: Driver for NCT6683D").
 
-Setting pwm16_enable back to 2 restores the BIOS fan curve.
-pwm4 (EZ Conn header JAF_1) remains read-only.
+On an MSI MAG B850M MORTAR WIFI (MS-7E61, customer ID 0x20d, EC
+firmware build 03/10/25) the current 16 mV scaling gives plausible
+values for these sources:
 
-Tested-by: Tomasz Bojanowski <tomasz@bojanowski.me>
+  in8   VCC    3.31 V
+  in9   VSB    3.34 V
+  in10  AVSB   3.34 V
+  in12  VBAT   3.10 V
+
+With the argument fixed, they would read about 6.6 V, 6.7 V, 6.7 V
+and 6.2 V, so on this firmware the 32 mV scale does not apply.
+
+What is the correct scale on the Intel and Mitac boards the driver
+was written for? If it is 16 mV there as well, the 32 mV case could
+be removed. Otherwise the argument could be fixed, with an exception
+for the MSI customer IDs. Which would you prefer?
+
+Separately: I have worked out the format of the fan curves in the EC
+on these MSI boards. Each fan channel has a 7-point temperature/duty
+curve, a bitmap selecting its temperature source, and a mode register
+(duty cycle or RPM target). Would support for
+pwmN_auto_point[1-7]_{temp,pwm} and pwmN_auto_channels_temp for
+customer ID 0x20d be of interest, as a follow-up to Hamza's fan
+control series?
+
+Thanks,
+Tomasz
