@@ -1,64 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793926691;
-	b=o+iMYSK9WpUViTOpQA5YD9OoslkKctgT7uUuJ24dqWtYQNMeQlWlth5jkWqPpPR9RI1m
-	 QlxzsS5adYHlqvwelQT1q5x/ApIT4w5Xl0cCKQBNzIDXoAMX4BcDe7aO0orQFJssNaoop
-	 N9kkmHYCndyRnWFknApi+Z7gJ2wHAuTEfJ69hVrDVcchPSVahcPGa+JBC6MwZIAGkgR68
-	 pm0KcLjS6dStgOIIKrClmau+ExjIA9JWgvcxDU+jqEBWKU7rsah0jiwiATjWcJTTr8EHw
-	 anX704Uo2ge4Iz2RbldX2rOoEWH+fUmQkHdID5i3WX6jE3R6PKXLWPSuzbNWQKCdgCg==
+	t=1793951079;
+	b=HPwzuJLUYZmMB/06/pXsJNzpVyuqTIg2jrzhzzxhBnGtetWVSfrS5P3Ztz+cE7bBSqfv
+	 Q4SgUfmlLnBK1DFoyvXYh5qrsYsvM3lhdvGZO2AKX7eA/Pr4BMZiD2FnFGty23ZuejGA5
+	 lzKJQ6GUG9xCKrUCdj6ciW/3vePY567YV0jPYB6PQvvxlHDBUi3HBm0T0cnNJvMZBdlTe
+	 2J0sac22Ztrr2h2q/tprEifT23VIYtQcDfiGK60eYhXwvCtLfZF3njrsulhgex7wAD3/V
+	 6sfvXway7vTFz82PCBLs4z7Tx3b1UV/GZW7Uumwn5g2bKRYvRofrhCiQBA0Ju4+LAOg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793926691;
-	h=Received:DKIM-Signature:Received:Subject:From:In-Reply-To:References:
-	 X-PR-Tracked-List-Id:X-PR-Tracked-Message-Id:X-PR-Tracked-Remote:
-	 X-PR-Tracked-Commit-Id:X-PR-Merge-Tree:X-PR-Merge-Refname:
-	 X-PR-Merge-Commit-Id:Message-Id:Date:To:Cc;
-	bh=UXoY+F3SsvFAd2zjwkFfZ2t9ltzlt+k4Gc/Cjjr6yOo=;
-	b=Nz1J/nsbdcWk3+mf1EWRFPF5oqcyitS+EbPTt8XJbZzvUjx5fbJeTc77iIklYccGXp+9
-	 DPHAdvABRIySw6v4Hf7A6+5rgiQcBcQPX22QMw0r5tUNe+5pfWXuA0H7e2YnLzbCoBiXK
-	 7NwmtUnjDaz8XOuDJpVvd8SgQzBkwyhRHyg5yBgRTRQSuD30Zr9TNS9C18/4i3jwnyJ9O
-	 pNdh/RCYjLyYLh5rUclhJrYeagknO0bH6GSNaJdt5WUXXIO2428M1blUfPNNdJWJthsJS
-	 sDq6ZQCFhXUVdV1FVB7h3c7oVnohlbKgQ7V+++jeBgWWC5yhFaCdf+tFKxhlhR2P/3g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793951079;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=SjVSzXWCLx+Jjtey5wy5TTeQi34u7lMXmhE20s/yWMM=;
+	b=RzZ6F2cXb45TRKvKnGhrD/orKeQP72w9OZmhAzixVa2rrFnJk+nWtqQb666wwdV2AkTe
+	 g7f0s1j4H+hK2h0UxAf+4y5dF+UIZAQ8Hl8FNWIpG/aF5qmCaMu6YIskBv1q0UbXymA7t
+	 Mg3KHcxqHMje/eqoTS9jZzZbv2u9riZoNfjsBkkl1Azws3uPbuUKYOH9h5UcBUsZkgvMh
+	 F8/zqWF/j/BLfVP5S05FM2sPIHIU1tcvS50N5aYt+jrphr2chO1kH0fb72dJBFuBlJPkf
+	 TulcrwZGafQLm3SeVo2arXdhdg3p2jF6xYKu63+Td3u58+guS4KxIUII6fPS+2rk4tQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iWUf0+EP;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jNn8gBxI;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1C5606A32E;
-	Fri,  6 Nov 2026 00:58:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB75606A326
+	for <linux-hwmon@vger.kernel.org>; Fri,  6 Nov 2026 07:44:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iWUf0+EP
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E04631F0089F;
-	Fri,  6 Nov 2026 00:58:10 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jNn8gBxI
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 678281F008A4
+	for <linux-hwmon@vger.kernel.org>; Fri,  6 Nov 2026 07:44:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793926690;
-	bh=UXoY+F3SsvFAd2zjwkFfZ2t9ltzlt+k4Gc/Cjjr6yOo=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc;
-	b=iWUf0+EP2eYzLYExMJFpQoG7U7BMsEuqtCBdQVb7gzrSijYhVe9/z3BJg/9KQteKv
-	 Yx62aijC+PGUp5wzVAKR758UIu6SMdMF+dlJEom3ZLspyZCryrLSb7dxND8IWreBcK
-	 Vv91ST2Y+OUKwbAstklVHeT29f/2N9IF/MYUti2ckwoUFvHF5kCl+EDdIR/v/sEwP7
-	 1wu21MDdLu9lGbLTmhm8vYrVsXErpjWyGEQksOA3lyGzrSJRe6PQGty/XN+MaiSWE2
-	 QEqLzawT9fJVLZosELmDimg2SU8xluR0UIK58BvanJqmmhkCJUlvLqZY4fToHDTVS7
-	 xCVzrAgDAGRog==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D83F6391B1B3;
-	Fri,  6 Nov 2026 00:58:10 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon fixes for v7.4-rc2
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20261105041558.3259881-1-linux@roeck-us.net>
-References: <20261105041558.3259881-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20261105041558.3259881-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.4-rc2
-X-PR-Tracked-Commit-Id: e395bbf3ddf1b3175fd3bddaead63a2909b33694
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3e516eae690b3f24c19168cc0fe605e1c610eb21
-Message-Id: <179392668937.268614.6405564038710984492.pr-tracker-bot@kernel.org>
-Date: Fri, 06 Nov 2026 00:58:09 +0000
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+	s=k20260515; t=1793951079;
+	bh=SjVSzXWCLx+Jjtey5wy5TTeQi34u7lMXmhE20s/yWMM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=jNn8gBxICYDAbumbHASNtUJNAGZaLnMzXaQakplDv1+8hPEpLanYzmowHaqYIGsdI
+	 1z1PkWmAUzIT8ZLe52KxnaXhQCarXpC7D/sJrZDPQ68Vnz7BZb8CigcFC4Wp6DNuWe
+	 bMOFNB1d9g1e4rKUYE1Tj/tEZ/dEP6n0iTcQI4+3YMxYi2B5+c3cBMIZDn1dLPJQa3
+	 mgw9ut8GdEr7gD3oPWoi9t+M5eaPAryKofexTfas+Wh0lRBnEcWJcc4a2aBcMWopZi
+	 8y8C1MKmgn1dKlZUoO/LFE1FUoJ4l5bG+QzbEB6cYCbG6mS7mkXZyqp137Ga4SfoEi
+	 By8LfhrBTlYHw==
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-3ab4354db11so1969821fa.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 05 Nov 2026 23:44:39 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AKwUvBxGrhtVhIsVg96trMbZd4aP0bBRZjOAtIr87xleCVzSnKiynKkV2wpKchg/wPf7vDs2ESMfYU+ZGIJlyQ==@vger.kernel.org
+X-Gm-Message-State: APuU4Z8pWPWcwdzaBVSvXv51Yhc1VcgutFd7xYIbjDOyFo0S3IGb/XNA
+	q4NBms10o0yyDy3SBdLIHtGfknC947/6cB6QidUj6pkKxruIsJGLeCcW03eZKr7C25qFrQIdhTT
+	axbIH7sVCnqIsbqXeb7ycD9IrLW8/LtI=
+X-Received: by 2002:a05:6512:12c9:b0:5bf:b603:365d with SMTP id
+ 2adb3069b0e04-5c003a8ded4mr513982e87.10.1793951078173; Thu, 05 Nov 2026
+ 23:44:38 -0800 (PST)
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -67,16 +58,56 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+References: <20261101-xg6846b-bcmbca-xrdp-reset-v2-0-455fe9eed5ee@kernel.org>
+ <20261101-xg6846b-bcmbca-xrdp-reset-v2-6-455fe9eed5ee@kernel.org> <b65ef6c6-cbcf-4793-9ba1-7c5cb270f574@roeck-us.net>
+In-Reply-To: <b65ef6c6-cbcf-4793-9ba1-7c5cb270f574@roeck-us.net>
+From: Linus Walleij <linusw@kernel.org>
+Date: Fri, 6 Nov 2026 08:44:26 +0100
+X-Gmail-Original-Message-ID: <CAD++jLm0patDC0Vh7sh3Mr214zaF3HFDoc8y=dHVs-gQePHa3g@mail.gmail.com>
+X-Gm-Features: AclHuK-ug9wMfHMkul6is-bHRohYb321IdFcWEC09gms_v_lOAueeEGxhDLccag
+Message-ID: <CAD++jLm0patDC0Vh7sh3Mr214zaF3HFDoc8y=dHVs-gQePHa3g@mail.gmail.com>
+Subject: Re: [PATCH v2 6/7] hwmon: Add Broadcom PMB PVTMON monitoring
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	William Zhang <william.zhang@broadcom.com>, Anand Gore <anand.gore@broadcom.com>, 
+	Kursad Oney <kursad.oney@broadcom.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	=?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Brian Masney <bmasney+clk@redhat.com>, Jerome Brunet <jbrunet+clk@baylibre.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Jonathan Corbet <corbet@lwn.net>, 
+	Randy Dunlap <rdunlap@infradead.org>, Benjamin Larsson <benjamin.larsson@genexis.eu>, mfd@lists.linux.dev, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-clk@vger.kernel.org, linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The pull request you sent on Wed,  4 Nov 2026 20:15:58 -0800:
+On Mon, Nov 2, 2026 at 4:06=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> w=
+rote:
+> On 11/1/26 14:14, Linus Walleij wrote:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.4-rc2
+> > Expose the BCM6846 die temperature and seven voltage inputs through
+> > hwmon using the shared Processor Monitor Bus (PMB) regmap.
+> >
+> > Register the temperature channel with the thermal framework so
+> > existing zero-cell device-tree thermal sensor references work.
+> >
+> > Poll for valid samples with a bounded timeout, releasing the PMB lock
+> > between reads. Report temperature in millidegrees Celsius, including
+> > negative values, and voltages in millivolts.
+> >
+> > Signed-off-by: Linus Walleij <linusw@kernel.org>
+>
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
+>
+> Please let me know if you want me to take this patch through
+> the hwmon subsystem.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3e516eae690b3f24c19168cc0fe605e1c610eb21
+Thanks G=C3=BCnther!
 
-Thank you!
+I think it's best to take all through an MFD immutable branch as
+is custom with these all-or-nothing drivers.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Yours,
+Linus Walleij
