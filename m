@@ -1,74 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=80.241.56.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794044930;
-	b=FxN8x0CdoVmuXem/PbyuZoavU79Lrb/y11DkGIRuhpDeJYYbN7ZNLB7eLcnRSl9w9bSe
-	 rYWYwbsuPSUJu1yNcsBJRf7TfIElA7NWyzg3rhe6M4UvIGFwzypQCZBimsXWhuv2uiMUO
-	 yB13Deb9RKSvdZgwpL0A2CgCFVGKmGw5TBxalc+OtpMI8DlwYuIdDt8T+7GWCg7GFwsXG
-	 2cOMmw6L7kyXLbwiRiG6by8jyMWLJolvKwMJcdk+AMI84zGJSXlDtNuaY2FqbXjcgxWny
-	 505wsLusQcyNy03C3qZ0kfdlO+lqZHE7WP1mI5jxNRR0MIitwhk2bkzMmjsn6WbB0xQ==
+	t=1794048006;
+	b=pPM3PGXUGoC2NPVSB8+w2U0ViaAXKkKWty3ZaXohhW/UPtDyaEDMoYCSnZb7OVz7ZrOi
+	 e+4btc4f4RgTWGFZXwf8zNBSNg6XKnjCrOnRDZ4ForrjN0PBoEQv4b1SFfaXVeghLYXwb
+	 ildHeCGlDh5CZ1ilzPKkOyi35kSpjbfVmpDSv12TaYeIz5wxU2zcy323vfsGHpo8S8e1+
+	 efpXAol6043rl74JoR5buWbrjFhBGpwEytJRjFIv9erL757lGOzwgoTFfeYSxK9sj5Qx3
+	 2NKkaeMPi9rH5hD2G/WbjSflpaBzmzdUnNjr+1rpGmWFNkz5j8zQwmYZDWHs/DqxDOA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794044930;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=rorNI1UIic/55wFWIBl0e+Ri75FN+PnMt9WvbEXwkRc=;
-	b=U7/psnXgEAnYQfxcSYHkkcUaBfLtp62nIG71yjEKq9ciYEBylQLa1LRNjfxuI8QXWsQc
-	 I6sGz2e6w6flKpwB3Gi59o/W9xwSWMotfMs8WhV/A4PkVzmRf0kzY6kGLWlBV69TJS6VK
-	 y8RCWYnIQoFkNGesjqgVrUUl9jcFQE9zwooeG9FHN/3/rX2h7/IDeGXJS1IPkU83u/yfm
-	 x/kyM1KupAhNeUhYagHFQ/QuCeoP0LMtpamDdbaNo70nyBMM0xyMQyigE+SjBOXQcCqAj
-	 /9c66oNu7IYlPouJfRw7syEROdKPuzSCD38Uj3D8yBaUJmO/YKo4Bs7G9XBhIToBd2w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794048006;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Rspamd-Queue-Id;
+	bh=ajPmXPlBn7FnQ6/3HIGkdGOkST7G5FOZwaWFT6iuc8g=;
+	b=Gf24kQT3Z3EDuO9KFjuZgQhWJnzMIe5XyN8wQ9znmjeZH7hR6n6h9ysQsfzAXzp1qmIJ
+	 7+dUYffh51aX1+QKfG99eqlgiZLevITce1z53C4WxQP0kVlP1Eezy8rsHRmGmkf4QQAgO
+	 720wDgiuMSiDf0rI6rfemCTBT4Kq5UTFREEkwMTvz8KI5k8cBdss1um1Rt3ldM1w82WxQ
+	 tU1KGiquNiZnxalgHpzkzRWOhwOvPzSt7no4UDGgvE/gtE2K7LVpc3d0NlCP9/VgD1sY0
+	 S2mpEgkVy6wkxmri7WNiFdhSuvAIbK+w/hSb3MRWldOp+gM+GvQBsjeZYd1QaxS0cmA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iW02CE60;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=bojanowski.me;
+	spf=pass smtp.mailfrom=bojanowski.me;
+	dkim=pass header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=094Q2MkN;
+	arc=none smtp.remote-ip=80.241.56.171
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20473606D801;
-	Sat,  7 Nov 2026 09:48:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C4E606A32D
+	for <linux-hwmon@vger.kernel.org>; Sat,  7 Nov 2026 10:40:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 80C4E606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bojanowski.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bojanowski.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iW02CE60
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 328FB1F0089F;
-	Sat,  7 Nov 2026 09:48:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794044929;
-	bh=rorNI1UIic/55wFWIBl0e+Ri75FN+PnMt9WvbEXwkRc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=iW02CE60RHF02fEuqPqKcJf6i4V3KTjWDHzo9DZbo95gORtH0ZrmCJDxrNOCnD4Id
-	 9WnOBlB++VD4fZIWQsCzrQhJIry0nbljvHblYH3quGITH2PJSiPvwUzFopDT7DZDt2
-	 EHHmNwDws2w9I0dTG1wwVA0PVma1a6Hmr9kUmUnaP/d8oN+oH0kQjwhxNPRQPPwlA4
-	 xw0Rt/uXRWnSdUas9IyJY6YU5S7A3WpR700rHxBipZTWxfOwImozcBkuV3AdARVDwJ
-	 t+x6t7k7LiUG553yMU1QgCJYHr0hUKV7+ybnwND/Tl+BQydELSVgjRpI3YK5OOLnj3
-	 agc3DJMfrldDA==
-Date: Sat, 7 Nov 2026 10:48:35 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-fsdevel@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
-	Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
-	Eric Dumazet <edumazet@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
-	Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados <joel.granados@kernel.org>, 
-	Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
-	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	netdev@vger.kernel.org, ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
-	coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, 
-	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
-	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
-	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
-	sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
-	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
-	linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, linux-debuggers@vger.kernel.org, 
-	Chuck Lever <cel@kernel.org>
-Subject: Re: [PATCH RESEND v2 14/23] proc: let procfs copy in writes before
- pinning the entry
-Message-ID: <20261107-akteur-gemieden-eckdaten-21304d085e35@brauner>
-References: <20261104-work-procfs-core-v2-14-76ace653a773@kernel.org>
- <CAMuHMdVfakapgBK6TBhO1iWX8qzvLDk8jzRS=t2MVa5G=MCUeg@mail.gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=094Q2MkN
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4jMCH602XyzMlV1;
+	Sat, 07 Nov 2026 11:40:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bojanowski.me;
+	s=MBO0001; t=1794048002;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ajPmXPlBn7FnQ6/3HIGkdGOkST7G5FOZwaWFT6iuc8g=;
+	b=094Q2MkNlJpBuPNXwRSZVNFduYWbacFGfnrhZg1FisI11s15aVs83R0QIwRXgV51wDLgC7
+	18X1lGNuFn2UVyjQaNHtuDV2d4K1RUKpxKrnZgl93z10BN4HbpgHAzjbf5laCQf4IzsASF
+	nsPnnuDgOLHD53YZHBjbCQd8P8/8ijLqaFLoBUyFpRLGZD019wqkbi6a9ppR6S/u4djNA8
+	zX4fkXrs3RawZV9qbuebqCq0uOn3p2t/EEiwGkDbmPhwmOW5hfXqD6F3B/AsAzF7qoQUDY
+	4n9JHaUQHfdeylnTImsw+0MlbgY3qFUSuhqyI54DRqNKTgh5/nR5UqvdhKBB1Q==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of tomasz@bojanowski.me designates 2001:67c:2050:b231:465::2 as permitted sender) smtp.mailfrom=tomasz@bojanowski.me
+From: Tomasz Bojanowski <tomasz@bojanowski.me>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	Hamza Mahfooz <someguy@effective-light.com>
+Subject: Re: hwmon: (nct6683) in_from_reg() never applies the 32 mV scale
+Date: Sat,  7 Nov 2026 11:39:59 +0100
+Message-ID: <20261107103959.7879-1-tomasz@bojanowski.me>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <cd150425-262a-4a74-9f78-5ff581e27846@roeck-us.net>
+References: <20261106144247.30507-1-tomasz@bojanowski.me> <cd150425-262a-4a74-9f78-5ff581e27846@roeck-us.net>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -78,58 +73,48 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdVfakapgBK6TBhO1iWX8qzvLDk8jzRS=t2MVa5G=MCUeg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4jMCH602XyzMlV1
 
-On Thu, Nov 05, 2026 at 11:07:32AM +0100, Geert Uytterhoeven wrote:
-> > +       ssize_t (*proc_write_buf)(struct file *, char *, size_t, loff_t *);
-> 
-> "const char *"?
+Hi Guenter,
 
-I prototyped this to have a detailed reply. It's not worth it.
+On 11/6/26 08:09, Guenter Roeck wrote:
+> The underlying problem is that, according to the datasheets, the basic
+> LSB is really 8 mV, not 16mV as the code suggests. 16mV LSB only applies
+> to ADC, AVCC, VBAT, 3VSB and 3VCC. There is no 32mV LSB anywhere.
+>
+> Patch(es) to fix the problem are welcome.
 
-* The buffer is the entry's private copy.
-  procfs creates the copy for this specific call and frees it
-  afterwards.
+Before writing a patch, I checked this on the MS-7E61 (NCT6687D,
+customer ID 0x20d), including a direct read of the EC registers. On
+this board the high byte has a 16 mV LSB for every source I could check,
+including the VINx inputs. I have no reference values for VTT and VREF.
+With 8 mV, VINx would read half of the expected values:
 
-  A bunch of handlers modify the buffer in place and it's documented as
-  allowed:
+  rail   source  raw  mult  16 mV (now)  8 mV
+  +12V   VIN0     63   x12      12.10 V  6.05 V
+  +5V    VIN1     62    x5       4.96 V  2.48 V
+  DRAM   VIN3     42    x2       1.34 V  0.67 V  (BIOS: 1.352 V)
+  Vcore  VIN4     84    x1       1.34 V  0.67 V  (cores at 5.5 GHz)
+  +3.3V  VCC     207    x1       3.31 V
+  VSB    VSB     209    x1       3.34 V
+  VBAT   VBAT    194    x1       3.10 V
 
-  - afs_proc_cells_write()
-  - afs_proc_sysname_write
-  - a chunk of the sunrpc cache channel ->cache_parse() implementations
-  - thinkpad_acpi's ->write() methods
-  - SCSI devinfo file
-  - dyndbg
-  - cio_ignore
-  - the pseries ofdt parsers
-  - two more hand the buffer to a char * interface:
-    - the SCSI host ->write_info()
-    - simple_strtoul() in proc_scsi_write()
-  - four strip a trailing newline in place
+The multipliers are the ones the vendor software uses for this board.
+With the low byte included (MSB * 16 + (LSB >> 4) mV), DRAM reads
+1.352 V, exactly as in the BIOS. The vendor software and
+LibreHardwareMonitor use the same 16 mV scale for every source on
+NCT6687D (LHM also for NCT6683D and NCT6686D). I have no data from
+Intel or ASRock boards.
 
-All ways to make that work suck.
+So I would propose a patch that removes the 32 mV case and the source
+argument of in_from_reg(), and documents 16 mV for all sources. Since
+the 32 mV case never matched, there is no functional change. A second
+patch could read the low byte as well, for 2 mV resolution.
 
-(1) Copy in the handler. That means eight kmemdup_nul()s and a
-    kvmemdup() for every nfs downcall.
-    IOW the copy this series just removed comes back as a copy of a
-    copy which is not acceptable.
+Would that work for you, or do you have data showing 8 mV on other
+boards? In that case the scale could depend on the chip or customer
+ID. Also, which source does "ADC" in your list refer to?
 
-(2) Make the parsers work on spans which also sucks and doesn't solve
-    all of them.
-
-(3) Leave the buffer writable. Costs nothing, nobody else can see it.
-
-So (3) I think char * stays.
-
-> While at it, I think it would be good to use this conversion as an
-> opportunity to replace "char *" by "void *", which will probably let
-> you drop several casts from users.
-
-So I tried that too. The thing is it drops exactly one u8 * cast in
-ntfs3's label write. And to get this done we need to introduce a whole
-range of local char *foo = arg assignments. So I decided against this.
-It just doesn't add value.
-
-Thanks for taking a look!
+Thanks,
+Tomasz
