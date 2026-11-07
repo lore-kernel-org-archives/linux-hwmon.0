@@ -1,13 +1,13 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.39
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794062798;
-	b=5SOj2GF2j0SVQAFL5xueFzdALCg492QzrIGPUhlN2X0v2DZCTe4ow1sPZ7ShX8ivkC/m
-	 Qt/BJMc8hvK72mhxAEs3kDKXaeTDLGXLwgvppzhisnpqBebtZsBVj6V51FeLgzbTK6bUy
-	 KCMnCZgFNFaI3QXPDWwo2cZsVsrNpzDynI6uYTnoWsW3+tJ66lOxDQE8zEU5sJ45jiPz0
-	 o0DY2FJf7tWSlh0EOTIiK8V/jRgG4zOyO/UTXMOoiuL0ZeBj/PXugfKRN0Dcgr3tOvRJ4
-	 QQnlOjBcxKFE3zEwqxc7zGiq+w+qdpX0xYh4JJBPQAH/O/CN/ET8GEbOTLtnBhoUp4Q==
+	t=1794063459;
+	b=ApnRXqi9LIhFJwT+J0CLo+1+5UphjvyISiNifcqkPgpsv+ZYp7IqJaeEm77mZ3wg6TV1
+	 ml0exYtH8iXVldcwGyOS3C0hM9Yl8Eqw8jrKhkon/PnNacdtqY6p+N0ux2BauTu7/BD2b
+	 DVDXLEQGH1hVWcffYfjEyYWx27jYPhOTLH7gLsU+VDR473oSFzm+aGOAZd3x4RxrUhcUL
+	 DnqK4zdyIY9NvfLKv4Ol3u+BaleurpWs8eL9G1il12IetPvqbNw2CfnIb+rMOO3lqCZrg
+	 /57KqtmQWDvL7n5f4G4nVf59ZjR6JuxIvn7fs1KL1/K2gCbzcCGvLXsBWtLzGV+m1oQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794062798;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794063459;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
 	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
@@ -15,58 +15,57 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
 	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=IoB9bq4NGVx3XVdhHveDkKj6a1MXw17zZzhzMKTeVJ4=;
-	b=HjDifJ3ClPcU3wZG0jCFVC9bYrvO1EIc7KROCnfFoAL/pBjICdXgmsbdb64xnqQsmuSu
-	 ABzJ0mqdE9aW/BNMGxCgcNWbrTckmu4L3riNSJos8rLDdvXThpV2zfKPqdR4LfeALpbX5
-	 SPzGcxzZqW5UwhqVeyKjAVg6ZGnnPo7ElKovv0FsEXnVTvJ9diZVaDvzBKgQqizS/34EK
-	 nIar/plIaN1/nFgvW69FgO57uISr+6votoG+QtWe9Kt+QwFrIGYdrZtAoBUj5BDvUM46G
-	 HojJIf55A29ur3xxy8l72fzRIBKflDMQ4e0HKoRx9HNIh3IjIuNo2IKIlzuSvLMqcig==
+	bh=EAvl3fitRQQ+zOb/lLotd7eR1uWF2wKurJXsbGkVIEU=;
+	b=gXsQbqXMwLL8OlN9Qv0SXLG4ETZ9laxK+uxiH1B/aLJDZxQrb8YHFnobraRii+QfmMWL
+	 rX5Ca5IJdDR6erptz59ydSj8py24oesqLaPA7ORFH058Iv3IX/pLHtf6/p/DC8Rhi3B8g
+	 RKcZ6tAGDlb8/5a6zxtnSCTWgB0IXLg+ZLljzTXWYbMs0Sip84I6tVjh+lAZxUyOFUx8p
+	 221VrCDuFraDEWFbMcXcUssPOqL3ijWs/aLoH8sFfvl5TqSHOCy//gGF2FjRtXA90FNZp
+	 6UbpSH3Y/pA9yt3K2b/A/zpQAw319rRxVvwqv/9r8KmemL8b0YG90k6EvNhrCmsRYeA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=qHYWQyGU;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=Gf2nERXO;
 	arc=none smtp.remote-ip=44.202.169.39
 Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61C1606D80A
-	for <linux-hwmon@vger.kernel.org>; Sat,  7 Nov 2026 14:46:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C61C1606D80A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B22A5606D83C
+	for <linux-hwmon@vger.kernel.org>; Sat,  7 Nov 2026 14:57:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B22A5606D83C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=qHYWQyGU
-Received: from eig-obgw-6007b.ext.cloudfilter.net ([10.0.30.166])
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=Gf2nERXO
+Received: from eig-obgw-5004b.ext.cloudfilter.net ([10.0.29.208])
 	by cmsmtp with ESMTPS
-	id PNVpxumdVOOJnPhgixrOXD; Sat, 07 Nov 2026 14:46:36 +0000
+	id PhlyxyNKQOOJnPhrIxrQuP; Sat, 07 Nov 2026 14:57:32 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id PhghxUHI53nNNPhgixryiH; Sat, 07 Nov 2026 14:46:36 +0000
-X-Authority-Analysis: v=2.4 cv=TuLmhCXh c=1 sm=1 tr=0 ts=6aef39cc
+	id PhrHxUJDSuJrPPhrHxkWLw; Sat, 07 Nov 2026 14:57:31 +0000
+X-Authority-Analysis: v=2.4 cv=WLZ/XmsR c=1 sm=1 tr=0 ts=6aef3c5b
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
  a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10
- a=asFnanmtrhShgoyyQk4A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=KPbNTLLc3YvdawN95zVk:22
+ a=0VzQnij0Y02-aV-MoqEA:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=IoB9bq4NGVx3XVdhHveDkKj6a1MXw17zZzhzMKTeVJ4=; b=qHYWQyGUx07A
-	qxO8tGhD2ixTFv/gTO45tjHOYo0m0KLNT5UA4ASA/KoDKDTJQ4cPsrKYW9Zb3ZhycTtOmFo1/ePp4
-	BZKbOt8ZvUQBL9EevLctYxlYJc/J9BUe32+1iL3Fpi2zR/pheyqWyclpZM8jf/EYZ6JIPuXpAomps
-	9tiGqNCr8HpoIcpxTHdm+9cpaU6po+GMKQ1DKy+sxtwtw8OaIDn/YgNT6LKRkBxwlpZTZxcjdYskU
-	Rr7VHUCnBKiKTEzera45g8oiU2Iw15mej+6BHgcw8MYv9WNd7Y+m5w0CyRr3E2cAeTgF+XsmLAWCT
-	pGTwjEsxnB4zpkVGzr1COQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:48028)
+	List-Archive; bh=EAvl3fitRQQ+zOb/lLotd7eR1uWF2wKurJXsbGkVIEU=; b=Gf2nERXOQmCG
+	VIoDGcPMYZTbtFueBaRm4thKVavIVFxMclZspFlaP98EMVKk5FXWGGpo/wH4ngi8wHwXgrsoMr73p
+	Jopt5KYi/TBWuwemMLRp/QlzEoyU/xSICcbGWKyFvSpWXvffzcX3m+pbi/MkBYnJgKEiYc7xdrus/
+	gVWLan+9TsYKGxM92oBceku5MDGuKykrJyywMU3fKPxow3gEZe8rrHnGqbqT15qVaLuMpdWzqT+RW
+	RBMzYXZ8BG2gFk3e0MF3p5/tfvvRtIwZF2ElaldwtKtPl9lXdt58hfvhGJt57zdVQJfHR2Z/arPk7
+	q7pr8p1cf7X1oSCXL4Za5g==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:51504)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xPhgh-00000003VX5-2OTk;
-	Sat, 07 Nov 2026 20:16:35 +0530
-Message-ID: <4394d6d4-ea95-455c-a52e-a1d021afc2d4@roeck-us.net>
-Date: Sat, 7 Nov 2026 06:46:34 -0800
+	id 1xPhrH-00000003bwA-0pLu;
+	Sat, 07 Nov 2026 20:27:31 +0530
+Message-ID: <9aff5480-3be5-42d5-b0c1-b3d7b4de8e9a@roeck-us.net>
+Date: Sat, 7 Nov 2026 06:57:29 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -77,12 +76,16 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: hwmon: (nct6683) in_from_reg() never applies the 32 mV scale
+Subject: Re: [PATCH] hwmon: Add driver for MSI Mystic Light controller voltage
+ sensors
 To: Tomasz Bojanowski <tomasz@bojanowski.me>
-Cc: linux-hwmon@vger.kernel.org, Hamza Mahfooz <someguy@effective-light.com>
-References: <20261106144247.30507-1-tomasz@bojanowski.me>
- <cd150425-262a-4a74-9f78-5ff581e27846@roeck-us.net>
- <20261107103959.7879-1-tomasz@bojanowski.me>
+Cc: linux-hwmon@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20261106184357.27763-1-tomasz@bojanowski.me>
+ <db51c24b-4b41-407b-a20a-b87ed7c0dbaa@roeck-us.net>
+ <20261107082728.8035-1-tomasz@bojanowski.me>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -128,9 +131,9 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20261107103959.7879-1-tomasz@bojanowski.me>
+In-Reply-To: <20261107082728.8035-1-tomasz@bojanowski.me>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -139,78 +142,75 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xPhgh-00000003VX5-2OTk
+X-Exim-ID: 1xPhrH-00000003bwA-0pLu
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:48028
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:51504
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 4
+X-Email-Count: 11
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfLbTz1Od/8Swf9Boz+KiY7OfLAJ0jPkjySPRIUJhGwUl8BAgn/Cf4v2Vpbmjd2UrJgZ7hfYC0CbHW7iX8Ki03rv0qs/mzDVYjqv5ZAYOmEaZ84LqPIqD
- uhitS/rhSrv8mb9H8DMl1L6tvaMDi6Y/jOIo9Vwo3Fz2FbyegermAxu6fHaQqAX5nXW5lCFktoJX4hPC1lck3u0qeH0HZxRStnkNsXLz2pke1CBwlVqIwdPd
+X-CMAE-Envelope: MS4xfFVAtuz0dSTgubR1CqzwIfkmKXFTtmsAke+4z7FLDmP9g4Xl3WpzY2yr7aLYxuBvMSmr5ne50aJh/h1Uz0CuuWOBUd8p00dVcnKUyoCR5Lr8Vp7giKEe
+ /xo8ViOQAGM4Y89ztPHxuTrn6bhMZqmk1X1edaVrV41FhLXyA8//kHqPTX2SPXa/32CfY23HkzSuKNwGR2azlEMQJbxCgCZt0khHsNWOKz4sK/+p8mw9nMd+
 
-On 11/7/26 02:39, Tomasz Bojanowski wrote:
-> Hi Guenter,
+On 11/7/26 00:27, Tomasz Bojanowski wrote:
+> Your reply did not reach my inbox, because the spam filtering at my mail
+> provider was set too strictly. I have fixed that, and I read your review
+> on lore.
 > 
-> On 11/6/26 08:09, Guenter Roeck wrote:
->> The underlying problem is that, according to the datasheets, the basic
->> LSB is really 8 mV, not 16mV as the code suggests. 16mV LSB only applies
->> to ADC, AVCC, VBAT, 3VSB and 3VCC. There is no 32mV LSB anywhere.
+
+There is nothing I can do about that, sorry. No matter which provider I use
+to send e-mail, some provider somewhere considers it to be spam.
+
+> Thanks for the review, and for trying the driver on your boards.
+> 
+> On 11/6/26 16:36, Guenter Roeck wrote:
+>> Using the USB serial number to detect the device seems fragile. If the
+>> USB vendor/product ID can not be used for some reason, it might make
+>> more sense to implement a DMI match.
+> 
+> Agreed. v2 identifies the board by DMI only and no longer looks at the
+> serial number. The driver is only registered on supported boards.
+> 
+>> This will require additional per-board data. On MAG B650M
+>> MORTAR WIFI (MS-7D76), the USB IDs are 1462:7d76, and
+>> hid_hw_raw_request() with the parameters below returns
+>> a length of 0 bytes. On MAG B650 TOMAHAWK WIFI (MS-7D75),
+>> the USB device ID is 1462:7d75, and on MAG B550M MORTAR
+>> (MS-7C94) it is 1462:7c94.
 >>
->> Patch(es) to fix the problem are welcome.
+>> That makes me wonder if the parameters can be associated
+>> with USB IDs.
 > 
-> Before writing a patch, I checked this on the MS-7E61 (NCT6687D,
-> customer ID 0x20d), including a direct read of the EC registers. On
-> this board the high byte has a 16 mV LSB for every source I could check,
-> including the VINx inputs. I have no reference values for VTT and VREF.
-> With 8 mV, VINx would read half of the expected values:
-> 
->    rail   source  raw  mult  16 mV (now)  8 mV
->    +12V   VIN0     63   x12      12.10 V  6.05 V
->    +5V    VIN1     62    x5       4.96 V  2.48 V
->    DRAM   VIN3     42    x2       1.34 V  0.67 V  (BIOS: 1.352 V)
->    Vcore  VIN4     84    x1       1.34 V  0.67 V  (cores at 5.5 GHz)
->    +3.3V  VCC     207    x1       3.31 V
->    VSB    VSB     209    x1       3.34 V
->    VBAT   VBAT    194    x1       3.10 V
-> 
-> The multipliers are the ones the vendor software uses for this board.
-> With the low byte included (MSB * 16 + (LSB >> 4) mV), DRAM reads
-> 1.352 V, exactly as in the BIOS. The vendor software and
-> LibreHardwareMonitor use the same 16 mV scale for every source on
-> NCT6687D (LHM also for NCT6683D and NCT6686D). I have no data from
-> Intel or ASRock boards.
-> 
-> So I would propose a patch that removes the 32 mV case and the source
-> argument of in_from_reg(), and documents 16 mV for all sources. Since
-> the 32 mV case never matched, there is no functional change. A second
-> patch could read the low byte as well, for 2 mV resolution.
-> 
-> Would that work for you, or do you have data showing 8 mV on other
-> boards? In that case the scale could depend on the chip or customer
-> ID. Also, which source does "ADC" in your list refer to?
+> On these older boards the controller uses the board code as its
+> product ID (1462:7dxx, 1462:7cxx). As far as I can tell from the vendor
+> software, the sensors of these controllers are read with a different
+> request, not with feature report 0xf0, which would be consistent with
+> the 0 byte reply. I have not verified this on hardware.
 > 
 
-Yes, that is ok. "ADC" is from the datasheet. It says:
+I have the ones mentioned above, so I could test there if you want to
+add support for it.
 
-The nine analog inputs of the hardware monitor block connect to an 8-bit Analog to Digital Converter (ADC) and
-consist of 4 general-purpose inputs connected to external device pins (VIN0 – VIN2) and five internal signals
-connected to the power supplies (CPUVCORE, AVCC, VBAT, 3VSB and 3VCC). All inputs are limited to a
-maximum voltage of 2.048V due to an internal setting of 8mV LSB (256 steps x 8mV = 2.048V). All inputs to the
-ADC must limit the maximum voltage by using a voltage divider. The power supplies have internal resistors, while
-the external pins require outside limiting resistors as described below.
-...
-All the internal inputs of the ADC, AVCC, VBAT, 3VSB and 3VCC utilize an integrated voltage divider with both
-resistors equal to 34KΩ, yielding a voltage one half of the power supply.
-...
-The CPUVCORE pin feeds directly into the ADC with no voltage divider since the nominal voltage on this pin is only
-1.2V.
+> On the 800-series boards the controller uses a common ID, 0db0:0076.
+> OpenRGB lists more than 30 X870, B850, B840 and Z890 boards behind this
+> ID and selects its per-board LED configuration by the DMI board name.
+> The vendor software also handles these boards with one class and tells
+> them apart by the USB serial number. So the USB ID does not identify
+> the board there, which is why v2 uses DMI.
+> 
+> For now the driver only covers the 800-series controller on the MAG
+> B850M MORTAR WIFI (MS-7E61), which is the board I can test on.
+> 
+> v2 also addresses the issues reported by Sashiko and your other
+> comments: it reads and validates the report in probe, fails probe if
+> that does not work, only exposes the rails that return a reading, and
+> no longer returns -ENODATA. I will send it as a new thread.
+> 
 
-So maybe it is all 16 mV except for CPUVCORE which is 8 mV ? I honestly can't say.
+Thanks a lot for the information.
 
-Thanks,
 Guenter
 
