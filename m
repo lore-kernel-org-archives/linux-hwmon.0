@@ -1,81 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794149451;
-	b=3VxWGs/lcleVafYOZBF2ysJAZdLHjhYc0RaVpXWOoS/Ws7n0KrVod0dk8TKTa4lL6AuY
-	 BxzRTVLBsllvNyNj2CUmG671lbahsT/RrYU8wslpzKCbZNLDxDii9ll1Ik++XOpOqXdNz
-	 Ij1RexT00wGdK1IPUxl7vIPVPQaHm/YywvuOj9FzL2AH6Xa+O+J9Rd/8XpkGE9InLDS+F
-	 lDTo/mZAPzgjKIf6IJEeMT1R1x3PLm+2RAvJjGY/3nVzpHcFvovVFFwGwA0OL/+PdDc6B
-	 IMIwDBZDlSEr3vGLG+A08qno8zOMx8KMq5otD/XJMIjFtFKsXe7Y1Uq/QZwxkBpUkMA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794149451;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
-	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
-	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
-	 X-Local-Domain:X-CMAE-Envelope;
-	bh=ZFlWh8q1FXbeFZVs9nVlhIoGr1Dnquy6NqDJrKTW2P0=;
-	b=K8FXjfGyAVSZXQM3NO3ZmXgq5hgGbu7gPbJ7EqkwMGmtV8zP74ki1rC6g19F4qAM0L5X
-	 5eT8U+2k73HhkO++yJmqJRLHzAoeZWFtpliOjiFnrBWQC4lBbrWzp8AY7oaqko3cdIkUL
-	 3fC/jM8vH9VLPM+71ZX2Y7Znq8VrvknVmqwlmLspaMY+2DWR2bjV/9Wq0vK2A9b5PKDVs
-	 gFNV5Cj/b8VwKFqEj62TQnyDBfeiDdbA1CdS8wIsxuDnGrVRHPkoRNJalxSPQGbhwgAwl
-	 CEKOiaCsxw+IK3e3ZoBi6n3ERh+aNLBrP5cDFLeGqtxWNlkk8xi3RJUqvC3ZpR2IKig==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=lMWWvh03;
-	arc=none smtp.remote-ip=35.89.44.37
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.51
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794152443;
+	b=NZUwwZMfg5zRrQAYrmmrOPL/0KDOfRciipL1s+i3W/oQ2dzgpFvTo4yQs9sBYbDSvKM3
+	 UC2TlWCw59nzddp32w960vTon5p/l9camqgeCrWGUER0U5NT2dJYIRQ/unmw14NwG4ylW
+	 T4EjwsQiY3IY6Z7qi9hnP0bFwXOMNtmETXH9wnkdwTifkMPEZUqvycwwEYibCxpqC/rAp
+	 xWFi+BL4CrCZgJdlELlTh30XhDdq7HiTNuorsmM/yv/hMo/XbdmNCXJ9LuO8lJjbxooxm
+	 RrzNyTm5SZs9nhdiWnXwiMXCNSPpWpx4T1X8N9/3MLFJws1AKzp328Y02X3nyZbq1ug==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794152443;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=v1EATUFgAK+e+fvvHz4fQmgc+IG10FBEDWMJovtpAtE=;
+	b=kAKrbGp9qUTzMZ7wJgXlL7n0XvCP5QhXU4+aeJGD/tdXYkdPBfbyWzTW56OjRYifzkDt
+	 etfmumQcnKS/3PCAahyXMrRPm2kUUn14SU+2QXU5Kav/l4chD3U427NHeSFGtQEOk8TkJ
+	 WZQe3o1vwQve+2kkSCn4vc2LXy97FPc8zo6JNzaoHAbxFYpcWElpxvu9QlOdL3UXJ0xTE
+	 Ah4olhkl7hPTsaL+vc45zvgYYLQzJKMBYEY+qEEp3phSOdDwWWc00Yz8LCXEc3H59Q/1N
+	 n8L/scPnBAlRoLfx0VbLzkoTSlPEy0RfliE5Xe2KWNYD2DNvocptOKaFQqx164X2vEA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=f4d8fCRx;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.51
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41056606A321
-	for <linux-hwmon@vger.kernel.org>; Sun,  8 Nov 2026 14:50:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 41056606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C55606A31C
+	for <linux-hwmon@vger.kernel.org>; Sun,  8 Nov 2026 15:40:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 40C55606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=lMWWvh03
-Received: from eig-obgw-6001b.ext.cloudfilter.net ([10.0.30.143])
-	by cmsmtp with ESMTPS
-	id PwgIxnO9zVK9UQ4EMxkVmG; Sun, 08 Nov 2026 14:50:50 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id Q4ELxMjWldRrRQ4EMxH5z8; Sun, 08 Nov 2026 14:50:50 +0000
-X-Authority-Analysis: v=2.4 cv=LOhmQIW9 c=1 sm=1 tr=0 ts=6af08c4a
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=UZ1dQ18DKJ-JX__J:21 a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10
- a=pGLkceISAAAA:8 a=EJN59OTSmWfVsbul1mkA:9 a=CjuIK1q_8ugA:10
- a=9ZlKDEqW8j0_VKCLas2V:22 a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=ZFlWh8q1FXbeFZVs9nVlhIoGr1Dnquy6NqDJrKTW2P0=; b=lMWWvh0319TJg2EOT8Uh5zgoOe
-	qLfnJ9Ww64cVeAnksSVjO8ICdWIEs5HxLsZGSuxZiX6R/FG7NTZNi8MuLF6l+jrEnv15JzNePIdiZ
-	w01qPdFjOlCDvAv9/Y0ePR0iEcYVLSAH4xpUNmw7jpoXlh4DbBkX3QrbMSgxcbPAp6V2Zn/xsOfLZ
-	DjxDzc42HJdiB1Kslgtv1vr8WOn/q1ym0YQQ8athBKgCmeh3GT3899MmWtPdg/hA0nb8L/DhZxK+w
-	aL5wLcToRj5jeNuBXQJWAVok3DQvkwMUQH+N08xVBUuP1aPkeqgdlte83Y43iPDw0tluv9uA3t4wD
-	904QG7MA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:60202 helo=server.roeck-us.net)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xQ4EL-000000004pa-2saW;
-	Sun, 08 Nov 2026 20:20:49 +0530
-Date: Sun, 8 Nov 2026 06:50:49 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Pablo Mazzini <pmazzini@gmail.com>
-Cc: Alistair Francis <alistair@alistair23.me>,
-	Andreas Kemnade <andreas@kemnade.info>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/5] hwmon: sy7636a: read the temperature only while
- the rails are on
-Message-ID: <d9035966-07f3-4758-9074-7fb94375c40b@roeck-us.net>
-References: <20261108093602.329554-1-pmazzini@gmail.com>
- <20261108093602.329554-5-pmazzini@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=f4d8fCRx
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3ae691283ecso46096a91.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 08 Nov 2026 07:40:43 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794152442; cv=none;
+        d=google.com; s=arc-20260327;
+        b=IfcYmq5qacMgSuw8mAVu3DNjzJazGipvRYOzRMxw5XbMttKq5xhZ1imNEAV8Fn5K1P
+         04BfAj2tkt1QcXZyKkr82jqf2BzTgWcgmPysZ9/3LL+eh5uBM5cHKy7sjW1tUWlXhZFm
+         95dyyEfh+5kzFCg6ZKolVKkLBt1f8fIZ2AGBb1NBvzfDwkjFUw3YVaqd8ctC85v/zYYK
+         HNtXqBdlRUsV54nVGP9U4H5e8YEM/0rNSeI1GfW+UeS8MGwk5YHFX35YdoLnuLZia5Kv
+         716szVDt90JgXklquQ0AzeA+Xpb5AzcmpQNbRFwjlQxnbDWOL/RXtvT44pBtaKd9WVcT
+         W51A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=v1EATUFgAK+e+fvvHz4fQmgc+IG10FBEDWMJovtpAtE=;
+        fh=dqzAJQSdTPY4zZdUpZ6xUoPNUK7lrjhnnlSrVz1xD0g=;
+        b=FdIlh3FGE8n4/uyocB8yD6FjvU4990vsg3FCE27dcgOzPa4uvjSjVuIqAPhzP5sMeJ
+         kE38yPIfdbn2rKBLkQMjyicrgXxNnlCFTloam1FmcF0BFNnf2dtfutJRhKZFOSHnxSYJ
+         LUg6aVCC5HseObnFZ6eaSxLtVkdYBV4TNDBakl5RLr1tek4PiL+xIdXE4y7MIu5+xsNR
+         KCy+nxN/IKszY/GeaJDnc4wPBNcZcE5XcSea1sUtQfgAk8rFc1n1XccmNhCwTZJPLLBr
+         pi2Paza4GjNUubHWmptyhTPj0drrHS4ML+h8pAWtGtPHUQ2qiO/GOdqxQF8nIFcuedQN
+         mCLQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794152442; x=1794757242; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=v1EATUFgAK+e+fvvHz4fQmgc+IG10FBEDWMJovtpAtE=;
+        b=f4d8fCRxpi6cwES9Gk/2Yb03pjXq2a6QLoF1T/37ngm4ROP168ZaGekdIzUXnEuwiv
+         Rs3V0Wux2NOT2kvC/KMM/AFDhbh2G5j0iQDjrABS3HCBcp5iIdMbq4RAJhBNYfuj8UGR
+         Df0JiMbOjPg562McP+adCEkbymb94Akrt0sJTuY6hFT/kp6WJfp/p0156zeDgOVU8W4c
+         3aqHRunNkNNh7HkDSmaQoElLXoHd9w7lYTgnx8oKIW+sMwax80IcGqoI8Gag69i+FPyn
+         lL0ktoMuKh+RBdH6D3Lgq86Ys0JpMiiD1rahWKDigCs+W+j329KxQBvdUMUxffc30/6l
+         lBGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794152442; x=1794757242;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=v1EATUFgAK+e+fvvHz4fQmgc+IG10FBEDWMJovtpAtE=;
+        b=0rlQe77sgR8sBxp2PW9n+7kIGoIyzwSlHtF8yGSgxiSWawJoiPVjakHmVvpxjYRPb7
+         Ry2GlTWKQpfG6TWK+v1SOdZRAY1YcuZZTN0c2V/yrl3J/8djR/GtZpd+cY2eBAg+Z5Jv
+         hnfxqymniaEO3toLiQZ4KuXIcaVEES+Ivxddl4BTA4FGPUwpyeZFw/ksUinbjhkC0bS/
+         ueD7VazdfYS2xPNUnMwl6Jp8aXAzxBBrDM6LdKkRGZyDYSfi858X8GCJO9Bq4q7344Sq
+         v07JAiIi68vT0qWEMJTmj1CsJXrPqlTXBJyw7Rv6FdEX67gi3enPduHdepT0p/F3wp+C
+         SpNw==
+X-Forwarded-Encrypted: i=1; AL+hErHUN8LtmTa++UyrcGszxq3fryk9dArcVRRZQHsr5UfZa2Slq59pUPKmyEo36zKKAOOHQkT/lJNgd+sO9A==@vger.kernel.org
+X-Gm-Message-State: APuU4Z9Qn/omYlOJhXfD3sdNfdNjYxg/blNYaiihK0oDRcJaEpTaa1EK
+	nnfC1EJ7prTdcce85cviABIJREUFB34enfUjade0M90pHMX+LCZ7kr8I2ztbj58/Bb8Ol+FhENS
+	EMNk4Yxd8fMYac8EmddYe8ECsovsxbdM+Z5rq/qalCaQI
+X-Gm-Gg: AYBFou1fv9HICW8hmEMrG6irFE8QsS5qyEvLmPdza5Cfn1RuoiqEZalaw7qy4jVZhII
+	MdnGK39vYKepL89ahXY9anr13lHreucPETvUb9rNffmVUWE5HRTFANkN1vmlFxBxtLH0udmidTU
+	tgdL1U5mg3xDmXN/utLZhwplpkPrYMZrjvUQRp92ZFOVMyOKyiRvEVIT8GF8xPTV+B+sDJ9iYQK
+	1NepHmwDs9EQVaZU5apitxehzf17ZRzXAzoCCUjMzPJR/V3V1Wp2JILyax0XIP5TYFN5wl5Hm30
+	dowxruK5yah+VlT3W6E5eWwxHdlTSnlHsa9wyy6pqqS/ZZPjex+UjZJpgcJY7wZUMkxVCiqkNQR
+	80Izn7xp2dEVPOl7k/M+0klN4+vY3WEx7R30iIXMe01zyobn+YEVE
+X-Received: by 2002:a17:90b:4b12:b0:3a0:d82b:237b with SMTP id
+ 98e67ed59e1d1-3b12d4ddfbamr1063419a91.25.1794152442391; Sun, 08 Nov 2026
+ 07:40:42 -0800 (PST)
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -85,115 +104,139 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261108093602.329554-5-pmazzini@gmail.com>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xQ4EL-000000004pa-2saW
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:60202
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 2
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfKrHEzRqTx95aQ7Vo9sfnGW9edIlLRJ4UrpnbAd4w2YbkG8Qp5LfNp/b2RNDqamR8TDQS+bJaANABDpBP+01WK3t8OESh9DaZCnr9imxif3kou3k1Vpc
- XZFs7Q7HQWpZLieHNZhHzTdYIir6y1radl0TQpDtcsRq8fWIPJJH4kt7ZQsWza72VSkxL4qojTWN699MIQ7EIiGen+2LB+kiGnY32DMvaLI1RrWrVf0PX6nQ
+References: <20261108093602.329554-1-pmazzini@gmail.com> <20261108093602.329554-5-pmazzini@gmail.com>
+ <d9035966-07f3-4758-9074-7fb94375c40b@roeck-us.net>
+In-Reply-To: <d9035966-07f3-4758-9074-7fb94375c40b@roeck-us.net>
+From: Pablo Mazzini <pmazzini@gmail.com>
+Date: Sun, 8 Nov 2026 15:40:17 +0000
+X-Gm-Features: AclHuK9879PTA1ZVJ5Sp0ZQ9MGLxSUczATyJyfWPud5R8IRCfsuM4ujwWYibCJU
+Message-ID: <CAAxh=juaE3=oiUS0W4vMTrNW9S-hJ+Z=LxH6aKUktBK32Racbw@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] hwmon: sy7636a: read the temperature only while
+ the rails are on
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Alistair Francis <alistair@alistair23.me>, Andreas Kemnade <andreas@kemnade.info>, 
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Nov 08, 2026 at 09:36:01AM +0000, Pablo Mazzini wrote:
-> The driver enables VCOM at probe, which keeps the panel's high voltage
-> rails on for good. Read the temperature only while the rails are on, when
-> the chip samples it, and return -ENODATA otherwise. Read power good with
-> it in one transfer, so the value can not be from before the first sample
-> or after the rails went off. Register it under the chip name, as the
-> TPS65185 and FP9931 drivers do.
-> 
-> Signed-off-by: Pablo Mazzini <pmazzini@gmail.com>
-> ---
->  drivers/hwmon/sy7636a-hwmon.c | 37 +++++++++++++++++++++++------------
->  1 file changed, 25 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
-> index a6b47452e29e..0c0601d47b87 100644
-> --- a/drivers/hwmon/sy7636a-hwmon.c
-> +++ b/drivers/hwmon/sy7636a-hwmon.c
-> @@ -9,26 +9,43 @@
->   */
->  
->  #include <linux/auxiliary_bus.h>
-> +#include <linux/bits.h>
->  #include <linux/err.h>
->  #include <linux/hwmon.h>
->  #include <linux/module.h>
->  #include <linux/regmap.h>
-> -#include <linux/regulator/machine.h>
->  
-> -#define SY7636A_REG_TERMISTOR_READOUT	0x08
-> +#define SY7636A_REG_FAULT_FLAG		0x07
-> +#define SY7636A_FAULT_FLAG_PG		BIT(0)
->  
->  static int sy7636a_read(struct device *dev, enum hwmon_sensor_types type,
->  			u32 attr, int channel, long *temp)
->  {
->  	struct regmap *regmap = dev_get_drvdata(dev);
-> -	int ret, reg_val;
-> -
-> -	ret = regmap_read(regmap,
-> -			  SY7636A_REG_TERMISTOR_READOUT, &reg_val);
-> +	u8 buf[2];
-> +	int ret;
-> +
-> +	/*
-> +	 * The thermistor is sampled while ON_OFF is set, but the first sample
-> +	 * is only ready after the ADC sampling and conversion time (ADC_SPL +
-> +	 * ADC_DEL in the datasheet); until then it holds its reset value, 0.
-> +	 * PG is only set once all rails are up, after the first sample, so
-> +	 * read it in the same transfer and report the temperature only while
-> +	 * it is set.
-> +	 *
-> +	 * With ON_OFF set but PG low (rails still ramping up, or a fault), no
-> +	 * temperature is reported even if one may be available. That is
-> +	 * accepted: the display driver reads the temperature only while it
-> +	 * holds the rails on, after power good.
-> +	 */
-> +	ret = regmap_bulk_read(regmap, SY7636A_REG_FAULT_FLAG, buf, sizeof(buf));
->  	if (ret)
->  		return ret;
->  
-> -	*temp = (s8)reg_val * 1000;
-> +	if (!(buf[0] & SY7636A_FAULT_FLAG_PG))
-> +		return -ENODATA;
-> +
-> +	*temp = (s8)buf[1] * 1000;
->  
->  	return 0;
->  }
-> @@ -72,12 +89,8 @@ static int sy7636a_sensor_probe(struct auxiliary_device *adev,
->  	if (!regmap)
->  		return -ENODEV;
->  
-> -	err = devm_regulator_get_enable(&adev->dev, "vcom");
-> -	if (err)
-> -		return err;
-> -
->  	hwmon_dev = devm_hwmon_device_register_with_info(&adev->dev,
-> -							 "sy7636a_temperature", regmap,
-> +							 "sy7636a", regmap,
+On Sun, Nov 8, 2026 at 2:50 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >     hwmon_dev =3D devm_hwmon_device_register_with_info(&adev->dev,
+> > -                                                    "sy7636a_temperatu=
+re", regmap,
+> > +                                                    "sy7636a", regmap,
+>
+> This change is neither related to this patch nor necessary. Other drivers=
+ (unnecessarily)
+> doing the same is not an argument.
 
-This change is neither related to this patch nor necessary. Other drivers (unnecessarily)
-doing the same is not an argument.
+Right, I'll drop it in v4.
 
-Guenter
-
->  							 &sy7636a_chip_info, NULL);
->  
->  	if (IS_ERR(hwmon_dev)) {
+On Sun, Nov 8, 2026 at 2:50=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
+rote:
+>
+> On Sun, Nov 08, 2026 at 09:36:01AM +0000, Pablo Mazzini wrote:
+> > The driver enables VCOM at probe, which keeps the panel's high voltage
+> > rails on for good. Read the temperature only while the rails are on, wh=
+en
+> > the chip samples it, and return -ENODATA otherwise. Read power good wit=
+h
+> > it in one transfer, so the value can not be from before the first sampl=
+e
+> > or after the rails went off. Register it under the chip name, as the
+> > TPS65185 and FP9931 drivers do.
+> >
+> > Signed-off-by: Pablo Mazzini <pmazzini@gmail.com>
+> > ---
+> >  drivers/hwmon/sy7636a-hwmon.c | 37 +++++++++++++++++++++++------------
+> >  1 file changed, 25 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmo=
+n.c
+> > index a6b47452e29e..0c0601d47b87 100644
+> > --- a/drivers/hwmon/sy7636a-hwmon.c
+> > +++ b/drivers/hwmon/sy7636a-hwmon.c
+> > @@ -9,26 +9,43 @@
+> >   */
+> >
+> >  #include <linux/auxiliary_bus.h>
+> > +#include <linux/bits.h>
+> >  #include <linux/err.h>
+> >  #include <linux/hwmon.h>
+> >  #include <linux/module.h>
+> >  #include <linux/regmap.h>
+> > -#include <linux/regulator/machine.h>
+> >
+> > -#define SY7636A_REG_TERMISTOR_READOUT        0x08
+> > +#define SY7636A_REG_FAULT_FLAG               0x07
+> > +#define SY7636A_FAULT_FLAG_PG                BIT(0)
+> >
+> >  static int sy7636a_read(struct device *dev, enum hwmon_sensor_types ty=
+pe,
+> >                       u32 attr, int channel, long *temp)
+> >  {
+> >       struct regmap *regmap =3D dev_get_drvdata(dev);
+> > -     int ret, reg_val;
+> > -
+> > -     ret =3D regmap_read(regmap,
+> > -                       SY7636A_REG_TERMISTOR_READOUT, &reg_val);
+> > +     u8 buf[2];
+> > +     int ret;
+> > +
+> > +     /*
+> > +      * The thermistor is sampled while ON_OFF is set, but the first s=
+ample
+> > +      * is only ready after the ADC sampling and conversion time (ADC_=
+SPL +
+> > +      * ADC_DEL in the datasheet); until then it holds its reset value=
+, 0.
+> > +      * PG is only set once all rails are up, after the first sample, =
+so
+> > +      * read it in the same transfer and report the temperature only w=
+hile
+> > +      * it is set.
+> > +      *
+> > +      * With ON_OFF set but PG low (rails still ramping up, or a fault=
+), no
+> > +      * temperature is reported even if one may be available. That is
+> > +      * accepted: the display driver reads the temperature only while =
+it
+> > +      * holds the rails on, after power good.
+> > +      */
+> > +     ret =3D regmap_bulk_read(regmap, SY7636A_REG_FAULT_FLAG, buf, siz=
+eof(buf));
+> >       if (ret)
+> >               return ret;
+> >
+> > -     *temp =3D (s8)reg_val * 1000;
+> > +     if (!(buf[0] & SY7636A_FAULT_FLAG_PG))
+> > +             return -ENODATA;
+> > +
+> > +     *temp =3D (s8)buf[1] * 1000;
+> >
+> >       return 0;
+> >  }
+> > @@ -72,12 +89,8 @@ static int sy7636a_sensor_probe(struct auxiliary_dev=
+ice *adev,
+> >       if (!regmap)
+> >               return -ENODEV;
+> >
+> > -     err =3D devm_regulator_get_enable(&adev->dev, "vcom");
+> > -     if (err)
+> > -             return err;
+> > -
+> >       hwmon_dev =3D devm_hwmon_device_register_with_info(&adev->dev,
+> > -                                                      "sy7636a_tempera=
+ture", regmap,
+> > +                                                      "sy7636a", regma=
+p,
+>
+> This change is neither related to this patch nor necessary. Other drivers=
+ (unnecessarily)
+> doing the same is not an argument.
+>
+> Guenter
+>
+> >                                                        &sy7636a_chip_in=
+fo, NULL);
+> >
+> >       if (IS_ERR(hwmon_dev)) {
