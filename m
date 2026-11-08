@@ -1,76 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.35
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794096096;
-	b=pwToVJmzJXOLLWwRdW/Cf3LUdxCtzT9BBMXyLcArdrfFukP3D4LslISQ0SIjVUZ5M6M2
-	 qu7Uyd5b0Sq9ggx1F0qWO+TDzAKAUv/cH5gkMsieYgok+yxhWjnloHNNgg8herszRW7hJ
-	 eA8Vx6CfdEZfT34ZCPBDDHXzz/0IXEn7XvU23HiAZXSoBuMqGLE6jRZZNg1cJSVEzgjOW
-	 NGCDoiPA6+p7hdRjPYxgjWEE52dGTaaNhCAQ1ngQRdarKpgVD1Z5XObb+QaKMnW2aTrMS
-	 D/SqPM0QHFULLPB+5WQW1CtwMYaSRN+5m3a9VADaU2RqDX0fll7bRrCPBYl4PPEdu4w==
+	t=1794096097;
+	b=zCr2M/zwat0TGJWhjoPHyJg+akXiQSJGyeb4L5y0Hkzy0+VOeqqv+YRJgQbebt/ZXOtE
+	 tYrYhz7OBDxQJaMF8YutkgC1JciHEjEAMn+Gr78q9TqRwGOBzaY37CmKa4fCPZnr6oLDV
+	 tKghp0yibMHdejaqAfc/9Owo9PUF9hX2S/ZaJeU+sGyhcrMgcaFRe+2YPsOx6hBfZiKfP
+	 afASXdD92B0tEndOlVdQdvYlOnyqi9Ixpzr8gTf934ElD3ir2rQY+SZ3xVdv2BfsrjiI6
+	 SM2xpssNb+CxDLeE8HfzHkRQ0ttZEqlywBtpsbxOURgg6vwftholPy5+h8575Y1OVEg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794096096;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794096097;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
-	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
-	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=iU6kVBRXbxOS0oj7hA2L0WJScDqBjI4nRVFxLPG9oIg=;
-	b=45zYgI97YxdMETnkUOBuU/V3+76UeEqw8f6MS3TG88AQ9xMAZcoO8CSy8ER7MsZPabYT
-	 wWE5ozVAu88OY+pRMYDUS0VngbcBsvwhL4mWCmq46kYyZOTK/R3FRGvKWJWxEmxp80bRN
-	 ucJOsmmQbrz2QX+XTuBU05m51V8I5vCWSrumlYwhfW8tblwdVWYtt80iIT+T9cXXF8KQM
-	 yBrdmkxlspwL5m2gguSTMMGo2o3LfcU54L6RngkCpNPY9Kfw4yVLQ8AWLCKeGgOH0fQ50
-	 olqcbfJyGF8aNNdaeQZ+r6xjdc7nxmWYtyLN2gSaGce2Tz3MMrH95SXMm5xsOizTbcw==
+	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
+	 References:MIME-Version:Content-Transfer-Encoding:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:
+	 X-Source-IP:X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
+	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
+	 X-Local-Domain:X-CMAE-Envelope;
+	bh=WhLOUe2muAW9NZVYSYp7BcV1IbTn1k6/5rOI+02tULI=;
+	b=wLfFPgLCOLAOKToPJkzq2rP8ghKNYvQuadQLgU0+1mvR3pF7G01NaW0zzV2hPB+Mkbro
+	 Lbjgsl0dqxpbRSHDS3NwxxiIcelTggxRN5T9xgQzdVnmPvba/J/06jSAz5OCeS1/t6GQf
+	 Xnjy/TrmTupRV4+jsez2U4yQ38zQCdkjWo6gJ2j2y6v7gzjdIw2+1Ftp3lCieerQtN0Eb
+	 TCx0qMTgTu36h3HFXYx9ZbYWKYxGkQrJR7mRzU/iQ0e+pi1r2CEbc0iWdXdAezkPZ8Bfv
+	 mjT0jK8rtN/XbH0j1QQ0PwIc4Iz3Mb2iITkzZnb0vitelOkQbbp9GOP4rVb16g/LWKw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=va5k5YXE;
-	arc=none smtp.remote-ip=44.202.169.39
-Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=noeq81Ec;
+	arc=none smtp.remote-ip=35.89.44.35
+Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50EB9606A326
-	for <linux-hwmon@vger.kernel.org>; Sun,  8 Nov 2026 00:01:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 50EB9606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8B9606A326
+	for <linux-hwmon@vger.kernel.org>; Sun,  8 Nov 2026 00:01:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A8B9606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=va5k5YXE
-Received: from eig-obgw-5002b.ext.cloudfilter.net ([10.0.29.226])
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=noeq81Ec
+Received: from eig-obgw-6003b.ext.cloudfilter.net ([10.0.30.175])
 	by cmsmtp with ESMTPS
-	id PldyxyzUJOOJnPqLmxtVyw; Sun, 08 Nov 2026 00:01:34 +0000
+	id PNuzxeguBRiNxPqLoxAPxA; Sun, 08 Nov 2026 00:01:36 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id PqLlxXlRMb2qJPqLmxwwtq; Sun, 08 Nov 2026 00:01:34 +0000
-X-Authority-Analysis: v=2.4 cv=A7tsP7WG c=1 sm=1 tr=0 ts=6aefbbde
+	id PqLnx7gJxGh2BPqLnx39iL; Sun, 08 Nov 2026 00:01:35 +0000
+X-Authority-Analysis: v=2.4 cv=Aszu3P9P c=1 sm=1 tr=0 ts=6aefbbdf
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=zdos1vbpJfyXFnXreKYA:9
- a=KPbNTLLc3YvdawN95zVk:22
+ a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8 a=6phSsQ8wN3HDoariCigA:9
+ a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=iU6kVBRXbxOS0oj7hA2L0WJScDqBjI4nRVFxLPG9oIg=; b=va5k5YXEKAjH7wWUSUv7Pv+BRz
-	QIPh8UC2eG0WeSPe3EMwwfCsPpNiOkBgZh7fN3uzpbaEoIajR5xHZWklXcxNebPRkuauPv938KoJD
-	/Uf9XpGe9pgiTYtegs+865OhYRLdF+4x76DJEj4GUgLaiBs5OJcGlFQIBIB7hKxZjq79Bjkq+qM8Y
-	dNAeJ+pJ4hoA+vtuHAyK3jwyB7eCbZJeEmfmVdcNheF+bHClRGuUS9wMqjpCQKMq1bjKaxMD+N5ly
-	v4HLbRPaTgfYSYaVfKVi2tRyQ1tRzsqiOW9SI4amx9DBBp37B4YYpeqsy0WK07u7d0XzjRiAaPDNE
-	iZYeyPWQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:34062 helo=server.roeck-us.net)
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
+	List-Archive; bh=WhLOUe2muAW9NZVYSYp7BcV1IbTn1k6/5rOI+02tULI=; b=noeq81EcXK7n
+	UsVRnls5FfdeWlea42kBl1A4kwQAql5yqaG25v+4pLyXt9SISzX5ndog5RSO9DJV2uNBO6fRQWTPp
+	Ssso/PZppdF3xwnvQijZC0tlVpRuNPc/WB0wPnQUIBNwaavuXYE5sfkn+BEc4OTlS/RSa9PErGDkY
+	NmjibTFaUZiHF6ZzgJC/Mz0JhwrJij8jgvabpG4fESE6SRbN45Px1omvZksCCDsgIEqgz5sSr5HPF
+	K4CmV9UcBsiYSPUog8FtqeASHRmzvnVa2AiKJan4ZChnePs5PR+XSH938bl8JB8UuHJah9J0yjv+8
+	kNmd/vb/2JilArXxWOL8KQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:34080 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xPqLl-00000004Dz5-2umz;
-	Sun, 08 Nov 2026 05:31:33 +0530
+	id 1xPqLn-00000004E1G-0g8k;
+	Sun, 08 Nov 2026 05:31:35 +0530
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
 Cc: Tomasz Bojanowski <tomasz@bojanowski.me>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 0/4] hwmon: (msi_mystic_light) Add support for additional MSI motherboards
-Date: Sat,  7 Nov 2026 16:01:27 -0800
-Message-ID: <20261108000131.1249664-1-linux@roeck-us.net>
+Subject: [PATCH 2/4] hwmon: (msi_mystic_light) Stop calling hid_hw_power()
+Date: Sat,  7 Nov 2026 16:01:29 -0800
+Message-ID: <20261108000131.1249664-3-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20261108000131.1249664-1-linux@roeck-us.net>
+References: <20261108000131.1249664-1-linux@roeck-us.net>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -89,57 +92,62 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xPqLl-00000004Dz5-2umz
+X-Exim-ID: 1xPqLn-00000004E1G-0g8k
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:34062
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:34080
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 2
+X-Email-Count: 6
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfCKjlW+Od4uUCozKK+R4FjfBft9U5TO+cBjOZ2EhLIfGRunml0ClQJWyS32F08R7c+hLkMzd0gZASDh523sFJuDAqXsrzVUXVlHwoExvzedoG91V/2DD
- 2Ct+99jShjpnUfnGt5TEN69Fom4e5FbrkCJrwKctqmRbbVFfId6OYK+XF18DrNYcW5+V3x4VlQkrG8apS2/W251i+HKkFg4sRz0QWAKrJA9T1TWZ40Pi+IN4
+X-CMAE-Envelope: MS4xfLFprl+zawUFvfESOnTcAOvkXna2ESkk34GTJ0jDoaeOGP8aLxNZGnhBy9V4UZpsoo/AT3jxiTazGH31sGAbGfMM1PEGhr/MzWGYlD4byRje4VAbN9Dt
+ xSyEgt4FmphmYJ+HWepeZLnU8FXtRBAanqGzghkA1xJPOY+XHC+Mfebf6Qri/+68kxW3yZPrtStVChavGTSDt6n9CEYgDWzgxZ9z5xzX0Dejakffk0t8bS22
 
-This series extends the msi_mystic_light hwmon driver to support voltage
-monitoring on three MSI 500- and 600-series motherboards:
+msi_ml_read_report() currently wraps hid_hw_raw_request() with
+hid_hw_power(..., PM_HINT_FULLON) and hid_hw_power(..., PM_HINT_NORMAL)
+to prevent USB autosuspend during the feature report transfer.
 
-  - MSI MAG B550M MORTAR MAX WIFI (MS-7C94, USB ID 1462:7c94)
-  - MSI MAG B650 TOMAHAWK WIFI (MS-7D75, USB ID 1462:7d75)
-  - MSI MAG B650M MORTAR WIFI (MS-7D76, USB ID 1462:7d76)
+However, msi_ml_probe() already calls hid_hw_open() and keeps the HID
+device open for the entire lifetime of the driver binding so its
+interrupt IN endpoint remains actively polled. Because the device is
+kept open and remote wakeup is not enabled on this controller, USB
+autosuspend is already inhibited while the driver is bound. Consistent
+with other hwmon HID drivers, explicit per-request hid_hw_power() calls
+are unnecessary.
 
-Unlike the 800-series MS-7E61 motherboard initially supported by the
-driver, which exposes voltage readings synchronously via a
-HID_REQ_GET_REPORT request on feature report 0xf0, the Mystic Light
-controllers on these 500- and 600-series boards require sending an
-output report to request sensor data and subsequently deliver the sensor
-readings asynchronously via a HID raw event.
+Drop the redundant hid_hw_power() calls to simplify the report read
+path.
 
-Patch 1 rearranges structures and per-board definitions so board-specific
-read callbacks can be added without forward declarations.
+Cc: Tomasz Bojanowski <tomasz@bojanowski.me>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/msi_mystic_light.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-Patch 2 drops redundant hid_hw_power() calls around sensor report reads,
-since the HID device is already kept open for the lifetime of the driver
-binding.
-
-Patch 3 introduces a per-board read_report() callback in struct
-msi_ml_board.
-
-Patch 4 adds the output-report/raw-event read implementation, board
-definitions, DMI/USB ID entries, and documentation for MS-7C94, MS-7D75,
-and MS-7D76.
-
-Guenter Roeck (4):
-  hwmon: (msi_mystic_light) Rearrange code to simplify adding per-board
-    read functions
-  hwmon: (msi_mystic_light) Stop calling hid_hw_power()
-  hwmon: (msi_mystic_light) Make sensor read function board specific
-  hwmon: (msi_mystic_light) Add support for additional boards
-
- Documentation/hwmon/msi_mystic_light.rst |  59 +++++-
- drivers/hwmon/msi_mystic_light.c         | 222 ++++++++++++++++++-----
- 2 files changed, 227 insertions(+), 54 deletions(-)
-
+diff --git a/drivers/hwmon/msi_mystic_light.c b/drivers/hwmon/msi_mystic_light.c
+index a008999e7c06..4b4e07f15aa8 100644
+--- a/drivers/hwmon/msi_mystic_light.c
++++ b/drivers/hwmon/msi_mystic_light.c
+@@ -76,17 +76,9 @@ static int msi_ml_read_report(struct msi_ml_data *priv)
+ 	memset(buf, 0, MSI_ML_SENSOR_REPORT_SIZE);
+ 	buf[0] = MSI_ML_SENSOR_REPORT_ID;
+ 
+-	/* Make sure the device is not autosuspended during the request */
+-	ret = hid_hw_power(priv->hdev, PM_HINT_FULLON);
+-	if (ret < 0)
+-		return ret;
+-
+ 	ret = hid_hw_raw_request(priv->hdev, MSI_ML_SENSOR_REPORT_ID, buf,
+ 				 MSI_ML_SENSOR_REPORT_SIZE, HID_FEATURE_REPORT,
+ 				 HID_REQ_GET_REPORT);
+-
+-	hid_hw_power(priv->hdev, PM_HINT_NORMAL);
+-
+ 	if (ret < 0)
+ 		return ret;
+ 	if (ret != MSI_ML_SENSOR_REPORT_SIZE)
 -- 
-2.56.0
+2.45.2
+
