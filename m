@@ -1,89 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794110410;
-	b=KoNUaUDK3/DSSL1iPhMGp+Ws1rZKnYCUOEs0phSAp/Nxc5x45Q0rcXHm9OzbWNQgmaEP
-	 eLrqrKajg7xzd8sUwnRZn7v47FVNCOp4qovrcYGeCeDVeCfw/FmI8FWOsVruXxfuaRwrW
-	 0xRLPwowM0zkJXTxS/NmB3xkpmqzkVfsEuNXqJcZ0vymBfEkdK5Ezy5qpGoe1sMSn0DtF
-	 k0AogzVSrYJQytlkhCi2IMhh857fOHuKOTcf9tpYZcbdc3PkZHxOKz+eLq1QV4tFp91yq
-	 h8yQo4ihhEk76HvxxoqydqXDYfalKy4np5y6j3e1Ur7cgk93y4FqmezOi7zRTf967Cw==
+	t=1794110413;
+	b=1X8ksoa9nqeNSCFVPa7NDk3RyPxTBhGTWvHIRBgNtqZzZuSaNJ5tdEH76eVb3d4ZQsYJ
+	 XMddsJeOUF2ESRR1Sb3z+GineqaZydp2/tVTT7mMstHmAVwBztn5beww0eJ1W0pQSugvZ
+	 c4vQN5Nfif2Ohh7jbC2HcEmpveYryXsT0FrG/hY5qlRfRelBPYuNoNpzCKYs2+nH6DF4W
+	 9WxzRoPWipDbuzsCm51q2yXrcJIDq+nWIjoViWhFPA5RaEBFxvDSPncZPFmkJGwB+o5Q6
+	 sA5s0MfBmCyb5UGFD0G74K3eB9KL4G6l+j5Jtga+NamRL/s44I7UJwNxU3Ni82+To3w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794110410;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794110413;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:Subject:Date:Message-Id:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key;
-	bh=MXs/vYPbzWYafmxmgKumqAJHyqvTX01sR3Js7JwVAao=;
-	b=cq1WADuMGnzsiShhe2Y7+BBfBhLiNP8ejalcrEGLpFRUiw9VOe1AeZKkw9LX9dqcbO5U
-	 eePEk5U1cqdG79Csz96vwDqXhJ9kZXlZwaLJCHy8ud/jyAGtotBH3JaM5NCGbMVEQhsAK
-	 3XGhj+o2RCTrwShXQJcKkbjfcWMQtH4Kno0LwZVtj9g1r7dBEH0ag7zPbUYgyNyyoT6+7
-	 9pfsLMrEWhC2ChRcE4mgbtJZQ3/WXt7rIv6UUgosbYMOje227tSk/+5XfiyEDo/t6MsQu
-	 hrCdlCnrA2HqfhZ1PF/nJ/wTwa4FvSd3hVItbHbelo/PWBDSX/JVF4UJ+A66W8cwAoQ==
+	bh=Fm7dk54aTQ+ve82k3n7UjfY8j5o5QSbD2ilJ3czYZ9s=;
+	b=eTd2WXa6BlBfuAFQAEid85nNLaAPkZkGnldDUWfyPAtOyQVLyN+vmt4AYVcDPU25s+MK
+	 ikRG9hZhOSnXj+zWCNYeqtEKx/eSO1GVfkcG1PuJloeIiqfzXKQITMmrn4W3vejwAQJJC
+	 jC3ynmkTrXMLfN8FxxVtsHgaLAI0mqHsVW4y1ugpNpoVbixdrLgYmudCpLGMFV+XKT8jR
+	 TD0T0CXCBACyielHPpilkrbPV8wwa2UISI+QLrDac+tcaFltdVr7ts9PO9fukRZA7pV06
+	 ZR4FLwp3FcctTVTxpN6d8H9HnwqrDtR1w2YeRmkZbdTjnIA4dhSJV3FnvaobzPbS0CQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EkCR26WK;
-	arc=none smtp.remote-ip=209.85.128.45
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="cevSR/Vk";
+	arc=none smtp.remote-ip=209.85.221.41
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85C7A606A31D
-	for <linux-hwmon@vger.kernel.org>; Sun,  8 Nov 2026 04:00:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85C7A606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D95606A33B
+	for <linux-hwmon@vger.kernel.org>; Sun,  8 Nov 2026 04:00:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 65D95606A33B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EkCR26WK
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4a1b07c3c5fso1476545e9.1
-        for <linux-hwmon@vger.kernel.org>; Sat, 07 Nov 2026 20:00:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cevSR/Vk
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-492f6b7f70dso90831f8f.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 07 Nov 2026 20:00:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794110408; x=1794715208; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=MXs/vYPbzWYafmxmgKumqAJHyqvTX01sR3Js7JwVAao=;
-        b=EkCR26WKGBesWOMeuUYBjQxQ9VPM0sDcZMo7omY9i+uEbe3+Q4QslZkKDLsGKI1GGI
-         sTQ01EoP/syAhkaNcd67YQ1RhS4XmzavWUgPgZ3fMkTDiYipMTq1J7Y9i4rklxd3vyVE
-         ZUE1FRLKQRqOih5d/cC0uitnflb8JpIHozECrD6WPC45IE1tdYK2mZrp9DaqZnCgmnAL
-         a6+LXIrzoR2CDfAi8OzK0ioqDMhHZgUCZSr+H5+ZBEQgtCrkEiTw3JkU2KbnXK74atIk
-         FZxGud+NuLPqjPWnj3QnE/xzd0poANc/iOMmh6TFsUauczd3Wyk8YQBusljapUEWv15G
-         faGw==
+        d=gmail.com; s=20260707; t=1794110411; x=1794715211; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Fm7dk54aTQ+ve82k3n7UjfY8j5o5QSbD2ilJ3czYZ9s=;
+        b=cevSR/VkliMogtQRW+YzMZulGqDey7G2dUNthfEZ/ilfXISo6heT0vscTZ3fsrQBpv
+         xafQDz318vWiH6imAHOIPe9Io3MwLKNxBR5OudAKaNYqIeDzm6mwHDGaZWcbM5qRzbWd
+         ma10rQMPPkaiF1GQIl+HU+y4C1z399JcjDJQ4AocXvSdy0193lbnKW5DHlkJh20/vAHw
+         kNkcisbJ19StBODPcQ8ybEP8SsOT4upSJ0KzIO24Y/xHcHUVIKXJt4pMlDx5xlNih0P4
+         OgpnaqvquuLJ67dLT7BBwErsRGctAOQoJK2N+wAWs3q3139fkz7A2SIW2aFHfEEiZFSq
+         epaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794110408; x=1794715208;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=MXs/vYPbzWYafmxmgKumqAJHyqvTX01sR3Js7JwVAao=;
-        b=EEe6VJ8KMwhyoHYICjDC++4gxaKpYD751zmVd6wRnmdroM/XPhF7q8Np5dSm026M8M
-         EvVxh4vudoH6KvnEfaypAljFenjLc9fnRk8+Eor1O+IS1hWG77sLNQkgVbxQ2thmwaKS
-         XVFynkseFQ6R+5lqX7jT+9npZ3pyFdFw3qZrIamd5zCR0jjqdl8Va+JJBRGrF3ARX9j4
-         lGgwT/WV40wsdP2nbXLeEHtX/J2M0tAs+kwpXXLtMkdJw1WtK2tPj58uMobVyl5AyMOK
-         CgYLRxZcPGpraj0ar4OKt14lxbt/slqkYlDDla8SETCAx6/YZNNPtWezklLj4+BLpZBq
-         d9lw==
-X-Forwarded-Encrypted: i=1; AKwUvByuXKyhfLJe+qXXsvoqh2xTA70enAO8nhmPM/wFOHFeBd5YZjpuNvy3ecsHr7qfKtU+IHnMcPE1EfhOrw==@vger.kernel.org
-X-Gm-Message-State: APuU4Z864hVcHmDH40A4guCovQ8SLidLBA6J4sdjJxwPJ2r9JiQlU3ww
-	qpZ1zKkuXVcVKPauaaybtIKk44GSHUJ9xHMiUXY1JCsbXI9fKeeZDTuf
-X-Gm-Gg: AYBFou02IRyD4PMNbFRo5pbjVrlbGTr/49pImuVR8dCZDB7HAZ4cfcGu7PE26gDrU2B
-	FKOY6AzQVclpXlNa82PIuODnRihn5NhrXR0RjPG8ia+bDnRaN/0qFvUIcQpa4Ej1/R6e2+ARnyH
-	ClcNXurirwztgWx5mblOf5OyKNgHoqRwBDtg3MDtxTQ8FNEOcIobsvWwuw+/sRswVxNT4zxhC85
-	umN96QVUK0Sw0/xw0SK/e4l9WgWZ0hFJcvAfPexrJKRUV8/cT0eDs9VyORaD5J1XQVkee0KvL0v
-	9gQ307oyFzvv0VVQ/ZPc4NmREXXDqj8KKbYiSK4ylvspdr0sexXmGIh2ZzvhdAhlkbXiNhAmuFu
-	OJdZoemuxzHAGv9dUe5dnvcpmszl9pwHVc5hGkJOU0IHzqBRgfD9t/xZ0AlLvEkoLHlr7uvZRov
-	kucOZNUcrE7mPMvBligADFiwXJBPT0OXaz9b+a/e96525LMC4QTgRsDukECZBX3ZdjzPqkYZfws
-	YUo4ycRio0RA6o4N8twy3RVzLK3JHyneVCFF4SLmy5AWVlMk1ChLK4tAaJaGuf2n05zH57jmuRH
-	f5wUrw70RIv7toiJrkhAIZ+04IjIGbFCANTuddYZKmST8IFtiphonWBv6S0aIQ==
-X-Received: by 2002:a05:600c:1c02:b0:4a2:74f:46c1 with SMTP id 5b1f17b1804b1-4b9633cee71mr11013845e9.8.1794110407861;
-        Sat, 07 Nov 2026 20:00:07 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794110411; x=1794715211;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Fm7dk54aTQ+ve82k3n7UjfY8j5o5QSbD2ilJ3czYZ9s=;
+        b=2rN9h211PKhzbLGxDn3KH18BT6t6rsjD7dvzBSAYDrybUv7pcZLZlM58Oi+z5pot/h
+         80jMpL2uXcnDicWHyqtUF01gNSmt6bZWTP8feS+pMd8O7Co589BycXnXsNjEe0qSi7rY
+         lQGR2w8WBBejfMBLwA5Y2bkTwRZrI2/lgPw6a9Ip7ENNcrRI6mVoeQLJWwhy0p14x3nR
+         8fEo+LPiQp+kg3Wea2npo6uxotpxZZFThqQF8Xt9FkEZsjTMMuhvCaj3zNFpkKYmWKRj
+         PS6thTKmodc0iULUzJHVNn2FMlCKxBn6oUFr/0U0Tpg6Vh0ltIxeJReG99t0ddooVu7a
+         PveA==
+X-Forwarded-Encrypted: i=1; AL+hErGu0kEDo/430Lwm+uaCViS0AbCE4FNgeS6LQe62cM52qgPiW8OmRTmmJk+AcQ1egYgxlH/+LlbLVK8AOg==@vger.kernel.org
+X-Gm-Message-State: APuU4Z++FIN6wOpopj3oDRtIkbDreI8iA3+JWbNRiHezHP6NqXJQcK8G
+	vU9Un65nDFaQhGanbkJCFXh4CQu+jI8EWyVZfBWDDpHzXiF8lrBlWVdE
+X-Gm-Gg: AYBFou09/yAtctJRk3ZnjHSFB+L3v77ZOF7Jdy/ky4zMfKztRmY70CY3fA7Aellhv57
+	GAIPoM9xJhBXCBJxH2sby/mHIcluv6fzdkW2o3hO3yjrr35EcO0iBDnHxW9Rc7Lez5Wrv9Zi82k
+	V241A2oOEo5rHQJB5zSw4sIBHsLzjbPJBFMPfvyg7HlgmF+biytti+fGbZKEQ5gP4cioqk4K/jG
+	nwQhKExoqfbgLD2vLjdxdm1GBcfs3lOepsiQGh2VC9mBZ+s0c7iemQ5WRyqCZ3dh8w+k/fcSJSn
+	+xHbnEpM95QMvN04KJ87unJ9EBfupRGJjmi/FMLubgNAk4DLJyQrvpRM7xAdwORt2FTFDeQE+nN
+	8HVP8ZTk+CAOml/piFvjOFk9Psyw6mCZrT2PRaNN0gD6kZdu1Jow2uElLrLhOcVBPrWZ5gE9SHU
+	TgEEd2rWfmFNMQCKgFPrwhLXjJTH0JEB1GlzU4z5NE+MNF9/2MqkKE+A7l/Ss7MnO9tmha7jXIB
+	bkyHE+EoZiAtkcsJEcep+b7QsLJ8tMaM2Td7E4uRZoELTwGkU+w7Ab/UTaKWw/lGxeMjy9taMmL
+	y+ofs+EuXArTL8hrHyL8+Uflev3zNBkBpfnyemJq
+X-Received: by 2002:a05:6000:310e:b0:48e:68d5:81a6 with SMTP id ffacd0b85a97d-4958502c858mr1324688f8f.34.1794110411323;
+        Sat, 07 Nov 2026 20:00:11 -0800 (PST)
 Received: from [192.168.10.105] ([212.58.121.92])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-495966f3163sm1736310f8f.11.2026.11.07.20.00.04
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-495966f3163sm1736310f8f.11.2026.11.07.20.00.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Nov 2026 20:00:06 -0800 (PST)
+        Sat, 07 Nov 2026 20:00:09 -0800 (PST)
 From: Stanislav Aleksandrov <lightofmysoul@gmail.com>
-Subject: [PATCH 0/3] hwmon: (max31760) Fix local limits, standby and the
- initial fan speed
-Date: Sun, 08 Nov 2026 03:59:52 +0000
-Message-Id: <20261108-max31760-fixes-v1-0-a61450463059@gmail.com>
+Date: Sun, 08 Nov 2026 03:59:53 +0000
+Subject: [PATCH 1/3] hwmon: (max31760) Fix the local temperature limit
+ registers
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -95,50 +95,51 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIALjz72oC/yXM3QpAQBCG4VvRHNvaoazcihwsBqP8tIOU3LvB4
- dPX+10gFJgEiuiCQAcLL7MC4wiawc89GW7VkNgkQ7S5mfyZosus6fgkMdZ3mCtThw40WgN9gzZ
- l9Vv2eqRme1/gvh8nIgcJcgAAAA==
-X-Change-ID: 20261108-max31760-fixes-0af187603717
+Message-Id: <20261108-max31760-fixes-v1-1-a61450463059@gmail.com>
+References: <20261108-max31760-fixes-v1-0-a61450463059@gmail.com>
+In-Reply-To: <20261108-max31760-fixes-v1-0-a61450463059@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Nurettin Bolucu <Nurettin.Bolucu@analog.com>, 
  linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Stanislav Aleksandrov <lightofmysoul@gmail.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794110404; l=1156;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794110404; l=1123;
  i=lightofmysoul@gmail.com; s=20261108; h=from:subject:message-id;
- bh=Ziw3YkmSyzfldrT5i6PlnnWtcqRZBGP8NMAy3Z4o/Ts=;
- b=qHzpvm9GMvYTw/xiK4s4TFssjytv12/+x3xSgdIuIXf9FJPgOU0TrfD4sMQ21wuUNcrf2feeT
- oA9/nxYXcq7C8I9oTlJLyFbBI7dOP5tdxTYqmMfxn8HrGk81FFJUsQY
+ bh=WJExlUq5ujG6qQKDWF6XzEtTjL9CmUxpEncKbMZrTaQ=;
+ b=7PBaY1x6zXFhU5famM+RU8tFWnND0XETbo0Ofb4N2FB/6ncUthuj+NWDSuVaNebMUeRee6+rC
+ ueGNH53YyAXCjx3cJO7lmgktuK4aAVqPfTzk1LLTawkDVZEPXYyvXIc
 X-Developer-Key: i=lightofmysoul@gmail.com; a=ed25519;
  pk=jeRUlfmkhE53CJPoeIIXgu7rTE0ybDRH0HQrEwbydzg=
 
-Three fixes for the MAX31760 driver, found while bringing up the Samsung
-Galaxy XR on mainline. The headset uses the chip for its two cooling
-fans.
+temp2_max and temp2_crit use each other's registers, so reading them
+shows the local limits swapped and writing temp2_max changes the
+overtemperature (SHDN) threshold.
 
-1. The local temperature max and crit limits are swapped.
-2. Probe never clears the standby bit. The Galaxy XR bootloader leaves
-   the chip in standby, so the driver gets no temperature or fan speed
-   readings and can't control the fans.
-3. The fan speed reads 3000000 RPM before the first measurement.
+Use the high limit (0x0C) for temp2_max and the overtemperature limit
+(0x08) for temp2_crit.
 
-The patches were written with the help of an AI coding assistant
-(Claude Code), based on the datasheet and tests on the device. I
-reviewed them and tested them on the Galaxy XR.
-
+Fixes: 38b04ad02d0d ("drivers: hwmon: Add max31760 fan speed controller driver")
+Signed-off-by: Stanislav Aleksandrov <lightofmysoul@gmail.com>
 ---
-Stanislav Aleksandrov (3):
-      hwmon: (max31760) Fix the local temperature limit registers
-      hwmon: (max31760) Leave standby mode at probe
-      hwmon: (max31760) Report 0 RPM before the first fan speed measurement
+ drivers/hwmon/max31760.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- drivers/hwmon/max31760.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
----
-base-commit: f4e680ffc2e50867c5b590e26a37f8801a31e486
-change-id: 20261108-max31760-fixes-0af187603717
+diff --git a/drivers/hwmon/max31760.c b/drivers/hwmon/max31760.c
+index 8d3be064b025..e3d86dc4257e 100644
+--- a/drivers/hwmon/max31760.c
++++ b/drivers/hwmon/max31760.c
+@@ -27,8 +27,8 @@
+ 
+ #define REG_TACH(ch)		(0x52 + (ch) * 2)
+ #define REG_TEMP_INPUT(ch)	(0x56 + (ch) * 2)
+-#define REG_TEMP_MAX(ch)	(0x06 + (ch) * 2)
+-#define REG_TEMP_CRIT(ch)	(0x0A + (ch) * 2)
++#define REG_TEMP_MAX(ch)	((ch) ? 0x0C : 0x06)
++#define REG_TEMP_CRIT(ch)	((ch) ? 0x08 : 0x0A)
+ 
+ #define TEMP11_FROM_REG(reg)	((reg) / 32 * 125)
+ #define TEMP11_TO_REG(val)	(DIV_ROUND_CLOSEST(clamp_val((val), -128000, \
 
-Best regards,
---  
-Stanislav Aleksandrov <lightofmysoul@gmail.com>
+-- 
+2.55.0
 
