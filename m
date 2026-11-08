@@ -1,100 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.172
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794134038;
-	b=a+KVYEW4EGTY1OfXeYYZCTUqMmlRzm1gA7UmCbb7dmQTReoHfYwQ1/sus5lsPyOGtVgr
-	 Gu1swkWJ93hQr32s/JxG3U9B1IdrSVtq1aOnKAFjPizY+38/lq+OrWw/O+UXGx8T59iCA
-	 uaFAGvZfmWoTH4LOYmWGQ6WYVibZKokVlDpLZgLahDoGY5wslpztbK/9LbyS06eIWSqyS
-	 hqfH72RrPDC/7H/+vCU5S4beCqP5+KqAqwxVRFS2Ki7kd9t9dhrRHk21hRJK0LQhjuuAN
-	 bNHlh+U/WQoxQGCj4jSF09ZNdxsJ/YihRYuhH7Je47vnBh4+pF6TaWFB5emcScO039A==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794134038;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=glvGrWRT1QN/fE8UGYdsbVnUnNT1CZIwbxztIXMB48g=;
-	b=eN0Ku0Utz7SRUfm/FFvS1VgQzPkcSJBkKPgyFJmWl7xkRIRjERm6z0D6Ng92MTLt0AR8
-	 rfx1TylvIuF1kUcFrgj5QDesE4Wwa+5iRx1eVvaBjJ0g/JrNTv3fRUzVJQk2ysq949lgI
-	 VjcteDJjC2L051C0q0xstub31liZcKVytCAI0fM6H2j2xgI+KAhlqL7pDUENc3g3Z2A4R
-	 yfWkyrbX59+zq3442gNwbs+iFV2qQ0o22TYzj/nm/DQjtMM3ij3wSr4cEaVrEDmDJZx5V
-	 jy7v+GAGUM4geQW6hb8tbh0GlCbR350Ws5xt26QSYdVjLi+BcMmWbF60ShL38HAfHcw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aZyBVlwC;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.172
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794149451;
+	b=3VxWGs/lcleVafYOZBF2ysJAZdLHjhYc0RaVpXWOoS/Ws7n0KrVod0dk8TKTa4lL6AuY
+	 BxzRTVLBsllvNyNj2CUmG671lbahsT/RrYU8wslpzKCbZNLDxDii9ll1Ik++XOpOqXdNz
+	 Ij1RexT00wGdK1IPUxl7vIPVPQaHm/YywvuOj9FzL2AH6Xa+O+J9Rd/8XpkGE9InLDS+F
+	 lDTo/mZAPzgjKIf6IJEeMT1R1x3PLm+2RAvJjGY/3nVzpHcFvovVFFwGwA0OL/+PdDc6B
+	 IMIwDBZDlSEr3vGLG+A08qno8zOMx8KMq5otD/XJMIjFtFKsXe7Y1Uq/QZwxkBpUkMA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794149451;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
+	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
+	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
+	 X-Local-Domain:X-CMAE-Envelope;
+	bh=ZFlWh8q1FXbeFZVs9nVlhIoGr1Dnquy6NqDJrKTW2P0=;
+	b=K8FXjfGyAVSZXQM3NO3ZmXgq5hgGbu7gPbJ7EqkwMGmtV8zP74ki1rC6g19F4qAM0L5X
+	 5eT8U+2k73HhkO++yJmqJRLHzAoeZWFtpliOjiFnrBWQC4lBbrWzp8AY7oaqko3cdIkUL
+	 3fC/jM8vH9VLPM+71ZX2Y7Znq8VrvknVmqwlmLspaMY+2DWR2bjV/9Wq0vK2A9b5PKDVs
+	 gFNV5Cj/b8VwKFqEj62TQnyDBfeiDdbA1CdS8wIsxuDnGrVRHPkoRNJalxSPQGbhwgAwl
+	 CEKOiaCsxw+IK3e3ZoBi6n3ERh+aNLBrP5cDFLeGqtxWNlkk8xi3RJUqvC3ZpR2IKig==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=none header.from=roeck-us.net;
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=lMWWvh03;
+	arc=none smtp.remote-ip=35.89.44.37
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74CB606A321
-	for <linux-hwmon@vger.kernel.org>; Sun,  8 Nov 2026 10:33:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A74CB606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41056606A321
+	for <linux-hwmon@vger.kernel.org>; Sun,  8 Nov 2026 14:50:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 41056606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aZyBVlwC
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-3ab43d1dbceso44161fa.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 08 Nov 2026 02:33:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794134036; cv=none;
-        d=google.com; s=arc-20260327;
-        b=c2+WiZGdGhdSqdf9t19bes7NW09c8EhgG78YAgkqCsHcVz788cJ3Fl9hYilECYYEVG
-         uzYn7MMc5V2i5Zmq4baxi7/vQ653hl1q05oZ5P6Y4f7TontYNuiwdTWg6NOUIMnlndT/
-         NmRmxK/M2w93JRnMgh4aNJMOProSdMB5R3CXMSeKe3xrQUoSg6MgtplQxkgtjJEvNPua
-         ImK+huOb6yjqEBXC5gYnl0rpnXduiKmZHsMxxaRjmDYqDKVn36Zgg5BR8Z6N68Jy8V4e
-         TLn9VchGxcnBR8QFK9w4mrN4Urmh3zkEsRPaSMdKb7/VI95pjgR7S2O7m44co68U5HSg
-         beAg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=glvGrWRT1QN/fE8UGYdsbVnUnNT1CZIwbxztIXMB48g=;
-        fh=vZzzr1H82KPWgLWyYZqIHDZx+g+jXN5vSm4c6JWkhi4=;
-        b=keja6a3iwBBD7G0dyUYiwx5pQRSULnxxBnqC8ylXJ0Q45nf7Jeykt9Jn98Ibdlu60s
-         sCoM3MY8aR+0xx8cZSsasn6XL0wD9PfWyuX+kt0eLt/utrZWf/Rbur0Q5Ft0wQOuIIog
-         a4pJu7RbEA/B/K4VODzWUGJ2E+EkAGcbheXvEzxxuvALLZyzqmYhMkxvkGHg7on7qMGj
-         06LScg5uhrHlRkqFp0S6idOcq5iFysfeSgTMoD/72FsBIOGXs/sVL9sdV0i58EIVuHFo
-         yyGesTHDAkAt8Tjs5f86wReZGkaGpjnPGTCRuITeGrnCItdzOikN5jcU6NH8e91T6T1M
-         CfXA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794134036; x=1794738836; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=glvGrWRT1QN/fE8UGYdsbVnUnNT1CZIwbxztIXMB48g=;
-        b=aZyBVlwCf3HtdIM+1sV0UWQdH2oSFkOc7HO3xGCc2YUHvHTXKYT7khh2XIxyNQ+mtv
-         ASKuqDjU8ERXQwDKG9KaoDqfPNad9Ukvu/lAl6xSetw/JW7T2bE0av8FKX0Rsdq8Bkhk
-         qFIx5stGz4MeP50q2tDAwKTLMmrax8Dp/bj9D9D0sIWULCizXkZP4q9MriCyyWoI0TFv
-         SbG2YCAzt5VAVm9BKTHlVK9CTS9aYYhZgtNifmVAFMTo6qxN1QmDa6v1YVinqxIeXQXA
-         N1/Wqf9Rc7JpqFLKV2qx6vi+v7qRbszs4wLnkL9fYoVjOX3qdUPV0ltxmtL9qIjtaNT+
-         2T1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794134036; x=1794738836;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=glvGrWRT1QN/fE8UGYdsbVnUnNT1CZIwbxztIXMB48g=;
-        b=XfKjbQFWNhRsMfC/6KgXdSDWoOMboGZQVAm6y9zgF25ZN8mS1crgbsL9jM5Jx8QOyd
-         59AIikywz+FcsiNJvsJe6raZ38SvRKq0OI96uzmHtaczJl31hWRjvNNvuA4q0X1znbDq
-         YkKXxopadTE3nbNI/9VPNtoFdO23qDR4rCiJ5x7PFg6VodGtB25+Pmv4/QfU8uzrgw0j
-         hbq+B5wP8yjZ8bCouf4rWlKBPvUgkeO+NuwAo1FMXVuuIFuPoRlxOXz1kMQYIRJUXepw
-         eI6s/isYUGiSLaK222AT0MAxCWrJpUpcNmUE993TG7CO1V/NGA0TDkI0lnVdF+Hs+ZWN
-         NCng==
-X-Forwarded-Encrypted: i=1; AL+hErHR6FZgo17rRGzVR62Udf+kHQpoSQgYgtArhqKdVlUFrAa+gG2ignIJdaS3rlPORHT2c/eFLsREiMJ8uA==@vger.kernel.org
-X-Gm-Message-State: APuU4Z+lAWVhMnDlv6DDXrErj3NkB5sbQgv3klcduRWQ8nq0c2+rb9sU
-	QILEnVBekDLFkLKHCPpFLJSVe7186akLZPtvXJJASIdVhhFRWgrMcQHX6SoJtADfQ43jRtvvT8L
-	aCCNCohWIAeMXzxUsqkfbBBSITKoAApA=
-X-Gm-Gg: AYBFou1xoPa2nXU/f/jmW6hMNCp87miwqFTgpA6h03+RW8rfSNeFrlHw7cAf+n1aHSJ
-	0J8rWMsReZY2HGsoJUmASm97Ftz3fAbr+KjUfzzhvmrERvLT1J+Ln+TrSnnYjhvfZ7BTqfmty4d
-	lZvvAV2RRNK+43S03DN+9Uh3mlSaBm6miR1BF+mM0EGedUkPoSuSkQns05kfzfY+yGi6gYBXs9e
-	mmh7jrcLQUiYxC2smIeHpjtKqkWLkrRlAS1C4IUnYIyqybSjde4LVd3Z2az/OYv+i8vcIIJrXQd
-	cRG0RXAMVFQb9eEcOqUFw6WVYVhM7JAEpJl+Ap3hy5IVhCJVCxunVQEensWlj+6H39VwpHwptS3
-	dg1GDopdXEu4bSW1FoSNZDtgaw6WNHqN4aJHsGw3MZWe0sEfS5TIzH01uhC2gxcYMDujmgg==
-X-Received: by 2002:a2e:7a04:0:b0:3ac:ddd5:55ee with SMTP id
- 38308e7fff4ca-3adfa3a50cbmr2094571fa.2.1794134035626; Sun, 08 Nov 2026
- 02:33:55 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=lMWWvh03
+Received: from eig-obgw-6001b.ext.cloudfilter.net ([10.0.30.143])
+	by cmsmtp with ESMTPS
+	id PwgIxnO9zVK9UQ4EMxkVmG; Sun, 08 Nov 2026 14:50:50 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id Q4ELxMjWldRrRQ4EMxH5z8; Sun, 08 Nov 2026 14:50:50 +0000
+X-Authority-Analysis: v=2.4 cv=LOhmQIW9 c=1 sm=1 tr=0 ts=6af08c4a
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=UZ1dQ18DKJ-JX__J:21 a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10
+ a=pGLkceISAAAA:8 a=EJN59OTSmWfVsbul1mkA:9 a=CjuIK1q_8ugA:10
+ a=9ZlKDEqW8j0_VKCLas2V:22 a=KPbNTLLc3YvdawN95zVk:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=ZFlWh8q1FXbeFZVs9nVlhIoGr1Dnquy6NqDJrKTW2P0=; b=lMWWvh0319TJg2EOT8Uh5zgoOe
+	qLfnJ9Ww64cVeAnksSVjO8ICdWIEs5HxLsZGSuxZiX6R/FG7NTZNi8MuLF6l+jrEnv15JzNePIdiZ
+	w01qPdFjOlCDvAv9/Y0ePR0iEcYVLSAH4xpUNmw7jpoXlh4DbBkX3QrbMSgxcbPAp6V2Zn/xsOfLZ
+	DjxDzc42HJdiB1Kslgtv1vr8WOn/q1ym0YQQ8athBKgCmeh3GT3899MmWtPdg/hA0nb8L/DhZxK+w
+	aL5wLcToRj5jeNuBXQJWAVok3DQvkwMUQH+N08xVBUuP1aPkeqgdlte83Y43iPDw0tluv9uA3t4wD
+	904QG7MA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:60202 helo=server.roeck-us.net)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xQ4EL-000000004pa-2saW;
+	Sun, 08 Nov 2026 20:20:49 +0530
+Date: Sun, 8 Nov 2026 06:50:49 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Pablo Mazzini <pmazzini@gmail.com>
+Cc: Alistair Francis <alistair@alistair23.me>,
+	Andreas Kemnade <andreas@kemnade.info>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/5] hwmon: sy7636a: read the temperature only while
+ the rails are on
+Message-ID: <d9035966-07f3-4758-9074-7fb94375c40b@roeck-us.net>
+References: <20261108093602.329554-1-pmazzini@gmail.com>
+ <20261108093602.329554-5-pmazzini@gmail.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -104,100 +85,115 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <CAPvUaSo1D+1Tvk3-4TMiXw-ScBtY8Mu0FzO7R_EG6zrjYfjYqg@mail.gmail.com>
- <asxTYBiGy6lf6-Ki@archlinux> <CAPvUaSo-ubCOCYYPadY1C23y1Fd_AAhQLuVKWRa6F1XVh6mk_Q@mail.gmail.com>
- <asz7WqGzukhkYHGD@archlinux> <CAPvUaSrbWrBuvAi3R02xC8w8M5Yh97pVd3-+FBXLp3mPgG5cUQ@mail.gmail.com>
- <as0bOFOoaaw-smyB@archlinux> <CAPvUaSoBgAG=MX93vMhfEiEk5bYXGydFsGn8CpoCu_QVQRPTCQ@mail.gmail.com>
- <CAPvUaSpPVYc-5M72G0Hf9JPsbdAp2-4f-p5OetYbMKdLqm0PXQ@mail.gmail.com>
- <atEh9Gon95EFIq76@archlinux> <CAPvUaSpq2d5hkxTaqAL6rBoeHct68Y37C4nSpV+goGZ-QwrCsw@mail.gmail.com>
- <atJc2J2hYrdI_Eun@archlinux>
-In-Reply-To: <atJc2J2hYrdI_Eun@archlinux>
-From: Lorenzo Collevecchio <lorenzocollevecchio17@gmail.com>
-Date: Sun, 8 Nov 2026 11:33:44 +0100
-X-Gm-Features: AclHuK8RS4vQ3n6u4Bm4vCHvO6Hnt7D0ObPsJjucxe4puVLCmB39UPpPrbPa-oI
-Message-ID: <CAPvUaSqAnLYVuzcq6Zq=hRp6JBoo8upjrsy=LSxnLdXuTyHDaw@mail.gmail.com>
-Subject: Re: hp-wmi: WHCM AE_AML_OPERAND_TYPE and fan init -22 on HP OmniBook
- 5 16-ag1xxx (board 8DF4)
-To: Krishna Chomal <krishna.chomal108@gmail.com>
-Cc: platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, W_Armin@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261108093602.329554-5-pmazzini@gmail.com>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xQ4EL-000000004pa-2saW
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:60202
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 2
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfKrHEzRqTx95aQ7Vo9sfnGW9edIlLRJ4UrpnbAd4w2YbkG8Qp5LfNp/b2RNDqamR8TDQS+bJaANABDpBP+01WK3t8OESh9DaZCnr9imxif3kou3k1Vpc
+ XZFs7Q7HQWpZLieHNZhHzTdYIir6y1radl0TQpDtcsRq8fWIPJJH4kt7ZQsWza72VSkxL4qojTWN699MIQ7EIiGen+2LB+kiGnY32DMvaLI1RrWrVf0PX6nQ
 
-Subject: Re: HP OmniBook 5 16-ag1xxx: hp_bioscfg output and fan
-results on all OSes
+On Sun, Nov 08, 2026 at 09:36:01AM +0000, Pablo Mazzini wrote:
+> The driver enables VCOM at probe, which keeps the panel's high voltage
+> rails on for good. Read the temperature only while the rails are on, when
+> the chip samples it, and return -ENODATA otherwise. Read power good with
+> it in one transfer, so the value can not be from before the first sample
+> or after the rails went off. Register it under the chip name, as the
+> TPS65185 and FP9931 drivers do.
+> 
+> Signed-off-by: Pablo Mazzini <pmazzini@gmail.com>
+> ---
+>  drivers/hwmon/sy7636a-hwmon.c | 37 +++++++++++++++++++++++------------
+>  1 file changed, 25 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
+> index a6b47452e29e..0c0601d47b87 100644
+> --- a/drivers/hwmon/sy7636a-hwmon.c
+> +++ b/drivers/hwmon/sy7636a-hwmon.c
+> @@ -9,26 +9,43 @@
+>   */
+>  
+>  #include <linux/auxiliary_bus.h>
+> +#include <linux/bits.h>
+>  #include <linux/err.h>
+>  #include <linux/hwmon.h>
+>  #include <linux/module.h>
+>  #include <linux/regmap.h>
+> -#include <linux/regulator/machine.h>
+>  
+> -#define SY7636A_REG_TERMISTOR_READOUT	0x08
+> +#define SY7636A_REG_FAULT_FLAG		0x07
+> +#define SY7636A_FAULT_FLAG_PG		BIT(0)
+>  
+>  static int sy7636a_read(struct device *dev, enum hwmon_sensor_types type,
+>  			u32 attr, int channel, long *temp)
+>  {
+>  	struct regmap *regmap = dev_get_drvdata(dev);
+> -	int ret, reg_val;
+> -
+> -	ret = regmap_read(regmap,
+> -			  SY7636A_REG_TERMISTOR_READOUT, &reg_val);
+> +	u8 buf[2];
+> +	int ret;
+> +
+> +	/*
+> +	 * The thermistor is sampled while ON_OFF is set, but the first sample
+> +	 * is only ready after the ADC sampling and conversion time (ADC_SPL +
+> +	 * ADC_DEL in the datasheet); until then it holds its reset value, 0.
+> +	 * PG is only set once all rails are up, after the first sample, so
+> +	 * read it in the same transfer and report the temperature only while
+> +	 * it is set.
+> +	 *
+> +	 * With ON_OFF set but PG low (rails still ramping up, or a fault), no
+> +	 * temperature is reported even if one may be available. That is
+> +	 * accepted: the display driver reads the temperature only while it
+> +	 * holds the rails on, after power good.
+> +	 */
+> +	ret = regmap_bulk_read(regmap, SY7636A_REG_FAULT_FLAG, buf, sizeof(buf));
+>  	if (ret)
+>  		return ret;
+>  
+> -	*temp = (s8)reg_val * 1000;
+> +	if (!(buf[0] & SY7636A_FAULT_FLAG_PG))
+> +		return -ENODATA;
+> +
+> +	*temp = (s8)buf[1] * 1000;
+>  
+>  	return 0;
+>  }
+> @@ -72,12 +89,8 @@ static int sy7636a_sensor_probe(struct auxiliary_device *adev,
+>  	if (!regmap)
+>  		return -ENODEV;
+>  
+> -	err = devm_regulator_get_enable(&adev->dev, "vcom");
+> -	if (err)
+> -		return err;
+> -
+>  	hwmon_dev = devm_hwmon_device_register_with_info(&adev->dev,
+> -							 "sy7636a_temperature", regmap,
+> +							 "sy7636a", regmap,
 
-Hi Krishna,
+This change is neither related to this patch nor necessary. Other drivers (unnecessarily)
+doing the same is not an argument.
 
-A quick update on the OmniBook 5 16-ag1xxx (board 8DF4, BIOS F.12), in
-case it helps with the HP side.
+Guenter
 
-1. hp_bioscfg: the driver loads and registers hp-bioscfg, but the
-attributes directory contains only Sure_Start and pending_reboot.
-dmesg shows: hp_bioscfg: Returned error 0x3, "Invalid command
-value/Feature not supported". There is no fan or thermal attribute, so
-I can't read or change "Fan Always On" from Linux.
-
-2. Fan behaviour: it isn't specific to the kernel or the OS. With Fan
-Always On disabled, the fan stays off under load on Windows 11, Linux
-Mint, Arch, CachyOS LTS and CachyOS 7.3.1-1. A full-load stress-ng run
-(all 12 threads, platform_profile=3Dperformance) reached 92 =C2=B0C in abou=
-t
-35 seconds with no fan. A 2-thread run reached 83 =C2=B0C with no fan.
-
-3. Timeline: BIOS F.12 has been installed since the end of July, and
-the fan behaved normally until October. HP PC Hardware Diagnostics
-UEFI still passes both the fan speed and thermal tests. A hard EC
-reset and BIOS defaults changed nothing.
-
-I've also reported this to HP and asked for a warranty repair. I'm
-happy to test any further patches or run any commands on this machine.
-
-Thanks for your work on the hp-wmi fix.
-
-Lorenzo
-
-Il giorno ven 16 ott 2026 alle ore 19:26 Krishna Chomal
-<krishna.chomal108@gmail.com> ha scritto:
->
-> On Fri, Oct 16, 2026 at 09:06:03AM +0200, Lorenzo Collevecchio wrote:
-> >Subject: Re: hp-wmi: WHCM AE_AML_OPERAND_TYPE and fan init -22 on HP
-> >OmniBook 5 16-ag1xxx (board 8DF4)
-> >
-> >Hi Krishna,
-> >
-> >Thanks a lot for digging into the ACPI code, the explanation makes
-> >everything fit: the missing GMCF call for HPWMI_GM, Local2 being left
-> >as an Integer, and the -22 coming from that.
-> >
-> >I also tried your suggestion about the platform profile. With
-> >HPWMI_READ/WRITE the errors should not appear:
-> >
-> >  Before: dmesg | grep -c WHCM  ->  3 (the three boot-time errors)
-> >  cat /sys/firmware/acpi/platform_profile  ->  quiet
-> >  After:  dmesg | grep -c WHCM  ->  3 (no new errors)
-> >
-> >On the fan: thanks for confirming that acpi_fan reads the EC value
-> >correctly. Together with hearing the fan on Mint and on CachyOS at
-> >idle, that makes me fairly comfortable that the 0 RPM readings are the
-> >fan really being off.
-> >
-> >Your plan to query the fan count and hide pwm1_enable and
-> >fan{1,2}_input when it fails sounds good to me. I am happy to test it
-> >on 8DF4 whenever you have a patch, and I can rebase it onto a stable
-> >kernel tree on my side if that is easier for you.
-> >
-> >I also tried 7.2.10-1-cachyos: dmesg and the hp-wmi hwmon folder are
-> >identical to 7.2.9 (three WHCM errors, then the -22 message, and
-> >pwm1_enable still present).
-> >
-> >Thanks again for the time you spent on this.
->
-> Thanks, I will share the final proposed patch on your Bugzilla report
-> (222138), and leave this thread for others to pick up the WQBC/WQBE
-> errors.
->
-> >Best regards,
-> >Lorenzo
-> >
-> [...]
+>  							 &sy7636a_chip_info, NULL);
+>  
+>  	if (IS_ERR(hwmon_dev)) {
