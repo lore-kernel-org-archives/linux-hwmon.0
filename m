@@ -1,57 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=80.241.56.151
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794110609;
-	b=P44N89a2IF5LjtkOacSIhk8oUHzBHxycyv4qL/qqelHFpHBcwDPXn+uQf1R7XYVQWo88
-	 Di4jQrLxM55oiC7+NSoigmH38965oFOp0i00PW/tJaSmQzgl4RYTHkPDqt0VdCRljeVDB
-	 jhYSbhPNMnaUBczfMJzdWb1SBHn1NYgtigZKgrD9S364J3gc8/bEGOJpItrec0MqD1e44
-	 UjHWfGBcNHbGHiLh2onccx1eAxpXQZFiN9GQuyrJ02/zvuZHFLL+AQFH3E+AfsS6fC1hJ
-	 cmfdZPwfxnyk2Lyl+2ezeuG5TZbc7cFGFBDLRVrcBVwJNbcYwmRagJeTrcNNi+g8O+Q==
+	t=1794125702;
+	b=ulH1KkIvB41gvnaeO5n9tJLs6TVeZ0UtN57FXI44Dbq7DcEGaLMz0aJPyyk27EWdlXbc
+	 5QthjN/+XThr15WpiIbZFocW3XDg4HDLpHSpiyOl5cu6TG7Qe/LRc86Vi7upOb28t/ehk
+	 4x/1g/SUJXNFnDLJX+c/s6i0iBhlJZ0XiykbZT2srI26GBbn4jyaJyZF8LMZCpgk36HRI
+	 2Dp7pAdVC7ic/J0siQuCtB4G0S3U9mXpWfG7ItLrq8vxXpRIZBj2jiu4O9ydwflsGz9PK
+	 wjd/zeM/I46OJZPAP8DZy3Gstt5A0aDA4Teq2k0rvmLw4EzjyYpqieLVOvxaOkbgqEQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794110609;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=2Cp62NMOFWdG1jxV8LHAlHWQxg7Z660gFAEqeGOL9F0=;
-	b=I9KkNaDYm8Tx1Z+YZxGU0t+ln8stXfFN17oiIvfNYYrXdg7Hz5Bu48BoRBZU0QD8DMxy
-	 zXSGliCMN+5z+HAUpWjgqal3jmS+LCGUPNecrcvpgWPcjcQrpCC+yJ70RGwJwogCARch3
-	 09h0kgHBCs9eSEDXY3xITGYmr1DDvn/NG40Gq1WL2t4MzoveqCtihQnWvjO6Zkj8Eae+9
-	 UmCLEgwK3wDpANc/FBkw14FGjjKmGor/zPKysVyU7ckhlIwDrVso6O0oDU9JTFX/HY0Px
-	 6mMQRetRcZGdlTURNFR9gb0Epw6O8vY8rUv04Pz1V6Eny7x48cGjgdmBDYhXJXjVE1Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794125702;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Rspamd-Queue-Id;
+	bh=YmeEiSEcdn8EwHpM34NbxLVkxxcZ/wCgYZ8mwnwdZ9s=;
+	b=YQMXPrQiT/4jNfBMEHnRrltxAIC/f4qyNCaWXHl5JgxUi4b/E0/LMv4/NSSj4BpBN3af
+	 hZQS/MlADZJmnqCe1Nrt/BZelJWdg6qmr/VHQGxhWPQS6w+WiNZAzuPYkmqxF7GAyT/dl
+	 cRNgpIl75wG/4CiUUBg2wnWcGjTePT6lcq3wcYPn6E6hZ4dJPYsM/YtL+pjerMsABnKU6
+	 J+iQI2kwbMM2DLTnpaUhS2PxIBBKds9M/ZKoOKsQcYbz0k6TO3VLIOQ6DYcbjrO/ygPVT
+	 87l25c0MyItAi2tOjpUVbNTkwWTu4DvDPixVxxnV8XGvihBjzx0VQSMiq+hEfHBT+3A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LtmX4qOS;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=bojanowski.me;
+	spf=pass smtp.mailfrom=bojanowski.me;
+	dkim=pass header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=PpQLaHJW;
+	arc=none smtp.remote-ip=80.241.56.151
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 476F1606A31A
-	for <linux-hwmon@vger.kernel.org>; Sun,  8 Nov 2026 04:03:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE67C606A333
+	for <linux-hwmon@vger.kernel.org>; Sun,  8 Nov 2026 08:15:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CE67C606A333
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bojanowski.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bojanowski.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LtmX4qOS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE7FB1F008A1;
-	Sun,  8 Nov 2026 04:03:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794110608;
-	bh=2Cp62NMOFWdG1jxV8LHAlHWQxg7Z660gFAEqeGOL9F0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=LtmX4qOSZ1nluKe6FAym0WxbPGAyqYpyhKPR5HjLY3qTL8ofc8f729EBF9iSYWW6b
-	 crsFzRNaAzixZonKnzalMA/B9T3by6VgBfY5QmVt7EVVU/1BUHMU06Z2IAEZ3jy7Hu
-	 ITdmxO8/S5zl6AgvJlwqzFg5KiBiwGmIJ6Ya3xD9ZrIbYrUYI2JwF4GUsk253qQnxi
-	 cCHX1WpwC9tXVQwSsVRFiSF8RB6z0i4lZEpUCiXhVKFYfpEmk/d26Axgawqoy1WF/0
-	 0D1CAbHq9+hzSWNof6jSr+aKecdHPHqo/Av2g04rXkbwwbqfp3i3FoT35VlLqzGFiM
-	 5l9NIr0ZH2xhw==
-Message-ID: <sashiko-outbox-203554@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 3/3] hwmon: (max31760) Report 0 RPM before the first fan
- speed measurement
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Stanislav Aleksandrov" <lightofmysoul@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=PpQLaHJW
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4jMm171qn8z8txp;
+	Sun, 08 Nov 2026 09:14:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bojanowski.me;
+	s=MBO0001; t=1794125691;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YmeEiSEcdn8EwHpM34NbxLVkxxcZ/wCgYZ8mwnwdZ9s=;
+	b=PpQLaHJWOWOpT7XZkoZt05xrXXtpFfsdh5VlqXOIkw9XWRvmABIRKaYNa8iNG+9mCIVzj1
+	5+egjPpDR1lq31wl2VArqqL6gaceNDkmJ/I082LlMKhoKqKoe1fdJWFX/2k9iaC8sf7Xlg
+	hTG2Ddh+Dz/ChnqG7bLU+pl/VdI6imZZ5CjD3QoZL7BO02a9ksfCNgTpOQrCwuSl97gHfy
+	zqrol2v3aWixzVuYJIhkkzItqqkqhf0V+ju/TxOnHj/bsSrc7MgDQ4WqixZFOKDLWORlTn
+	02Zexbro6B223cv8s6eG4U0wVVMgt809ls3ibQlfbUHUlyqKUvEe6JbULniIFg==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of tomasz@bojanowski.me designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=tomasz@bojanowski.me
+From: Tomasz Bojanowski <tomasz@bojanowski.me>
+To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261108-max31760-fixes-v1-3-a61450463059@gmail.com>
-References: <20261108-max31760-fixes-v1-0-a61450463059@gmail.com>
- <20261108-max31760-fixes-v1-3-a61450463059@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 08 Nov 2026 04:03:28 +0000
+Subject: Re: [PATCH 0/4] hwmon: (msi_mystic_light) Add support for additional MSI motherboards
+Date: Sun,  8 Nov 2026 09:14:50 +0100
+Message-ID: <20261108081450.8218-1-tomasz@bojanowski.me>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261108000131.1249664-1-linux@roeck-us.net>
+References: <20261108000131.1249664-1-linux@roeck-us.net>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -60,21 +71,20 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4jMm171qn8z8txp
 
-> The tachometer count registers initialize to 0 until the first
-> measurement cycle completes after power-on. To prevent division by
-> zero, tach_to_rpm() clamped tach =3D=3D 0 to 1, causing it to compute
-> and report 3,000,000 RPM (60 * 100000 / 1 / 2).
->=20
-> Return 0 RPM when tach =3D=3D 0 instead.
->=20
-> Fixes: 38b04ad02d0d ("drivers: hwmon: Add max31760 fan speed controller d=
-river")
-> Signed-off-by: Stanislav Aleksandrov <lightofmysoul@gmail.com>
+Hi Guenter,
 
-Sashiko has reviewed this patch and found no issues.
+Tested on the MS-7E61 with the series applied on top of hwmon-next.
+The readings are the same as before.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261108-max31760-f=
-ixes-v1-0-a61450463059@gmail.com?part=3D3
+Tested-by: Tomasz Bojanowski <tomasz@bojanowski.me> # MS-7E61
 
+This was my first driver, and working on it with you was a very
+pleasant experience. Thank you for the reviews and for adding
+support for the older boards so quickly.
+
+Thanks,
+Tomasz
