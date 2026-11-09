@@ -1,78 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=80.241.56.161
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794249568;
-	b=RSTUiyRNgkH0HG8pSVEGFJMGNKOLoLFctRwzHuEuQjZPnqUsyNXk53Sc9jbrYQSy4T4U
-	 c4NSUxtkyPXtYtg0pLi37jrpjCVFFCuCvC7pnINCcttRdSJQz56gkmM3hAlVcVlE8wlJ6
-	 hbYn1RZ1xr1tq0TSj8tiExC45m/Tszi+NUxh50i3uLegppZmlYGf4Z3QBpiekx8hVWOl2
-	 8Qkb/VUXPdFfs/2uihTmuQeiv+af34b42KmLp6WEVV7ufeEKbRnYryjbZcuwvXoJsxTZ6
-	 U0nkkYEW+rjJEclUQJnHOmyk0fK6e2mvEWRXLYqXtD5hl+sGISJvPhjACUW1TZN94Vw==
+	t=1794250423;
+	b=Oos5BhibdnC3sSbl7N6u5ZXd9k0ylw6eoe2DpIFsdRHfVcHnra4Hw74QO4jm4qYmGkX3
+	 dkajCQc5VyJ6rHMp+ekj4fVeYcfCSSSijtO1XRS757QvJigEd/nLqijls0DYrob0OYFj3
+	 jBUloWh+qULKFWE1a7PwAyPU7+sk+JVAe1myJRJt83jeHhT7+i5xmKQdxYvjjiFci3STZ
+	 5I2opaZaBdkQbCddQMn1lj67TYmMPbWXiDFtUztWJld4F8NYqg+3v0AmLW3YGMoc06ZfX
+	 k/QYmrnUgl6Z5cYZ0MFmEcOZ5dctD9VpmqC9rGb56a3+NQwHQUPSBhxnEU0BY7kndig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794249568;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:From:Date:To:cc:
-	 Subject:In-Reply-To:Message-ID:References:MIME-Version:Content-Type;
-	bh=stI3jtpvM2YYP1yEZSkEZ7SghKm/GllTBEaHKU/eszE=;
-	b=zduGwRbqL5vdEpmgBIkgNvuDHWrgZfl0V1ENb2Fawp/0YqmZWxeCtgcvgFerpKTW29Is
-	 blDySVfDm8689bFm9s8PB0oY7yHGKPYOzXfX5OKpjnuG6lLuzorb8XOO9F1szSkTWTxnu
-	 YnkSOZxPa5wrxHX1LOhRL6Z8+irwYfR+1j35pQOpJuzle72cJ47qa99TWbCc9mauCxReN
-	 H8/eNqnWG0/OIgqhlEJmJ6j/p8364cu0XW6KzpdkifL8Iv9fYTY4dOhG0IzvWbMfzscP/
-	 L7G3PBpZfmxcsp7XLBdlgElEtl4B5YJ8dC/WMOPWMcZgfvkOLmnawJxyihlcTm8yv1A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794250423;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Rspamd-Queue-Id;
+	bh=YjzUZB+X7tHX1gt4W84NHzmu4XEbAGyzapOO/tnSdkU=;
+	b=qfKAtBeK5jzEhAtgvobtdHV2osQwlnyi8fyxOs7EsbysRZy0FHYyzYFBWaziELMPk0ei
+	 5dz7ZIXL2inb/FFMXUzNOp/PjxMZ4GeqBklOe0dwSrnYjPncHrTJH/P5FEMVdsx0Qpbdq
+	 EuY6FzIVeoR9z6d3rP+6eAMXkGFvtXDaP3d5u2gviKwKIi2YrennXVljfPvF0bLsQC7BH
+	 FqiaW+C77Fjy5DV86nWTHt8ryzpkz+LbykPzdYMBCrAK7gnLqEdl6XweODLeU5tnap7Jf
+	 1b8fe2boQZVdKauP3TAnCWGbjJ2Z4qXa5kCswhgaJVZq0Rot0JJlcKRIMTuNA4gRuwA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.intel.com;
-	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=naOCQY0F;
-	arc=none smtp.remote-ip=192.198.163.7
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=bojanowski.me;
+	spf=pass smtp.mailfrom=bojanowski.me;
+	dkim=pass header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=wDg0k5Vn;
+	arc=none smtp.remote-ip=80.241.56.161
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 113CA606A325;
-	Mon,  9 Nov 2026 18:39:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 113CA606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B450606A326;
+	Mon,  9 Nov 2026 18:53:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4B450606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bojanowski.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bojanowski.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=naOCQY0F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794249567; x=1825785567;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=AR9HO37+WZET1xfDFkT+PkhphAIRkn3TOYR+YW4pQew=;
-  b=naOCQY0FLDyR2HgxH3D+0gRvYeXq+gjVINu3DE29990nBzdv5UuNUB5E
-   I5ZAD34AW6lkS9kSKeE69O7ZazVGRGOS8Nags0U9oDKAORJfdozUGYC8f
-   7GxKgWbYnQv576dQwsZ2DRcvpo30b31octRogY6wPtesXJfAINmuZPQmD
-   SdhE6ycWZey+IpiqMYu94ZIYsv1CxJ7Axgh1m6zvhJLPc32+mwhFuYCGZ
-   HUI4cs7N5qIoSR4xQd8OpRT16M7zK5j41kIjmVby4253QCmWA1EaZHJc4
-   jKZwIv+X5VRw1fvwXDv1ku1XJngth4TUVCxwivqsY7rdH8Skn49qw7iln
-   Q==;
-X-CSE-ConnectionGUID: SKqdPuGORWeB1izrRNzBlQ==
-X-CSE-MsgGUID: FXal0sYyQ0eoel6rppqVRg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11961"; a="2850176"
-X-IronPort-AV: E=Sophos;i="6.27,204,1787036400"; 
-   d="scan'208";a="2850176"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2026 10:39:26 -0800
-X-CSE-ConnectionGUID: rSX/ccPoRViXWqNHd/04kw==
-X-CSE-MsgGUID: ScpW41F/QL+SNMjgaexk8w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,204,1787036400"; 
-   d="scan'208";a="7795277"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.139])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2026 10:39:23 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 9 Nov 2026 20:39:19 +0200 (EET)
-To: Bartu Alev <bartualev@gmail.com>
-cc: Corentin Chary <corentin.chary@gmail.com>, 
-    "Luke D. Jones" <luke@ljones.dev>, Denis Benato <denis.benato@linux.dev>, 
-    Hans de Goede <hansg@kernel.org>, platform-driver-x86@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org, 
-    Guenter Roeck <linux@roeck-us.net>, linux-api@vger.kernel.org
-Subject: Re: [PATCH 7/7] platform/x86: asus-wmi: show the effective duty for
- enabled curves
-In-Reply-To: <20261101-asus-fan-floors-v4-v1-7-b8d1c31a99a9@gmail.com>
-Message-ID: <9e4832e9-9bd1-85c0-8b4d-e1de98373690@linux.intel.com>
-References: <20261101-asus-fan-floors-v4-v1-0-b8d1c31a99a9@gmail.com> <20261101-asus-fan-floors-v4-v1-7-b8d1c31a99a9@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=wDg0k5Vn
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4jNf7l0tYszKn1W;
+	Mon, 09 Nov 2026 19:53:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bojanowski.me;
+	s=MBO0001; t=1794250419;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YjzUZB+X7tHX1gt4W84NHzmu4XEbAGyzapOO/tnSdkU=;
+	b=wDg0k5VnYlmKsFsz2n286lCR4fi2w0TKouLLH0WYfImRGDE3tBQwaw+3KMa7FpyDU22D1V
+	d/QSvHThyQ15usXRUn4BCDNSxhBDsp/mm/MxDuBWamRrEUfVWv62YJJpanmE7gsUcM/fi3
+	E0zMHDUF0+OLUA1fnIh2ccghEMJP82uMpNX3ZRi1I7WcACOvTTAWzfz7WIqbKt6tQHJkVF
+	pft0aafCSrj2lMgGcuLlcH17ZqJhuElzr6zK74xfjcWCl+QgoXpNB81Uj3eKspqiEYuw3S
+	VqIWLgEANqlmU0ynfInzN7MGt9xjDZXoAPFkW1tg67LLpRXD8tB4cJhFgad+jg==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of tomasz@bojanowski.me designates 2001:67c:2050:b231:465::202 as permitted sender) smtp.mailfrom=tomasz@bojanowski.me
+From: Tomasz Bojanowski <tomasz@bojanowski.me>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	Hamza Mahfooz <someguy@effective-light.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (nct6683) Report the fan curves of MSI boards with NCT6687D-R
+Date: Mon,  9 Nov 2026 19:53:37 +0100
+Message-ID: <20261109185337.130731-1-tomasz@bojanowski.me>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <3ebb15c8-cef3-41a9-a603-335a9dcf4d86@roeck-us.net>
+References: <20261109015759.24284-1-tomasz@bojanowski.me> <3ebb15c8-cef3-41a9-a603-335a9dcf4d86@roeck-us.net>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -82,149 +78,20 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4jNf7l0tYszKn1W
 
-On Sun, 1 Nov 2026, Bartu Alev wrote:
+On Mon, Nov 09, 2026 at 10:24:06AM -0800, Guenter Roeck wrote:
+> I don't feel comfortable enough to enable it for good on those boards
+> (I don't know why pwm3..8 are skipped), but it is good enough for
+> testing.
 
-> When a custom fan curve is enabled, the embedded controller executes
-> each point at max(written_duty, floor_duty).  However,
-> pwmY_auto_pointZ_pwm reports only the stored value, diverging from
-> the duty applied by hardware.
-> 
-> Return max(stored, floor) from pwmY_auto_pointZ_pwm when the curve is
-> enabled and floor data is valid.  When disabled, continue returning
-> the stored value.
-> 
-> Because the controller operates in integer percentages while sysfs
-> uses PWM units (0-255), the reported value is an upper bound of the
-> applied duty.  Consequently, reading an enabled curve is not
-> read/modify/write safe: writing back a read value commits the
-> firmware floor into the stored curve.
-> 
-> Trigger sysfs notifications on pwmY_auto_pointZ_pwm on enable and
-> disable transitions, as well as floor refreshes, so pollers detect
-> changes in effective duty.
-> 
-> Signed-off-by: Bartu Alev <bartualev@gmail.com>
-> ---
->  Documentation/ABI/testing/sysfs-platform-asus-wmi | 14 +++++++++++
->  drivers/platform/x86/asus-wmi.c                   | 30 +++++++++++++++++++----
->  2 files changed, 39 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi b/Documentation/ABI/testing/sysfs-platform-asus-wmi
-> index 24931cc97ca86..36b633a5dfc49 100644
-> --- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
-> +++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
-> @@ -281,6 +281,20 @@ Description:
->  		(0-255); the driver scales the duty to the percentage the
->  		firmware expects when the curve is enabled.
->  
-> +		While the curve is enabled, _pwm reports the effective duty,
-> +		which is the higher of the stored duty and the firmware floor
-> +		of the point (pwmY_auto_pointZ_floor_pwm).  A disabled curve
-> +		reports the stored duty.  The controller works in whole
-> +		percent, so the reported value is an upper bound: the applied
-> +		duty can be up to 2.5 pwm units lower.
-> +
-> +		Reading while the curve is enabled is therefore not
-> +		read-modify-write safe: a curve editor that reads the points
-> +		and writes them back stores the effective duty as the new
-> +		curve, and the duty the user originally wrote is lost.  Read
-> +		the curve while it is disabled, or write back the values that
-> +		were written rather than the ones that were read.
-> +
->  		The embedded controller binds point Z (Z = 1..8) to the
->  		temperature decade [30 + 10 * (Z - 1), 39 + 10 * (Z - 1)]
->  		degrees Celsius and silently clamps the threshold into that
-> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-> index 74476904cb99c..bae5a528ac5d8 100644
-> --- a/drivers/platform/x86/asus-wmi.c
-> +++ b/drivers/platform/x86/asus-wmi.c
-> @@ -324,7 +324,7 @@ struct asus_wmi {
->  	bool gpu_fan_curve_available;
->  	bool mid_fan_curve_available;
->  	struct fan_curve_data custom_fan_curves[3];
-> -	/* protects custom_fan_curves[].floors */
-> +	/* protects custom_fan_curves[].floors and .floors_valid */
->  	struct mutex fan_curve_lock;
->  	struct device *fan_curve_hwmon;
->  
-> @@ -3754,7 +3754,7 @@ static int fan_curve_load_floors(struct asus_wmi *asus, u32 fan_dev)
->  	return 0;
->  }
->  
-> -static void fan_curve_notify_floors(struct asus_wmi *asus)
-> +static void fan_curve_notify(struct asus_wmi *asus)
->  {
->  	struct device *hwmon = asus->fan_curve_hwmon;
->  	bool valid[ARRAY_SIZE(asus->custom_fan_curves)];
-> @@ -3778,6 +3778,10 @@ static void fan_curve_notify_floors(struct asus_wmi *asus)
->  				 "pwm%d_auto_point%d_floor_pwm",
->  				 fan + 1, point + 1);
->  			sysfs_notify(&hwmon->kobj, NULL, name);
-> +			snprintf(name, sizeof(name),
+On the MS-7E61 (customer ID 0x20d), the CPU and PUMP_SYS fan headers
+are on channels 0 and 1, the system fan headers on channels 12-15
+(pwm13..16), and the EZ Conn header on channel 3. The board has no
+other fan headers.
 
-scnprintf()
-
-> +				 "pwm%d_auto_point%d_pwm",
-> +				 fan + 1, point + 1);
-> +			sysfs_notify(&hwmon->kobj, NULL, name);
->  		}
->  	}
->  }
-> @@ -3797,7 +3801,7 @@ static void fan_curve_refresh_floors(struct asus_wmi *asus)
->  	if (asus->mid_fan_curve_available)
->  		fan_curve_load_floors(asus, ASUS_WMI_DEVID_MID_FAN_CURVE);
->  
-> -	fan_curve_notify_floors(asus);
-> +	fan_curve_notify(asus);
->  }
->  
->  /* Check if the capability exists, populate its defaults and read its floor table */
-> @@ -3855,15 +3859,28 @@ static ssize_t fan_curve_show(struct device *dev,
->  	struct asus_wmi *asus = dev_get_drvdata(dev);
->  	struct fan_curve_data *data;
->  	int value, pwm, index;
-> +	bool enabled;
->  
->  	data = fan_curve_attr_2_select(asus, attr);
->  	pwm = dev_attr->nr & FAN_CURVE_PWM_MASK;
->  	index = dev_attr->index;
->  
-> -	if (pwm)
-> +	if (pwm) {
-> +		enabled = data->enabled;
->  		value = data->percents[index];
-> -	else
-> +
-> +		/*
-> +		 * The EC runs the point at the higher of the curve and the
-> +		 * firmware floor, so report the duty it applies.  Only the
-> +		 * floor table is protected by fan_curve_lock; enabled and
-> +		 * percents are written without it, so this is a snapshot.
-> +		 */
-> +		guard(mutex)(&asus->fan_curve_lock);
-> +		if (enabled && data->floors_valid)
-> +			value = max(value, (int)data->floors[index]);
-> +	} else {
->  		value = data->temps[index];
-> +	}
->  
->  	return sysfs_emit(buf, "%d\n", value);
->  }
-> @@ -4059,6 +4076,9 @@ static ssize_t fan_curve_enable_store(struct device *dev,
->  			fan_curve_refresh_floors(asus);
->  		}
->  	}
-> +
-> +	fan_curve_notify(asus);
-> +
->  	return count;
->  }
->  
-> 
-> 
-
--- 
- i.
-
+I have no board with another customer ID, but the vendor's Windows
+software lists the system fan headers of the MS-7D75 on channels 2-7
+and those of the MS-7D76 on channels 2-4, with the CPU and PUMP_SYS
+headers on channels 0 and 1.
