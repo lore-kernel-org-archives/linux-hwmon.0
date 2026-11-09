@@ -1,56 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794217323;
-	b=pi/2sm6AulfBv4ABA9W9J4ZzmKQsGVge5gWqepwzEwVPzQuINHzMlxSnZq8GV2y3etua
-	 Sf454YYvlJrpFYSmBELZgaIWxYleCGqCayVUr6ShEhQ3czVG/VAH5xZJzs39Us/OBvedW
-	 NgY0SiwGNiKhT7hA2r7Tm1UzXkyoXnAwWBESPzDR8qg5o5QTmDsahtwmFqZl9gMkObfB5
-	 087pr6JDr6YiRXIZuIl5Xl6w5YdENufyxU0+RK0JoHwEl7qgE5U57cYSELvM0hiGS3VOJ
-	 Dm7I7UZu3iQoAZdkR48cS1SeZDU/4RJFDLJ9MnwwlBWLn6+TKi0Kmualr0GsqgP0a2w==
+	t=1794217563;
+	b=bHLKlUixCXnuLOHwCZqoYE2DOQd0QC77jChQDsMdU5h0trwjpbk38zyFKG+inMFHeIBY
+	 fvYwcyua509Ry/RoIjjvQsYeLbRPfGLorxTt3oKU/R2MY9TsCOtHv099+ktDarYUWg/+p
+	 Qe0s+unwvxvoPcFCKAxvoZrdMMVk7rjNE6Ela8H2shOdvCSBJwODBsu/I6mjaqMYBKE3Y
+	 qqibno8SVF9B+yMVwDaYEtrVq3WkQpBRg8zWFE0hYl/EnXUi7uBnxnIz9Y0KneYY6/lE8
+	 vd81qEXFz67HXP61GJmNwm/6ttOXsgZx7PHjLVEhoGRNxWlEZnGTkUCBngCL+c0xt2w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794217323;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794217563;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=d9UzkgTq40zuA+YG/VGlosMrFLkoXfuVtAGM0Q6VOLA=;
-	b=Pxl+VTe/1gDQnDP2ORp53h550MSJEVawZOQ9+dsEu79ABUA4QEQWK/FI3p8UlijvjctY
-	 ZznHAGpeUQ4TQ8cKsaMCvrSP9QzXmMh285hAJCFmNGNqPdzD2+U7G4RqWPfiQQwCLdqt8
-	 rQMoykKVNjs83jpCbjaEWgeBRlIeHi3s4InncKjX16dSuURixq/OD6JPwdnLmr0Q3If0/
-	 Rq667ESZSMshSpPUCm2TNK41xbtnzEli4iBoENhj/oPO7L5jcPLiB4HiLf7apZqUsLhJi
-	 2MOqMlzYRd6M6z3dgUU3+drtZtWsINrTojr/Djh7SIIAWLQxreA7ZprT5Wm0zigizBQ==
+	bh=8IE9s4VxUkFaAsMKwKM4nIVf27D1y4dKThyXuKqKm4g=;
+	b=mB749DPg8Wi4ZtT+OI4CfyB39ntDjxYy41N+v2xKOpc5F3tMiiCX/hVXxgIWlHKe1yFM
+	 syiRzPjBm5nGFtsHH/pMBYmhxCSWC67mlpSXHB99aYloZCN7vKkYj183Bvc87JCVwVX9M
+	 QQcdTsCxEVpgu4CW3OpD9P3hZdSfDUL0tX5EW8sHq/nDRLx6sX2l+dfow9bfUJL5eP2QS
+	 QeZkNMU8JBAwl7fAwEiVYEPTr55vTbLApUxDluyUPq88h+7q9zdWUKpDWtaHlemk4ksYW
+	 ikIq95FPG6HobRsNGfP5M6/FEjGhJs8DnhmaBP4S/1oJvTUDXIqSJ1Jp+Dso2SKa3ew==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="oD/Zyl/h";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fCneRsok;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D362606D803
-	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 09:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E26CD606A322
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 09:46:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oD/Zyl/h
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 087481F008A7;
-	Mon,  9 Nov 2026 09:42:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fCneRsok
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63B531F0089F;
+	Mon,  9 Nov 2026 09:46:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794217323;
-	bh=d9UzkgTq40zuA+YG/VGlosMrFLkoXfuVtAGM0Q6VOLA=;
+	s=k20260515; t=1794217562;
+	bh=8IE9s4VxUkFaAsMKwKM4nIVf27D1y4dKThyXuKqKm4g=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=oD/Zyl/hppYKvC95G0ol7v0JkDd8YzfzHBQUr5RfQ7vXmcLYNUK+viKWGmYFkgJ7h
-	 vLS/77FwCVNW3IlhAcK/YYasEfIlJwASHaSz8QjcjNsM9c06kS3p6H8dckOlou3rz+
-	 FYhohxAYfPhVwziHjbIVq4LljWm5uCw/MIu7wbnSmqA2NrSnitXj+R/HsouzjnY4w2
-	 7TZwGKtht4QdjHI5x/2ji03CLp2UTGzqkj+Szq7jU1w4E2Bg1BlYp1WSa43wVO6vnf
-	 oIj4lq5B3MYNFbDteWN6p+6sUzbsuFcEDAuP5QRT7+0ZIszxPOHVS0kY0J9PfuU+oz
-	 aLFQTClg5ZFDg==
-Message-ID: <sashiko-outbox-204732@kernel.org>
+	b=fCneRsokXqUcTwW5ttvy6DxzGZ3QmKXgofftgheIU+G+WHEs0mfENbNp3PzUBRHUV
+	 GiH7A7cyK4E7ga6E/63S271Hu2d3zeEUoDbcY0bbj4QN5L6JM89tnQp8kb7Jn4PlIC
+	 o4HqDHOYbZUW2zeBnNPKe6LNo92DSXeyb9fIGJ5uHjgR0wQOqJk3Hp/5JXebLCuCyu
+	 TRKgFV1nEvrsg4siicf8z+bWXXns1WDzg+pDD+wDUPcYD7Wdcx5Pe5tV4cBqS9tG8z
+	 jborbKsM2+p9ukZDfN94ZsLcsULufQcTIGkr4pMzf/wt5PZnkGrb+3G4MUhc5/ELWz
+	 h8xY9rJxAHGqA==
+Message-ID: <sashiko-outbox-204740@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (lochnagar) Avoid oversized shifts for zero
- readings
+Subject: Re: [PATCH] hwmon: (w83795) Clamp fan control times before rounding
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Zhu Jun" <zhujun2@cmss.chinamobile.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261109093453.5384-1-zhujun2@cmss.chinamobile.com>
-References: <20261109093453.5384-1-zhujun2@cmss.chinamobile.com>
+In-Reply-To: <20261109093722.5508-1-zhujun2@cmss.chinamobile.com>
+References: <20261109093722.5508-1-zhujun2@cmss.chinamobile.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 09 Nov 2026 09:42:02 +0000
+Date: Mon, 09 Nov 2026 09:46:01 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -62,20 +61,20 @@ Precedence: list
 
 > From: zhujun <zhujun2@cmss.chinamobile.com>
 >=20
-> A zero IEEE754 reading gives exp =3D -150 in float_to_long(). Both shifts
-> in the rounding expression then exceed the width of u64. UBSAN reports a
-> shift exponent of 149, and the conversion can return a nonzero reading.
+> time_to_reg() adds 50 before clamping the result. An unsigned long close
+> to ULONG_MAX wraps, so an excessive stop time can select zero rather
+> than the maximum. The same conversion is used for fan speed transition
+> times.
 >=20
-> Return zero when the required right shift is at least 64 bits. With the
-> supported precisions, the scaled mantissa is too small to round up in
-> this case.
+> Clamp to the maximum representable duration before adding the rounding
+> adjustment.
 >=20
-> Fixes: 4cdb56214746 ("hwmon: lochnagar: Add Lochnagar 2 hardware monitori=
-ng driver")
+> Fixes: 792d376b4f3f ("hwmon: New driver for the W83795G/ADG monitoring ch=
+ips")
 
 Sashiko has reviewed this patch and found no issues.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261109093453.5384=
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261109093722.5508=
 -1-zhujun2@cmss.chinamobile.com?part=3D1
 
