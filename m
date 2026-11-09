@@ -1,56 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794254529;
-	b=YZ30LOVMCux8hfVJ/nlZe8m47PIcD07o2vZ0b/SSuUyuB+uYFayQVfBSfuuAZphs/yrR
-	 +fODuxbmdX0l0D/eM40yNaMDu3/49PuD8vN+HKjDuTHi8DBp1tgw6gaWI/0e54SW+Edhd
-	 qrfccUA9eG4gh8sgnn1NSgP9LFxd6L8FUBQlYVQsn0+PoL0xxy+MjiUt6DsvLdo0gPVrB
-	 MhZVIRULS6zWTz40GTQi81yYHDTEAFBURH4797dRv4yy9zBdt4I2AZtJ6lKGit7CUorC2
-	 Mtq9rkJ22gsi85FxnBYh63SWCJUTwBTLg7FA9Ls58RDfSmd6WludosgEhJEzMqxudRQ==
+	t=1794254530;
+	b=I/XogoX7p+3IJJcTV/8fT1Zm6IqD0ikCC2VYDRz5JRPKQPTrH8DGFpk6AfRh8ZpmpBZX
+	 AAd/eeTaBXOTwu5lRqwRhNviZ1h3U9Rb4Nfz6CJktOJsrVzDrqXtl8Ns3p86JUrbbG1Yv
+	 AbpaEeqrbB17rPTLrcCMtxwSpzQO1Mc3IlotPaSgYzUgmafQu9yZdsoguDSmVtK0fnsjp
+	 sk0giwM7WfB5HdEekIMlgYW0dpet/Yo8gsPZKIsAbLabXMCyje2+ikUA6YFN1JGYxc2+6
+	 JXwEArZkptbOAaz/2HFOw+VQuaXNTJRlJxOamIM1erZU7qnwQBhsNZx8F5FUQOwMaNw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794254529;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794254530;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=qfhyMJ58uR4wAyi7IlV/BfJDC0bg1TKCyfBB6DZFKtI=;
-	b=R83Pac6FHAriJx9cT9q7ju/eUXlu0O+WfSDmALTeOEM1RulQ/y8o186GmIDWqQTjRoKh
-	 3nrozULZKmuMFUm5FxRIgLowudjx8CwBiVQffRKSX3y/ikXGJSfqwf21qBX/mneOQ7MKO
-	 743/8395sDVCVEVTo6R3LznmGlbOQICpENrI/K8pO23D+2JnppeYUjx61FUZoWjGMrqim
-	 Xg9yuJlz4pHPaZ3W6z8Nbi/qrIBYsCBeyXsWL5zq0+bMjVX0gRtXedxXxO/q2fTQkfli3
-	 3t+FOXr+3FQWPsd3nYsFKLQW+9DjVVpzaSp7mubk5Q2pH4J++1Rvn9PB2vBQleO8kbA==
+	bh=ycWxdupgMnZJa0hQn93JJ6J7E486/T6u0bfIjf7FSFc=;
+	b=FkocISIrV3IWGM+h0XDmHDmb9rNi4RiOv8ZZRPL9swmQki76ufiTVeurhN5903iVu2Aq
+	 molUgviThKH3W+0HqvTxqmtWcA2yzKExPAUD2EuYZhdhgo/LVGYSAwvAxhLrquGKcU7Mw
+	 w4Nu33xhLT+d5uKml8jDKyafqby+wmE3wuHfwDQQAHuAVNFGsNIlu0f4oQIPeKGxuIzvf
+	 XPjpZd2PN+xodPiHmpbz5DElvdgDiwnNqNw7nn3qbceKAQAlM9zcF6QHvZD/k9TApo7F7
+	 CcLzirOK/f8i0G18p4k0FFOE+q7vYJ/J9r3bIgCIEDgDmEsGn4EZtNTmxvFchGn1z4Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BEHd6uxX;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kyiWjt7G;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4781B606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F11606A331
 	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 20:02:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BEHd6uxX
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9DB51F0089F;
-	Mon,  9 Nov 2026 20:02:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kyiWjt7G
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 777D51F008A1;
+	Mon,  9 Nov 2026 20:02:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794254528;
-	bh=qfhyMJ58uR4wAyi7IlV/BfJDC0bg1TKCyfBB6DZFKtI=;
+	s=k20260515; t=1794254529;
+	bh=ycWxdupgMnZJa0hQn93JJ6J7E486/T6u0bfIjf7FSFc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=BEHd6uxXRMl3+739OK2M8gaJaildR9hFgYAu2Sw32Plk5C3JfHiaROvtUcuWXyGLJ
-	 cHgODabj68cRtMsNBsvVNqQCndomRBlkMq9RYEKxkL5aeNqlHyVFFB6kASGtkzAWdh
-	 mucHM0uaFXigzJqWWmoQAS1Kh3juewnMKzO6OcuUmnJuapzlnqcluF5lLTuxYPqNoZ
-	 HMr6FYs0MjYxBPHG7j/JA8X9AgDqCLVfPW+piT5HBN+x/cQFgwZYvTOB3gWLToE9K8
-	 5heZBZKuGsGB7hOTIuNEwxeGgok5ABQ7QhR13LYFrCWXKCogbwpvwotMmPsqWEC6GX
-	 TMa2y+/XyffOw==
-Message-ID: <sashiko-outbox-205524@kernel.org>
+	b=kyiWjt7GJfpay3LzXrz1AfACiDN7k8NkaQHM4KZ3gxwFxoRGpUqJLh155B4kwQKcf
+	 PTD6vc4bCwYRanVIH3/12BwHQnVgUjxUjc2nzblFTDabK7hHCAVhj1xhn74spPxNll
+	 EC5miXcVhaE7RAZcGJIfaZuABKy7mZV++SNHSli4Cp2dHf6I2Hzx9N0qVb2lBAGRvO
+	 bUvEvSbF7LUzQA8zhW5Tqzcs+8jAqkc3m9SCs0/Unf4UdpwkKoM66aYYn2kFAmk9Ep
+	 Y3MwLPKi29GLcAO8A39za94E2nETjsJLWrYtvQmEvoWIaDm27ffBnx536kCZ4VPiGv
+	 pnh9zXkIJ1ZGQ==
+Message-ID: <sashiko-outbox-205525@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (it87) Clamp voltage limits before
- multiplication
+Subject: Re: [PATCH] hwmon: (w83627ehf) Clamp voltage limits before scaling
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Zhu Jun" <zhujun2@cmss.chinamobile.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261109092742.5237-1-zhujun2@cmss.chinamobile.com>
-References: <20261109092742.5237-1-zhujun2@cmss.chinamobile.com>
+In-Reply-To: <20261109092654.5177-1-zhujun2@cmss.chinamobile.com>
+References: <20261109092654.5177-1-zhujun2@cmss.chinamobile.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 09 Nov 2026 20:02:08 +0000
+Date: Mon, 09 Nov 2026 20:02:09 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -62,18 +61,21 @@ Precedence: list
 
 > From: zhujun <zhujun2@cmss.chinamobile.com>
 >=20
-> set_in() accepts an unsigned long, but in_to_reg() converts it to long
-> and multiplies it by 10 before clamping. Large positive limits can
-> become negative and select register zero instead of the maximum.
+> in_to_reg() narrows the sysfs value to u32 and multiplies it by 100
+> before clamping. A large positive voltage limit can consequently be
+> programmed as zero instead of the maximum; 4294967296 mV reproduces this
+> on a 64-bit system.
 >=20
-> Keep the unsigned input type and clamp the voltage before scaling it by
-> the ADC resolution.
+> Preserve the input width and clamp to the representable voltage range
+> before multiplication.
 >=20
-> Fixes: ead8080351c9 ("hwmon: (it87) Add support for IT8732F")
+> Developed with assistance from OpenAI Codex.
+>=20
+> Fixes: cf0676fe42c8 ("[PATCH] w83627ehf: Add voltage inputs support")
 
 Sashiko has reviewed this patch and found no issues.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261109092742.5237=
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261109092654.5177=
 -1-zhujun2@cmss.chinamobile.com?part=3D1
 
