@@ -1,55 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794217563;
-	b=bHLKlUixCXnuLOHwCZqoYE2DOQd0QC77jChQDsMdU5h0trwjpbk38zyFKG+inMFHeIBY
-	 fvYwcyua509Ry/RoIjjvQsYeLbRPfGLorxTt3oKU/R2MY9TsCOtHv099+ktDarYUWg/+p
-	 Qe0s+unwvxvoPcFCKAxvoZrdMMVk7rjNE6Ela8H2shOdvCSBJwODBsu/I6mjaqMYBKE3Y
-	 qqibno8SVF9B+yMVwDaYEtrVq3WkQpBRg8zWFE0hYl/EnXUi7uBnxnIz9Y0KneYY6/lE8
-	 vd81qEXFz67HXP61GJmNwm/6ttOXsgZx7PHjLVEhoGRNxWlEZnGTkUCBngCL+c0xt2w==
+	t=1794217664;
+	b=NDgnp+DsubFVD/rI867jjpMl0kkyU0quJ0n0cWc0r6Y30otgrJNua9qCFogKQrrxKDvd
+	 5Z2+QMLMyc+HU4KMQ+KlwL3Psjuae5LZb/X5AVHyhutgR6n75gR+vkvSyFx4HCtjLV+Vh
+	 iNW7A1w8eeBo87HJBv6+letRuUUSA1SoAKAkUzqVpugs/ESwQSfb+A7gr9DKQrE1S6j2m
+	 hPz2dHPXRYTcdVRoPTRAHaE0doLnSyoq5dAX07Vbrr2JVDQ65KLkRvTjh79B7uEGC5Qgl
+	 p2seDGI+vG5DnQglFKJmUTEQuGeYMEbG+yuGdV8tsF5Bt02CJ3QhC0DM2vmpb35n0Kw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794217563;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794217664;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=8IE9s4VxUkFaAsMKwKM4nIVf27D1y4dKThyXuKqKm4g=;
-	b=mB749DPg8Wi4ZtT+OI4CfyB39ntDjxYy41N+v2xKOpc5F3tMiiCX/hVXxgIWlHKe1yFM
-	 syiRzPjBm5nGFtsHH/pMBYmhxCSWC67mlpSXHB99aYloZCN7vKkYj183Bvc87JCVwVX9M
-	 QQcdTsCxEVpgu4CW3OpD9P3hZdSfDUL0tX5EW8sHq/nDRLx6sX2l+dfow9bfUJL5eP2QS
-	 QeZkNMU8JBAwl7fAwEiVYEPTr55vTbLApUxDluyUPq88h+7q9zdWUKpDWtaHlemk4ksYW
-	 ikIq95FPG6HobRsNGfP5M6/FEjGhJs8DnhmaBP4S/1oJvTUDXIqSJ1Jp+Dso2SKa3ew==
+	bh=lEuYaTb7EGh0d1YgKVOPOtdNLISKHC0+3HlVovA3JS4=;
+	b=5R33+euevs5R/BSIXYcw7Gs0zd7VKEYSaEsrApT4WlPJOw1z/yiT8iG6X1R/ymFMKDIo
+	 VbniIdDvunJHT29pdgqHfeyfutpfg8j6qyGwhe3zCGiBTJ9UJJkVMHT9v/AAULiiQ2NHf
+	 f66qKS16nA8/0ORDsYUB6tT73GR6KSioklei/mPiEZT1CGOKlu0s6QQpj9TbJLe4fOHi/
+	 53sY7sRcwdtd8EMwci1NJNpeKNGxokG9dytTd5YDCnB5LuDFI7/Jj/rSh3KjdjAqNNKF9
+	 XS9/phnz1qco+gHK3RD47wRBLTBffay1mm83HtrA8/BuQcVVPZrOXYGQRy3pCfQ+m9w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fCneRsok;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QxoUp66p;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E26CD606A322
-	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 09:46:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 785AE606A31C
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 09:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fCneRsok
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63B531F0089F;
-	Mon,  9 Nov 2026 09:46:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QxoUp66p
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7CCB1F0089F;
+	Mon,  9 Nov 2026 09:47:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794217562;
-	bh=8IE9s4VxUkFaAsMKwKM4nIVf27D1y4dKThyXuKqKm4g=;
+	s=k20260515; t=1794217664;
+	bh=lEuYaTb7EGh0d1YgKVOPOtdNLISKHC0+3HlVovA3JS4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fCneRsokXqUcTwW5ttvy6DxzGZ3QmKXgofftgheIU+G+WHEs0mfENbNp3PzUBRHUV
-	 GiH7A7cyK4E7ga6E/63S271Hu2d3zeEUoDbcY0bbj4QN5L6JM89tnQp8kb7Jn4PlIC
-	 o4HqDHOYbZUW2zeBnNPKe6LNo92DSXeyb9fIGJ5uHjgR0wQOqJk3Hp/5JXebLCuCyu
-	 TRKgFV1nEvrsg4siicf8z+bWXXns1WDzg+pDD+wDUPcYD7Wdcx5Pe5tV4cBqS9tG8z
-	 jborbKsM2+p9ukZDfN94ZsLcsULufQcTIGkr4pMzf/wt5PZnkGrb+3G4MUhc5/ELWz
-	 h8xY9rJxAHGqA==
-Message-ID: <sashiko-outbox-204740@kernel.org>
+	b=QxoUp66p4Si3ZlwZjlJuBIgtqQHzpvx9SGE/VJdksXNTT8TOxEtK39yqbKn4mvU1N
+	 8RYxd4MzB+9O7hWCW2xZpclpHA3r7fqapmyisp7IHNwhvnOFWRQ/zJsc2XFE51x6A0
+	 7Oj5kYTmEL3k3tnMyLwIVbhI1U8fKA57JhG3mRr+DDuC3UqqyGNjek/438c362OPbU
+	 c+WaoNnhBYtRwyeTIuk38HcLvlVYhPqWIF5w/Ssk26M8gNS9phjMLucXTSRGJP40Fc
+	 izuJIAXkytUVl7OBiMRJOiKdvUguy+5E0bdCDG82VGVzwXn+pESdDLUsNR1fA9gNzX
+	 JK9U3nbIkbebg==
+Message-ID: <sashiko-outbox-204742@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (w83795) Clamp fan control times before rounding
+Subject: Re: [PATCH] hwmon: (vt8231) Clamp voltage limits before scaling
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Zhu Jun" <zhujun2@cmss.chinamobile.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261109093722.5508-1-zhujun2@cmss.chinamobile.com>
-References: <20261109093722.5508-1-zhujun2@cmss.chinamobile.com>
+In-Reply-To: <20261109093739.5539-1-zhujun2@cmss.chinamobile.com>
+References: <20261109093739.5539-1-zhujun2@cmss.chinamobile.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 09 Nov 2026 09:46:01 +0000
+Date: Mon, 09 Nov 2026 09:47:43 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -61,20 +61,20 @@ Precedence: list
 
 > From: zhujun <zhujun2@cmss.chinamobile.com>
 >=20
-> time_to_reg() adds 50 before clamping the result. An unsigned long close
-> to ULONG_MAX wraps, so an excessive stop time can select zero rather
-> than the maximum. The same conversion is used for fan speed transition
-> times.
+> The voltage limit stores multiply an unrestricted unsigned long before
+> clamping the register value. Large inputs can wrap and select a low
+> threshold. On 32-bit systems, writing 4483265 mV to a regular voltage
+> limit selects register 3 instead of 255.
 >=20
-> Clamp to the maximum representable duration before adding the rounding
-> adjustment.
+> Bound the input before multiplication, using the separate scaling for
+> input 5. This preserves the conversion throughout the representable
+> range.
 >=20
-> Fixes: 792d376b4f3f ("hwmon: New driver for the W83795G/ADG monitoring ch=
-ips")
+> Fixes: 1de9e371b89e ("[PATCH] hwmon: New vt8231 driver")
 
 Sashiko has reviewed this patch and found no issues.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261109093722.5508=
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261109093739.5539=
 -1-zhujun2@cmss.chinamobile.com?part=3D1
 
