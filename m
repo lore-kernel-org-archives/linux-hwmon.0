@@ -1,62 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.151
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.139
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794219422;
-	b=h57ZToNFgNoAoPo/cuSyJ9PJm0Oi6/DEmzzQ5jVKMZRb8l+J/ypdiuEo0T/6yEfJF5OR
-	 eMFs9+288Y01WRd2KD/l/OImD3JGTgFaPjMW2NiG4t03qiPb4EBHCrZekUf+qXlKdwuHv
-	 wt465/z0OdHpI1MJnnFRxWN5Q1OWwoRhCzY7clPnzSW55/eT7Itfl6g34JpBds5CXbCoJ
-	 rE6HeCKUHACX5J5CNZF3gTEV4C1wzOS8y0YQgStZFc2TTnXB4s4eUyRyA+4aq+qGNE4sJ
-	 2Z/2VU1MpZnhZSJJ5rEl/Mpt740QV+m1ceFiwvLGGdDVBSPu03+8nILTe/E35f/nNGg==
+	t=1794219450;
+	b=U51CXNt/cWICLWkZiHTvIcPhsaxf2RojZmEisp1zjASb9bHSCMz5z6UX1JYAoYXjcLbi
+	 ARwyvSHgTOmBi9lEICfGnLLcQsnRcIZ+vc7GZDEU0O1KHNpsZXpDFWlUVqqcfbIeRPDvi
+	 PdLKzctz4tMlygpaHuaTqqvZQRSC+nPHZVchFLdulGjqd6DGTfHWgAfX8I2//B3v45yzZ
+	 5NPKLn6qmcwPXK50Ez/nEbNQ4m+KVkHs5oaB3/BTvWj6rSG32NJVUL74a+h+5bgrKZXds
+	 WHTB3WhHCcxybjzn8xalUxqWupNMS61tmFibA9cvSp5E7YCObrEAOUipnnmE5LjVGaw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794219422;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794219450;
 	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
 	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
 	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=gOHCe4hDhs4ZH7TGCggKPRPlRIeYbewm1vhOq46tUng=;
-	b=3eNz0ZV5l4Jv/2AjOJEvEKE8945CLHyO4BNs7iVO8wfg/NPmoVUgRiT4WHlEDDJnqOzh
-	 qTWgKIA/rSTUM+Wvux5Ed5EvMECZKA7bJXSYV4TJmhKKP8p4SkXZHRcTBh7uRCZJmmprl
-	 g9xDLzHSQSQrCHaFJU46jAD9MLcMUT1sT4kFlI7qHWcM1gNdgixFtgAu6BgVCND4wNbzb
-	 gFZLP3DPzolro+N9pJud9EG18iBB0e54XeADVaFlZpyR56B7aV1+s3IgGvUqZnISMRRwT
-	 3Od1u+E53lDpYy74qC/+PneBhqcfZn7AZtG3snEc2savXOg+suJSzLNDT2FMo93kYOQ==
+	bh=cTz+IlTqa5+jcSZYqRGk9nQTbICrUS28laYZWZAnGYE=;
+	b=1ywL0N2ce+e3uhgRQSYdYKob8OHkosXpHfqGxFCYjE5eVUFbgzxYj4rg3tM9CKWcA72R
+	 oJn9+jqUIfn8n3YpG4DYMZGrgxpHGTXVZWoyitubP2D3KzVpE0bnHTBFSuGzhj74OXFrI
+	 JtS0KZefUEErnBOahseVsAHSG49EXhP+GbNaYOMUhT/OncEQAsD7yLjsJJUleU0XRI2jU
+	 751pJD+YpGpMOTfewr68K5Iiy6agWAfSn19l3AaYlZIWsm+lbJeT7utsAoEf64y36Kike
+	 SOzmL/EBgts7lRAwNCqSTd4g55Ke1r42nhznBeNHKlLf2OQ43EG42/TXv78BuhIm3tw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cmss.chinamobile.com;
 	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b="QsTL/tl4";
-	arc=none smtp.remote-ip=111.22.67.151
-Received: from cmccmta8.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F12B9606A334;
-	Mon,  9 Nov 2026 10:16:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F12B9606A334
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=ZetOdvQi;
+	arc=none smtp.remote-ip=111.22.67.139
+Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13642606A31C;
+	Mon,  9 Nov 2026 10:17:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 13642606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=QsTL/tl4
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=ZetOdvQi
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=cmss.chinamobile.com; s=default; l=0;
 	h=from:subject:message-id:to:cc:mime-version;
 	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=QsTL/tl404m1yyUYEw5Xmasl4WpHcIBHTEGcg83fahmifDUMvV4Fsu+I+qsQ045m9G/vupzjIZdZH
-	 TM5JZ7fzJy64Sf4kjtdmgkFcps8ET8StQO6TOq8czxBEOyQp1sDoPm9ZtUufyEmTdeIx1/HE2VqH/P
-	 Z2kIj/rfxDR/Y1Wk=
+	b=ZetOdvQiVmrP7ehBMjuoEFVlyWk/ZtrjqE9BkPSj1RaJQleBq0O2tWofqv02QDxv5nEmKBun0MHDE
+	 dgSdJy/9TUxXWOQPDWwo0D7/yQ6efNrMcAhLADB0f4hrBKLQmd534jGymUGRnESmLJQmidVvOEwbr8
+	 VuPV9jeYeQEhcB/E=
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee26af19d9904e-00dea;
-	Mon, 09 Nov 2026 18:16:58 +0800 (CST)
-X-RM-TRANSID:2ee26af19d9904e-00dea
+	by rmmx-syy-dmz-app09-12009 (RichMail) with SMTP id 2ee96af19db01cd-ca476;
+	Mon, 09 Nov 2026 18:17:27 +0800 (CST)
+X-RM-TRANSID:2ee96af19db01cd-ca476
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from devin-VMware-Virtual-Platform.localdomain (unknown[10.55.1.72])
-	by rmsmtp-syy-appsvr10-12010 (RichMail) with SMTP id 2eea6af19d98fb9-8baa9;
-	Mon, 09 Nov 2026 18:16:58 +0800 (CST)
-X-RM-TRANSID:2eea6af19d98fb9-8baa9
+	by rmsmtp-syy-appsvr01-12001 (RichMail) with SMTP id 2ee16af19db540f-8bfa5;
+	Mon, 09 Nov 2026 18:17:27 +0800 (CST)
+X-RM-TRANSID:2ee16af19db540f-8bfa5
 From: Zhu Jun <zhujun2@cmss.chinamobile.com>
-To: linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
+To: jdelvare@suse.com
+Cc: linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (w83627ehf) Clamp fan control times before rounding
-Date: Mon,  9 Nov 2026 18:16:57 +0800
-Message-ID: <20261109101657.16793-1-zhujun2@cmss.chinamobile.com>
+Subject: [PATCH] hwmon: (it87) Bound 16-bit fan limits before conversion
+Date: Mon,  9 Nov 2026 18:17:26 +0800
+Message-ID: <20261109101726.16875-1-zhujun2@cmss.chinamobile.com>
 X-Mailer: git-send-email 2.51.0
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,15 +70,15 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The fan time stores pass an unsigned long to step_time_to_reg(), which
-takes unsigned int. Large values can be truncated or overflow when the
-rounding adjustment is added. For example, 4294967295 ms selects
-register 1 instead of 255.
+FAN16_TO_REG() doubles an unrestricted positive long and adds 1350000
+before dividing. Large fan limits can overflow these intermediate values
+and select an incorrect tachometer limit. Converting LONG_MAX can select
+0xfffe instead of 1.
 
-Keep the input as unsigned long and bound it to the maximum duration
-before applying the PWM or DC mode conversion.
+Apply the same RPM bound used by the 8-bit conversion before doing the
+arithmetic. Keep zero as the alarm-disable value.
 
-Fixes: 08c79950a047 ("hwmon: Add fan speed control features to w83627ehf")
+Fixes: 17d648bf5786 ("it87: Add support for the IT8716F")
 ---
 Validation: x86-64 and i386 driver objects built with W=1.
 Source-extracted boundary tests passed on both word sizes;
@@ -86,24 +87,21 @@ No physical sensor or booted-kernel testing was available.
 OpenAI Codex assisted analysis, code, tests and changelog drafting.
 Please review and add your own Signed-off-by before submitting.
 
- drivers/hwmon/w83627ehf.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/hwmon/it87.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
-index 9c08ab662dc6..5bcb0a5fd095 100644
---- a/drivers/hwmon/w83627ehf.c
-+++ b/drivers/hwmon/w83627ehf.c
-@@ -258,8 +258,9 @@ static inline unsigned int step_time_from_reg(u8 reg, u8 mode)
- 	return mode ? 100 * reg : 400 * reg;
+diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+index bbb3f9788c2e..b8ad1ed043b3 100644
+--- a/drivers/hwmon/it87.c
++++ b/drivers/hwmon/it87.c
+@@ -761,6 +761,7 @@ static inline u16 FAN16_TO_REG(long rpm)
+ {
+ 	if (rpm == 0)
+ 		return 0xffff;
++	rpm = clamp_val(rpm, 1, 1000000);
+ 	return clamp_val((1350000 + rpm) / (rpm * 2), 1, 0xfffe);
  }
  
--static inline u8 step_time_to_reg(unsigned int msec, u8 mode)
-+static inline u8 step_time_to_reg(unsigned long msec, u8 mode)
- {
-+	msec = min(msec, 255UL * (mode ? 100 : 400));
- 	return clamp_val((mode ? (msec + 50) / 100 : (msec + 200) / 400),
- 			 1, 255);
- }
 
 base-commit: 7475ea8b58616b33c04afb976cf0fbaad9dd63fb
 -- 
