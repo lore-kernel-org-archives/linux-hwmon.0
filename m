@@ -1,78 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794268090;
-	b=XnvtT8L4qRHsMEoYYKgE6bEX6Aw50IAMILYypfJgKdFvQ+PcUvkw5gf+U7BUuax/TivG
-	 nn2NzerT2Db2znru9WFInPkH63lREF1QG5/FaxvBIoMuSb/TvR6tc4jDrLkK5irNlD5Nv
-	 MXm3yIT4C6/sbbxS8jzW4N4vgoQzN3cIrLlPtepD/nSNkn8QVv1EItmrjknAke6qfKxsj
-	 QNiZkVymQRR5xAKxXyu6e10m6hpR6iF26hyLLC1AuqkwDY7QUYYEQXQMwdB4z6f8aY+sE
-	 +Lg1CUFaywSuZtUYfysbbErjl7ZaWNFj4qczenfUqhPgtPEXBw2EazGoIiEMrmmAPQQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794268090;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:X-B4-Tracking:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=r/s7nbQdksHktoJTgJZCq4IA437X0Zsh6izfilxtMXs=;
-	b=vUeI4PQ5RhARWS/7+WU29ylT/fk3UZDoexoEqZckOrNkDQPQl1cm/B3XJ6SX1ut186Ba
-	 s9UyLAbhliu4qfriLWDMYaTODCQAD4JAzSXo0QabxVOQ6uATIzK4BSxt2ENy5r7Y8RahR
-	 mFeIVGiQwe60M4PSB6MYF5fEQ1zgZtNP3UJeUimNbqUnXLISq8jjJs/MllG6rh5afQEZc
-	 4Xjs/HZmL9ynaQvnCmiLdW0MSLDJgD/RTFc/Dz9y3ElBtrCg7XP5JBMqu/MRCS81Mb6uV
-	 Bn52Gnb2KD9cfAxTHNPgSrtaAldAhlALMNYoUwQrqKxYT6KWlY6ZhpRV85SNb2vhDCA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=W0bqKhkf;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.35
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794268305;
+	b=Jzba4UJN6Cedb2l2F+uer+Uw3yHfduynbPvwMQKtLgWdc1tW3KtT/2RBiunBd7XPlPsg
+	 1+drliX9Ezh96r5efDqriBk4FRPPKcIcDcx5CoLV+qp/QjSXCg+kQIkTetW+EgCLay09m
+	 52Fb4CbUcVcp3iQnywwLeUF63J7wQhC44RMfGsWZiccryHpSVX0GkILxPkLibbS6FMxM+
+	 Zap13fnXC2i8d9xdcBre1HFYK3dRA0E5rE0ADwVZg7Bh8CzayfxpZRNmzGYZqUUNxkIaj
+	 25+JN1VRK24O/KY+ZkbZ4FojsUCGN82Na/SCPIop3eneJV195URBVbm15BXU4OjvC0A==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794268305;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
+	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
+	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
+	 X-Local-Domain:X-CMAE-Envelope;
+	bh=mG+Z2x8BVo/jwFACUmpDutjLeT1jmDjIbhjaCHs8Tt0=;
+	b=Jld/7LOZj7GH0B3OpQ5g7bt9AQUbifJFTJNr44o3RpWgQXDCVhemIbY4pigaRKEPOwZ1
+	 YKxH8y1oKOwk5hfto7hFoiTy61+sDVo/9SjQ4l6+wJkKjiznLYRzW8z5nK9gkwytqyKM3
+	 sYjMOnb/ZNx5JC0K2Dowr5YAyxp3WXDDNKhsyqKk7uolV3T/SafN2sMRfVLijJz0DDNPP
+	 8A+W5qER5HdzcoB7WcaqHcLHSggVQrIz6xMN4pZglcNwRR9nmRjcmr/cMTUOpaR/LHiSO
+	 ViIWiJJsbdE9075U5c+GzhjYXK5hIE+hDRGUt9g8ad9FKmgr91UBO1qHd5ZIUnmoc2w==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=none header.from=roeck-us.net;
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=eJHGXirf;
+	arc=none smtp.remote-ip=44.202.169.35
+Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2EF0606A31C;
-	Mon,  9 Nov 2026 23:48:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B99606A321
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 23:51:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 56B99606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=W0bqKhkf
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794268089;
-	b=soTmE42lB7GCd2IP9TcAdWG+faIVAK+PVD7dv7Esm/WqSeSZZGjsBv1mutQsR3WvD9NJ
-	 kqU1nmDU9HMUZyLzF1mfsLznVG+s/XHF7of6bH20T5SgYBLfVH9AuA0GJBioTgENXwFSJ
-	 ex2RiZcZp33111iV8iN/1zaKWpLCXol5YqVGE+Z/zylCLbLgjfWiVu7bzZ7CDrj1KJevi
-	 /lI3tWL6K/612Wyc3QU7ekqSP7kBDHC9E586Afb288qiDGmtaF8aciDCRCO2NfCwcq0GD
-	 kqUyJcni/BxB0UYObxfgCf3vElZA3xMtQZEEB6MXBnvHMUzESHJqI2nVFaOWNDeepgw==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794268089;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:X-B4-Tracking:To:Cc:X-Mailer:X-Developer-Signature:
-	 X-Developer-Key:X-Endpoint-Received:X-Original-From:Reply-To:
-	 Content-Transfer-Encoding;
-	bh=r/s7nbQdksHktoJTgJZCq4IA437X0Zsh6izfilxtMXs=;
-	b=KIVm5ITpcNZlAsGtse1oqbqYVkzV4298V+4ck823fThCk0A5/ApzujWaZjCjF2Pd1Lx5
-	 UlDEWQK4K7tLRt0TwYi9Df1u/VvDfTz7Q/HZuc4TPEgVPVsFfBrpp+9DfRz4MDU25as5z
-	 GxKIZSv3eZsm20xJw3bNik5bRY2O2j3eqPCKnmSioxyeY2etVA22z0Wd3jlgYWdS1x89e
-	 277BoUrKbEq4gVedxBmMuKhzsKglNCim2/Qp62463nYl7rU3/uJlvQ6KK+13IniNIzj9o
-	 P6msvdXUjsUK3sCABhoLXrmh32DZbHczJhXwBk3rlrG7Y17w22MzU+mHMguOm5xlQZA==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id ACA6C1F0089F;
-	Mon,  9 Nov 2026 23:48:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794268089;
-	bh=r/s7nbQdksHktoJTgJZCq4IA437X0Zsh6izfilxtMXs=;
-	h=From:Date:Subject:To:Cc:Reply-To;
-	b=W0bqKhkfr5WgxopbaN3WlTIEepaF8GvU6BJAeXWgvXJxijV+kSdgNIa35olX3nrFN
-	 V2JVBKUJgHSaYTPlliURoMJXh3a7LEMuHQVQYh31AWdgP3LUlyy9e4cWwsF9hEGkkG
-	 mnlMzZj/C8JtYzDj5sCSiQnD+FkMTUTqO3YS02f0GhlDjrIMbc/IHeO5euV4URWxdA
-	 LtUSEiGbhodx61CpzQjo9jbOMR02atKM0CMMPoBF9GNJV9gxICvcDLm43F5MJdVJ24
-	 4cIfJVQGKwkPWFmtnWs9mbfCpyL7ETZB1W+1I+uHdi+yAmW05GJE/AN8SogLjImLiM
-	 0pHeWlxRy3wGA==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 0E4C2486F4;
-	Mon,  9 Nov 2026 23:48:08 +0000 (UTC)
-From: Vincent Jardin via B4 Relay <devnull+vjardin.free.fr@kernel.org>
-Date: Tue, 10 Nov 2026 00:48:05 +0100
-Subject: [PATCH v3] hwmon: (pmbus/core) Add a vout_command debugfs entry
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=eJHGXirf
+Received: from eig-obgw-6003b.ext.cloudfilter.net ([10.0.30.175])
+	by cmsmtp with ESMTPS
+	id QQQNxoiQz4vCDQZ9MxCWRp; Mon, 09 Nov 2026 23:51:44 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id QZ9LxTbyEGh2BQZ9Lx4Itz; Mon, 09 Nov 2026 23:51:44 +0000
+X-Authority-Analysis: v=2.4 cv=Aszu3P9P c=1 sm=1 tr=0 ts=6af25c90
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=XYAwZIGsAAAA:8
+ a=3nL8IkXtacJJuiP_3MUA:9 a=CjuIK1q_8ugA:10 a=E8ToXWR_bxluHZ7gmE-Z:22
+ a=KPbNTLLc3YvdawN95zVk:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=mG+Z2x8BVo/jwFACUmpDutjLeT1jmDjIbhjaCHs8Tt0=; b=eJHGXirffgbhtaHhzY22qhSDiu
+	HBiyiwt8ucKOR3S4N4egYKWNVK+JrxLUeetycfKd7WVjSNocMW6fHicSCyGxUQLhT9yvszTaz9mic
+	iIB2KTo2SLPnK0Zt7UvQnU9+2YyrrX7OkFrPOWEJBx8HoE0mtvtoNPQRZE3d5yE/FDRUKllGYRsj3
+	ba8je+n7X76AZBZhXShmFT5yKBqPB5h87QZNtWdkckxFFWZzHTM6yjHIO8mBq8oDD3uIvgOAZ0xUj
+	bC+f2oG98IBb9MUm+9z+vHaGUU+ThC7vOnhpRWdi4aqArXkk7VP8/udeyJ4x0zjrIhNS7Sih0B3yG
+	2Aqqxxrw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:58268 helo=server.roeck-us.net)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xQZ9K-00000001Beu-0Hqc;
+	Tue, 10 Nov 2026 05:21:42 +0530
+Date: Mon, 9 Nov 2026 15:51:40 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Robert Marko <robert.marko@sartura.hr>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	corbet@lwn.net, skhan@linuxfoundation.org, rdunlap@infradead.org,
+	Steen.Hegelund@microchip.com, daniel.machon@microchip.com,
+	UNGLinuxDriver@microchip.com, nicolas.ferre@microchip.com,
+	claudiu.beznea@tuxon.dev, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	luka.perkov@sartura.hr
+Subject: Re: [PATCH v2 3/6] hwmon: sparx5: add LAN969x fan monitoring support
+Message-ID: <e189dcb8-1cbd-4629-85dc-1b73243806fd@roeck-us.net>
+References: <20261109133609.810876-1-robert.marko@sartura.hr>
+ <20261109133609.810876-3-robert.marko@sartura.hr>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -82,130 +89,347 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261110-for-upstream-pmbus-vout-command-debugfs-v1-v3-1-e3a261fe4342@free.fr>
-X-B4-Tracking: v=1; b=H4sIALRb8moC/52NOw6DMBAFr4JcZyPWSAZS5R5RCn/W4MIY2WAlQ
- tw9hiY90mvmFTMbSxQdJfaoNhYpu+TCVKC5VUyPchoInCnMeM0FYt2BDRHWOS2RpIfZqzVBDus
- COngvJwOG1DrYciIISw1p3rQKJSvCOZJ1nzP2ehceXVpC/J7tjMd7KVOGoFtZi4as6lE/bSS62
- 8iOSObXxbyIFfZGaIOdlPQX7/v+AxldQM87AQAA
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Vincent Jardin <vjardin@free.fr>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794268087; l=3565;
- i=vjardin@free.fr; s=20260525; h=from:subject:message-id;
- bh=2p/itRLjC3fhkJ7j832/F1RjibHZstzgI7xkcvdHOdg=;
- b=1/y6A3KWu1uBRwEljcagbu6Yh91gnL3RsZ0DJhQMs3H4OTXQ/bvT+5gmaQUF2n2TcumxLa2Vr
- tg4XKjryLHPD5NcLEZHMCizPAilKz/X8swt4KUvmpwZwLCEGrovFbP0
-X-Developer-Key: i=vjardin@free.fr; a=ed25519;
- pk=hppgLeFpGpKOi7LNwGEZ4jOYofJCoGd4Jf1ltAabiLw=
-X-Endpoint-Received: by B4 Relay for vjardin@free.fr/20260525 with
- auth_id=871
-X-Original-From: Vincent Jardin <vjardin@free.fr>
-Reply-To: vjardin@free.fr
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261109133609.810876-3-robert.marko@sartura.hr>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xQZ9K-00000001Beu-0Hqc
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:58268
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 105
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfHrRYLTvHJvm+smsUWal4BIvXUVaVNgh3ygRjKH4jxER7fTlrOkl8fHzR2ElINlGuBmeTT9xu04fVREbAK2eSHO+eG8beK67eK/MsggJ6QBiePVJPrWK
+ TktqerO2Bp6CqHUJhEx1qbtwzB+dRhzxC0wC4yorLwb5S8jN8VUwVZobJ96bX8huwKajlOsEjEHU9GmJNIlWdlXIyMY26SnHHuthTMnkDzQE9WN9DP5YbvXh
 
-From: Vincent Jardin <vjardin@free.fr>
+On Mon, Nov 09, 2026 at 02:35:07PM +0100, Robert Marko wrote:
+> LAN969x has a fan controller with a tachometer in a register block
+> separate from its Sparx5-compatible temperature sensor. Match the fan
+> node independently and expose fan1_input on its own hwmon device.
+> 
+> Read the optional pulses-per-revolution property from the fan child.
+> Preserve the temperature-only behavior of existing device trees.
+> 
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 
-The vout hwmon attributes and the regulator get_voltage() callback
-both report READ_VOUT.
+I don't see the point of keeping this as single driver with two completely
+different sets of functionality. If you want to have two instances, please
+make it separate drivers.
 
-On a regulator whose configuration applies a load line (droop),
-READ_VOUT sits below the setpoint under load by design, so user space
-cannot see what the regulator was actually set to.
+Thanks,
+Guenter
 
-max20730 already exposes a driver-specific vout_command entry. Add
-vout<page>_command to the PMBus core debugfs, for every page with VOUT
-and a readable VOUT_COMMAND, in millivolts like the in*_input attributes.
+> ---
+> Changes in v2:
+> - Register fan and temperature monitoring as separate hwmon devices.
+> - Reject a present but malformed pulses-per-revolution property.
+> 
+>  Documentation/hwmon/sparx5-temp.rst |   9 ++
+>  drivers/hwmon/Kconfig               |   7 +-
+>  drivers/hwmon/sparx5-temp.c         | 146 ++++++++++++++++++++++++----
+>  3 files changed, 139 insertions(+), 23 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/sparx5-temp.rst b/Documentation/hwmon/sparx5-temp.rst
+> index 0140809089542..a053d12fbdbbb 100644
+> --- a/Documentation/hwmon/sparx5-temp.rst
+> +++ b/Documentation/hwmon/sparx5-temp.rst
+> @@ -15,6 +15,10 @@ Supported chips:
+>  
+>  Author: Lars Povlsen <lars.povlsen@microchip.com>
+>  
+> +The driver also supports the Microchip LAN969x temperature sensor and fan
+> +controller as separate devices. The fan controller uses the
+> +microchip,lan9691-fan compatible.
+> +
+>  Description
+>  -----------
+>  
+> @@ -30,4 +34,9 @@ The following attributes are supported.
+>  
+>  ======================= ========================================================
+>  temp1_input		Die temperature (in millidegree Celsius.)
+> +fan1_input              Fan speed in RPM (LAN969x only).
 
-Signed-off-by: Vincent Jardin <vjardin@free.fr>
----
-Changes in v3:
-- Rebase for hwmon-next (Guenter Roeck).
-- Link to v2: https://lore.kernel.org/r/20261108-for-upstream-pmbus-vout-command-debugfs-v1-v2-1-b19d6cd18aae@free.fr
+FWIW, this is misleading. One instance will support the temperature, a
+separate hwmon device will support the fan. Really, if you want to have
+two separate devices, make it two separate drivers.
 
-Changes in v2:
-- Use pmbus_vout_command_mv(), simpler (Guenter Roeck).
-- Link to v1: https://lore.kernel.org/r/20261108-for-upstream-pmbus-vout-command-debugfs-v1-v1-1-c7a063efb91c@free.fr
----
- drivers/hwmon/pmbus/pmbus_core.c | 41 ++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 39 insertions(+), 2 deletions(-)
+>  ======================= ========================================================
+> +
+> +The tachometer counts pulses over one-second intervals, independently of the
+> +PWM output. The fan child's pulses-per-revolution property specifies how many
+> +pulses represent one revolution; it defaults to two.
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 3ae676a56d95c..deb9eb82b8501 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -669,11 +669,12 @@ config SENSORS_I5K_AMB
+>  	  will be called i5k_amb.
+>  
+>  config SENSORS_SPARX5
+> -	tristate "Sparx5 SoC temperature sensor"
+> +	tristate "Sparx5 and LAN969x SoC hardware monitoring"
+>  	depends on ARCH_SPARX5 || ARCH_LAN969X || COMPILE_TEST
+>  	help
+> -	  If you say yes here you get support for temperature monitoring
+> -	  with the Microchip Sparx5 SoC.
+> +	  If you say yes here you get support for temperature monitoring on
+> +	  Microchip Sparx5 and LAN969x SoCs, as well as fan monitoring on
+> +	  LAN969x SoCs.
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 7ce8be840565..b3aa7f1ac479 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -3833,6 +3833,30 @@ static int pmbus_debugfs_get_status(void *data, u64 *val)
- DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_status, pmbus_debugfs_get_status,
- 			 NULL, "0x%04llx\n");
- 
-+static int pmbus_debugfs_get_vout_command(void *data, u64 *val)
-+{
-+	struct pmbus_debugfs_entry *entry = data;
-+	struct i2c_client *client = entry->client;
-+	struct pmbus_data *pdata = i2c_get_clientdata(client);
-+	int rc;
-+
-+	guard(pmbus_lock)(client);
-+
-+	rc = _pmbus_read_word_data(client, entry->page, 0xff, entry->reg);
-+	if (rc < 0)
-+		return rc;
-+
-+	rc = pmbus_vout_command_mv(pdata, entry->page, rc);
-+	if (rc < 0)
-+		return rc;
-+
-+	*val = rc;
-+
-+	return 0;
-+}
-+DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_vout_command,
-+			 pmbus_debugfs_get_vout_command, NULL, "%llu\n");
-+
- static ssize_t pmbus_debugfs_block_read(struct file *file, char __user *buf,
- 					size_t count, loff_t *ppos)
- {
-@@ -3940,10 +3964,12 @@ static void pmbus_init_debugfs(struct i2c_client *client,
- 	 * device specific:
- 	 *	ARRAY_SIZE(pmbus_debugfs_block_data) + 2
- 	 * page specific:
--	 *	ARRAY_SIZE(pmbus_debugfs_status_data) + 1
-+	 *	ARRAY_SIZE(pmbus_debugfs_status_data) + 2
- 	 */
- 	entries = devm_kzalloc_objs(data->dev, *entries,
--				    ARRAY_SIZE(pmbus_debugfs_block_data) + 2 + data->info->pages * (ARRAY_SIZE(pmbus_debugfs_status_data) + 1));
-+				    ARRAY_SIZE(pmbus_debugfs_block_data) + 2 +
-+				    data->info->pages *
-+				    (ARRAY_SIZE(pmbus_debugfs_status_data) + 2));
- 	if (!entries)
- 		return;
- 
-@@ -4011,6 +4037,17 @@ static void pmbus_init_debugfs(struct i2c_client *client,
- 						    &pmbus_debugfs_ops);
- 			}
- 		}
-+
-+		if ((data->info->func[page] & PMBUS_HAVE_VOUT) &&
-+		    pmbus_check_word_register(client, page, PMBUS_VOUT_COMMAND)) {
-+			entries[idx].client = client;
-+			entries[idx].page = page;
-+			entries[idx].reg = PMBUS_VOUT_COMMAND;
-+			scnprintf(name, PMBUS_NAME_SIZE, "vout%d_command", page);
-+			debugfs_create_file(name, 0444, debugfs,
-+					    &entries[idx++],
-+					    &pmbus_debugfs_ops_vout_command);
-+		}
- 	}
- }
- 
+Same here. Based on the description and the documentation, a user would not
+expect to get two separate hardware monitoring devices.
 
----
-base-commit: e0fdadf444800610828d01b299743f79ae3bd27f
-change-id: 20261108-for-upstream-pmbus-vout-command-debugfs-v1-6fe3ec237b1a
-
-Best regards,
--- 
-Vincent Jardin <vjardin@free.fr>
-
-
+>  
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called sparx5-temp.
+> diff --git a/drivers/hwmon/sparx5-temp.c b/drivers/hwmon/sparx5-temp.c
+> index 0fd5c147f8167..1f197004780cc 100644
+> --- a/drivers/hwmon/sparx5-temp.c
+> +++ b/drivers/hwmon/sparx5-temp.c
+> @@ -9,8 +9,11 @@
+>  #include <linux/hwmon.h>
+>  #include <linux/init.h>
+>  #include <linux/io.h>
+> +#include <linux/kernel.h>
+>  #include <linux/module.h>
+> +#include <linux/of.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/property.h>
+>  
+>  #define TEMP_CTRL		0
+>  #define TEMP_CFG		4
+> @@ -20,9 +23,26 @@
+>  #define  TEMP_STAT_VALID	BIT(12)
+>  #define  TEMP_STAT_TEMP		GENMASK(11, 0)
+>  
+> +#define FAN_CFG			0
+> +#define  FAN_CFG_GATE_ENA	BIT(2)
+> +#define  FAN_CFG_STAT_MODE	BIT(0)
+> +#define FAN_PWM_FREQ		4
+> +#define  FAN_PWM_FREQ_CYCLES	GENMASK(27, 16)
+> +#define FAN_CNT			8
+> +#define  FAN_CNT_DATA		GENMASK(15, 0)
+> +
+> +#define FAN_TACH_INTERVAL_HZ	100000
+> +
+> +struct s5_match_data {
+> +	bool is_fan;
+> +};
+> +
+>  struct s5_hwmon {
+>  	void __iomem *base;
+> +	void __iomem *fan;
+>  	struct clk *clk;
+> +	unsigned long clk_rate;
+> +	u32 pulses_per_revolution;
+>  };
+>  
+>  static void s5_temp_enable(struct s5_hwmon *hwmon)
+> @@ -37,6 +57,24 @@ static void s5_temp_enable(struct s5_hwmon *hwmon)
+>  	writel(val, hwmon->base + TEMP_CFG);
+>  }
+>  
+> +static void s5_fan_enable(struct s5_hwmon *hwmon)
+> +{
+> +	u32 cycles, val;
+> +
+> +	cycles = DIV_ROUND_CLOSEST(hwmon->clk_rate, FAN_TACH_INTERVAL_HZ);
+> +	cycles = clamp_val(cycles, 1, FIELD_MAX(FAN_PWM_FREQ_CYCLES));
+> +
+> +	val = readl(hwmon->fan + FAN_PWM_FREQ);
+> +	val &= ~FAN_PWM_FREQ_CYCLES;
+> +	val |= FIELD_PREP(FAN_PWM_FREQ_CYCLES, cycles);
+> +	writel(val, hwmon->fan + FAN_PWM_FREQ);
+> +
+> +	/* Count all tachometer pulses over one-second intervals. */
+> +	val = readl(hwmon->fan + FAN_CFG);
+> +	val &= ~(FAN_CFG_STAT_MODE | FAN_CFG_GATE_ENA);
+> +	writel(val, hwmon->fan + FAN_CFG);
+> +}
+> +
+>  static int s5_read_temp(struct s5_hwmon *hwmon, long *temp)
+>  {
+>  	int value;
+> @@ -62,6 +100,17 @@ static int s5_read_temp(struct s5_hwmon *hwmon, long *temp)
+>  	return 0;
+>  }
+>  
+> +static int s5_read_fan(struct s5_hwmon *hwmon, long *val)
+> +{
+> +	u32 count;
+> +
+> +	count = readl_relaxed(hwmon->fan + FAN_CNT);
+> +	count = FIELD_GET(FAN_CNT_DATA, count);
+> +	*val = count * 60 / hwmon->pulses_per_revolution;
+> +
+> +	return 0;
+> +}
+> +
+>  static int s5_read(struct device *dev, enum hwmon_sensor_types type,
+>  		   u32 attr, int channel, long *val)
+>  {
+> @@ -72,6 +121,10 @@ static int s5_read(struct device *dev, enum hwmon_sensor_types type,
+>  		if (attr == hwmon_temp_input)
+>  			return s5_read_temp(hwmon, val);
+>  		break;
+> +	case hwmon_fan:
+> +		if (attr == hwmon_fan_input && hwmon->fan)
+> +			return s5_read_fan(hwmon, val);
+> +		break;
+>  	default:
+>  		break;
+>  	}
+> @@ -82,62 +135,115 @@ static int s5_read(struct device *dev, enum hwmon_sensor_types type,
+>  static umode_t s5_is_visible(const void *_data, enum hwmon_sensor_types type,
+>  			     u32 attr, int channel)
+>  {
+> -	if (type != hwmon_temp)
+> -		return 0;
+> +	const struct s5_hwmon *hwmon = _data;
+>  
+> -	switch (attr) {
+> -	case hwmon_temp_input:
+> -		return 0444;
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		return attr == hwmon_temp_input ? 0444 : 0;
+> +	case hwmon_fan:
+> +		if (hwmon->fan && attr == hwmon_fan_input)
+> +			return 0444;
+> +		return 0;
+>  	default:
+>  		return 0;
+>  	}
+>  }
+>  
+> -static const struct hwmon_channel_info * const s5_info[] = {
+> +static const struct hwmon_channel_info * const s5_temp_info[] = {
+>  	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
+>  	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
+>  	NULL
+>  };
+>  
+> +static const struct hwmon_channel_info * const s5_fan_info[] = {
+> +	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT),
+> +	NULL
+> +};
+> +
+>  static const struct hwmon_ops s5_hwmon_ops = {
+>  	.is_visible = s5_is_visible,
+>  	.read = s5_read,
+>  };
+>  
+> -static const struct hwmon_chip_info s5_chip_info = {
+> +static const struct hwmon_chip_info s5_temp_chip_info = {
+>  	.ops = &s5_hwmon_ops,
+> -	.info = s5_info,
+> +	.info = s5_temp_info,
+> +};
+> +
+> +static const struct hwmon_chip_info s5_fan_chip_info = {
+> +	.ops = &s5_hwmon_ops,
+> +	.info = s5_fan_info,
+>  };
+>  
+>  static int s5_temp_probe(struct platform_device *pdev)
+>  {
+> +	const struct s5_match_data *match_data;
+> +	struct device *dev = &pdev->dev;
+>  	struct device *hwmon_dev;
+>  	struct s5_hwmon *hwmon;
+> +	struct device_node *fan_np __free(device_node) = NULL;
+> +	void __iomem *base;
+> +	bool is_fan;
+> +	int ret;
+>  
+> -	hwmon = devm_kzalloc(&pdev->dev, sizeof(*hwmon), GFP_KERNEL);
+> +	match_data = device_get_match_data(dev);
+> +	is_fan = match_data && match_data->is_fan;
+> +
+> +	hwmon = devm_kzalloc(dev, sizeof(*hwmon), GFP_KERNEL);
+>  	if (!hwmon)
+>  		return -ENOMEM;
+>  
+> -	hwmon->base = devm_platform_ioremap_resource(pdev, 0);
+> -	if (IS_ERR(hwmon->base))
+> -		return PTR_ERR(hwmon->base);
+> +	base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(base))
+> +		return PTR_ERR(base);
+> +
+> +	if (is_fan) {
+> +		hwmon->fan = base;
+> +		hwmon->pulses_per_revolution = 2;
+> +		fan_np = of_get_available_child_by_name(dev->of_node, "fan");
+> +		if (fan_np &&
+> +		    of_property_present(fan_np, "pulses-per-revolution")) {
+> +			ret = of_property_read_u32(fan_np, "pulses-per-revolution",
+> +						   &hwmon->pulses_per_revolution);
+> +			if (ret)
+> +				return dev_err_probe(dev, ret,
+> +						     "invalid pulses-per-revolution\n");
+> +		}
+> +		if (!hwmon->pulses_per_revolution ||
+> +		    hwmon->pulses_per_revolution > 4)
+> +			return dev_err_probe(dev, -EINVAL,
+> +					     "invalid pulses-per-revolution\n");
+> +	} else {
+> +		hwmon->base = base;
+> +	}
+>  
+> -	hwmon->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+> +	hwmon->clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(hwmon->clk))
+>  		return PTR_ERR(hwmon->clk);
+> +	hwmon->clk_rate = clk_get_rate(hwmon->clk);
+>  
+> -	s5_temp_enable(hwmon);
+> +	if (is_fan)
+> +		s5_fan_enable(hwmon);
+> +	else
+> +		s5_temp_enable(hwmon);
+>  
+> -	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
+> -							 "s5_temp",
+> -							 hwmon,
+> -							 &s5_chip_info,
+> -							 NULL);
+> +	hwmon_dev = devm_hwmon_device_register_with_info(dev,
+> +					is_fan ? "lan969x_fan" : "s5_temp", hwmon,
+> +					is_fan ? &s5_fan_chip_info :
+> +						 &s5_temp_chip_info, NULL);
+>  
+>  	return PTR_ERR_OR_ZERO(hwmon_dev);
+>  }
+>  
+> +static const struct s5_match_data lan969x_fan_match_data = {
+> +	.is_fan = true,
+> +};
+> +
+>  static const struct of_device_id s5_temp_match[] = {
+> +	{
+> +		.compatible = "microchip,lan9691-fan",
+> +		.data = &lan969x_fan_match_data,
+> +	},
+>  	{ .compatible = "microchip,sparx5-temp" },
+>  	{},
+>  };
+> @@ -154,5 +260,5 @@ static struct platform_driver s5_temp_driver = {
+>  module_platform_driver(s5_temp_driver);
+>  
+>  MODULE_AUTHOR("Lars Povlsen <lars.povlsen@microchip.com>");
+> -MODULE_DESCRIPTION("Sparx5 SoC temperature sensor driver");
+> +MODULE_DESCRIPTION("Sparx5 SoC hardware monitoring driver");
+>  MODULE_LICENSE("GPL");
