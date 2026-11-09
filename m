@@ -1,63 +1,63 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.139
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794216346;
-	b=rd1tvhOniRgepOcK/6bUvmGOYgrQXRW131z+0lB8/A8so29LIdMo4SuzvTE5X+Y89MSf
-	 2EsiuVZ1qrf5RTHv7pvB0zn/CbQxwdNjizwddMkuCd/AN0JCV0mAYFyBAsrUcD2BdUv/R
-	 doGHHBL2GO/tl1hlyVxIYpGq3xpt+aMaElqyKrk1+ixoQpGoO9cdpmP0NJgwQG9W0+ZSi
-	 bMAm49305OCOnn2NsHCayXgaobyCbFDbCjFDGZdtMkyCy86n4lJXSD1F3P16YrrT3Xayx
-	 Ru+Mx5VpITiVtrCtdN0VVeHfa7HWv4IKgeCsbjus29bKnzj1PSRQqw4O4GjAn8gMoUA==
+	t=1794216419;
+	b=mKJYT8qKFrCgJ9nQybAbAYn66vBtF5FYRldec8RyBN+6Oh6yjZ848mkeJUXIpE6trNGX
+	 c/JUEuY7dxro2zfQqQa/7trSutckE7YTPfR/YAZ7cy2wDXVh4ceGJ0Oz4gwDwVQuxm0kW
+	 SVYuRFX3OmEjf+RsmSEIPPDyQlR+XRt9POxNVWIg12xxXS0OHpWj5yGTeP/25RXY8/VFQ
+	 PmGF87SIkfi9toY+WM71EC+nxmT5bL1QNozI4NXvDUm7JZ2MtjDzl2i5y9LKaKuIyraVP
+	 cUixM0UmrwcEjQy6INQjZc2QJuVzUNb0j6UJCwQQqJRlAjobPHIyPn/cV9Qq6gYX8sQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794216346;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794216419;
 	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
 	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
 	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=qfXHdsXfUnus+BsSIHxkGMXWGAmMV5mnGUVwlX7rk68=;
-	b=x+12L+sR8tQRkED286hazc4KnbGfKfwJGi00gu3qY7CiyJBxChn5AwH0qKofpwz6x5pP
-	 oHiHIV9+/DlGgDG94sLAQWz67Cno9iKqSHC37HG5IEA+5b/SfgVI+qP5P+hJe2a9ohsMb
-	 wdbEFmvx/5GIS2nAuepGJm/N5JVsbLYD2zBGevA96+faByfd96hQj7h/Arlc401gMmSEB
-	 LeUW1ppnDoovQWmn48vX0ZeyYDs9eHadiqVy/olgmq2DO5WOOHuZSCbsa4FgKlPYGiWhI
-	 vn8EUvB961qMmhHA7tcrc/Yop6/jRT3Eprkr6u8i9XRV6FHh8Zz6mcLWPgHQw39yOlQ==
+	bh=DdokkUU7jtX0nt2wAdDB24Xb0J518CPnR4clvwHs950=;
+	b=knhnwGpNqtRaU63zCMijxuWmZ5VbIHWkpS9MUW+rkJbBfnC7D5lEmqb3W9tEIMnixt/k
+	 O+9IwSDxnKL4NpbvdxseIgJGDEOtiJVUxxJL4b+IPhhI7NTpu3RKTqgJw6XhJC0Z0NmMi
+	 p/XnwZ0NOc5G/3tTZ5vXgjfppfLt19Iry6B3NNBpXKomH6Zy6tmYAdGu+ouIqOFzaspiE
+	 sJxxNN2uemeOPJ4/rqs4IZAN6BIlJc5cb1NklW0uc+iVnfTisRza+1/QKHXMUOkH2d31l
+	 xpxp5BTUJVrFT6gVolf21VKYKnkHa9rACjRnejROvJ6CfVqz+JrXc1rvte+U0ZcMscQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cmss.chinamobile.com;
 	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=J8vQAfI3;
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=MrrEeOQU;
 	arc=none smtp.remote-ip=111.22.67.139
 Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E5AF606D801;
-	Mon,  9 Nov 2026 09:25:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E5AF606D801
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D96C606A326;
+	Mon,  9 Nov 2026 09:26:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D96C606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=J8vQAfI3
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=MrrEeOQU
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=cmss.chinamobile.com; s=default; l=0;
 	h=from:subject:message-id:to:cc:mime-version;
 	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=J8vQAfI3gTyg0ZKQIMKppMkz57cWOqqfYvaw3tq+ZopPw5wJkTdBAQpRXoCupa6sBXqnqWv7M3oMl
-	 Lmo8Oh8G9KG6frMMaNzjcEvJETXgCtcEW+BYk7pp82QIbrXufnms2I9C//ESeoCR8OQcVyoXaTzaEb
-	 zRu9MrCEpfBirxuI=
+	b=MrrEeOQUhAldVu0pFnKq1YQX55Fhk3MZWvIHPKf65+8gDY6s3T+aZMnZFOqp27jG88juUlMb1fQ2W
+	 fA+KVPIBReYBaZybvTy5zPj7aK2nmKDvTAi44aoS2TwJuWM5z1drJ6IiJdBgX8pW/ad3Q7rVJ7m3Kc
+	 crJzBbu37ozCOwas=
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app09-12009 (RichMail) with SMTP id 2ee96af1918f7b2-c9a59;
-	Mon, 09 Nov 2026 17:25:35 +0800 (CST)
-X-RM-TRANSID:2ee96af1918f7b2-c9a59
+	by rmmx-syy-dmz-app09-12009 (RichMail) with SMTP id 2ee96af191df7df-c9a86;
+	Mon, 09 Nov 2026 17:26:55 +0800 (CST)
+X-RM-TRANSID:2ee96af191df7df-c9a86
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from devin-VMware-Virtual-Platform (unknown[10.55.1.72])
-	by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee76af1918d8a1-8a2f6;
-	Mon, 09 Nov 2026 17:25:35 +0800 (CST)
-X-RM-TRANSID:2ee76af1918d8a1-8a2f6
+	by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee86af191df6ec-8a1c5;
+	Mon, 09 Nov 2026 17:26:55 +0800 (CST)
+X-RM-TRANSID:2ee86af191df6ec-8a1c5
 From: Zhu Jun <zhujun2@cmss.chinamobile.com>
 To: linux@roeck-us.net
 Cc: linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	zhujun <zhujun2@cmss.chinamobile.com>
-Subject: [PATCH] hwmon: (nct6775) Clamp voltage limits before narrowing and scaling
-Date: Mon,  9 Nov 2026 17:25:33 +0800
-Message-ID: <20261109092533.5146-1-zhujun2@cmss.chinamobile.com>
+Subject: [PATCH] hwmon: (w83627ehf) Clamp voltage limits before scaling
+Date: Mon,  9 Nov 2026 17:26:54 +0800
+Message-ID: <20261109092654.5177-1-zhujun2@cmss.chinamobile.com>
 X-Mailer: git-send-email 2.51.0
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -72,15 +72,17 @@ Content-Transfer-Encoding: 8bit
 
 From: zhujun <zhujun2@cmss.chinamobile.com>
 
-store_in_reg() parses an unsigned long, but in_to_reg() takes a u32 and
-multiplies it by 100 before clamping. Large limits can therefore wrap to
-a low register value. For example, 4294967296 mV becomes zero on a
-64-bit system.
+in_to_reg() narrows the sysfs value to u32 and multiplies it by 100
+before clamping. A large positive voltage limit can consequently be
+programmed as zero instead of the maximum; 4294967296 mV reproduces this
+on a 64-bit system.
 
-Keep the input as an unsigned long and bound it to the register range
-before scaling.
+Preserve the input width and clamp to the representable voltage range
+before multiplication.
 
-Fixes: 9de2e2e84e7d ("hwmon: Driver for Nuvoton NCT6775F, NCT6776F, and NCT6779D")
+Developed with assistance from OpenAI Codex.
+
+Fixes: cf0676fe42c8 ("[PATCH] w83627ehf: Add voltage inputs support")
 ---
 Validation: x86-64 and i386 driver objects built with W=1.
 Source-extracted boundary tests passed on 32-bit and 64-bit;
@@ -89,22 +91,22 @@ No physical sensor hardware or booted-kernel test was available.
 OpenAI Codex assisted analysis, code, tests and changelog drafting.
 The human submitter must review and add their Signed-off-by.
 
- drivers/hwmon/nct6775-core.c | 3 ++-
+ drivers/hwmon/w83627ehf.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-index 6e97e4f08b90..b7c1e8ceaac9 100644
---- a/drivers/hwmon/nct6775-core.c
-+++ b/drivers/hwmon/nct6775-core.c
-@@ -1039,8 +1039,9 @@ static inline long in_from_reg(u8 reg, u8 nr, const u16 *scales)
- 	return DIV_ROUND_CLOSEST(reg * scales[nr], 100);
+diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
+index 9c08ab662dc6..5c04b9c52b76 100644
+--- a/drivers/hwmon/w83627ehf.c
++++ b/drivers/hwmon/w83627ehf.c
+@@ -293,8 +293,9 @@ static inline long in_from_reg(u8 reg, u8 nr, const u16 *scale_in)
+ 	return DIV_ROUND_CLOSEST(reg * scale_in[nr], 100);
  }
  
--static inline u8 in_to_reg(u32 val, u8 nr, const u16 *scales)
-+static inline u8 in_to_reg(unsigned long val, u8 nr, const u16 *scales)
+-static inline u8 in_to_reg(u32 val, u8 nr, const u16 *scale_in)
++static inline u8 in_to_reg(unsigned long val, u8 nr, const u16 *scale_in)
  {
-+	val = min(val, 255UL * scales[nr] / 100);
- 	return clamp_val(DIV_ROUND_CLOSEST(val * 100, scales[nr]), 0, 255);
++	val = min(val, 255UL * scale_in[nr] / 100);
+ 	return clamp_val(DIV_ROUND_CLOSEST(val * 100, scale_in[nr]), 0, 255);
  }
  
 
