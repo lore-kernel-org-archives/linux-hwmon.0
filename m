@@ -1,82 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=80.241.56.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794240409;
-	b=Z7F3wPl9vKrwcb3uM04VZJdtKBI+6KTvlffjcHA94prt0sU2+lPijPcVNm477VBkBibT
-	 xTUF3cStYtJMxRVIjWWWrzgyCYRDI4hynnyrT4+87mXybh/8InFIDvkL8mPCR/7A3Mp8H
-	 gtH3qv2/tSCgP1TdTkUjY8BQ7E0L64yCl6T/tT0apt0X3CeeFgVPU+hFPbhsqOP2gn11w
-	 5eqHhWCuB/8q4sAnMoTrhUSmZ8KnM9XVMKBw2/ZouvxIwS/wOBdFDCDHoZLFAVXJhwDaz
-	 iWHdiMO3bRWw0uj0FNvgNQQ8aSmWG5V2HjQdlPoK4gBReUGRkzb/3bsf5hma40v0DzQ==
+	t=1794242015;
+	b=rMOWm9iIggijoY+wVXNjF9baqZXN+K3NyAnYMQQhMnfch+V8cT1wMgBFkRTwpNKWMg7W
+	 du1kUBTwSqb8Y4kHzDpBwD1Qis4gIdT7TYAPEnA+KpWboXtB8mq164+UvJUhsQxjlJRdD
+	 Wmq5f6+pqzSvBoEsg8n0lerlMBqJG7j2iHC2pszpI98sLAfzmMZtfoNz51AJKZb70rr//
+	 lW1nY2+CVOez4V+uiGQ6JArBexY4CzP9OwKJX3NINuqCtiG3KSK6QE5v/m0PcOepfqJ4u
+	 yPGtlK9czdYbwPUPtsfl2s/rhHvDskaeeWQ7Z3NvL6wPDys7Y35hNVxcyEWXIhmig3g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794240409;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
-	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
-	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
-	 X-Local-Domain:X-CMAE-Envelope;
-	bh=/JEBKMqCbYkY8gT7npKZfTjE4ZsvilkK0DJ+NCBsccQ=;
-	b=QJcpvigTSxcTq6HQvXo8taxblq7cHvIHi8xHFUuOsIFJPTHEin3dc8quNvhcgpvfFDQ9
-	 PjrRZtOECiwN3BjHalT5dRT9HjMUaOFbXAoc13BzafSI7WjL4VrXJlpqo3Y1r7pmiSvrX
-	 csl+9xY6/eDA0+34jl8S3NMjHc21PWe9H8c/GTaCTmVsDWmRP810JY/LlPXHPIHtp+Bav
-	 bZNSUpQ2mL6vL4fL1+O4UprJcY/tpSGCEk/6Aud5HsWpPUDpTjwFzrox6Sza6GgwJtPGH
-	 jZZuWO2EHOYtXAABVlgVYMIm0YVGYJKlSj3vPGkP9ln8t156/SpKapQgcDCbhJ74G6Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794242015;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-Rspamd-Queue-Id;
+	bh=Kop+hinQLKchy1QoJRL2IXxqQFH3lAsbksyTp58ePKQ=;
+	b=dvsWjt0asbBNYUo+LfN/L7EbxhuYTmoaFfsa1dk5HlfXBBJeNmTk4hephTM9QXVnDF6W
+	 cfMrEIMZdNqAAbXxhhmimNaHgkgVArxJs8k5+xabFy8UQD48E/w7+1ihnj6ZVnuKGXboS
+	 MdSikjAUxaCF7BDukQwQvD/oW8/SCuhmJhHpYdsp0XxKKjgJgMCjmOwPwFYRn9hGxRhRe
+	 PyOZ3U7w+tbsWiTMifp0Jwi4PSw6oVbnTzxNTLD3UqkVBBJYIE1QMJscj1dQ2kJ3uWPoJ
+	 Oi/n2Lf6LEB6laYPLwAY1xkAyI2i3AxCHjH/3Psk6MZDu6nFv6Ghsy97Cqep4LO/+/g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=Yo9DLNzG;
-	arc=none smtp.remote-ip=35.89.44.37
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=bojanowski.me;
+	spf=pass smtp.mailfrom=bojanowski.me;
+	dkim=pass header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=GtM6LVdw;
+	arc=none smtp.remote-ip=80.241.56.171
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F400C606A325
-	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 16:06:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F400C606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDAD4606A321;
+	Mon,  9 Nov 2026 16:33:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDAD4606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bojanowski.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bojanowski.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=Yo9DLNzG
-Received: from eig-obgw-5004b.ext.cloudfilter.net ([10.0.29.208])
-	by cmsmtp with ESMTPS
-	id QQqrxrm5AVK9UQRtQxrwhq; Mon, 09 Nov 2026 16:06:48 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id QRtPxemGuuJrPQRtPxlRhp; Mon, 09 Nov 2026 16:06:48 +0000
-X-Authority-Analysis: v=2.4 cv=WLZ/XmsR c=1 sm=1 tr=0 ts=6af1ef98
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=c92rfblmAAAA:8
- a=b3CbU_ItAAAA:8 a=VwQbUJbxAAAA:8 a=UVmsjvvKQtr-GOCPzRcA:9 a=CjuIK1q_8ugA:10
- a=GvGzcOZaWPEFPQC_NcjD:22 a=Rv2g8BkzVjQTVhhssdqe:22 a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=/JEBKMqCbYkY8gT7npKZfTjE4ZsvilkK0DJ+NCBsccQ=; b=Yo9DLNzG4zlC9SWekZgRGG43h0
-	meajznK+Hu9x+BZYKfyGdBJrslSnOuFOo1UiFTFJsqefVFHHd3EUWD1g4M4n57E6jn8mbRSFhvXcm
-	8Pxqnnjglo5qCxqGZA//X9oT6pGQVfyAjANMP6X0V5QmQg7Y5JXUDI+ejfugZmeVZJG/l3YX/BI1f
-	KlPt0f3u89I5aWK/Tlh4W37fEbPnTGUmDgI47m2+k/TDcNM7VlSpBE2Jvnxlh3w8+jGfRl1femn75
-	7HRh5MAxXxMkbq5wmKHg+JHUz8eJQumGtjEgE9WdKIMiJmqkmf1TXIMsPfD/3mFBmEGY+my2ZFj70
-	BuB9Woow==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:52336 helo=server.roeck-us.net)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xQRtP-00000001aex-1KtZ;
-	Mon, 09 Nov 2026 21:36:47 +0530
-Date: Mon, 9 Nov 2026 08:06:46 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Sudeep Holla <sudeep.holla@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, arm-scmi@vger.kernel.org,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Sashiko <sashiko-bot@kernel.org>,
-	Marek Vasut <marek.vasut@mailbox.org>
-Subject: Re: [PATCH 2/2] hwmon: (scmi) Configure sensors before exposing
- channels
-Message-ID: <a6dedf5b-a15b-4b73-a609-af767d4318af@roeck-us.net>
-References: <20261109151927.1672956-1-sudeep.holla@kernel.org>
- <20261109151927.1672956-2-sudeep.holla@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=GtM6LVdw
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4jNb216fyGzMl0n;
+	Mon, 09 Nov 2026 17:33:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bojanowski.me;
+	s=MBO0001; t=1794242009;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Kop+hinQLKchy1QoJRL2IXxqQFH3lAsbksyTp58ePKQ=;
+	b=GtM6LVdwjyAu0EGKKh3z/khCzX7TQEyXOXZcr0c1t1Um2AoO4o4Px2ZJoXGW6kwT9cUrwL
+	vhz4mpFEqCo6illYvaW4TQW6rWMdO1gs73/2BUQvIij33nNJLqCHYD3lV5EaBpxfo5UOw5
+	NQirnRfomPNx+3AsUg2mzu4WYDp5veQfxcW1TNX4+DA5+YHkaawdyk4kDP3Q2VnVOuw7pE
+	ZCB/yzugCvO358iGUIau1lGiPx2NS2+4wjYFQbt2DXsmln+8rCuKYZSe+BY/DjKgFyocpj
+	spN/w1FuU6bZbuOoPdzmbM+4O49bRxnRx9sOTWzetJaChcXkVC5b16Cn7xmBEg==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of tomasz@bojanowski.me designates 2001:67c:2050:b231:465::202 as permitted sender) smtp.mailfrom=tomasz@bojanowski.me
+From: Tomasz Bojanowski <tomasz@bojanowski.me>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Hamza Mahfooz <someguy@effective-light.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (nct6683) Restore manual fan control after resume
+Date: Mon,  9 Nov 2026 17:33:28 +0100
+Message-ID: <20261109163328.61787-1-tomasz@bojanowski.me>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -86,47 +71,118 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261109151927.1672956-2-sudeep.holla@kernel.org>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xQRtP-00000001aex-1KtZ
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:52336
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 16
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfDXycsHvIfrI1f01d+kn63Brbp95DAx6LM60NuucgUYQ7uteki/M8FnReBoCR6tnh6QuEPwnNY0BgDhQ8KV/zT8r8y8IT3k5B7elnew+bLpUWrCpePgh
- c5ynWBmTpnCTZbQXL8RklK+gtQ/C6SLEW2MRU4BrrAYeo++L0bZvdQEew1C40nn7kHXyhTLpUlsVO6zJji2V3M+Gt9P7rUBQzepRHx7T6TzfGciC1G6mgECg
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4jNb216fyGzMl0n
 
-On Mon, Nov 09, 2026 at 03:19:27PM +0000, Sudeep Holla wrote:
-> SCMI hwmon enables sensors with SENSOR_CONFIG_SET, but only after
-> registering the hwmon device and only for temperature sensors. This
-> leaves other sensor classes disabled on firmware that defaults sensors
-> to off, and exposes temperature channels before they are ready.
-> 
-> Configure each supported sensor while building the channel list, before
-> registering the hwmon device. Leave failed sensors out of the list so
-> their channels remain hidden, while continuing with other sensors.
-> 
-> Cc: Marek Vasut <marek.vasut@mailbox.org>
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Closes: https://sashiko.dev/#/bug/linux-4bdf9a68-22d5-4305-b684-f11fe6d1dbcc
-> Fixes: 72804d1631b3 ("hwmon: (scmi) Enable sensors to assure they can be read")
-> Signed-off-by: Sudeep Holla <sudeep.holla@kernel.org>
+On MSI boards with NCT6687D-R, the BIOS restores automatic fan control
+on resume from S3. The manual mode and duty cycle set through
+pwmN_enable and pwmN are lost, and pwmN_enable reports 2.
 
-Applied.
+Remember the channels switched to manual mode through sysfs and their
+duty cycle, and restore them on resume if the EC switched them back to
+automatic mode. Other channels are not touched.
 
-Thanks,
-Guenter
+Tested on an MSI MAG B850M MORTAR WIFI (MS-7E61): with pwm16_enable set
+to 1 and pwm16 to 153, pwm16_enable reads 2 after resume from S3 without
+this patch. With this patch it stays 1 and the fan returns to the manual
+duty cycle.
+
+Fixes: 5410a1257e26 ("hwmon: (nct6683) Add fan control support for MSI boards with NCT6687D-R")
+Signed-off-by: Tomasz Bojanowski <tomasz@bojanowski.me>
+---
+I used an AI assistant (Claude Code) during development. I reviewed all
+of the changes, tested them on the hardware described above, and take
+responsibility for them.
+
+This addresses your comment on suspend/resume in [1]: on the MS-7E61,
+the BIOS restores automatic fan control on resume from S3. The patch
+does not depend on the fan curve patch; both apply in either order.
+
+[1] https://lore.kernel.org/linux-hwmon/487b2f39-7e22-46db-9eaf-9b1dd9b31d31@roeck-us.net/
+
+ drivers/hwmon/nct6683.c | 39 +++++++++++++++++++++++++++++++++++----
+ 1 file changed, 35 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
+index 65e374c64fb8..d88b981efb1f 100644
+--- a/drivers/hwmon/nct6683.c
++++ b/drivers/hwmon/nct6683.c
+@@ -365,6 +365,10 @@ struct nct6683_data {
+ 	/* Remember extra register values over suspend/resume */
+ 	u8 hwm_cfg;
+ #endif
++
++	/* Manual fan control set through sysfs, restored on resume */
++	u16 pwm_manual;			/* channels set to manual mode */
++	u8 pwm_cmd[NCT6683_NUM_REG_FAN];	/* their duty cycle */
+ };
+ 
+ struct nct6683_sio_data {
+@@ -1052,8 +1056,11 @@ static int nct6683_set_pwm(struct nct6683_data *data, int ch, u8 val)
+ 		err = nct6683_fan_ctrl_update(data, ch, true, val);
+ 	else
+ 		err = -EBUSY;
+-	if (!err)
++	if (!err) {
+ 		data->pwm[ch] = val;
++		data->pwm_manual |= BIT(ch);
++		data->pwm_cmd[ch] = val;
++	}
+ 	mutex_unlock(&data->update_lock);
+ 
+ 	return err;
+@@ -1130,10 +1137,17 @@ store_pwm_enable(struct device *dev, struct device_attribute *attr,
+ 	manual = val == 1;
+ 
+ 	mutex_lock(&data->update_lock);
+-	if (nct6683_pwm_manual(data, index) != manual) {
+-		/* Keep the current duty cycle when switching to manual mode */
+-		cmd = manual ? nct6683_read(data, nct6683_pwm_reg(index)) : -1;
++	/* Keep the current duty cycle when switching to manual mode */
++	cmd = manual ? nct6683_read(data, nct6683_pwm_reg(index)) : -1;
++	if (nct6683_pwm_manual(data, index) != manual)
+ 		err = nct6683_fan_ctrl_update(data, index, manual, cmd);
++	if (!err) {
++		if (manual) {
++			data->pwm_manual |= BIT(index);
++			data->pwm_cmd[index] = cmd;
++		} else {
++			data->pwm_manual &= ~BIT(index);
++		}
+ 	}
+ 	mutex_unlock(&data->update_lock);
+ 
+@@ -1549,11 +1563,28 @@ static int nct6683_suspend(struct device *dev)
+ static int nct6683_resume(struct device *dev)
+ {
+ 	struct nct6683_data *data = dev_get_drvdata(dev);
++	unsigned long manual;
++	int ch, err;
+ 
+ 	mutex_lock(&data->update_lock);
+ 
+ 	nct6683_write(data, NCT6683_HWM_CFG, data->hwm_cfg);
+ 
++	/* The BIOS may switch the fans back to automatic mode */
++	manual = data->pwm_manual;
++	for_each_set_bit(ch, &manual, NCT6683_NUM_REG_FAN) {
++		if (nct6683_pwm_manual(data, ch))
++			continue;
++		err = nct6683_fan_ctrl_update(data, ch, true, data->pwm_cmd[ch]);
++		if (err) {
++			dev_warn(dev, "Failed to restore manual mode of pwm%d: %d\n",
++				 ch + 1, err);
++			/* The EC does not respond, skip the remaining channels */
++			if (err == -ETIMEDOUT)
++				break;
++		}
++	}
++
+ 	/* Force re-reading all values */
+ 	data->valid = false;
+ 	mutex_unlock(&data->update_lock);
+
+base-commit: ec921ef8d81acf0cc41b3f3b6db54698e9a2917f
+-- 
+2.56.0
+
