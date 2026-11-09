@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.39
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794236485;
-	b=nbcG0hiwG5sZT/1SIrOsZquQCTU6Xd++ZKUQFUMwLt8NUajyVu1nU+MktsyBIPgu/YT8
-	 kzUbHr/xWII/K7e1S1+wQD6a4rQUZ2V/3hbaXDFgrpRuz1fiuDY6COgEh7zQXA8KvgDuH
-	 qH3UcuEbASzkuENs3SjSgEezhTE7PRl+H1fRJrsSrzobs14q73GI2AL+xa6hJlkjc8iSq
-	 Xi1lZ9NJZSYXfQG8uJBG1lj6lecSffqj3YauLwWsFBYmPLFQ3mint4uFshx1lazmtWmH0
-	 pCxNfhX8gPsOY2ypHkEV4JcC3QQf9N6pfIMTO9XxdGeUbATjH0Mkz9xsK49JgP1qv1Q==
+	t=1794237070;
+	b=R8iTBDemV9EE55naypXRg6sfUJDgLwCZEIFSpAYrOMD/CUvmmZpRMQ3cA42WMQullA6U
+	 SREuy2p2GjL2hAosQXRms3cSD9ndgfU4YnBU/9KcpYsCy8okGPPq2oOHIGJd5QQAxFnls
+	 koWYocx7f8Dv8eULEwbPCIuOd4tgAZp7rkze+2QP13ZETOxbdo4g1nKWX1HG86Dt1bjJ4
+	 j9Q26jO/Xv/qWrzUXwUWTgLI545H+lZfInoF53g1gtoo3MtTz2KQmBh/Jvl/6L53fAt6j
+	 RQ6aIp0ptAG2pTCwNP2rTPzPW3+P0mExAqGIIaMo8WPYElwqP9dqcP9AL6H2/Da2rug==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794236485;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794237070;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
 	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
@@ -15,58 +15,57 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
 	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=pE/zoHsVh2hvD+ALrCiRyBI4CZ0z8Da+B0aHYRWc3dM=;
-	b=HapYij97uTeK2c60vVYqi6O6i8eM65yNZTAEu0iVDzZW/Ok1Db61G6wre+Ij5O/n3sPC
-	 d284pI9DDAJF9bjEuQuJY3R0SO7Zq7M+UdlfDxAMkduHEsCPl7W98d3hk/0FyzumfQKOK
-	 wOJ+q0Enh1nGib0vZCDrqL8ukgD5aY8Qx5D8ioyu1801era64XMMIfydXvx+EL+Tmoleq
-	 vt38A5kQN06wHWWKeJM4j8IsqCHdh4K9kWq0BQAadwWkY0NJp4YzyXx1Aq+aaDJXX9Nfm
-	 8+E4FN+18VfUjr6PAUbO7LvpvBtLMB/YVIfM+ekdYUAbJhVtxaoboox55aDzp5u7xtg==
+	bh=uGfg7qyz+Mob49HILdEQHSBVwOgoxsBxFYRGd/5ckX0=;
+	b=EJGD2Nv3HJjtxx6P+tlhI2lEpKgUxgIwR9DmMRaw0UVHBGc11iuKYtBYstOcFX+ulxUB
+	 0AsUpWpV+nplzotTjBx0yzlMdk0UfbWvKkIlVGFtWM3AVbZPrUJ7UUqSUSUG0ylJ1IF8H
+	 lMWX3qW34cfc4NemCXhxehSK286IifzwkHk74JbjWXyw4LQ5a6iDS18t9RI5PaX1El6zA
+	 u27ZlUeN6kK+3N8BDy1hc0g+ZtFMvlcD4FjEaaSazUmILVaXMHN1Iwy2G2WKwaX1qWrNC
+	 DeAJMrBizm97C4FdePG5hbJrlFjAfInj7EMnSrb8taCcV2H6F+MKmIBpqAaE0C5UbAQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=mSYSnkdX;
-	arc=none smtp.remote-ip=35.89.44.37
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=mRF8zOzK;
+	arc=none smtp.remote-ip=44.202.169.39
+Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F6C2606A31C
-	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 15:01:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2F6C2606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5652D606A339
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 15:11:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5652D606A339
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=mSYSnkdX
-Received: from eig-obgw-5004b.ext.cloudfilter.net ([10.0.29.208])
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=mRF8zOzK
+Received: from eig-obgw-5007b.ext.cloudfilter.net ([10.0.29.167])
 	by cmsmtp with ESMTPS
-	id QIQGxqBpeVK9UQQs8xrDBT; Mon, 09 Nov 2026 15:01:24 +0000
+	id QQ0Ox51euOOJnQR1Zx2r8Y; Mon, 09 Nov 2026 15:11:09 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id QQs5xcoyHuJrPQQs5xjhnU; Mon, 09 Nov 2026 15:01:21 +0000
-X-Authority-Analysis: v=2.4 cv=WLZ/XmsR c=1 sm=1 tr=0 ts=6af1e044
+	id QR1VxlXw0xqjjQR1Wx3wWs; Mon, 09 Nov 2026 15:11:06 +0000
+X-Authority-Analysis: v=2.4 cv=bZxrUPPB c=1 sm=1 tr=0 ts=6af1e28d
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8
- a=jgqPS7p6Ee5OVFubFSMA:9 a=QEXdDO2ut3YA:10 a=7K6VwESCuAkwX747YaXk:22
- a=KPbNTLLc3YvdawN95zVk:22
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=R5C9hjxsAAAA:8
+ a=aTefX-UtI5BFv7nUFlIA:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=pE/zoHsVh2hvD+ALrCiRyBI4CZ0z8Da+B0aHYRWc3dM=; b=mSYSnkdX6ub7
-	zs4PHiV5ehrwnEpyCU6Rf4NW+Brts0HWGJ2/8iT1okFEDdjAzPln0j1xPc/5AD35QLT99vhL2NGkK
-	k2bPJDCRGMfnNpH4dhIlj1Yi4M/26g0KlyRAOTccHgreZGOmnOjMSvEpeFbrAMl/4+aPErH+3IR2a
-	F2BKYu7nd0PrCTh62I+vq1r0PtB7tGU+5JIQImI4gYrgBmvawtikl9sgHCytxT4VkVnIyc2FT0nFL
-	dy3iU45S5qMMaBuRsedrMt/ou5clGcAsu+6e2XoQy2AFlIwSbCI+5spKrM4ujANpPnW4KhqqY9Sd5
-	gMZtKCzWZt7eQPZrU1OYMg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:37372)
+	List-Archive; bh=uGfg7qyz+Mob49HILdEQHSBVwOgoxsBxFYRGd/5ckX0=; b=mRF8zOzKD56g
+	5RcLnwxX/H9v70BlJar9VxSykh2a5qSVcvb+SX0s2WH+sha4FhQlqFSEzW9o2EQd4PxEvemqi44gd
+	Fhka4fp2GfkZyNXhu73BCfnzzoIBs+Wh2ivIeuUuv7Lih6A+FITRLSSgn3Byc58WOQG9TVkSlYuwP
+	SgVyFdtVhQboVBARUi9YXY/DCE4ioKVnZD4ASt6hDgagglGDRR6pDeP+fvMI5Zbg2VbBvBle69pvS
+	UB5CVa22SNWudbXX+j8esNaCO8CUJ//MsLAaennR1S4rXy5AI8SI0VJKorPeuzl3cwa8G5oAxvSn2
+	P1mRyhmcOkVN+W35eBP1Yw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:50750)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xQQs4-00000000zu3-3RM3;
-	Mon, 09 Nov 2026 20:31:20 +0530
-Message-ID: <8986a7fb-f822-4b05-8aae-a948b893e5a7@roeck-us.net>
-Date: Mon, 9 Nov 2026 07:01:20 -0800
+	id 1xQR1V-000000014hK-2a0E;
+	Mon, 09 Nov 2026 20:41:05 +0530
+Message-ID: <59a7e61f-ce9c-4bba-b2c8-6e19b3d84081@roeck-us.net>
+Date: Mon, 9 Nov 2026 07:11:04 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -77,11 +76,14 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (dme1737) Use str_yes_no() helper in
- dme1737_init_device()
-To: Archit More <architmore303@gmail.com>, Juerg Haefliger <juergh@proton.me>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261109121127.10937-1-architmore303@gmail.com>
+Subject: Re: [PATCH] hwmon: (lochnagar) Avoid oversized shifts for zero
+ readings
+To: Charles Keepax <ckeepax@opensource.cirrus.com>,
+ Zhu Jun <zhujun2@cmss.chinamobile.com>
+Cc: rf@opensource.cirrus.com, patches@opensource.cirrus.com,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261109093453.5384-1-zhujun2@cmss.chinamobile.com>
+ <avGsCiZK7ChHaHx2@opensource.cirrus.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -127,7 +129,7 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20261109121127.10937-1-architmore303@gmail.com>
+In-Reply-To: <avGsCiZK7ChHaHx2@opensource.cirrus.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -138,67 +140,52 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xQQs4-00000000zu3-3RM3
+X-Exim-ID: 1xQR1V-000000014hK-2a0E
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:37372
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:50750
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 2
+X-Email-Count: 6
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfCtAzhtAFLhro/vSrsZcV4krbvJhU10OQsNM9NlG8n1WH3L7XAiRO0fa0q3SgAd+8n9nHynOjm1rVDBAwtEkuvP9EUNB9KzH1+q+mkXfDt2kzz+YMO7Z
- lLX45cQqMxzNyourKL0ZEgsuRt6+R65wrudosX8yYUVhLVFtj4rbuOFGYzjGVSX0MBL5E9BqoLmqLbms2V+EkrPkquuVB75MR7vY+RHRsyPuTLVzzF17hiVf
+X-CMAE-Envelope: MS4xfCg3ywwGVsRGEUMh8heFlEPBDgUzJlgYC3QBcgYAxPOMl40kPDx9xhvHEkuiDOZqUS7xQIJlt9Aiwt/1+ezNnGHhe4vuqDA3SFoUID9C+zXEgd0WU43b
+ 2WvPv8mZTZdNp5WhifcihS3Zfa5Ah54CMIwHLNVexzJY64MAIARLuSWMVZiqqqp4rVlyLrQcA6A14OL1XMYkBRPKSe+Z9vNLVNEMa6MY/aUo8fGPv/xrye7N
 
-On 11/9/26 04:11, Archit More wrote:
-> Replace open-coded ternary string choices ("yes" / "no") with the
-> standard str_yes_no() helper from <linux/string_choices.h>.
+On 11/9/26 03:18, Charles Keepax wrote:
+> On Mon, Nov 09, 2026 at 05:33:32PM +0800, Zhu Jun wrote:
+>> From: zhujun <zhujun2@cmss.chinamobile.com>
+>>
+>> A zero IEEE754 reading gives exp = -150 in float_to_long(). Both shifts
+>> in the rounding expression then exceed the width of u64. UBSAN reports a
+>> shift exponent of 149, and the conversion can return a nonzero reading.
+>>
+>> Return zero when the required right shift is at least 64 bits. With the
+>> supported precisions, the scaled mantissa is too small to round up in
+>> this case.
+>>
+>> Fixes: 4cdb56214746 ("hwmon: lochnagar: Add Lochnagar 2 hardware monitoring driver")
+>> ---
+>> Validation: x86-64 and i386 driver objects built with W=1.
+>> Source-extracted boundary tests passed on 32-bit and 64-bit;
+>> the corresponding test fails on the base revision. I/O is mocked.
+>> No physical sensor hardware or booted-kernel test was available.
+>> OpenAI Codex assisted analysis, code, tests and changelog drafting.
+>> The human submitter must review and add their Signed-off-by.
 > 
-> Signed-off-by: Archit More <architmore303@gmail.com>
+> Yeah afraid the human submitter will need to add their
+> Signed-off-by :-)
+> 
 
-Please refrain from submitting such patches. I will not apply them.
-The Linux kernel is known to have thousands of bugs. If you want
-to do some good, concentrate on fixing some of those.
+... and remove the AI comment that it needs to be added. Unfortunately
+that didn't happen, suggesting that the human submitter didn't even read
+those comments, making it questionable if they were actually reviewed.
+I can not apply any of the patches due to the missing signature,
+making them just noise. Too bad :-(.
 
-Thanks,
+In the case of this patch, unless I am missing something, it isn't really
+needed because the large shift causes the result to be 0 anyway.
+
 Guenter
-
-> ---
->   drivers/hwmon/dme1737.c | 15 ++++++++-------
->   1 file changed, 8 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/hwmon/dme1737.c b/drivers/hwmon/dme1737.c
-> index b1bd3682c5fb..c3bf5f4ef941 100644
-> --- a/drivers/hwmon/dme1737.c
-> +++ b/drivers/hwmon/dme1737.c
-> @@ -17,6 +17,7 @@
->   #include <linux/module.h>
->   #include <linux/init.h>
->   #include <linux/slab.h>
-> +#include <linux/string_choices.h>
->   #include <linux/jiffies.h>
->   #include <linux/i2c.h>
->   #include <linux/platform_device.h>
-> @@ -2316,13 +2317,13 @@ static int dme1737_init_device(struct device *dev)
->   
->   	dev_info(dev,
->   		 "Optional features: pwm3=%s, pwm5=%s, pwm6=%s, fan3=%s, fan4=%s, fan5=%s, fan6=%s.\n",
-> -		 (data->has_features & HAS_PWM(2)) ? "yes" : "no",
-> -		 (data->has_features & HAS_PWM(4)) ? "yes" : "no",
-> -		 (data->has_features & HAS_PWM(5)) ? "yes" : "no",
-> -		 (data->has_features & HAS_FAN(2)) ? "yes" : "no",
-> -		 (data->has_features & HAS_FAN(3)) ? "yes" : "no",
-> -		 (data->has_features & HAS_FAN(4)) ? "yes" : "no",
-> -		 (data->has_features & HAS_FAN(5)) ? "yes" : "no");
-> +		 str_yes_no(data->has_features & HAS_PWM(2)),
-> +		 str_yes_no(data->has_features & HAS_PWM(4)),
-> +		 str_yes_no(data->has_features & HAS_PWM(5)),
-> +		 str_yes_no(data->has_features & HAS_FAN(2)),
-> +		 str_yes_no(data->has_features & HAS_FAN(3)),
-> +		 str_yes_no(data->has_features & HAS_FAN(4)),
-> +		 str_yes_no(data->has_features & HAS_FAN(5)));
->   
->   	reg = dme1737_read(data, DME1737_REG_TACH_PWM);
->   	/* Inform if fan-to-pwm mapping differs from the default */
 
