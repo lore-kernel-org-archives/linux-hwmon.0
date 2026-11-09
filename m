@@ -1,74 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=80.241.56.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794245475;
-	b=ghiXUvJEaAfkvzwuxshRxiwexahDQzLTGV+RHDsSlft4kcvLnDGoST3/vjTYbiBji0Qa
-	 Gz2sbFWdyp8HjKv/0MUFuX54Dqdk9GPISBbH2Xb0yloXO/0AAftN8SZCRl2wlKzOkpapQ
-	 MUUSYJoniapBXiyK/6zZ1Pf+KatClvi1ZnCiSVPKwkSULTb1hXjse/peQYXqchx94hGE7
-	 yw8Apq689hS52c/qwKv5mGs0fGfZ9bPtjxp8oW7YZVPETqbqibtrqS+RW9H8vKtVDGGPM
-	 PX84mCIxf2PPYYbzyr3FJ3nTjwCfY/IToXYLxrassk8e1EB0Me09ehsjFYPzG5SdPJA==
+	t=1794247691;
+	b=aVpbieldmcYU17f+d9zsetxI+RqK7lZBA41OytWLSDFnOZdUTqabVk2TMfxXD0lwHozU
+	 6W2ik3ycQwP3YVOvDU05r9KeZ0YtHPeRsiNh4OoLW41sOmBz0xQdYmvMrUrPJjyHgXEDT
+	 8lG8t8oD9emmXZxyEdzDV7bc6VhC0zNcLmsvqtO1fKPT6iYkbuwXHAMnIZHqYcFrMtPZ1
+	 eSTTkk6gfaz5yjgqF1CisEEdkCgqBAkzAssvWFnSOINK4ncHFCZU+8ma0s1d4w5JpwJCi
+	 Yzjkq/F27VS435XqJBxSaUx/6Wy0IhWHD3b+GaJwUPM1gbu5UyyIcfeqB0wpL6IHESg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794245475;
-	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Rspamd-Queue-Id;
-	bh=nhLFeCiJmgAXqRFWir2gProEGfGcp5eqJ0rp4zYIthw=;
-	b=CqyK81r9faoNLOmZoYWLz8//VC7ShwkA9Bp8MqkQaNmfqb5t3I8jhrtGSRAAAFxcRVnz
-	 WKOCGpD/r2UHUKPUegi0c45IqnkOQE8moyCp7ven4vhxYap1YW87IfwgZoK8t/np2meBw
-	 W752ZUEm+NZLnE2ifD7QggTEkcULJvSmx5+gx8XpQ6lC+ak92ttASDXs4FbTS5ia5VC0Y
-	 ihgG34TLYSAStzQFpIq0BFBxIK4RLCvyXXu+Awc3VnfOA50kZQsidiOYv6brrEjT3FcYS
-	 eBO4aV+n2BREYxmrTEn9JXs5HDLd/cKE1xOGXv2pALlYcHNZuazQ/It2FtwKwxUsWiA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794247691;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:From:To:Cc:Subject:
+	 In-Reply-To:Organization:References:Date:Message-ID:MIME-Version:
+	 Content-Type;
+	bh=s7U/x5CE+niXpSBFgBUHJahPZfA7nFuXi/iUGvk2YDg=;
+	b=j/Buw4lHRWZmII5hShFBtLq+bIMvLla8pe4WlITN2TFhdciVHL3dZsT7hDXIMC8S5zEF
+	 cFlwy6BxhIrV9KBjvfq4+lT8WAOR2gVtd9q7KBqRlxrsoZrhRvbiVXTn6oH5qZ92Mai9c
+	 Gz2JD3+57stYEXDfpPwKkiLv4W4LSuZY3Y11arpqinai4xbPn76swOQrThf4I4sS6xfyw
+	 66/DV6HTsUuv3hw1Pir7wEqTYUqwNRvP+CLtA3e0iGPj2iNE5GYhwVAGTNO0sJbqDqabJ
+	 WcJJ6jHBXeOEBv57ETWcG+pzZqCJHZFVuQCHBMDkMFnothPtr0vhTN7RkhycURWHsDw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bojanowski.me;
-	spf=pass smtp.mailfrom=bojanowski.me;
-	dkim=pass header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=DPX5fuK0;
-	arc=none smtp.remote-ip=80.241.56.171
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=linux.intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=IP9SxyfD;
+	arc=none smtp.remote-ip=192.198.163.11
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F74A606A321;
-	Mon,  9 Nov 2026 17:31:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F74A606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bojanowski.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bojanowski.me
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F481606A325;
+	Mon,  9 Nov 2026 18:08:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8F481606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bojanowski.me header.i=@bojanowski.me header.a=rsa-sha256 header.s=MBO0001 header.b=DPX5fuK0
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4jNcJZ3pthzMlX9;
-	Mon, 09 Nov 2026 18:31:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bojanowski.me;
-	s=MBO0001; t=1794245470;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nhLFeCiJmgAXqRFWir2gProEGfGcp5eqJ0rp4zYIthw=;
-	b=DPX5fuK03r6ynVDTY1qswsoMiu80CHwRDd6n6r1fjd5/HUNjkgjE0aOqZeMECrBudhd37w
-	JQYQw034ICONwR7vD9SSoXYf+Sc1mIp0dkyec2omctcADUb+RnJmLhftMD11ki4RlsLOpr
-	1O2s74HtV4zqiwKhkW2J8i2GDNuFARvA549wtFbC7KZvH7ZQqCsUAy278wfnQWBjyKRUJm
-	Z/2nu1RoFqn+J+Z5PC0H9K1uZHDGoWOjySygyzrjxxW4Zd/WXx/raCcCgswMkEWjuNKh4o
-	2sVUmciquiyI0595bCUQYZVk78aqjDl9gf150uwKksQerGqGctFfnyCFUeegAw==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of tomasz@bojanowski.me designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=tomasz@bojanowski.me
-From: Tomasz Bojanowski <tomasz@bojanowski.me>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
-	Hamza Mahfooz <someguy@effective-light.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (nct6683) Report the fan curves of MSI boards with NCT6687D-R
-Date: Mon,  9 Nov 2026 18:31:09 +0100
-Message-ID: <20261109173109.77246-1-tomasz@bojanowski.me>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <487b2f39-7e22-46db-9eaf-9b1dd9b31d31@roeck-us.net>
-References: <20261109015759.24284-1-tomasz@bojanowski.me> <487b2f39-7e22-46db-9eaf-9b1dd9b31d31@roeck-us.net>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=IP9SxyfD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794247691; x=1825783691;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=wfrbeowEpzlsOOtS5Xzt/Z99rOONWv91scfsMt1LT1o=;
+  b=IP9SxyfDSB6EGFGs7A0bVCps7q2rwZcFhAiDYps8uP26aAu5UsHuIxSf
+   tlmYluqa8O0Vkzw3iTrVKhijz+FC+kmiN5XaQ71GLb+8eONi8JfI0J27i
+   gAac0Ey+5zHnjNqUoGr9URlzdDJ+F39/qK50JinS21ss/u/G8rc4vPQ7x
+   mqFEASpQPYKebvqnlIxIvZKEEeurzQ5f47Zp+zwzxQZxNVFZvEO6oQe8W
+   qyB2XD0JMOX45lgejPKqDw7YfMTajxl51pPK45w+PADjiswcG2ePqK5eB
+   51DxM3/Q69Vre2Thnw8Y200cdNemMOs78amfHRZkMWzOSK6HYmZMgrBl8
+   w==;
+X-CSE-ConnectionGUID: KecGYyTSRKKI8ipgzy4cvw==
+X-CSE-MsgGUID: CyDqiia7S7WO37n5QGEFUw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11961"; a="2894249"
+X-IronPort-AV: E=Sophos;i="6.27,204,1787036400"; 
+   d="scan'208";a="2894249"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2026 10:08:09 -0800
+X-CSE-ConnectionGUID: REOqqbgbSlKUYG/hgL23ew==
+X-CSE-MsgGUID: M/rq1zH2TtK3zErWiBcqiA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,204,1787036400"; 
+   d="scan'208";a="8094048"
+Received: from conormcd-mobl2.ger.corp.intel.com (HELO localhost) ([10.245.244.93])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2026 10:07:59 -0800
+From: Jani Nikula <jani.nikula@linux.intel.com>
+To: Petr Pavlu <petr.pavlu@suse.com>, Petr Pavlu <petr.pavlu@suse.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, Ian Abbott <abbotti@mev.co.uk>, H Hartley Sweeten
+ <hsweeten@visionengravers.com>, Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Rudolf Marek <r.marek@assembler.cz>, Andi
+ Shyti <andi.shyti@kernel.org>, Chris Snook <chris.snook@gmail.com>, Andrew
+ Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Tony Nguyen <anthony.l.nguyen@intel.com>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>, Marek =?utf-8?Q?Beh=C3=BA?=
+ =?utf-8?Q?n?=
+ <kabel@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Andreas Noever <andreas.noever@gmail.com>, Mika Westerberg
+ <westeri@kernel.org>, Yehezkel Bernat <YehezkelShB@gmail.com>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
+ <jirislaby@kernel.org>, Duncan Sands <duncan.sands@free.fr>, Chas Williams
+ <3chas3@gmail.com>, Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez
+ <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Aaron
+ Tomlin <atomlin@atomlin.com>, Wolfram Sang
+ <wsa+renesas@sang-engineering.com>, linux-watchdog@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+ linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, linux-rtc@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-atm-general@lists.sourceforge.net, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] Remove obsolete __MODULE_STRING()
+In-Reply-To: <a190f981-d668-4208-8148-f4e50adb31a6@suse.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park,
+ 6 krs Bertel Jungin Aukio 5, 02600 Espoo, Finland
+References: <20261002-module-string-v2-0-fc7438acaf4d@suse.com>
+ <2e88806e-57dd-47e0-a9ef-a8507d22aa3e@suse.com>
+ <a190f981-d668-4208-8148-f4e50adb31a6@suse.com>
+Date: Mon, 09 Nov 2026 20:07:56 +0200
+Message-ID: <6c00fc009f4e61e87895eb2dd3d77c5dfb28183d@intel.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -78,15 +108,40 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4jNcJZ3pthzMlX9
+Content-Type: text/plain
 
-On Sun, Nov 08, 2026 at 09:37:30PM -0800, Guenter Roeck wrote:
-> A more important problem is going to be handling after
-> suspend/resume. The BIOS will restore its default settings during
-> resume, which might be unexpected unless the configuration is restored
-> in the driver.
+On Mon, 09 Nov 2026, Petr Pavlu <petr.pavlu@suse.com> wrote:
+> On 10/14/26 11:36 AM, Petr Pavlu wrote:
+>> On 10/2/26 10:31 AM, Petr Pavlu wrote:
+>>> __MODULE_STRING() has been an alias for __stringify() since "[PATCH]
+>>> MODULE_PARM support for older modules" [1] in 2002-12. That change also
+>>> moved it to the graveyard section at the end of linux/module.h
+>>>
+>>> Replace the remaining uses of __MODULE_STRING() with __stringify() and
+>>> remove the macro.
+>>>
+>>> Apologies for the wide distribution. Acked-bys are appreciated.
+>>>
+>>> [1] https://git.kernel.org/tglx/history/c/136839a1b4
+>> 
+>> I've queued the second patch ("drivers: Replace __MODULE_STRING() with
+>> __stringify()") on modules-next for v7.4-rc1. Thanks for the Acked-byes
+>> and reviews.
+>> 
+>> The first patch ("hwmon: Replace __MODULE_STRING() with __stringify()")
+>> should go through the hwmon tree. Once these changes are in mainline,
+>> I plan to pick up the final patch ("module: Remove obsolete
+>> __MODULE_STRING()").
+>
+> v7.4-rc1 no longer contains any __MODULE_STRING() calls, so I've queued
+> the final removal in patch 3 on modules-next for 7.5-rc1.
 
-Thanks. No changes are planned for this patch. The resume issue is
-addressed by a separate patch, which you have applied:
-https://lore.kernel.org/linux-hwmon/20261109163328.61787-1-tomasz@bojanowski.me/
+Perhaps send it for v7.4-rc3 to prevent *new* __MODULE_STRING() users
+from cropping up between now and v7.5-rc1?
+
+BR,
+Jani.
+
+
+-- 
+Jani Nikula, Intel
