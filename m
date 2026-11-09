@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.39
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794237070;
-	b=R8iTBDemV9EE55naypXRg6sfUJDgLwCZEIFSpAYrOMD/CUvmmZpRMQ3cA42WMQullA6U
-	 SREuy2p2GjL2hAosQXRms3cSD9ndgfU4YnBU/9KcpYsCy8okGPPq2oOHIGJd5QQAxFnls
-	 koWYocx7f8Dv8eULEwbPCIuOd4tgAZp7rkze+2QP13ZETOxbdo4g1nKWX1HG86Dt1bjJ4
-	 j9Q26jO/Xv/qWrzUXwUWTgLI545H+lZfInoF53g1gtoo3MtTz2KQmBh/Jvl/6L53fAt6j
-	 RQ6aIp0ptAG2pTCwNP2rTPzPW3+P0mExAqGIIaMo8WPYElwqP9dqcP9AL6H2/Da2rug==
+	t=1794237181;
+	b=LtSg9lt/h/7s7+JJDlNlE1AcjNlsqKhoEwolZvndRjQkjs2tfxdW6kear7gruB6aXhq+
+	 FqC9AzjvlHGOddUMjAepcpeQDhdtHT9gdDNuJfo/m4YObLattEPB6WRsbgIGOfOu5Tidu
+	 yGs/c9ykwn0Rj5613LYCpn39xT1xovxloO8x+z+tqkkhaIs7JpMpnSG7R+detDbvYQr+m
+	 nArb/n/Ar0BOvtnw2ceJcuGj37gjl0f7VTfiDn5z3r34ZbL/EE3oefG+B4V3uGA84hLVc
+	 Gd4gdbDy9ji983KAHYnS4qLuXATD3ctl3fGnzIt+Aaq/4lYRCSyg7ni2QEpr5t6+e9A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794237070;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794237181;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
 	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
@@ -15,57 +15,57 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
 	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=uGfg7qyz+Mob49HILdEQHSBVwOgoxsBxFYRGd/5ckX0=;
-	b=EJGD2Nv3HJjtxx6P+tlhI2lEpKgUxgIwR9DmMRaw0UVHBGc11iuKYtBYstOcFX+ulxUB
-	 0AsUpWpV+nplzotTjBx0yzlMdk0UfbWvKkIlVGFtWM3AVbZPrUJ7UUqSUSUG0ylJ1IF8H
-	 lMWX3qW34cfc4NemCXhxehSK286IifzwkHk74JbjWXyw4LQ5a6iDS18t9RI5PaX1El6zA
-	 u27ZlUeN6kK+3N8BDy1hc0g+ZtFMvlcD4FjEaaSazUmILVaXMHN1Iwy2G2WKwaX1qWrNC
-	 DeAJMrBizm97C4FdePG5hbJrlFjAfInj7EMnSrb8taCcV2H6F+MKmIBpqAaE0C5UbAQ==
+	bh=oLClHZAiMj98sMJiVJxYuzmbPG0nMxiCEYPgb4jBb6U=;
+	b=amAsQ52MSBYqaarNZVPMgDre4N7l9qKJuyMUyVz9WPyXrXI3cvaM3rxPh0hWZwagakaf
+	 Lflsc1eOUMaerdIbKOCxRqqziJLsrizRkIjYiVyVIHL8CMtYFqQVbl0ewTR0Tw29mkTGg
+	 O8rVBsisVrXkrROGZCNWUqipc1/jUh7yqHIlZdAeWaQwx/UBNyu3SVK14NDQgbD79F3+5
+	 VycKm4gjovipdy4oNbk0fDEbCbbcQhD/9S6I5+BWqu0Vlp+qADpJZIT0HnijN3G8CvSQb
+	 I3FkU7grJAm2tcTZRvSI85cvCClLYxcY9/EXoEQifYxDHaGxgYhe4pivOuTOvjt9bQQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=mRF8zOzK;
-	arc=none smtp.remote-ip=44.202.169.39
-Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=jB1Cuzvl;
+	arc=none smtp.remote-ip=35.89.44.39
+Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5652D606A339
-	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 15:11:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5652D606A339
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1FBA606A325
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 15:13:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B1FBA606A325
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=mRF8zOzK
-Received: from eig-obgw-5007b.ext.cloudfilter.net ([10.0.29.167])
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=jB1Cuzvl
+Received: from eig-obgw-6001b.ext.cloudfilter.net ([10.0.30.143])
 	by cmsmtp with ESMTPS
-	id QQ0Ox51euOOJnQR1Zx2r8Y; Mon, 09 Nov 2026 15:11:09 +0000
+	id QPThxBH3fyb4YQR3MxlLrz; Mon, 09 Nov 2026 15:13:00 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id QR1VxlXw0xqjjQR1Wx3wWs; Mon, 09 Nov 2026 15:11:06 +0000
-X-Authority-Analysis: v=2.4 cv=bZxrUPPB c=1 sm=1 tr=0 ts=6af1e28d
+	id QR3Lx3TJVdRrRQR3LxnAlf; Mon, 09 Nov 2026 15:13:00 +0000
+X-Authority-Analysis: v=2.4 cv=LOhmQIW9 c=1 sm=1 tr=0 ts=6af1e2fc
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=R5C9hjxsAAAA:8
- a=aTefX-UtI5BFv7nUFlIA:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10
+ a=YqshgQQMxR2ATWee5y0A:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=uGfg7qyz+Mob49HILdEQHSBVwOgoxsBxFYRGd/5ckX0=; b=mRF8zOzKD56g
-	5RcLnwxX/H9v70BlJar9VxSykh2a5qSVcvb+SX0s2WH+sha4FhQlqFSEzW9o2EQd4PxEvemqi44gd
-	Fhka4fp2GfkZyNXhu73BCfnzzoIBs+Wh2ivIeuUuv7Lih6A+FITRLSSgn3Byc58WOQG9TVkSlYuwP
-	SgVyFdtVhQboVBARUi9YXY/DCE4ioKVnZD4ASt6hDgagglGDRR6pDeP+fvMI5Zbg2VbBvBle69pvS
-	UB5CVa22SNWudbXX+j8esNaCO8CUJ//MsLAaennR1S4rXy5AI8SI0VJKorPeuzl3cwa8G5oAxvSn2
-	P1mRyhmcOkVN+W35eBP1Yw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:50750)
+	List-Archive; bh=oLClHZAiMj98sMJiVJxYuzmbPG0nMxiCEYPgb4jBb6U=; b=jB1CuzvlPv/j
+	zqSNv+mCojetzrBOdwUJpH6Vm6VnfWgCupLDnsUCNGS9e6TMx0TXHvjFVFO7lAsbfYSrIirHcC3kV
+	3EENkh2BBIqK6fgRO2j2jxHqx3MCDe4ONoqRzja6/2DgWj49BDbunc56fdNIE5yuG57+yOd8WpvmJ
+	5uDzvSjjzA1zWpCVzAwTaxio8s1WTxgsd0T8QV1xdYXZHlg0xPS240cuUQ59Z1RvYIGt/IWaRbVU4
+	ibhRtarxYjcLHqOG6hezV7iqziQA3/8/9mcmpes+wnF4bxmHQ/edyt6Rkpgxiez3ltY0m2rWcUPhh
+	DxwbCz2HvvhwLjndLYLKjw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:33582)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xQR1V-000000014hK-2a0E;
-	Mon, 09 Nov 2026 20:41:05 +0530
-Message-ID: <59a7e61f-ce9c-4bba-b2c8-6e19b3d84081@roeck-us.net>
-Date: Mon, 9 Nov 2026 07:11:04 -0800
+	id 1xQR3L-000000015qL-26FE;
+	Mon, 09 Nov 2026 20:42:59 +0530
+Message-ID: <bbeb7fc2-f9da-48cc-a383-f7234540cc49@roeck-us.net>
+Date: Mon, 9 Nov 2026 07:12:58 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -76,14 +76,11 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (lochnagar) Avoid oversized shifts for zero
- readings
-To: Charles Keepax <ckeepax@opensource.cirrus.com>,
- Zhu Jun <zhujun2@cmss.chinamobile.com>
-Cc: rf@opensource.cirrus.com, patches@opensource.cirrus.com,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261109093453.5384-1-zhujun2@cmss.chinamobile.com>
- <avGsCiZK7ChHaHx2@opensource.cirrus.com>
+Subject: Re: [PATCH] hwmon: (lm85) Bound fan stop temperatures before
+ subtraction
+To: Zhu Jun <zhujun2@cmss.chinamobile.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261109101936.17430-1-zhujun2@cmss.chinamobile.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -129,7 +126,7 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <avGsCiZK7ChHaHx2@opensource.cirrus.com>
+In-Reply-To: <20261109101936.17430-1-zhujun2@cmss.chinamobile.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -140,52 +137,59 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xQR1V-000000014hK-2a0E
+X-Exim-ID: 1xQR3L-000000015qL-26FE
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:50750
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:33582
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 6
+X-Email-Count: 12
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfCg3ywwGVsRGEUMh8heFlEPBDgUzJlgYC3QBcgYAxPOMl40kPDx9xhvHEkuiDOZqUS7xQIJlt9Aiwt/1+ezNnGHhe4vuqDA3SFoUID9C+zXEgd0WU43b
- 2WvPv8mZTZdNp5WhifcihS3Zfa5Ah54CMIwHLNVexzJY64MAIARLuSWMVZiqqqp4rVlyLrQcA6A14OL1XMYkBRPKSe+Z9vNLVNEMa6MY/aUo8fGPv/xrye7N
+X-CMAE-Envelope: MS4xfC0w0/7RXeedHCg1WIe24XUXyFpRtXClV8o0buAK2sGULMPpylst/BWggk2e9KeoVFNaBMkSMsMOzYhhNh8az+sdKQRjHONUnGNjwWIcA9p8uDVSwJr9
+ l3nQAAp6TsJ8Y99DvSwLdhANuE4c0LmQwyvwZk+eM/B5fPDLSwc3Pk2eVZyBBPPVsrRzxlefvrom2ey3DKx11WhAPOe355i5dDmNVxxsoy7dQYtIijR5oUVa
 
-On 11/9/26 03:18, Charles Keepax wrote:
-> On Mon, Nov 09, 2026 at 05:33:32PM +0800, Zhu Jun wrote:
->> From: zhujun <zhujun2@cmss.chinamobile.com>
->>
->> A zero IEEE754 reading gives exp = -150 in float_to_long(). Both shifts
->> in the rounding expression then exceed the width of u64. UBSAN reports a
->> shift exponent of 149, and the conversion can return a nonzero reading.
->>
->> Return zero when the required right shift is at least 64 bits. With the
->> supported precisions, the scaled mantissa is too small to round up in
->> this case.
->>
->> Fixes: 4cdb56214746 ("hwmon: lochnagar: Add Lochnagar 2 hardware monitoring driver")
->> ---
->> Validation: x86-64 and i386 driver objects built with W=1.
->> Source-extracted boundary tests passed on 32-bit and 64-bit;
->> the corresponding test fails on the base revision. I/O is mocked.
->> No physical sensor hardware or booted-kernel test was available.
->> OpenAI Codex assisted analysis, code, tests and changelog drafting.
->> The human submitter must review and add their Signed-off-by.
+On 11/9/26 02:19, Zhu Jun wrote:
+> temp_auto_temp_off_store() subtracts an unrestricted long from the zone
+> limit before clamping the resulting hysteresis. Extreme inputs can
+> overflow this subtraction and select the wrong end of the hysteresis
+> range.
 > 
-> Yeah afraid the human submitter will need to add their
-> Signed-off-by :-)
+> Bound the requested stop temperature before calculating the difference.
+> A signed 8-bit zone limit and a maximum hysteresis of 15 degrees require
+> only the -143..127 degree range.
 > 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> ---
+> Validation: x86-64 and i386 driver objects built with W=1.
+> Source-extracted boundary tests passed on both word sizes;
+> the corresponding test fails on the base revision. I/O is mocked.
+> No physical sensor or booted-kernel testing was available.
+> OpenAI Codex assisted analysis, code, tests and changelog drafting.
+> Please review and add your own Signed-off-by before submitting.
 
-... and remove the AI comment that it needs to be added. Unfortunately
-that didn't happen, suggesting that the human submitter didn't even read
-those comments, making it questionable if they were actually reviewed.
-I can not apply any of the patches due to the missing signature,
-making them just noise. Too bad :-(.
-
-In the case of this patch, unless I am missing something, it isn't really
-needed because the large shift causes the result to be 0 anyway.
+You did not even read that, did you ? I can not apply any of your patches
+due to the missing signature.
 
 Guenter
+
+> 
+>   drivers/hwmon/lm85.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/hwmon/lm85.c b/drivers/hwmon/lm85.c
+> index 80bd1f47114d..e776ec4ae40f 100644
+> --- a/drivers/hwmon/lm85.c
+> +++ b/drivers/hwmon/lm85.c
+> @@ -1153,6 +1153,7 @@ static ssize_t temp_auto_temp_off_store(struct device *dev,
+>   
+>   	mutex_lock(&data->update_lock);
+>   	min = TEMP_FROM_REG(data->zone[nr].limit);
+> +	val = clamp_val(val, -128000 - 15000, 127000);
+>   	data->zone[nr].hyst = HYST_TO_REG(min - val);
+>   	if (nr == 0 || nr == 1) {
+>   		lm85_write_value(client, LM85_REG_AFAN_HYST1,
+> 
+> base-commit: 7475ea8b58616b33c04afb976cf0fbaad9dd63fb
 
