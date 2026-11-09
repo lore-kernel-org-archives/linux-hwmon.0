@@ -1,56 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794231537;
-	b=BhgAqT8qSh5Bw/A3ZurhhaUcneMS2WYhiKMfE6ImjoRXLEai6tqjoXKX1B3/KFKcK3XW
-	 EyOXu9ZqdF51hVQNlo1aTD2yBRNqLhpR0t9llMU2uAsEJ1mpZYWICqohf9JKO0gpccg/b
-	 2gzAmhGShIfbO6wBFo+5pjD/8esQAF1YRLjrE0VKT6F4Y70Fhus5PBJxT90JnX+LyXu9j
-	 AdxEoNC1jUI4++oRmZRMzFgPBcpLiFQ3eLCckQURRduaa6jsj046UjmGLXO1j0TRePsdu
-	 MYDinoIF7Q8yh7Hpb1entZ52yoUybU3Zy7GErTGcZe/0RDZV0QWWHzHJRMigdiJo2EA==
+	t=1794231811;
+	b=dBIu2mVPl6WgEb6zW7zSgVfKrxoao5nlCMc3b85NSKNGliHCvbKJaeDF+WA3bNSUtsUj
+	 TJWYV0hnUI16rSW5/RdS2r7Iwd2Sl2l5Njxq4DzuQA0hLuZgyWzm8wfTuikcNp+b9SxGT
+	 X2/c1oI/O1Cv+crHQ/C/+B4GcWGhovFcs8hNj/zqghuE4RJ+VU0fLwUgG+FhlK3gqS+KW
+	 ecid/WO4PMbLjT262YlZNpceRaraT6vdGE0RogazG04rS6x/mtBoITrbdqpdnq4J5zYeS
+	 xY+UZQUVwVZY4vH13g9H0MwNm1wr2JuPYvN2FC3i4w1hN9gyPL6mAMWLiIjcgD03Fhw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794231537;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794231811;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=T4AeIeBcsYTICkV5N1JJbnaH/wrXvLSoN2TpczQCmHU=;
-	b=j2enZuLNGOm80spJ4BFH/pb7EH9FULC8fnMIIYksqA/WojUlY+swke5BSjUqZlXwtpiy
-	 dmERFgih/gNw+2Kv+oKkW3f1bbPiuuvdAJAyCOMv98uDJr9+xFDKReO3OGcelS17HauYD
-	 aR21CxBDsUc4mYD9JnReF42eibqtPc4YjA9AOBt9Yhe7hQj6mUwOWxDPraQGP6HYZJU+z
-	 wS3Q6STlps+7ZiQVgUkirlul0ceAUwHZD5j/lm/2kVPcTCggjp4T/TvOjoFNLj705GecA
-	 8PU5hPlQ3GVVfrZZGgL/zFgo65FnoV/I/CPjMyRayVnm8v1+lIN2tqcP87ykN32Umbw==
+	bh=zAHWVcbYNjPrOtbPtrww9i0ipkOfHeXpdq2N192XUmU=;
+	b=ZG3o3QDq+hPPA77px7vGgpYK6DKul6DPt7Yb16YEjKV8sD7N3WUKZVWyvkiCVcQTGEt8
+	 NThtGavhTZmLdNvdwTSCVxNIfymQGYJNgIw6tJoeQM7fHrc8uqs7m5CfEjk3RqfR5zWOp
+	 kDH3Y+k9pzUGMreNzkh4XzSisVxYK9dLvLaVmo76TCX0zwFURgBmvWam+cVx66ajhz/KH
+	 MAgTgyHWZM1DvaO8B2iHuDuZ8zSWQQLtUwkxgtHCEKM8JZtJIxszKFQ0la8sHsDLqFn1G
+	 7qZEAVZqjSoFzScMlNIxeS75RpNOdYl8WeoQG4l39HRBmk0v8Hq7gduUGXiDwi3knqg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dMAWp9hb;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QC1ZmvkZ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA36D606A31C
-	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 13:38:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C447606A31C
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 13:43:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dMAWp9hb
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D72F1F0089F;
-	Mon,  9 Nov 2026 13:38:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QC1ZmvkZ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09BAC1F008A1;
+	Mon,  9 Nov 2026 13:43:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794231536;
-	bh=T4AeIeBcsYTICkV5N1JJbnaH/wrXvLSoN2TpczQCmHU=;
+	s=k20260515; t=1794231811;
+	bh=zAHWVcbYNjPrOtbPtrww9i0ipkOfHeXpdq2N192XUmU=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=dMAWp9hbPncD66G+C4eBjTOccp9cRJWkRcQwA5FMRhW+HG8Vg1iULQIezi0CgZ0C4
-	 B7HzU8mSyuUOsk6AHAefbd+iDIEoA7TIDujarQ0aJ4qroJvNmd55WsO1wWmHVyIL7Y
-	 35Fakw0wIgVVHdlUkjdHSwvqyh6HQ5/AyNOiCFAkvjKLJzKpqtqmglt5sHyHLf/lSh
-	 wjZUb+flHjY8xcYodiHnycr03raycQ+Y3viRBqHWB0NCLvX5wUTF3BQ/vTu57L4JrL
-	 SVtJt6rLy+WRrRdeRKA7r0QENu/WdOtSHPPtlfYhEzkUglY6Flnb2N9bOwv87Z4HAs
-	 WTS9a/9HJl2lg==
-Message-ID: <sashiko-outbox-205016@kernel.org>
+	b=QC1ZmvkZeOn+ceagL58Jw44SfkpQflehuhRbjBs+qFeIcyJ1IwrbWrNiYrIwD2XIY
+	 2ZPuMUGDIKSR5Xx9worJ2QCMucJSS2nrYsT6YQW6R4dI1lXFYvEktKbxLHbc5lBgrS
+	 NC8HGM8OgmZTvjVftxsut8QWuck2JY9hJ/1lBXXhgO+1nMgEeNQOffe/rcY8SvGveP
+	 LUEOWPNGPGucmM3ntbKy/svVvUqYOo3gNUm3AgcZ0saGxqz503pYNPq73eMjaQdeHC
+	 GQbr8gRlRCmNJXkcy9XNaZd4LrSNMySvCMsdkrR6W8LBKTGCNHMF2JSSFze4exU0dC
+	 OywRcnucFTDbg==
+Message-ID: <sashiko-outbox-205020@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/6] hwmon: sparx5: separate temperature reading from
- sensor dispatch
+Subject: Re: [PATCH v2 1/6] dt-bindings: hwmon: add Microchip LAN969x fan
+ controller
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Robert Marko" <robert.marko@sartura.hr>, linux-hwmon@vger.kernel.org
-In-Reply-To: <20261109133609.810876-2-robert.marko@sartura.hr>
+In-Reply-To: <20261109133609.810876-1-robert.marko@sartura.hr>
 References: <20261109133609.810876-1-robert.marko@sartura.hr>
- <20261109133609.810876-2-robert.marko@sartura.hr>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 09 Nov 2026 13:38:55 +0000
+Date: Mon, 09 Nov 2026 13:43:30 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -60,9 +59,12 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> Move temperature conversion into a helper and dispatch reads by sensor
-> type. Preserve the existing temperature calculation and error handling
-> in preparation for adding fan monitoring.
+> The LAN969x fan controller has a PWM output and tachometer input in a
+> register block separate from the Sparx5-compatible temperature sensor.
+> Describe it with its own compatible and binding.
+>=20
+> The optional fan child specifies PWM period and polarity, tachometer
+> pulses per revolution, and thermal cooling levels.
 >=20
 > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 
@@ -70,5 +72,5 @@ Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261109133609.8108=
-76-1-robert.marko@sartura.hr?part=3D2
+76-1-robert.marko@sartura.hr?part=3D1
 
