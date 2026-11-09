@@ -1,75 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794223657;
-	b=spEtiLHs1vykCb7mu18k+fj5gS7BEkKaMdlKxXuZJw3m5VVuJjpOfkW4LAMFYy+Mly6E
-	 VZKQbyZF2edVcC2p8IWqFFLV1YOlSllKdKV/KNi86+yQ9vWNWc9G9wgPMVVGLrMpuOU3s
-	 g01geXp53SmaWi3iH5M0YLchwGkOSqRtXngI8Gy+F8sRhrqFmOTJr1/xm7/7x8/Zn/SS+
-	 T+y62K9SOKsPGV5pY8CNL3u2US196cooTgHmR6ypd+jSSRn/H5IN5QHvbvg4V3ubmStst
-	 PYejedaFY/tIGx9zQ5yBtUVV0s8UZkV9Lp0tO+as/awA/wK8fpPtrRtwfN7L4q+M7yQ==
+	t=1794226317;
+	b=oZGAkfYVOMgq/5f6P04oPu9fy0byL37/JwYhAod5Uc81A+0al2U9E3ZUxi+1SC5YP9EG
+	 wSclgSLcdlh7HejZnDa6jTIFTtOw+aCMxBHMqaK9ejusj65fGeoEiUgSaczB1Btmvq8mN
+	 QmyMhZe8DNt546xByrE7vt61Pk2a3qOkOE2mzR8Uk/0r8t8SpRCp72kpnU5Wh0bjqLlA+
+	 +voLLQS6FYX1LZJiwJJLgIFhRgr6awXMS0YXgi/LVUt1WFVdaMai0VcYeWvWg2nQn5tDw
+	 bBYHEGkBwJmfT70Swl98oWhARdVmsK/t+1yAL6nQ+6Lb7U2jgP3aeGHbUOBvIC5aQEw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794223657;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=GTe3rVqqBFubJwfvXPNDDRZX+sidHXepwnZzWomDy5A=;
-	b=NfU9kT2bZiORXw5zCXCda/QL8aJYOgH2BUdYtc79k8w+H+He5VhdNu9Cnf2/2IcxBuZu
-	 whoIpQKrD35eFow0FLSeMsppAHs7T/JowXmdaEvnahhYKBHCrBHaeXZYVCvXSKNKTWszk
-	 Bu8qi6oDSgI1VXT2Gz0/7R+qYdNY941e6XcKfGF8hCMO9ChGo+afDYbgil6zPxFQW8Ini
-	 zhqGLTzGo1Higv2QnpkZm+THa5sLuSQ314SC+lkWoKCvQA7uNE01oHPo+7+uf7W7pI2vb
-	 YaXO+uRyI3C57qCB2gf8wMWl5rPrj/0D0L6RxC02HaZZJotqm2D1dRWZD7LMkPwW/AA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794226317;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=rOoAO/cKnojQ1mjIUDSYzy80JHx2s+cP2ZxIueKDKk0=;
+	b=P2iTU3mABooMjNZt43IiCGQAqoov+8BLQZb1XIa1YVMPec9aaoqy/dx5rO6uHavSOMmf
+	 4EycLa9xoFCxb8MaQX3XeUxX2riQ1T51+TlWD2XRV+fGx5GAaVCa/qQEUTfFREzp/RV20
+	 r9bfFWNr/HE0Y23Tyxm5gER3L/BMPKt+nVw7FFHQG5j0sHomtvRlrn+RxrS87ECUP4GRH
+	 XOFbVTAkziKBgLOXSAwxXn+Jnv58FD6pME1Sg+GpkVfvUn7KD0Bpbx4KCFUpXVc39InJ4
+	 UhoztiAVY2jbf5UxSm4gdJoNXrZJSoNWz2+R/PSgqIYtl/28j6NtizZxreh+mS2wB8Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iU5O51DC;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RbR8YWVO;
+	arc=none smtp.remote-ip=74.125.82.54
+Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E54B7606A31C;
-	Mon,  9 Nov 2026 11:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D2B606A323
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 12:11:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 52D2B606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iU5O51DC
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96EA41F0089F;
-	Mon,  9 Nov 2026 11:27:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794223656;
-	bh=GTe3rVqqBFubJwfvXPNDDRZX+sidHXepwnZzWomDy5A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=iU5O51DC6zVVQKzDHuys9tIxjfbSOhYw8z0UcE86pb//wkXavh32S2N8S2PUurU2A
-	 o1E3RopKG7W94xtmWo25LA834OkIsoplK5Zc5sWRxNqoMBKXFQxzncUeAVAHVqzYUN
-	 x0xzl99BebTVjgItzYyFM18S+rvSgi3xMyTZJ/jJZ69X0Gf56Vq2vszIAP9EEsAUq5
-	 YP1A5SHoyPmQVAQUq/DaV61yYmuj4yVaaeC+HIcZMJhadQiWUxN4AW86j7fp4xdZK/
-	 SKtdAofdOgM6AVAC0cEZ3+8Z/6By8LpM/kvwzBv9E4RtCHAt3TdDxZIlKuxADBPb0I
-	 863RWmyUQ6DWA==
-Date: Mon, 9 Nov 2026 12:27:22 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
-	Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
-	Eric Dumazet <edumazet@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
-	Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados <joel.granados@kernel.org>, 
-	Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org, 
-	linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, linux-um@lists.infradead.org, 
-	linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, 
-	ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, coreteam@netfilter.org, 
-	kexec@lists.infradead.org, linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
-	netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
-	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
-	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
-	sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
-	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
-	linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, linux-debuggers@vger.kernel.org, 
-	Chuck Lever <cel@kernel.org>
-Subject: Re: [PATCH RESEND v2 07/23] proc: let procfs own the seq_file of
- seq_file entries
-Message-ID: <20261109-atemberaubend-begabung-bedienen-85aade0f99b4@brauner>
-References: <20261104-work-procfs-core-v2-0-76ace653a773@kernel.org>
- <20261104-work-procfs-core-v2-7-76ace653a773@kernel.org>
- <8A21EE2A-F392-40B7-9152-CBC440FDDA70@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RbR8YWVO
+Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-1438d9363fbso439367c88.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 09 Nov 2026 04:11:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794226315; x=1794831115; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=rOoAO/cKnojQ1mjIUDSYzy80JHx2s+cP2ZxIueKDKk0=;
+        b=RbR8YWVOz+jr23GxOq782kbhyAEaDpRxtqVXfsCdQqajVBjiYCGIuNunab9XcHqNa9
+         hpjj8tofVmUn7EGJmKlPlS5HCSUMjeG+ex+YIaPlvtRTo95MycqCwnfv78gEPLHLd84a
+         UuyslXsJBwWYO8hKZpgi6iNmFZx6Kr7k8hEYIOjOFD9O2nyj9948zVTTMViN475b+i3t
+         jwbm+yJKPUzDuL8FlZ03c676Z+S3VicHWIv+yZmx0+hb0kWc3TbwIwYGXfCVkoM6fk+N
+         hNV8jeDkbWyUc1iR44AAaGsAYOzVMboResO2FuJy97Lt80Trq/eMIhpqmiD1mOXn5LSj
+         ZPqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794226315; x=1794831115;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=rOoAO/cKnojQ1mjIUDSYzy80JHx2s+cP2ZxIueKDKk0=;
+        b=XII7K//NVI/WzdVclvhZ+3v5d/1DVI1LP30Dk9TMNrKZNarDDdoE9vNb4IKkAtfN67
+         elujETsjkD5i2sBz3YBgqKWsXSKjRgpHf5wvFWxYQJiE7kDEYF+fJI1rRwXZ4jQRlJTE
+         ySXSCm9fT6jpCkZJ3Gq2+ruahCxgtCjtCMPLGniyZwApcRiHE6abVOrdT4UaaCg8nR18
+         Nb7Lj+Atst/AAqY4qdw9kcAjeGNtOFtXBf2mZS7JZ8KYmAuxPis6x+e2b2z0goR2LdeR
+         2FLB0tW5+SCxgZxv+/OFsqA76o4HlIQgD85Qr8B2JIJqvEYkHYHWWhRB+jNZ0RpAYcCA
+         8M1A==
+X-Gm-Message-State: APuU4Z9BI/Jgv3/KecbAzxGKYmXNrSPywsBjCaW1u3nsvPx9Ett6/xDW
+	Rdv5/rMRnP5LMeRwzMBB5Qmw6EqDITxTv3e1j879nt/wpyiderRunHnesLsXE/6OIy8=
+X-Gm-Gg: AYBFou1WEOhdx2Zne9maFEux3Ego3febWPO3Txg77Oc0BHjWw1ViuDdgdr5ij67XvL0
+	fz40Htzgx/Nqk4/2sfklkXzlNQkXHx3CBVr70ZmtHsxRxcvo1hWexz6v7NgDtHCTvGMl8azs5sF
+	SgGc8khdOc8MgBf6aFQnKeYO9nknDGFv49Xd2b1l5cQTlW6h5gyG6ThA5KE9HtWpKlwd5YK3Z4d
+	Oqojl0Tzw1bMnDAALyWarZHyPaMVI6818Yooala4DfGte7HDf/oAE9ZPkHCrH4Fq82g6/yIYfWf
+	GpN9bEh4p8l1PRzf2eb1kSZbxLuCegXFn1FyEf64SVQrrCKPWBaTdjJ/Z3TN9KQJG7uzQB6RmTL
+	sukLsvkQwCrf3q3oL8EReFHu9dPX9u4QZKDqwQkV1cdcnvpiTfjlerW7JT3QDEyh0boEXoF4fy4
+	5PJoiaHWl5m86Ber0NkvnxPM1QvXIwyoCDXbZ/U3ZC0XR/dn/POC7RnW1LtWdp73PL0NicXh01O
+	RgFvnM0AVz4AS0UcU/3G8Dla8KLDJHyTLo4XgVPBgxwrXDqrlwu0PrmDO9FHIQdp5jTIAbawMA4
+	WP2ztqHG8LeJWU7OvT3uYjYqOBXdNhe6UDBul/6woiTO
+X-Received: by 2002:a05:701b:260d:b0:181:8948:f022 with SMTP id a92af1059eb24-1b39fed1e46mr5037953c88.21.1794226315281;
+        Mon, 09 Nov 2026 04:11:55 -0800 (PST)
+Received: from evo.www.tendawifi.com ([103.98.7.211])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b375604109sm16188496c88.10.2026.11.09.04.11.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Nov 2026 04:11:54 -0800 (PST)
+From: Archit More <architmore303@gmail.com>
+To: Juerg Haefliger <juergh@proton.me>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Archit More <architmore303@gmail.com>
+Subject: [PATCH] hwmon: (dme1737) Use str_yes_no() helper in dme1737_init_device()
+Date: Mon,  9 Nov 2026 17:41:27 +0530
+Message-Id: <20261109121127.10937-1-architmore303@gmail.com>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -79,37 +94,49 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <8A21EE2A-F392-40B7-9152-CBC440FDDA70@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Nov 07, 2026 at 08:10:28AM -0800, Kees Cook wrote:
-> Please use the new style typed allocation calls for objects:
-> 
-> ops = kmalloc_obj(*ops);
-> 
-> (This happened to jump out at me, but please check the other patches for this pattern.)
+Replace open-coded ternary string choices ("yes" / "no") with the
+standard str_yes_no() helper from <linux/string_choices.h>.
 
-Done, there are 5 of them in total:
+Signed-off-by: Archit More <architmore303@gmail.com>
+---
+ drivers/hwmon/dme1737.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-proc: resume readdir after the last name it returned
--		cursor = kmalloc(sizeof(*cursor), GFP_KERNEL_ACCOUNT);
-+		cursor = kmalloc_obj(*cursor, GFP_KERNEL_ACCOUNT);
-
-proc: sysctl: resume readdir after the last name it returned
--		cursor = kmalloc(sizeof(*cursor), GFP_KERNEL_ACCOUNT);
-+		cursor = kmalloc_obj(*cursor, GFP_KERNEL_ACCOUNT);
-
-proc: keep the open files of an entry in an open node
--		dp->open = kzalloc(sizeof(*dp->open), GFP_KERNEL);
-+		dp->open = kzalloc_obj(*dp->open);
-
-proc: own the wait queue of an entry with a ->proc_poll()
--	on = kzalloc(sizeof(*on), GFP_KERNEL);
-+	on = kzalloc_obj(*on);
-
-proc: let procfs own the seq_file of seq_file entries
--	ops = kmalloc(sizeof(*ops), GFP_KERNEL);
-+	ops = kmalloc_obj(*ops);
-
+diff --git a/drivers/hwmon/dme1737.c b/drivers/hwmon/dme1737.c
+index b1bd3682c5fb..c3bf5f4ef941 100644
+--- a/drivers/hwmon/dme1737.c
++++ b/drivers/hwmon/dme1737.c
+@@ -17,6 +17,7 @@
+ #include <linux/module.h>
+ #include <linux/init.h>
+ #include <linux/slab.h>
++#include <linux/string_choices.h>
+ #include <linux/jiffies.h>
+ #include <linux/i2c.h>
+ #include <linux/platform_device.h>
+@@ -2316,13 +2317,13 @@ static int dme1737_init_device(struct device *dev)
+ 
+ 	dev_info(dev,
+ 		 "Optional features: pwm3=%s, pwm5=%s, pwm6=%s, fan3=%s, fan4=%s, fan5=%s, fan6=%s.\n",
+-		 (data->has_features & HAS_PWM(2)) ? "yes" : "no",
+-		 (data->has_features & HAS_PWM(4)) ? "yes" : "no",
+-		 (data->has_features & HAS_PWM(5)) ? "yes" : "no",
+-		 (data->has_features & HAS_FAN(2)) ? "yes" : "no",
+-		 (data->has_features & HAS_FAN(3)) ? "yes" : "no",
+-		 (data->has_features & HAS_FAN(4)) ? "yes" : "no",
+-		 (data->has_features & HAS_FAN(5)) ? "yes" : "no");
++		 str_yes_no(data->has_features & HAS_PWM(2)),
++		 str_yes_no(data->has_features & HAS_PWM(4)),
++		 str_yes_no(data->has_features & HAS_PWM(5)),
++		 str_yes_no(data->has_features & HAS_FAN(2)),
++		 str_yes_no(data->has_features & HAS_FAN(3)),
++		 str_yes_no(data->has_features & HAS_FAN(4)),
++		 str_yes_no(data->has_features & HAS_FAN(5)));
+ 
+ 	reg = dme1737_read(data, DME1737_REG_TACH_PWM);
+ 	/* Inform if fan-to-pwm mapping differs from the default */
 -- 
+2.34.1
+
