@@ -1,63 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.135
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794219559;
-	b=bC9c27Y/NdZmzVPXZ7lFGCf3ewEfxW1GNq/5AxxK2jBwUsJrScI1g9T7apsdzcx7eAq9
-	 2exn9GAxhChVcrpt5RPEFhlwRjAQXNLy6qtovNIpMViZZAMT+wCHaHZG2/0Klcoc3Y/gz
-	 8boIvy3zzMYCTWz6f2fNQE7M9SmaBOPtbokBtPUYDQR50s3dSh3ViIyEBCRmISgH8eh/u
-	 3L8fNjkppED33aJvb92SC3DWzwrmH52Cc0zGP1lvLF7F71uNUjatWXZ84Ya8lynhsy+Qp
-	 Z4lujVdI4Wmj01C/5Jt2FjxXwffQr60Ajmv57MBS4rBeGe9wzoQdoKXwx1Mr9cUWcEA==
+	t=1794219577;
+	b=bbADeox3XiCnxvi/lGLlNua+9YMtAHtzE1Pv8xyG8cwN1MTM2rk0KU7nZ2kiWANpbPjR
+	 qh3BvOD/YstHgJavn3wp0UZCJOYNZro4DZePeHGbYJdQ2aTrP8IjUjdlyvHqlwunY5uSX
+	 ySje1TFUnragWXTWxU+4oBycd/X7fX+lrHldmD5USgU7EG+DBJgp3bFg/gS3rnBZaSkEk
+	 5vi42uovqaCPMRhmVQ1Cwe/04l++706EDSEdJhGrNQYYzeHXQuWfj6dojR0TSsfl3Do0E
+	 oBJltfX5SOwoHNWNslXh2Oav6mzi9u3P9mcuxTrcftJx02pgEo48j3k7XRu6FIz3ViQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794219559;
-	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
-	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
-	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=E0t6MsfuW+XxWkVjpL0Aj71g9+y9Dg7DgPJLNkOm0iY=;
-	b=o6QYMC+pVfYywEJgXs9kmLSVGsRvgQyNEOm9fSmB6BKZi5zhPY5Zhh9CeF1Ntn2Vz3dH
-	 Brq/9G/RFnTUhnRZekM9/HJyyBcsex3zaIecQWO6J06hFg5hogee7KVSrJkstF0GIr2ut
-	 giCzTo4KE0z2NiXTf0bwQMKft/mubIJ4xxbU59TW3hiJylz3ZAV469mPUGr+cFJZzlGVD
-	 rC6NAeJn59tJrik8xY8CwXq9lgTBHh/WnQ3CtaAjkSLyaQYRBzPfdNb2po+hGy3d9n3wd
-	 pZ8HhBug5vQ57tCiCFEIZeTE0R45Ts2LMA5xjMpY37tDGG3GCzvEJYxPj+j1XXpJtuQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794219577;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=Ejl4y/tap39P+E4iq7k+OQcvb0b5EyzWEDMiAZBF92g=;
+	b=ohaJMISiuqn4o52koI2BMWgc8I1ulgqh6pD5Gr5VNZw+znFLY1YtO87JX6FbFKa9BtlL
+	 3KBKFy1TTSlaYXC0QtkcrVjwmJFkd7NO8Qo7mVGkvlrBrEe/4bJfn2sFewXYfngYxZhZo
+	 VWayBUZ4wOnRdy1OtN+CCAZo+R89AL5SpEi1Flm0CcjKs0KHw55CXBYxrhU3ZpIzOLObB
+	 siCNxcMqLygiQLaEN8VbiHL+9J3xI7G6fRYfqvDY/+Ez1qVRXIXzSkiotFrWHc2qi5mCT
+	 /GdK16zhDQi6+03bFDjWyVolWjm9LogSM2aA7Z9pphplCZswNRJhHjU2lojM6xvcNvw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cmss.chinamobile.com;
-	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=TCGdSjS8;
-	arc=none smtp.remote-ip=111.22.67.135
-Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C82A606A321;
-	Mon,  9 Nov 2026 10:19:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C82A606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D7fKhiCq;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F11606A31C
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 10:19:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=TCGdSjS8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=cmss.chinamobile.com; s=default; l=0;
-	h=from:subject:message-id:to:cc:mime-version;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=TCGdSjS84ptgymyragoMmqh5D8c4zR0DhrkLOGtVlUVLKrM+M6fTPsUUEcjM86N/IJyQkaQ3DipAl
-	 LBp9c7sjfB4svtQwBqh3q0UH2b/Cz6Z0A3ac2+P1KQjGxypEDgFss11lQigkBT3axJbk83uEF6hevn
-	 pm02z26TBBi8bTLk=
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee76af19e2328f-c5aec;
-	Mon, 09 Nov 2026 18:19:17 +0800 (CST)
-X-RM-TRANSID:2ee76af19e2328f-c5aec
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from devin-VMware-Virtual-Platform.localdomain (unknown[10.55.1.72])
-	by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee86af19e2213b-8bc27;
-	Mon, 09 Nov 2026 18:19:17 +0800 (CST)
-X-RM-TRANSID:2ee86af19e2213b-8bc27
-From: Zhu Jun <zhujun2@cmss.chinamobile.com>
-To: linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (w83l786ng) Clamp voltage limits before rounding
-Date: Mon,  9 Nov 2026 18:19:16 +0800
-Message-ID: <20261109101916.17352-1-zhujun2@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D7fKhiCq
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1712B1F0089F;
+	Mon,  9 Nov 2026 10:19:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794219577;
+	bh=Ejl4y/tap39P+E4iq7k+OQcvb0b5EyzWEDMiAZBF92g=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=D7fKhiCqPVQgJofRRlODzpm9C13r9Cl1x5WHDdcGJq0k/etRZmvHtwtkUwt51+mtX
+	 nZJk/BnWEtIHOfDM0/qz2zOFsqVIOgEyzgdzLpDPAe1tYCtmkqXspAe39QObMJmvcG
+	 z1Wo56zD3q8zTT+vYjV4aqL2n7ns4PCIWLUpkOlANIJUCY9+L6pMBrbWrakItN9JiV
+	 h886Rsu9Rrvq3hlvCpF3FIufWuqSxImjQbS8niST/wmrTRXAB0Jr7og4sv9MmacP/n
+	 N4AbKKDwXEsn9+1Q3v+tDBeKZfJAzfabAGu5JmtzJWHf4dDU+hSTR4XA+nt1HYD/uq
+	 6KUcrxqHL3PuQ==
+Message-ID: <sashiko-outbox-204800@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (nct6775) Clamp fan control times before
+ rounding
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Zhu Jun" <zhujun2@cmss.chinamobile.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20261109101629.16713-1-zhujun2@cmss.chinamobile.com>
+References: <20261109101629.16713-1-zhujun2@cmss.chinamobile.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 09 Nov 2026 10:19:36 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -66,44 +59,21 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-IN_TO_REG() adds 4 to an unrestricted unsigned long. Inputs close to
-ULONG_MAX wrap, so an excessive voltage limit can select register zero
-instead of 255.
+> store_fan_time() accepts an unsigned long, but step_time_to_reg()
+> narrows it to unsigned int and adds the rounding adjustment before
+> clamping. For example, 4294967295 ms wraps and selects register 1
+> instead of 255 in either mode.
+>=20
+> Preserve the input width and clamp to the maximum duration for the
+> selected mode before rounding.
+>=20
+> Fixes: cdcaeceb74ff ("hwmon: (nct6775) Add support for automatic fan cont=
+rol")
 
-Clamp to the 0..2040 mV register range before rounding to 8 mV units.
+Sashiko has reviewed this patch and found no issues.
 
-Fixes: 85f03bccd6e0 ("hwmon: Add support for Winbond W83L786NG/NR")
----
-Validation: x86-64 and i386 driver objects built with W=1.
-Source-extracted boundary tests passed on both word sizes;
-the corresponding test fails on the base revision. I/O is mocked.
-No physical sensor or booted-kernel testing was available.
-OpenAI Codex assisted analysis, code, tests and changelog drafting.
-Please review and add your own Signed-off-by before submitting.
-
- drivers/hwmon/w83l786ng.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/w83l786ng.c b/drivers/hwmon/w83l786ng.c
-index d16afda34e41..0cd545011e73 100644
---- a/drivers/hwmon/w83l786ng.c
-+++ b/drivers/hwmon/w83l786ng.c
-@@ -101,7 +101,7 @@ static int temp_from_reg(int val)
-  * in mV as would be measured on the chip input pin, need to just
-  * multiply/divide by 8 to translate from/to register values.
-  */
--#define IN_TO_REG(val)		(clamp_val((((val) + 4) / 8), 0, 255))
-+#define IN_TO_REG(val)		((clamp_val((val), 0, 2040) + 4) / 8)
- #define IN_FROM_REG(val)	((val) * 8)
- 
- #define DIV_FROM_REG(val)	(1 << (val))
-
-base-commit: 7475ea8b58616b33c04afb976cf0fbaad9dd63fb
--- 
-2.51.0
-
-
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261109101629.1671=
+3-1-zhujun2@cmss.chinamobile.com?part=3D1
 
