@@ -1,66 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794252446;
-	b=LtzzD9XFnJxtI3SUD4+zlzs4EonzrjBsSmdM9xn/Vrdo4CCQ+AEF3/kGD69Te/7EmCNk
-	 lCrzaOjQdvG8KwDee174ENmxVrX+GES8NJNSrK1TioC7/p/MotRmGuyGQ8f6COnVMfgeK
-	 zXSwkDzoKYXBeqYpKj59TXQT0Hy2pQQ1sVKnmg6dT6rGdk5cKqcvxafeaZYzFtNCAa+cu
-	 E0wEc9PgFbZdZy3TUMEGGfBmKR3Bf2+PXPH9AZzqK7m5x17cuaOJNz1gwk69synl+eGPu
-	 9dvmvis+YLJqwagVUCBx4Hnzn+lWaDOLrqBOxTU24QjI1sSUVH72obGolFJVPUMXybA==
+	t=1794254442;
+	b=KCCVKLtoQSj0koWNpwsgLaC5OobKcDxB5R5d4KXPaPMjkIiB8jqfCVIYGL354wnCcCWo
+	 dbvKdPn67f0sW1bgaCtxZFawyMLI7iPskgkHV/N4eWAoxfqFwSd4RZJ2rbHqSsRqBfPNF
+	 yR+NVmJ/9THGoPSmxWzCZWseHFODoDK4JWe1MZWMUGw5K+71i57Nbc/s5FNnJYq/hIK8o
+	 UnY1AbtRu78UOtW+NNyQSJZQsxRDQt95+girvFIc4fJbjZpl1F5HNSJ6BlOWA8sIbXWXo
+	 NMu7qy90MGaHxyJ1pR+xRj37SyJACE6siYEkwNNaPkGbBydXjpLQl+VTt5ePlh4LoDg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794252446;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=VqI4vEj9I0PE8OdnRFGraF5rg0lsij7ceArvqc84Ggc=;
-	b=Ukue1JBu3Q/dYR2Ok+19Ksh/IZ9UCOOkVamlXJpPPO6DEA+OwrExxv9RyoycNnESemHy
-	 VjHqUaXmVwCpPYlqxSUmVMQIEl70fQk05S2mp0Bev5SxGlssq2TW2OrypHgJuqv3lYFcp
-	 uadi0BQnoSefZdNszOPdTghQ084rSk5IlsVAEy/6An0Ustu+3irGQAQ0bF9RFoqJaDFuS
-	 wEASKsoJhbKYAXelU0SaSAAmXFBkJrhR7BLw+AbEJ2I329PILFGnaLWCwnvcxNTR46PNM
-	 tnDj6rWmoLzEAbDI5ZLQhXdWYWp3GWkuNHEOIcrI6Uq1LUkP6wrIeCRUl46CtB9xOVA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794254442;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=Ovlm9cImQS3p5lX+VhA7M6tcPoYjfe752cg9CRIkRac=;
+	b=Rgz5nkq9h2hZrYJVGBUYWG56EZxYMXg/+JgcfcznH1VIxeY8Lho0TK1lYb88irGqPRtY
+	 4Landqfs0vZMShr5jxD2mbMC3watKpuSTYR4uhyQ41XPeUkdcDiLmUrTUtbr4EbFFJ9t1
+	 w0iQy3hprBBi12B/bZPeLbcCdmal2z95Sr92/NzST9EzMFrf9CrihxWtMcNU7dhxdIEDY
+	 NgMeohupskjbisA2N6Zdlo9FEavEJs/3JeOHnP9SZ2CzR5DWM+VgRevlm9MLGl+XvzKOc
+	 WuFZhBwZw+tLU2ZI0Voix6qALWlKKg3ONhcVy3EMA9lQirm8RJWNwymbmVOYeMJfLbQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ALXmOPih;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XyC32KmY;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF82606A321;
-	Mon,  9 Nov 2026 19:27:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C11C1606A31C
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 20:00:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ALXmOPih
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F9741F0089F;
-	Mon,  9 Nov 2026 19:27:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XyC32KmY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3798F1F0089F;
+	Mon,  9 Nov 2026 20:00:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794252445;
-	bh=VqI4vEj9I0PE8OdnRFGraF5rg0lsij7ceArvqc84Ggc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ALXmOPihuMxoB5rOy1DtnfFXSpYohLI+nUQJjB4I2A2RzJ6Aj6yhCZ0BqF5gxv7Yo
-	 O0WCPpcIRxOSPq5EQhKDAuJ/jqVeFdFvrcKxdH9YfftJMv6LQiU2cPSt52b7zfzJ0w
-	 8BLKelnSCcmb4PlRkLw1CVwr6ACGGNja6hlYaWXhv2h5bOPgB27RS5U9RCj87IvJiz
-	 63NFE51VHmkwSUvb3kCfiffJKYXpdXH281uLhRmIoGynzY3EAR6Uy82IILhivtoBbz
-	 JUmu8UXs+6+iTVqXeXSml5Me6mtfF2Ap6w8mDJg8VG4ucJtNhT3e6gbimIIY9U7kh1
-	 vuu6o3M4OESsw==
-Date: Mon, 9 Nov 2026 19:27:19 +0000
-From: Simon Horman <horms@kernel.org>
-To: "Nikhil P. Rao" <nikhil.rao@amd.com>
-Cc: Brett Creeley <brett.creeley@amd.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	Abhijit Gangurde <abhijit.gangurde@amd.com>
-Subject: Re: [PATCH net-next 3/4] ionic: add an auxiliary device for hardware
- monitoring
-Message-ID: <20261109192719.GA18859@horms.kernel.org>
-References: <20261103-pr46-b4-v1-0-850ab7fbec19@amd.com>
- <20261103-pr46-b4-v1-3-850ab7fbec19@amd.com>
+	s=k20260515; t=1794254441;
+	bh=Ovlm9cImQS3p5lX+VhA7M6tcPoYjfe752cg9CRIkRac=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=XyC32KmY1wHxf81Gns3tQZGqoidRGQcNovVxlnZ5sC1+yARk4NkswsgXBXu18tX+H
+	 KsrPOvN9JOBpwCWsmphxxcTkJE4K1Mrp4BTZuO5gFhZotGt6fQY2gbDdya8FdJ/Lek
+	 f/NoZonALL6U0qQ9MMwNkF0HjJAE/DMI/UpmMVXK6Zo+TNsMQtm1uS38Imd6XdkNaJ
+	 8XL5yD8UymfhVNfgY6jJPKBtrqQDoY7sdeTO/wjGiYLZs3doNRgolVPrOEHfXTFNkO
+	 hcjfnvQX5V5s2aHbSCWhCX1scqSsCxW/eUcU4uHUFjKyAnndkJr3uTzvIZgvRIZ+bD
+	 sK4M80U1x7gLA==
+Message-ID: <sashiko-outbox-205521@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (nct6775) Clamp voltage limits before narrowing
+ and scaling
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Zhu Jun" <zhujun2@cmss.chinamobile.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20261109092533.5146-1-zhujun2@cmss.chinamobile.com>
+References: <20261109092533.5146-1-zhujun2@cmss.chinamobile.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 09 Nov 2026 20:00:40 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -69,22 +59,23 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261103-pr46-b4-v1-3-850ab7fbec19@amd.com>
 
-On Tue, Nov 03, 2026 at 06:14:48PM +0000, Nikhil P. Rao wrote:
-> When the firmware sets IONIC_DEV_CAP_HWMON, create an "hwmon" auxiliary
-> device so the adapter's sensors can be exposed by a driver in
-> drivers/hwmon/ rather than by the Ethernet driver.
-> 
-> The GETCAPS response buffer belongs to ionic for the life of the device,
-> not to the hwmon driver, so a command abandoned on timeout or unbind can
-> only write into that buffer, never into freed memory.
-> 
-> Reviewed-by: Brett Creeley <brett.creeley@amd.com>
-> Signed-off-by: Nikhil P. Rao <nikhil.rao@amd.com>
+> From: zhujun <zhujun2@cmss.chinamobile.com>
+>=20
+> store_in_reg() parses an unsigned long, but in_to_reg() takes a u32 and
+> multiplies it by 100 before clamping. Large limits can therefore wrap to
+> a low register value. For example, 4294967296 mV becomes zero on a
+> 64-bit system.
+>=20
+> Keep the input as an unsigned long and bound it to the register range
+> before scaling.
+>=20
+> Fixes: 9de2e2e84e7d ("hwmon: Driver for Nuvoton NCT6775F, NCT6776F, and N=
+CT6779D")
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+Sashiko has reviewed this patch and found no issues.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261109092533.5146=
+-1-zhujun2@cmss.chinamobile.com?part=3D1
 
