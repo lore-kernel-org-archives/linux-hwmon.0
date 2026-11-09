@@ -1,104 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.12
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794247691;
-	b=aVpbieldmcYU17f+d9zsetxI+RqK7lZBA41OytWLSDFnOZdUTqabVk2TMfxXD0lwHozU
-	 6W2ik3ycQwP3YVOvDU05r9KeZ0YtHPeRsiNh4OoLW41sOmBz0xQdYmvMrUrPJjyHgXEDT
-	 8lG8t8oD9emmXZxyEdzDV7bc6VhC0zNcLmsvqtO1fKPT6iYkbuwXHAMnIZHqYcFrMtPZ1
-	 eSTTkk6gfaz5yjgqF1CisEEdkCgqBAkzAssvWFnSOINK4ncHFCZU+8ma0s1d4w5JpwJCi
-	 Yzjkq/F27VS435XqJBxSaUx/6Wy0IhWHD3b+GaJwUPM1gbu5UyyIcfeqB0wpL6IHESg==
+	t=1794247783;
+	b=yIFZBF45nzBlLgmsvDqKnc98k2HA+vg39qU4279Si3PGSHoWZmMUDrg3T3R+Be9D8lBf
+	 hFlvrYaozKLibvQw0DQ4o/8Bp9SK1zXKg6l8+KTbQdhXIdOGlpm8rOmxxtCKIzvlnwUJI
+	 8yezoQdxqhvdJfhA+oZwSlmu3IPOVjZZ8uWlpNZjNXuoG0XwWzombYOOeHvM30onKXNAM
+	 u5CvTZ59HJDxlndCSHcJtwLFiEu4zmd63WRV9ZerV+q8Xm7RW76+VLRCu8vwHtxR1UN4Z
+	 xFmU8YbZ13kpgN9ohI8L76IsPkFJZxSAuvAnEDyDREjhwTa184vs6aCu3Cbtr5o7Kpw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794247691;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794247783;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:From:To:Cc:Subject:
-	 In-Reply-To:Organization:References:Date:Message-ID:MIME-Version:
-	 Content-Type;
-	bh=s7U/x5CE+niXpSBFgBUHJahPZfA7nFuXi/iUGvk2YDg=;
-	b=j/Buw4lHRWZmII5hShFBtLq+bIMvLla8pe4WlITN2TFhdciVHL3dZsT7hDXIMC8S5zEF
-	 cFlwy6BxhIrV9KBjvfq4+lT8WAOR2gVtd9q7KBqRlxrsoZrhRvbiVXTn6oH5qZ92Mai9c
-	 Gz2JD3+57stYEXDfpPwKkiLv4W4LSuZY3Y11arpqinai4xbPn76swOQrThf4I4sS6xfyw
-	 66/DV6HTsUuv3hw1Pir7wEqTYUqwNRvP+CLtA3e0iGPj2iNE5GYhwVAGTNO0sJbqDqabJ
-	 WcJJ6jHBXeOEBv57ETWcG+pzZqCJHZFVuQCHBMDkMFnothPtr0vhTN7RkhycURWHsDw==
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:From:Date:To:cc:
+	 Subject:In-Reply-To:Message-ID:References:MIME-Version:Content-Type;
+	bh=NyETrJbUD+hqxbhle7a7WmJRnJKa8FLKFhpoYnSB0Wk=;
+	b=LEOL9L5rr2YFWov9ztp/ovKip17ikO4+ZjyxnEqdizyitHGAkyvoyQ/7Vdgks/sJZwqK
+	 lGau19r+2dLLssPP3KLjSxjlgqB62BZ63OU/wJASYu7nRd+cR9URBizS1rgiIy3b468Y+
+	 1wNV2CjIfxN+dZIIoB/2Uyxds8lE6Oevfda7ZErVAnewFxas8QPNGT/cz7zISn86pCDez
+	 obiLYpS6v5B6WZ05pStuRUL/cN+0/PfGneRQrwbM1Gq37jkJc7zkhnRnu47fD+V7M2++T
+	 JjLWOldTWeIm+Kbu2gCWNJnwr5lIkjO293M7wx8bjHX7otzPQsUNzi0bSm74BJbJ+0Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=IP9SxyfD;
-	arc=none smtp.remote-ip=192.198.163.11
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	spf=pass smtp.mailfrom=linux.intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=gQy8dG47;
+	arc=none smtp.remote-ip=198.175.65.12
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F481606A325;
-	Mon,  9 Nov 2026 18:08:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8F481606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F05C60A2609;
+	Mon,  9 Nov 2026 18:09:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4F05C60A2609
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=IP9SxyfD
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=gQy8dG47
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794247691; x=1825783691;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=wfrbeowEpzlsOOtS5Xzt/Z99rOONWv91scfsMt1LT1o=;
-  b=IP9SxyfDSB6EGFGs7A0bVCps7q2rwZcFhAiDYps8uP26aAu5UsHuIxSf
-   tlmYluqa8O0Vkzw3iTrVKhijz+FC+kmiN5XaQ71GLb+8eONi8JfI0J27i
-   gAac0Ey+5zHnjNqUoGr9URlzdDJ+F39/qK50JinS21ss/u/G8rc4vPQ7x
-   mqFEASpQPYKebvqnlIxIvZKEEeurzQ5f47Zp+zwzxQZxNVFZvEO6oQe8W
-   qyB2XD0JMOX45lgejPKqDw7YfMTajxl51pPK45w+PADjiswcG2ePqK5eB
-   51DxM3/Q69Vre2Thnw8Y200cdNemMOs78amfHRZkMWzOSK6HYmZMgrBl8
+  t=1794247784; x=1825783784;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=xEgo4L9gzdCnmgxxQ23kg4wNOstbd44PXXFSGJn5uDA=;
+  b=gQy8dG47TKhI9sl65+rMlrN7qdnsAKQeBxwxAIu34gc3ZLd9EeiRdk+F
+   8rVO289IYKU+NX/FfWEYpqmuEhR8GCxUYNhQOpB5cv8jPqMMoOvXtmL7m
+   i1r9xvsalPAfmk9wReMN6im0CKYqP5I9JDc9eXFjoto16V8anMApSrJj7
+   mlDEFutHKZrQZF4MSCnf8VzU68tXsCQQdDS787dc/DvKw9By8acxt21xn
+   m5SYz9ewN7cnmSMyUgtuNo3780F+uEt4YIA+LOSWNZmPjFSnLvk0KcJ3o
+   N+Sadc1K17PHkPJfR+or60rbPfyElV6VVTrjQ+tz89eg9j2NpxfiikT2B
    w==;
-X-CSE-ConnectionGUID: KecGYyTSRKKI8ipgzy4cvw==
-X-CSE-MsgGUID: CyDqiia7S7WO37n5QGEFUw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11961"; a="2894249"
+X-CSE-ConnectionGUID: 8q/ZszU1Qc22Htv6HBwg4Q==
+X-CSE-MsgGUID: 4e1DCbm8RfKEgLU/OeQHqQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11961"; a="2859416"
 X-IronPort-AV: E=Sophos;i="6.27,204,1787036400"; 
-   d="scan'208";a="2894249"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2026 10:08:09 -0800
-X-CSE-ConnectionGUID: REOqqbgbSlKUYG/hgL23ew==
-X-CSE-MsgGUID: M/rq1zH2TtK3zErWiBcqiA==
+   d="scan'208";a="2859416"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2026 10:09:43 -0800
+X-CSE-ConnectionGUID: kMp0NImLRsWnH5m/HbNZzA==
+X-CSE-MsgGUID: K/Zw5+R3Szmi9KZroVBOyw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,204,1787036400"; 
-   d="scan'208";a="8094048"
-Received: from conormcd-mobl2.ger.corp.intel.com (HELO localhost) ([10.245.244.93])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2026 10:07:59 -0800
-From: Jani Nikula <jani.nikula@linux.intel.com>
-To: Petr Pavlu <petr.pavlu@suse.com>, Petr Pavlu <petr.pavlu@suse.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, Ian Abbott <abbotti@mev.co.uk>, H Hartley Sweeten
- <hsweeten@visionengravers.com>, Maarten Lankhorst
- <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Rudolf Marek <r.marek@assembler.cz>, Andi
- Shyti <andi.shyti@kernel.org>, Chris Snook <chris.snook@gmail.com>, Andrew
- Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>, Marek =?utf-8?Q?Beh=C3=BA?=
- =?utf-8?Q?n?=
- <kabel@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Andreas Noever <andreas.noever@gmail.com>, Mika Westerberg
- <westeri@kernel.org>, Yehezkel Bernat <YehezkelShB@gmail.com>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
- <jirislaby@kernel.org>, Duncan Sands <duncan.sands@free.fr>, Chas Williams
- <3chas3@gmail.com>, Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez
- <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Aaron
- Tomlin <atomlin@atomlin.com>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, linux-watchdog@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
- linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
- intel-wired-lan@lists.osuosl.org, linux-rtc@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-atm-general@lists.sourceforge.net, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] Remove obsolete __MODULE_STRING()
-In-Reply-To: <a190f981-d668-4208-8148-f4e50adb31a6@suse.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park,
- 6 krs Bertel Jungin Aukio 5, 02600 Espoo, Finland
-References: <20261002-module-string-v2-0-fc7438acaf4d@suse.com>
- <2e88806e-57dd-47e0-a9ef-a8507d22aa3e@suse.com>
- <a190f981-d668-4208-8148-f4e50adb31a6@suse.com>
-Date: Mon, 09 Nov 2026 20:07:56 +0200
-Message-ID: <6c00fc009f4e61e87895eb2dd3d77c5dfb28183d@intel.com>
+   d="scan'208";a="8270746"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.139])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2026 10:09:39 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 9 Nov 2026 20:09:36 +0200 (EET)
+To: Bartu Alev <bartualev@gmail.com>
+cc: Corentin Chary <corentin.chary@gmail.com>, 
+    "Luke D. Jones" <luke@ljones.dev>, Denis Benato <denis.benato@linux.dev>, 
+    Hans de Goede <hansg@kernel.org>, platform-driver-x86@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org, 
+    Guenter Roeck <linux@roeck-us.net>, linux-api@vger.kernel.org
+Subject: Re: [PATCH 1/7] platform/x86: asus-wmi: dump buffer replies in the
+ debugfs dsts file
+In-Reply-To: <20261101-asus-fan-floors-v4-v1-1-b8d1c31a99a9@gmail.com>
+Message-ID: <09c087ac-d0a4-8665-552d-63d289104e3a@linux.intel.com>
+References: <20261101-asus-fan-floors-v4-v1-0-b8d1c31a99a9@gmail.com> <20261101-asus-fan-floors-v4-v1-1-b8d1c31a99a9@gmail.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -108,40 +82,99 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
 
-On Mon, 09 Nov 2026, Petr Pavlu <petr.pavlu@suse.com> wrote:
-> On 10/14/26 11:36 AM, Petr Pavlu wrote:
->> On 10/2/26 10:31 AM, Petr Pavlu wrote:
->>> __MODULE_STRING() has been an alias for __stringify() since "[PATCH]
->>> MODULE_PARM support for older modules" [1] in 2002-12. That change also
->>> moved it to the graveyard section at the end of linux/module.h
->>>
->>> Replace the remaining uses of __MODULE_STRING() with __stringify() and
->>> remove the macro.
->>>
->>> Apologies for the wide distribution. Acked-bys are appreciated.
->>>
->>> [1] https://git.kernel.org/tglx/history/c/136839a1b4
->> 
->> I've queued the second patch ("drivers: Replace __MODULE_STRING() with
->> __stringify()") on modules-next for v7.4-rc1. Thanks for the Acked-byes
->> and reviews.
->> 
->> The first patch ("hwmon: Replace __MODULE_STRING() with __stringify()")
->> should go through the hwmon tree. Once these changes are in mainline,
->> I plan to pick up the final patch ("module: Remove obsolete
->> __MODULE_STRING()").
->
-> v7.4-rc1 no longer contains any __MODULE_STRING() calls, so I've queued
-> the final removal in patch 3 on modules-next for 7.5-rc1.
+On Sun, 1 Nov 2026, Bartu Alev wrote:
 
-Perhaps send it for v7.4-rc3 to prevent *new* __MODULE_STRING() users
-from cropping up between now and v7.5-rc1?
+> Reading dsts calls asus_wmi_get_devstate(), which uses
+> asus_wmi_evaluate_method().  Because that helper handles only
+> ACPI_TYPE_INTEGER and leaves other return types zeroed, methods
+> returning an ACPI buffer read as 0x0.  This affects fan floor tables
+> (0x00110026, 0x00110027, 0x00110033), fan curve getters (0x00110024,
+> 0x00110025), and TUF RGB readback (0x0010005B).
+> 
+> Evaluate the method through asus_wmi_evaluate_method_locked() directly,
+> matching the call node, which keeps execution serialized against other
+> WMI operations.  Format integer replies as before, dump buffer
+> contents with their byte length, and print any other type as t:<type>:
+> 
+>   DSTS(0x110026) = 16 bytes:
+>     00000000: 00 00 00 00 19 30 3a 4a 00 00 00 00 00 00 00 00
+> 
+> The sentinels 0xfffffffe and 0xffffffff continue to return -ENODEV.
+> 
+> Signed-off-by: Bartu Alev <bartualev@gmail.com>
+> ---
+>  drivers/platform/x86/asus-wmi.c | 46 ++++++++++++++++++++++++++++++++++-------
+>  1 file changed, 39 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+> index b33ebdb21aa21..c55f469cb03dc 100644
+> --- a/drivers/platform/x86/asus-wmi.c
+> +++ b/drivers/platform/x86/asus-wmi.c
+> @@ -5038,16 +5038,48 @@ struct asus_wmi_debugfs_node {
+>  static int show_dsts(struct seq_file *m, void *data)
+>  {
+>  	struct asus_wmi *asus = m->private;
+> -	int err;
+> -	u32 retval = -1;
+> +	struct bios_args args = {
+> +		.arg0 = asus->debug.dev_id,
+> +	};
+> +	struct acpi_buffer input = { (acpi_size) sizeof(args), &args };
+> +	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
+> +	union acpi_object *obj;
+> +	acpi_status status;
+> +	u32 retval;
+> +	int err = 0;
+>  
+> -	err = asus_wmi_get_devstate(asus, asus->debug.dev_id, &retval);
+> -	if (err < 0)
+> -		return err;
+> +	status = asus_wmi_evaluate_method_locked(asus->dsts_id, &input, &output);
+> +	if (ACPI_FAILURE(status))
+> +		return -EIO;
+>  
+> -	seq_printf(m, "DSTS(%#x) = %#x\n", asus->debug.dev_id, retval);
+> +	obj = (union acpi_object *)output.pointer;
 
-BR,
-Jani.
+Using __free() is preferred. Please also declare the variable here in 
+that case.
 
+> +	if (!obj)
+> +		return -ENODATA;
+>  
+> -	return 0;
+> +	switch (obj->type) {
+> +	case ACPI_TYPE_BUFFER:
+> +		seq_printf(m, "DSTS(%#x) = %u bytes:\n", asus->debug.dev_id,
+> +			   obj->buffer.length);
+> +		seq_hex_dump(m, "  ", DUMP_PREFIX_OFFSET, 16, 1,
+> +			     obj->buffer.pointer, obj->buffer.length, false);
+> +		break;
+> +	case ACPI_TYPE_INTEGER:
+> +		retval = (u32)obj->integer.value;
+> +		if (retval == ASUS_WMI_UNSUPPORTED_METHOD || retval == (u32)~0)
+> +			err = -ENODEV;
+> +		else
+> +			seq_printf(m, "DSTS(%#x) = %#x\n", asus->debug.dev_id,
+> +				   retval);
+> +		break;
+> +	default:
+> +		seq_printf(m, "DSTS(%#x) = t:%d\n", asus->debug.dev_id,
+> +			   obj->type);
+> +		break;
+> +	}
+> +
+> +	kfree(obj);
+> +
+> +	return err;
+>  }
+>  
+>  static int show_devs(struct seq_file *m, void *data)
+> 
+> 
 
 -- 
-Jani Nikula, Intel
+ i.
+
