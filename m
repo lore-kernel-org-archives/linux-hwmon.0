@@ -1,55 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794217243;
-	b=MV9Km9rYPf9XZLnwuG0NMljJO+mjcIbAxsb8jdu1tOF8Dg/CoycHZbnBFjnLfgOW0ETI
-	 Ktvhy7fDeNYoVhv87x5xA9350gesoXLW8QrxongzVfqnenKvPtZ29neBH5035wekGhf74
-	 h4rD2PEA3KHscrfs2MaK4Nb+0R8E7MhemlqoCuXwpKnUsRQOa0rHni4/sIR7UAFI6rhas
-	 iPGvngGQLQAdmP3nllUQVmTYkEUI84D80Q5NcwixRsAGc02oc2A9PfJW3F4QRB0c/1o13
-	 FcS24NWFp+ylsyd7eiFoNTQYnS+niLEpFdQ+Rq+LD1A/lfOqRBd5P87s2ZEU92KF8Ow==
+	t=1794217323;
+	b=pi/2sm6AulfBv4ABA9W9J4ZzmKQsGVge5gWqepwzEwVPzQuINHzMlxSnZq8GV2y3etua
+	 Sf454YYvlJrpFYSmBELZgaIWxYleCGqCayVUr6ShEhQ3czVG/VAH5xZJzs39Us/OBvedW
+	 NgY0SiwGNiKhT7hA2r7Tm1UzXkyoXnAwWBESPzDR8qg5o5QTmDsahtwmFqZl9gMkObfB5
+	 087pr6JDr6YiRXIZuIl5Xl6w5YdENufyxU0+RK0JoHwEl7qgE5U57cYSELvM0hiGS3VOJ
+	 Dm7I7UZu3iQoAZdkR48cS1SeZDU/4RJFDLJ9MnwwlBWLn6+TKi0Kmualr0GsqgP0a2w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794217243;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=2Lhf1oVBUzjNJ7L7ccHNHY1ZkhYM/kcm/f0+29KNaVA=;
-	b=f4P57qPd1nVJkEbTD/q7fu6PK+EZGBQ1T9WXLpew3VLoJJ/Iklp+QKEAdYTkQ6PjaV6G
-	 FP8irdSTscTr7NdZGIQbklT/YQRJlBcNHxjVtnEcQoUjuk8SON8ET+fU5+iQYHxxvbJ9w
-	 acwuMy8t8XKY3iYce5MxqVh2a/P5rdiVdtrcFLiFDKiJ32tDTuS74En1E8vCoUE0VomLD
-	 01XjVlqQr0nf2haH9n4X0RlabOv/cMNAuwjlK/xxSgSyhYaSXBEc889BE4KXxp2baPHHK
-	 z3vo311zFeZHrd/WnBLwcV4sg//5mKsaAFspqqdkq0lw+Cpi4tB4eQr7QCqHfJtFjSw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794217323;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=d9UzkgTq40zuA+YG/VGlosMrFLkoXfuVtAGM0Q6VOLA=;
+	b=Pxl+VTe/1gDQnDP2ORp53h550MSJEVawZOQ9+dsEu79ABUA4QEQWK/FI3p8UlijvjctY
+	 ZznHAGpeUQ4TQ8cKsaMCvrSP9QzXmMh285hAJCFmNGNqPdzD2+U7G4RqWPfiQQwCLdqt8
+	 rQMoykKVNjs83jpCbjaEWgeBRlIeHi3s4InncKjX16dSuURixq/OD6JPwdnLmr0Q3If0/
+	 Rq667ESZSMshSpPUCm2TNK41xbtnzEli4iBoENhj/oPO7L5jcPLiB4HiLf7apZqUsLhJi
+	 2MOqMlzYRd6M6z3dgUU3+drtZtWsINrTojr/Djh7SIIAWLQxreA7ZprT5Wm0zigizBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EtTG9ifD;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="oD/Zyl/h";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17C3606A336;
-	Mon,  9 Nov 2026 09:40:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D362606D803
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 09:42:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EtTG9ifD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB4C31F008A2;
-	Mon,  9 Nov 2026 09:40:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oD/Zyl/h
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 087481F008A7;
+	Mon,  9 Nov 2026 09:42:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794217242;
-	bh=2Lhf1oVBUzjNJ7L7ccHNHY1ZkhYM/kcm/f0+29KNaVA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=EtTG9ifDodRJOB8+ggrbktVkdLsbeY5l9Na1ZYAYCT7eR82Y6sNwlWI/eG/en0noi
-	 JSpIWOTHxTwTIE7NHoNVf6PsnQ0zppP4KuhUtbi9zGn/zMOULsj+ucbZFdY2a1jwsl
-	 v0O2J7YTtmbqKkeKQPBPpDib4I5asR0YE5pMZXdC3mw9q50gZ12zRAIBQsRu1H8s1i
-	 hoKkCzsx1JCbWYKpcpIXGfv2v2QLTjYPk9KZEx2ub2qpWQzRrVj/a/Q1w4MACE1n2F
-	 J2um1Obp+kO+Urv3+ywFth1u58w/P/MyaxaNw2AkZR5O+g+N3Pd8qPM+7nLYsH3GD+
-	 Goc8ooofKzdvg==
-Date: Mon, 9 Nov 2026 09:40:38 +0000
-From: Sudeep Holla <sudeep.holla@kernel.org>
-To: raoxu <raoxu@uniontech.com>
-Cc: linux@roeck-us.net, cristian.marussi@arm.com, marek.vasut@mailbox.org,
-	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Sudeep Holla <sudeep.holla@kernel.org>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (scmi) Enable temperature sensors using their
- sensor IDs
-Message-ID: <20261109-cheerful-panther-of-abracadabra-aa907b@sudeepholla>
-References: <AED18609B941BCFD+20261109082854.3739085-1-raoxu@uniontech.com>
+	s=k20260515; t=1794217323;
+	bh=d9UzkgTq40zuA+YG/VGlosMrFLkoXfuVtAGM0Q6VOLA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=oD/Zyl/hppYKvC95G0ol7v0JkDd8YzfzHBQUr5RfQ7vXmcLYNUK+viKWGmYFkgJ7h
+	 vLS/77FwCVNW3IlhAcK/YYasEfIlJwASHaSz8QjcjNsM9c06kS3p6H8dckOlou3rz+
+	 FYhohxAYfPhVwziHjbIVq4LljWm5uCw/MIu7wbnSmqA2NrSnitXj+R/HsouzjnY4w2
+	 7TZwGKtht4QdjHI5x/2ji03CLp2UTGzqkj+Szq7jU1w4E2Bg1BlYp1WSa43wVO6vnf
+	 oIj4lq5B3MYNFbDteWN6p+6sUzbsuFcEDAuP5QRT7+0ZIszxPOHVS0kY0J9PfuU+oz
+	 aLFQTClg5ZFDg==
+Message-ID: <sashiko-outbox-204732@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (lochnagar) Avoid oversized shifts for zero
+ readings
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Zhu Jun" <zhujun2@cmss.chinamobile.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20261109093453.5384-1-zhujun2@cmss.chinamobile.com>
+References: <20261109093453.5384-1-zhujun2@cmss.chinamobile.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 09 Nov 2026 09:42:02 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -58,31 +59,23 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AED18609B941BCFD+20261109082854.3739085-1-raoxu@uniontech.com>
 
-On Mon, Nov 09, 2026 at 04:28:54PM +0800, raoxu wrote:
-> From: Xu Rao <raoxu@uniontech.com>
-> 
-> scmi_hwmon_probe() groups sensors by hwmon type, so the index in
-> scmi_sensors->info[hwmon_temp] is not necessarily the SCMI sensor ID.
-> Passing that index to config_set() targets a different sensor if the
-> platform exposes non-temperature sensors ahead of temperature sensors.
-> The intended temperature sensor can remain disabled, causing subsequent
-> readings to fail. If configuring the wrong sensor fails, thermal
-> registration of the intended sensor is also skipped.
-> 
-> Use the firmware sensor ID, as the read and thermal registration paths
-> already do, so temperature sensors are enabled correctly.
-> 
-> The patch was reviewed and the commit message expanded with OpenCode
-> AI assistance.
-> 
+> From: zhujun <zhujun2@cmss.chinamobile.com>
+>=20
+> A zero IEEE754 reading gives exp =3D -150 in float_to_long(). Both shifts
+> in the rounding expression then exceed the width of u64. UBSAN reports a
+> shift exponent of 149, and the conversion can return a nonzero reading.
+>=20
+> Return zero when the required right shift is at least 64 bits. With the
+> supported precisions, the scaled mantissa is too small to round up in
+> this case.
+>=20
+> Fixes: 4cdb56214746 ("hwmon: lochnagar: Add Lochnagar 2 hardware monitori=
+ng driver")
 
-Reviewed-by: Sudeep Holla <sudeep.holla@kernel.org>
+Sashiko has reviewed this patch and found no issues.
 
--- 
-Regards,
-Sudeep
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261109093453.5384=
+-1-zhujun2@cmss.chinamobile.com?part=3D1
+
