@@ -1,79 +1,78 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.39
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794335793;
-	b=KBoojWp0shhFA3NbTYIm0nudCq46nO7wWyXRtfRxiIrIkjBPacpw++h32bFTX2h1hgzj
-	 HRcb7pRlbU7gxVd/eLSfWdLoXDVj4KSHuv73fD9quJodtEcNmj+ZEswusuUtiSTcQDj3R
-	 QYz4uwcPTgzfe0kFUCjQ3dxgd4UdTBLxsCgb2Db0wUIsMnDcElCDIdUpFztkA3qaZX9N6
-	 MI8j208PefvVAZAEjvrFhDPzw00BECiY8SXelx0iop5hCDcQTPEwCuVpPsKFNBV/NgLJt
-	 n2W5T7bK8CraprRZaDsK3mEPoiHnnQkTB70hI7xdjKh97udsuaSXyb1M2OVC2dQTimg==
+	t=1794336112;
+	b=iOJH9XbWcCf5SBLdcODKQ45btJUw+XalamxJ6GvJmr5Ut6O1kjLh9szD68U8fpvhKg12
+	 /lPiVp4sMdZp9bMw8Mxpcs1Vk4Uc14ZMinqzhLB8AQKqH+VE2B9Sgf4qvE1gg4orHwIip
+	 E5lb52rBua6KKMMRib5c4zfk0iZYGN0wdeRgmCboLzI7KzVE9DiNhSjW1KSnUMcZPssQi
+	 GTHQa7RFa6LZY5A1Vraco1lJjRHx0BDH4YnxjwrHGMbyt9I24XjylMWl/DH2CMvYM6b/s
+	 U+0A+Si3MXX1NOu3C8N4Aj3vPPL9SdlgA5eUrCt45QasudGCanpstnu9jB1iFCTAYBA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794335793;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794336112;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
-	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
-	 X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:X-Source:X-Source-Args:
-	 X-Source-Dir:X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:
-	 X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=BkAh/naonxwCFmxEjtC1JpyDS0Uv/1pMVGUHzCrZAuU=;
-	b=itmsTOejSCAKfJMU7xDLswzuYZZCsTqkT3Q5N1zMgjfE+yPBIc+RHgChg9Va6hTunhH+
-	 YU9PofWVt27RWWrEe9dr1MLEJ/2N3RTa6lERWrht1oNb5NdTq8I4mNP8NvOzIXG/rIiUc
-	 0gqcS8vARuGvpUpHH/0SlEDYEbMvUVTMdkri0uhv+9+ZDBCPS4bf3X94ymdxzTKcDybm3
-	 n2ZvDoxvD0rubIWy6O3ODTuZP/WbuE8g4C6zMH1W2Nrbt8BITBJZyzrzSxgrhnbhQzHi6
-	 NaBgO2iDBRNVADH8OT56XOTU4KN/dEkv7YNu8JKkDuWkE2xuIQgNTOgGIpYdKngjPmA==
+	 References:MIME-Version:Content-Transfer-Encoding:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:
+	 X-Source-IP:X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
+	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
+	 X-Local-Domain:X-CMAE-Envelope;
+	bh=tvYBZcsHCPKJUtSpgggvuKHeeI+9lsmPB5BLHqiOR8M=;
+	b=l+MfwI+023yZtI2JXzFlM/KmGFnB5ej4PMbtUeyulrdnZG+MTGZDoKZXb4x9wA5CnCFz
+	 yNHnwekFV3z70WFoUUHSajI0G4VdIZgIePpraO4q4ppr4FKqJUZLv7FmRlv7wyj/D2cIT
+	 M2PG1u3xUJKkThjZq4131bKxD85g6qVlkPkSj3vYekBtVxQhDAQu5NoY1onJD/VfVOg4k
+	 nQQ0AHQ1iPbt2ENvaD5neMTlro93jg3cn+OBeLwAN/if/1/7RS1NPMM408TeZ3WyIRSEy
+	 YdRXBbbiC9bnXZN6QiQrjcPy26qcEwCbZQze7m646pGVxo9Z2uJHTcONvgCc+gU9ctw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=aIXUiPD6;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=BInuGOdj;
 	arc=none smtp.remote-ip=35.89.44.39
 Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A66F3606A31C
-	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 18:36:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A66F3606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B464606A32D
+	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 18:41:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6B464606A32D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=aIXUiPD6
-Received: from eig-obgw-5005b.ext.cloudfilter.net ([10.0.29.189])
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=BInuGOdj
+Received: from eig-obgw-6002b.ext.cloudfilter.net ([10.0.30.203])
 	by cmsmtp with ESMTPS
-	id QqAjxHzC7yb4YQqhsx0vg9; Tue, 10 Nov 2026 18:36:32 +0000
+	id QmFSxG3vsyb4YQqn2x12U1; Tue, 10 Nov 2026 18:41:52 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id QqgPxIJLJYskhQqgPxBpQ8; Tue, 10 Nov 2026 18:35:01 +0000
-X-Authority-Analysis: v=2.4 cv=CKMqXQrD c=1 sm=1 tr=0 ts=6af363d5
+	id Qqg8xgfHC8cn4Qqg9xd4qS; Tue, 10 Nov 2026 18:34:45 +0000
+X-Authority-Analysis: v=2.4 cv=Qrde3Uyd c=1 sm=1 tr=0 ts=6af363c5
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=gAnH3GRIAAAA:8
- a=_jlGtV7tAAAA:8 a=aRxQL1JOAAAA:8 a=V3OuN7rwlyLKenittegA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=nlm17XC03S6CtCLSeiRr:22 a=lBRdisTmIr2YKkuu8atg:22
- a=KPbNTLLc3YvdawN95zVk:22
+ a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=AgWW5FNtAAAA:8 a=_jlGtV7tAAAA:8
+ a=VwQbUJbxAAAA:8 a=GYR7VeAFDjvgWpLPay8A:9 a=8DkScU8FlKhdH4yH5W0q:22
+ a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=BkAh/naonxwCFmxEjtC1JpyDS0Uv/1pMVGUHzCrZAuU=; b=aIXUiPD6Rbmd
-	s2Lg21twfPe9ZdqVpPaEZ2W/U6PeCLfoBKbF5xuIVJV86ym1X0m1hmP6mgMCDB7I5ardslTndNR8J
-	FXbWV620Tx0tT9Aoz6abHwGA5IE4RzGHhpgDl9A9Q8lOuovVW6lvIOA8bQaljNO/6J/NoyxmHX+hD
-	Sx3owClgxkGp5Q9okLoIXEjYKb6tN9YOkbzHKaiIk/qkj9G4qStmR53/ijX6r1xKIfwpoOL8ubDyU
-	hguG2ilMuEjlU0ZpHGjEJoS7J4cegFeiXeE0aswGvGYSAb7EQ5UzQrKUeHutkBUUdaAUFXrausoT7
-	4UrHy4fyxE1nvlcxduJ3ag==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:40306 helo=server.roeck-us.net)
+	List-Archive; bh=tvYBZcsHCPKJUtSpgggvuKHeeI+9lsmPB5BLHqiOR8M=; b=BInuGOdjuate
+	wjZtIHVvhjI2joigS8vUBMcIuvYCS89pgdVNzdzVVaWCXz44gvvCb+suGbNIlrz62ktJZq65oj19V
+	Fg/3Pl7Kov+VRgpDG2K1BW+0behEatWgV+3hSAKsGiSiIguNkszys3HfDlPZqt8qOHutnDTeiebG+
+	r6vdxY4fnT2S1RtKzSYCsRdtF7Bw8kkGE34TyRQIefOL8sp14Ks0t6Qv1H89X7m7eD/1508LR/dtR
+	3llFaK56XQn0QehG3gjmoKNcgDcTcxsn6b+In12FhY5cHOCcFrlh+ftS1hg2UudFPvj6XKZx4rCxh
+	0WWx8Mxnk9i/XTuuFeSHkA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:56188 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xQqgP-00000003PmN-0HWP;
-	Wed, 11 Nov 2026 00:05:01 +0530
+	id 1xQqg8-00000003Pcp-1xMb;
+	Wed, 11 Nov 2026 00:04:44 +0530
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
 	Guenter Roeck <linux@roeck-us.net>,
-	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>
-Subject: [PATCH 08/10] hwmon: (max197) Remove driver
-Date: Tue, 10 Nov 2026 10:34:31 -0800
-Message-ID: <20261110183434.181711-9-linux@roeck-us.net>
+	Tim Harvey <tharvey@gateworks.com>
+Subject: [PATCH 04/10] hwmon: (gsc-hwmon) Drop platform data support
+Date: Tue, 10 Nov 2026 10:34:27 -0800
+Message-ID: <20261110183434.181711-5-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20261110183434.181711-1-linux@roeck-us.net>
 References: <20261110183434.181711-1-linux@roeck-us.net>
@@ -86,7 +85,6 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
@@ -96,537 +94,277 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xQqgP-00000003PmN-0HWP
+X-Exim-ID: 1xQqg8-00000003Pcp-1xMb
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:40306
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:56188
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 24
+X-Email-Count: 14
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfPzGpKr6g5SUOqhxSnGa379PMB6FtMs0i8dLURBTAbJICQMMZ0CH12BkFUcxYg7dvn+vH152nU7454D2DRYhyibC0wabOKN5jzcRRp+Wyt4BorGJrife
- 5yjxsCeI0GEezo85HpaKG0MYRYvg9hOg29SKlNkKgSnNl2VZxXZDP4yfILXJr0ypXJX2FpMPQA5EQflR+VnVQtSBIzKMHs7Nv7fZLGI21Y884SX2/lqkL6KY
+X-CMAE-Envelope: MS4xfICigdHl/CsDxTWKmO5ZfjYd82x5RdhyloUeKIqhh289DonNJ9cTJzSX66SkLFltOo2jft9Rfzv/5isTV8zVA7tmOqfHZl1KNU4iNNAz0G56NYitiSAA
+ rleZ0sQAPetSq42+7YPJon8e/+4pcZpSoF2G7YTljcaU4x5NmiPHEoy6H2tst3gmAEC2n8lp3fKNwDLi41Tfo7LKgeQFZAfgLYFZ4sZKmw1Q75C07o9tcj1q
 
-The max197 driver requires platform data providing a convert() callback
-function pointer and fails to probe without it. No in-tree platform ever
-instantiates max197 or supplies struct max197_platform_data, and there
-is no alternative mechanism to access the chip.
+There are no in-tree users providing gsc_hwmon_platform_data. Channel
+descriptions and the fan controller base address are already obtained
+from devicetree / fwnode properties.
 
-Remove the unused driver, its platform_data header file, Kconfig/Makefile
-entries, and documentation.
+Move enum gsc_hwmon_mode and struct gsc_hwmon_channel into the driver,
+fold the channel array and fan_base into struct gsc_hwmon_data, drop
+platform data support, and remove the unused platform_data header file.
 
-Cc: Nuno Sá <nuno.sa@analog.com>
+Cc: Tim Harvey <tharvey@gateworks.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- Documentation/hwmon/index.rst        |   1 -
- Documentation/hwmon/max197.rst       |  70 ------
- drivers/hwmon/Kconfig                |   9 -
- drivers/hwmon/Makefile               |   1 -
- drivers/hwmon/max197.c               | 341 ---------------------------
- include/linux/platform_data/max197.h |  23 --
- 6 files changed, 445 deletions(-)
- delete mode 100644 Documentation/hwmon/max197.rst
- delete mode 100644 drivers/hwmon/max197.c
- delete mode 100644 include/linux/platform_data/max197.h
+ MAINTAINERS                             |  1 -
+ drivers/hwmon/gsc-hwmon.c               | 72 +++++++++++++++----------
+ include/linux/platform_data/gsc_hwmon.h | 45 ----------------
+ 3 files changed, 45 insertions(+), 73 deletions(-)
+ delete mode 100644 include/linux/platform_data/gsc_hwmon.h
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 7ce1a6f42ddc..e364e051457f 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -168,7 +168,6 @@ Hardware Monitoring Kernel Drivers
-    max16601
-    max1668
-    max17616
--   max197
-    max20730
-    max20751
-    max20826
-diff --git a/Documentation/hwmon/max197.rst b/Documentation/hwmon/max197.rst
-deleted file mode 100644
-index 00e16056823f..000000000000
---- a/Documentation/hwmon/max197.rst
-+++ /dev/null
-@@ -1,70 +0,0 @@
--Kernel driver max197
--====================
--
--Author:
--
--  * Vivien Didelot <vivien.didelot@savoirfairelinux.com>
--
--Supported chips:
--
--  * Maxim MAX197
--
--    Prefix: 'max197'
--
--    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/MAX197.pdf
--
--  * Maxim MAX199
--
--    Prefix: 'max199'
--
--    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/MAX199.pdf
--
--Description
-------------
--
--The A/D converters MAX197, and MAX199 are both 8-Channel, Multi-Range, 5V,
--12-Bit DAS with 8+4 Bus Interface and Fault Protection.
--
--The available ranges for the MAX197 are {0,-5V} to 5V, and {0,-10V} to 10V,
--while they are {0,-2V} to 2V, and {0,-4V} to 4V on the MAX199.
--
--Platform data
---------------
--
--The MAX197 platform data (defined in linux/platform_data/max197.h) should be
--filled with a pointer to a conversion function, defined like::
--
--    int convert(u8 ctrl);
--
--ctrl is the control byte to write to start a new conversion.
--On success, the function must return the 12-bit raw value read from the chip,
--or a negative error code otherwise.
--
--Control byte format:
--
--======= ========== ============================================
--Bit     Name       Description
--7,6     PD1,PD0    Clock and Power-Down modes
--5       ACQMOD     Internal or External Controlled Acquisition
--4       RNG        Full-scale voltage magnitude at the input
--3       BIP        Unipolar or Bipolar conversion mode
--2,1,0   A2,A1,A0   Channel
--======= ========== ============================================
--
--Sysfs interface
-----------------
--
--  ============== ==============================================================
--  in[0-7]_input  The conversion value for the corresponding channel.
--		 RO
--
--  in[0-7]_min    The lower limit (in mV) for the corresponding channel.
--		 For the MAX197, it will be adjusted to -10000, -5000, or 0.
--		 For the MAX199, it will be adjusted to -4000, -2000, or 0.
--		 RW
--
--  in[0-7]_max    The higher limit (in mV) for the corresponding channel.
--		 For the MAX197, it will be adjusted to 0, 5000, or 10000.
--		 For the MAX199, it will be adjusted to 0, 2000, or 4000.
--		 RW
--  ============== ==============================================================
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 9979958a59a2..1612a408c287 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1342,15 +1342,6 @@ config SENSORS_MAX1668
- 	  This driver can also be built as a module. If so, the module
- 	  will be called max1668.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 476bcd5d0e1c..15d70b72d9a2 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11169,7 +11169,6 @@ F:	Documentation/hwmon/gsc-hwmon.rst
+ F:	drivers/hwmon/gsc-hwmon.c
+ F:	drivers/mfd/gateworks-gsc.c
+ F:	include/linux/mfd/gsc.h
+-F:	include/linux/platform_data/gsc_hwmon.h
  
--config SENSORS_MAX197
--	tristate "Maxim MAX197 and compatibles"
--	help
--	  Support for the Maxim MAX197 A/D converter.
--	  Support will include, but not be limited to, MAX197, and MAX199.
+ GCC PLUGINS
+ M:	Kees Cook <kees@kernel.org>
+diff --git a/drivers/hwmon/gsc-hwmon.c b/drivers/hwmon/gsc-hwmon.c
+index 83005d8ae47e..9424deb98590 100644
+--- a/drivers/hwmon/gsc-hwmon.c
++++ b/drivers/hwmon/gsc-hwmon.c
+@@ -10,11 +10,10 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
++#include <linux/property.h>
+ #include <linux/regmap.h>
+ #include <linux/slab.h>
+ 
+-#include <linux/platform_data/gsc_hwmon.h>
 -
--	  This driver can also be built as a module. If so, the module
--	  will be called max197.
--
- config SENSORS_MAX31722
- 	tristate "MAX31722 temperature sensor"
- 	depends on SPI
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index ec4b0de8cf47..56776df17cfd 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -164,7 +164,6 @@ obj-$(CONFIG_SENSORS_MAX127)	+= max127.o
- obj-$(CONFIG_SENSORS_MAX16065)	+= max16065.o
- obj-$(CONFIG_SENSORS_MAX1619)	+= max1619.o
- obj-$(CONFIG_SENSORS_MAX1668)	+= max1668.o
--obj-$(CONFIG_SENSORS_MAX197)	+= max197.o
- obj-$(CONFIG_SENSORS_MAX31722)	+= max31722.o
- obj-$(CONFIG_SENSORS_MAX31730)	+= max31730.o
- obj-$(CONFIG_SENSORS_MAX31760)  += max31760.o
-diff --git a/drivers/hwmon/max197.c b/drivers/hwmon/max197.c
-deleted file mode 100644
-index a613abfdc2db..000000000000
---- a/drivers/hwmon/max197.c
-+++ /dev/null
-@@ -1,341 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * Maxim MAX197 A/D Converter driver
-- *
-- * Copyright (c) 2012 Savoir-faire Linux Inc.
-- *          Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-- *
-- * For further information, see the Documentation/hwmon/max197.rst file.
-- */
--
--#include <linux/kernel.h>
--#include <linux/module.h>
--#include <linux/init.h>
--#include <linux/err.h>
--#include <linux/slab.h>
--#include <linux/mutex.h>
--#include <linux/device.h>
--#include <linux/sysfs.h>
--#include <linux/hwmon.h>
--#include <linux/hwmon-sysfs.h>
--#include <linux/platform_device.h>
--#include <linux/platform_data/max197.h>
--
--#define MAX199_LIMIT	4000		/* 4V */
--#define MAX197_LIMIT	10000		/* 10V */
--
--#define MAX197_NUM_CH	8		/* 8 Analog Input Channels */
--
--/* Control byte format */
--#define MAX197_BIP	(1 << 3)	/* Bipolarity */
--#define MAX197_RNG	(1 << 4)	/* Full range */
--
--#define MAX197_SCALE	12207		/* Scale coefficient for raw data */
--
--/* List of supported chips */
--enum max197_chips { max197, max199 };
--
--/**
-- * struct max197_data - device instance specific data
-- * @pdata:		Platform data.
-- * @hwmon_dev:		The hwmon device.
-- * @lock:		Read/Write mutex.
-- * @limit:		Max range value (10V for MAX197, 4V for MAX199).
-- * @scale:		Need to scale.
-- * @ctrl_bytes:		Channels control byte.
-- */
--struct max197_data {
--	struct max197_platform_data *pdata;
--	struct device *hwmon_dev;
--	struct mutex lock;
--	int limit;
--	bool scale;
--	u8 ctrl_bytes[MAX197_NUM_CH];
--};
--
--static inline void max197_set_unipolarity(struct max197_data *data, int channel)
--{
--	data->ctrl_bytes[channel] &= ~MAX197_BIP;
--}
--
--static inline void max197_set_bipolarity(struct max197_data *data, int channel)
--{
--	data->ctrl_bytes[channel] |= MAX197_BIP;
--}
--
--static inline void max197_set_half_range(struct max197_data *data, int channel)
--{
--	data->ctrl_bytes[channel] &= ~MAX197_RNG;
--}
--
--static inline void max197_set_full_range(struct max197_data *data, int channel)
--{
--	data->ctrl_bytes[channel] |= MAX197_RNG;
--}
--
--static inline bool max197_is_bipolar(struct max197_data *data, int channel)
--{
--	return data->ctrl_bytes[channel] & MAX197_BIP;
--}
--
--static inline bool max197_is_full_range(struct max197_data *data, int channel)
--{
--	return data->ctrl_bytes[channel] & MAX197_RNG;
--}
--
--/* Function called on read access on in{0,1,2,3,4,5,6,7}_{min,max} */
--static ssize_t max197_show_range(struct device *dev,
--				 struct device_attribute *devattr, char *buf)
--{
--	struct max197_data *data = dev_get_drvdata(dev);
--	struct sensor_device_attribute_2 *attr = to_sensor_dev_attr_2(devattr);
--	int channel = attr->index;
--	bool is_min = attr->nr;
--	int range;
--
--	if (mutex_lock_interruptible(&data->lock))
--		return -ERESTARTSYS;
--
--	range = max197_is_full_range(data, channel) ?
--		data->limit : data->limit / 2;
--	if (is_min) {
--		if (max197_is_bipolar(data, channel))
--			range = -range;
--		else
--			range = 0;
+ #define GSC_HWMON_MAX_TEMP_CH	16
+ #define GSC_HWMON_MAX_IN_CH	16
+ #define GSC_HWMON_MAX_FAN_CH	16
+@@ -22,10 +21,35 @@
+ #define GSC_HWMON_RESOLUTION	12
+ #define GSC_HWMON_VREF		2500
+ 
++enum gsc_hwmon_mode {
++	mode_temperature,
++	mode_voltage_24bit,
++	mode_voltage_raw,
++	mode_voltage_16bit,
++	mode_fan,
++	mode_max,
++};
++
++/**
++ * struct gsc_hwmon_channel - configuration parameters
++ * @reg:  I2C register offset
++ * @mode: channel mode
++ * @name: channel name
++ * @mvoffset: voltage offset
++ * @vdiv: voltage divider array (2 resistor values in milli-ohms)
++ */
++struct gsc_hwmon_channel {
++	unsigned int reg;
++	unsigned int mode;
++	const char *name;
++	unsigned int mvoffset;
++	unsigned int vdiv[2];
++};
++
+ struct gsc_hwmon_data {
+ 	struct gsc_dev *gsc;
+-	struct gsc_hwmon_platform_data *pdata;
+ 	struct regmap *regmap;
++	u32 fan_base;
+ 	const struct gsc_hwmon_channel *temp_ch[GSC_HWMON_MAX_TEMP_CH];
+ 	const struct gsc_hwmon_channel *in_ch[GSC_HWMON_MAX_IN_CH];
+ 	const struct gsc_hwmon_channel *fan_ch[GSC_HWMON_MAX_FAN_CH];
+@@ -37,6 +61,8 @@ struct gsc_hwmon_data {
+ 	struct hwmon_channel_info fan_info;
+ 	const struct hwmon_channel_info *info[4];
+ 	struct hwmon_chip_info chip;
++	int nchannels;
++	struct gsc_hwmon_channel channels[] __counted_by(nchannels);
+ };
+ 
+ static const struct regmap_bus gsc_hwmon_regmap_bus = {
+@@ -55,7 +81,7 @@ static ssize_t pwm_auto_point_temp_show(struct device *dev,
+ {
+ 	struct gsc_hwmon_data *hwmon = dev_get_drvdata(dev);
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+-	u8 reg = hwmon->pdata->fan_base + (2 * attr->index);
++	u8 reg = hwmon->fan_base + (2 * attr->index);
+ 	u8 regs[2];
+ 	int ret;
+ 
+@@ -73,7 +99,7 @@ static ssize_t pwm_auto_point_temp_store(struct device *dev,
+ {
+ 	struct gsc_hwmon_data *hwmon = dev_get_drvdata(dev);
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+-	u8 reg = hwmon->pdata->fan_base + (2 * attr->index);
++	u8 reg = hwmon->fan_base + (2 * attr->index);
+ 	u8 regs[2];
+ 	long temp;
+ 	int err;
+@@ -236,10 +262,9 @@ static const struct hwmon_ops gsc_hwmon_ops = {
+ 	.read_string = gsc_hwmon_read_string,
+ };
+ 
+-static struct gsc_hwmon_platform_data *
+-gsc_hwmon_get_devtree_pdata(struct device *dev)
++static struct gsc_hwmon_data *gsc_hwmon_get_devtree_data(struct device *dev)
+ {
+-	struct gsc_hwmon_platform_data *pdata;
++	struct gsc_hwmon_data *hwmon;
+ 	struct gsc_hwmon_channel *ch;
+ 	struct device_node *fan;
+ 	int nchannels;
+@@ -248,15 +273,15 @@ gsc_hwmon_get_devtree_pdata(struct device *dev)
+ 	if (nchannels == 0)
+ 		return ERR_PTR(-ENODEV);
+ 
+-	pdata = devm_kzalloc_flex(dev, *pdata, channels, nchannels);
+-	if (!pdata)
++	hwmon = devm_kzalloc_flex(dev, *hwmon, channels, nchannels);
++	if (!hwmon)
+ 		return ERR_PTR(-ENOMEM);
+-	pdata->nchannels = nchannels;
++	hwmon->nchannels = nchannels;
+ 
+ 	/* fan controller base address */
+ 	of_node_get(dev->parent->of_node);
+ 	fan = of_find_compatible_node(dev->parent->of_node, NULL, "gw,gsc-fan");
+-	if (fan && of_property_read_u32(fan, "reg", &pdata->fan_base)) {
++	if (fan && of_property_read_u32(fan, "reg", &hwmon->fan_base)) {
+ 		of_node_put(fan);
+ 		dev_err(dev, "fan node without base\n");
+ 		return ERR_PTR(-EINVAL);
+@@ -264,7 +289,7 @@ gsc_hwmon_get_devtree_pdata(struct device *dev)
+ 
+ 	of_node_put(fan);
+ 
+-	ch = pdata->channels;
++	ch = hwmon->channels;
+ 	/* allocate structures for channels and count instances of each type */
+ 	device_for_each_child_node_scoped(dev, child) {
+ 		if (fwnode_property_read_string(child, "label", &ch->name)) {
+@@ -294,7 +319,7 @@ gsc_hwmon_get_devtree_pdata(struct device *dev)
+ 		ch++;
+ 	}
+ 
+-	return pdata;
++	return hwmon;
+ }
+ 
+ static int gsc_hwmon_probe(struct platform_device *pdev)
+@@ -302,22 +327,15 @@ static int gsc_hwmon_probe(struct platform_device *pdev)
+ 	struct gsc_dev *gsc = dev_get_drvdata(pdev->dev.parent);
+ 	struct device *dev = &pdev->dev;
+ 	struct device *hwmon_dev;
+-	struct gsc_hwmon_platform_data *pdata = dev_get_platdata(dev);
+ 	struct gsc_hwmon_data *hwmon;
+ 	const struct attribute_group **groups;
+ 	int i, i_in, i_temp, i_fan;
+ 
+-	if (!pdata) {
+-		pdata = gsc_hwmon_get_devtree_pdata(dev);
+-		if (IS_ERR(pdata))
+-			return PTR_ERR(pdata);
 -	}
--
--	mutex_unlock(&data->lock);
--
--	return sprintf(buf, "%d\n", range);
--}
--
--/* Function called on write access on in{0,1,2,3,4,5,6,7}_{min,max} */
--static ssize_t max197_store_range(struct device *dev,
--				  struct device_attribute *devattr,
--				  const char *buf, size_t count)
--{
--	struct max197_data *data = dev_get_drvdata(dev);
--	struct sensor_device_attribute_2 *attr = to_sensor_dev_attr_2(devattr);
--	int channel = attr->index;
--	bool is_min = attr->nr;
--	long value;
--	int half = data->limit / 2;
--	int full = data->limit;
--
--	if (kstrtol(buf, 10, &value))
--		return -EINVAL;
--
--	if (is_min) {
--		if (value <= -full)
--			value = -full;
--		else if (value < 0)
--			value = -half;
--		else
--			value = 0;
--	} else {
--		if (value >= full)
--			value = full;
--		else
--			value = half;
--	}
--
--	if (mutex_lock_interruptible(&data->lock))
--		return -ERESTARTSYS;
--
--	if (value == 0) {
--		/* We can deduce only the polarity */
--		max197_set_unipolarity(data, channel);
--	} else if (value == -half) {
--		max197_set_bipolarity(data, channel);
--		max197_set_half_range(data, channel);
--	} else if (value == -full) {
--		max197_set_bipolarity(data, channel);
--		max197_set_full_range(data, channel);
--	} else if (value == half) {
--		/* We can deduce only the range */
--		max197_set_half_range(data, channel);
--	} else if (value == full) {
--		/* We can deduce only the range */
--		max197_set_full_range(data, channel);
--	}
--
--	mutex_unlock(&data->lock);
--
--	return count;
--}
--
--/* Function called on read access on in{0,1,2,3,4,5,6,7}_input */
--static ssize_t max197_show_input(struct device *dev,
--				 struct device_attribute *devattr,
--				 char *buf)
--{
--	struct max197_data *data = dev_get_drvdata(dev);
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
--	int channel = attr->index;
--	s32 value;
--	int ret;
--
--	if (mutex_lock_interruptible(&data->lock))
--		return -ERESTARTSYS;
--
--	ret = data->pdata->convert(data->ctrl_bytes[channel]);
--	if (ret < 0) {
--		dev_err(dev, "conversion failed\n");
--		goto unlock;
--	}
--	value = ret;
--
--	/*
--	 * Coefficient to apply on raw value.
--	 * See Table 1. Full Scale and Zero Scale in the MAX197 datasheet.
--	 */
--	if (data->scale) {
--		value *= MAX197_SCALE;
--		if (max197_is_full_range(data, channel))
--			value *= 2;
--		value /= 10000;
--	}
--
--	ret = sprintf(buf, "%d\n", value);
--
--unlock:
--	mutex_unlock(&data->lock);
--	return ret;
--}
--
--static ssize_t name_show(struct device *dev, struct device_attribute *attr,
--			 char *buf)
--{
--	struct platform_device *pdev = to_platform_device(dev);
--	return sprintf(buf, "%s\n", pdev->name);
--}
--
--#define MAX197_SENSOR_DEVICE_ATTR_CH(chan)				\
--	static SENSOR_DEVICE_ATTR(in##chan##_input, S_IRUGO,		\
--				  max197_show_input, NULL, chan);	\
--	static SENSOR_DEVICE_ATTR_2(in##chan##_min, S_IRUGO | S_IWUSR,	\
--				    max197_show_range,			\
--				    max197_store_range,			\
--				    true, chan);			\
--	static SENSOR_DEVICE_ATTR_2(in##chan##_max, S_IRUGO | S_IWUSR,	\
--				    max197_show_range,			\
--				    max197_store_range,			\
--				    false, chan)
--
--#define MAX197_SENSOR_DEV_ATTR_IN(chan)					\
--	&sensor_dev_attr_in##chan##_input.dev_attr.attr,		\
--	&sensor_dev_attr_in##chan##_max.dev_attr.attr,			\
--	&sensor_dev_attr_in##chan##_min.dev_attr.attr
--
--static DEVICE_ATTR_RO(name);
--
--MAX197_SENSOR_DEVICE_ATTR_CH(0);
--MAX197_SENSOR_DEVICE_ATTR_CH(1);
--MAX197_SENSOR_DEVICE_ATTR_CH(2);
--MAX197_SENSOR_DEVICE_ATTR_CH(3);
--MAX197_SENSOR_DEVICE_ATTR_CH(4);
--MAX197_SENSOR_DEVICE_ATTR_CH(5);
--MAX197_SENSOR_DEVICE_ATTR_CH(6);
--MAX197_SENSOR_DEVICE_ATTR_CH(7);
--
--static const struct attribute_group max197_sysfs_group = {
--	.attrs = (struct attribute *[]) {
--		&dev_attr_name.attr,
--		MAX197_SENSOR_DEV_ATTR_IN(0),
--		MAX197_SENSOR_DEV_ATTR_IN(1),
--		MAX197_SENSOR_DEV_ATTR_IN(2),
--		MAX197_SENSOR_DEV_ATTR_IN(3),
--		MAX197_SENSOR_DEV_ATTR_IN(4),
--		MAX197_SENSOR_DEV_ATTR_IN(5),
--		MAX197_SENSOR_DEV_ATTR_IN(6),
--		MAX197_SENSOR_DEV_ATTR_IN(7),
--		NULL
--	},
--};
--
--static int max197_probe(struct platform_device *pdev)
--{
--	int ch, ret;
--	struct max197_data *data;
--	struct max197_platform_data *pdata = dev_get_platdata(&pdev->dev);
--	enum max197_chips chip = platform_get_device_id(pdev)->driver_data;
--
--	if (pdata == NULL) {
--		dev_err(&pdev->dev, "no platform data supplied\n");
--		return -EINVAL;
--	}
--
--	if (pdata->convert == NULL) {
--		dev_err(&pdev->dev, "no convert function supplied\n");
--		return -EINVAL;
--	}
--
--	data = devm_kzalloc_obj(&pdev->dev, struct max197_data);
--	if (!data)
++	hwmon = gsc_hwmon_get_devtree_data(dev);
++	if (IS_ERR(hwmon))
++		return PTR_ERR(hwmon);
+ 
+-	hwmon = devm_kzalloc_obj(dev, *hwmon);
+-	if (!hwmon)
 -		return -ENOMEM;
--
--	data->pdata = pdata;
--	mutex_init(&data->lock);
--
--	if (chip == max197) {
--		data->limit = MAX197_LIMIT;
--		data->scale = true;
--	} else {
--		data->limit = MAX199_LIMIT;
--		data->scale = false;
--	}
--
--	for (ch = 0; ch < MAX197_NUM_CH; ch++)
--		data->ctrl_bytes[ch] = (u8) ch;
--
--	platform_set_drvdata(pdev, data);
--
--	ret = sysfs_create_group(&pdev->dev.kobj, &max197_sysfs_group);
--	if (ret) {
--		dev_err(&pdev->dev, "sysfs create group failed\n");
--		return ret;
--	}
--
--	data->hwmon_dev = hwmon_device_register(&pdev->dev);
--	if (IS_ERR(data->hwmon_dev)) {
--		ret = PTR_ERR(data->hwmon_dev);
--		dev_err(&pdev->dev, "hwmon device register failed\n");
--		goto error;
--	}
--
--	return 0;
--
--error:
--	sysfs_remove_group(&pdev->dev.kobj, &max197_sysfs_group);
--	return ret;
--}
--
--static void max197_remove(struct platform_device *pdev)
--{
--	struct max197_data *data = platform_get_drvdata(pdev);
--
--	hwmon_device_unregister(data->hwmon_dev);
--	sysfs_remove_group(&pdev->dev.kobj, &max197_sysfs_group);
--}
--
--static const struct platform_device_id max197_device_ids[] = {
--	{ .name = "max197", .driver_data = max197 },
--	{ .name = "max199", .driver_data = max199 },
--	{ }
--};
--MODULE_DEVICE_TABLE(platform, max197_device_ids);
--
--static struct platform_driver max197_driver = {
--	.driver = {
--		.name = "max197",
--	},
--	.probe = max197_probe,
--	.remove = max197_remove,
--	.id_table = max197_device_ids,
--};
--module_platform_driver(max197_driver);
--
--MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Savoir-faire Linux Inc. <kernel@savoirfairelinux.com>");
--MODULE_DESCRIPTION("Maxim MAX197 A/D Converter driver");
-diff --git a/include/linux/platform_data/max197.h b/include/linux/platform_data/max197.h
+ 	hwmon->gsc = gsc;
+-	hwmon->pdata = pdata;
+ 
+ 	hwmon->regmap = devm_regmap_init(dev, &gsc_hwmon_regmap_bus,
+ 					 gsc->i2c_hwmon,
+@@ -325,8 +343,8 @@ static int gsc_hwmon_probe(struct platform_device *pdev)
+ 	if (IS_ERR(hwmon->regmap))
+ 		return PTR_ERR(hwmon->regmap);
+ 
+-	for (i = 0, i_in = 0, i_temp = 0, i_fan = 0; i < hwmon->pdata->nchannels; i++) {
+-		const struct gsc_hwmon_channel *ch = &pdata->channels[i];
++	for (i = 0, i_in = 0, i_temp = 0, i_fan = 0; i < hwmon->nchannels; i++) {
++		const struct gsc_hwmon_channel *ch = &hwmon->channels[i];
+ 
+ 		switch (ch->mode) {
+ 		case mode_temperature:
+@@ -380,7 +398,7 @@ static int gsc_hwmon_probe(struct platform_device *pdev)
+ 	hwmon->fan_info.type = hwmon_fan;
+ 	hwmon->fan_info.config = hwmon->fan_config;
+ 
+-	groups = pdata->fan_base ? gsc_hwmon_groups : NULL;
++	groups = hwmon->fan_base ? gsc_hwmon_groups : NULL;
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev,
+ 							 KBUILD_MODNAME, hwmon,
+ 							 &hwmon->chip, groups);
+diff --git a/include/linux/platform_data/gsc_hwmon.h b/include/linux/platform_data/gsc_hwmon.h
 deleted file mode 100644
-index 03ef46f9cd65..000000000000
---- a/include/linux/platform_data/max197.h
+index 70e8a6bec0f6..000000000000
+--- a/include/linux/platform_data/gsc_hwmon.h
 +++ /dev/null
-@@ -1,23 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * Maxim MAX197 A/D Converter Driver
-- *
-- * Copyright (c) 2012 Savoir-faire Linux Inc.
-- *          Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-- *
-- * For further information, see the Documentation/hwmon/max197.rst file.
-- */
+@@ -1,45 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _GSC_HWMON_H
+-#define _GSC_HWMON_H
 -
--#ifndef _PDATA_MAX197_H
--#define _PDATA_MAX197_H
+-enum gsc_hwmon_mode {
+-	mode_temperature,
+-	mode_voltage_24bit,
+-	mode_voltage_raw,
+-	mode_voltage_16bit,
+-	mode_fan,
+-	mode_max,
+-};
 -
 -/**
-- * struct max197_platform_data - MAX197 connectivity info
-- * @convert:	Function used to start a conversion with control byte ctrl.
-- *		It must return the raw data, or a negative error code.
+- * struct gsc_hwmon_channel - configuration parameters
+- * @reg:  I2C register offset
+- * @mode: channel mode
+- * @name: channel name
+- * @mvoffset: voltage offset
+- * @vdiv: voltage divider array (2 resistor values in milli-ohms)
 - */
--struct max197_platform_data {
--	int (*convert)(u8 ctrl);
+-struct gsc_hwmon_channel {
+-	unsigned int reg;
+-	unsigned int mode;
+-	const char *name;
+-	unsigned int mvoffset;
+-	unsigned int vdiv[2];
 -};
 -
--#endif /* _PDATA_MAX197_H */
+-/**
+- * struct gsc_hwmon_platform_data - platform data for gsc_hwmon driver
+- * @nchannels:	number of elements in @channels array
+- * @vreference: voltage reference (mV)
+- * @resolution: ADC bit resolution
+- * @fan_base: register base for FAN controller
+- * @channels:	array of gsc_hwmon_channel structures describing channels
+- */
+-struct gsc_hwmon_platform_data {
+-	int nchannels;
+-	unsigned int resolution;
+-	unsigned int vreference;
+-	unsigned int fan_base;
+-	struct gsc_hwmon_channel channels[] __counted_by(nchannels);
+-};
+-#endif
 -- 
 2.45.2
 
