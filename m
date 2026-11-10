@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794339947;
-	b=oGkvUMc1v7bpKfNstVMglIJjgh/cJst3r4qRLLmxCndnR7ZJ3OedlAYVqPz1/p1wOQ10
-	 DnXM0rJ+SHms6xlOULJ7db5BEw7nxAZabF+ZivN9b3tAlGgrNQJL2j3fOatUWcVZ+sGGJ
-	 Es5WlrlEdvvd/NKDPcmiHTPXXKMTO+jaF8wIeptkL80YetoN7lp0NI0wOaLLAy5RNaYIG
-	 zUK1PvyQxHu2Ujxsnh/7Azhv1epSgxizAF30gyu1EIXHYMqUIBdrbM5wOl2OHZQ8hIOC4
-	 flNrI0+dIeLVXJYLWbG+wxD6ULeXyTK9rdWcF8pURWoIf12d3YwvOJqQf68iEe5QnXQ==
+	t=1794340209;
+	b=46ooJEisGHQbiRD6pSrJpY4YBy1A+lVmak/QhdDihxdN5L90i6jdE0NQt4lJFzoPINGK
+	 4l2JDLldv59ogwFgVT4zwda0WLoi4JMjrucBd5XhI33NvTLm88vZIs/hmQLt0bsZQnoKh
+	 D6b/JB5hT63Xsi8X1aCTZ8vR+pIx+116iMc/I58qIDmX+0upt9FIadzItPLIc7wpawIjZ
+	 b+NQrDLoVBBP/QubmbkHgPqTjleMVDckIWtI4/tAW6v/do2uA+1++xt6E21iMpBaBMu8k
+	 6ZTxOZfICjD1xsYQ9YmPK/K47Nh9s5dDWxlsUwErNjwp/su/Ewen0AmYT4bEdr3kJHA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794339947;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794340209;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
 	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
@@ -15,58 +15,57 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
 	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=XyeqLU/Ged9V3eXp3/4e8g4ExRY3jlFHCC2fyKXjNwc=;
-	b=fVIVIxp85rz/rpRsOaU8QOsorAY/CM9cUZ3Tz7aMz+hyVJ9WZpsdhAMd/fKCNbhRtmW1
-	 d6na+9YwuFcqeI73VmhZLUImUuacuOh8bbSVFtgDbvv4CHZYUPimuJITFP8allvpwhdpQ
-	 FsxsONrldz4tXptwj888Iz6BGPhHO5t8n8h81Uo+05xXmT2suKDdeYoT4BQWC0JVAH93H
-	 2Ly9Teaa1yKSDOSEW+LkjI/j3K+MoAd7M0mWISYfZnk8dLuvXqwpdmuTqotDl39BhGIiy
-	 AeY788AD8UahbpxwkNrprA+P2+wh/f8BC6xE5it1An2vxFXJsD+31rSzi0mhtiTlCWw==
+	bh=IWOw1JwfDiwyl/GaeGAOvZTCmIypp63YopvxlyJkSsc=;
+	b=NBW50GZ3yMGXhrGULlq2vzZ7zB1s8odEPrTZK9TfDnLrLw2xcc0NHzl4K1csB5NPcsxR
+	 +q1YbvBckwlrz7QrSZGAUQytgXyOeXMFhuG4pbH/d6oTCfMELq7yMy95CE/GE24w7K0Qv
+	 eX1c+gQPxlRgLiWUIP6p1IR5uOxATsuE2MEz/1ne7B2fb7UmqLOdp3cLOjr+QDmT3Zx21
+	 JCDjjwIlM8oqLHH1x2VhArDG/ChB3iwxci3r+nYq51jalmEPr4t0bEzeTiB4v7+Jfd+8K
+	 TPvvOg09/kXjpTdSn2uM8KkJMRwQD4eeAysMN6owbwFfErmN05rdBn1jvUU9PRoY6kA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b="0VXrSJ/V";
-	arc=none smtp.remote-ip=44.202.169.37
-Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=rPT7yIAG;
+	arc=none smtp.remote-ip=35.89.44.37
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E234606A320
-	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 19:45:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1E234606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6701606A335
+	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 19:50:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6701606A335
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=0VXrSJ/V
-Received: from eig-obgw-6002b.ext.cloudfilter.net ([10.0.30.203])
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=rPT7yIAG
+Received: from eig-obgw-6007b.ext.cloudfilter.net ([10.0.30.166])
 	by cmsmtp with ESMTPS
-	id QqA3xcwgLJFmFQrmsxKlun; Tue, 10 Nov 2026 19:45:46 +0000
+	id QqA1xy6vjVK9UQrr6x8ZZ1; Tue, 10 Nov 2026 19:50:08 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id QrjExir6C8cn4QrjExenkx; Tue, 10 Nov 2026 19:42:00 +0000
-X-Authority-Analysis: v=2.4 cv=Qrde3Uyd c=1 sm=1 tr=0 ts=6af37388
+	id Qrr5xfljE3nNNQrr5xWELC; Tue, 10 Nov 2026 19:50:07 +0000
+X-Authority-Analysis: v=2.4 cv=TuLmhCXh c=1 sm=1 tr=0 ts=6af3756f
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=gAnH3GRIAAAA:8
- a=_jlGtV7tAAAA:8 a=TUUkVAhzJrhg2LysjsMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=VwQbUJbxAAAA:8
+ a=go7_iiqvOra4VVw7hDIA:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=XyeqLU/Ged9V3eXp3/4e8g4ExRY3jlFHCC2fyKXjNwc=; b=0VXrSJ/VZAam
-	eDwYmVNuUEQjSH3TJRGqMa/XmdBFw+vFcPa1bDY2jBd+6h3VT2TLoanZHW5BTbAJPrXH2DFALZs/+
-	iiFQudmvOeB0x6kRPoeM2KfH3vWt/Mz4f3TDKjDsbTTZpcDxnJIDQQbYGSKugDXOKt9b6mNQnrV3B
-	GDXKu2/MdCHED8/C3fsEaQdLv/EoLbJ+tbOfVEeRXd5UIUWcGMCKitpewePo2GAdarJG0H0bM9xka
-	/E+R114bWm4/W0YeOtBNOrUxWnM+Hb4SRQeG/dehkW2p7E0KBubZXdPquZY7J6uROiSSaJffh15fM
-	IK+AA0YMhgboeAILMHOIzw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:53402)
+	List-Archive; bh=IWOw1JwfDiwyl/GaeGAOvZTCmIypp63YopvxlyJkSsc=; b=rPT7yIAGQQDM
+	LaRwK2ijOyAYdssmcbcds6Vi/zvMNOczZgyIWhV+/oTJeomTJtN+BVTp5LrykQag4xNIM6PtHwG8Y
+	MEPfF2eVwkkPan/3Kvrs+JyhN0Jzdwcg1XpaAQBMUWZLrwxUAD4+krJd5kNSjsl2br6E7VV9154gW
+	ZE91StTVoDL2jLKgguI/hTe3Ed9vRgg0zkfxtU5+ndoon+68B+qiczZBaUGiGCqZFhvYjOygW2Wi2
+	hiPKoXU4aAmSvwPYl9JbCE0w8WsYbtvVO1XZ9ORRMnzUBWU6TcFadtHJH9GT23OOzpdh4A2cbCK9m
+	fJ84o9p4REm8HOtG2bIu+A==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:53516)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xQrjE-00000003vMz-18HH;
-	Wed, 11 Nov 2026 01:12:00 +0530
-Message-ID: <a2221692-efa4-43cf-8da8-648aeb665900@roeck-us.net>
-Date: Tue, 10 Nov 2026 11:41:59 -0800
+	id 1xQrr4-000000041GZ-43iy;
+	Wed, 11 Nov 2026 01:20:07 +0530
+Message-ID: <d43d0f8c-bec0-4dcf-ba81-b3e141faf4e8@roeck-us.net>
+Date: Tue, 10 Nov 2026 11:50:03 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -77,13 +76,13 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 10/10] hwmon: (ds620) Drop platform data support
+Subject: Re: [PATCH 00/10] hwmon: Drop unused platform data support and max197
+ driver
 To: Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org
-Cc: =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- Roland Stigge <stigge@antcom.de>
+Cc: Tim Harvey <tharvey@gateworks.com>, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>, Riku Voipio <riku.voipio@iki.fi>
 References: <20261110183434.181711-1-linux@roeck-us.net>
- <20261110183434.181711-11-linux@roeck-us.net>
- <840d907c-5769-4b4a-8181-5149b5a05d7f@app.fastmail.com>
+ <2d7b1690-c943-4640-89d3-d18901d04ebb@app.fastmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -129,9 +128,9 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <840d907c-5769-4b4a-8181-5149b5a05d7f@app.fastmail.com>
+In-Reply-To: <2d7b1690-c943-4640-89d3-d18901d04ebb@app.fastmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -140,41 +139,69 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xQrjE-00000003vMz-18HH
+X-Exim-ID: 1xQrr4-000000041GZ-43iy
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:53402
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:53516
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 10
+X-Email-Count: 18
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfB8v88GQsSz4xmz2wEkOInc143gHqmeSJ6i5kcRv19EAixchMZyH477HLXShPGkXA+JNjYYtSHH8UPvu8atF0hXbZinnQpD3aZjDoIz9dBKOnMDCgZT0
- zAYL4jSSq7ZbdJisStYOXqjObac5qmNUZfUyViWc/NaTjRqMOeSDDJpPFMz7Ih4TuKT58wLjuPr6n8AvOC2EyzOwB7cP/f4m1e6Sw/cmKQialRVlzq/mhKMX
+X-CMAE-Envelope: MS4xfH5Q46eRyKx9ISDhU2xVU6dpZJz3U0dkULI1fC8YHCxYrgGv8yz++xxpmYiaLyNfuIB9EXZCzGbhANinnEq3UpI/I5qPputwqK50ae0G7uyyY7RFqQZB
+ ooDbY6ckP9fSp2cTZhxawABO/oEtvcc0asYjlXHLao7nyuCjsYZXJGX0ajPSATppHAOchw1F+ADdZWCSvo4CgV2FZijjMQDFT49rR6RMxIm6zc9hEtXY2D7r
 
-On 11/10/26 11:07, Arnd Bergmann wrote:
+On 11/10/26 11:24, Arnd Bergmann wrote:
 > On Tue, Nov 10, 2026, at 19:34, Guenter Roeck wrote:
->> There are no in-tree users of ds620_platform_data. Without platform
->> data, the driver clears PO2 to keep the thermostat output pin low,
->> which is the default valid configuration.
+>> Several drivers in drivers/hwmon still support configuration through
+>> platform data structures even though no in-tree platform or board code
+>> ever instantiates or supplies that platform data.
 >>
->> Drop platform data support from the driver, remove the unused
->> platform_data header file, and update the driver documentation.
->>
->> Cc: Nuno Sá <nuno.sa@analog.com>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> Audit all hwmon drivers using dev_get_platdata(), dev->platform_data, or
+>> headers under include/linux/platform_data/ and drop dead platform data
+>> support where it is never provided in-tree:
 > 
-> My patch here was different, as I concluded that this was
-> likely never used upstream and removed the whole thing.
+> Hi Guenter,
 > 
-> Your patch looks fine though, so if you want to keep the driver:
+> I already commented on the individual patches, and this looks all
+> ok to me as I did almost exactly the same thing.
 > 
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Obviously it's a bit unfortunate that we duplicated the work, but
+> it does give the chance to compare both and find possible mistakes.
+> 
 
-The Analog web site states that the chip is still in production,
-so I didn't just want to remove the driver. Let's wait to see
-if Nuno has a comment.
+At least on my side it took maybe 30 minutes, so not much time lost.
+All I did was to ask Gemini to do the work for me (see the Summary
+patch).
+
+> My patches are in
+> https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/log/?h=board-remove-7.4
+> 
+> 337dd938a3b0 hwmon: shtc1: remove platform_data based probing
+> ab1c9ff391ad hwmon: emc2305: remove platform_data based probing
+> 985a7d241616 hwmon: ltc4245: remove platform data probing
+> 8b300deafa72 hwmon: g762: remove pdata based probing
+> 489bafe5cfb8 hwmon: gsc: remove pdata based probing
+> 94ec070cdb5f hwmon: asd7828: remove pdata based probing
+> 296048203f0b hwmon: mcp3021: remove platform_data probe support
+> 93ce98eff9b5 hwmon: remove unused max1111 driver
+> 9d4791700bb8 hwmon: remove unused max197 driver
+> 190ba99436ff hwmon: remove unused ds620 driver
+> 157784eaf3df hwmon: remove unused f75375s
+> 
+> The main difference was that I ended up being a little more
+> aggressive about removing drivers entirely.
+> 
+> The max1111 driver is technically still used in mainline, but
+> I remove the last reference from the pxa board files earlier
+> in that branch.
+> 
+
+I'll look into your patches later and pick the ones I like better
+(including the removals).
+
+Again, sorry, I did not intend to duplicate your work.
 
 Thanks,
 Guenter
