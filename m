@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794284121;
-	b=vsjt8U5FF7dNJ+/WTstvGaZ1Xs9OCOBwevp7VAublWeC36wGjcQpyitHyC4cTSzdQ0MC
-	 XGw03zaHpa3RVLompIavXsrdSJqqq4YqEgDNpH6dsLNcYyI7oEE3GYQh+OyRwatuQ2EuP
-	 2nBhwIXxiiXl5qlOQginXZX6yrouft0ZSzmwNWJ5MM9Tv4BmC1/UQnrV+ehIJpMQQ7WrI
-	 CCcW/Enfql0kT7M17wFf08DmGmEAkfxZKQkR+4Hia+leVcOjdd/nA3smomrD9dW/56L/w
-	 5yNDEOJp2d/mb4xLfwkMF5IjKiL4fsimTHq2ftORlQSnbDdOMwfujHBLjgozZN/9OAw==
+	t=1794284380;
+	b=UepWt7VaD2UZpqMEYyrPpGD1buDgxMPC5kNFjTDuA4TOoM0Qg8Gv7/qj45/mfynaGinW
+	 lHAw9eOVTZRNz5eV4rTVOjFrR47LidydKk6tMAVAuJCEutuu7jOAod5U1bdJN3oTjQjZz
+	 KTBd17ydv6CF3JiiCgKoSH/vxRXJvMj/k+cSmNfdJrkJT42JtLysxi7lzPUmqU3u+a6H/
+	 af80mWj2tcSLJ3XV43CIi1gCYo4yxmqdAwaaAd1GDXQb54j/2PuMHEkYbo06MyQ9EnNKn
+	 G1RtEB06NyTSH7EuCHsA4OFAHP0P0FMut7sPTafZlEdE62GxZqbsSFXOWocr0k+Fr2g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794284121;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794284380;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=sknkV/zRhFYs8UwOIYp7ieUtaq/HMq+smXlSs5iswKs=;
-	b=YaHbQ/p3+wmHWrSxFLvUEb44zFZz98ZdK/qF53Qn+nZovI4qREXfgl/FIcnSfvcniQbM
-	 1/De/g/PdpN8yl1XLrqbQDbWoITc40Js7m4M65aTVzHgGq7J337YhmXMmidVN/1/L0FCP
-	 pf8icRKH9znXIj3HCDOpMwdjRx1sydvEAr9ikJbB1NnWeJSR5mWOnKTLyszaLhbgSXKJy
-	 5DQApVWB9I0cCt14Oo0tE9JEF+ezaHrWO8IFFLRro0wH8X0Z3OC4BtRqEB9d3qOApALSj
-	 FetzFebF1Zpi0pa0I8puYAND8tifqMleIjFi5Kdq/LsyzBeP0NfhBdVK8jb7o9ZAL4Q==
+	bh=Z0o7XAMLKrmUcWa6cx1ip2Z7jvoUOkjW1MwEtQJdmdk=;
+	b=kzarLWNQFYEx8kiBLAhsYff00iQ25yfytPg8Ag1KLtkaWU5LnjjVM491JP82N9D5p9Y/
+	 5VaM9HCT8SSwNkATcuUucvqltPmKxH9mEUeK1mpcAlR6lulS/4nocQkv4Rxavnlj3fEK8
+	 OUgczY4AEBoG3OyxVB4kvNi3vO1whj54qls2y85xxoid9OUW9SKq1hE24f/QJ2ICWZyi7
+	 X0hrszvVs+03WpAds6vm87+1nnztnCpeoQ3tURqsrHyVfPPsSENTxmY5T62FESX1qIwTS
+	 8tn9b1SZSL4CgUYS4HoW9yEXXveVsvsTLnv1ZZA89394O4y33UMlSC7gkRON4EkqazA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="QAoBzU/+";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h8L4OHxZ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8225C606A32A
-	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 04:15:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41878606E8DD
+	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 04:19:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QAoBzU/+
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 338B11F008A1;
-	Tue, 10 Nov 2026 04:15:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h8L4OHxZ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C16511F0089F;
+	Tue, 10 Nov 2026 04:19:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794284121;
-	bh=sknkV/zRhFYs8UwOIYp7ieUtaq/HMq+smXlSs5iswKs=;
+	s=k20260515; t=1794284379;
+	bh=Z0o7XAMLKrmUcWa6cx1ip2Z7jvoUOkjW1MwEtQJdmdk=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=QAoBzU/+l4VzydhWh0+J8oZlJS9HLiTGPrYqlkuRYGMckopEaOpROkhlJA64X71Hp
-	 ZClvgP6wquDl3LM7hKO41Z8sEYolfgRwpZRMWXxmsa2wIBGWWm4v8k6OYigftcdkuY
-	 uZ5a16H77OlQ4IKT6dbH/lLFba1UUcFceQdX7uVcQVFff7VJvwYphlZwD8wOrbdwie
-	 9ElO58I1VFP0MwnQJqCWebxwODjNZnTcxTUkV01PIIalmukuZW5uzAPvS5JO/PWLdp
-	 98fA0Ld759mM8xKwge22ZwO8XIvWHDY3Cc/dOvNni2koaJA5Uw17IwgAsWqDYF6piY
-	 ZZ4ox+3JoQ7kQ==
-Message-ID: <sashiko-outbox-206182@kernel.org>
+	b=h8L4OHxZpJ2P5fYOTYkkaDsg0lSV+0a5Y0vadKjoS/vwsxZYnPX5zflcct4FHBdCn
+	 Cw2kmpjWY+lDJbHJXdy+lCglfYvqgdb276bRkF1ubplKW2dhSAT0iQAKMIUgzm1L20
+	 VZGLbTccSmZL7OcwwiumjDdbEsA2RAnx6i/Qp+boHHGLB0YNlc0TMc334vlJuxt1z9
+	 d8QKWYWYFAvNElHM6gLt8EU7/t140ZaJn9bmxuBMYycNImqBxCdn8ZV8IYNTT3/5u4
+	 885/LAEU/k1L42p3ml4fViR1scBNVf+uCHnrImuiCVzxn7HmWXDvJ939uTvuGgFmY6
+	 bmMN6bAsEO+1w==
+Message-ID: <sashiko-outbox-206185@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [RFT PATCH 1/3] hwmon: (nct6775) Fix target temp and tolerance
- for NCT6106/6116/6126
+Subject: Re: [RFT PATCH 2/3] hwmon: (nct6775) Fix swapped temperature
+ tolerance register writes
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Guenter Roeck" <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-In-Reply-To: <20261110035955.3968731-2-linux@roeck-us.net>
+In-Reply-To: <20261110035955.3968731-3-linux@roeck-us.net>
 References: <20261110035955.3968731-1-linux@roeck-us.net>
- <20261110035955.3968731-2-linux@roeck-us.net>
+ <20261110035955.3968731-3-linux@roeck-us.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 10 Nov 2026 04:15:20 +0000
+Date: Tue, 10 Nov 2026 04:19:39 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -60,76 +60,31 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [High] hwmon: (nct6775) REG_TARGET marked word-sized in
-  nct6775_reg_is_word_sized()
---
+> sensor_dev_template_pwm_temp_tolerance uses index 0 (backed by
+> REG_FAN_MODE via pwm_update_registers()) while
+> sensor_dev_template_pwm_crit_temp_tolerance uses index 1 (backed by
+> REG_CRITICAL_TEMP_TOLERANCE). However, store_temp_tolerance() checks
+> if (index) with inverted branches.
+>=20
+> As a result, writing to pwm*_temp_tolerance writes the new tolerance to
+> REG_CRITICAL_TEMP_TOLERANCE instead of REG_FAN_MODE, while writing to
+> pwm*_crit_temp_tolerance updates REG_FAN_MODE with temp_tolerance[0] and
+> leaves REG_CRITICAL_TEMP_TOLERANCE unchanged.
+>=20
+> Invert the index check in store_temp_tolerance() so index 0 updates fan
+> mode registers via pwm_update_registers() and index 1 writes to
+> REG_CRITICAL_TEMP_TOLERANCE.
+>=20
+> Fixes: cdcaeceb74ff ("hwmon: (nct6775) Add support for automatic fan cont=
+rol")
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Link: https://sashiko.dev
+> Cc: Anton Lundin <glance@ac2.se>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-commit 7460f66a45ab993c8409879e58f676a24f6e5ad1
-Author: Guenter Roeck <linux@roeck-us.net>
-
-hwmon: (nct6775) Fix target temp and tolerance for NCT6106/6116/6126
-
-This commit initializes target_temp_mask, tolerance_mask, and
-speed_tolerance_limit for NCT6106, NCT6116, and NCT6126 in nct6775_probe().
-
-Link: https://sashiko.dev/#/bug/linux-76f191d0-4c79-4982-887e-e5c9a2ed7136
-
-> diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-> index 6e97e4f08b90b..9340525689cff 100644
-> --- a/drivers/hwmon/nct6775-core.c
-> +++ b/drivers/hwmon/nct6775-core.c
-> @@ -3574,6 +3574,9 @@ int nct6775_probe(struct device *dev, struct nct677=
-5_data *data,
-> =20
->  		data->fan_from_reg =3D fan_from_reg13;
->  		data->fan_from_reg_min =3D fan_from_reg13;
-> +		data->target_temp_mask =3D 0xff;
-> +		data->tolerance_mask =3D 0x07;
-> +		data->speed_tolerance_limit =3D 63;
-
-[Severity: High]
-Does setting target_temp_mask to 0xff expose that REG_TARGET (0x111, 0x121,
-0x131, and 0x191, 0x1a1 on nct6116/nct6126) is marked word-sized in
-nct6775_reg_is_word_sized()?
-
-drivers/hwmon/nct6775-core.c:nct6775_reg_is_word_sized() {
-	...
-	case nct6106:
-		return reg =3D=3D 0x20 || reg =3D=3D 0x22 || reg =3D=3D 0x24 ||
-		  (reg >=3D 0x59 && reg < 0x69 && (reg & 1)) ||
-		  reg =3D=3D 0xe0 || reg =3D=3D 0xe2 || reg =3D=3D 0xe4 ||
-		  reg =3D=3D 0x111 || reg =3D=3D 0x121 || reg =3D=3D 0x131;
-	case nct6116:
-	case nct6126:
-		return reg =3D=3D 0x20 || reg =3D=3D 0x22 || reg =3D=3D 0x24 ||
-		  reg =3D=3D 0x26 || reg =3D=3D 0x28 || reg =3D=3D 0x59 || reg =3D=3D 0x5=
-b ||
-		  reg =3D=3D 0xe0 || reg =3D=3D 0xe2 || reg =3D=3D 0xe4 || reg =3D=3D 0xe=
-6 ||
-		  reg =3D=3D 0xe8 || reg =3D=3D 0x111 || reg =3D=3D 0x121 || reg =3D=3D 0=
-x131 ||
-		  reg =3D=3D 0x191 || reg =3D=3D 0x1a1;
-	...
-}
-
-Because nct6775_reg_is_word_sized() returns true for REG_TARGET, a read via
-nct6775_read_value() performs a 16-bit big-endian read across REG_TARGET
-(placed in bits 15:8) and the adjacent REG_TOLERANCE_H at reg + 1 (placed in
-bits 7:0).  In nct6775_update_pwm_limits(), masking reg_t with
-target_temp_mask (0xff) then discards REG_TARGET and stores REG_TOLERANCE_H
-into data->target_temp[i], while also corrupting data->target_speed[i] in
-speed_cruise mode.
-
-When writing pwm*_target_temp in thermal_cruise mode, pwm_update_registers()
-passes the 8-bit data->target_temp[nr] to nct6775_write_value(), which writ=
-es
-0x00 (value >> 8) to REG_TARGET and overwrites REG_TOLERANCE_H with
-target_temp[nr].  Should 0x111, 0x121, 0x131, 0x191, and 0x1a1 be removed f=
-rom
-nct6775_reg_is_word_sized()?
+Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110035955.3968=
-731-1-linux@roeck-us.net?part=3D1
+731-1-linux@roeck-us.net?part=3D2
+
