@@ -1,76 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794268439;
-	b=h0DrNRdJedWRC6SqUK5u/ZmBf0Zz1s+tQuGtnaKksP0Hwp01QSEPIVlJbA7U+H0++lwV
-	 v7APdNSBYttJm3rmwVdFwq9Nie+fDKjOcGGaFio9SEErcZe92gO38W1ZqYPty5/m8UFD6
-	 p/pJRsQze/9NRMkGJIuNimc6d9NXqc0FJOVdFIA41B+qPWPQWTTzctQsgfZ5adeh2FgYQ
-	 4pUUKiUQOhlvGRH8pzqQQiNu7et7rYZrlTax0wp1KKbLP8Z+gSRIJlBKAfjQbm5RX7N9y
-	 BlmMXCyFH94fwGb3rwNGlk2PKPVmjtXP7p9TkEI9abOECvxN9J1iuVLWramkqC1dsEw==
+	t=1794269942;
+	b=Ri5tZ2k+MBNtiSlBOPFXAPM2XCTZ5Cp+f4PtYcGD3EapF4GJB6k8Fvy+rC5n+q85k5k1
+	 iCYtOVkHOTHCGk/DxiJdFzWxYo9Hgc7U5KH6BuABaITMofh7lpxsRvgco5JxdMBZklxG9
+	 yvs6hfoQmQyod1ObLmBziB/cuue/8I1WL/qlfKhnzTWTeK5HEnsj6rnYTS848uDBId/D8
+	 RrHklGGTTT0PwJ6kMSI/kv8ZAIKUWP+SoObeKEl+OXLV0Ds7ajuOjdiAnA7gGCVfFrI4e
+	 d96v9Jx6tsRvy/Cxbsz3WFLNX9j56H0rk0bPvy4nto2fsFPImyIsawQaJoC1ygl4siA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794268439;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
-	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
-	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
-	 X-Local-Domain:X-CMAE-Envelope;
-	bh=Iexm6f7c/MXG0Uw85sM3bVZ4URBsUSd+I0OCtwvBuW0=;
-	b=h6R0uWimtKI0IgEaZpQ9SYqSE5Fq3F3myoiev6wxkeyARxUmONhSi1FlRSNkZ71GnWQi
-	 8s6Sm8nZuAa90umbcoCnK4mzTHpddRw2QT4XjicQlsUPxHnVqwaiUVnjCCaYolJum/8YF
-	 OkVqQ+Nd+wjW6DWa4r12lZB+h+W4nRuwQDZoczfyTJUMbEdJHc5dHeX+0oqfXrxIJzOgH
-	 ZDMk4hCoaJOtqKI43KRDx9+GyZEo1z0U00r+JSQO/zZL2CYvsSHaZW4lokHIs6IzRjxVZ
-	 HBo8EDXZsTLcBVDfrRSt/tw8C356yZ6epqKvDl5kDMi4Q5qD5KZMZbJrXG77CEPmF2Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794269942;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=nysLrwzoQAe2qw/VpKL+Q2ul7kXLQN9mYGdMAz8BYVU=;
+	b=404zQP05g7taUiKVDHCS5kZwGp/s5ImcITqrfnVYZqNqUFVVN6Ej4DvGU6JlrObwGUxd
+	 Nobh1jEHznA9kmTIP88vg9G9E/7tMpSWF2/GXQeqytoo/xy9PBK4q50Jvzz2GDvFqEfHr
+	 6Zlub1PLZtVvALoUfaq0JcZOIWQbhkmWT/9Hwt6EqMPF9KpyR+75MKgCGKguDcOOzlSLR
+	 NjZsQIjvMR4GCztr6EraBomNUjjRA5LXbjr/yDJUh+ar1odhpsImuhUiLkO0fXDvtd3QT
+	 2oiI6ld6LNJbOIYDr3nLTs8jOhSDS+RDgbNBIaOoN/M8utWRf1pVrOd+g/TviTn7VqQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=4z0o2rmd;
-	arc=none smtp.remote-ip=44.202.169.39
-Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TVQDjg7p;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55CD2606A321
-	for <linux-hwmon@vger.kernel.org>; Mon,  9 Nov 2026 23:53:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 55CD2606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC40606A333;
+	Tue, 10 Nov 2026 00:19:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=4z0o2rmd
-Received: from eig-obgw-6006b.ext.cloudfilter.net ([10.0.30.211])
-	by cmsmtp with ESMTPS
-	id QUb6x6vXFOOJnQZBWx7Ug4; Mon, 09 Nov 2026 23:53:58 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id QZBVxGxgIFhzrQZBVxaF5q; Mon, 09 Nov 2026 23:53:57 +0000
-X-Authority-Analysis: v=2.4 cv=JY+8rVKV c=1 sm=1 tr=0 ts=6af25d15
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10
- a=K6s_-0DHPOfA-GDsQU4A:9 a=CjuIK1q_8ugA:10 a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=Iexm6f7c/MXG0Uw85sM3bVZ4URBsUSd+I0OCtwvBuW0=; b=4z0o2rmdTbOkgIKMh5CP2MOSl4
-	rIslZ8KKnnFACTint1YjzsLRoNLjsh9aPdTUEt18u43MGBOR7QHIufawvqRRyNAX4G23hTl5o3ayR
-	svbDdYVUwcIGcdyo2yTUV2+Sg8/0O18nxFpAAW7r6s/Ywp4LooY4eGcF/ADWM3vYK7dyZEHP46nOC
-	6oaOJBFP3h/kz/UuCcAjUB4wquE4KGTlix4tOwX1s5kHIvgMAUUCccJCsZPIiaffe951cnzDZUHPT
-	YPaqlXz5sKMsPfeeRYfDTcw7asE86tWPtX4pxj6OQ0nltWGFcuAFfEGrAX5y1eZk46e9BdzTDpz29
-	Z2GselAg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:40558 helo=server.roeck-us.net)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xQZBV-00000001CWs-0vfp;
-	Tue, 10 Nov 2026 05:23:57 +0530
-Date: Mon, 9 Nov 2026 15:53:56 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Vincent Jardin <vjardin@free.fr>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] hwmon: (pmbus/core) Add a vout_command debugfs entry
-Message-ID: <16ba027b-4f29-434c-86c3-18aa9635cbe1@roeck-us.net>
-References: <20261110-for-upstream-pmbus-vout-command-debugfs-v1-v3-1-e3a261fe4342@free.fr>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TVQDjg7p
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 929A51F008A3;
+	Tue, 10 Nov 2026 00:19:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794269941;
+	bh=nysLrwzoQAe2qw/VpKL+Q2ul7kXLQN9mYGdMAz8BYVU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=TVQDjg7pbClHUDJ/j+YKSQ+slS8aD19hQ8/hBTOCnK4pvJJGU8NERUg9JZRmAu6if
+	 8eHt/MXF/7GH7ZGnWiB9tFbzfTRnyioW++FE0wjg5WJKyuC5fbHLD2w5ttQYWO9c35
+	 B1tqyUcR3ypOnP7+Sh/a759mKfdeAaZJz0NJhTYsJO+P3AK6rCUc1+ic1GfS1L2f0L
+	 3d21sopk9eQ0RJhDJYIT6G13dMVj7XvfKXRsAFnfI2YhEA9MtBA2jyU6PJGe3EAagd
+	 1PQzYPMFlTnTOCQfODHmG1nrBlRNKxEgZqNZ6JTOvk44OXLPE7SuA2vTWyrNFHItfV
+	 ZAk31ZBeq0egQ==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Hans de Goede <hansg@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Abel Vesa <abelvesa@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Abel Vesa <abel.vesa@oss.qualcomm.com>
+Subject: Re: (subset) [PATCH v4 0/4] Asus Zenbook A16/A14 (UX3607OA/UX3407NA) EC driver
+Date: Mon,  9 Nov 2026 18:18:53 -0600
+Message-ID: <179426970779.877162.914179721642251304.b4-ty@b4>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261015-topic-asus_ec-v4-0-af6305ffcb10@oss.qualcomm.com>
+References: <20261015-topic-asus_ec-v4-0-af6305ffcb10@oss.qualcomm.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -80,47 +72,28 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261110-for-upstream-pmbus-vout-command-debugfs-v1-v3-1-e3a261fe4342@free.fr>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xQZBV-00000001CWs-0vfp
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:40558
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 119
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfGkvR1/vIPBb7QrzHfR0DHb//CTKO4FmMqLHW4wBrel2IMrnIW8/WoVT11q8xOISSrTgPfoBhZxLybaQ9t/vGsHQSh0s96irYcn1xBY2I49hwGVh23Qz
- G7LVm8wzFaI7FfdCv8aVUjTInH5ESjP7K4nsYHD6DphKOsg4drITQTl0i0QgxBXNEWj7490o7i+DXlyrY5TqdC0JrtV0Rz557xBRMh26ha87Wtj9+NnB/zLA
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 10, 2026 at 12:48:05AM +0100, Vincent Jardin wrote:
-> From: Vincent Jardin <vjardin@free.fr>
-> 
-> The vout hwmon attributes and the regulator get_voltage() callback
-> both report READ_VOUT.
-> 
-> On a regulator whose configuration applies a load line (droop),
-> READ_VOUT sits below the setpoint under load by design, so user space
-> cannot see what the regulator was actually set to.
-> 
-> max20730 already exposes a driver-specific vout_command entry. Add
-> vout<page>_command to the PMBus core debugfs, for every page with VOUT
-> and a readable VOUT_COMMAND, in millivolts like the in*_input attributes.
-> 
-> Signed-off-by: Vincent Jardin <vjardin@free.fr>
 
-Applied.
+On Thu, 15 Oct 2026 10:55:28 +0200, Konrad Dybcio wrote:
+> The Snapdragon X2 series-based Zenbooks come with a bespoke embedded
+> controller firmware, bearing some resemblence to the reference Qualcomm
+> implementation (qcom-hamoa-ec.c), albeit with too many changes made to
+> consider them anywhere near "compatible".
+> 
+> This series introduces a new driver to let the user retrieve current
+> RPM of the two fans, the temperature readouts from 2 temperature
+> sensors and get/let keyboard brightness levels. The driver also
+> notifies the EC of system suspend entry/exit.
+> 
+> [...]
 
-Thanks,
-Guenter
+Applied, thanks!
+
+[1/4] dt-bindings: embedded-controller: Add ASUS Zenbook A16 EC
+      commit: c9970526e61a968381399cf556789123fe67ea5b
+
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
