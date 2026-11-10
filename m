@@ -1,110 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.147
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.156
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794336348;
-	b=NbqHRIG0xK+mwfVfUIvdekIJO4q0XkMmNayNT0MVkVpMmg9ex2H9Ry7vbmBvFslJ3sgG
-	 Yodn+Xpzp+v5MgC6ofFc3D0CKDjh6FS/sFOHiqeMaCjslUGIW/Z6KM+6X8oodrLngtemc
-	 hOion2IIvPT4NHjlnh58Ootg1tT3vFjjKDlGSRfC1l3iyHy4z5sQfeqTXYWuRKj2tpr9W
-	 0BGtl/L79WsbdDLIfVLzGVxOHXnUtbe6TWxYwpXg3MVn37/zPABbpOCJ5LgoMj2K/ONw+
-	 hPJw8Kfz0ogFOVtYhWpw6youWFJTeleFNOqIuky5W+7yIHMtdfDiEeyE7GJ9NywtK3g==
+	t=1794337003;
+	b=R8kWVZdeYnCBRrkI7NTeBDnf/SNcl4RgBkCk5PPCZ4K6q6Sni/XtkeqgA9Rtr6g6vqa4
+	 lbbp4u/qs2BW4fDz+Vr4eNqSQb5k+WFfurZb0QjCfSYa2zJPfgZ7HOMGC+vjsE4GxlUtn
+	 TY32lmv6tn8unCaGc3lN8wsNfKGsAW+kJgJS/LblS6OB0q4ug9EjCJKvLqVsc+1EutnPx
+	 si4mciDkBGGogjtOQM7fzmH+8xzugHQ0nHr3attTGaEHxdPNBh6YfymkAbkfvsTshBLdK
+	 VFIbq3nGDIjit/sV+pzQZjACCvL4MLpcgL/pN9Go3MKLugbo7dM8srk7ZmCscusperg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794336348;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794337003;
 	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
 	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
 	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
 	 MIME-Version:X-ThreadId:Date:From:To:Message-Id:In-Reply-To:
 	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=qrdYKpzCqRJ+cDZ++BAIo2KDd1fphmcFdltnrUQZA6w=;
-	b=IYsH8Bo1wz6ugUb4IyBeGUmqIYup33Jc0UXgUCPD/Q7xXEqU3tsvEBFtL8M+QFqWzAR8
-	 R1R6/pR1TfRNcsfoVvEpQdPBsAykV9LDk+R3pZal8kIBQEWZ97LLN2Migk0HeJkQT1Tru
-	 8tzFvk3iop55NZ4bg5x5/F9uPUFcGDK7zKqqZETzmZInXIgcbCfvFPNjjO1aB0R3R4hIz
-	 gGby8msREDhylL4X3O9LIySJcYhqDVZ/895NQ5Vq+SH2Bw8FNnzwdbNwIibpAoOTNxBp/
-	 CFaYV1G8KcEvy+g0uuGqM1KZn57pt0Eu8TmzzaZGFUStoVgh4Qx9/2vr6u+hCIgrifQ==
+	bh=77pB6jjKuYC+9zXzZigkrnZsk8fIFqaoziozid1NOpE=;
+	b=RVI6mUsawkffHmZrlIHuNxQyPTPV1t72m5agAxb3cyuzPI4JH6Hhbs1H3EJyVjpbbh9D
+	 t90IQh7AMdNZDEppWxXxAdn0mZg9XJv3RaCtgqpaVamPeZL4FkrqvjDI01yKADYFHi4Vo
+	 vOmgTKNN5/17EVW/iAltsSZ9tXQ1wmzByDU3Azd2OprQZ5wwPRP6dPUYXBST+FM1CZS+V
+	 gYPJK3ZcTiXJAwphWHYS9+K5IkhLd7qE6gTz8PoHYMlhZaPvQ79EsXDUrQZKB6QmaFk56
+	 mdNmivwu8KvIighMxE5qY9SwNE/zD2jyYhl2ImiKiUgFmxbxhryc0waq2bCtzZYtTiw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=arndb.de;
 	spf=pass smtp.mailfrom=arndb.de;
-	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=NAgX6Vso;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=uy6PQV2I;
-	arc=none smtp.remote-ip=202.12.124.147
-Received: from fout-b4-smtp.messagingengine.com (fout-b4-smtp.messagingengine.com [202.12.124.147])
+	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=TAF35FHL;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=KYXLTr9X;
+	arc=none smtp.remote-ip=202.12.124.156
+Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A24606A320
-	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 18:45:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 05A24606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5251D606A31C
+	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 18:56:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5251D606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=NAgX6Vso;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=uy6PQV2I
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=TAF35FHL;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=KYXLTr9X
 Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfout.stl.internal (Postfix) with ESMTP id 21FBC1D00299
-	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 13:45:46 -0500 (EST)
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 4C6327A0290
+	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 13:56:42 -0500 (EST)
 Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Tue, 10 Nov 2026 13:45:46 -0500
+  by ams-compute-02.internal (MEProxy); Tue, 10 Nov 2026 13:56:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:content-transfer-encoding:content-type:content-type:date:date
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1794336344;
-	 x=1794422744; bh=qrdYKpzCqRJ+cDZ++BAIo2KDd1fphmcFdltnrUQZA6w=; b=
-	NAgX6Vso21kDnzb9CcDWTENzFdDgTMCGR3yYI5kDH14jBrR9sYFMQpbLgkMbFmqE
-	xkERquCYX0HCBJS4+3Q3ejt/uVfmdO6RXaMTtR8y1mXOy0Ty8sZD9/Hg2KNAaOjW
-	pNPrqyF86RpD/L4ZUOAXADoQ8ESvYm1s7bXjnI/HPpEouQhYtDCWpevd6AZRRN/n
-	6HnwRxFfTD/TxmSthEP/UCGNHOMMdPDPI7DcLgQ9NuwWXkdNT86Vx0pRwcVA70tG
-	dAiYOpdW2UGDZ7gTRG0qwymtzpC+HoUIu5xPfuDx4pfGLjfqIfnIFCBDSE1lOLXa
-	3bsVeUw7pIYsQPU1tpfRzw==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1794337000;
+	 x=1794423400; bh=77pB6jjKuYC+9zXzZigkrnZsk8fIFqaoziozid1NOpE=; b=
+	TAF35FHLgdTnA2kmrBi5GjTZZVVFGTf3m2DKt9mFATV2VhtozAl74Kpv4g9zuPor
+	nTKXUnnjJq8TSz2MSCVYgFdpm4PORrcemaAiU3c4+rZbthk3neuHWOzv1K5qjwnm
+	tYgwtmaGv4SFa2fXEKhtvRyclhDN3+bhC1OWW/z7DZZrvrr7KOCx1sXAJDsUZXit
+	o/AvVI0hMi7WVuaEWH4N3B0b2vJ7V0u6DEP8Digd3fV2pi6nUEnWCmWG/dv8xC/4
+	5TjHVB1DF/l79ubppHP/fVMyuJmPBF9hhPHyURp4ZLV5aOE0zG+dBtggNxax4lT3
+	b9iehvYwIqHGxMj+8nmZBg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:content-transfer-encoding:content-type
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1794336344; x=1794422744; bh=q
-	rdYKpzCqRJ+cDZ++BAIo2KDd1fphmcFdltnrUQZA6w=; b=uy6PQV2IULL9W5lp+
-	f48JlopAbylBuwueq9hC7oiw5ifz/3BluT8cgLf25IToTxeDyUusG0ZXx37ThXUh
-	oFHhJPqV406rrad1h4wxHjX329ZUvJAyClFU7RcHxKZCMvtkQYq5ln8qPmxFcBBO
-	1pRacTeBhQU88yQaVXLPlIPEwvG4tmEGkMxLWwbWymWEcVmyRSL4XNABv6poeWj0
-	hle5k/EtM46HFPC3NcXoLYYPXVSmv7G13M5T0fOIYL6J872EYnWqiv4us4r7tBkR
-	wzaNO0wUopumJe+pxslaOqzFYhLsucxhj+GqjlzEnD/Y9OD9mzi2zqx/EnIGYf34
-	LvsgA==
+	:x-me-sender:x-sasl-enc; s=fm3; t=1794337000; x=1794423400; bh=7
+	7pB6jjKuYC+9zXzZigkrnZsk8fIFqaoziozid1NOpE=; b=KYXLTr9XSZZ7NfsG6
+	zikfGarfFHuWFsEmIQX6T+c7e8IzG5sKuGotFZ1V09SnrQA1vuuS3BoWa3PTOFMq
+	1sSOgJ5ZkZEum8UHyyzgxafq90PuKFNJVqUDtyHDFT3Hab7oNTTPcpQrN6zQb0sC
+	fLF4LO6+HjGOjjfpvY19/FlV2fl8hrJvW+Kjfn9xY/mKUIaefdbm2HDM8Qj/gfgL
+	PDY3qfVWOqbgtGSkE3+fJAc/wn/RjbERtI1oFj8bw6X+RACQLIl25GNfhsWxHR2a
+	O1PYW0esAxByl6GdThRNRYXqn8p0CygP8aGfMSKw3mM2WWZjzT0fnYW8b2GD/NFj
+	TOn7w==
 X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
 	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
 	action=sign d=arndb.de a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1794336344; d=arndb.de;
+DKIM2-Signature: i=1; m=1; t=1794337000; d=arndb.de;
 	mf=PGFybmRAYXJuZGIuZGU+;
 	rt=PGxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZz4=;
-	s=fm2:rsa-sha256:jRro03xElFPeC94sX/FwzH/m10KFPpzemDYWcGgngGLx+kd
-	ds/Wo1gxjBp09kyb+MNfd8z1Jq0OzmuerZTnssHhoBI7OfQ9b0yRn0jfvR+6Utgi
-	fNu6PDuIufK1ZAzji3lTYSkrLpMn8Iis4sO4JhY8EnsnqAfKb1kQ96SlrH4VE+mw
-	Fn4SedoalX/SngfBqmthwhe1GXRaNpsxcwvRmLXQHE6lT6dBgUcfi6HWoItZt7rW
-	o2vY43OuBqTz62RJaSgm2EX37jYbquKt9N+xErKmCkq/5NC0qup5hUX2semot57V
-	VBAYCt4cDMGEMb5d/Pzz7WlPV5VQJRPWbIawMNg==;
+	s=fm2:rsa-sha256:LBGrpQz6y4BDX+KypX0o7PzsBTjogoCrqbW5sWuXPsKLPoa
+	I15Hekv9jMbSv+mLEKHc+CsOokq/SrupOpQyNlrGW/S9a/UrkoFxu3sDJhtK/yBO
+	pwvaoSt5JWP6U61aozo1nAt30xgCwcRn6WiNnUNYUL4CwNLuQqFCFsnhAmmYTOao
+	eW+qRxM8iyUlrOPYF0TwsGgyOq2a6qD+Qj4V+5tk60gWudZF8xHVoJJb4ZObmLWP
+	2RjyohMvkw8vID7RkQhlvjXQVqcGqQVgU2li771s2cSIHm6tA4Y0h8eeXfHwuanT
+	zt1slOs/lfrJbxADirPyt2hbNgW2JC7IHvZ/ZpQ==;
 X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
 	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
 	action=mi-m=1; hc=11;
 	hn=content-transfer-encoding,content-type,date,feedback-id,from,
 	in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:IURt6+6GSppj8YaJwsUnwf8f/DZxTGTg/rfDlu56ZbU=:qQ1fahs4GBEpkjwTganjuez4nanFW4Cvdwns6UReltw=;
-X-ME-Sender: <xms:V2bzagBGrKzP63GaP11xbAEvnJwTOYFs83oRU1UvEe81GO67I48eBg>
-    <xme:V2bzatWhzK_ADhaRvpl6iPtp4cOJ5UFNe5HgnTBAewSBohtLG1i_XIJmz2oVJr8nk
-    Ld8PqniUhP74vGfln1_IwF9uhhmdNcZ-Yfah_mkjQh2OfhEPNYUoFAT>
-X-ME-Proxy-Cause: dmFkZTEjbKD/sIhn3KL383Qbz77zkkDvddEqGyYPo/K6cfRfZ9KaTbckckDX7RVgFGSm3x
-    cnQDia7gxYgd5M9ipUEw0hCMTCcgJiLB3gy6mLfaQaRbBBfBZK+XG9iSorPDAiVM4q3VhG
-    ss/v4GjWO+UP17oI9pn+L0aXh8zriWPzW1twUtJHGu7umhb3xZDwRwx2h7Jig4PYxwPuHj
-    8IqKY0P2achgLXF4bUmkVjnndWwR2HlrBHSSv0KUDIRhKUPlQqPaWPF7aTPsNopBi2cYYH
-    rYVY3zpI0mYbMdsgtpLGrVBO1JVxxL52A70cp/cK9JaEHVkzE9U6i1PZirNuvVDxBGAPJY
-    1Afa+KNiQ0/xjC5AqTWEYMjOd+gVAo7qQMpmQVWvUl8zPTKKHs0mGZ7AjptmQtM2gtd+BS
-    7rU5rTPYWJOQQ3cnzMREAoE01pWE9x9XaITAaIidDBIhZdF4HuJP7VKFh5OjK67DmJwwxV
-    nyTIW6c657GpPfzyL5uuKlt9hpsYB0MxBCEdHmpKtKQr2xllP7OKR9fPZ1wBbz83vDp6qZ
-    KXTsK983LpCPu/ff7/f7wdFqEXl6Wc6wjWTUBQP3yJRxw+2es9x/YAGUc6gp1mtGCGfxE1
-    kfo1LBN+Pne/1KwfmokrdQkg1TFoiW7eUs+1hBBlDlE9oj/Oy6fJ9SrUTPag
-X-ME-Proxy: <xmx:V2bzaistlOO-QoRL89im2EtphLsgEBlAGARNoErw037qkxzmgPEelA>
-    <xmx:V2bzalYmKhz-clkQrMRraczhgOHbTb7m8wN25f7F9tpCqcUhr-c22Q>
-    <xmx:V2bzalUUcrHsdeNtQCo8QwpCyjVodT9d5VaZJOLJiV5D0w3wFexyuA>
-    <xmx:V2bzap7xyh0bGluavtZF8bl8J-RCac74UdP40lu-vyREbYot7LF5yw>
-    <xmx:WGbzaq7XSjaWI04dZ4KsWQUxv2apZt5BGyqP-1nTZ8_NnVq2b9cBdE3S>
+Message-Instance: m=1; h=sha256:zvjPy9V1jaRX/WbG0RO8tSGoA8PnDAeorOgJ+vlT7p0=:nB1PbrDdjzuLRysr2NrVqydLe2Wb1BPQDVGGH3S0lsw=;
+X-ME-Sender: <xms:52jzapCRihQIARHWvShtsXzbBGzQXZOwVQRpmbBxHOZauG5DoUtZZg>
+    <xme:52jzaiUuFipwazW5jimAnjs7kxmnz6vQcY68QmvmNduz6xaDUeSqArHqwQu-f1TJK
+    831ozITSXI-HAsn2rBtjTXrMWgy6mmLpihYj6OPqhYP5su6VAbGGJ4Ukw>
+X-ME-Proxy-Cause: dmFkZTEMzlz1LtK/oY+XPfcUeQCxGCi3A3kycgJPcTTxHw4WYGodkQ4CO5YzWfFPcSZTtI
+    2Mk5trxKuUOkns2WdEZ8ZsCmqf8qAwFlaXKnrkKHk2J7N5pMTn5KbPua/u0SABRvZAcG+G
+    YZPQ/m8koL1UrKBua9c+XwSBVkllAwBnTYKlaDBFIlon9VBpsoQq0NCkr2Vaw+/pZnBG3U
+    vEGl/jGDIAwizkikY6Pcj0o43bU81SryJKHxrqBvfsEKxB1p1xiguuGwS+eYu0V4isyJmD
+    8U1xwHGsORYGX2i+BS2Uj3oloQ4dlllgqPYdqM7+y0nKwSOeMOV3+d899ttwcRFyqovsfr
+    r9TdjToBb/icAswAk9/sdrTJtJlPsxZlJFM5+ocbd9o540mJvDveUcXrRM6GN/ygxkJi+Y
+    MliI5OA3p3MK73KyPYQ2cTg3HHfFETyYapHBQ9GEoawTNfOzEr/2rrOgk/fggE7hx5Pyfh
+    13LA9+WzK0ijKhYPZQKrLvfzOOEaFb/81OHo4ZD8H86nCvbKtoZFW80v2v9AU4mYIXqrC1
+    rD2qfY0BRLv7uiOUt4p/4tg7B8MG63cWhZO9Rx7SfLOeLzBIPuML3zU60YdPHocAO2ro2J
+    XsiAPGrI9krkgxdNkfx/vNVxriMAZCLZAEK5z/FSzbQMlmNk0CpBVDBSHZXQ
+X-ME-Proxy: <xmx:6Gjzart83DwEnSt3-9GV3gxeGiQ899LxHs1SwKOpn2Z6haOwezHGeg>
+    <xmx:6GjzaqZmL1DfGxA1cKJianAlbWzj-NyHqxtJYGrFBDTQYpYtdei6ew>
+    <xmx:6GjzamVWNjlE8G8pv3Q15xFlNrQ-Ksz9_8noG3L-6Y8fwkfOJw8m9Q>
+    <xmx:6Gjzam5ydQaUAfBfGwStTYIdzNHgGgTlDP7yquxF-Q2D2stWs2ZUrA>
+    <xmx:6Gjzav7AKS9zHLxdXhSGvM6kUKM2xtGX1N5nwi0prGuVSBjemEnB1SgW>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id EFF7B32A0097; Tue, 10 Nov 2026 13:45:42 -0500 (EST)
+	id 9FBF532A0097; Tue, 10 Nov 2026 13:56:39 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -115,54 +115,31 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: A8GDZGyJBCjo
-Date: Tue, 10 Nov 2026 19:45:22 +0100
+X-ThreadId: AzctlkTPwaRZ
+Date: Tue, 10 Nov 2026 19:56:19 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: "Guenter Roeck" <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Message-Id: <966198d5-9789-4505-b1cc-670bf035a358@app.fastmail.com>
-In-Reply-To: <20261110183434.181711-2-linux@roeck-us.net>
+Message-Id: <2b16d572-aad5-4a99-978a-611781e38966@app.fastmail.com>
+In-Reply-To: <20261110183434.181711-3-linux@roeck-us.net>
 References: <20261110183434.181711-1-linux@roeck-us.net>
- <20261110183434.181711-2-linux@roeck-us.net>
-Subject: Re: [PATCH 01/10] hwmon: (ads7828) Drop platform data support
+ <20261110183434.181711-3-linux@roeck-us.net>
+Subject: Re: [PATCH 02/10] hwmon: (emc2305) Drop platform data support
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
 On Tue, Nov 10, 2026, at 19:34, Guenter Roeck wrote:
-> There are no in-tree users of ads7828_platform_data. The driver already
-> supports configuring differential input mode and external reference
-> voltage via devicetree properties ("ti,differential-input" and the
-> "vref" regulator supply).
+> There are no in-tree users of emc2305_platform_data. Active PWM channel
+> count is detected from the chip product ID register, and per-channel PWM
+> and thermal cooling parameters are configurable via devicetree child
+> nodes.
 >
-> Drop platform data support from the driver, remove the unused
-> platform_data header file, and update the driver documentation.
+> Move EMC2305_PWM_MAX into the driver, drop platform data support, and
+> remove the unused platform_data header file.
 >
 > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
 Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-My patch is almost the same, with two minor differences:
+Again, your patch is very similar to mine, but yours is a little nicer.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/commit/?h=board-remove-7.4&id=94ec070cdb5fdfbcd22d5533970423ecaf7b3e4a
-
-> -	} else if (dev->of_node) {
-> +	if (dev->of_node) {
->  		diff_input = of_property_read_bool(dev->of_node,
->  						   "ti,differential-input");
-
-Since only DT support remains, I removed the check for of_node here,
-and also the conditional on the match table:
-
-@@ -199,7 +190,7 @@ MODULE_DEVICE_TABLE(of, ads7828_of_match);
- static struct i2c_driver ads7828_driver = {
-        .driver = {
-                .name = "ads7828",
--               .of_match_table = of_match_ptr(ads7828_of_match),
-+               .of_match_table = ads7828_of_match,
-        },
- 
-        .id_table = ads7828_device_ids,
-
-I hope to eventually remove all of those, but there is no need
-to respin your patch just for that.
-
-      Arnd
+    Arnd
