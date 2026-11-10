@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794339800;
-	b=EEJ30iSr0UTx9DVyUCMDqKJ964P4BDRtmbXYKNBv4ywzwxgO8SUOQ9xibo+VrQD3ZGSv
-	 WxQ8Wy3xRuH7INV46n3NsiGercSNnPAoQHp7B00JgddlHPNSn3KVu+yMOfVEMi+4oagbd
-	 q+iiS0KOYnDFq3VKKMA7nJfnLdzQv+i4WWsC/JybB1GoNRZoWIoExlsGnLGLhSUklhOUi
-	 k/uuZCeD4mvSJ9VKKGmdzoiDQg7X16OAzU0LCMDLbRAEFM/gkuVKGfbZa6wBAn6/AMYH7
-	 /m59kDFZfsGA1xhRtHxfHsnCwFnb6cdpmJf2Ku4Jv5XOk3uxU+dwWziEP1Bw5eqXGww==
+	t=1794339947;
+	b=oGkvUMc1v7bpKfNstVMglIJjgh/cJst3r4qRLLmxCndnR7ZJ3OedlAYVqPz1/p1wOQ10
+	 DnXM0rJ+SHms6xlOULJ7db5BEw7nxAZabF+ZivN9b3tAlGgrNQJL2j3fOatUWcVZ+sGGJ
+	 Es5WlrlEdvvd/NKDPcmiHTPXXKMTO+jaF8wIeptkL80YetoN7lp0NI0wOaLLAy5RNaYIG
+	 zUK1PvyQxHu2Ujxsnh/7Azhv1epSgxizAF30gyu1EIXHYMqUIBdrbM5wOl2OHZQ8hIOC4
+	 flNrI0+dIeLVXJYLWbG+wxD6ULeXyTK9rdWcF8pURWoIf12d3YwvOJqQf68iEe5QnXQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794339800;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794339947;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
 	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
@@ -15,58 +15,58 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
 	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=Syq5nNsDqtBxRiwURflCtbJexqVSDOFOFh9sZACLRSQ=;
-	b=aCq0rnrUPS9E10uLC1U1h+hHdKjn5Os4Uw3oSbNt5kUSdPCzY+Hmny+R+u0nU++ZSTuo
-	 8jRELNsDg1tVv4ywhAVDO0UpHXgIzR4uJFEzXDLqvdiBRamWGLJgpKbuxKbU0gVDLvpwD
-	 EkPMeMQB6QefNithgTk19vbcAg+OabHDoyWuRs+v+vA3gs7JumSP3n+ZsYVr6SRb6v4rH
-	 VWQPozMbsY2d46x4oRZ/WzWxyo/BAYQTIIQon1iTZ37DLBySxOnQX2IEBHCjZoWjwKp80
-	 Y72atZHRL2OmlEgXj4bnAxc/WltMFynGC9KpU2o+uY+0VC6ZGxZqiB4Lwdr6MmfMUqw==
+	bh=XyeqLU/Ged9V3eXp3/4e8g4ExRY3jlFHCC2fyKXjNwc=;
+	b=fVIVIxp85rz/rpRsOaU8QOsorAY/CM9cUZ3Tz7aMz+hyVJ9WZpsdhAMd/fKCNbhRtmW1
+	 d6na+9YwuFcqeI73VmhZLUImUuacuOh8bbSVFtgDbvv4CHZYUPimuJITFP8allvpwhdpQ
+	 FsxsONrldz4tXptwj888Iz6BGPhHO5t8n8h81Uo+05xXmT2suKDdeYoT4BQWC0JVAH93H
+	 2Ly9Teaa1yKSDOSEW+LkjI/j3K+MoAd7M0mWISYfZnk8dLuvXqwpdmuTqotDl39BhGIiy
+	 AeY788AD8UahbpxwkNrprA+P2+wh/f8BC6xE5it1An2vxFXJsD+31rSzi0mhtiTlCWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=TIDu++d6;
-	arc=none smtp.remote-ip=35.89.44.37
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b="0VXrSJ/V";
+	arc=none smtp.remote-ip=44.202.169.37
+Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B828A606A327
-	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 19:43:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B828A606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E234606A320
+	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 19:45:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1E234606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=TIDu++d6
-Received: from eig-obgw-5001b.ext.cloudfilter.net ([10.0.29.181])
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=0VXrSJ/V
+Received: from eig-obgw-6002b.ext.cloudfilter.net ([10.0.30.203])
 	by cmsmtp with ESMTPS
-	id QmsbxwWRJVK9UQrkVx8RL3; Tue, 10 Nov 2026 19:43:19 +0000
+	id QqA3xcwgLJFmFQrmsxKlun; Tue, 10 Nov 2026 19:45:46 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id QrkTxIipDxmi7QrkTxnAWs; Tue, 10 Nov 2026 19:43:18 +0000
-X-Authority-Analysis: v=2.4 cv=KuFN2XWN c=1 sm=1 tr=0 ts=6af373d7
+	id QrjExir6C8cn4QrjExenkx; Tue, 10 Nov 2026 19:42:00 +0000
+X-Authority-Analysis: v=2.4 cv=Qrde3Uyd c=1 sm=1 tr=0 ts=6af37388
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8
- a=Pbzasi2esYBJbdekaeMA:9 a=QEXdDO2ut3YA:10 a=nlm17XC03S6CtCLSeiRr:22
- a=KPbNTLLc3YvdawN95zVk:22
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=gAnH3GRIAAAA:8
+ a=_jlGtV7tAAAA:8 a=TUUkVAhzJrhg2LysjsMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=Syq5nNsDqtBxRiwURflCtbJexqVSDOFOFh9sZACLRSQ=; b=TIDu++d6Y11F
-	yNrByx2EZ6IslHf8/5GqetfVA8RTs9b8ibrVjFwlp6iJy6950+/LB5/ISxVk+HE6XACCopas3ayu6
-	dwVaXIB9DPvI+1HiNWaBgWHoewo4B1iT9KofjJQdgBo4KIvJ2u9x4dDoRwVosXbgioDjSmRaF8j9v
-	2FZ6C+vxYCdd5Qhlhji/HtdvvfFD2azdS7/R/Oe+mWHbkeXcN9VI8+rMxhZJMRtP0iroyWpcm2cxQ
-	tUmt0694a8tDguvF9R2DJ5MLUh170SrNNE8HVyPN0jVRMazqiRtFNKVgtkGnDL6bEP0f084w4nuXk
-	VY6/hCnCqiWh2EgDuv+tTQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:41260)
+	List-Archive; bh=XyeqLU/Ged9V3eXp3/4e8g4ExRY3jlFHCC2fyKXjNwc=; b=0VXrSJ/VZAam
+	eDwYmVNuUEQjSH3TJRGqMa/XmdBFw+vFcPa1bDY2jBd+6h3VT2TLoanZHW5BTbAJPrXH2DFALZs/+
+	iiFQudmvOeB0x6kRPoeM2KfH3vWt/Mz4f3TDKjDsbTTZpcDxnJIDQQbYGSKugDXOKt9b6mNQnrV3B
+	GDXKu2/MdCHED8/C3fsEaQdLv/EoLbJ+tbOfVEeRXd5UIUWcGMCKitpewePo2GAdarJG0H0bM9xka
+	/E+R114bWm4/W0YeOtBNOrUxWnM+Hb4SRQeG/dehkW2p7E0KBubZXdPquZY7J6uROiSSaJffh15fM
+	IK+AA0YMhgboeAILMHOIzw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:53402)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xQrkT-00000003vp2-1SNf;
-	Wed, 11 Nov 2026 01:13:17 +0530
-Message-ID: <8b4b2b9a-004f-4afd-8084-0cc744ad3a05@roeck-us.net>
-Date: Tue, 10 Nov 2026 11:43:16 -0800
+	id 1xQrjE-00000003vMz-18HH;
+	Wed, 11 Nov 2026 01:12:00 +0530
+Message-ID: <a2221692-efa4-43cf-8da8-648aeb665900@roeck-us.net>
+Date: Tue, 10 Nov 2026 11:41:59 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -77,12 +77,13 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 09/10] hwmon: (f75375s) Drop platform data support
+Subject: Re: [PATCH 10/10] hwmon: (ds620) Drop platform data support
 To: Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org
-Cc: Riku Voipio <riku.voipio@iki.fi>
+Cc: =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+ Roland Stigge <stigge@antcom.de>
 References: <20261110183434.181711-1-linux@roeck-us.net>
- <20261110183434.181711-10-linux@roeck-us.net>
- <fd6da907-9362-4a6e-adcd-9ef99861231a@app.fastmail.com>
+ <20261110183434.181711-11-linux@roeck-us.net>
+ <840d907c-5769-4b4a-8181-5149b5a05d7f@app.fastmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -128,9 +129,9 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <fd6da907-9362-4a6e-adcd-9ef99861231a@app.fastmail.com>
+In-Reply-To: <840d907c-5769-4b4a-8181-5149b5a05d7f@app.fastmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -139,49 +140,41 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xQrkT-00000003vp2-1SNf
+X-Exim-ID: 1xQrjE-00000003vMz-18HH
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:41260
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:53402
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 13
+X-Email-Count: 10
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfLvW0rcOb3q6817tiW9VTq5p5mQmrJamJ2g9FEqhgAXlX/ydiupBPgUaokMMzREXklA9ff9fZcOk0Ji4uXhGS095a7I6dEDoQE3DU3hujh3TVReWuBCr
- TaIJCMs9AY+7ZCCdQih4WLcbw/sXCuxBJcs1qsH1d3gfENhePSmUmxvXitKV+iF93W/wxDXA/4HnCUmehqZl7GAhF2dQlO9L2sPYUGvjNwQZdhdKKoabWOwY
+X-CMAE-Envelope: MS4xfB8v88GQsSz4xmz2wEkOInc143gHqmeSJ6i5kcRv19EAixchMZyH477HLXShPGkXA+JNjYYtSHH8UPvu8atF0hXbZinnQpD3aZjDoIz9dBKOnMDCgZT0
+ zAYL4jSSq7ZbdJisStYOXqjObac5qmNUZfUyViWc/NaTjRqMOeSDDJpPFMz7Ih4TuKT58wLjuPr6n8AvOC2EyzOwB7cP/f4m1e6Sw/cmKQialRVlzq/mhKMX
 
-On 11/10/26 11:18, Arnd Bergmann wrote:
+On 11/10/26 11:07, Arnd Bergmann wrote:
 > On Tue, Nov 10, 2026, at 19:34, Guenter Roeck wrote:
->> There are no in-tree users of f75375s_platform_data. Initial PWM mode
->> and enable settings are read from the chip registers during probe, and
->> both pwm and pwm_enable are configurable through standard hwmon sysfs
->> attributes.
+>> There are no in-tree users of ds620_platform_data. Without platform
+>> data, the driver clears PO2 to keep the thermostat output pin low,
+>> which is the default valid configuration.
 >>
->> Drop platform data support from the driver and remove
->> include/linux/f75375s.h.
+>> Drop platform data support from the driver, remove the unused
+>> platform_data header file, and update the driver documentation.
 >>
->> Cc: Riku Voipio <riku.voipio@iki.fi>
+>> Cc: Nuno Sá <nuno.sa@analog.com>
 >> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > 
-> Once more, I took a different route here and removed the whole driver.
-> Here is my explanation:
+> My patch here was different, as I concluded that this was
+> likely never used upstream and removed the whole thing.
 > 
->      hwmon: remove unused f75375s
->      
->      This was used on the iop32x platform but has no references
->      left in the kernel and has no devicetree support, so there
->      is no longer a way to use it.
->      
->      Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Your patch looks fine though, so if you want to keep the driver:
 > 
-> Note also that f75375_init() runs into a NULL pointer dereference
-> when there is no platdata. Your patch fixes this, but I don't
-> see how this would help anyone.
-> 
-Makes sense. FWIW, I am all for removing drivers, and if this one crashed
-without platform data I think we have a good argument for removing it.
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+
+The Analog web site states that the chip is still in production,
+so I didn't just want to remove the driver. Let's wait to see
+if Nuno has a comment.
 
 Thanks,
 Guenter
