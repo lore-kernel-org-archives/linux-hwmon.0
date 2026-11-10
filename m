@@ -1,94 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.135.77
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794303377;
-	b=B93IskqMv0fxJw2gl0lEpI049rWcOR4jv3AeAdsPLNR9MhXNrT2g/4u303ByYTuRA4+8
-	 QU0wbXH106NKcXRejIDQLgXJiAHUQxGcSoQGdouyiTSQllBMsV2jcTAfhafRVyOXADtka
-	 OEVOGUuMSr2VLghEzhhO89cVZ92GBPhK8ENQSTKf5ruZboYK8DJuxnci7c9NVu2LT5mZN
-	 bXSx678Os1jwAlKLa+um2C5om4oivza0vbRCZcAFl9oygB25b+4wUNuHZ9OJUXvPtBIPr
-	 T0i505Ln+239tzkxLhxVXuIaj3HyG1iwP9x2iLe/DIvFdSXADF2X0p0Wlsnd/KpJAvg==
+	t=1794304893;
+	b=HEFNo0ifdvZFKYG/ioPfOb5UMn661b2n7pYKjA4BwTq9l7yXJ59EKP6WyO9ZshlRdFrq
+	 pl1+RnEJxqtHTTFLiQuAfahn0PZdv9UPw1+RASvvdvOxLhzCiesEz1DUgQGhX/R8jje3h
+	 SWbw+VwH4bpJsR4owjwh90OQg0O9Nt8siQJ8vERSG1lUy4BfjtI95ZDSm14/O28exJ+dT
+	 TDRfqE91FFiedPfxhJX8FluVKPS//qv3sT+qnHhK3Ohr21tSDdBSanEfl8YVOwi2kXmGK
+	 7rz17D2gKRalzeDmikML1qZum+jfNHoZt2qqWe7nGYIGSWBA9LufPOy9qhj/4Xj2ztg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794303377;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=iucbFFY9zAAhuHSoLktk3X2g9x2uMiv+kG1Kr5rpS+E=;
-	b=QgNIbK9HJzohRc54wB4J0HyXz7+MAXmKmFjaoVR50QvljtBYCiJSIioRPxRNDegfDG99
-	 D4jjX4Xf0546kJPNxdGBQMdTG1R0sEbNUe3cVNucNPFFIl5/ZU/eqiae9PEZ0BbR88Pkh
-	 F7bayn4SCwQaD9lwk2ap12KNlIr7MRkSVjsWX199adQXhJvlSGleGCYfRMECE0EGlJQH7
-	 fh/2FiPcz4pRTaUJeG0GzOnfudYOgTe5Jlmxx3BnMPN1U6LnX5TJzCSwUhNKhFRcb3YT3
-	 x6tVc4RCGP9HDW/X6fzgzbIsvfTPKESaUHzVwiaSfoWpy3Knh17Xyws/IVoQ/Oyk/ZQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794304893;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:Received:
+	 Received:Received:Received:Received:From:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:CC:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-ADIRuleOP-NewSCL:X-Proofpoint-GUID:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-Virus-Version:
+	 X-Proofpoint-Spam-Details;
+	bh=Pcf79JCJAWHbiN6Vn4/htZhJapEM9Xf8xgTLcJyZEcE=;
+	b=eQBjrv0SxIG98OkejaqxQTFKXR+fLWHeXkVNxeqfsnNieOId1nMtCI49vL4BxDjD1+kE
+	 rD7Y8iss0rGU1+HfsLUUxiDnloLlRrmILEJtACULJJtd98tdHD8YRcCRgjL1LpD6yimZG
+	 w6jfjYIhtUkj14RYoq8jceDHe7i4VQaQaMFxffjRphWyGTYbhsnP1bb4den+Hr+O+9L/y
+	 D0T85D+/DCCSaow1D/hA3YVgcEyHwbpUF3pJajJ3BENSWcJ6B4OGQDkB3J7iO4tIG29KM
+	 Cv/3b/YSa/TKCfyZ5Vr9/JF3jD8GObsP786eb/BFPqda5JRfHBvFEf/z09HyMiPNGRg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lUlMKgJb;
-	arc=none smtp.remote-ip=209.85.221.48
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=analog.com;
+	spf=pass smtp.mailfrom=analog.com;
+	dkim=pass header.d=vtelectron.com header.i=@vtelectron.com header.a=rsa-sha256 header.s=DKIM header.b=rQMnbe0t;
+	dkim=pass header.d=analog.com header.i=@analog.com header.a=rsa-sha256 header.s=DKIM header.b=UyFzQBOG;
+	arc=none smtp.remote-ip=148.163.135.77
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA29606DA0E
-	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 09:36:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CBA29606DA0E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A29C7606A33C;
+	Tue, 10 Nov 2026 10:01:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A29C7606A33C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lUlMKgJb
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-491846221ffso1249957f8f.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 01:36:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794303375; x=1794908175; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=iucbFFY9zAAhuHSoLktk3X2g9x2uMiv+kG1Kr5rpS+E=;
-        b=lUlMKgJbwkULNr+U9YoG0ugtTDHq2B28v7SSuW/Yzh7kL87qP3PR26BfFeBboI+EKC
-         VrVYwcq8BQZk2o/w3VdsncJBtzCLpdHVGC4O/qCg0ck811mB8bUeMjmuYkyr2VLnCLVw
-         a9b/SEM1TIBbTIizg3kLnvPk3Nrs5nTdWttwC8lliiHiM18uCr3HspTra7d7iGok49Rg
-         0lK2SyWHYVTRpBjOtSSVS4o66d2M5Cmo+33GWGs95RwweYq3U7pMojCfnD9KKTWJ6/ri
-         AZCnWLc9U90GjSeiUytj8YL8ieYQU8oJfCCFFZwWB6k49y2rQO1YEuPUyxz4aZL7w1Ps
-         3vDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794303375; x=1794908175;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=iucbFFY9zAAhuHSoLktk3X2g9x2uMiv+kG1Kr5rpS+E=;
-        b=Ewg6VBfxHsQOgZebH47HyWxDQyBqGWtA3jGvhaRnSIkV5Nv480uAqvKEjK+JjoWRVm
-         uMksrHuxnmv8s5l/CV090H/IwMlaHnlR86hgKBVJ3q4Q6O8FrbExS/XfRq3/dWRIt8Cb
-         QvWMCZo9FpQPZUaqDEzs7PupEGv0AeB9tFEezsFoSCBb1cS6Kp8RnLmJgYD+iBCLpo5W
-         2gwjS5+fP3RnBp7xsFk2Aux9HlhtnrNHdmMlwtw21K9y4CMnFcVlHYz5GEAE9BPf4SvX
-         SlTNmVjrGiEOINwHgkhXEPH6CFRhapOqfExLDEcI+V58v78CKdB5E5Yf+6ETswhNheTn
-         f51g==
-X-Forwarded-Encrypted: i=1; AL+hErF4dyf7FNXWzImdWIK+Q335sleSW68v80sW3GP8osUbUkrw6CqxDVikoqpZNQ6EGqRz0RxS9H5j/EtTqg==@vger.kernel.org
-X-Gm-Message-State: APuU4Z/isqOo5+AFkYW+URHwbcR0p/8vicTCA7JvO0n4d/QRrj3uCAWa
-	liryqM6LlLFt+Mh9mzr+7by1IUOojAGoSbCVjyFGnNUdp9ZtWZtaiDQNA8+2Ro12
-X-Gm-Gg: AYBFou1CmywrzZqmqwpiY3/iGqIr3jsVqn2tKpWZkAAyaSVXRR0U1SwtXaHFNT5S7GT
-	2xHv4nE8LquqSPetMfvqgSec0vImYlUwNh8h8B0rwlsC3IYHASo0BRil4sFK876x/VQRMJ2zWhx
-	6+GqWrl7qfIvrr4LxXZ45T9IMKojyahBEh1hY2+QI3JRYMvLKgDCTRRm3+EnM86+QvidDsmvdVv
-	UxakSGnZcoJPT9Vg5P5gxRUB4TLLUyBNxDyybKCSwsxKW2UM8ThcXjL+d30H8CmDGs9txR717R2
-	+a7YbZKmow5/5DcaAifWjpF26asyUA5iiJPHkwq0Vu5VFQyRqVM9w28JsAd+IWzqtEPVoLaGibe
-	fQnW2jSKXbWouHk7+mMN+OkoSxQ30+7KV7LA6FW1wRD9iYV4wJC68pQcdTH5904OMVSVpHXqgFp
-	7E8oerDmpO0oHgiZKGUmDsTHW0RwKvUW3e4glT7u+00Ug75bVyMZgu4T3YhamqhQkJtMAlkZbFo
-	ZdV09AuKVssy4O5M66peoO572V1U/e9q3eZY6rZvO/Suf/i7LhxIFDUD5rt9SLYOfmSV9fLwHFh
-	cOdMdq2X075eFmzoO6xj+MH2K9/3DuPWp4USI3Ch1Ss1Ut8xmrLv8Ynw3+F4sa4z3v8=
-X-Received: by 2002:a05:6000:310e:b0:48e:932:af0b with SMTP id ffacd0b85a97d-4982fd3e055mr4320746f8f.32.1794303374605;
-        Tue, 10 Nov 2026 01:36:14 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4983585c5c4sm3359512f8f.17.2026.11.10.01.36.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 01:36:14 -0800 (PST)
-Date: Tue, 10 Nov 2026 09:36:13 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Zhu Jun <zhujun2@cmss.chinamobile.com>
-Cc: linux@roeck-us.net, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (w83l786ng) Clamp voltage limits before rounding
-Message-ID: <20261110093613.52ed3861@pumpkin>
-In-Reply-To: <20261109101916.17352-1-zhujun2@cmss.chinamobile.com>
-References: <20261109101916.17352-1-zhujun2@cmss.chinamobile.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key, unprotected) header.d=vtelectron.com header.i=@vtelectron.com header.a=rsa-sha256 header.s=DKIM header.b=rQMnbe0t;
+	dkim=pass (2048-bit key, unprotected) header.d=analog.com header.i=@analog.com header.a=rsa-sha256 header.s=DKIM header.b=UyFzQBOG
+Received: from pps.filterd (m0516787.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AA7lHuo3216554;
+	Tue, 10 Nov 2026 05:00:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vtelectron.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:message-id:mime-version:subject:to; s=DKIM; bh=Pcf79JCJAWHbiN6V
+	n4/htZhJapEM9Xf8xgTLcJyZEcE=; b=rQMnbe0tR1P12PChTNuf6RLu2Eqsqt3H
+	XcfAXgt+QaIMbUqOSUiR74tBu/n3dkVT/5xTV7yrFwvLhA8iRSdHHuCDc640gBDr
+	wa4kj2ff31+i4OE0OZED4QW9DoFqbwffs4DyZQgRzdajAScL1CiYOjyzL8t7F3Zk
+	lwqViPnBi2BsuBSyn9QHTahiONSloAXkUsfwVb5Z9Ftjy2vypb2HcnUv2facACWZ
+	VLId3LtIyLPU8gCYdai4O9aVjT8wDAWgIMyowb3lycH8jf7Y8XuDh4b4PRzxT+nY
+	x3tvUJVsdBSd5/4Ccbs1VklMuXAG/LwAT+LkrDfKV1yfDf4RnOJPKA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=Pcf79JCJAWHbiN6Vn4/htZhJapE
+	M9Xf8xgTLcJyZEcE=; b=UyFzQBOGfJJzc2WziCMovN4whtbapVxhmcyv/KeJruX
+	NVdtpcfvcOjxscGrDWqa4Wuj5AvlL96CrlAiBr4OgidG2POnuKVO1pvTRKBhNsLd
+	lPlJeR/O6PL4IhgiO+JTn7gVE/Ab8UABj/Cq1P35hFVifkAoQ0djJGW5TjSSVy/r
+	UFr2/POnR1ThFOBO4yhNSs+nqySTSDn1UwV1MpTuWyPXro0YTeaOrLW6gJl5fu3d
+	v0YrYqQDK12xF2YaXmUCdqjKkc/JSz6JUWRblmmF/SYOq1enDansABPyflXBRwc1
+	pnS6nysEMSh5Om6kiM05sG8LuLMScuAi4ruOvo28C1A==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 4huwenhffq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 10 Nov 2026 05:00:59 -0500 (EST)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 6AAA0w1a021107
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 10 Nov 2026 05:00:58 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.37; Tue, 10 Nov
+ 2026 05:00:58 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.1748.37 via Frontend
+ Transport; Tue, 10 Nov 2026 05:00:58 -0500
+Received: from HYB-GHaNx595DZ2.ad.analog.com (HYB-GHaNx595DZ2.ad.analog.com [10.117.116.192])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 6AAA0eua008466;
+	Tue, 10 Nov 2026 05:00:43 -0500
+From: Christopher de Guzman <christopher.deguzman@analog.com>
+Subject: [PATCH v2 0/4] hwmon: (pmbus/ltc2978) Add support for LT7175 and
+ LT7176P
+Date: Tue, 10 Nov 2026 18:00:39 +0800
+Message-ID: <20261110-upstream-lt7175-lt7176p-v2-0-dd60d28383bf@analog.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -98,51 +93,125 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEfr8moC/4WNSw6DIBRFt2LeuDRAI2hH7qNxwOepNCoG0LQx7
+ r1+FtDRzUnuvWeFiMFhhGe2QsDFRefHHfgtA9OpsUXi7M7AKReMckrmKaaAaiB9kkzmV4iJ6BI
+ f0mhVNNzCvp4CNu5zPr/qi+Os32jScXc0OheTD99TvbCj99+yMEJJIXSpJS90mdtKjar37d34A
+ ept237KNgzd0QAAAA==
+X-Change-ID: 20261020-upstream-lt7175-lt7176p-b9e37cba8f2d
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan
+	<skhan@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+CC: <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        Christopher de
+ Guzman <christopher.deguzman@analog.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794304841; l=2885;
+ i=christopher.deguzman@analog.com; s=20261020; h=from:subject:message-id;
+ bh=lNd3XhwiREZFjb8YSQiZAwOfJHUr5v741WXrnVtLqRY=;
+ b=Agu+HOC9yGUx1vqE4ETtOEHCPsoLD9Ci82Rv4+OF8VKpRF4OfaMCsxWeI52b31R2eKU2CG+7k
+ KVO36Bi28CHDLFvzauczxWifcFHi+7R9wZ0ZLauFTfZJKyA9tyu05xs
+X-Developer-Key: i=christopher.deguzman@analog.com; a=ed25519;
+ pk=nSwfp91RWULY/zCnrDkBvXulgnpfKy+5C6/Gh3ecLwo=
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: DhpFf0MzOw6gwGEVNxo9MZ1-_B8gBm-6
+X-Authority-Analysis: v=2.4 cv=Dv/Da2/+ c=1 sm=1 tr=0 ts=6af2eb5b cx=c_pps
+ a=3WNzaoukacrqR9RwcOSAdA==:117 a=3WNzaoukacrqR9RwcOSAdA==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=0sLvza09kfJOxVLZPwjg:22 a=OmVn7CZJonkx5R5zMQLL:22 a=bC-a23v3AAAA:8
+ a=gAnH3GRIAAAA:8 a=_jlGtV7tAAAA:8 a=VwQbUJbxAAAA:8 a=8AirrxEcAAAA:8
+ a=07d9gI8wAAAA:8 a=ag1SF4gXAAAA:8 a=JfrnYn6hAAAA:8 a=LjB95_yAhz7QVSCH7TwA:9
+ a=QEXdDO2ut3YA:10 a=FO4_E8m0qiDe52t0p3_H:22 a=nlm17XC03S6CtCLSeiRr:22
+ a=ST-jHhOKWsTCqRlWije3:22 a=e2CUPOnPG4QKp8I52DXD:22 a=Yupwre4RP9_Eg_Bd0iYG:22
+ a=1CNFftbPRP8L7MoqJWF3:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTEwMDAzOSBTYWx0ZWRfX8rFEKJI1v4J6
+ t8ZMhywRB3i508Xc2suqRQ/ThwwbwNoLuMSK4ixeyxKbQcbmSDM39dqplvw6BgJdnB1zCdaJIJi
+ ymT//Vz8HW43o/xqFwM006V+s1cjMliQthrNUim1Urr2qhz0BWicDx0tpJTM3ov9CSC8eSvG3Py
+ aiyU/sOxSPAfTn8qGBblhFY0w9iVP/kwS8I8mxERI2cFxHYsIHgslAi951HDIkersrMIvrNmYQu
+ yJDmW7Ozussjkt9STFqZo4IKV9a1u08hBDTk6kIKAZH2q7ZQXBekuUFZYd2bvkTQW8ngqPZNnYn
+ ZHvDcWKkqL/S6QPJycqCJ46+nlNQ+K1+iZdO+KroFFjifW9VuLAbAFn2Fqs/zcSNUmXP/RCbESr
+ UGG224rNezrvubdjylMQiZRRu+4bwzK0j1Qmbly2xlOmrr+By/qlA8tOY/lpeQEFwpRWBJ45kPp
+ m7RrnfdZGpoGtOjuJzg==
+X-Proofpoint-ORIG-GUID: DhpFf0MzOw6gwGEVNxo9MZ1-_B8gBm-6
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTEwMDAzOSBTYWx0ZWRfX4zDnKS5ss5PA
+ z9u/3msZ7XA/z0vL0Spb5FIab+k+tm3Di3OKWsvBIAvhtK8QiizlOqXnQ6sWjHgXsM59AFhyynU
+ 92VYfz6B5fEakPQJ0VjzfFvHboDRR5y3nlq2QZCKv1lQtTBfO5/x
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-10_03,2026-11-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 suspectscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0
+ impostorscore=0 bulkscore=0 adultscore=0 malwarescore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611100039
 
-On Mon,  9 Nov 2026 18:19:16 +0800
-Zhu Jun <zhujun2@cmss.chinamobile.com> wrote:
+Add support for the LT7175 and LT7176P PMBus buck regulators to the
+ltc2978 driver. Both belong to the LT7170 family (MFR_SPECIAL_ID
+0x1C1D) and are identified by their PMBUS_IC_DEVICE_ID string.
 
-> IN_TO_REG() adds 4 to an unrestricted unsigned long. Inputs close to
-> ULONG_MAX wrap, so an excessive voltage limit can select register zero
-> instead of 255.
+Patch 2 also changes how LT7170-family chips are identified: the
+IC_DEVICE_ID string is matched against ltc2978_id[] instead of using
+a strncmp() per chip, as suggested in review. Patch 4 fixes a related
+documentation error for LT7170/LT7171.
 
-I looked, it really doesn't matter.
-The 'unrestricted unsigned long' comes from a write to a sysfs value.
-Nothing will write a value that large unless they are trying to break
-something, and they can just as well write "0".
+Tested with LT7175 and LT7171-1 eval boards on a Raspberry Pi 3B. The
+chip identification change was tested on a 6.12 kernel because the
+board does not run hwmon-next; the series is build-tested on
+hwmon-next.
 
-David
+Signed-off-by: Christopher de Guzman <christopher.deguzman@analog.com>
+---
+Changes in v2:
+- Drop the -1 variants from the bindings and the i2c/of tables (Guenter)
+- Add lt7175/lt7176p as case labels on the existing lt7170/lt7171
+  probe block instead of duplicating it (Guenter)
+- Identify LT7170-family chips by matching IC_DEVICE_ID against
+  ltc2978_id[] with a length check instead of a strncmp() per chip;
+  this avoids reading past the returned data (Guenter, Sashiko)
+- Don't list LT7175/LT7176P under the curr1 "iin" label (Sashiko)
+- New patch 4: remove LT7170/LT7171 from the curr1 "iin" label for the
+  same reason
+- Not addressed: ltc_get_max() compares IEEE754 peak values as LINEAR11
+  (Sashiko). This is pre-existing and also affects LT7170/LT7171; I can
+  send a separate fix if that is useful.
+- Link to v1: https://patch.msgid.link/20261020-upstream-lt7175-lt7176p-v1-0-86b9b728b95d@analog.com
 
-> 
-> Clamp to the 0..2040 mV register range before rounding to 8 mV units.
-> 
-> Fixes: 85f03bccd6e0 ("hwmon: Add support for Winbond W83L786NG/NR")
-> ---
-> Validation: x86-64 and i386 driver objects built with W=1.
-> Source-extracted boundary tests passed on both word sizes;
-> the corresponding test fails on the base revision. I/O is mocked.
-> No physical sensor or booted-kernel testing was available.
-> OpenAI Codex assisted analysis, code, tests and changelog drafting.
-> Please review and add your own Signed-off-by before submitting.
-> 
->  drivers/hwmon/w83l786ng.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/w83l786ng.c b/drivers/hwmon/w83l786ng.c
-> index d16afda34e41..0cd545011e73 100644
-> --- a/drivers/hwmon/w83l786ng.c
-> +++ b/drivers/hwmon/w83l786ng.c
-> @@ -101,7 +101,7 @@ static int temp_from_reg(int val)
->   * in mV as would be measured on the chip input pin, need to just
->   * multiply/divide by 8 to translate from/to register values.
->   */
-> -#define IN_TO_REG(val)		(clamp_val((((val) + 4) / 8), 0, 255))
-> +#define IN_TO_REG(val)		((clamp_val((val), 0, 2040) + 4) / 8)
->  #define IN_FROM_REG(val)	((val) * 8)
->  
->  #define DIV_FROM_REG(val)	(1 << (val))
-> 
-> base-commit: 7475ea8b58616b33c04afb976cf0fbaad9dd63fb
+To: Guenter Roeck <linux@roeck-us.net>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Frank Li <Frank.Li@nxp.com>
+To: Jonathan Corbet <corbet@lwn.net>
+To: Shuah Khan <skhan@linuxfoundation.org>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-hwmon@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+
+---
+Christopher de Guzman (4):
+      dt-bindings: hwmon: ltc2978: Add support for LT7175 and LT7176P
+      hwmon: (pmbus/ltc2978) Add support for LT7175 and LT7176P
+      hwmon: ltc2978: Document LT7175 and LT7176P support
+      hwmon: ltc2978: Remove LT7170 and LT7171 from curr1 iin documentation
+
+ .../devicetree/bindings/hwmon/lltc,ltc2978.yaml    |  4 ++-
+ Documentation/hwmon/ltc2978.rst                    | 32 +++++++++++++++++-----
+ drivers/hwmon/pmbus/Kconfig                        |  6 ++--
+ drivers/hwmon/pmbus/ltc2978.c                      | 23 ++++++++++------
+ 4 files changed, 45 insertions(+), 20 deletions(-)
+---
+base-commit: 0b6eda22f9ab67ddb2a872b0c3fc578ad9f4e27e
+change-id: 20261020-upstream-lt7175-lt7176p-b9e37cba8f2d
+
+Best regards,
+--  
+Christopher de Guzman <christopher.deguzman@analog.com>
 
