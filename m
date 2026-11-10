@@ -1,110 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.147
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.156
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794337667;
-	b=KHoCo+mIUcg8WToAsgI/YcpKgK+gY24s8BDnkw7xjUrc+dLPYnF+QEOYbyjjYh9sPmE4
-	 eB4T1AbR8o0QX3Mu/N/kCBqMvIdmJgREMm4qkuRQCj9OrwgpvTTcLPWYONteJikhleb8g
-	 yXvRtONmIPiJx2djHdqpWnoNqbxzXirkjE40OxnQafXliYSIq5rPe8P8fgK+KhzB+4JrD
-	 pHA1kCSgahzticw9arYe4TmJWs8F8c09u/24WJLObr3kpPGHSQ+DcsjS1gacAqpXh42KF
-	 F4ns/eYagFIErkBRGXyaoAKZvd8/ixHK5WUpk5BEdWLqlRof99BW5figU2NWh65UbSA==
+	t=1794337765;
+	b=cts1OX9jIM1SYgcT5EGZCTpbhieVnffFslC1ja3+1ie5Ag0KxRXIqWbDL6hfVvPr6T0b
+	 MYEla7qkV1FnzdtIlt7Ch9jxeAoEueDewqikZ8pMhhKKk0+WN72ZDx9fllJFMRcA5IzAB
+	 vvEQ68rOmxkTGxMgj4stzSkKxJvEk/Ui5pzj87u8yLeBwT8zRcm8EZiSg1i1jWdqibCJV
+	 DBaxfcSW7GgB2Wbb9ZTBK9pJ0q80hW76TXqS9jMPb0Ws955VcniWwJPfHv+czdxDKeQUE
+	 V27z+rO9f3xbGzKNkRu18ReozJjQGPTf9FkwDYX0qUoqcJXBCT++w5bFRiSwbQkZiGA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794337667;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794337765;
 	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
 	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
 	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 MIME-Version:X-ThreadId:Date:From:To:Message-Id:In-Reply-To:
 	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=VEvRBM4KhJ5MiB65RTf5GEGCfvSSogA0Wje6yynJeRA=;
-	b=44KGzl8iMLTJAFZ/qZHorWvwT4zcHnnNsEfdT6/aO2Di1mloLwlD4OpxPVTF4rexIYJK
-	 MDurq7sS3PKMhss5/5uH7FPTzxUPFSH6EcGmjK2PEEjOIye98om85CJH2oTNExg7c3b1l
-	 3NlaAq1tDgOF3eQaxuTXNw4PKVfN6V1cZmA6IVrSjsqCizUkJxU0piLTaJNQAPTcLXnkL
-	 g/Nt1v67EkGIw6oi9RmxhLwjCk9U1Xi55DE5amE39Eu9cqUpPR5dkaiOIdueXOI76svcL
-	 xW6X/GNzYgyT51VjBSMZ+dZkjCM3vr3MnUUv7jDx9RcsTZHbQ2o3IHX6aaxeuLaUYoA==
+	bh=xAYh3rCpk0gZjy4TxPxU9Jme4XyrB0CbnhHMjAeOERU=;
+	b=YUYF4GUowCALFYOlEamLPhpXpz38lSkmjsOiRRcahsZRQscNNGSlzyJsCOX5MEmu2Kqv
+	 qnqkReFj475pU0JHKc+UyVrE2R2R6Y3To79syF9LV0p4FmTWf1AIE4rRxvHuf8qzS/T45
+	 476iSkZ9sAojjhnYpQJ14LswVabpOjspVUVvO+SSakZrHr6bJEKvyEUgs3/0+4AF9YGRC
+	 nCDtDLKLjaashcz1ob/P/Hx5+vKStEPlUfVJF7B2ZKMcuMWX3j0qi/7C6oBRWf2Nt4kSP
+	 j7omUarbfvmSVHI//xn9RvkJ216bCMTgtcVbwqacgW6wu7uRSBddhtJBt/H22tZ1jPA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=arndb.de;
 	spf=pass smtp.mailfrom=arndb.de;
-	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=YjxxZbiw;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=W+Zqvx3N;
-	arc=none smtp.remote-ip=202.12.124.147
-Received: from fout-b4-smtp.messagingengine.com (fout-b4-smtp.messagingengine.com [202.12.124.147])
+	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b="ADx7G11/";
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b="q/r6CqgT";
+	arc=none smtp.remote-ip=202.12.124.156
+Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7541C606A320
-	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 19:07:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7541C606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64C9A606A327
+	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 19:09:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 64C9A606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=YjxxZbiw;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=W+Zqvx3N
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=ADx7G11/;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=q/r6CqgT
 Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfout.stl.internal (Postfix) with ESMTP id 839501D00254
-	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 14:07:46 -0500 (EST)
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 797387A0296
+	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 14:09:24 -0500 (EST)
 Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Tue, 10 Nov 2026 14:07:46 -0500
+  by ams-compute-02.internal (MEProxy); Tue, 10 Nov 2026 14:09:24 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1794337663;
-	 x=1794424063; bh=VEvRBM4KhJ5MiB65RTf5GEGCfvSSogA0Wje6yynJeRA=; b=
-	YjxxZbiwFQ8n390v13TL6GLlgLj9ifijwQQDe/Ub0kZSdc4atwnOasCUEPvu4YFA
-	M9jMZJOxkLmoRlbVybL1FmnHhrnNw6SX9Ak0uIThLHVJbakULsbUyay+YeeuRLVq
-	iFObaIwdyAHGqnyugtPI5Cxl0b47xrn15+vzyGT9vc5ZpbuCw6YTNEK2LYTrz7fK
-	ZaoVoPpuWcsAnuV5Kwu8khGX2L8YAziwFVH/5VtqdGYmPyE4MB4TBWSF3iYeMcwY
-	Vx8bu5ZrIWFGWlew4kp9aLy3SzGD2OgkDSGYMLs3cZfG479rhkQebKiZIuR1YV7V
-	sZrpOPyaWfgWu0Pz+HVMGA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
+	:content-transfer-encoding:content-type:content-type:date:date
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1794337663; x=
-	1794424063; bh=VEvRBM4KhJ5MiB65RTf5GEGCfvSSogA0Wje6yynJeRA=; b=W
-	+Zqvx3Nn4gZZS9UO9eQHhi9hHU/qkalWyb/XCzhtRpe0gF1UT/gL31rXXPPKD1Jn
-	Rk1ghqFwZQugJ3ciyh8XQ2v4WK2GQCw2bQiTft0VFQMvv3osIUKq4A9YT7eL3lQQ
-	o+EJOI9gFuD/YusqJKqg2SGXKKpE5EyRy4PEFh18qhSKeju9f+n0B1bdQDrNtgUL
-	WebAVUoPL2wjn3wGuyM2lt4SzV52/ZoD6jTiG/tqj8NcnYf36rJFY9WCGQyyw1mW
-	Y9CylRMEaurD5q+St6EW0x/+TTo9QffIQ1FQV/b7bG63wpKw36Hk6suxVDVlutcp
-	LIbzB47eAWskalPvqJyGw==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1794337763;
+	 x=1794424163; bh=xAYh3rCpk0gZjy4TxPxU9Jme4XyrB0CbnhHMjAeOERU=; b=
+	ADx7G11/k2taN04b5dy1TvSpw5AhypEj+OfbzJqWZz1h4VahYA9XrBjZnFn4KVBf
+	K4FozOYLjVQVFt/O9NMLfCEh0LK86H7vRJ4jWu6eblXgIgSOhnJiIj6A/+FH6j+a
+	BvF85Qu78rIF8OEMGI5oQxdsXbt5xgOe8dhvRHzMy5ssBpTVo7JH8/ISU9X22ai3
+	Hik5BxzaIqBm3HnDVhh+IONxmP48iz5aAXJuBExnc0BNlBQsCpVBHuZLW6yv9Jby
+	iF1EUB8Tcl4GeBvvbRiccPY6wwGfAehNXxrigQYS8mJ1Gi9QGsEAcQYNvkkfLRMH
+	x1AJDUbGgquJsVIdQCM7oA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:content-transfer-encoding:content-type
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm3; t=1794337763; x=1794424163; bh=x
+	AYh3rCpk0gZjy4TxPxU9Jme4XyrB0CbnhHMjAeOERU=; b=q/r6CqgTMmsu90ob2
+	/FLsSJO0aCoLRSaT59iT2FErgvUiEjtd3aPmep48zAcLonQ5CzsLoXJpuD22XCQm
+	yfRK6RVthiLoF7UooqwE+OsWB/gygkqCHWN9s3/UeU6OJtTvvtY8RbuEKABmjoFu
+	IjUr6UHAfGce+JGTKh3+JAuq4tmzmbjTfaivsO2ZIGwnmJl/MsmCjsp7feCu1nLU
+	V3XGGXgj96s6RyIRGFQP8c/PhXlX9g5qWKHMdzholXiQwNpgKaFCm3QTA0vfHOXE
+	RgtvbpFWpJSPgMhX87G9Em9sGMFP6SBO/9TC5GsXLQzOPqMQgLLG3Hv9oTd12Flu
+	KhEIQ==
 X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
 	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
 	action=sign d=arndb.de a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1794337663; d=arndb.de;
+DKIM2-Signature: i=1; m=1; t=1794337763; d=arndb.de;
 	mf=PGFybmRAYXJuZGIuZGU+;
 	rt=PGxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZz4=;
-	s=fm2:rsa-sha256:BjOiwlP6Pt4kBnLMvzvIIPDCnXRNfaZNDyRs3Ys3NLYG1lY
-	W0RAD5M7uabrasxMdzudeqS8SEl2kpce1UQzwIpNUtdiUryBcfkj22ikXmLr9ouR
-	fHXK7ki8qsRbxOV9x5CEda5vv4MPsfb4NAOD8ZrVJ1WhJKjslnPAbrAF0lBMKqMc
-	ZphxoqZ1Q1hsW8sDzWqHD4DYW/uRHnkMF1KYHTsCFgEQW1Xlz+QbmR0N+O0e540X
-	dZ2GcdWoLj041AXsgoImlqHtpYfdkpUsDtucT+1BjoqEw3gNyBxvdqvrwBIzuUGK
-	mzCaVbLoZFKwkp5kBpvxk8hNA7YWiqso8BnVxKg==;
+	s=fm2:rsa-sha256:XBJ/5rBhbopDA6Ev6ROdyuDBrVba9g9qYD4KhUVI6MAeJmN
+	/ms/vrIxHELeKl1YYR88ln60zSjtSxCL0PfLszIR4vJhNeFa79NqKvnFo+jSltcB
+	7d0NWFdJZA+NpogCwqvt35EwyTFg5m4y/rEDBSXlH+J1Fgft6tCkeoSyVOxkVRtV
+	XYxxD8T0sJ+Lpv57bokIvbCGuw9D2jX3utmQgmdb0AzzPGk28NgihBUTDP5XDeL9
+	jqkm+Jv0RycP8B9gsMHd6dnk++Ut8ebk7qDqPKC2xysm+j9qVorHoDQjh8BzrZia
+	T2WwgS9Mk8vc40VuEPDjJtoG1kQSKR7NwOpFsbg==;
 X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
 	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:03NL961CdPnWplWcSAsvvgR8zPZeGPz4HvrIapctnCA=:VEvRBM4KhJ5MiB65RTf5GEGCfvSSogA0Wje6yynJeRA=;
-X-ME-Sender: <xms:fWvzahVYzHpgsxzgAVJKzAbg6mxDxjgN7va3NLwi-0fdGzCMMSwE6g>
-    <xme:fWvzasYyDyUe1FehCQBU7Qbf0Dno8xyLPN0A_YqeoI7d4_yrX4sZ25JZBrcycjidS
-    hCNQqI7zYCxZ8zPrtVnEd1RWgahrCiGSGdlD8Upk0SHUa5KXnAy4xOZxA>
-X-ME-Proxy-Cause: dmFkZTFCD2CDtk2B0Ec52xi+cWwvVSFfC+RkGEOJP9IyNGl2le8rGCvZsqMTGyoo/aGaIR
-    dbu3ZnF4MOOJcUZf/cK1+AjSHoKK+TVgu6AQR4M20u4gXDDQz97kdu0nnlGaA3P2PwoVna
-    mqgIGvBb2QNWBJNVi+eMJcXDy+PjMLw44QF1GNv/y9bn5tvEmgg231PmXvaSCO8GKjwTs1
-    aC5jxd8fMsnod476ZlAVFn9qXzfLfyk9IU6XxnylAqIPSNrHswPDQxofNU3BAHnBS+cAg1
-    UJ+ZwBQ3SPQvWdIMVd6/+2PzF0Hut7iHCV1I5NtMYGdLiAtXaUdv07gg8hfNfapdwVt2Tx
-    yYC4ArLj8OdrppvLGeBA66xJ/5qFpL4jlKj/DsGcOaa40zwiYhqjxz7mdu2jguPzCyb01N
-    l2eXg/yz8W4FzHXuxvc2D/1yXKsTo1QlFLEWDUTgkeF/93LxKzTcmjhn0VqB0TT5wIzUpg
-    gLV+lxIYf0JAujQ82D1sAlZh1QhDu3GlDgXRIOXQFWM6ATl5qE98YMjjZF0J9Xv1Xh6nc2
-    RABjI1wKPjHNt0oTCKVvu3dREYUNBqQ1Z4MJmL96J26pV9vZi6xCImnxNMehOiiI5wi/S8
-    xA3+sZ6LXHuVH6adrS6PJJlu40SuXa06snqnEWuCqb2cTiwxjlo03riXiPMQ
-X-ME-Proxy: <xmx:fmvzau_M4Akeq0W-v9OF1BcOmUyVsLJaUyoJtsU-Wzulo88GMQJJkQ>
-    <xmx:fmvzasgJSjTYXfTWDv6qeYu9DcqDclUdsoWR-dh2V9-Vn3tl4mZ7Ug>
-    <xmx:fmvzaucP8emrd6yscn1ZCH1f9bmTwPhr9xM4fntAxiokNqoeoLk3lw>
-    <xmx:fmvzajqdd3nOPtXllmXWocX141-v2_uhQSltaM_KuhDZz_3RjTj6Zw>
-    <xmx:f2vzalwWZ1govYDSBRp57ClJny__C-2Z7lEidgXotCqC_2tT8w5Qmv_W>
+	action=mi-m=1; hc=11;
+	hn=content-transfer-encoding,content-type,date,feedback-id,from,
+	in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:uLQg43C1yh4uW8bel0pQCS2kIbZSnXIsRwyuQDkhCHU=:AJXB+gw637lLEXMEk8dWe3H5Qoy8okQj4wzUTLQzV3o=;
+X-ME-Sender: <xms:4Wvzah1qZ0Rmu1A1Lmn6GlkNwNSzpmEYu9Xsxs61kEwaQgytzRLcgw>
+    <xme:4Wvzai4Qqd0C76CnahI2qE8q-k9SVm2JGH-iyQQJ5seZ4jf-cR-VTFyG4nRU42k26
+    YHm8ZSJIU7xFgqWxPkSNHVLjZ56n0JRMWm7u2D_zRbb7ODQgJc7Xbfj>
+X-ME-Proxy-Cause: dmFkZTGac2lEHaIJvy8qBFm+CDb8Hy2Ugz8b3inrO/yJfyvFpWgd5kyDSWyjurvV+Zb5gY
+    DIAmpbjqQvnUstOpz39sJDwtZMiJB3jN44FLuXOLY+egH6MzoMNN4slCbjm8QD5SZY0EXN
+    G/NtwLsX0wA9JFCnV9q1hAreAeQ4AC/9KXlKhw5Wq+rmZjgWiPHgFO4ehZfTv+qtW3CTzQ
+    1A/8nSt4NhgdGdYVq0ljKmtj5ncup5gp9MJpK6NAxKckuGbbEy1xnVwSlxl9Wj1p5vXPcm
+    evXodYaS8hNrOhIHBu54gVW6EPLLoffsMicny7i4QUYjV1KLFZpZkiRrCwqTpUuAOV8DF2
+    CnDa5lsbmaVyId/MwetgZhEIo5VmeDT4Ub24GjJSM0pOeVMVKr2LTg9Mcd1jWwjGK9rQxb
+    4q1E12siAULzpC7K64ysgwKyH/AafHdcbE+AfuDqk4PzcBQ4Ei+DBqzv04T/Fng3eLLNvH
+    RhmDypafdfstRzYQIk61KTy4dE0QgL5XYLMZ78fxm5aO5noI0XGBVVpo7qZsd47SkzZpTi
+    DeDf/+N9pzoOcOvdYTjbYcDnE6PY/ZwpL8m7IFLS687zZjKMAejje2ciWSeJW69A4mJn7M
+    SMgINi8nYmpI6Z6cqsshCymGO9Zcx6s+18gAWOIh+S1qBDFs8vRSXBCDL8ng
+X-ME-Proxy: <xmx:4mvzaoiShB2Gg7_E-XON4TZn0vgBA5zk4imvdYBtkhiccERRq_-T-w>
+    <xmx:4mvzau_cUtpCsl9P8RnYUHI-V3Pfu9_eSWGZIojJKPmFtmyGMrxGCg>
+    <xmx:4mvzanpJ4T_BzcDfgyDtjHHY96tV_dy__BCKl3m21zDXcl32MN4ocw>
+    <xmx:4mvzal_Q_8D-OeQfArHUhlZ1Sp02nGErxeyKbc6Ey2spncj4l-Jftg>
+    <xmx:42vzahfbKYkh2NWBXiw8UjtkiNzphoBzTt36dPI_6MCncBMJ1nk71pH8>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 5EAFB32A0097; Tue, 10 Nov 2026 14:07:41 -0500 (EST)
+	id C81AD32A0097; Tue, 10 Nov 2026 14:09:21 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -115,34 +115,33 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: AfEUqT_QZ1kk
-Date: Tue, 10 Nov 2026 20:07:21 +0100
+X-ThreadId: AkIRVJOnK82J
+Date: Tue, 10 Nov 2026 20:09:01 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: "Guenter Roeck" <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc: =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- "Roland Stigge" <stigge@antcom.de>
-Message-Id: <840d907c-5769-4b4a-8181-5149b5a05d7f@app.fastmail.com>
-In-Reply-To: <20261110183434.181711-11-linux@roeck-us.net>
+Message-Id: <fb8ef91c-f485-4ac9-9eee-6c3cb6eb3e45@app.fastmail.com>
+In-Reply-To: <20261110183434.181711-4-linux@roeck-us.net>
 References: <20261110183434.181711-1-linux@roeck-us.net>
- <20261110183434.181711-11-linux@roeck-us.net>
-Subject: Re: [PATCH 10/10] hwmon: (ds620) Drop platform data support
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+ <20261110183434.181711-4-linux@roeck-us.net>
+Subject: Re: [PATCH 03/10] hwmon: (g762) Drop platform data support
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
 On Tue, Nov 10, 2026, at 19:34, Guenter Roeck wrote:
-> There are no in-tree users of ds620_platform_data. Without platform
-> data, the driver clears PO2 to keep the thermostat output pin low,
-> which is the default valid configuration.
+> There are no in-tree users of g762_platform_data. All hardware
+> parameters configurable through platform data (input clock, fan gear
+> mode, PWM polarity, and fan startup voltage) are already configurable
+> via devicetree properties.
 >
-> Drop platform data support from the driver, remove the unused
-> platform_data header file, and update the driver documentation.
+> Drop platform data support and the now-unnecessary CONFIG_OF guards from
+> the driver, remove the unused platform_data header file, and update the
+> driver documentation.
 >
-> Cc: Nuno S=C3=A1 <nuno.sa@analog.com>
 > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-My patch here was different, as I concluded that this was
-likely never used upstream and removed the whole thing.
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-Your patch looks fine though, so if you want to keep the driver:
+My patch is entirely identical except that your changelog text
+is a bit nicer.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+      Arnd
