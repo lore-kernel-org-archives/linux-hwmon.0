@@ -1,55 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794380480;
-	b=ayQaviCAxE+jnT2t+fHzFlKi6hBCq/NKH15Jdpk3G8mormEb8vgqwFAYwb9hzpWQossX
-	 saZJB0CdxHOk4H3YWd+Jm2FJT5afKpR0PkjtOVPfWGPxtdkqoFZX0JFey2EwnMgE7dSO/
-	 wx6tO7MdmxJ5k87qPCvIA9WOhDf1l4Jysg/17R+zNrLzmh9cVvhhr+HRBrd2AyZ2MG7T8
-	 hbTVx0PpwwCnYeQqbgiP1UwkVo8LZV340d6h78u7O0ijv9gesvFx/c6IV/YK6QgjbcAgd
-	 eXjCxtEVFcqEYEuunFD0minXHdfBwBTvQJc/Da/oqT12Cts3Eg/zmanMVQDImIn9B3A==
+	t=1794380496;
+	b=eFTqyag0sHK7DAF4JjAkKgtM6azFQLmEqpVdif9wCLJQ1jgQxuUTcUGDk3unK923HPI/
+	 sU5+YquJYrva16+tVrSepzialWd6c9Vs6/tpMBVdYSdZTz250+4+CERhGt67TlHTtYx4R
+	 gSMvLzD+6DZZ7O285uyfskL4TeT7wQ8+UrNePd/DwOQl8Jx1ShTXeCOjKMVMQBkucvoyO
+	 w9Yicjzpj9hHjlqdOC3L2AEewZbfrJCNkfB8y5NZ6lmDyBlbmk3xYE5weaH5/boy1Ztxa
+	 1P982EKSS1C2rGjxXHHu2WA0zv8aBJgabXK1Xr2sK4vnNLFXsuNLDe8ff+ELN9P05hA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794380480;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794380496;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=StpK99dmWHQ94n811ksqmvihiH2eR+UQQdanaqkmWss=;
-	b=afe+We8zIDPu+x6MQnXn7CMorLt42j8rdrVhD1kDq6FQkxuT7/uXE7aQ818mZuPKlOUE
-	 i0xDjac1Rz3fPz2WjQTGC7n7N7D1ZnMG+jM69a/CKPgXvdlZO3rgTVISi48Ap4C0v7saT
-	 REkPOu2WvAJRBNM9eAiswkmJbMMXeTJsl//IB7HfCY966Ecur883F75iWnMKDbHUa4GIv
-	 XnZoYkghd9oNICeaN8BaRuUcUHcyWchHa82J5dk60gwWhPb23kZC/xkkV+0hotnyfh4E2
-	 gQMsuhDV7548ImmAbWudYwm7M0aJhvtTJyQPy8ejDOldvm6jWeAw14eG0v4P40mDs1Q==
+	bh=IKVQ2C/XdQUMsNG+CCaGZFxqXPWQMfivYrP17bjDqmQ=;
+	b=T3j5bu2K67De3kvR60KpO27s3Zj5X1PQYR8GTethyibRll/MGzUYMYiRm2xb7y0MZyR4
+	 AEKYqdPxkIu4Rtu6wtAA0VeKJY53iOrKwz7+DhbgSDXuuWNiyWokIhdhp+wjJ3PN5hO7p
+	 Qzrm6zT+QW5rb9irzwhbWTY6i5s5vtSzQ+FFO7h5+ihI6U7GRU+KeqO2Vg/iRB1a1a1p3
+	 Hqg4kC8itYHolXqz51ypHb4LDh+xRIIDhgnXOKqxNe+fDTBJQxqZpwU1od0vU1BLRsXNx
+	 /bHctz2I7oBpSTz241Z05xCO7UzFEYlg85jlABWRcQOrWbwqzrNFSHDpqNVKncCpIoA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YpR4k4G7;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XPSuuAeB;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2B8A606A31C
-	for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 07:01:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52FA8606A31C
+	for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 07:01:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YpR4k4G7
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49F4B1F00A05;
-	Wed, 11 Nov 2026 07:01:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XPSuuAeB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 020D31F00A05;
+	Wed, 11 Nov 2026 07:01:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794380480;
-	bh=StpK99dmWHQ94n811ksqmvihiH2eR+UQQdanaqkmWss=;
+	s=k20260515; t=1794380496;
+	bh=IKVQ2C/XdQUMsNG+CCaGZFxqXPWQMfivYrP17bjDqmQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YpR4k4G7QssEsSj/db4zlI1riUQ8jhmzPtmlkn3uUSZEWv9cpgWtgZBc5I3BsJyf+
-	 huzkUtSG8XyHQu4tN+wJlgrDEZL6VCEn4NXSeFaQo69+DVXSrpK9XOr2lRLD8S7Gm/
-	 iayzxIOYi8JO0P7VpjmaSKF9mtkAebZzQhHGLsGm2nP6HCYDIxbX+xZav+/0tm7gqN
-	 JgBTx6y7CrL0OyI5JxUdlRv6rZPQ3x2+eJ96bVxTWGVFPPmekq71qEKamF7H5PXcQZ
-	 8RNo+bbW65oqojmP0wxMsaL1jwIC2HmAViTZrU8BuUhHpeebctLoklJp945qCY5SEP
-	 vCu75AAjcexYQ==
-Message-ID: <sashiko-outbox-208482@kernel.org>
+	b=XPSuuAeBROzfPEJQlRUSf4KrTfbGRWd1J1i1YkV610tZPB1ueWFrg8kvD3bDOIOJv
+	 s6OiG88ph5pkHeXDCfj/d6pdVoZhJ45og5igG3pfd6yjU3FdQRgUICmZqQZMCvTRe7
+	 mDw3q7M8mBM1FA1z7HSa6jdutJuMw8IWExWYDBTtmZWC8G5TFlAdgrof6mfJnRbPU2
+	 s3mtzPjwB79NOv+Z06OXyZ5pmWyxhJCRXWNefl3zJ8Tq9uTewB9QN5DPAP/gy32Bo/
+	 A7tU2pAe2KAMTxgOKB5OSh+PCsQJCO6ldpbvX9OzPA7d7vNCPT6gRBlLczHg7D6nOw
+	 0Ks567M+O4Gzw==
+Message-ID: <sashiko-outbox-208483@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (it87) Clamp temperatures before rounding
+Subject: Re: [PATCH] hwmon: (lm80) Clamp voltage limits before rounding
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Zhu Jun" <zhujun2@cmss.chinamobile.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261111065252.17695-1-zhujun2@cmss.chinamobile.com>
-References: <20261111065252.17695-1-zhujun2@cmss.chinamobile.com>
+In-Reply-To: <20261111065302.17721-1-zhujun2@cmss.chinamobile.com>
+References: <20261111065302.17721-1-zhujun2@cmss.chinamobile.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 07:01:19 +0000
+Date: Wed, 11 Nov 2026 07:01:35 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -59,12 +59,11 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> TEMP_TO_REG() adds or subtracts 500 before clamping the result. Values
-> near LONG_MAX or LONG_MIN can overflow, causing a high temperature limit
-> to select the lowest register value, or vice versa.
+> IN_TO_REG() adds 5 to the signed sysfs value before clamping the
+> register result. A voltage limit close to LONG_MAX can overflow and be
+> programmed as zero instead of the maximum.
 >=20
-> Clamp the requested temperature to the signed 8-bit range before
-> rounding to whole degrees.
+> Clamp to the 0..2550 mV register range before rounding to 10 mV units.
 >=20
 > Fixes: 1da177e4c3f41 ("Linux-2.6.12-rc2")
 > Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
@@ -72,6 +71,6 @@ Precedence: list
 Sashiko has reviewed this patch and found no issues.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111065252.1769=
-5-1-zhujun2@cmss.chinamobile.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111065302.1772=
+1-1-zhujun2@cmss.chinamobile.com?part=3D1
 
