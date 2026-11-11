@@ -1,64 +1,64 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.139
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794379970;
-	b=Xu8o3PfFyK2h8ZIZooNAcsEhwYE8tDKOlmP+P6xJnZqBCaXPh/zHDWiMgMPuEOOY3hNd
-	 UPWyQxW0FWPUIKFdpkT7/jVaer/7GarorMYMs7ybhVbZDClhLQcThxfPgmEC1TSF/jua1
-	 cpdKYhdDpZ+7ll8wDh3Qrk89XclE/hQ5XCnKE1iRRnLxg2k5DosytPkSvs/Zsr6gmA2w/
-	 lZzq486odsD4OAfuT8aYi6wgD3XHTlCF7dN7IYG9EMfjpRyhWTM5uL3NUKJ4bxNXDV0hT
-	 thqyi5ZWawSyul8EHgb3Er7ED+A+LJycswyVGP4UIZTZokPSBUFPzpfQnRzxaB0E94g==
+	t=1794379976;
+	b=s+nLA5jhsnSd4G8QFzipmV8YcA60U/j1QXcU7dHlnTgVmTQMeAKBvpz/kdxLUVoCTzX9
+	 Qeg8GUqLdY1CRFWeowPI2eAi9VQivF/9mNtrvAoM6/mOoBSeywQ4UTsE2lgbOzr3bzzAY
+	 rsc02td+g9JrXbLzI4X0NOjCRVtpZMlPxjjILype1HmMCC5DhJCSA9vEcqwWrvl5JUmKa
+	 0PS7YGpHDEYw70FxrtIhiwRiKer7fYDIj394GiDOLu2fG+nW3VeuBvHQbVUsZnhLMCa5D
+	 NlwLbYrN1OKEuJPSN1LTo+/k28AzNbhjZnGenqogGdiQpgsclioiISih9R2kPsarCJA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794379970;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794379976;
 	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
 	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
 	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=pnjinjODmMLa7JROu/ME+a4Z2QVAzLBoXj0aMC9e0wU=;
-	b=AuAifB0czgPLdi0mVj5MhQoMAquSJGh5rZllSEqmVHMcy6tWdlVvmtpoYGj2l1WxUMAE
-	 j45k8qspqWYqFcJMaO/yZGNV+iM437ZKtyaAdve6lOqvZrR7m+SYZp0W4wRmLHwWaG47u
-	 IM30htdThVIFWV6Ffo4/iaZ80bcSmn+g1NNhdgFfb0tgp1cHIciOx/pT5i1ZUWOBXEnPQ
-	 uIaF0cW0R6nqwoAwxukmSFcIpdNr0TG+rm2qMcOCJroNkWgmzsUsV/J6ac0yIIRpMmlcu
-	 6mUA2ZAp0CF7v10jyomPwB5chWH8qhcbpON3c4+J2e+c8u8QxmHvFKIUUY4E0IgVtuA==
+	bh=wVtU8v738Ui1E6oFIdZU0RxbVE6v4Y9offS3OGnfUTk=;
+	b=O6BhyMbYdX/NdVFD9tzMIkS+p2cC98rV8oF9a9UzDbSuyezqxiAhBD/Lz358SOBEv948
+	 0ZJfUP0hoBXMYdC60lqMNqLh0DKvWwLt53C0uP9TnYzjRa7GvsD+zHpTAJFFYU8OSU7P1
+	 AclW9qAvpElUiiO/xaE1fHGlRobScHvibwl4ekNs60YyKvulBnfEr3SDlb5UZl8BXIAjx
+	 DlJgvaqa6Lh+tTBJPaKANJtPTZWPJf1GyZS7Ahf0rj5fkHVM04AOVQYUZfSWqq9aLVuMK
+	 Mg+y+yoS9KWKqJ0mkx7YjdmeVmDsLJOdbGV4ORJyLtguD+BZaulj4L7SzO+BPK4HmSQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cmss.chinamobile.com;
 	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=Evf6g9i3;
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=Qt0D2KC3;
 	arc=none smtp.remote-ip=111.22.67.139
 Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71D3F606A31C;
-	Wed, 11 Nov 2026 06:52:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 71D3F606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67A42606A330;
+	Wed, 11 Nov 2026 06:52:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67A42606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=Evf6g9i3
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=Qt0D2KC3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=cmss.chinamobile.com; s=default; l=0;
 	h=from:subject:message-id:to:cc:mime-version;
 	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=Evf6g9i3t84y04zo3L5cv174H9sFNHv5XRhoKiVNYhuFZrRb1QPbSmlqLodrcphtb6p8iAVIsDN8n
-	 UciUH5kwRuJNeMP4vwnKZY/2XBxBRnk22VFy9rB8//4jaz22n5nLXtlxgzbQ8E4lAjYJFJGVGq0EG5
-	 gIZ+4CN+ekZZx2zQ=
+	b=Qt0D2KC3YTLs2JkEuWyAswLPnfbJWUTKkaQ9rrANDnc9YhYK3xCqPfbBtQE5qK8HnCrBdJb6gsAPV
+	 P2mv6vhpDOhsGuCnEMs8UC8+sPb4BUCQ5CY3tn4MmO4PnjWe0t2r6fYmCLbvEXQvo6od1I2oN2LKvF
+	 FvQPivcxZytHLEWM=
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app09-12009 (RichMail) with SMTP id 2ee96af410bf67b-da9de;
-	Wed, 11 Nov 2026 14:52:48 +0800 (CST)
-X-RM-TRANSID:2ee96af410bf67b-da9de
+	by rmmx-syy-dmz-app01-12001 (RichMail) with SMTP id 2ee16af410c5cf7-b1169;
+	Wed, 11 Nov 2026 14:52:53 +0800 (CST)
+X-RM-TRANSID:2ee16af410c5cf7-b1169
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from devin-VMware-Virtual-Platform.localdomain (unknown[10.55.1.72])
-	by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee36af410be1d2-d136d;
-	Wed, 11 Nov 2026 14:52:48 +0800 (CST)
-X-RM-TRANSID:2ee36af410be1d2-d136d
+	by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee66af410c4104-d20ef;
+	Wed, 11 Nov 2026 14:52:53 +0800 (CST)
+X-RM-TRANSID:2ee66af410c4104-d20ef
 From: Zhu Jun <zhujun2@cmss.chinamobile.com>
 To: jdelvare@suse.com
 Cc: linux@roeck-us.net,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Zhu Jun <zhujun2@cmss.chinamobile.com>
-Subject: [PATCH] hwmon: (it87) Bound 16-bit fan limits before conversion
-Date: Wed, 11 Nov 2026 14:52:46 +0800
-Message-ID: <20261111065246.17682-1-zhujun2@cmss.chinamobile.com>
+Subject: [PATCH] hwmon: (it87) Clamp temperatures before rounding
+Date: Wed, 11 Nov 2026 14:52:52 +0800
+Message-ID: <20261111065252.17695-1-zhujun2@cmss.chinamobile.com>
 X-Mailer: git-send-email 2.51.0
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,32 +71,34 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-FAN16_TO_REG() doubles an unrestricted positive long and adds 1350000
-before dividing. Large fan limits can overflow these intermediate values
-and select an incorrect tachometer limit. Converting LONG_MAX can select
-0xfffe instead of 1.
+TEMP_TO_REG() adds or subtracts 500 before clamping the result. Values
+near LONG_MAX or LONG_MIN can overflow, causing a high temperature limit
+to select the lowest register value, or vice versa.
 
-Apply the same RPM bound used by the 8-bit conversion before doing the
-arithmetic. Keep zero as the alarm-disable value.
+Clamp the requested temperature to the signed 8-bit range before
+rounding to whole degrees.
 
-Fixes: 17d648bf5786 ("it87: Add support for the IT8716F")
+Fixes: 1da177e4c3f41 ("Linux-2.6.12-rc2")
 Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
 ---
- drivers/hwmon/it87.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/hwmon/it87.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index bbb3f9788c2e..b8ad1ed043b3 100644
+index b8ad1ed043b3..036e0b7ce01b 100644
 --- a/drivers/hwmon/it87.c
 +++ b/drivers/hwmon/it87.c
-@@ -761,6 +761,7 @@ static inline u16 FAN16_TO_REG(long rpm)
- {
- 	if (rpm == 0)
- 		return 0xffff;
-+	rpm = clamp_val(rpm, 1, 1000000);
- 	return clamp_val((1350000 + rpm) / (rpm * 2), 1, 0xfffe);
- }
+@@ -771,8 +771,8 @@ static inline u16 FAN16_TO_REG(long rpm)
+ #define FAN16_FROM_REG(val) ((val) == 0 ? -1 : (val) == 0xffff ? 0 : \
+ 			     1350000 / ((val) * 2))
  
+-#define TEMP_TO_REG(val) (clamp_val(((val) < 0 ? (((val) - 500) / 1000) : \
+-				    ((val) + 500) / 1000), -128, 127))
++#define TEMP_TO_REG(val) \
++	DIV_ROUND_CLOSEST(clamp_val((val), -128000, 127000), 1000)
+ #define TEMP_FROM_REG(val) ((val) * 1000)
+ 
+ static u8 pwm_to_reg(const struct it87_data *data, long val)
 -- 
 2.51.0
 
