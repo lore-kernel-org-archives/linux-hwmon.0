@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794366123;
-	b=KmOsgcSlMyhNrAx0k/1kf17wJ4Nb7N0qCmWMSl448tMW7JMstJwkNNacGPbNHANQv8bg
-	 Co60mdFiG5R6OWJVYKNxBEFjP3y0A3thqd4SxCHVUKx228/BswNp7wS99Om31CMvz0ElR
-	 t8wu6jj4J7lUD0zytriZH/uSD71uuJRMGMIUJoWu5tfqvq32hJ1VohMlHpZg+M7adsjrF
-	 DU6mnRtoB0CXRkZbyMRwUhgmSMnrqgmRt+dyddENnRuVtCZK3ffPb+bqEMu1ok+RrU4Hh
-	 6tP515IuXtOJn254wuYmUoTw4ZllFRB4rnqNtY/j4h37jlK5BOp1R6DETab0IIbVjDg==
+	t=1794366185;
+	b=Pohyuw/8YEFVxYSpoMRedldDNSge6aGtjWJ58L9L/U5VLnsYMM5+0qrOwcw6OzjhCGuj
+	 B8l6lIbGYoDnR7kbdMcUHAn9A2LMcgT+Byh7N7M4axEPwT4lrHquJunMzCpCFe2gzypTO
+	 yr9weOJVWNPsFofFmZwYJVf6KyFuZe3bVpmZiE13/J5OltktT0OgT4Qleb5fFQCrqKB87
+	 Abra8vXENH5sqZfxPp9wwT9Jo+nWZfo5od+sbMals+vTmc8HlYyhcelACp3r4ROO/MYah
+	 H5HkIZVhLaFf6v6O7/RxvTIBudynVTESll49TMZfF+xa507baLYkgaNlXjhmcIERpsQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794366123;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794366185;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=45f9F8QBv72iR+qRuKTHK4pfoI4/bTYh4h3dlrTS0aI=;
-	b=s0u/sH1MEHUQOnKA2WlJYs1H2re+Pnsp2eJsEqZ0vgY7NE+g7XKIMKE8DIdunwKUg2xU
-	 xbkw3kSiaA3lUY/RfVsJ0J1V9UZqYKjPaCkt8I0k6fHxvZD5Qdx/88HXyZXF+wNIoM0Xz
-	 RiJO9BOE0EBhhhOt8TU7boXE5mrjYgvR4U5BNylIhG4csHZgnO5esz3qNT2RHUzBkdoST
-	 nR4EC8yAH6Va9xQ6fugnHW08f5jHv+V0TUjet21U1W03S2/Q4hho4lkSibxQJ8GH0NNAT
-	 cfCrCnbALLE7AyGS9eSx84ZpRkPuzRNP4xu04J8krehWVkF9CDm5BBM7Py51tThdiVQ==
+	bh=oIQLDdqhFGAv5xgiSya00tLYOu5UevFKNJYfrciwv9Y=;
+	b=fMeGPTXvuf7mkszOsO2isR0/6Zwb40d47o02a2TrzhuKVu0Dk9bNSBwk0Lymit4LwAZ8
+	 3occnz+JmFsFf9Y223xofovZPIUayy4VDvQ3CJ+zu3EOSwrutL3w37zphRpZD19yCLOJv
+	 tqJ29tkVR7Blh0wIcw6jf3AAJ1NCQIamqtzKdQc9to+KGFLPzSu5MBmjNzVsXjj9ouJeI
+	 p/xEf2xJjfUlJiNDQrIEUAY9740ZMl+95eAjfmukInCDZpbdIRvXispyTydKLIsoAgzkl
+	 5yiACjfdwNvJwkjAm9Xtiky1ZINdloKB5Hqo4T+ukTMtoNPQe/fTm3UoQ/jAAJK2D9g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dAHhU4ys;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nqta5LIA;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 291BC606A31C
-	for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 03:02:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F667606A326
+	for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 03:03:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dAHhU4ys
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85A6E1F0089F;
-	Wed, 11 Nov 2026 03:02:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nqta5LIA
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B90E1F0089F;
+	Wed, 11 Nov 2026 03:03:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794366122;
-	bh=45f9F8QBv72iR+qRuKTHK4pfoI4/bTYh4h3dlrTS0aI=;
+	s=k20260515; t=1794366185;
+	bh=oIQLDdqhFGAv5xgiSya00tLYOu5UevFKNJYfrciwv9Y=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dAHhU4ysfIon00exn5/AdbfKLTW/lywwKZ1YvRQ4cLE9eXMYEjYdTOp4pemL1Wdl5
-	 2Wq+niEsRhauE+4V3XIUwbk7/ha0SvVC0E+fO8o+eNFoTZdUrk8iGdIbEi3wxe2whR
-	 FHU+IfnHNEif2/5cvyPdcNSPFr0mUxnurcwoENI3mKFSsvu4IfWxE4L+zvgVKrJoP/
-	 HIp1C9NjyI8pqebq8OAwHQyQdTBgEPwfnVQCcTQbZixGNnMFzho+XvUprsYF8G53O7
-	 IRl0MSkDxdbSlDajj9lGttpGsNdCzw5odoPIoapqpOJA//m/3qFbsjI6oqh4DFKfEi
-	 JyrmrIQg1ztAg==
-Message-ID: <sashiko-outbox-208146@kernel.org>
+	b=nqta5LIAlTQ7E9/crvm79gYy+6YvWsEKUTdqMSBgMBmq/dP7ZpSiRsTXYDE9IS5pM
+	 nVgwpvHC+raxjEFTyohHrbBCGkFk9PVWWZDxql+6asHiovQkNL4wiaArZ3kyZuVK2N
+	 ELENgmUQKZn+LpEufPM4ESO+Eqk9cMwCt46WJThuhBEaCtJjl3bZ25wNyl3oX+z4j1
+	 qpxmIDB6p1o2a1l0Wc73D0YY1sbO6VfQdpg54v+UkyNNIDwzjxhZaVdNlH6A0U9nSP
+	 8zMc4+sKf20vd/kSo1RvscHMKDJ4iehtOc3D/PVtxQDE0vJLrsk+L75XqvoOZYt1Qg
+	 n99NCyhcsdJqg==
+Message-ID: <sashiko-outbox-208152@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (nct6775) Clamp fan control times before
- rounding
+Subject: Re: [PATCH] hwmon: (nct6775) Clamp voltage limits before narrowing
+ and scaling
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Zhu Jun" <zhujun2@cmss.chinamobile.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261111024607.9712-1-zhujun2@cmss.chinamobile.com>
-References: <20261111024607.9712-1-zhujun2@cmss.chinamobile.com>
+In-Reply-To: <20261111024524.9627-1-zhujun2@cmss.chinamobile.com>
+References: <20261111024524.9627-1-zhujun2@cmss.chinamobile.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 03:02:02 +0000
+Date: Wed, 11 Nov 2026 03:03:04 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -62,33 +62,32 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Low] hwmon: (nct6775) missing Fixes: trailer for step_time_to_reg()
-  bug fix
+- [Low] hwmon: (nct6775) missing Fixes trailer for in_to_reg() overflow
+  fix
 --
 
-commit befc95af1cfff1fb8b3fc9efb4b1e43ee7673fb9
+commit 942ff78cd13ea05813c6ab30f0bbe111309ffcdb
 Author: Zhu Jun <zhujun2@cmss.chinamobile.com>
 
-> hwmon: (nct6775) Clamp fan control times before rounding
+> hwmon: (nct6775) Clamp voltage limits before narrowing and scaling
 >
-> store_fan_time() accepts an unsigned long, but step_time_to_reg()
-> narrows it to unsigned int and adds the rounding adjustment before
-> clamping. For example, 4294967295 ms wraps and selects register 1
-> instead of 255 in either mode.
+> store_in_reg() parses an unsigned long, but in_to_reg() takes a u32 and
+> multiplies it by 100 before clamping. Large limits can therefore wrap to
+> a low register value. For example, 4294967296 mV becomes zero on a
+> 64-bit system.
 >
-> Preserve the input width and clamp to the maximum duration for the
-> selected mode before rounding.
+> Keep the input as an unsigned long and bound it to the register range
+> before scaling.
 >
 > Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
 
 [Severity: Low]
-This fixes a narrowing and rounding overflow bug in step_time_to_reg().
-Should this include a Fixes tag for the commit that introduced
-step_time_to_reg() and store_fan_time()?
+This fixes a bug in in_to_reg() where values parsed by store_in_reg()
+can wrap when narrowed and scaled.  Should this include:
 
-  Fixes: cdcaeceb74ff ("hwmon: (nct6775) Add support for automatic fan cont=
-rol")
+  Fixes: 9de2e2e84e7d ("hwmon: Driver for Nuvoton NCT6775F, NCT6776F, and N=
+CT6779D")
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111024607.9712=
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111024524.9627=
 -1-zhujun2@cmss.chinamobile.com?part=3D1
