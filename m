@@ -1,63 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.137
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.139
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794379990;
-	b=hG8RFl/mQ35dHIXEZiqXbRSRktsGynIxYesgbHPJw4bTtc3UOH+zIhrodDmXi/j+mhev
-	 iOHW/3sBI5De98ndMvRq59gFMoX6dR9HfSC6dRrGS0WKBHFKE4IMVcljcf4gMuPZuS7Jx
-	 2llvRQwkLREQ9BU/Gh+R/659Z6RTtezyNZuY3/k0fvVbf2C1/lGfeA7on6wzKYGdWdA5r
-	 ITKKU4+4YCi9HPc7b6cQHwFUOxnru4cbsCzP3mR0qw7xlZYYDtHdcT+eReTd5+07tMkT6
-	 5HG6pOol0efCgqakX880XGG/rK4naE15l1gGQ9jWmMqEuPL+xoARYFh+c4DZZYO0hkA==
+	t=1794379996;
+	b=m8oULxl0LHCMLOmVNSVMGQhDmXUTmhF6eLmPWDEtYQD8xccHSAN/GfYKXx5JYw4T+GKQ
+	 y1sNkMsrma/ulcR3IIPa2ryLmGlWyUvIR2JGpgVWghfCyZT0TFY139x0hmGb6SqzXQ6dJ
+	 xUuYupoCPidgMi9WuVdRVSDVDOnoIstqQB/jCVMsHDG4oDNUCw1c0RIqjqoKoP1Ak6JzF
+	 d7UXbZlnRnyF+TJYTPc225hcxFyAFdtt0XUz5QQ6fQ3tp09v3k0lr1FwywwkdDka4LX+N
+	 qMV0AnFRZQ1K3WKYBguAlEmmGj59isRt6vf6FdB2FK4PmPxtoLgLpRvwGIn6BEBsFgA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794379990;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794379996;
 	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
 	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
 	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=FHnXSqUbFlkuTaX7b2PW4LqXPvnPDYC4FCyfsdCC63E=;
-	b=ren+5BVrmbMtPxGlip6E17Cp/I9QqEm2sD6KXVPSexsU/U0jvfJokIhw0DWvVS83txm6
-	 83Qjsnj3lkfQWCYIbSY97KxuNJ5gf7aDgYQFMkJvBPhWGypfHvA1iD9CbFKS7/JhyQA4y
-	 e2g5jbBLI2o+us7Vay+WHPK9rzmeywjtWuZDuOD1WiqvnNkSlpeNqXK3h2NWPyFHDxnWd
-	 YMqI8FLIu1pdtV9wAF5TrdXi1ARW+4Qf3rkKjNPC4ugDNf7Fji/nW6P9gxNVeP2C+6i2c
-	 6YodqSMRgGUGbCiC6vxU1PwV9CjnhwQy0RcBJYem0KEG6JKlxjCrKJnnoBVutX1fCZA==
+	bh=vzVmZo5Yu8WbtnqnqJUDiuOMynld+P73JEtDj5C2IZg=;
+	b=d0Aa7Et8d7R4O72aQiNUk0/+qYsGkHtFw36LxQxhe0iSxWccWXvoJzkdSDB02Z1p3ec1
+	 br7fvLJyeHO7nsEgOYUT4q/OGG0OnpMSrTd6w7pJTWbcEQKd7mjAhZ4E6j5BKjIH9BqFI
+	 vBTfquqIlFimZlF9fj9ofQI5n3Cd8sZxyD2IINmej6bD0Ooyjl11IT73JeumBMOdoOM2x
+	 n1WKJjVI8LhNgIq/b04xNSIbHYb0k+XUgG6F5rngQYziJ2m2lZy+FnYxCMqUjQxSmEFIY
+	 Wode8nmy3vHzlSszlEKRG2OsskG9lTIuByQowgNeZlV8u9xMpa1BdBtcVTBieS/Y4KQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cmss.chinamobile.com;
 	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=Zmxqv7Pj;
-	arc=none smtp.remote-ip=111.22.67.137
-Received: from cmccmta4.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B25A060A2602;
-	Wed, 11 Nov 2026 06:53:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B25A060A2602
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=SaCAUyWt;
+	arc=none smtp.remote-ip=111.22.67.139
+Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DE90606A327;
+	Wed, 11 Nov 2026 06:53:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7DE90606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=Zmxqv7Pj
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=SaCAUyWt
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=cmss.chinamobile.com; s=default; l=0;
 	h=from:subject:message-id:to:cc:mime-version;
 	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=Zmxqv7Pj6diJT2dCEjzGD8xnx2GCevjmDmE2H2m3inlIGTgKX/C2IjzmaEx7Mv6oYkt+mqlAAEV6p
-	 3SsQmKMkLQ0T4Pba9M6ECSef9/u2qPHH+HpPBxxyprjreru7pLVDZ+eecHz7cI1+uqqZ40wO+/fHVM
-	 G9Ylgr4nSqv8GivY=
+	b=SaCAUyWt+k6cdT0k38Rb85LQHeXIYw7opCwNWuNbS1HCsfP3IHuF8IPOeatQO5K9jDrJAAMyjoLMz
+	 khNmkv9ftxeMxK9l5skM4yCSQ+aRHcBoXI89dJjAI+EZ3kSGtbIzrUxBllr/LD7AMXqCIeQMd4ZTzd
+	 gTSg538tJCg7Jni4=
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee46af410d0319-751b4;
-	Wed, 11 Nov 2026 14:53:08 +0800 (CST)
-X-RM-TRANSID:2ee46af410d0319-751b4
+	by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee56af410d273b-d2d2c;
+	Wed, 11 Nov 2026 14:53:14 +0800 (CST)
+X-RM-TRANSID:2ee56af410d273b-d2d2c
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from devin-VMware-Virtual-Platform.localdomain (unknown[10.55.1.72])
-	by rmsmtp-syy-appsvr09-12009 (RichMail) with SMTP id 2ee96af410d3247-d248a;
-	Wed, 11 Nov 2026 14:53:08 +0800 (CST)
-X-RM-TRANSID:2ee96af410d3247-d248a
+	by rmsmtp-syy-appsvr10-12010 (RichMail) with SMTP id 2eea6af410d9a79-d1c6c;
+	Wed, 11 Nov 2026 14:53:14 +0800 (CST)
+X-RM-TRANSID:2eea6af410d9a79-d1c6c
 From: Zhu Jun <zhujun2@cmss.chinamobile.com>
-To: linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
+To: m.hulsman@tudelft.nl
+Cc: linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Zhu Jun <zhujun2@cmss.chinamobile.com>
-Subject: [PATCH] hwmon: (w83781d) Clamp voltage limits before rounding
-Date: Wed, 11 Nov 2026 14:53:07 +0800
-Message-ID: <20261111065307.17735-1-zhujun2@cmss.chinamobile.com>
+Subject: [PATCH] hwmon: (w83791d) Clamp voltage limits before rounding
+Date: Wed, 11 Nov 2026 14:53:13 +0800
+Message-ID: <20261111065313.17748-1-zhujun2@cmss.chinamobile.com>
 X-Mailer: git-send-email 2.51.0
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,32 +71,32 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-IN_TO_REG() adds 8 to an unsigned long before clamping. Writing
-ULONG_MAX to a voltage limit therefore wraps and programs register zero
-instead of 255.
+IN_TO_REG() adds the rounding adjustment before checking the register
+range. For an unsigned sysfs input such as ULONG_MAX, this addition
+wraps and selects zero instead of the maximum voltage limit.
 
-Bound the input to the 0..4080 mV register range before adding the
-rounding adjustment.
+Clamp the millivolt value to the representable range before rounding to
+16 mV register units.
 
-Fixes: 1da177e4c3f41 ("Linux-2.6.12-rc2")
+Fixes: 9873964d6eb2 ("[PATCH] HWMON: w83791d: New hardware monitoring driver for the Winbond W83791D")
 Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
 ---
- drivers/hwmon/w83781d.c | 2 +-
+ drivers/hwmon/w83791d.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/w83781d.c b/drivers/hwmon/w83781d.c
-index 59d2b9d40920..0a820e64a7a4 100644
---- a/drivers/hwmon/w83781d.c
-+++ b/drivers/hwmon/w83781d.c
-@@ -146,7 +146,7 @@ static const u8 BIT_SCFG2[] = { 0x10, 0x20, 0x40 };
- #define W83781D_DEFAULT_BETA		3435
+diff --git a/drivers/hwmon/w83791d.c b/drivers/hwmon/w83791d.c
+index 8bb457326c0b..41c73fca388d 100644
+--- a/drivers/hwmon/w83791d.c
++++ b/drivers/hwmon/w83791d.c
+@@ -207,7 +207,7 @@ static inline int w83791d_write(struct i2c_client *client, u8 reg, u8 value)
+  * in mV as would be measured on the chip input pin, need to just
+  * multiply/divide by 16 to translate from/to register values.
+  */
+-#define IN_TO_REG(val)		(clamp_val((((val) + 8) / 16), 0, 255))
++#define IN_TO_REG(val)		((clamp_val((val), 0, 4080) + 8) / 16)
+ #define IN_FROM_REG(val)	((val) * 16)
  
- /* Conversions */
--#define IN_TO_REG(val)			clamp_val(((val) + 8) / 16, 0, 255)
-+#define IN_TO_REG(val)			((clamp_val((val), 0, 4080) + 8) / 16)
- #define IN_FROM_REG(val)		((val) * 16)
- 
- static inline u8
+ static u8 fan_to_reg(long rpm, int div)
 -- 
 2.51.0
 
