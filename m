@@ -1,64 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.135
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794380009;
-	b=yjv3M+8IntrNyP7VyN8bEwcu7VG+c6rwgcjtnl8GRUAYGZZug0vXsciVwKWowRinSOae
-	 Q7Cqix5eRaoYG52RoelVYRPbN69JEpDrK2uIK/8VXPlktVq5S3xGeQpd3QXZJ2tlEWNiE
-	 2BIMcjTYVf5x2n2Njt6hBcd0fwWbdjSzyyN6L/CdM39B1fkLVPf2HKO+J7ja1ls2VDAKD
-	 bvqryyAMkJfLttKuyoWLwetSYXmtoUSTbcqx+vakyjJZUB0PT9sXqg0Twt5rZgbNWzX6u
-	 GNvGrpxOMsHwkIo6szgqssnByhUQvDtiHuOI8Jvf0gIPR2f+QGvYPe7Kose6zuqEmfA==
+	t=1794380042;
+	b=wTe562KXCQA/NXKOx25+CGnQs3wph97zNoAQSagnlreJv3uatjojqSOTCsh5GgW/QqqY
+	 NfhOSY9YDlWHO5AyoED1+ITABYE6OH6FLVT+eWjLY92Wk9GbeHV1Yx4gl7s54CaVlUeoe
+	 G6LKggpN6ZQpNrmzd42cOiCV4pvf1Y/g5r2WM/az415u/XfMq3DDy8z09+ix4YZB+rRE5
+	 Ke+ofFwdC24dIhYgIjg6Bm2j1LJv1JW7XwrFyEPXgSSN3zbRUef6wU2WuEwJwyiz38O74
+	 FReakjB6cOLblU36CkolTUT+/Oa3EQfKob29w1dazh+TvDwhvS3kM0yxGIb2h7+CYDQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794380009;
-	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
-	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
-	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=AyjfQU+yoUSKk8eYrWKnMnUhkNrbpB3JaFAxG5B+hGE=;
-	b=ijwqCzDsfsESDzouKft8PJ7ZjibjfLo6hvpRknRQpLvWJzP0QmzpZcz11wMKRj/hTPdW
-	 XrmOotUeTieusW/EJBiGMa3/6gnfhufrr+IN72cnOhDvJX3VfEUjYqhN5CNyIywvGTBy2
-	 6huVQyMxsJg0IuarPDsyL1OynbtLWsyfXcApZXKrYmQApHBadnI3xNP3cz4jc2mye162Y
-	 qjCLsSAGMhUtHPkq+XAsl4HvAQZcG0xwb+WmcEgyQgzOj6/DSus/1WM9JJtZ47Q7Vh79k
-	 0HDvOEbHPg3nm6kHzEZWZp+VI2iT8ezh8kZ5C9d+aJhKMP1IQJm3MJ+mdvOdrIcuvIA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794380042;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=cuU2q7FVmMK2X4Obj5s6jBJNageE6TbZtLZ+09cDCyg=;
+	b=nsdfQW1HvHP2VWdYtLYmLEpXpGP+VF/3JHEwZpXlAU/ZVRzYjgnoSCA1PkzmnSgoccoS
+	 cIYd1mFpSbVysPiNUtt8Qng4CDDCB5Y590XXYT+1qKmpHim1nF0TzMV5xc9nnCBOpLSzs
+	 njfrpwRvgnaM3A9STI7POOtbcK9r2SZ14Ict5tYYKsfs6I3iGXJMkOkapm5pp2bJ1PLaA
+	 OJF2K8pb8OzcQAKHLjHcp/w3+VPzkfVzMs/DyV2kYVUqn8slKlMJ/21pgU7AGptnBK7tJ
+	 QlMU2/z8btG3ZOvmT6U8h+UmZYkXpLSygospJ2UBeue3MseWdN4gTGnfACumBqxeGZw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cmss.chinamobile.com;
-	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=Jw0Fq4+B;
-	arc=none smtp.remote-ip=111.22.67.135
-Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5E4E60A2601;
-	Wed, 11 Nov 2026 06:53:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C5E4E60A2601
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=M1TOgfzD;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32592606A31C
+	for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 06:54:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=Jw0Fq4+B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=cmss.chinamobile.com; s=default; l=0;
-	h=from:subject:message-id:to:cc:mime-version;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=Jw0Fq4+BOa4+R/8QvpVB7iclZ+o54X7eSsOCt5uzyKyzRVKFNEQKh/GrpbjIUzkHtFYMBVvwVWqqy
-	 YPysugonGYOh+5mncCnDHeeO8GoK1bAzd2BPQ+FFEx6o5iD2GAgLx+Brd5z3+gvkg6Flb+Z0spBS+s
-	 FW2qJ4B8p0tTluhQ=
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee76af410e581f-d6146;
-	Wed, 11 Nov 2026 14:53:26 +0800 (CST)
-X-RM-TRANSID:2ee76af410e581f-d6146
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from devin-VMware-Virtual-Platform.localdomain (unknown[10.55.1.72])
-	by rmsmtp-syy-appsvr05-12005 (RichMail) with SMTP id 2ee56af410e4c8c-d20c7;
-	Wed, 11 Nov 2026 14:53:26 +0800 (CST)
-X-RM-TRANSID:2ee56af410e4c8c-d20c7
-From: Zhu Jun <zhujun2@cmss.chinamobile.com>
-To: linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Zhu Jun <zhujun2@cmss.chinamobile.com>
-Subject: [PATCH] hwmon: (lm85) Bound fan stop temperatures before subtraction
-Date: Wed, 11 Nov 2026 14:53:24 +0800
-Message-ID: <20261111065324.17776-1-zhujun2@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=M1TOgfzD
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0A301F00A05;
+	Wed, 11 Nov 2026 06:54:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794380041;
+	bh=cuU2q7FVmMK2X4Obj5s6jBJNageE6TbZtLZ+09cDCyg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=M1TOgfzDXPHKeV8P2koOjwmFO6Q2pIgUlIcrTXBDQsHl2N9a5NyOISEMLV2jQ9XoA
+	 3OSCwxb4ZE0rkOKlt8VM2ES+tQyeuy+vXx7iYHFHEPsaR0ggi0Ndc2eGxKe68FHfzf
+	 BpHqnEPBV6EcJXEm3e4vjJ4ne8xFEel3N1mj9cWmgsV4NDTrE8V9xQwpT2dS6JSWzA
+	 tEvMb/9yOnSoz9i1lTLbQWDSUFS+ayZORYjkiRRmuI2CqkyuC6tNh+aBq2s3BwGmVx
+	 YYlfWi9LQ4shx/Ua6eohwMPzIf2ZkctbETtdK9BslNq+7YVFql6lik/+vHjadWI0C4
+	 zZEat7E0V+8Lg==
+Message-ID: <sashiko-outbox-208467@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (w83627ehf) Clamp voltage limits before scaling
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Zhu Jun" <zhujun2@cmss.chinamobile.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20261111064831.17299-1-zhujun2@cmss.chinamobile.com>
+References: <20261111064831.17299-1-zhujun2@cmss.chinamobile.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 11 Nov 2026 06:54:01 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -67,37 +58,21 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-temp_auto_temp_off_store() subtracts an unrestricted long from the zone
-limit before clamping the resulting hysteresis. Extreme inputs can
-overflow this subtraction and select the wrong end of the hysteresis
-range.
+> in_to_reg() narrows the sysfs value to u32 and multiplies it by 100
+> before clamping. A large positive voltage limit can consequently be
+> programmed as zero instead of the maximum; 4294967296 mV reproduces this
+> on a 64-bit system.
+>=20
+> Preserve the input width and clamp to the representable voltage range
+> before multiplication.
+>=20
+> Fixes: cf0676fe42c8 ("[PATCH] w83627ehf: Add voltage inputs support")
+> Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
 
-Bound the requested stop temperature before calculating the difference.
-A signed 8-bit zone limit and a maximum hysteresis of 15 degrees require
-only the -143..127 degree range.
+Sashiko has reviewed this patch and found no issues.
 
-Fixes: 1da177e4c3f41 ("Linux-2.6.12-rc2")
-Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
----
- drivers/hwmon/lm85.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/hwmon/lm85.c b/drivers/hwmon/lm85.c
-index 80bd1f47114d..e776ec4ae40f 100644
---- a/drivers/hwmon/lm85.c
-+++ b/drivers/hwmon/lm85.c
-@@ -1153,6 +1153,7 @@ static ssize_t temp_auto_temp_off_store(struct device *dev,
- 
- 	mutex_lock(&data->update_lock);
- 	min = TEMP_FROM_REG(data->zone[nr].limit);
-+	val = clamp_val(val, -128000 - 15000, 127000);
- 	data->zone[nr].hyst = HYST_TO_REG(min - val);
- 	if (nr == 0 || nr == 1) {
- 		lm85_write_value(client, LM85_REG_AFAN_HYST1,
--- 
-2.51.0
-
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111064831.1729=
+9-1-zhujun2@cmss.chinamobile.com?part=3D1
 
