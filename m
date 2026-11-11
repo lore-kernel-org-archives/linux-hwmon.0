@@ -1,78 +1,127 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.148.104
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794388439;
-	b=gduI4/IJWZqj1lAG0ojeeDnptpyi9JTw1m4k5np/Wzk6flt4/57huHWB7gdgQac6GvWy
-	 +RLlWAlbzaCLdEd/b7uLsVvBwvN/Gnb0DLvDbvpR+rWSQ7PLn22YKc+4n1RyGf4kcBL1y
-	 E6mCdc5PL9ku7GvfK5eBCWi17ArB7Pohn8trkxjrCanmzkiTxkR2rw5dp+eELACaV8VZy
-	 V60lvzhVhxQsWexIySibsYDqRKQuf+uWfDVkSxpK5FCEBVE6Ba9UwbsvdsfbGZCbkp+Y5
-	 dAc/+/cbdFrHyYyfzJM8yqgggpvCBcePmcZ5e/kyjhtfRbgda8FQYbqg8s6teBNpYgw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794388439;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:From:
-	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding:X-Authority-Analysis:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=GRzsaOCKjDVmrskdVuxSmKYoO/Bmer5GyRq6NF1cbik=;
-	b=pJH5iBzy5sALunzKzhyNTqZ7/AqV3lEyA8wqHt7vyMeJk/sxAdGmEoupkiRQ3q6lptJO
-	 VhMukgH8lEd5hwXDAldf2L6k728V9ZLLOeqA32WBEmypZgKlzwOe42bZfHZag09l6YklP
-	 g5USXQIRZ8pzqyHro1TuZVisTaFkGUyon+ht3vZOMNpqZ50nkDqlp1/zU6uVlnbjFudya
-	 U5+unlrmwBq7k3Y1kBbAE4pS9u17Nz+plnV2sWFopw7sNWznVmzBUxCdHMb6vPxHJAMc1
-	 grexeo9LWk+DWILB7/mtg6mllelmJaBN7apfdTNYWYI33e9/LqBa9Zsn2mM6YdzSRkw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=lenovo.com;
-	spf=pass smtp.mailfrom=lenovo.com;
-	dkim=pass header.d=lenovo.com header.i=@lenovo.com header.a=rsa-sha256 header.s=DKIM202306 header.b=gCyHf1IO;
-	arc=none smtp.remote-ip=148.163.148.104
-Received: from mx0a-00823401.pphosted.com (mx0a-00823401.pphosted.com [148.163.148.104])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.152.168
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794389574;
+	b=otfXJ2Bl3DPZdXME9CiMbm+7+ceeQDi7tDSTazpNAyXeiSqiVuwfGnZ/tCuzFZZaEMtU
+	 v0uWWEVFz6BSR69DpSeUtBGSC0gihnhNOSxxkNDKZ76OH8jBvr0QtOfrXHBXHyGbjHVb1
+	 /Lr/TDJxnSay+5poRgDTIrVgAukJdbgp8Aj9TtDhg4e5YxZJE9GPgGhNzTPlkpt4w5Atv
+	 vLj47VSJCkE/Kab04Q8RSP0QkS3Rh9nOTwFgsg8DsuboqyXcswXXbXLt3S9q8TXPRcwMg
+	 eIj2S/K6XQBC/FAEzZnRPpVsrnYEA3CHEGr2d+bH+12S1+1BvjlC7jSGfX+kSdCFi/Q==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794389574;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:DKIM-Signature:
+	 Received:Received:X-MS-Exchange-Authentication-Results:Received-SPF:
+	 Received:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
+	 X-EOPAttributedMessage:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
+	 X-OriginatorOrg:X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-Id:
+	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
+	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-GUID:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Reason;
+	bh=B7aQ3q2DNqnMo/WIPHLbk1Xhn2EPnkmKcTpn550r/qk=;
+	b=1SStRax0AJtM4ZueFie/viPn88lwWXwqATmVhOXzJTDmt+51OFRPKQnd1pTCUy/UP/kv
+	 +FUSxWrYd/bFbgYtakDN0CFehjdhJGRxikR0n7Wj0mVIgKGRXibmEBFDk+6rKtGQBLgjn
+	 k9d9sB0BCRAheZR135fF6E2RaAa1AheFmsk1QCRqDcG6uX3v9Fdo8k0EV4sTtViJuGzHC
+	 wuoFeKdfznQX+EXkH1GMlzjRmq0XyctB6oghrYY8EQbofBQNGc5SP7FqzeQJQgpOOqhNF
+	 jOtxAu5gDrnN1XDu5Ia1x9+XrLSdzFz/5xmxZWxuHEMrcNDTdFsoCFEmp8E67BaghPg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=opensource.cirrus.com;
+	spf=pass smtp.mailfrom=opensource.cirrus.com;
+	dkim=pass header.d=cirrus.com header.i=@cirrus.com header.a=rsa-sha256 header.s=PODMain02222019 header.b=oJMwcuPp;
+	dkim=pass header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.a=rsa-sha256 header.s=selector2-cirrus4-onmicrosoft-com header.b=sA+UmWsk;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.152.168
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DEC2606A327
-	for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 09:13:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3DEC2606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lenovo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lenovo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 647D6606A321;
+	Wed, 11 Nov 2026 09:32:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 647D6606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lenovo.com header.i=@lenovo.com header.a=rsa-sha256 header.s=DKIM202306 header.b=gCyHf1IO
-Received: from pps.filterd (m0464638.ppops.net [127.0.0.1])
-	by mx0a-00823401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AB5Ms8Y4085675;
-	Wed, 11 Nov 2026 09:13:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lenovo.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=DKIM202306; bh=GRzsaOCKjD
-	VmrskdVuxSmKYoO/Bmer5GyRq6NF1cbik=; b=gCyHf1IOTDscQDxbs9IK7hwVLH
-	oc6E3USKUNHTKOxKiGkwYKL83DsEbStVl+OH8rEaFe6KQkvQvyzb8VGNqwEQJ4gL
-	uBprD6ZGLC4KvBXLMeafv7Q9sdB1V6az1L4AfZ0hlbDShMR14GpjGx6JJUMBabqa
-	fcp6F0+1mPUIQDyGKXXmwEPEksExZFySEbpxdVQDq9GXuUzJ60MXGcG0mmihW05M
-	Udy6+DO0tC3rOPdlcmPTkdgXOjtSMJM3w5ohXj6RQs5tW7tfhKo1w0xWfDc3Z1kD
-	Aw51/Ug4j7i4x0TDmKcLevRZcdnsfaloMlKsRI6nLrZODkKDDIwZTkTIZN6w==
-Received: from hkglppfpool1.lenovo.com ([103.30.235.218])
-	by mx0a-00823401.pphosted.com (PPS) with ESMTPS id 4htfefnhbj-1
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.a=rsa-sha256 header.s=PODMain02222019 header.b=oJMwcuPp;
+	dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.a=rsa-sha256 header.s=selector2-cirrus4-onmicrosoft-com header.b=sA+UmWsk
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+	by mx0b-001ae601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AB919vh3365657;
+	Wed, 11 Nov 2026 03:32:28 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=PODMain02222019; bh=B7aQ3q2DNqnMo/WIPH
+	Lbk1Xhn2EPnkmKcTpn550r/qk=; b=oJMwcuPpHwnjKGAAT606rYghDEWt9K8Osc
+	+fpuW+UDkK5gW6ai5GWtqyKedlRx7jMirl6czaOhtITDM0/vDctSxUk49MdxNC8H
+	Pbwshfubh0f5/llYLzakYgrrvBc+o9PSNIM/tYbEAoygVFxSkcu/bNguHGaaa9QQ
+	9+O/q51MagV1YP1O2ZW+HK7y8LdDJmQzicQNlLM4wtdEPUHxM/hL49N3bCOQmVmo
+	BAJQdxtkYM8wyc6P4QTvUcyoSb7Ho9lnwv2dh8clG3BVaM5WyfYRUEctSd8UGT92
+	2fAc0b79oXBxyAAT+0PoKOi/aNq5OP49bTE//uUJe1VXqIKy1OKg==
+Received: from ph8pr06cu001.outbound.protection.outlook.com (mail-westus3azon11022081.outbound.protection.outlook.com [40.107.209.81])
+	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 4hv7urs7db-1
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Wed, 11 Nov 2026 09:13:41 +0000 (GMT)
-Received: from shelppfpol2.lenovo.com (unknown [10.122.146.24])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by hkglppfpool1.lenovo.com (Postfix) with ESMTPS id 4jPd8T0tDHz9vVNs;
-	Wed, 11 Nov 2026 09:12:41 +0000 (UTC)
-Received: from lenovo.com (unknown [10.119.171.213])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by shelppfpol2.lenovo.com (Postfix) with ESMTPS id 4jPd9b0837z4yHH;
-	Wed, 11 Nov 2026 09:13:39 +0000 (UTC)
-From: Jiqi Li <lijq9@lenovo.com>
-To: linux-hwmon@vger.kernel.org
-Cc: linux@roeck-us.net, jdelvare@suse.com, lijq9@lenovo.com
-Subject: [PATCH v1 2/2] hwmon: Add driver for the NCT6801D EC sensor window
-Date: Wed, 11 Nov 2026 17:13:38 +0800
-Message-ID: <20261111091338.799889-3-lijq9@lenovo.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261111091338.799889-1-lijq9@lenovo.com>
-References: <20261111091338.799889-1-lijq9@lenovo.com>
+	Wed, 11 Nov 2026 03:32:28 -0600 (CST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=DBvDm/A1BRtJoLojAAxTlPHwvtaNjEIicagvXd6ATDBc3mRZNf7mUu1tIYfNMVfmBg3hlkkrrvNuUz/4Upst8FylfbVvX992C3NCEKgEey+4ihah0LWsv69C1Me9hXlRfnQ7aDLoG++7WWt85OV8JBF8xozhAj7yUccAUhOpttXKUtKV0Byiv5UkqL9uFvcWqC3dXJSe8kcComgMw2yq2u8dfUiwmc5cyAVDlft+5scxT9BMZH6cbylOkQm7rnT0XRv+LgocKbKb25P58rR3cN4TW4e9ELLWpM/VwdHQwf6/CTKxmPxsQb1YN41ncdpn+sAKrYc0s75fcBX7yT3PRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=B7aQ3q2DNqnMo/WIPHLbk1Xhn2EPnkmKcTpn550r/qk=;
+ b=AMExj6Zvn5RNgWKWs95S1fQ/vM/TlBNUkcBB9bzhxTeOnlAKVoEH48yuGCQjhXT/YowNMteW+T0SLDPnU45AuQgicESAwQzxkCZO1cYi5u0knuPS95G9GWMfpb3NWRQxvp7eH94PrIT4JfoWziOF/WLN1rY8xNoIaZe9UjKFlUbgD8jtLhmiYwghw4ke2i5mKQbd0aCCbDT5xAAefiFS6g/4Nbz4DXn+N7kX5HZmjTFUucs246QU3PbwM45jNBFMSxzeREHP77ES8A3NbxTDkJvnKfQGZ27ckCTCcLMpchmt5rElCn3798DTyPDHZ/DN+FR3AjONOO+pNHH/vmNhsg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 84.19.233.75) smtp.rcpttodomain=cirrus.com
+ smtp.mailfrom=opensource.cirrus.com; dmarc=fail (p=reject sp=reject pct=100)
+ action=oreject header.from=opensource.cirrus.com; dkim=none (message not
+ signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=cirrus4.onmicrosoft.com; s=selector2-cirrus4-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B7aQ3q2DNqnMo/WIPHLbk1Xhn2EPnkmKcTpn550r/qk=;
+ b=sA+UmWskyzGqdWYR0jXjOHbDEVH0UewsbqiVusPtZlQFlEnU/LpEivnvISB2k6sTqK3roTPoqEQ+5LBuOH2rYb+2GH2KwfKaeUUfv8DKhu4/OnQ4JUJCEVdH3Q3daqqbJvr+ra+WKzNWIkSXnmYYejqIuOohtSCiKYjk9jAbNLA=
+Received: from CH2PR18CA0045.namprd18.prod.outlook.com (2603:10b6:610:55::25)
+ by DM4PR19MB6415.namprd19.prod.outlook.com (2603:10b6:8:a3::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.8; Wed, 11 Nov
+ 2026 09:32:24 +0000
+Received: from CH01EPF000BE942.namprd02.prod.outlook.com
+ (2603:10b6:610:55:cafe::90) by CH2PR18CA0045.outlook.office365.com
+ (2603:10b6:610:55::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.615.9 via Frontend Transport; Wed, 11
+ Nov 2026 09:32:24 +0000
+X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=softfail (sender
+ IP is 84.19.233.75) smtp.mailfrom=opensource.cirrus.com; dkim=none (message
+ not signed) header.d=none;dmarc=fail action=oreject
+ header.from=opensource.cirrus.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ opensource.cirrus.com discourages use of 84.19.233.75 as permitted sender)
+Received: from edirelay1.ad.cirrus.com (84.19.233.75) by
+ CH01EPF000BE942.mail.protection.outlook.com (10.167.244.134) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.615.4
+ via Frontend Transport; Wed, 11 Nov 2026 09:32:24 +0000
+Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
+	by edirelay1.ad.cirrus.com (Postfix) with ESMTPS id 2CD02406559;
+	Wed, 11 Nov 2026 09:32:23 +0000 (UTC)
+Received: from opensource.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPSA id 185CB820273;
+	Wed, 11 Nov 2026 09:32:23 +0000 (UTC)
+Date: Wed, 11 Nov 2026 09:32:22 +0000
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
+To: Zhu Jun <zhujun2@cmss.chinamobile.com>
+Cc: rf@opensource.cirrus.com, linux@roeck-us.net,
+        patches@opensource.cirrus.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (lochnagar) Avoid oversized shifts for zero
+ readings
+Message-ID: <avQ2JvdLKIp51/wH@opensource.cirrus.com>
+References: <20261111064930.17408-1-zhujun2@cmss.chinamobile.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -82,640 +131,79 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=DoDDa2/+ c=1 sm=1 tr=0 ts=6af431c5 cx=c_pps
- a=yIlUyoB/d3ZP/uZUHEUQoQ==:117 a=yIlUyoB/d3ZP/uZUHEUQoQ==:17
- a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=2RTuljz969oO5usasWGy:22
- a=QJilI6ASod0cdCKXAsqI:22 a=8k6WQxmsAAAA:8 a=ESrXGY6UmIiBSyv7DF8A:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTExMDAzNiBTYWx0ZWRfX7YpArBVqsXI8
- Yy1iiN/GBwpya1vcTwaxuQMgKnM+rWsUTtRASuzqJ6Q3FUDlp1g1yGl6AxNtV+cSuc7Fc4K/Vtp
- XlEt96hTfyVJEq7wV8FnD/7UQf1meLVzJvmcS02oH89MJty940HgZwvvGHOOdNdfrpiXaGU8LLH
- 7CEZ0H7U6tgRyjA1WaZL2WhhhZ0g+j+r7FyMevGjb2S4qn3M07iZzITP3a9gnKPwOvJI/I6pMZl
- X3Yao4F/ZcU3cTH3C+Lx8Aw6W03nn5y3sdrYQKCrlxezB2WYrbbWoAdmcludN9lD9pcm7I9QF98
- R57DhcsTfK4rwBQAQB8jqZkEl/G1MYka8CMZx9P6oLos8YRlnk2ITOyV8hDa6degPY07exc8QHZ
- v55pZS5x5uNTMGrUVwgnlcQdmwfMGb52iSJYWrs4ZFm6eEhTkmwQP9EjUO0Ln1oO4hkwiEimiO3
- Mp28FmGQijrnwkKaHdg==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTExMDAzNiBTYWx0ZWRfX6a8G57MhGOup
- vs96IxL0r2Y/LVnglopwDNYgfPxeb/E16qZD6RPPl7iyh5QxmH8MD+zuNXAGkkqNEluTUut0obc
- lBksj7TlObIvMxsJAxLL22dbxagZ8wY=
-X-Proofpoint-ORIG-GUID: LKhwmTVqtt1BkXFh8qpFnl2ap-V1yvk5
-X-Proofpoint-GUID: LKhwmTVqtt1BkXFh8qpFnl2ap-V1yvk5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-11_02,2026-11-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 clxscore=1011 malwarescore=0 priorityscore=1501 phishscore=0
- lowpriorityscore=0 bulkscore=0 impostorscore=0 spamscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=-20
- reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611110036
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261111064930.17408-1-zhujun2@cmss.chinamobile.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH01EPF000BE942:EE_|DM4PR19MB6415:EE_
+X-MS-Office365-Filtering-Correlation-Id: c91a10de-2f0c-45e2-9427-08df3fd6b18f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700016|82310400026|23010399003|376014|61400799027|18002099003|22082099003|16102099003|56012099006|11063799006|10067099003;
+X-Microsoft-Antispam-Message-Info:
+	1WAIYenRAGUO6Uayo3pwuMTxdsb2k+rFB3hZNmyPliB2Oy0QIJRW+ei3ZnpcLwjpPpI6WGK88ksWkHhQJC1oSk2898PjLaDpAaYdnX7QKPsh6gOjlHTXkCCxygASk8ysaob1kR5OzahR44+hRiSnLyRqlDm637Lk7VzhsFh/KW+b11/ESClvLknTl7FW6mOkU3HlBlrzfRmBp1gGakscCrhkkUOonKNPVwkb57fwt6rJbQHvSLnHT79K9GZXQ6muvwFCqdVViagyVPRx4GCS14dQmiASBVgPHzLv19rGXY+ljnLBVREOj89fopAQxlBMSkKSy9Yu/PD21ikZD3+l56BOoTTHw8StKPO2yth71uwMuDpFvsiPgiBHPWQNGom3Bx2HcHNsnpeXvlb8PsOQlF+f5D2YuDVQYw55u+OPHE/cE9JMGgrzThIVTVmLr5R5ibrj7LIZpgDvizUAp4f/KB/VCdAXvJM+qNuT9Bn7BeNSghWntiJyfrzfdqfeh7EiahxthQPFA3WAPmiWxJOi8zlComjwztDpHq+goQTPDlgXwuOyASfN/Xj/EYcMpXNxA7u8nzOionoIMxrKh4xdhn9QdPY6mdfReDw84WZnZV+bgFmBIU9cSk2fQ7t3VKqAROj/Ds1yCr/2n9S3jmFyryKdGKFhagyehPBSIvS+fX4ET59kZdRBy7XGI4ZjRMv3BHkiKQc3lww59blHQHlnOQ==
+X-Forefront-Antispam-Report:
+	CIP:84.19.233.75;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:edirelay1.ad.cirrus.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(82310400026)(23010399003)(376014)(61400799027)(18002099003)(22082099003)(16102099003)(56012099006)(11063799006)(10067099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	GLe36E/CbYIpommo+CsE0LoUwyXuw8s2Ciio84ZYHQ+s+gUl2y1/saHumaAbVAnvDvYzGdnqFFlxgQBXV3e0Rze8/gY4lsPKjw2mSg3Q78HciAqFKm+3KAgiH+S9p8SsT3kYTUyi/QnCCOsDrmCePidbyVBTwsJZIqFUY8XBdfH77DUELWoQcrHplYiM5kOjGxixgDa75/igFwED4g/ndnyR0sunOOoMbQWKvibIeXWGIgfMY+dID4Q/owGT9+Z/t7ukqimIHjWVjms7VfUgv0QGLnRlwvtOQkNm6dbtEw9Mdz3ORJDpKtYceqcQT5tNNWp26LRNK6G4qhB2OlCPXOI4WCPLJvB7Jf15KvS589ELWP6MQzkTcATUa3tncPG3mhj91b50nysHGRVz+WNhNinb/JETrOkt8XJ/uQzZ2MD1BPaRZOZzYFoopZpY4xhf
+X-Exchange-RoutingPolicyChecked:
+	kTiluLRIrAQPPZC12+rz+aoa80Skps7MW79mUCQTTwityt69dAXBGOJ0VK48Xxb1bxxg+kwtZ993CspLE+yg5F2eDzTju4Zq5rvURFSB10RgQyBtz03bKwvzrsFnI+SngU03Kjp/pEggjb6QEjVlhrRskpGFdJwsWoRxM2+3bxVQdqdupwkG9gjzdKoLQ8NxuSOdeSJbOUMQEDy0n6MdjzuyBKuHUIi+uj+bbG09rNSCbQGJj2FqmjPBhFdjI7XFgPn7C9UYYYYjGndShdVz1bEmXTRHAIdeItgZFnPnSPLNuWueBXSs55y4ThkTFffBL9TlFW4FLGVz+k6/WVU4tg==
+X-OriginatorOrg: opensource.cirrus.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2026 09:32:24.2054
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c91a10de-2f0c-45e2-9427-08df3fd6b18f
+X-MS-Exchange-CrossTenant-Id: bec09025-e5bc-40d1-a355-8e955c307de8
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bec09025-e5bc-40d1-a355-8e955c307de8;Ip=[84.19.233.75];Helo=[edirelay1.ad.cirrus.com]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-CH01EPF000BE942.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR19MB6415
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTExMDAzNyBTYWx0ZWRfX+loshmtt7B/e
+ RSn4RJFCag5do5sZvwy+uOmQv5/NrGqhEeaiujMekOBj0lsTAgQo1MTM9DZE52BYqDDhXUTUV2W
+ iB3lrUkICYbvGRIT4XNl8/dOJ+/WSMxInkdNlFviR0RRvFXEMBs3W9osUZc/bUF5rifPaPMiKG2
+ BdRRuoFM0BYnC/VGZnDq+KPBRUd2nxtirwy+Rj6BJP43522X1BOJ2lTPaQ8DyyaxgyxYKKyqGTG
+ 10ITJb2KgUTwoF4uIyM3hW2+MJIEW4E9MM4vGGUCy1IOL5q4/K3zzGdeJ0WobM9KKM8wJS7lJdI
+ CQesuqFprrXLCpNaTDN2DVLPr5MW3+JmIB9rlmix/puyDjkv5SpUErE/BBqHhYucRodJxjO+ffQ
+ Pd0Nkkrjdpj5yMS8R18shXU5ZyVtb/ouRjrx22rsc4T7Pao/bMxXqutiS2VD6lTuxX7vaxqawCP
+ Frb/cDelLyBU5HTSMWQ==
+X-Proofpoint-ORIG-GUID: anQeUH_8tz1R5sgQ3FrPCOw5GzFm2cvi
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTExMDAzNyBTYWx0ZWRfX5tKLTKCdlCA+
+ 658JRr/vvuVMyLR3TCPxeeA8zuV6/fvW90DqFsmK+a2u8che7PBKyxK7u0lXcLcV6M3jwz854uR
+ EFCyIrdXQ9jQujp/3KLkqB/S6nhJGMk=
+X-Proofpoint-GUID: anQeUH_8tz1R5sgQ3FrPCOw5GzFm2cvi
+X-Authority-Analysis: v=2.4 cv=JagpPkKV c=1 sm=1 tr=0 ts=6af4362c cx=c_pps
+ a=XJoAL0HPiv6B0cYJlRTKVw==:117 a=h1hSm8JtM9GN1ddwPAif2w==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=s63m1ICgrNkA:10 a=RWc_ulEos4gA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=iX4cTi3TZMoOKdANLEfx:22 a=KfkQE9S9VqCBgivYGm0O:22
+ a=R5C9hjxsAAAA:8 a=FHBEN9-or5iHGesUZp0A:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Spam-Reason: safe
 
-The Nuvoton NCT6801D used in the Lenovo P3 TWR G2 does not expose a
-hardware monitor logical device in its Super-I/O configuration space:
-LDN 0Bh is the ATXPGD/BEEP/DDR4 block, so the eSIO-style register window
-that nct6683 relies on does not exist on this part.
+On Wed, Nov 11, 2026 at 02:49:30PM +0800, Zhu Jun wrote:
+> A zero IEEE754 reading gives exp = -150 in float_to_long(). Both shifts
+> in the rounding expression then exceed the width of u64. UBSAN reports a
+> shift exponent of 149, and the conversion can return a nonzero reading.
+> 
+> Return zero when the required right shift is at least 64 bits. With the
+> supported precisions, the scaled mantissa is too small to round up in
+> this case.
+> 
+> Fixes: 4cdb56214746 ("hwmon: lochnagar: Add Lochnagar 2 hardware monitoring driver")
+> Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
 
-Fan and temperature values are instead published by the EC firmware in
-one of the shared-memory windows of the SHM logical device (LDN 0Fh),
-which the ACPI firmware maps as
+Thanks for adding the sign off.
 
-	OperationRegion (SHWM, SystemMemory, <base>, 0xFF)
+> +	else if (exp <= -64)
+> +		result = 0;
+>  	else if (exp < 0)
+>  		result = (man + (1ull << (-exp - 1))) >> -exp;
 
-The window base is not hardcoded: it is read back from the shared-memory
-configuration registers (SHAW1..SHAW5 base address, at indices F7h-F4h,
-FBh-F8h, E3h-E0h, E7h-E4h and EBh-E8h of LDN 0Fh for memory access), as
-documented in the Datasheet. Several windows are normally enabled, so
-each candidate is checked for plausible sensor data before it is
-accepted and an unrelated mapping is never exposed as a sensor device.
+But as I missed and Guenter Roeck kindly pointed out there is no
+value in this. The shift in the following case will just result
+in a value of zero anyway.
 
-The controller is matched on the full 16-bit Super-I/O ID (registers
-20h/21h), which reads back as 0113h. The lower nibble carries the device
-variant on this part, so a masked comparison would clear the very bits
-that identify it.
-
-The layout inside the window is defined by the platform firmware rather
-than by the controller: the Datasheet specifies the window mechanism but
-no fan or temperature register block inside it. The offsets used here are
-the ones the Lenovo firmware generates for this machine:
-
-  0x24/0x26/0x28  TD0..TD2 thermal diodes
-  0x30            CPU temperature
-  0x32            PCH temperature
-  0x50            10 fan tachometers, 2 bytes each, big endian RPM
-
-A machine whose firmware lays the window out differently fails the same
-plausibility check and reports no sensors instead of wrong ones, so
-tying the offsets to this platform does not turn into bad readings
-elsewhere.
-
-Verified on a Lenovo P3 TWR G2: the driver locates the window
-(0xfe500200) without any module parameter. Under full load the CPU fan
-goes from 808 to 2920 RPM and the CPU temperature from 32 to 100 C. At
-the same moment ACPI TCPU reads 100.05 C, TCPU_PCI 100.00 C,
-x86_pkg_temp 100.00 C and coretemp 101.0 C, i.e. four independent
-sources agree within 1 C. Readings return to idle values when the load
-is removed.
-
-Signed-off-by: Jiqi Li <lijq9@lenovo.com>
----
- drivers/hwmon/Kconfig          |  17 ++
- drivers/hwmon/Makefile         |   1 +
- drivers/hwmon/nct-ec-sensors.c | 507 +++++++++++++++++++++++++++++++++
- 3 files changed, 525 insertions(+)
- create mode 100644 drivers/hwmon/nct-ec-sensors.c
-
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 5c2d3ff5fce8..6358ec85c700 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1754,6 +1754,23 @@ config SENSORS_NCT6683
- 	  This driver can also be built as a module. If so, the module
- 	  will be called nct6683.
- 
-+config SENSORS_NCT_EC
-+	tristate "Nuvoton EC sensor window"
-+	depends on HAS_IOPORT
-+	depends on !PPC
-+	help
-+	  If you say yes here you get support for the fan and temperature
-+	  sensors of the Nuvoton NCT6801D embedded controller found in
-+	  Lenovo systems, which are published through the EC shared-memory
-+	  window rather than through a Super-I/O hardware monitor block.
-+
-+	  The window is set up by the platform firmware; the driver only
-+	  reads it. A machine whose firmware lays the window out
-+	  differently reports no sensors rather than wrong readings.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called nct_ec_sensors.
-+
- config SENSORS_NCT6694
- 	tristate "Nuvoton NCT6694 Hardware Monitor support"
- 	depends on MFD_NCT6694
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 63effc0ab8d1..59b50cf80e9c 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -179,6 +179,7 @@ obj-$(CONFIG_SENSORS_TPS23861)	+= tps23861.o
- obj-$(CONFIG_SENSORS_MLXREG_FAN) += mlxreg-fan.o
- obj-$(CONFIG_SENSORS_MENF21BMC_HWMON) += menf21bmc_hwmon.o
- obj-$(CONFIG_SENSORS_MR75203)	+= mr75203.o
-+obj-$(CONFIG_SENSORS_NCT_EC)	+= nct-ec-sensors.o
- obj-$(CONFIG_SENSORS_NCT6683)	+= nct6683.o
- obj-$(CONFIG_SENSORS_NCT6694)	+= nct6694-hwmon.o
- obj-$(CONFIG_SENSORS_NCT6775_CORE) += nct6775-core.o
-diff --git a/drivers/hwmon/nct-ec-sensors.c b/drivers/hwmon/nct-ec-sensors.c
-new file mode 100644
-index 000000000000..82d048275cba
---- /dev/null
-+++ b/drivers/hwmon/nct-ec-sensors.c
-@@ -0,0 +1,507 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * nct_ec_sensors - hwmon driver for the Nuvoton EC sensor window
-+ *
-+ * Copyright (C) 2026 Jiqi Li <lijq9@lenovo.com>
-+ *
-+ * The Nuvoton NCT6801D embedded controller used in Lenovo systems does
-+ * not expose a hardware-monitor logical device in its Super-I/O
-+ * configuration space: LDN 0Bh is the ATXPGD/BEEP/DDR4 block, so the
-+ * eSIO-style register window that nct6683 relies on does not exist on
-+ * this part.
-+ *
-+ * Fan and temperature values are instead published by the EC firmware in
-+ * one of the shared-memory windows of the SHM logical device (LDN 0Fh),
-+ * which the ACPI firmware maps as
-+ *
-+ *	OperationRegion (SHWM, SystemMemory, <base>, 0xFF)
-+ *
-+ * The window base is not hardcoded. It is read back from the shared-memory
-+ * configuration registers of the EC itself (LDN 0Fh, SHAW1..SHAW5 base
-+ * address registers at indices F7h-F4h, FBh-F8h, E3h-E0h, E7h-E4h and
-+ * EBh-E8h for memory access), which is where the firmware that programmed
-+ * the window keeps it. Several windows are usually enabled, so each
-+ * candidate is checked for plausible sensor data before it is accepted.
-+ *
-+ * The layout inside the window is defined by the platform firmware and
-+ * not by the controller: the Datasheet specifies the window mechanism but
-+ * no fan or temperature register block inside it. Different machines can
-+ * therefore lay the same window out differently. The offsets used here
-+ * are the ones this machine's firmware generates; a window whose contents
-+ * do not match them is rejected instead of being exposed as a sensor
-+ * device.
-+ *
-+ * Fan readings are big endian, in RPM. Temperature readings use the first
-+ * byte of each pair and are in degrees Celsius.
-+ */
-+
-+#include <linux/hwmon.h>
-+#include <linux/io.h>
-+#include <linux/ioport.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+
-+#define DRVNAME			"nct_ec_sensors"
-+
-+/* Super-I/O configuration ports and registers */
-+#define SIO_PORT_2E		0x2e
-+#define SIO_PORT_4E		0x4e
-+#define SIO_REG_LDSEL		0x07
-+#define SIO_REG_DEVID		0x20
-+#define SIO_LD_SHM		0x0f
-+
-+/* Sensor window geometry */
-+/*
-+ * Window span. The firmware maps at least 0x200 bytes from the base, but
-+ * only the first 0x100 are needed: the highest offset any layout uses is
-+ * 0x50 + 2 * NCT_EC_MAX_FANS = 0x64.
-+ */
-+#define SHM_SIZE		0x100
-+#define NCT_EC_MAX_FANS		10
-+
-+/*
-+ * Plausibility limits used to tell the sensor window from the other
-+ * shared-memory windows the firmware also enables. A candidate that does
-+ * not look like sensor data is skipped, so the driver never exposes
-+ * garbage readings.
-+ */
-+#define TEMP_MAX_C		125
-+#define FAN_MAX_RPM		0x8000
-+
-+/* SHAW1..SHAW5 base address registers, memory-window form */
-+static const u8 nct_ec_shaw_reg[] = { 0xf4, 0xf8, 0xe0, 0xe4, 0xe8 };
-+
-+/*
-+ * Controller identification. The device variant is encoded in the lower
-+ * nibble of the Super-I/O ID, so the full 16-bit value is compared rather
-+ * than the SIO_ID_MASK-masked value nct6683 uses: masking would clear the
-+ * very bits that identify the part.
-+ */
-+struct nct_ec_chip {
-+	const char *name;
-+	u16 sid;
-+};
-+
-+static const struct nct_ec_chip nct_ec_chips[] = {
-+	{ "NCT6801D", 0x0113 },
-+};
-+
-+struct nct_ec_temp_ch {
-+	u8 reg;
-+	const char *label;
-+};
-+
-+/* Window layout of one machine family */
-+struct nct_ec_layout {
-+	const struct nct_ec_temp_ch *temps;
-+	unsigned int ntemps;
-+	u8 fan_reg;
-+	unsigned int nfans;
-+	const char *const *fan_labels;	/* optional, may be NULL */
-+};
-+
-+#define NCT_EC_TEMP_CH(r, l)	{ .reg = (r), .label = (l) }
-+
-+/*
-+ * Layout used by the Lenovo P3 TWR G2, taken from the SHWM field
-+ * definition in that platform's DSDT. This is the only layout known to be
-+ * correct today; a machine whose firmware lays the window out differently
-+ * fails the plausibility check below and gets no sensor device, so
-+ * readings are never taken from the wrong offsets.
-+ */
-+static const struct nct_ec_temp_ch nct_ec_temps_p3twr[] = {
-+	NCT_EC_TEMP_CH(0x24, "Ambient"),	/* TD0 */
-+	NCT_EC_TEMP_CH(0x26, "VCC_IA VR"),	/* TD1 */
-+	NCT_EC_TEMP_CH(0x28, "Diode 2"),	/* TD2 */
-+	NCT_EC_TEMP_CH(0x30, "CPU"),		/* CPT */
-+	NCT_EC_TEMP_CH(0x32, "PCH"),		/* PHT */
-+};
-+
-+static const char *const nct_ec_fans_p3twr[NCT_EC_MAX_FANS] = {
-+	[0] = "Front",
-+	[4] = "Side",
-+	[5] = "CPU",
-+	[6] = "Rear",
-+};
-+
-+static const struct nct_ec_layout nct_ec_layout_default = {
-+	.temps = nct_ec_temps_p3twr,
-+	.ntemps = ARRAY_SIZE(nct_ec_temps_p3twr),
-+	.fan_reg = 0x50,
-+	.nfans = NCT_EC_MAX_FANS,
-+	.fan_labels = nct_ec_fans_p3twr,
-+};
-+
-+/*
-+ * Optional override, mainly for bring-up. Zero means "discover from the
-+ * EC configuration space", which is the normal case.
-+ */
-+static unsigned long shm_base;
-+module_param(shm_base, ulong, 0444);
-+MODULE_PARM_DESC(shm_base,
-+		 "Physical address of the EC sensor window (0 = auto-detect)");
-+
-+struct nct_ec_data {
-+	void __iomem *regs;
-+	const struct nct_ec_layout *layout;
-+};
-+
-+/* ------------------------------------------------------------------ */
-+/* Super-I/O access                                                    */
-+
-+static int nct_ec_sio_enter(int port)
-+{
-+	if (!request_muxed_region(port, 2, DRVNAME))
-+		return -EBUSY;
-+
-+	outb(0x87, port);
-+	outb(0x87, port);
-+
-+	return 0;
-+}
-+
-+static void nct_ec_sio_exit(int port)
-+{
-+	outb(0xaa, port);
-+	release_region(port, 2);
-+}
-+
-+static u8 nct_ec_sio_inb(int port, u8 reg)
-+{
-+	outb(reg, port);
-+	return inb(port + 1);
-+}
-+
-+static void nct_ec_sio_select(int port, u8 ld)
-+{
-+	outb(SIO_REG_LDSEL, port);
-+	outb(ld, port + 1);
-+}
-+
-+static u32 nct_ec_read_shaw(int port, u8 reg)
-+{
-+	return nct_ec_sio_inb(port, reg) |
-+	       (nct_ec_sio_inb(port, reg + 1) << 8) |
-+	       (nct_ec_sio_inb(port, reg + 2) << 16) |
-+	       ((u32)nct_ec_sio_inb(port, reg + 3) << 24);
-+}
-+
-+static const struct nct_ec_chip *nct_ec_identify(int port)
-+{
-+	u16 sid;
-+	int i;
-+
-+	sid = (nct_ec_sio_inb(port, SIO_REG_DEVID) << 8) |
-+	      nct_ec_sio_inb(port, SIO_REG_DEVID + 1);
-+
-+	for (i = 0; i < ARRAY_SIZE(nct_ec_chips); i++) {
-+		if (nct_ec_chips[i].sid == sid)
-+			return &nct_ec_chips[i];
-+	}
-+
-+	return NULL;
-+}
-+
-+/* ------------------------------------------------------------------ */
-+/* Sensor window discovery                                             */
-+
-+static bool nct_ec_window_valid(struct nct_ec_data *data)
-+{
-+	const struct nct_ec_layout *l = data->layout;
-+	unsigned int i;
-+	int sane_temps = 0;
-+	int sane_fans = 0;
-+
-+	/*
-+	 * A channel reading 0xff means "not connected" on these ECs, which
-+	 * is normal early in boot and on SKUs without every sensor fitted,
-+	 * so require at least one plausible reading rather than all of
-+	 * them. Fans are counted the same way.
-+	 */
-+	for (i = 0; i < l->ntemps; i++) {
-+		u8 t = readb(data->regs + l->temps[i].reg);
-+
-+		if (t != 0xff && t <= TEMP_MAX_C)
-+			sane_temps++;
-+	}
-+
-+	for (i = 0; i < l->nfans; i++) {
-+		u16 rpm = (readb(data->regs + l->fan_reg + i * 2) << 8) |
-+			  readb(data->regs + l->fan_reg + i * 2 + 1);
-+
-+		if (rpm > 0 && rpm < FAN_MAX_RPM)
-+			sane_fans++;
-+	}
-+
-+	return sane_temps > 0 && sane_fans > 0;
-+}
-+
-+static phys_addr_t nct_ec_find_window(const struct nct_ec_layout *layout,
-+				      const struct nct_ec_chip **chip)
-+{
-+	static const int ports[] = { SIO_PORT_2E, SIO_PORT_4E };
-+	struct nct_ec_data probe = { .layout = layout };
-+	u32 bases[ARRAY_SIZE(nct_ec_shaw_reg)];
-+	phys_addr_t found = 0;
-+	int p, i, n;
-+
-+	for (p = 0; p < ARRAY_SIZE(ports) && !found; p++) {
-+		const struct nct_ec_chip *c;
-+		int port = ports[p];
-+
-+		if (nct_ec_sio_enter(port))
-+			continue;
-+
-+		c = nct_ec_identify(port);
-+		if (!c) {
-+			nct_ec_sio_exit(port);
-+			continue;
-+		}
-+
-+		nct_ec_sio_select(port, SIO_LD_SHM);
-+		n = 0;
-+		for (i = 0; i < ARRAY_SIZE(nct_ec_shaw_reg); i++) {
-+			u32 base = nct_ec_read_shaw(port, nct_ec_shaw_reg[i]);
-+
-+			/*
-+			 * SHAWnBA_3-0 == 0 means the window is disabled
-+			 * (Datasheet 5.3.3). The Core side WIN_BASEn
-+			 * register has its own disabled marker, but it is
-+			 * not reachable from the host, so the only further
-+			 * check available here is the content check below.
-+			 */
-+			if (base)
-+				bases[n++] = base;
-+		}
-+		nct_ec_sio_exit(port);
-+
-+		/* Validate outside the configuration-region lock. */
-+		for (i = 0; i < n && !found; i++) {
-+			probe.regs = ioremap(bases[i], SHM_SIZE);
-+			if (!probe.regs)
-+				continue;
-+			if (nct_ec_window_valid(&probe)) {
-+				found = bases[i];
-+				*chip = c;
-+			}
-+			iounmap(probe.regs);
-+		}
-+	}
-+
-+	return found;
-+}
-+
-+/* ------------------------------------------------------------------ */
-+/* hwmon interface                                                     */
-+
-+static int nct_ec_read(struct device *dev, enum hwmon_sensor_types type,
-+		       u32 attr, int channel, long *val)
-+{
-+	struct nct_ec_data *data = dev_get_drvdata(dev);
-+	const struct nct_ec_layout *l = data->layout;
-+	u16 rpm;
-+	u8 t;
-+
-+	switch (type) {
-+	case hwmon_fan:
-+		if (attr != hwmon_fan_input || channel >= l->nfans)
-+			return -EOPNOTSUPP;
-+		rpm = (readb(data->regs + l->fan_reg + channel * 2) << 8) |
-+		      readb(data->regs + l->fan_reg + channel * 2 + 1);
-+		if (rpm == 0xffff)
-+			return -ENODATA;
-+		*val = rpm;
-+		return 0;
-+	case hwmon_temp:
-+		if (attr != hwmon_temp_input || channel >= l->ntemps)
-+			return -EOPNOTSUPP;
-+		t = readb(data->regs + l->temps[channel].reg);
-+		if (t == 0xff)
-+			return -ENODATA;
-+		*val = t * 1000;
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int nct_ec_read_string(struct device *dev, enum hwmon_sensor_types type,
-+			      u32 attr, int channel, const char **str)
-+{
-+	struct nct_ec_data *data = dev_get_drvdata(dev);
-+	const struct nct_ec_layout *l = data->layout;
-+
-+	switch (type) {
-+	case hwmon_fan:
-+		if (attr != hwmon_fan_label || channel >= l->nfans ||
-+		    !l->fan_labels || !l->fan_labels[channel])
-+			return -EOPNOTSUPP;
-+		*str = l->fan_labels[channel];
-+		return 0;
-+	case hwmon_temp:
-+		if (attr != hwmon_temp_label || channel >= l->ntemps ||
-+		    !l->temps[channel].label)
-+			return -EOPNOTSUPP;
-+		*str = l->temps[channel].label;
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static umode_t nct_ec_is_visible(const void *drvdata,
-+				 enum hwmon_sensor_types type,
-+				 u32 attr, int channel)
-+{
-+	const struct nct_ec_data *data = drvdata;
-+
-+	switch (type) {
-+	case hwmon_fan:
-+		if (channel >= data->layout->nfans)
-+			return 0;
-+		if (attr == hwmon_fan_label &&
-+		    (!data->layout->fan_labels ||
-+		     !data->layout->fan_labels[channel]))
-+			return 0;
-+		return 0444;
-+	case hwmon_temp:
-+		if (channel >= data->layout->ntemps)
-+			return 0;
-+		if (attr == hwmon_temp_label &&
-+		    !data->layout->temps[channel].label)
-+			return 0;
-+		return 0444;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static const struct hwmon_channel_info * const nct_ec_info[] = {
-+	HWMON_CHANNEL_INFO(fan,
-+			   HWMON_F_INPUT | HWMON_F_LABEL,
-+			   HWMON_F_INPUT | HWMON_F_LABEL,
-+			   HWMON_F_INPUT | HWMON_F_LABEL,
-+			   HWMON_F_INPUT | HWMON_F_LABEL,
-+			   HWMON_F_INPUT | HWMON_F_LABEL,
-+			   HWMON_F_INPUT | HWMON_F_LABEL,
-+			   HWMON_F_INPUT | HWMON_F_LABEL,
-+			   HWMON_F_INPUT | HWMON_F_LABEL,
-+			   HWMON_F_INPUT | HWMON_F_LABEL,
-+			   HWMON_F_INPUT | HWMON_F_LABEL),
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL),
-+	NULL
-+};
-+
-+static const struct hwmon_ops nct_ec_ops = {
-+	.is_visible = nct_ec_is_visible,
-+	.read = nct_ec_read,
-+	.read_string = nct_ec_read_string,
-+};
-+
-+static const struct hwmon_chip_info nct_ec_chip_info = {
-+	.ops = &nct_ec_ops,
-+	.info = nct_ec_info,
-+};
-+
-+/* ------------------------------------------------------------------ */
-+/* Platform glue                                                       */
-+
-+static int nct_ec_probe(struct platform_device *pdev)
-+{
-+	const struct nct_ec_layout *layout = &nct_ec_layout_default;
-+	const struct nct_ec_chip *chip = NULL;
-+	struct device *dev = &pdev->dev;
-+	struct nct_ec_data *data;
-+	struct device *hwmon;
-+	phys_addr_t base;
-+
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->layout = layout;
-+
-+	base = shm_base ? shm_base : nct_ec_find_window(layout, &chip);
-+	if (!base) {
-+		dev_dbg(dev, "no supported Nuvoton EC sensor window found\n");
-+		return -ENODEV;
-+	}
-+
-+	if (!devm_request_mem_region(dev, base, SHM_SIZE, DRVNAME))
-+		return -EBUSY;
-+
-+	data->regs = devm_ioremap(dev, base, SHM_SIZE);
-+	if (!data->regs)
-+		return -ENOMEM;
-+
-+	if (!nct_ec_window_valid(data)) {
-+		if (!shm_base) {
-+			dev_dbg(dev, "rejecting implausible window at %pa\n",
-+				&base);
-+			return -ENODEV;
-+		}
-+		/*
-+		 * The base came from the module parameter, so this is a
-+		 * bring-up session and the caller wants to see what the
-+		 * window actually holds. Say plainly that the values are
-+		 * not trustworthy: with a wrong base they read back as
-+		 * figures like 187 degrees or 25088 RPM.
-+		 */
-+		dev_warn(dev,
-+			 "window at %pa does not look like sensor data, readings will be bogus\n",
-+			 &base);
-+	}
-+
-+	dev_info(dev, "%s EC sensor window at %pa\n",
-+		 chip ? chip->name : "Nuvoton", &base);
-+	platform_set_drvdata(pdev, data);
-+
-+	hwmon = devm_hwmon_device_register_with_info(dev, DRVNAME, data,
-+						     &nct_ec_chip_info, NULL);
-+	return PTR_ERR_OR_ZERO(hwmon);
-+}
-+
-+static struct platform_driver nct_ec_driver = {
-+	.driver = {
-+		.name = DRVNAME,
-+	},
-+	.probe = nct_ec_probe,
-+};
-+
-+static struct platform_device *nct_ec_pdev;
-+
-+static int __init nct_ec_init(void)
-+{
-+	int ret;
-+
-+	ret = platform_driver_register(&nct_ec_driver);
-+	if (ret)
-+		return ret;
-+
-+	nct_ec_pdev = platform_device_register_simple(DRVNAME, -1, NULL, 0);
-+	if (IS_ERR(nct_ec_pdev)) {
-+		ret = PTR_ERR(nct_ec_pdev);
-+		platform_driver_unregister(&nct_ec_driver);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void __exit nct_ec_exit(void)
-+{
-+	platform_device_unregister(nct_ec_pdev);
-+	platform_driver_unregister(&nct_ec_driver);
-+}
-+
-+module_init(nct_ec_init);
-+module_exit(nct_ec_exit);
-+
-+MODULE_AUTHOR("Jiqi Li <lijq9@lenovo.com>");
-+MODULE_DESCRIPTION("Nuvoton EC shared-memory sensor driver");
-+MODULE_LICENSE("GPL");
--- 
-2.43.0
-
+Thanks,
+Charles
