@@ -1,55 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794380663;
-	b=dvWJ2r+uYLDeY+rgJwSXciiEZ5uJI9/ZfT5IUS7L5853RotFPvfjgBH12NQOSDYQJds1
-	 YvNGY7N3lI1wGnLwwZb9F19gnN7YkujqiIHhj+AU1lGnXAKd8b4nBBdDz0ZvxXvPHbyDg
-	 AJmEtfVybrHz0BRz2Z+jfKXBfytP3KrOMwkf+ZyVjSNDsEd4cJErPT7Yj8uwoYxUX8MwS
-	 TPp4Aw52B+Ts5nNcbdFKxGWuH4OYKW8JO+MXiXHnNjuW5JLk6jTEWv1bB5OVY4riY7Oas
-	 GQXhGkuciFw+ZcmyanyEBhheImBYCL2x6ZHOm7p1eEEGWRg297fnXw3xcfWgTye8+Qg==
+	t=1794380674;
+	b=M7niAFdu4QWcMmJYdBNHc1uknHzPH4UzoUNhmnHEnCzDcFaGR1MzdlMHmnnubOAL57dl
+	 D3oREXjdJdNu13CVYYNS0sslyajyF4Td5m8vIBLW8R+1f9Bi20Z9EvTKO2FDiarandsFX
+	 WPwjoHWaybBb35Ap6RTZ/RNhzaEp8R+/B/Cm/264OHbDUpDJeiFDClYvhJZ2VNkIDYWTi
+	 9Aa5HYOdVx2b21+rSHynWLa/4GnPbXwyHxuZvmrq6n2qXcOdwmiCAVV7FFGlYBFLIBVL8
+	 86uRWcEysz7GZhh8Wr/qdzlGtfupURVpfoGiIltFdZQ6VFnpHl+4Et/YQ+aU5P48zTA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794380663;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794380674;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=rPrGiw2CS+S81O5DLqE2xwB/yv4ugGxP0U4/IAcqpoA=;
-	b=KM/VME6AxzEar+swMFdt06BoAXf3NYfyxe5Pyrie9NpZwqwaRONOmLdMrR1D8H/9qJ3Q
-	 ycKqWftDOV1d/hj20Mw/HZIaZ/sn04NIPzsXIoGhd7PkRpbkkXcsjgpi27U6Nf3a03WYn
-	 n2TnBPuBXq3XE8DznJBzoYAUvgvJw3VIYpRc4UYypHrHw5BFQ84GcccuwqcW/aUF3TC+e
-	 bbFNTpTbDGAS6wp3JZmpdU2GE3qsemVIMqZzOra8gQD+I5f5ZA5Xibfd3Wg3yL+jjmI2T
-	 3wQQtpe79GaXREIyW/i5qI0A2VvWB7u/WBcy3Lui/cBaH8lHoFjIP27f0vzIIuzChJg==
+	bh=ypvKNbFpGMN50c47FhfzuvWScLeL7g5eWwtfWwwA3mo=;
+	b=WPS5qbsrnvEAja1ncdfAXa+m8bO1CLJsBzoUBYM1nm2B3xJd4q+tgKFBzlDQv8cnD5pE
+	 8WQrmuqQxYekvcb/IkqGsQwcZcKKZx2T4YlkmbeAx56CI/S9ERKsAnSOkRgFce7gtdMDO
+	 zOeCJpfBAZVwQDOlM6f7QuysMkfDVQa/Vyml1whLojugAb1e1qbw3KL9BKDOL4mQp2nSQ
+	 bTKFXaCTT+KeJYdBKKg+dhQ5n6nuskrLQ97GGYUbd9H0y0SJpQx22PSuHMXE/TFnM7tKp
+	 loLqx81SrSKRyZTYRD8akCBkmNnPuDOy0uajz1X5+47j7fHQyxNKnkOiKBWyTym64Sg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AwuqcCGu;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ogjCcx+6;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD865606A338
-	for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 07:04:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B634B606A320
+	for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 07:04:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AwuqcCGu
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 631BD1F00A05;
-	Wed, 11 Nov 2026 07:04:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ogjCcx+6
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E501F00A05;
+	Wed, 11 Nov 2026 07:04:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794380663;
-	bh=rPrGiw2CS+S81O5DLqE2xwB/yv4ugGxP0U4/IAcqpoA=;
+	s=k20260515; t=1794380674;
+	bh=ypvKNbFpGMN50c47FhfzuvWScLeL7g5eWwtfWwwA3mo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=AwuqcCGu9vV7tQYQUcq+RFtpm2V3Va4RqamAq/RlhgngLsNANyI804cQTkEmA6hdz
-	 pPebNViiS1+/YaKm57Efq66e0q+l5+AWiqeQzC8sddT36d9LZTECq+MoUW/hX60i2S
-	 iN87W12k1v1yyKc8eby7kqeDqFWnoXfRewk7m0eSiTYQ2HVb+Gk81Fb5efHwKwZFEa
-	 UDxlM/I4N41sLbFw0LMM7xDc6a/5nMuXp5M1Z610ipGgD1tR6gNypuC3rVbwjGdxl6
-	 6HC7n3wHdhAsa44fbmOt2aEK/LVrMbEz7MEozJ6LDSbA4CfX7UZXLyd3lqgXmdgmV2
-	 lc9cj7jqYR+Zw==
-Message-ID: <sashiko-outbox-208486@kernel.org>
+	b=ogjCcx+68ggdenV0LxC21JJHTXsXsiZImYXQa+2ms/DhdbSymClkyOgCseqt2DQyZ
+	 //cUoMV5rwFKElIFu8rRXxIDUcTXIuw60eSiQPzS/GbuMH7zCCaQzH8JI2m8GC5p8v
+	 abhW8BQiBxj3ssbYEFWgKpFB7mbt/HtaQzqjayuEYrkRgOyg8bEMhiNaB+XASJEze9
+	 5Ek9NNXQU9Z//xQnd+xsmBso7V3yYpfSWPHvgcF7qChoqhp88YwfeO1fr/ZyqY0GbD
+	 N+qBpP7Z0lcppn+RVf10sE8dIfMFv/iPx4RL1gIJ8IU0bJlSj1S4/ma00cTNV25jSV
+	 Ncrmkd69pQ5XA==
+Message-ID: <sashiko-outbox-208487@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (w83781d) Clamp voltage limits before rounding
+Subject: Re: [PATCH] hwmon: (w83791d) Clamp voltage limits before rounding
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Zhu Jun" <zhujun2@cmss.chinamobile.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261111065307.17735-1-zhujun2@cmss.chinamobile.com>
-References: <20261111065307.17735-1-zhujun2@cmss.chinamobile.com>
+In-Reply-To: <20261111065313.17748-1-zhujun2@cmss.chinamobile.com>
+References: <20261111065313.17748-1-zhujun2@cmss.chinamobile.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 07:04:22 +0000
+Date: Wed, 11 Nov 2026 07:04:33 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -59,19 +59,20 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> IN_TO_REG() adds 8 to an unsigned long before clamping. Writing
-> ULONG_MAX to a voltage limit therefore wraps and programs register zero
-> instead of 255.
+> IN_TO_REG() adds the rounding adjustment before checking the register
+> range. For an unsigned sysfs input such as ULONG_MAX, this addition
+> wraps and selects zero instead of the maximum voltage limit.
 >=20
-> Bound the input to the 0..4080 mV register range before adding the
-> rounding adjustment.
+> Clamp the millivolt value to the representable range before rounding to
+> 16 mV register units.
 >=20
-> Fixes: 1da177e4c3f41 ("Linux-2.6.12-rc2")
+> Fixes: 9873964d6eb2 ("[PATCH] HWMON: w83791d: New hardware monitoring dri=
+ver for the Winbond W83791D")
 > Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
 
 Sashiko has reviewed this patch and found no issues.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111065307.1773=
-5-1-zhujun2@cmss.chinamobile.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111065313.1774=
+8-1-zhujun2@cmss.chinamobile.com?part=3D1
 
