@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794385950;
-	b=OuyFSaZe/91mlJKwV+9lu+rgm2nivsaPe12fA0C4fGuGSRSOcqaA712yHHeT6UhwApcE
-	 KZvxJ2EL1+vhBlRKhKEXZdpoozwf4CwmNlAzDvVl0pAq2018yUidgprvRmeF04VNcK8ku
-	 m5vm7shRVUXnmZ9JSFLYgM7KtdXFL2IT+iS4wvgUXJB71TVx8m2yA6uGzd4dAPGvl37rD
-	 zq4RBf5yme8yhjPRqRtz8+ysw8pWBtf1qreAVwsdw4o3Pgxy5AiLJIIhnKy/8NJH9lgtl
-	 BI4sVKFgiV91rBKWTbUI0wimefPxYtPikYenKTkVAkXC4WM0ztscxugeHirlXdE7R7w==
+	t=1794385966;
+	b=GdQKfpCaw0B/eP8s0GQOkaDcqGHGiomlPJEWqKnhZSPnfFgLwZkrEnVSx0kg+vkMq7Tv
+	 UN+ZKhLPfgX7fcC2zke9XuPjGgiUjoCe1kFuGXZ8FpdYKTOdC2rhN7WKNf+tF5+ZK5nxr
+	 ZAtPfuTN3iBheT6F1k0CHUBmYKN21VEqeAAEfSCK2hP4IV5gO0xpoa0CbgQhJxuXs28mt
+	 QDZcWBxh/rVw+phcAilQyNf10upgF+5YJMiLvFOxMGkhthEBi1vb3nQhtReDkZzfXnGbM
+	 KKorncILmj4IzJ9ML0rDHO6g2GCuLIio+VElm+Q8SG4xTHrMzgco28ZtzocW4rUNdBA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794385950;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794385966;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=X3vmlMwXta9FrJuBaKgx1GyqJ3msxWev6rBlNGmnvKM=;
-	b=mecHJ1ZOsHm/e+WpZyKS855ZruxInKQDeAoqIuEpFMWEjA0SuzcUK4J6NIRoBk8Oizj8
-	 xEBdwgZzOdOfJGBEX+A7baGXh9KSlQZx5Px6zDGoYUXmNB2CtgmTmQPHA6L2YCoBSY9fW
-	 o8NlKnryry/uKBGWTThs8rLx99gM6h964G92P+5V0VsrYbHX2BZ52XWzo1mBJm73cROl+
-	 aVOcd0g6snC8tTjWhCvO8oDgY5qUSdkafGD8hypFJVnLArpX+2+dYfTknTgGBLTWJg7i9
-	 p7u3MtWuhE6AchuCVtnckt2ueg7yZgsU9//upTM233pIwAiWFjVI3szu27m5+OUMqFg==
+	bh=USEsdXlX1oFJn2c8dSMKEdmN/SI4AvTRNzLhCan8R/o=;
+	b=eZj9ZIYqgJzzeOaoWrqyskUc05U/YwqSRjEYplPgZlRS9l065gWqdXmaGMoIaFEYH0fA
+	 6f/g2RUoRelVy/9DP+mIUK3eTLqD41n/372nWBOt97Es/HuIPEcEmkXJJAKTaDXpbE2XZ
+	 3Vbo84ElGCBvBryIMmchOKDEGpl+XGLKb9rHOH+t23rpcDDlMeUKxEe47AtWnxyCeJgCg
+	 ehv10e52Bl5dnMw8Gu33ybHKVKFiYNlhtqgW/fSJ2m8XwjHOK+8h/fmcxeAukiz9IMkxc
+	 SvzUhhRKaRY2dlJpvnnvEfMAmq4OoD/PeBL/OcodDpYhZYhZ6kqYB3DFd0nwQIkmZ4A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=M2Q32utZ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VmZJLHAd;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC60606A324
-	for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 08:32:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC64606A31C
+	for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 08:32:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=M2Q32utZ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FE431F00A06;
-	Wed, 11 Nov 2026 08:32:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VmZJLHAd
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E52001F00A07;
+	Wed, 11 Nov 2026 08:32:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794385950;
-	bh=X3vmlMwXta9FrJuBaKgx1GyqJ3msxWev6rBlNGmnvKM=;
+	s=k20260515; t=1794385966;
+	bh=USEsdXlX1oFJn2c8dSMKEdmN/SI4AvTRNzLhCan8R/o=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=M2Q32utZoHoFQH+1eowzug08oaWQGh7jUPNN1oZYBrGznqhAhSjiieTmAksLnq3xP
-	 CKu2otVbxlaldVny1H2AytZt07NvPNZYxtqYmjjp65WDmw9AVmI6NrLe7yh80i1J96
-	 4sbQkyiPbBu+wqLG7HkwYF3wpDQgazBvawhni5O0bl48C9cCeku2grebr6A0MZoKGa
-	 SZfJ7RZ9P6bICFUiWA9NsWbtplxjV/myUvmWIY9fhlnVFOXs0Os/u1JVXkj57U/UsT
-	 9l2a5utEUXraMDC/pYI8C/77Wmo5bDRQkWBW7hsBLXmzZgvq5Nsz9u3YK9xsCW3dPR
-	 932BE0qcA8gDQ==
-Message-ID: <sashiko-outbox-208609@kernel.org>
+	b=VmZJLHAdEHsIModoeHwEuveJGmYmc9s54WZT93P2K6Gv6Tx2opW4k+6F5QQelg1Af
+	 VIHAUCE0Tvvh/9CticcCeewl7WXS/O3+aJpDqRzoN9IHpCswfcHrW4JjOI0MvXMBa6
+	 l9/lLslGCv5c8q7+UUxbsia2DegXbpbAydJIPG2q6KV0h1qgiVtVPXdtxSTXOr01y1
+	 78Nfy0C1rG4u07jJtLfKfay8xzlXM7BWkSYzrAcAMcQVmNSKJoGhu29Dasmcn4Qvwq
+	 NYTtV/H5vQ/8X3lgQE7Qebu8uUGmlKfuXeBkVDIK7qOhqP25WUmG0I70oM/ghepSJ5
+	 ZnA750D32Uwrg==
+Message-ID: <sashiko-outbox-208610@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/7] hwmon: (nct6683) Add customer ID for ASRock B850
- Steel Legend WiFi
+Subject: Re: [PATCH v2 6/7] hwmon: (nct6683) Name the fan headers of the
+ ASRock B850 Steel Legend WiFi
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Johan Dahlin" <jdahlin@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261111082838.1418051-2-jdahlin@gmail.com>
+In-Reply-To: <20261111082838.1418051-7-jdahlin@gmail.com>
 References: <20261111082838.1418051-1-jdahlin@gmail.com>
- <20261111082838.1418051-2-jdahlin@gmail.com>
+ <20261111082838.1418051-7-jdahlin@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 08:32:29 +0000
+Date: Wed, 11 Nov 2026 08:32:45 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -61,10 +61,13 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> The ASRock B850 Steel Legend WiFi has an NCT6686D with customer ID
-> 0x164a, so the driver only probes on it with the force module parameter.
+> With fan control available, users need to know which pwm channel drives
+> which header. The driver has no fan labels.
 >=20
-> Add the customer ID so the driver probes on this board by default.
+> Add a fanN_label attribute, visible on boards with a name table, and name
+> the channels of the ASRock B850 Steel Legend WiFi after the headers
+> printed on the board: CPU_FAN1, CPU_FAN2, AIO_PUMP and CHA_FAN1 to
+> CHA_FAN3. The order was inferred from the readings and the BIOS defaults.
 >=20
 > Signed-off-by: Johan Dahlin <jdahlin@gmail.com>
 
@@ -72,5 +75,5 @@ Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111082838.1418=
-051-1-jdahlin@gmail.com?part=3D1
+051-1-jdahlin@gmail.com?part=3D6
 
