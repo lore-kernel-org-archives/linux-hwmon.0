@@ -1,71 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794416229;
-	b=Vlwa5nBKGYmPTELpbHsxe4gVcsc/rdmJLhiqZccMdmYODSQemsxFbftSjk2a681YBo93
-	 r7WRjDXqp1EILoRuyTiYf8Vzyefcmeps04VYjJTojljHCcGDOsXLh5wydhRBiH8irtJvB
-	 vMqceMigNNMYzE8oM6pFu2aBWwy/OeNr8phGymaiZSBEcwCLnKaNxFdqQSVt2G22+AblZ
-	 Ev4BQ2lWVO1eHyWbRKBH4/kMCeTNKlJmmlPJo4zsoNDnflktYzwpzOpcXJ9V72RU/8GqD
-	 sF5vFF3VD4Ok4XDJ1jaByVjSOT2wvNXdCeQCBRpvb6ggP+Aul29HNzh0Z7QinokUZtg==
+	t=1794416734;
+	b=DSSnfoc6SEyT1hl/V7J8KO+orlZySlBJwtSIJ1m3LwmIMWdCaj5DqTQFmQW4HtVj4iq1
+	 kKQRSzzszFygVHDYIzVJqkg+uGBIpom1VWJMx0iIlxXAl/lPSVB17dCvtW0MBePlI70c+
+	 leleMjjZ2G3DQ77xDoyRd+2d6N/xDX7XROGQ3wJNwvwp7ni41BikiRkCJWNuYGfl8crSV
+	 EcRGcyplD7aTiA9KpWfQ3DmiQ735dRMpX4BZdzB6LEQph1LB+//w6JQ/0Qtv6DgOXA2B+
+	 CLO7QGbihugxFSn/j6GAEC7BJeLT/UMdsgSTimBSPQtuVxmVaBOrZ56FiQzZCfs75eA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794416229;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
-	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
-	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
-	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=gZgfMh8iRm41GPkrMNsQVuYsAEwmt2aiuYtOnJ9zAQE=;
-	b=R39XTl3t+vSj8aTCSHEy9VLcYHwcySFmJ7urx1My605eZIjuKV1SgDbjUcbbNjkAJrI5
-	 gIdaSyyfJgrQ5J8B0d+InvoYRQiZJLppAOVJU3FmjKTxKNqir7gdJjOb4bvzBMEkrD+ol
-	 EdM2J7G9DoW/JcE85en/O/oNEMiAK7cfwIXADevEY5m9h6EmrfIuUQiDlnGKNFT6Wt52L
-	 P7flaDGFmg+B706g0X3z6MadBVA6tHGwLFM03dbAknAGEhAsnYVxs55lxMvsulIgD8zJ/
-	 uURTGYrW5XNbFESbnCTy/u39yxFsLAFoT1gKNEX2ta7OnANj+vyOU0vYuqO0fbHfHUw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794416734;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=BIjsyfCAMtV7iYJZyUQnR/qSWRidGT61sCTUErFE8Y0=;
+	b=1zOX1qmL8b6u3f+fxfiyASfpjNkJSRGt2jUobWLcOsrOQ1RL+LnlMnhNsOfMxhfpe23K
+	 bBnvnEqxrnBeRqdm3DXzI8YpfEqrIJSQ+UjHH2VIveShCWE+v8AuguuDxHqjJ93gILIx8
+	 g5tKBq6LiemoEQ7st4x5SxgdiaN2MAYy8UClo+V0E5LYaXMISM+P5SVOGPsaKIgfP4qZf
+	 OBSJoaOj3OLTT65ke1MvziQHjUT+lvbtE6yd1ycjXQdm7iz7Bq8tGb+4OfryM/HeLW06b
+	 gX3CCJZmMxWgfEMp2OMszzXZw2H71449WTlVEjK4RuUp32F/N1cG/blGEyMcs6PstqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=ABXNqbxo;
-	arc=none smtp.remote-ip=35.89.44.37
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=J8NDL01K;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 020D1606A888
-	for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 16:57:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 020D1606A888
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6084660A2600;
+	Wed, 11 Nov 2026 17:05:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=ABXNqbxo
-Received: from eig-obgw-5002b.ext.cloudfilter.net ([10.0.29.226])
-	by cmsmtp with ESMTPS
-	id R3FTx1o0OVK9URBdExI1aw; Wed, 11 Nov 2026 16:57:08 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id RBdExoAPJb2qJRBdExw5gS; Wed, 11 Nov 2026 16:57:08 +0000
-X-Authority-Analysis: v=2.4 cv=A7tsP7WG c=1 sm=1 tr=0 ts=6af49e64
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=R5C9hjxsAAAA:8
- a=YqshgQQMxR2ATWee5y0A:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=gZgfMh8iRm41GPkrMNsQVuYsAEwmt2aiuYtOnJ9zAQE=; b=ABXNqbxo5Zqu
-	aDhWucWvGPeFFTMHqHNqGSQSHbWDgrxkKWcCGdOTmqf8uECepK2ARDGwqlcDSkXRF6doHJYqd1JUu
-	/jTCOsm6Iyd5MEkWBNq7OLR+heLZhoOmxOce9CtsZuHSwyeo4w/wThp7/FiMph//oepexL786FgvS
-	7XQchmDK4Ppy2OR4AfdNRWWoEYjGNEMm0nv0XgwTOPVYkHVNBuSPFdAxELK0rvUai54DdYxVF0JB5
-	uyq75C/sQugI4bjc/ooGe+XXUHS9S2KlN4sAupFYUFsyQT+pkqvQhe0QPfz3qfAVu/bahCzMYBXaC
-	pO9FEm/n45eCqcyZxrpApA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:39186)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xRBdD-00000001GKt-30uF;
-	Wed, 11 Nov 2026 22:27:07 +0530
-Message-ID: <3541f3f9-f2aa-44d1-8bf0-50ab7ba98340@roeck-us.net>
-Date: Wed, 11 Nov 2026 08:57:06 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=J8NDL01K
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C233A1F00A07;
+	Wed, 11 Nov 2026 17:05:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794416734;
+	bh=BIjsyfCAMtV7iYJZyUQnR/qSWRidGT61sCTUErFE8Y0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=J8NDL01KzKueCRrzIThmTcCU88ocXYyn4+kkLuTyba7c3VtJ14dFSHV8Fh1TqJVAU
+	 FnEf3wgOPWM65xQN8GRR3PwDt5YApemSB1gz97EsPmL57pyi8zpjf3fJD+V+2PrzV2
+	 PIVbUCJBFHML12Wozi5frrxK58PL/CPqMvJAzWiOixfvza7MrqYJRB/vRYkW+LBnb9
+	 Pt2p4ITMbclSYQl4lleawgEnm5AdyBkvOW34tu8RR7b+wGPVO4dRywdX6yk/Z0VgSL
+	 GFMyhxHgDiq+7QEeTAfQkhgTXutpxLur+Yye1yTuTLQfkIOvN0Q/eO3j7XCQIPxrqE
+	 +JL7oz0bTFKaA==
+Date: Wed, 11 Nov 2026 11:05:31 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Linus Walleij <linusw@kernel.org>
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	Anand Gore <anand.gore@broadcom.com>, devicetree@vger.kernel.org,
+	linux-clk@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+	Jerome Brunet <jbrunet+clk@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+	Brian Masney <bmasney+clk@redhat.com>,
+	William Zhang <william.zhang@broadcom.com>, mfd@lists.linux.dev,
+	Benjamin Larsson <benjamin.larsson@genexis.eu>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	linux-arm-kernel@lists.infradead.org, Lee Jones <lee@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Ulf Hansson <ulfh@kernel.org>,
+	Kursad Oney <kursad.oney@broadcom.com>, linux-pm@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH v4 1/7] dt-bindings: soc: Describe the BCM6846 Power
+ Management Bus
+Message-ID: <179441673078.3717632.4630154111518612765.robh@kernel.org>
+References: <20261111-xg6846b-bcmbca-xrdp-reset-v4-0-17035a5e8ad2@kernel.org>
+ <20261111-xg6846b-bcmbca-xrdp-reset-v4-1-17035a5e8ad2@kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -75,119 +74,37 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (lm85) Bound fan stop temperatures before
- subtraction
-To: Zhu Jun <zhujun2@cmss.chinamobile.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261111065324.17776-1-zhujun2@cmss.chinamobile.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20261111065324.17776-1-zhujun2@cmss.chinamobile.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xRBdD-00000001GKt-30uF
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:39186
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 12
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfFBCmlk2WYCO3S2S1JruIljftlttdOoTarqoRPO0tysbFOYXqeRJnRnm3yJw4uQceuxewfamkr528tsnJi/H2uBw59jdiLIkwliTPfVeeGnvBQR2CoDJ
- 6C3X/TfSyf82H6xfYHq65TU8MbHHpHuWiXvTz3MaOGs9GG8lihZV7IpUT5+3iTN856aB9E3b+qn4QEEOa8WtR8UeLVD+cdYAaT0FEUtVwd7KwHf40PTbmvTC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261111-xg6846b-bcmbca-xrdp-reset-v4-1-17035a5e8ad2@kernel.org>
 
-On 11/10/26 22:53, Zhu Jun wrote:
-> temp_auto_temp_off_store() subtracts an unrestricted long from the zone
-> limit before clamping the resulting hysteresis. Extreme inputs can
-> overflow this subtraction and select the wrong end of the hysteresis
-> range.
+
+On Wed, 11 Nov 2026 12:00:42 +0100, Linus Walleij wrote:
+> The third generation Power Management Controller (PMC3) accesses SoC
+> block control and reset registers through the Power Management Bus
+> (PMB). Describe the BCM6846 PMB and its child controllers.
 > 
-> Bound the requested stop temperature before calculating the difference.
-> A signed 8-bit zone limit and a maximum hysteresis of 15 degrees require
-> only the -143..127 degree range.
+> Add bindings for the power, clock, reset and PVTMON child controllers,
+> and headers defining their clock, reset and power-domain IDs. Include
+> the combined XRDP, Runner and WAN power domain and the zero-cell PVTMON
+> thermal sensor.
 > 
-> Fixes: 1da177e4c3f41 ("Linux-2.6.12-rc2")
-> Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
-
-I honestly can't say if you are trying to annoy me or just don't care.
-This is version 2 of this patch. It should have been versioned as such,
-and a change log should have been provided.
-
-On top of that, you are flooding me with similar patches which are all
-not versioned, and there is no change log. Do you seriously expect me
-to dig through all your patches and path versions to figure out what
-if anything (besides the added Signed-off-by: tag) changed ?
-
-Guenter
-
+> Signed-off-by: Linus Walleij <linusw@kernel.org>
 > ---
->   drivers/hwmon/lm85.c | 1 +
->   1 file changed, 1 insertion(+)
+> I considered even just using the PMB but the PMC has more stuff and
+> it seems natural to let it live in a simple-mfd node.
+> ---
+>  .../bindings/clock/brcm,bcm6846-pmb-clock.yaml     | 39 ++++++++++
+>  .../bindings/hwmon/brcm,bcm6846-pmb-pvtmon.yaml    | 42 ++++++++++
+>  .../bindings/power/brcm,bcm6846-pmb-power.yaml     | 44 +++++++++++
+>  .../bindings/reset/brcm,bcm6846-pmb-reset.yaml     | 31 ++++++++
+>  .../bindings/soc/bcm/brcm,bcm6846-pmb.yaml         | 90 ++++++++++++++++++++++
+>  MAINTAINERS                                        | 12 +++
+>  include/dt-bindings/clock/brcm,bcm6846-pmb.h       | 42 ++++++++++
+>  include/dt-bindings/power/brcm,bcm6846-pmb.h       | 12 +++
+>  include/dt-bindings/reset/brcm,bcm6846-pmb.h       | 11 +++
+>  9 files changed, 323 insertions(+)
 > 
-> diff --git a/drivers/hwmon/lm85.c b/drivers/hwmon/lm85.c
-> index 80bd1f47114d..e776ec4ae40f 100644
-> --- a/drivers/hwmon/lm85.c
-> +++ b/drivers/hwmon/lm85.c
-> @@ -1153,6 +1153,7 @@ static ssize_t temp_auto_temp_off_store(struct device *dev,
->   
->   	mutex_lock(&data->update_lock);
->   	min = TEMP_FROM_REG(data->zone[nr].limit);
-> +	val = clamp_val(val, -128000 - 15000, 127000);
->   	data->zone[nr].hyst = HYST_TO_REG(min - val);
->   	if (nr == 0 || nr == 1) {
->   		lm85_write_value(client, LM85_REG_AFAN_HYST1,
+
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
