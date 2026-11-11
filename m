@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794385737;
-	b=G57A6nrM+WPuU+R1ak+mPwT5DBFzh+rd33cESmHedw2FZcf/Mm+5tro5lfuEFG2hevrO
-	 KUT14ZsCsWN1+w7yacUByy6s5PNJWF7GkxXnf8GS5z+kKquU3L+n7c3RUnS0mSUhhPb/8
-	 vTMPA8kiTvmWZWcUiXZkCNWfmwr6ik1J8djZZ/D2r1mZgd4J9rURzSbFJLFtJ78xLMS9R
-	 EYyb9wBuWKkfStBfmiLoCuPvl1qkuiCMkXfUDiDXyc36RO+ZRijC3tEcNFyjzJNN0cQQw
-	 50PmRcHRDG2MXmKZS66VZC/BJsVlhrthGvlsa+ArNr5VmYVmfsHQTJyqp8nx9hr6jxg==
+	t=1794385739;
+	b=VoSGLJELp5QYqYn6bqbaNUhJZn++bid2ZVsnNpDqBYxQM13YccP6fb/1dJDi9E10ozCR
+	 Y+RTH1s45I+M9jWrOMOm1nNJgNWEHN1iRIsRrmQzWuFkCBEh0f0GDa6t6+ub05/G7/JRJ
+	 vP7KQf7LbweQFo9FUHBUUuPoQCg6M9eBaCwfKLb/r8iItx9P072guMI+6dr/vl/cd68lj
+	 xsQ3sEucrps8LG+D046udRVAEz5hYlo++PMi0+3Esui1nDTbE9k0J1drwKHjVtrbh12h8
+	 cMmx8DJtcLEQtQJRpZNO6+uA9ichEu6h81acfV0YGViHJHWHOnr/xZlUH6djSqGRwIg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794385737;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794385739;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=k38d6anjSDhUfif+YA8JiZnUO/fighramhUwYa6uFhs=;
-	b=m+tFKM4NnZDDj6kVg90B7QpiBc5VucuXT0AsG0+EgsY0vovXqm+ZM8d2fmZkHvvkGhzU
-	 5RIKkH/5OpN7yxYYE70ew3HNw7/R7Y2CnAuASBdbF1mr9j3gICkZY1cI+2b3izAHZLG1J
-	 7okKtqJ0+o4yoJZpX2Hdmi53s4KhG6vHgJk26fvqnw4JRwgW9IoswjINTRGY1JEGZTSUt
-	 x1nMpqKR5kG6172laGh07RZZ3yPsmQuXdG8E5nTid2w9cZ+ovMgSEdRoqXpFwewpV9QG1
-	 UNb8bNnEvRSHwqBbbpkfo52ssQhV3s4fRKKg6vi3i5o9IP6RDKyGBUoXsi1k0Uxx1WQ==
+	bh=oqt6WiGEqMCVRR7QR/nQyneBo34H3pnYJBAqkvsamRY=;
+	b=YTih6vCSRy/wgQ4t8uHUjfiHBIW6RitB3rMoyapIq9atpiNB8Gfwz+y/icPvuU20A9Sj
+	 Ihb2AgxwvHph5H89XSH8ESJ+krZxI7o/oC3guxh5Bdqmb1LZ07srMVyWj1Q+qsAEzGYj9
+	 y5ppJ6PcLvUgSYvtPerAW07pYtNIYuWLiu5ElIDLSlIJBWEL2/+KHkZMeq8xqd7ipBBx/
+	 zUAqZJGy3fcmGMvSrPjW8Cb2Q+yb1xCWsZpAJbTGCU2F+hSLmhJDTbBDedrOP1Qjw5mIx
+	 q5YMl/RDjMQAY0ru8mdNuDC4S3dQdg9Z0mvu94XSPKz4xitDBqrKRR09P6mOZVrzJEQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jY5GeuBO;
-	arc=none smtp.remote-ip=209.85.218.43
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WveNnJAN;
+	arc=none smtp.remote-ip=209.85.218.54
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84D5460A3812
-	for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 08:28:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 84D5460A3812
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448BC60A3831
+	for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 08:28:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 448BC60A3831
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jY5GeuBO
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c4d473cfff6so405849266b.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 00:28:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WveNnJAN
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-c45551fa84eso433325466b.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 00:28:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794385735; x=1794990535; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794385738; x=1794990538; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=k38d6anjSDhUfif+YA8JiZnUO/fighramhUwYa6uFhs=;
-        b=jY5GeuBOl8bHMfi0r7mnCkCG3Aso/9E7hAETup2M9paBvEolf2g1FrN8/p8zb/oLUf
-         Y71B5ThijYLK3uQuRWoAYNj3Itm0hmXDgMw9cgj2PZVJ8Bl7eyzPV5VnCbmdCyYCQsKL
-         GHAyvHijf7wtoGCrYQU3rB63hpYoN8K0Lbr/ozpjQSG1VmHYO/INdm/Dy8kmba9dwCbH
-         6ixusH/YZ9Q7aXmL5oI2EylKHtYm3MilEJThsvm03P0rhSIdaum6IaNhQjPLAo3ZC4zD
-         oGI1qqb0CXulyB/WcIEbG9OGRryB46/03V3H+ScVE23v1mAmYe2ajBXDz5eW2YTd9TcN
-         s3cA==
+        bh=oqt6WiGEqMCVRR7QR/nQyneBo34H3pnYJBAqkvsamRY=;
+        b=WveNnJANYQ5jI5VR1ozDjvLq8bePJgW5TiMOpnWaIp99YEJyKY0uE9TO26oOL5vR5z
+         R6HoB+tiiqkmxlCB3jVOh6JQOg6RvNfgYo1l7oa8tcFkpUICQFXD0ohPqIh+M6mHPk/J
+         hHrUrpf205+PAalTk6qjK3y03rjpLp3pZN1VHlzhzPtvXrTB2u6eP+lXryWXWPX9puxb
+         wcE1Dq+2Ecc41OMUD+5v3JgwdRLETfD8aRctUaQgQGAnNkN48f7QdhV82tPrnNZTDCVa
+         wOOMRtHqEmqBYhzxqdHJyc9OWe4c+HcEfFaeW14R8tRcuInsY7+gL0vEqwaBo2BPDKd9
+         Zhhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794385735; x=1794990535;
+        d=1e100.net; s=20260707; t=1794385738; x=1794990538;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=k38d6anjSDhUfif+YA8JiZnUO/fighramhUwYa6uFhs=;
-        b=Fbrc8Im0vFbnO79iWtMDl0m7P+AGn+LhDRRqzNaQoJm0dQSlpUkYL1kouxqK/Du14y
-         j178FkQv8tYJWDfcZ/g67PdOsYMNGheDv1+V1rgrfqiO6u7SCwXiUquTcp6T3+d+OFEN
-         se/HRAcuT9N3GWA2kgT9IsubebE/9ZgRugRnyHQQc4BJ82mqM7lkvhbbD+AvJane4nM3
-         2xw4soEZYABqFBvsOIdK95SmsC47x1aLH4ZF/YslHVmYRoxAMD3D/E6R8vMFpnS5fnm2
-         4eXPNflsW37JTBU9vXZuBTP0GDRgoj9B5OIB+/jYvEithrtsCZR1F+g3/CHpwocwcS2n
-         nwnA==
-X-Gm-Message-State: APuU4Z/g71dE3vPBTgx9Mfb2ZITFdwSDLZtnU0s4IBl4L0FTVS5L9S4g
-	os1X8DqY+EP79fxzalwJtfnbvw+9StZYs2JJ76FD1t6v7dA59A1NA8Nh
-X-Gm-Gg: AYBFou2l4pwtsRj54Lo3LQ919kZaasUDjHHcDBdJNhS5aH9TXhWOCL1/+Oo3fb8sIid
-	XKygCrK0+vwJWzbr4Ghh4P2g31kAieVeWKSK3YoHG3hr+ZSRcjOUJyo7Ytg7WyjFnV2dTnLUOKW
-	GibTU8OEp74U1iM+jwuEnFnY+bQRrzlx+xoPQEIboKSZVgj3dUEJ8y33Y6x1D/v0IJpHaOlCmPB
-	xn6gw2IFbInHYAgmI3Kr3YRZBQ2b75mu+vLGDMzdFLV+ASq2/5xRbdv2UzSM0UWl9r1w8TKRJvs
-	k3t1u5Bb3maqB07qX3dJJ23fy1BJH1XreEkBwQ/Ge+o17QlWCvaEdLwtKUq6ER/RMO7LLKeDP40
-	IGJzsQ6fcsAYHzsYK9CGWEv/YvYU9roUmn4OpBoHgc//S6/N0LcENOsRhXfVxtEXcT5ZapoK++r
-	6XuMKzt8gMphJQuCMD/bGfi3m9SY/rumGq1T8AkDS936YCtyvzd5HZhy/6SL2nriD/h1rJFXWU7
-	f09ke0mPpz4QUFLfVkoOqnY/BYx4qMPa5uJVfwBdi4hH5HjdpmcgqWAkwL6SyPkdIs56MbpT4bC
-	LxUDvADqL3Z7/Tp77rH0zodzzPgZ8y6nqwRavPN9x+2vjBTeiCw4xlNtD62/ZOWHNQ4Tn1znmL4
-	bWuuLm9IoeXOgqDQ1tNlxQvCPBvtjfzpuKG2DeNFymD/BhY/C0MKkXgs1BttwwzVuyunWBkn+Q7
-	W8a6g3igWoGoFQ5Na6fk9OLPBKQewQJSs8A+70qW3JTsdp
-X-Received: by 2002:a17:907:1c98:b0:c41:b94c:4539 with SMTP id a640c23a62f3a-c506698cf92mr109978466b.6.1794385734830;
-        Wed, 11 Nov 2026 00:28:54 -0800 (PST)
+        bh=oqt6WiGEqMCVRR7QR/nQyneBo34H3pnYJBAqkvsamRY=;
+        b=a/fd3UGaqD2y5OLQ+lMtbuzAJcX4UgKq/tpDMyDUBsyrqzvdQf7kzlC9nGZPH9HBvj
+         8UaYkpt/yvPfyUASmlA42qtsbau8kzGUjoEg5hM3XKcgDBexz1K02qqDi+ZgglKG6/ne
+         o7e1DVmBDiF1o9wNtXiekP6g9uUDHLpHXLhxpAbfD2vtWAYwIPKlDkXajBQr+vb6GcFo
+         4oTUGxcCTTlk6A76f3Hp/237xvqb6ZxXkeUR6WKYAG/bcWhAqHSCmAbL9fgGFeDvl68N
+         tdJGAy+cmaNrG3ygLQFdXplBI0d1b0i7u2oeaXWt9+BNxLf0TVATD2CAyXOwXNvq6Cw7
+         Q/Kg==
+X-Gm-Message-State: APuU4Z8neZVoXki62f6gj4lXpoOjO1zSqHx2DLiL7H2UJkXzNQrL3+35
+	E5OovkU9lv4M6V6WNp6JmAXwhaDnPPdq5dSNCal0ALmkkd3ZEl9YF4koV/v3Xyyj
+X-Gm-Gg: AYBFou25uT0PVCg6/ndqhxRKkDenFqbFq+8NhawzqfA6wUXuILvdLK3nDNREidIvm8s
+	4NA37T+zNcO4vPzdl+wxTA2FHYnak9ePMC5oSgDgTaIz3TdiN/H3IxGdWmP4Cj7vvN3iSxxtcIP
+	777Ie+qufgm1shUh5frfHtUkUu4gUwg+dTI5nXWoO2T0dgOOY2U0uL27quo57OoUCsIeq2q1Yz/
+	PjARLnfDn7LOPmaWqp4qqmzikP+KKXU6mTW5Y9P8KeMj798oD4FI2VOrhr6CE5IQPsZt8np3yvr
+	PEq25PEqgsm6/Zkmy/DguY9RbTGN5ZQ9xP1MRA8YYnwnoRXO9ab1k+YmyfRTGmpb4JgD7mTrNFC
+	tjE5eS58vtY3RsIzJfgAQW05tCfemBAIbEHBNNIPc8kyBhHaeT6rbIMvOlikBSKStWXKaXvpYb1
+	txhNV7Sr9J+aNthNYxeKu/KjZ1Z0VVEDbE0CLRJ8h93XqcDmp8R8swVxqECTgCQn0CPwGvcIrjp
+	1mAfuiHFqUS6Z9CAV2jQMihPClgGERAqZx4p4pev98QUgs+3g2dPjfunX3hSCrw6Up8TkYmdGya
+	wXYpruCnOKFP7pAu0KkxRYKqYhvQAiPa5V42WRICj3qiAeJ4HNQ/Qlt+W5VE5hlah4SkVXfb4TJ
+	clB9rdBxosWUkOHF1aPjarHg6roKXfzelFz0vd/wkRhh1nFOULXsZB82m5qPbrWq3Y9SWguxYJA
+	YrrchFh8eOe5p/WmENMHd4q/0rmdNABDGbGeT6aulydQa2
+X-Received: by 2002:a17:907:dab:b0:c46:2a05:b257 with SMTP id a640c23a62f3a-c5066af79eemr119409166b.23.1794385737557;
+        Wed, 11 Nov 2026 00:28:57 -0800 (PST)
 Received: from fractal.tuxedo-gray.ts.net (c-78-82-25-228.bbcust.telenor.se. [78.82.25.228])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c504a56ffc7sm210135866b.17.2026.11.11.00.28.53
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c504a56ffc7sm210135866b.17.2026.11.11.00.28.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 00:28:53 -0800 (PST)
+        Wed, 11 Nov 2026 00:28:56 -0800 (PST)
 From: Johan Dahlin <jdahlin@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org,
@@ -87,9 +87,9 @@ Cc: linux-hwmon@vger.kernel.org,
 	Fabio Baltieri <fabio.baltieri@gmail.com>,
 	Hamza Mahfooz <someguy@effective-light.com>,
 	Johan Dahlin <jdahlin@gmail.com>
-Subject: [PATCH v2 6/7] hwmon: (nct6683) Name the fan headers of the ASRock B850 Steel Legend WiFi
-Date: Wed, 11 Nov 2026 09:28:37 +0100
-Message-ID: <20261111082838.1418051-7-jdahlin@gmail.com>
+Subject: [PATCH v2 7/7] hwmon: (nct6683) Scale the +5V and +12V inputs of the ASRock B850 Steel Legend WiFi
+Date: Wed, 11 Nov 2026 09:28:38 +0100
+Message-ID: <20261111082838.1418051-8-jdahlin@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261111082838.1418051-1-jdahlin@gmail.com>
 References: <20261111082838.1418051-1-jdahlin@gmail.com>
@@ -104,121 +104,88 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-With fan control available, users need to know which pwm channel drives
-which header. The driver has no fan labels.
+The +5V and +12V rails reach the chip through resistor dividers, so they
+read as 1.70 V and 2.03 V while the UEFI setup shows 5.04 V and 12.19 V.
 
-Add a fanN_label attribute, visible on boards with a name table, and name
-the channels of the ASRock B850 Steel Legend WiFi after the headers
-printed on the board: CPU_FAN1, CPU_FAN2, AIO_PUMP and CHA_FAN1 to
-CHA_FAN3. The order was inferred from the readings and the BIOS defaults.
+Let the sensor table carry a divider ratio and apply it when reading the
+input, with ratios of 3 and 6 on this board. sysfs-interface.rst asks for
+such conversions in user space because dividers differ between boards.
+Here the board is identified by its customer ID, so the ratios are fixed.
 
 Signed-off-by: Johan Dahlin <jdahlin@gmail.com>
 ---
  Documentation/hwmon/nct6683.rst |  3 ++-
- drivers/hwmon/nct6683.c         | 32 ++++++++++++++++++++++++++++++--
- 2 files changed, 32 insertions(+), 3 deletions(-)
+ drivers/hwmon/nct6683.c         | 20 +++++++++++++++-----
+ 2 files changed, 17 insertions(+), 6 deletions(-)
 
 diff --git a/Documentation/hwmon/nct6683.rst b/Documentation/hwmon/nct6683.rst
-index a9c53d6eab9c..c8b8ade3b95b 100644
+index c8b8ade3b95b..17fba35bf9bb 100644
 --- a/Documentation/hwmon/nct6683.rst
 +++ b/Documentation/hwmon/nct6683.rst
-@@ -62,7 +62,8 @@ customer ID 0x164a), where pwm1 to pwm6 control the fan headers reported
- by fan1 to fan6, and on the ASRock BC-250 (NCT6686D, customer ID 0x162b).
+@@ -63,7 +63,8 @@ by fan1 to fan6, and on the ASRock BC-250 (NCT6686D, customer ID 0x162b).
  
  On the ASRock B850 Steel Legend WiFi the temperature and voltage inputs
--are named after the H/W Monitor page of the BIOS setup.
-+are named after the H/W Monitor page of the BIOS setup, and fanN_label
-+names the fan header each channel is wired to.
+ are named after the H/W Monitor page of the BIOS setup, and fanN_label
+-names the fan header each channel is wired to.
++names the fan header each channel is wired to. The +5V and +12V inputs
++report the rail voltage rather than the divided voltage seen by the chip.
  
  pwmN_enable selects the fan control mode:
  
 diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
-index 4fcd0c74af44..dcad72d1ef97 100644
+index dcad72d1ef97..9a306728ee84 100644
 --- a/drivers/hwmon/nct6683.c
 +++ b/drivers/hwmon/nct6683.c
-@@ -354,6 +354,15 @@ static const struct nct6683_mon_desc asrock_b850sl_mon_desc[] = {
+@@ -328,10 +328,14 @@ static const char *const nct6683_mon_label[] = {
+ #define NUM_MON_LABELS		ARRAY_SIZE(nct6683_mon_label)
+ #define MON_VOLTAGE_START	0x60
+ 
+-/* Board specific names for the monitoring sources */
++/*
++ * Board specific names for the monitoring sources, and the ratio of the
++ * resistor divider in front of a voltage input.
++ */
+ struct nct6683_mon_desc {
+ 	u8 src;			/* index into nct6683_mon_label */
+ 	const char *label;
++	u8 scale;		/* voltage divider ratio, 0 if none */
+ };
+ 
+ /*
+@@ -346,11 +350,11 @@ static const struct nct6683_mon_desc asrock_b850sl_mon_desc[] = {
+ 	{ 0x46, "CPU" },		/* AMD TSI Addr 98h */
+ 	{ 0x60, "+3.3V" },		/* VCC */
+ 	{ 0x66, "CPU Vcore" },		/* VIN0 */
+-	{ 0x69, "+5V" },		/* VIN3 */
++	{ 0x69, "+5V", 3 },		/* VIN3 */
+ 	{ 0x6b, "VDDCR_SOC" },		/* VIN5 */
+ 	{ 0x6c, "VDD_MISC" },		/* VIN6 */
+ 	{ 0x6d, "DRAM" },		/* VIN7 */
+-	{ 0x76, "+12V" },		/* VIN16 */
++	{ 0x76, "+12V", 6 },		/* VIN16 */
  	{ }
  };
  
-+/*
-+ * Fan headers as printed on the board, see the ASRock B850 Steel Legend WiFi
-+ * User Manual, section 1.3 "Motherboard Layout", page 7, and section 2.12
-+ * "Onboard Headers and Connectors", pages 44 to 46.
-+ */
-+static const char * const asrock_b850sl_fan_label[] = {
-+	"CPU_FAN1", "CPU_FAN2", "AIO_PUMP", "CHA_FAN1", "CHA_FAN2", "CHA_FAN3",
-+};
+@@ -761,11 +765,17 @@ show_in_reg(struct device *dev, struct device_attribute *attr, char *buf)
+ {
+ 	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
+ 	struct nct6683_data *data = nct6683_update_device(dev);
++	const struct nct6683_mon_desc *desc;
+ 	int index = sattr->index;
+ 	int nr = sattr->nr;
++	long val = in_from_reg(data->in[index][nr]);
 +
- /* ------------------------------------------------------- */
++	/* Report the rail voltage for inputs behind a resistor divider */
++	desc = nct6683_find_mon_desc(data, data->in_src[nr]);
++	if (desc && desc->scale)
++		val *= desc->scale;
  
- struct nct6683_data {
-@@ -375,6 +384,8 @@ struct nct6683_data {
- 
- 	/* Board specific sensor names, NULL if none */
- 	const struct nct6683_mon_desc *mon_desc;
-+	const char * const *fan_label;
-+	int num_fan_label;
- 
- 	struct mutex update_lock;	/* used to protect sensor updates */
- 	bool valid;			/* true if following fields are valid */
-@@ -822,17 +833,30 @@ show_fan_pulses(struct device *dev, struct device_attribute *attr, char *buf)
- 		       ((data->fanin_cfg[sattr->index] >> 5) & 0x03) + 1);
+-	return sprintf(buf, "%ld\n",
+-		       in_from_reg(data->in[index][nr]));
++	return sprintf(buf, "%ld\n", val);
  }
  
-+static ssize_t
-+show_fan_label(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
-+	struct nct6683_data *data = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%s\n", data->fan_label[sattr->index]);
-+}
-+
- static umode_t nct6683_fan_is_visible(struct kobject *kobj,
- 				      struct attribute *attr, int index)
- {
- 	struct device *dev = kobj_to_dev(kobj);
- 	struct nct6683_data *data = dev_get_drvdata(dev);
--	int fan = index / 3;	/* fan index */
--	int nr = index % 3;	/* attribute index */
-+	int fan = index / 4;	/* fan index */
-+	int nr = index % 4;	/* attribute index */
- 
- 	if (!(data->have_fan & (1 << fan)))
- 		return 0;
- 
-+	/* Fan names are only known for some boards */
-+	if (nr == 3 && fan >= data->num_fan_label)
-+		return 0;
-+
- 	/*
- 	 * Intel may have minimum fan speed limits,
- 	 * but register location and encoding are unknown.
-@@ -846,6 +870,7 @@ static umode_t nct6683_fan_is_visible(struct kobject *kobj,
- SENSOR_TEMPLATE(fan_input, "fan%d_input", S_IRUGO, show_fan, NULL, 0);
- SENSOR_TEMPLATE(fan_pulses, "fan%d_pulses", S_IRUGO, show_fan_pulses, NULL, 0);
- SENSOR_TEMPLATE(fan_min, "fan%d_min", S_IRUGO, show_fan_min, NULL, 0);
-+SENSOR_TEMPLATE(fan_label, "fan%d_label", 0444, show_fan_label, NULL, 0);
- 
- /*
-  * nct6683_fan_is_visible uses the index into the following array
-@@ -856,6 +881,7 @@ static struct sensor_device_template *nct6683_attributes_fan_template[] = {
- 	&sensor_dev_template_fan_input,
- 	&sensor_dev_template_fan_pulses,
- 	&sensor_dev_template_fan_min,
-+	&sensor_dev_template_fan_label,
- 	NULL
- };
- 
-@@ -1722,6 +1748,8 @@ static int nct6683_probe(struct platform_device *pdev)
- 		break;
- 	case NCT6683_CUSTOMER_ID_ASROCK8:
- 		data->mon_desc = asrock_b850sl_mon_desc;
-+		data->fan_label = asrock_b850sl_fan_label;
-+		data->num_fan_label = ARRAY_SIZE(asrock_b850sl_fan_label);
- 		break;
- 	default:
- 		if (!force)
+ static umode_t nct6683_in_is_visible(struct kobject *kobj,
 -- 
 2.53.0
 
