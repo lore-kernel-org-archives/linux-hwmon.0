@@ -1,56 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794415330;
-	b=p3u/h4Qzc+foPAmy5LVHRwuKOmLwlXfn1y+4dnABTRzwJmOjyOdKBmj48qtX8XHfYmuT
-	 htX2TIsVF2ZVxnU/3RFeAUbx6+wLmFBLDuvHEXRjwzMvICgVK8sS4DVKeswIE/9lH5/ed
-	 Fz5lrTP0E4lxxAbI/OhnX5Z4AXm5uLAKKwW5ZZaUyI23RrWQIX20Y1fxmiPq4/yDg/fRK
-	 /jVsiczguLqhLhFxQ4w9OgHB8s0gwQjTIFiBL4MILY6ae4uYT10x+QroZGROv8I6fHiz3
-	 TrNgQVO+VgsRLme4etQOypC5A1XazlHGlgOp5SeJET8t7zlr1iNOLaIF0NzxRSuKHtg==
+	t=1794415893;
+	b=dtSPZLa0i2xrTYAv0Aoo4VlWlHXQy17FuPcGC+5IJhvz+bEJ/bRdPdDBBs8ElmXaDILp
+	 2kFUql0HJHTJMKmItr/5Tgs9epCXbE0FmPfUIhVXE1b1jhVbjqtgj3Bm50Xwe1enUc0CI
+	 xfO2BZHGD4m/tySliiQD7y+XEcyWO1DnDZ2Eit2iTHOVCqaVm1Dc6x4d9mFia4iguJlKT
+	 F5WpFrLjI97Z+3jO+rXMzT1oaySNwJ1H9jyJxv47LrZWpdOjEr1PuUR+xNSttw7zuPulF
+	 vpxT31e+26i/BfVhE25oMkN1BqrRyNKYPFluzSy8L0C4MgXQ3iAfWWgPBsQ/9lXazpw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794415330;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	a=rsa-sha256; c=relaxed/relaxed; t=1794415893;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=JqQCWuEarmUjVJdZqljVT1EQqbNJ3oN1Mdp73+O5rFY=;
-	b=QXu+Dg3uDXEQRMwqcZQclu2jtDJRA+Nvrvu7yqfnGcdHE0P2kzU8zUUHYhR/AbXYbJca
-	 ADfIjA71n3iqXFXJsMbpD4/2OUfLoy2rLhCFNG+jQTTQmsLEsCj2ycZWGFJsqRo50C559
-	 BdwUgMLOJjpwBCAs0IQeUpVpzIeoKZqFT97OeV/3TLTKgXXfMaQGbg8JTOQIjgFqC2TM2
-	 FCaDYXRE0VJjVk8VUeHTCq+k7UnHcadf7NOd6+bl3iizmgaXS1fAYHO8rWEXxpbeV/B02
-	 PRTqqQl5hF9LIFbAr8lmCZz5ZvjM1Xr69ti3CT+kCC++fl36a8p8hb7qZ0Hqh6xkbDw==
+	bh=6rUXEd1YfhqmGM76L8N3C5HBkeLK3JVMf/Xxpe84k7Y=;
+	b=w19wVhtV3c09GWzp+M7ChbR98t6ULOsoKqgOEgiKls4s1Z3Xb5zbwBhZDV/Id3VuF3U5
+	 t3/S5WY3YBXGe9CtfosisdAMJL5LnqPZphiHXm0ZDlqvJhHhINd7Sasm2S3Pw+A+On8Mb
+	 gp/6nUZ77DXYMOjoaIFSSZsxViwYUaCnSoeOk942M76q4/x60rJu+jtf6O6BYJ9Xd0Tck
+	 Ydd8o+4mizJOdr1KSvTH0lmD+vspLUCXwIiwQITchyoumG2Grlgi1U9EJDtft9esrIN1n
+	 YUxqK7XBLG9ogzk7gNjtg3K74WwT74avCRAQxBgwLvwnBlFZtAo4GABh94BQAoe5F/Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NoWa54ki;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ekTKrlUS;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A03606A31C
-	for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 16:42:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395F7606A321;
+	Wed, 11 Nov 2026 16:51:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NoWa54ki
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C8C1F00A05;
-	Wed, 11 Nov 2026 16:42:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ekTKrlUS
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8713F1F00A09;
+	Wed, 11 Nov 2026 16:51:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794415330;
-	bh=JqQCWuEarmUjVJdZqljVT1EQqbNJ3oN1Mdp73+O5rFY=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=NoWa54ki/brJiQ6iS9nRrVR5ArS3YrDO4IZojULNpjWz4LVPBI7oq/5WKwyL935uj
-	 axDccFzHzX1Q+AxM0gwcNBdSonHXohMMtBzBfJSGgF7vXAQuIIUwGTlObKWCrH+akc
-	 7Vfmd4trTLt9kcOynjjuxxFDHgJsCResX49vzJWFa+ZqrxjiixSAa5pJI0PSVRTg5y
-	 sZBoWvMxrBi15B53FUXgEoQzEBJof/HvISh/T4gvumTRdWTQAeFAJWYVEQ1obUlUW9
-	 tGiLcQ6Pt1nSFot3SimV21YpUlk+b9PxvWpjWZH9NSWIeLrIvKnQsxQ+2MymSRgfCB
-	 Qpplu2Qs84QDw==
-Message-ID: <sashiko-outbox-209308@kernel.org>
+	s=k20260515; t=1794415892;
+	bh=6rUXEd1YfhqmGM76L8N3C5HBkeLK3JVMf/Xxpe84k7Y=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ekTKrlUSQRBh85WA8c/Zn6Ph22ARbS3HMDGUKDxVWY7SIwIPySQtEZ7qc66CBTqSd
+	 HN/ctKsCOm2X1TsIE/pB8qkSwWHfZSy17KRsTXXahk2OTFFz7Axb4H/nUsk3DfHFJW
+	 v9bAFNCqHWK9kUPLY+n+scrLi62AQ3UwjZyiCX4km0Glko5pY6dbmfl4yQsqt003Oo
+	 HwVJdxnApGHjhGnUHOMGi70HrAFXDm2D6l7+1AyGguN+4jl+Ar4mToWxOEKe0RINyj
+	 3dCO8xE1esgRx3BUJoZeACQ3PVr70M87Ax29GhbGXj7ZrYaGLmVXfNCeazV+VtIZpi
+	 lCZTrJF2lVaig==
+Message-ID: <sashiko-outbox-209333@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 2/4] dt-bindings: hwmon: add Microchip LAN969x fan
- controller
+Subject: Re: [PATCH v3 3/4] hwmon: Add Microchip LAN969x fan controller
+ driver
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Robert Marko" <robert.marko@sartura.hr>, linux-hwmon@vger.kernel.org
-In-Reply-To: <20261111161619.232141-2-robert.marko@sartura.hr>
+To: "Robert Marko" <robert.marko@sartura.hr>, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+Cc: robh@kernel.org, conor+dt@kernel.org
+In-Reply-To: <20261111161619.232141-3-robert.marko@sartura.hr>
 References: <20261111161619.232141-1-robert.marko@sartura.hr>
- <20261111161619.232141-2-robert.marko@sartura.hr>
+ <20261111161619.232141-3-robert.marko@sartura.hr>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 16:42:09 +0000
+Date: Wed, 11 Nov 2026 16:51:32 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -60,19 +61,52 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> The LAN969x fan controller has a PWM output and tachometer input in a
-> register block separate from the Sparx5-compatible temperature sensor.
-> Describe it with its own compatible and binding.
->=20
-> The optional fan child specifies PWM period and polarity, tachometer
-> pulses per revolution, and thermal cooling levels.
->=20
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] hwmon: lan969x-fan: separate __free() declaration in
+  lan969x_fan_probe()
+--
 
-Sashiko has reviewed this patch and found no issues.
+commit b2df768159182a27301144a0ba71d10e45a494fd
+Author: Robert Marko <robert.marko@sartura.hr>
+
+hwmon: Add Microchip LAN969x fan controller driver
+
+This commit adds a hwmon driver for the Microchip LAN969x fan controller,
+supporting tachometer input, PWM output, and thermal cooling.
+
+> diff --git a/drivers/hwmon/lan969x-fan.c b/drivers/hwmon/lan969x-fan.c
+> new file mode 100644
+> index 0000000000000..fae0248658818
+> --- /dev/null
+> +++ b/drivers/hwmon/lan969x-fan.c
+[ ... ]
+> +static int lan969x_fan_probe(struct platform_device *pdev)
+> +{
+> +	struct thermal_cooling_device *cdev;
+> +	struct device *dev =3D &pdev->dev;
+> +	struct lan969x_fan *fan;
+> +	struct device_node *fan_np __free(device_node) =3D NULL;
+> +	u32 initial_pwm;
+> +	int ret;
+> +
+> +	fan =3D devm_kzalloc(dev, sizeof(*fan), GFP_KERNEL);
+> +	if (!fan)
+> +		return -ENOMEM;
+> +
+> +	fan->base =3D devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(fan->base))
+> +		return PTR_ERR(fan->base);
+> +
+> +	fan->pulses_per_revolution =3D 2;
+> +	fan_np =3D of_get_available_child_by_name(dev->of_node, "fan");
+
+[Severity: Low]
+This isn't a bug, but per the cleanup.h conventions, fan_np should be
+defined and initialized in a single statement at the point of assignment
+rather than declared initialized to NULL at the top of
+lan969x_fan_probe().
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111161619.2321=
-41-1-robert.marko@sartura.hr?part=3D2
-
+41-1-robert.marko@sartura.hr?part=3D3
