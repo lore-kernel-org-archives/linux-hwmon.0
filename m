@@ -1,96 +1,50 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794394671;
-	b=apmlYTEqxucmzE6tfURX1avpNdobu5++HiuqEBS55g7Aix4vSogpJ/Mt7btg5L1T6aDl
-	 p3deglXx6DaGhulxYKIBh5mLAxUH/4ANyQn1/30s12Z+zIN+FSTAh1Jhy1RkfnFAlh7od
-	 vlI6BMFJYbO7P84ze9/BRCGf0e5L2AdL5jlRZTTKQOyPNLcm85zNeQYjtMovDvbXUeRSB
-	 +bmKA1sso9Q/nnv6UMDEIS5A2TAzuKoGyjRfS4CTfjUbWuCnjV1icd3i1hWoimzsYnNpt
-	 SI2cpgWhbhd9UVZkQTFaA22qSoDE8OZGkC8PmCH90OjHE1UdnkTAV253pGhszdSVPFA==
+	t=1794394850;
+	b=SH43fyYEAnO23AJrsWpKaVXipaK4NNy0pjRTmJVHBBLd/ZhwLeSdWGFHMXE0NlWpNz5r
+	 dSMXA9kWOi70BWul/j4TfMc3zukRC8c5XJzArAcjmk4j4fLaqTuXceWgehAW6s9JkQ3aL
+	 TJ2htFccQaC7b9M+nDIX3++Qm3GbQtxYsKhxxXfalAEKkpl8Kxq8FQakpp2vWCUTgwJlz
+	 +VCbIj4Y3rW3K0ZRVMYhlhnztaoMk6tyvijLIVmtj8JhEIwrHKMDnxODCo/xGeBy4lK5N
+	 aDC4f2gFeNiRy82o97QCFHG+UwD6fNXtRkuz+5mWXzSDkVqT7vBGjmhZ5T4RD4vNAqg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794394671;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=B/JodyxslCE0s5rZbktiNiCgYyceChxk1HoTgFEpDMM=;
-	b=jiAoVF6Cp4JsHapHm/f6FrdA4+EQOwt6aVV8iYHj6l9inAEtVGOnTeRIJgwGLY3OJqFG
-	 dl1vaAhBRDnMar+mCkmeIMMqiCks21KzT5esSrtEw0fOApzlbOBo/FgUbgJ2FQ7H397n+
-	 t+/nUXNAV9ziCy56dyC8OgUHdvqk6o8JUrZEXFIZiC9fg233pCgH1yDhHZ5VzkJUJCbBP
-	 eSzEIx6Kg8Z0bPw7VFifvzbIylXPzB3HkgKuhBVrIqnbUHoNKE8IuzJW0ncm7YhxkXv2z
-	 0K5T9+PfdRhJXXWAYxNggCoTA7+O4V4pLyx2n93/z++t0rns/TlkCIoKTWnb9hpEUMA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794394850;
+	h=Received:DKIM-Signature:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer;
+	bh=PzG0rJZUGKNJfM97jTQLU563A2BoSWOnrtLJjZWzR7Q=;
+	b=1PzkmwUETyTU84vE1oj6x7JFfVmHZREdyt9+gJ+TyZrq6wOuXmhG4nY9Gip33pDNXl4V
+	 jYwZbDg8LZTyDQLoSXJ/cvHeqR5oI9KhvaE1drrqQQ3CagV6eensjnW2O10f1gDhRDpql
+	 E2Wfk/Jc0R3MaPQXV+wJfK+ABRVroTC0QGlGqaB56Hf48zL0IxeJ/nb2rv7FsELSmLxSo
+	 NvlcoCICYq4TdMp2IK0A2q6OGnewHK+1GiWA50YfDrRoSw8JpFCb4PnOXiFUNpanUPMlf
+	 3T5Xuu65gr8MifLVL5pH1mVN7eOawaG+tFd3NOSEfq2bxkML7tWDsC2h7OCJtWEp/Aw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hVNXTubb;
-	arc=none smtp.remote-ip=209.85.128.42
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Djhhcsbl;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28906606A321
-	for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 10:57:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 28906606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B726B606A324;
+	Wed, 11 Nov 2026 11:00:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hVNXTubb
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4a2153c8525so23698495e9.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 02:57:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794394669; x=1794999469; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=B/JodyxslCE0s5rZbktiNiCgYyceChxk1HoTgFEpDMM=;
-        b=hVNXTubbRWSUizyaWoIgKFgbFDKSBccwRfDJSNm8qsUoysuBP8H/F2nkF4RI92wber
-         di7s/6CYiBlwknrPU+mDweQFkjcTxdimhkRIl5uSVBZRuMcVbl4SN8eBhwOReHSES/Pl
-         jiaRAVgF9xk0KP91UmVe68XmNvA4wy6HWzLTDcgNQWaPWDs0s2Lme/uZYy1lkqK5K4Il
-         VxMkub+CfETknI9c/M1xJ99LZOIyCsVQkFIbZnArUEK9cod+T38TwP714EB22efWpFFa
-         GOEY05W1C3Wkzolepw6Lc+hXLBjvJkVDNHdGpXToDmXLaWARYFWhsHYsy6F3xngHfKFQ
-         9kDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794394669; x=1794999469;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=B/JodyxslCE0s5rZbktiNiCgYyceChxk1HoTgFEpDMM=;
-        b=SmIciKgY6e+R+C0AbTd/vG3ryaMEwS61DgzZGQi9GfD7Hh8nRzZ3Y8H3pFp4I5T6RG
-         PMgG3tMXUsQrsOTo5k6mcgV/ppUmKFs5KPjhaB/dolMriOUw3iu0qLkE1CiPtY3V2WcX
-         2Ky4B8h3iBtgwJH5KCy17MTPOYzdiipdRziHXgHp5XFdoCqAtocUuz2WNltRcyWx0AeN
-         1ag2Z+axyffBpK9hREW2A9JzJJYDFY85DXOD20K5f+f2i0L0VwCxLWV35f8nm9nshlpv
-         X6FC5nZg4/Xrw8AoPGElkfa2OEgynNIF+b0fFb9oqMYZBki44ETGnFW4UJwUQvlr81Cb
-         Gt7g==
-X-Forwarded-Encrypted: i=1; AL+hErF5xzcyCTpDfqMwLAJNFn0vYumHnS3UzEiOXSFTT/3SJpf9zR0ZAZwHWubBZM/MvSRLcJMvF3fu+kX1zw==@vger.kernel.org
-X-Gm-Message-State: APuU4Z+wPlxvOoGzQ7Xw/s9BOQbd4uK3+OrRV8ULYzoBqw3LCp5vpM+n
-	Sm0GTM1HRiuAxvyVuk6YM7P3dR1hijos5NUU4QrS5c+G3zBCHcItYrkh
-X-Gm-Gg: AYBFou0NQUp4t7vaN2Xq3Q/AfdtaVaRNedrjoxL79y3/Kqh+I34j4ccBZeg3FdDbwjM
-	gCzTYp7IGvoL3nWRbMn9wt3XZfsV+cA9KQfJpYLq408tzBJKMNcQVhUW9r1Oz+buhhitDl9B1RS
-	qat0eSOPQ5wOneoWqV+67fNxRleFW70c3HzdgURSGE4Ui43sDh7lU3gwDLDI4IMfbp1+vXzpcZX
-	5KnrarJddFqDlc5ZfHFxTRNlr/eoXJ+uioh3bjxS23otgDTRi80wO5aVj/ip47h4SnXhuhargh+
-	P6OkbvUmBgFosnqLVrzA60IuOFElZIA6GS/wXLotJFF0fI8zBmSElglqI2j0EjsyQsEzD+lhZ7R
-	gYFpam3AzBAlG26LiIs5cp8Khuw0q+5A9fJdFqxHeCoM6YOdjMlcuLcxOBrfGFLOFdMUyKcuQ7k
-	nyQxSRU23c1cKnNLy9UxN6sSJW3rKzHzycmHE+iTnl+ej20Ta6WoLz6hjmiiZlh7IwAEBPuiic3
-	12LLQDBuytGgTTd3h+MCWZce+gtk+AKLjhKxWWp2W72w2tntqmc3wkbaC4t8YEfpnpBiyPmuVOK
-	jNhtFcQRqOOMFbk2HDXp5cQyxFAv7PWh2utCUebdsTHJlZbLgJkT36iNxwcQB1vx4cpTmd4hojq
-	lANo+XEzLuXE=
-X-Received: by 2002:a05:600c:1d28:b0:4a1:e6c8:ff74 with SMTP id 5b1f17b1804b1-4ba0939db75mr37798895e9.29.1794394669238;
-        Wed, 11 Nov 2026 02:57:49 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba0950f3casm31107125e9.3.2026.11.11.02.57.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 02:57:46 -0800 (PST)
-Date: Wed, 11 Nov 2026 10:57:45 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Zhu Jun <zhujun2@cmss.chinamobile.com>
-Cc: linux@roeck-us.net, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (nct6775) Clamp fan control times before
- rounding
-Message-ID: <20261111105745.5b3b6a40@pumpkin>
-In-Reply-To: <20261111033954.12468-1-zhujun2@cmss.chinamobile.com>
-References: <20261111033954.12468-1-zhujun2@cmss.chinamobile.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Djhhcsbl
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB8381F00A06;
+	Wed, 11 Nov 2026 11:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794394850;
+	bh=PzG0rJZUGKNJfM97jTQLU563A2BoSWOnrtLJjZWzR7Q=;
+	h=From:Subject:Date:To:Cc;
+	b=Djhhcsbl71g30wN5Nl+2FxXCkWu4IVvlAN2d1X8OUR76HYOaCZ1w1+B0VHBfP5THy
+	 ttBD6WbkSBvy4F8mYYWB/Nh5HMuAyiPd0yUgqF471Xvgg1Wctth/nsknmEP1OkTxn2
+	 +jj3BJrE6oNeNwM4mNWCUD+hN+ijETy6p/u5juSPl+SDnuLJdt96y/uRRyW5X+YTFk
+	 g79KtdSglCNFHih6TS5ad8sgQXA+CfIpLSbpE9xDcFOGdm+zn66XEDQUhbcAYXlTO0
+	 atip7dCmm2lrXR0v0lxeR6YkUMJ7tZ6NlGyN1VuDwRr45TGJxGh3pA5UpoiAkuVgVb
+	 3GefA94XhUYfA==
+From: Linus Walleij <linusw@kernel.org>
+Subject: [PATCH v4 0/7] BCMBCA PMB power, clock, reset and hardware
+ monitoring support
+Date: Wed, 11 Nov 2026 12:00:41 +0100
+Message-Id: <20261111-xg6846b-bcmbca-xrdp-reset-v4-0-17035a5e8ad2@kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -100,48 +54,172 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAA/33Oy2rDMBCF4VcRs/YUjSzJiVd5j5CFLmNHtLWNF
+ IxD8LsHB0JbCt6exXf+BxTOiQu04gGZ51TSOEArdCUgXN3QM6YIrQAllSVJNS69PWjr0YdvHxw
+ uOU6YufANIzfkDzIo4zRUAqbMXVpe9vlSCbimchvz/XU107a+Vb2jzoQSo+tMpKZhovr0yXngr
+ 48x97Cxs/qhSNIepVCiNqbjI3M0zP+o+jdl96h6q7Iusm/IdeH4h1rX9QkIJBhjWQEAAA==
+X-Change-ID: 20261013-xg6846b-bcmbca-xrdp-reset-de71b80c25a4
+To: Linus Walleij <linusw@kernel.org>, Lee Jones <lee@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ William Zhang <william.zhang@broadcom.com>, 
+ Anand Gore <anand.gore@broadcom.com>, 
+ Kursad Oney <kursad.oney@broadcom.com>, 
+ Florian Fainelli <florian.fainelli@broadcom.com>, 
+ =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>, 
+ Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney+clk@redhat.com>, 
+ Jerome Brunet <jbrunet+clk@baylibre.com>, 
+ Guenter Roeck <linux@roeck-us.net>, Philipp Zabel <p.zabel@pengutronix.de>, 
+ Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, 
+ Ulf Hansson <ulfh@kernel.org>, 
+ Benjamin Larsson <benjamin.larsson@genexis.eu>
+Cc: mfd@lists.linux.dev, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, linux-pm@vger.kernel.org
+X-Mailer: b4 0.16.0
 
-On Wed, 11 Nov 2026 11:39:54 +0800
-Zhu Jun <zhujun2@cmss.chinamobile.com> wrote:
+This is another of these big upfront design binding and driver hoards
+that is the consequence of adding new SoC support.
 
-> store_fan_time() accepts an unsigned long, but step_time_to_reg()
-> narrows it to unsigned int and adds the rounding adjustment before
-> clamping. For example, 4294967295 ms wraps and selects register 1
-> instead of 255 in either mode.
-> 
-> Preserve the input width and clamp to the maximum duration for the
-> selected mode before rounding.
-> 
-> Fixes: cdcaeceb74ff ("hwmon: (nct6775) Add support for automatic fan control")
-> Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
-> ---
->  drivers/hwmon/nct6775-core.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-> index 6e97e4f08b90..76b2c9551a1c 100644
-> --- a/drivers/hwmon/nct6775-core.c
-> +++ b/drivers/hwmon/nct6775-core.c
-> @@ -949,8 +949,9 @@ static unsigned int step_time_from_reg(u8 reg, u8 mode)
->  	return mode ? 400 * reg : 100 * reg;
->  }
->  
-> -static u8 step_time_to_reg(unsigned int msec, u8 mode)
-> +static u8 step_time_to_reg(unsigned long msec, u8 mode)
->  {
-> +	msec = min(msec, 255UL * (mode ? 400 : 100));
->  	return clamp_val((mode ? (msec + 200) / 400 :
->  					(msec + 50) / 100), 1, 255);
+My stake is to be able to boot and test a full featured Cortex-A7
+system and the BCM6846 XG6846B is one such system on my desk.
 
-Just do most of the division before doing the add:
-	return clamp((msec / (mode ? 200 : 50) + 1) / 2, 1, 255);
+It's been cooking for a while in various prototype forms.
 
-(It should never have been clamp_val(), the correct change was 1u, 255u.
-Not needed any more.)
+IMPLEMENTATION:
 
-David
+The PMC contains various stuff so this needs to be a simple MFD node
+so more things can be added into it later.
 
->  }
+Inside the PMC is the PMB, the power management bus. This bridges
+to several individual peripherals which are very clearly distinct
+devices on that bus.
+
+Handle the PMB with an MFD driver with power domain, clock, reset and hwmon
+providers.
+
+Expose the standard BPCM peripheral, memory, USB and PCIe domains and
+a combined XRDP domain covering XRDP, the three Runners and WAN. Keep
+the peripheral and memory domains always on. The power domain provider
+now owns zone transitions, leaving the reset provider to pulse resets.
+The CPU and PLL blocks use different register layouts and are excluded.
+This new power domain integration has not been tested on hardware.
+
+The BCM6846 XRDP reset sequence enabled full-MTU traffic on all four LAN
+ports and copper WAN and has been tested on that series. The zone
+power-up sequence also passed direct CFE flash boot in the Linux 6.18
+OpenWrt port; this folded v7.3-rc1 revision still needs hardware testing.
+
+MERGE STRATEGY:
+
+Through an MFD immutable branch once everyone ACKs the subdrivers,
+it will take time I guess. Queue the bindings and drivers in MFD.
+
+Updates to peripheral schemas and device trees to accommodate the power
+domains will be submitted separately.
+
+The patches were authored with the assistance of an LLM.
+
+Signed-off-by: Linus Walleij <linusw@kernel.org>
+---
+Changes in v4:
+- Reset: simplify sequence dispatch, rely on core translation defaults and
+  clarify power-domain ordering before reset pulses.
+- MFD transport: disable unsafe regmap debugfs access and keep register
+  reads, writes and bit updates serialized in the callbacks.
+- Introduce the PMB binding, child bindings and IDs before the PMC binding
+  so binding checks work at every commit.
+- Expand PMB as Power Management Bus throughout.
+- Sort the PMC and PMB example children by name and drop unused labels.
+- Link to v3: https://patch.msgid.link/20261106-xg6846b-bcmbca-xrdp-reset-v3-0-d6adeb71afc9@kernel.org
+
+Changes in v3:
+- Add a PMB power domain subdriver and binding with a combined XRDP domain.
+- Move XRDP, Runner and WAN power sequencing out of the reset driver.
+- Register the power domain MFD child.
+- MFD transport: simplify cell registration, drop unused state and
+  property.h, and add the bcmbca-pmb subject prefix.
+- Power domains: default to MFD_BCMBCA_PMB.
+- MFD transport and reset: use mutex guards; reset: use
+  str_assert_deassert().
+- Clock: use the reference clock as parent, limit CLK_GET_RATE_NOCACHE to
+  PLL outputs, drop CLK_IGNORE_UNUSED and simplify Runner registration.
+- Clock and reset: suppress manual bind/unbind.
+- MFD transport, clock, reset and hwmon: drop redundant mod_devicetable.h;
+  clock: drop slab.h.
+- Power domain, clock, reset and hwmon drivers and PMC/PMB bindings: drop
+  vendor-source references from comments.
+- Link to v2: https://patch.msgid.link/20261101-xg6846b-bcmbca-xrdp-reset-v2-0-455fe9eed5ee@kernel.org
+
+Changes in v2:
+- Use a shared PMB regmap in all child drivers, keeping keyhole semaphore
+  handling and timeout recovery inside the MFD provider.
+- Drop PCIe reset IDs and sequences pending proper power and lane
+  configuration handling.
+- Power up the XRDP, Runner and WAN zones before the XRDP reset pulse,
+  preserving the sequence tested with direct CFE flash boot in OpenWrt.
+- Describe clock, reset and PVTMON PMB child nodes with separate
+  compatibles.
+- Move the PMB transport and accessor header under MFD and register
+  clock, reset and PVTMON MFD cells matched to their child DT nodes.
+  Select reset variants through OF match data.
+- Add PMB clock support and PVTMON clock and reset bindings.
+- Add PVTMON hwmon support for temperature and all seven voltage inputs,
+  retaining the zero-cell thermal sensor through the hwmon bridge.
+- Drop the unnecessary literal block marker from the PMC description.
+- Use the BCM6846-specific "brcm,bcm6846-pmc" compatible.
+- Expand PMC as "Power Management Controller" throughout.
+- Move the LLM assistance disclosure from trailers to the cover letter.
+- Drop the RFC prefix.
+- Link to v1: https://patch.msgid.link/20261014-xg6846b-bcmbca-xrdp-reset-v1-0-daf5d177e113@kernel.org
+
+---
+Linus Walleij (7):
+      dt-bindings: soc: Describe the BCM6846 Power Management Bus
+      dt-bindings: mfd: Describe the BCM6846 PMC complex
+      mfd: bcmbca-pmb: Add a shared BCMBCA PMC3 PMB transport
+      pmdomain: bcm: Add BCMBCA PMB power domains
+      reset: Add BCMBCA block resets through the PMB
+      clk: bcm: Add BCMBCA PMB clocks
+      hwmon: Add Broadcom PMB PVTMON monitoring
+
+ .../bindings/clock/brcm,bcm6846-pmb-clock.yaml     |  39 +++
+ .../bindings/hwmon/brcm,bcm6846-pmb-pvtmon.yaml    |  42 +++
+ .../devicetree/bindings/mfd/brcm,bcm6846-pmc.yaml  |  87 +++++
+ .../bindings/power/brcm,bcm6846-pmb-power.yaml     |  44 +++
+ .../bindings/reset/brcm,bcm6846-pmb-reset.yaml     |  31 ++
+ .../bindings/soc/bcm/brcm,bcm6846-pmb.yaml         |  90 +++++
+ Documentation/hwmon/bcm_pmb_pvtmon.rst             |  53 +++
+ Documentation/hwmon/index.rst                      |   1 +
+ MAINTAINERS                                        |  20 ++
+ drivers/clk/bcm/Kconfig                            |  11 +
+ drivers/clk/bcm/Makefile                           |   1 +
+ drivers/clk/bcm/clk-bcmbca-pmb.c                   | 388 +++++++++++++++++++++
+ drivers/hwmon/Kconfig                              |  18 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/bcm_pmb_pvtmon.c                     | 231 ++++++++++++
+ drivers/mfd/Kconfig                                |  11 +
+ drivers/mfd/Makefile                               |   1 +
+ drivers/mfd/bcmbca_pmc3_pmb.c                      | 308 ++++++++++++++++
+ drivers/pmdomain/bcm/Kconfig                       |  10 +
+ drivers/pmdomain/bcm/Makefile                      |   1 +
+ drivers/pmdomain/bcm/bcmbca-pmb.c                  | 279 +++++++++++++++
+ drivers/reset/Kconfig                              |  13 +
+ drivers/reset/Makefile                             |   1 +
+ drivers/reset/reset-bcmbca-pmb.c                   | 227 ++++++++++++
+ include/dt-bindings/clock/brcm,bcm6846-pmb.h       |  42 +++
+ include/dt-bindings/power/brcm,bcm6846-pmb.h       |  12 +
+ include/dt-bindings/reset/brcm,bcm6846-pmb.h       |  11 +
+ include/linux/mfd/bcmbca-pmb.h                     |  11 +
+ 28 files changed, 1984 insertions(+)
+---
+base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
+change-id: 20261013-xg6846b-bcmbca-xrdp-reset-de71b80c25a4
+
+Best regards,
+--  
+Linus Walleij <linusw@kernel.org>
 
