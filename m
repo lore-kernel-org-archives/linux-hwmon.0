@@ -1,63 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.137
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.135
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794379715;
-	b=vJSiSIyX+h3bjR9GKFtcJWaQrfTCnJ1uq3b7WTBME5LXcsxz4qlGQRnCBHUl+9wAMkod
-	 VWj0+11hB7keoG+cnhTq5r0q9wuhayll+ofZq9VDs9tByEBPdbtok6Pv6qMQsQ8SXxB0x
-	 KzGwxjveyH8SVEGYlK+dz0azkXscAHWXt2ZgnlnEUmhmx8GBmlk+RxVRZtFUXHuPdI27m
-	 hGeehZu1PsMPfgmft/vMX0+v0fbv4v/MGYlO8pEtaVu3QkBXQM6FJ48aBnqq8SHxBWrQ7
-	 /h4f9MRoulrG5csXsD9qskkRaJd/JN5nCOluWMglqixeTjpfhm3U0tDe5UXUOXG7eFg==
+	t=1794379733;
+	b=htknoCrgI3tko7P4CrX55r2BWmj0dhkw41AUYbho4g4MOSe/2r6REPLjH+siEY2XC2/W
+	 iEjx5BrVj0nlrf4dFKIphPAHVrstCjL//UuaZ+e3mTDAF+9pN0UzAGyOwWhZ+4N591OO4
+	 mWC88hbBpNds8jTfijjKM34VpyqhUm7sLYZPgNjzz68z159EEseHIhlR34ilvl5X1Ark7
+	 HGWJfrkfptR93ujBJ31u2wyk/tC+NAYjqKI7Stf92g7U7rVIfOsskXyGi9ZCpiBB6Cfy3
+	 yDKPNo7HOkwdnttmFH5UxaUIGI70BUJzwVSd7DKBk/iDKcnq2AAzK9DdAlXo/N5B5tg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794379715;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794379733;
 	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
 	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
 	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=EiudYiK8Nl3Q0w4RgLVGNqLw7ojYPMTrFxKGITMzjTo=;
-	b=NAIyMBRRXE5/aZueN5n1l4MKihxgWQhVtLgXLq3q1dQFRA/2caPKTG+U62F0pZNvaI06
-	 OCJbAY4eT5jakBWSA91khjEJaoElpu6q8dx2iTBuyhoslIb7tSPIAlIgppkx7SNw4OuPt
-	 hWccZ5Ktej8s/7dsfqCDWygZr4PwKhbukM9BkMRNnVTZlsMQgaRf1kJQ+Zz8NW2J2/qsC
-	 LI9Q48PImwgSxvcZJw6o/dov02wXVuN1XyZZnU1AoyvipUsu0MfyDqso/uiQTCh5HRF6o
-	 Azeed71YQ0m9nBM2maPGTCq5E8y5mvDTpok+xx3jHfT153jrk55kXVpqW5xavSQxs/g==
+	bh=R+Nh7+AUuzs//XDtIcn5bmTRYqTNO5OkqgpsOBnBqU8=;
+	b=CfONmQ7V6MK5aj17OgK/X7kJS70sYNCStht/08byj08dB4IPjRphg3w9cuBNwYEK0y1Y
+	 9v+LMdCU77dh3v5o2urUYsW5YxQYtUHkJv4MmL6VNsrMz8JSp4hpe+h9ARZYx6eg77goS
+	 LpATkrIo/C75LdCCHxzYRtu1gFuJ79UcAjjeO02ByB1OQ10lwBolNfQUbSFnZjQhX/+DO
+	 nD5I9cXX7JQ3tF3UulnzDAhiEAgX4JBclDX0PdJpkDGNYiyhVAZGFd0IJd2cy1jkydnbp
+	 CcvDuTdLueC5JVNaC7POGhEdIn4Hu77R/n7ShzD9ulJYb9vzxKuaYQOCZOk9YuV6Z/g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cmss.chinamobile.com;
 	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=Ar2c2WfS;
-	arc=none smtp.remote-ip=111.22.67.137
-Received: from cmccmta4.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E40C606A335;
-	Wed, 11 Nov 2026 06:48:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6E40C606A335
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=cZYWbgFd;
+	arc=none smtp.remote-ip=111.22.67.135
+Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 920C1606A327;
+	Wed, 11 Nov 2026 06:48:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 920C1606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=Ar2c2WfS
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=cZYWbgFd
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=cmss.chinamobile.com; s=default; l=0;
 	h=from:subject:message-id:to:cc:mime-version;
 	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=Ar2c2WfSzhpvqslziufykuQ/dNxLjM4nxY2TbPurBe1fh5h/C2NEyrch2buSpuIOBkvB/wUn6k0Q/
-	 VFGc939htVVYH6vW0OHsEHDADd+dNrhoLMAvoU0HUUAcfi0x+XVnyxsqdW6yvhvGfK4z3g7v88NQqO
-	 jX/GxdV531eKVB+s=
+	b=cZYWbgFdBFlu10wkeGslP3OBVASHvfsF8HeiZqBJAF9BJodwUcHKnbumNac2/lEq0GrtpGxq8+2UC
+	 rCMBPe/sV2ghQcW/YbNrMh3g8LgWfElnF49n6Jyk+ErkLqjW9mXLLFq8LlStk2YwhaxQVsMAXQ9gDq
+	 7taBIA5edTeng5jM=
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app08-12008 (RichMail) with SMTP id 2ee86af40fb50c5-75238;
-	Wed, 11 Nov 2026 14:48:33 +0800 (CST)
-X-RM-TRANSID:2ee86af40fb50c5-75238
+	by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee76af40fce706-d602d;
+	Wed, 11 Nov 2026 14:48:48 +0800 (CST)
+X-RM-TRANSID:2ee76af40fce706-d602d
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from devin-VMware-Virtual-Platform.localdomain (unknown[10.55.1.72])
-	by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee86af40fc0acf-d1b31;
-	Wed, 11 Nov 2026 14:48:33 +0800 (CST)
-X-RM-TRANSID:2ee86af40fc0acf-d1b31
+	by rmsmtp-syy-appsvr10-12010 (RichMail) with SMTP id 2eea6af40fcf849-d1a3a;
+	Wed, 11 Nov 2026 14:48:48 +0800 (CST)
+X-RM-TRANSID:2eea6af40fcf849-d1a3a
 From: Zhu Jun <zhujun2@cmss.chinamobile.com>
-To: linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
+To: jdelvare@suse.com
+Cc: linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Zhu Jun <zhujun2@cmss.chinamobile.com>
-Subject: [PATCH] hwmon: (w83627ehf) Clamp voltage limits before scaling
-Date: Wed, 11 Nov 2026 14:48:31 +0800
-Message-ID: <20261111064831.17299-1-zhujun2@cmss.chinamobile.com>
+Subject: [PATCH] hwmon: (it87) Clamp voltage limits before multiplication
+Date: Wed, 11 Nov 2026 14:48:47 +0800
+Message-ID: <20261111064847.17317-1-zhujun2@cmss.chinamobile.com>
 X-Mailer: git-send-email 2.51.0
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,35 +71,34 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-in_to_reg() narrows the sysfs value to u32 and multiplies it by 100
-before clamping. A large positive voltage limit can consequently be
-programmed as zero instead of the maximum; 4294967296 mV reproduces this
-on a 64-bit system.
+set_in() accepts an unsigned long, but in_to_reg() converts it to long
+and multiplies it by 10 before clamping. Large positive limits can
+become negative and select register zero instead of the maximum.
 
-Preserve the input width and clamp to the representable voltage range
-before multiplication.
+Keep the unsigned input type and clamp the voltage before scaling it by
+the ADC resolution.
 
-Fixes: cf0676fe42c8 ("[PATCH] w83627ehf: Add voltage inputs support")
+Fixes: ead8080351c9 ("hwmon: (it87) Add support for IT8732F")
 Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
 ---
- drivers/hwmon/w83627ehf.c | 3 ++-
+ drivers/hwmon/it87.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
-index 9c08ab662dc6..5c04b9c52b76 100644
---- a/drivers/hwmon/w83627ehf.c
-+++ b/drivers/hwmon/w83627ehf.c
-@@ -293,8 +293,9 @@ static inline long in_from_reg(u8 reg, u8 nr, const u16 *scale_in)
- 	return DIV_ROUND_CLOSEST(reg * scale_in[nr], 100);
+diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+index bbb3f9788c2e..632d98ade940 100644
+--- a/drivers/hwmon/it87.c
++++ b/drivers/hwmon/it87.c
+@@ -738,8 +738,9 @@ static int adc_lsb(const struct it87_data *data, int nr)
+ 	return lsb;
  }
  
--static inline u8 in_to_reg(u32 val, u8 nr, const u16 *scale_in)
-+static inline u8 in_to_reg(unsigned long val, u8 nr, const u16 *scale_in)
+-static u8 in_to_reg(const struct it87_data *data, int nr, long val)
++static u8 in_to_reg(const struct it87_data *data, int nr, unsigned long val)
  {
-+	val = min(val, 255UL * scale_in[nr] / 100);
- 	return clamp_val(DIV_ROUND_CLOSEST(val * 100, scale_in[nr]), 0, 255);
++	val = min(val, 255UL * adc_lsb(data, nr) / 10);
+ 	val = DIV_ROUND_CLOSEST(val * 10, adc_lsb(data, nr));
+ 	return clamp_val(val, 0, 255);
  }
- 
 -- 
 2.51.0
 
