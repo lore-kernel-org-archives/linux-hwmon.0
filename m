@@ -1,65 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.151
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794343896;
-	b=N/KyYqGkIquOo3op64ajcP+iOiGKX3GrkX3FDn0ulbTtGnXhcTY+y/rdVyUOpBowhhrq
-	 1NQ2hg5x4zctM4aSB67T0B0IyxJxhdJxnknltWCu55PH8J5uhHd+mLsS6SZ/1xVhbFNww
-	 HJZyfzeFy01W7qLDoENdGG7UfaAP5GiCYfSjJxhDuhhvKxkGjPza7R1t9o9BLxk8nsssN
-	 BDKUdjEYpXnGVRS4dERGjh9PtMOIfIRSt0kdOiIlgpgrsfkhG+LUCVtn49We2V+ertOpQ
-	 Fl7R6Srh0iLYMNK2QcK1nrUEiO7EPbtl9bP4+tmn6M9ikL21aQNz43wJuMszdsIjdrw==
+	t=1794364778;
+	b=rm0NxDbzBYjfLDWQMSEnVtWd8VEWqGX1vpO8kK6zsa0KYFUKubVwt5/LLdPj9JE26NMa
+	 0g71F56VUou2O60w7XtosXXI6eWBUhSx0sJQj0v1Kwa55ZcbFQTzTBoqInCMeYJ9xeUob
+	 +oN7ODu8WzN+Ntk4rma0ma3qTVJcve4olZ3cfwIH/NQlF3o4dMZpZ4cipc9czxf3nBYyv
+	 gXzGQIkK1Z5oppMJg8iNkX1I6YWsookNWZk5LtcwiJ0oJT0CO12XGGZ+f/BojNxF9KOqu
+	 q/83BTPovt42M1F0xhrklJSUn+w/ez52okNgFeHLTMOJ2fOBxcA84qoyaKbuCX2fYHw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794343896;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
+	a=rsa-sha256; c=relaxed/relaxed; t=1794364778;
+	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
+	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=Pmm933fIc9TKQDco3Q+vmfaeRrJIn57BcrNsnRJf6/8=;
-	b=s2N/9BBi9eACqTcdkVnBi9AYSY2s26Xq4VWQj+Y+zzL6qrdGlowXeDSA86MmlGCYxT4Q
-	 jaEnaTozo/Xh3a/ezjAILWZPKkdptCgSTG4xNxBpkCkMZ9HzZUyJSt9m+i1YMxcX+/N9m
-	 h2/itA1GyIqnPR7T9gMLYqGQ6GUy9Pag62u9CTYK1iQpeAcQZO6wIhb8Kd+vH8UfwG53V
-	 L2rgDtIbkxMUeo7xVT/+Jz1OoNVZ/WyGxuTEIvxBy0DMcH9XgKxUPBQ6fWCuTqdSE+mn+
-	 +jn4ZQm4EUor1AzaAisCR8Ci4W7qTaJgtaU4SYX0uXTaL6HLPuk9jWrvhrHL6xP+4Dg==
+	bh=rFhbmKmMJi9mGdLbso/FKdXw9abtublD1KPqag2vqqQ=;
+	b=PsZiV8nM2yEepJ9yY2eyT0ackLgaKrDr0liMm4a+E1loVy8rE4mr+fwn7jkgRfLcQ77J
+	 KnyA7NqAam65IWevCSD/HBDkQbsrGd82sY+x6yaICOwEdsM//tyr4j/jrqndS2qDSvjeE
+	 ZgGdYXMJW6oykkqJOBVIb0ZmxBDCe95oafzFDRKv/dtbh/EcYUOooapkozVA3oJTAXqwW
+	 K9UsiFk1EINLLK6Rc4GHLRuZU77fW8VUvlnSDDD1RSBR/xY0c8W9vPDSg7KiGo81IdIgT
+	 NvY9xjQrWGzCzlnwtTfhcBe6QxV6mqD9vDGte7/3WUhhJg/Zb6yEk/OxT6BCGFonVvw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=kik.pw;
-	spf=pass smtp.mailfrom=kik.pw;
-	dkim=pass header.d=kik.pw header.i=@kik.pw header.a=rsa-sha256 header.s=key1 header.b=F9D6V5fP;
-	arc=none smtp.remote-ip=91.218.175.51
-Received: from mta0.migadu.com (out-51.mta0.migadu.com [91.218.175.51])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3F3606A321
-	for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2026 20:51:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8A3F3606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kik.pw
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kik.pw
+	dmarc=pass header.from=cmss.chinamobile.com;
+	spf=pass smtp.mailfrom=cmss.chinamobile.com;
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b="yf/yaPeO";
+	arc=none smtp.remote-ip=111.22.67.151
+Received: from cmccmta8.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0917606A31C;
+	Wed, 11 Nov 2026 02:39:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A0917606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kik.pw header.i=@kik.pw header.a=rsa-sha256 header.s=key1 header.b=F9D6V5fP
-X-Envelope-To: linux-hwmon@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Pmm933fIc9TKQDco3Q+vmfaeRrJIn57BcrNsnRJf6/8=;
- c=simple/simple; d=kik.pw;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794343892; v=1; x=1794948692;
- b=F9D6V5fPxCutkCSzFAK5D6VA2F5ixsN9PEXq91RFrUDqIzt+XX3m+fwQm2tWLsiCbi9VBIMo
- uv2ZEw9n6964tDrQ35vFsyv2p55DnMfqHXmE8McB3o1Hw4xE0Qa7blP68nv1R57V+jnt3yPHEjT
- bxa6nOvokk9OOKW1JCEuZbfbPyl1T4OtF5TatsEBUrFHio7ghnIWqYKkyKeAalwTJnxx9Wn6ktT
- LAVSPEE7JAYhE5hIV6+Uswee0DpSn1G8Vgf+oC8/MD664RoEdrzw1oaFj370O7pWlN0w0r4xywH
- J4FnvWJnvcz5DDOvYS8SWLJD4gVjjT4IwaeSp9v6Wx2pg==
-X-Envelope-To: linux-hwmon@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 0847aaf9939602f1;
-	Tue, 10 Nov 2026 20:51:32 +0000
-X-Mizu-Trace-ID: 0847aaf9939602f1
-X-Migadu-Flow: FLOW_OUT
-From: Alwyn Kik <alwyn@kik.pw>
-To: jdahlin@gmail.com
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=yf/yaPeO
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=cmss.chinamobile.com; s=default; l=0;
+	h=from:subject:message-id:to:cc:mime-version;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	b=yf/yaPeOLeHRjMNpvpPa8DaYQQXQ9tXruXBAcJ6E6YhnXSva3ImqratZre7v7RoiLc+T4/4IqO6Nz
+	 IMVT2FpaoNdKHJmA+tOrkkv14ZoLINzZRQIHHZNAF9EhkE6bZELakjkievu7GQD6FJwMfdMhfa4jx9
+	 4hMxbxEqeIVTPZGg=
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app06-12006 (RichMail) with SMTP id 2ee66af3d55f1c5-9fdbf;
+	Wed, 11 Nov 2026 10:39:28 +0800 (CST)
+X-RM-TRANSID:2ee66af3d55f1c5-9fdbf
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from devin-VMware-Virtual-Platform.localdomain (unknown[10.55.1.72])
+	by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee36af3d55e33f-ca419;
+	Wed, 11 Nov 2026 10:39:28 +0800 (CST)
+X-RM-TRANSID:2ee36af3d55e33f-ca419
+From: Zhu Jun <zhujun2@cmss.chinamobile.com>
+To: linux@roeck-us.net
 Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux@roeck-us.net
-Subject: Re: [PATCH 0/5] hwmon: (nct6683) Fan control for ASRock B850 Steel Legend WiFi
-Date: Tue, 10 Nov 2026 21:51:28 +0100
-Message-ID: <20261110205128.18197-1-alwyn@kik.pw>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20260825092546.669450-1-jdahlin@gmail.com>
-References: <20260825092546.669450-1-jdahlin@gmail.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (nct6775) Clamp voltage limits before narrowing and scaling
+Date: Wed, 11 Nov 2026 10:39:26 +0800
+Message-ID: <20261111023927.9234-1-zhujun2@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.51.0
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -71,34 +69,35 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi Johan!
+store_in_reg() parses an unsigned long, but in_to_reg() takes a u32 and
+multiplies it by 100 before clamping. Large limits can therefore wrap to
+a low register value. For example, 4294967296 mV becomes zero on a
+64-bit system.
 
-I have the same board in my system so I wanted to help out:
-ASRock B850 Steel Legend WiFi, BIOS 4.10 (02/10/2026), NCT6686D EC
-firmware 1.0 build 10/29/24.
+Keep the input as an unsigned long and bound it to the register range
+before scaling.
 
-Tested the whole series twice: on 05441d697f7f (7.4-rc1 + 132), and on
-7.4-rc2, both without issues.
+Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
+---
+ drivers/hwmon/nct6775-core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Patch 2/5 needed git am -3 because the docs changed in 04f4079ee61a
-("hwmon: (nct6683) Add more MSI boards to list of tested boards").
-The driver probes without force, and pwmN_enable reads 2 after probe.
+diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
+index 6e97e4f08b90..b7c1e8ceaac9 100644
+--- a/drivers/hwmon/nct6775-core.c
++++ b/drivers/hwmon/nct6775-core.c
+@@ -1039,8 +1039,9 @@ static inline long in_from_reg(u8 reg, u8 nr, const u16 *scales)
+ 	return DIV_ROUND_CLOSEST(reg * scales[nr], 100);
+ }
+ 
+-static inline u8 in_to_reg(u32 val, u8 nr, const u16 *scales)
++static inline u8 in_to_reg(unsigned long val, u8 nr, const u16 *scales)
+ {
++	val = min(val, 255UL * scales[nr] / 100);
+ 	return clamp_val(DIV_ROUND_CLOSEST(val * 100, scales[nr]), 0, 255);
+ }
+ 
+-- 
+2.51.0
 
-Manual control works on CPU_FAN1/2, AIO_PUMP and CHA_FAN1/3 with
-fanN tracking pwmN.
-CHA_FAN2 is untested (fan cable too short) but by elimination it should
-be fan5/pwm5.
 
-Also tested patch 4/5; a fan in manual mode at pwm 255 went back to EC
-control on rmmod. pwm6_enable read 2 after reload.
-
-I didn't test suspend/resume, or the retry path in 1/5 (I never caught
-a lost write).
-
-Is a v2 planned with the requested changes? Happy to test it!
-
-PS: this is my first time on the kernel mailing list, pointers welcome.
-
-For the whole series:
-
-Tested-by: Alwyn Kik <alwyn@kik.pw>
