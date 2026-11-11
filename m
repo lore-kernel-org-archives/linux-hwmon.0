@@ -1,84 +1,84 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794385730;
-	b=YOE+cWVFrxmXAv1BIQ9wINwA+fNHiBAFupu7+DHTyKgFV+Y1su02g2tUxqy2FC0eFXiQ
-	 lCVWhnV8kYe1rWmnMJN7jhddK2UBwZwVDshKl1kcsxgDuRaNGs43dWNa4a0QyYxex8Caf
-	 sNSJqW2SA1eD8V8FzKYetrkFsLH2ze9nVYnVT1DiAW32vYJf+Td3O6Kg3cNnixbkG3AGk
-	 40Yv8t8LjqLOiX1RTtjbfHUXC/IPgoGSoO1WFtz04LTJGn2qjFs8F8trRiW6TGHr5dbZx
-	 zWeI17JNWH4NArbQ2nvJePYSkvK/+Z7aC6E1JxxklDhVAgLfI0DTZoH3bkRzEqo0jfw==
+	t=1794385731;
+	b=LIxrRO3NDoaO/gY5MRZcIzbqEoCa6e2Wx9jj+npTwmzYVQc7oYVIFYSebkvOM+5Tz3nj
+	 9yI6IoNEi5cCqfYZBHHFwi2YkNbO851PySQ0Qk2g6OO+hZcbGdfsHrxzVX9+JkLav8+Kf
+	 hmOTJPAcudSb5ixKnd+Q+arUjOIT+FXcqCagbBTxX21cj+k1yWo4QGvHPStrqXYhs/MRD
+	 Kwy5BlCFNjYKC7prjwGs8mzc491nzIuc6qzWagYMzNmhP4unW0AegHi1Y/6XO8AF+4sbR
+	 6eGqdW4DVpIcudGsPVhE3x8qdsn0trxgeZuykcH8SxEo7yo2iWrcLHRPnSg33Mvmhtg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794385730;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794385731;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=vib/5TwxB3fUtDLG/5zdfJfLg2wHWLUrNvbITdsjIUI=;
-	b=aDdlhD8ls/+qtuoOr7THHdv1E2GpPpcIJZpEpuWU8idLsz9Rz3k3lRN+NIdLFdeX7NCp
-	 hV9RdEabFfCxZxeHAtdm9o2UCzPi91ht23st2M7HJbNuNlyHyDwM+Zo1aE/i7mZabDF/8
-	 pN9YpH0FWWk0R5cCzp74Nnjef6ygk53opxQOXvJcTiMoGKiwRsnsCiyvHptI3AVbC2lp0
-	 zQiFZkhdSPaLuJRJM//u5yCoF5mZM7uPU+PbwRJdbWzCoQWwZ1G5tQhnFfhwxW39VbMc0
-	 NIKzpJpYszekna6kfx329RRlbmNz763i0WVQq+Scp4Adu9ijd3Q7DOrSdDrhuL0VMCg==
+	bh=agS3oe8L0hdPjr48miavd+nPT5T0r6hqPyAhGQquZQM=;
+	b=cLmqyOU38YSisXPtrilrV5WAwYS+/ODd1ZxvjCCiOdS6S4gx5O9+Woy7jlajGGkcirlb
+	 gz1kmLlGnJX4t/ZdWSq6atweQNFVD17MSwED3RzMCMk4RbpPDXqWiIk4GoLY5ov5Sa3cr
+	 VSxFFi40lrFTzzs7nBLpQN3F7CH3gtcwoi1btntflg27ZRfcWQBkFlVAfgziXi0U1Oik4
+	 I1mPLrA1wWj/Bjlv/IVYnxqpOxc3FJE1h3vylvEIr/b4tZACbTtV6Ord+bR8mo1rD7jys
+	 OEBCbXMHT5jVBqLX6fxYGSjneM06c+5Sq5F6Ek8bIkDUU2Uzt0NEKdEOfkg876oDHUw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="hj/zEf5Z";
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zOqQL73s;
 	arc=none smtp.remote-ip=209.85.218.54
 Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B99960A260A
-	for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 08:28:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3B99960A260A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0937E60A2613
+	for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 08:28:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0937E60A2613
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hj/zEf5Z
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-c40f29667e6so430204666b.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 00:28:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zOqQL73s
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-c505b2e1cb9so189374466b.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2026 00:28:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794385728; x=1794990528; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794385729; x=1794990529; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=vib/5TwxB3fUtDLG/5zdfJfLg2wHWLUrNvbITdsjIUI=;
-        b=hj/zEf5ZsGeU1Dj2Uyl6zl40lou6eCr69g4V4+JHq50ZUtlDFqgarsqdQpNTQj6h1y
-         SW7L6jF6CZswNIy2McH+GbiOR3a74uPCevRWpcRdwwgVFfWVX1gHssPEHUtvC2nVer43
-         mQurA2rNYiOm4A1O3UCtYPxNLO5I+au509Qv904jiJNBaxyJpg+uj3vJReqwyqvIuYqk
-         YFSdamBwN0GOPESlfEWa0f2lEMini4o97i22EvGU7PTHQVj1RsMfZU5XTF3CF/0a+SZY
-         KvwdaTZG4lS8og4zu5Zb7/Nmu0DtkvtimNEB0bgXS329O6NSBCwk4Z8QajH5YqypplIJ
-         ARgQ==
+        bh=agS3oe8L0hdPjr48miavd+nPT5T0r6hqPyAhGQquZQM=;
+        b=zOqQL73shpSJwoZ/CtH2OwVaU2aUb2HCvMM+a/e6wu8s1Qlmi1Er4kcgvMvrrZ1d9u
+         eJhrdzdEY2RQYpNztDR0NH1OE51/3oTftK5e7KBAgqulisuvrjMKKBJcxUzOxnYor7C9
+         Y67PYyNZ/5PeFAiJXBdcYDuEMAgiiAU+E2DSCY/uMpxp0piIpSoH4xygJ/BjQgYJLDnG
+         39p4wMC5VpEqUauyaoPD9gvYLIbOxH07rvIXnm7aRjQryahsay5yymgO+dJQtSP112vF
+         bESzBiocfo+Ihj8s6grwL3R+7seqYz2PyumswtaFT3sARFoJ+w/oEE+jPQMgbU2wP8Mo
+         DQxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794385728; x=1794990528;
+        d=1e100.net; s=20260707; t=1794385729; x=1794990529;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vib/5TwxB3fUtDLG/5zdfJfLg2wHWLUrNvbITdsjIUI=;
-        b=qoJiLmsmcuKyVLTtSrJXdJx0RKxLXTEJKTCbWsb+r/rdBexZbJLydYbJ/aUPaWMVfS
-         B4LCHuL/80ySuXDsJfFygfML8f0baPgQYpwLdofGyn6Lv4+ST4AlkCfmlk5KevQfvnSP
-         5gIL4rIgF1f01TW8W7Bj4WIssOpnx2eruBTc3uKDKHrhuGxA/MVY7a9yixBf8qH37yJM
-         CK8deR0u7sWVN1by612kp5P1HIz3WLj5E9QaONzXrcvKWfTA2V99gj1powOPIIafW12Y
-         uDYJPOEUsv/IGOYlAZ2XVTPdNFsEgM5M/d79Chf5m+YuAOrUXkDlGPfV/KLOcENZ1pmy
-         mr7A==
-X-Gm-Message-State: APuU4Z9zGb6I42ekY2RwgKlAF4LnsUGN5MWE6cwZwTVHhUprAzFaxvhH
-	4wtWYneFFEZUCpA+GP5me3+GlWFw/a86qdQ11mTj4MrI3fO+KvcPOolM
-X-Gm-Gg: AYBFou2XXVmakqDQ96jWdCgdIHMNW9fw5KeO+2AXRhGO06E9UUCh6dta90NZHtTSmJ/
-	kVV2mHES0c3tSjkxCueTrR5XSnNgq2x2LjMOdAF4YEYmgZLoV9Eew1MAXqORbJxfUuX7T/LRS4v
-	3gm2kT2QrGhsRdkJqWojGuAVGDkmTW5+o1iW7St+B3wIWXE+zKLX9bnz/RzVuVPFJnHWueXcqby
-	KiIvwhlPlQ4IOf8FKUzKt0Wh52ai/kJXFZ42ozn5msJW2S31ox8huEKx8UIahEW/dXkImsqO199
-	yL7vwnIbIieT78bFr8NfvJnmnU1rcHUdUUEvrGypMGFz0PFVPK/ScB16WShVRw1GeXH9oKYOaWm
-	2mAWXjnxbvt+wMTiG1CL7eosOlF4d4x0W/F6qpdjSh9jkPcos1AYKVpn2ZP4Js6z/SUnc8ptcpw
-	tfJQqegqeb8O03cpN3XlM7FCqrGJawTV24PhlJjhAGyjD9wQ58qbAyCp9BHsj/xfoQscoFeFS2c
-	cnwcritY9pMPbA112W6An2CmZtchFUi7mp4u0lH/RTyi4o2/+wS73vSY0+9HcNeGyJ/jdt8mWAH
-	cKmjDPvWAKLhAZEwThPffW1eb8yNKhrjtM1KeypFNqs0JE7TwEe1dVcqYDka5ZUSXD0QV+64t4I
-	9lks94puyNqaUpDmrBJE60A6lhsm8+OvntyOdx8dvqsvECb9iXFbsZJDPujPKpP6/EOBIftuIbi
-	eu5etiZB5lK8niH4Rtvh4SuzSeAEiRcAh8jUwinnIhrmsV
-X-Received: by 2002:a17:907:c10:b0:c33:ae8b:817d with SMTP id a640c23a62f3a-c5066cf55b0mr113938266b.46.1794385728356;
-        Wed, 11 Nov 2026 00:28:48 -0800 (PST)
+        bh=agS3oe8L0hdPjr48miavd+nPT5T0r6hqPyAhGQquZQM=;
+        b=AmnDp1yj0rNsGHWbs6SWy7lhkGekRAlVn3hJ9ToWRdkXt+IHDdyLdJGcIDw7ztQk3F
+         HAQx0btv9eqG2hIEgPYiPz2m2rRR+nm+qW2W9o5wGgKbQv9sDbP5dOIz6Dswg2WCqnZU
+         Xtox6eyKXNTQuAfRywwb/7uFCi12KQd/BlYZBrcfEKdHsUWLXAAWObG4XgAu05ESNHEY
+         N3j1KFAK9NiJwA8dY9vD/ad7Fk+RCUbHxl3pzbZ1ukVYDB7DYKVXL/emcPmUEHcmZIQf
+         4h+FgV+int+eWxeaXsWw8pfBpy8/bW/ukygKc0+YRXu5CqGJmZRJdeZBGGAJAN9Y1QeH
+         NWOg==
+X-Gm-Message-State: APuU4Z/Da8IJVUACIk/rTYtOpekosSb08cghP/SgyQ7We0o+JurWjaC+
+	7kySs9D4vpO3XxR97NFF6xxrMvL3/ZrcjQYsfj0kwOfuSDUu/JDzVnV8
+X-Gm-Gg: AYBFou1JO7PJUMCZPNu5SmxtNrhVWwzAUqt87U7fQ+kNFkKMHG4h8K2iaiHF3le8auQ
+	hmRSX8PGbi39JMYxFBY7aV8x8bpca4F4+s5e84yo9+1OEkKDZjeV20V4tAgY/4q6p+WtIiD4gFz
+	zI63zTmqXW9wawSzhGR4F43/nqRInJ4K2X+cDnAlwsOqxjJO83HvyxrhxWeB4s1JP0vD0rE7c3W
+	83nBPGT/chm/3rbwgcXGiwSVKHulxzhIC5IIa/G950Y/V2wh64Wsh5dCPWB/T/KZE15fdnSrSa7
+	DuViYLM5bCI4WP/Na4gKisbS444sKjmTneJM/IrVeTDM/sS8sANxcl5RUr/e2MtEhZ0W1glLRnG
+	AZBqkZdIrbRvwuUvEA3Dud4Icp5PHtO6ZjIDFzyhynZuK5x1lJeE9x89QeRvf/OPlQjnaE88bhX
+	VCubjsiZJqnitiOApbvAmqChxLTcGD0v0ZQ1j7Z7Tch1kKpUdMBbQMHFbFbLat3II2ihk6gfZJB
+	Jp7FIMCdLa0j/oRvCAjbbWjxuTm8PCU2TUaQ5FkFJKxg0a7GSN3snJDeu4w+Ndp+5iikvjttGGl
+	mOqLStPe71Ro+/WlKRe5fzU0P657EbkwaUtSgzIPv/sRnzr5mR2pjJGNlRip8uVS/bbp6oD4I7y
+	yuDMXV6yMnf1Q50rd+4XI1gszZxwW/7+jw8ckTBTxf12AjdldmG94OcMpGLpEy0EvS8hap9Nl1X
+	BHliiyDwnTvUsbvIymUBHI6HWRntA+9Qs0pjRQcyFKuoC1ig==
+X-Received: by 2002:a17:906:794c:b0:c50:6345:e41b with SMTP id a640c23a62f3a-c5066d3d007mr110823166b.46.1794385729434;
+        Wed, 11 Nov 2026 00:28:49 -0800 (PST)
 Received: from fractal.tuxedo-gray.ts.net (c-78-82-25-228.bbcust.telenor.se. [78.82.25.228])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c504a56ffc7sm210135866b.17.2026.11.11.00.28.46
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c504a56ffc7sm210135866b.17.2026.11.11.00.28.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 00:28:47 -0800 (PST)
+        Wed, 11 Nov 2026 00:28:48 -0800 (PST)
 From: Johan Dahlin <jdahlin@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org,
@@ -87,9 +87,9 @@ Cc: linux-hwmon@vger.kernel.org,
 	Fabio Baltieri <fabio.baltieri@gmail.com>,
 	Hamza Mahfooz <someguy@effective-light.com>,
 	Johan Dahlin <jdahlin@gmail.com>
-Subject: [PATCH v2 1/7] hwmon: (nct6683) Add customer ID for ASRock B850 Steel Legend WiFi
-Date: Wed, 11 Nov 2026 09:28:32 +0100
-Message-ID: <20261111082838.1418051-2-jdahlin@gmail.com>
+Subject: [PATCH v2 2/7] hwmon: (nct6683) Restore automatic fan control on driver removal
+Date: Wed, 11 Nov 2026 09:28:33 +0100
+Message-ID: <20261111082838.1418051-3-jdahlin@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261111082838.1418051-1-jdahlin@gmail.com>
 References: <20261111082838.1418051-1-jdahlin@gmail.com>
@@ -104,51 +104,77 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The ASRock B850 Steel Legend WiFi has an NCT6686D with customer ID
-0x164a, so the driver only probes on it with the force module parameter.
+A fan switched to manual mode through pwmN_enable keeps its last duty
+cycle after the driver is unloaded, with nothing left to adjust it.
 
-Add the customer ID so the driver probes on this board by default.
+Return the channels the driver switched to manual mode to automatic mode
+when the device is removed, using the bitmap kept for resume. Other
+channels are not touched.
 
 Signed-off-by: Johan Dahlin <jdahlin@gmail.com>
-Tested-by: Alwyn Kik <alwyn@kik.pw>
 ---
- Documentation/hwmon/nct6683.rst | 1 +
- drivers/hwmon/nct6683.c         | 3 +++
- 2 files changed, 4 insertions(+)
+ drivers/hwmon/nct6683.c | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/Documentation/hwmon/nct6683.rst b/Documentation/hwmon/nct6683.rst
-index 62da8fd011c8..4c137eda6583 100644
---- a/Documentation/hwmon/nct6683.rst
-+++ b/Documentation/hwmon/nct6683.rst
-@@ -97,6 +97,7 @@ ASRock X570			NCT6683D EC firmware version 1.0 build 06/28/19
- ASRock X670E			NCT6686D EC firmware version 1.0 build 05/19/22
- ASRock B650 Steel Legend WiFi	NCT6686D EC firmware version 1.0 build 11/09/23
- ASRock Z590 Taichi		NCT6686D EC firmware version 1.0 build 01/25/21
-+ASRock B850 Steel Legend WiFi	NCT6686D EC firmware version 1.0 build 10/29/24
- MSI B550			NCT6687D EC firmware version 1.0 build 05/07/20
- MSI B550M			NCT6687D EC firmware version 1.0 build 05/07/20
- MSI B650			NCT6687D EC firmware version 0.0 build 09/27/22
 diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
-index de5b0194c256..0565ca9290eb 100644
+index 0565ca9290eb..d43dcf90048b 100644
 --- a/drivers/hwmon/nct6683.c
 +++ b/drivers/hwmon/nct6683.c
-@@ -209,6 +209,7 @@ superio_exit(int ioreg)
- #define NCT6683_CUSTOMER_ID_ASROCK5	0x1621
- #define NCT6683_CUSTOMER_ID_ASROCK6	0x1633
- #define NCT6683_CUSTOMER_ID_ASROCK7	0x163d
-+#define NCT6683_CUSTOMER_ID_ASROCK8	0x164a
+@@ -1584,6 +1584,32 @@ static void nct6683_setup_sensors(struct nct6683_data *data)
+ 	}
+ }
  
- #define NCT6683_REG_BUILD_YEAR		0x604
- #define NCT6683_REG_BUILD_MONTH		0x605
-@@ -1640,6 +1641,8 @@ static int nct6683_probe(struct platform_device *pdev)
- 		break;
- 	case NCT6683_CUSTOMER_ID_ASROCK7:
- 		break;
-+	case NCT6683_CUSTOMER_ID_ASROCK8:
-+		break;
- 	default:
- 		if (!force)
- 			return -ENODEV;
++/*
++ * Hand the fans the driver switched to manual mode back to the EC, so that
++ * they do not stay at a fixed duty cycle once nobody is left to adjust it.
++ */
++static void nct6683_restore_fan_control(void *_dev)
++{
++	struct device *dev = _dev;
++	struct nct6683_data *data = dev_get_drvdata(dev);
++	unsigned long manual;
++	int ch, err;
++
++	mutex_lock(&data->update_lock);
++	manual = data->pwm_manual;
++	for_each_set_bit(ch, &manual, NCT6683_NUM_REG_FAN) {
++		err = nct6683_fan_ctrl_update(data, ch, false, -1);
++		if (err) {
++			dev_warn(dev, "Failed to restore automatic mode of pwm%d: %d\n",
++				 ch + 1, err);
++			/* The EC does not respond, skip the remaining channels */
++			if (err == -ETIMEDOUT)
++				break;
++		}
++	}
++	mutex_unlock(&data->update_lock);
++}
++
+ static int nct6683_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -1593,6 +1619,7 @@ static int nct6683_probe(struct platform_device *pdev)
+ 	struct device *hwmon_dev;
+ 	struct resource *res;
+ 	int groups = 0;
++	int err;
+ 	char build[16];
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_IO, 0);
+@@ -1710,6 +1737,13 @@ static int nct6683_probe(struct platform_device *pdev)
+ 		 nct6683_read(data, NCT6683_REG_VERSION_LO),
+ 		 build);
+ 
++	if (data->have_fan_ctrl) {
++		err = devm_add_action_or_reset(dev, nct6683_restore_fan_control,
++					       dev);
++		if (err)
++			return err;
++	}
++
+ 	hwmon_dev = devm_hwmon_device_register_with_groups(dev,
+ 			nct6683_device_names[data->kind], data, data->groups);
+ 	return PTR_ERR_OR_ZERO(hwmon_dev);
 -- 
 2.53.0
 
