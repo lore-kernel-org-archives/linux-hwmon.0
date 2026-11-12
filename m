@@ -1,94 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=143.244.207.79
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794499515;
-	b=ItRwCIoqCiINnx5RPWXxSxXs89Ay5CbwJ7lSGl9rGV6RnQWaAJDt57wnJn3tojicJTKi
-	 FUybaB2BkBZAeqWPm1zHOKtBvANtWogk4l72vhVNBkotHP2W6kBCihspR1qM/HqQa56PI
-	 lZLKiCi2TYLB+V0vsI5dNmEKdk1neS3ofeDMWa3xwgzxTCN4PUJcBOkNn0SlBXgBsBFPg
-	 8xRkLt3H3JYBpo8XaI7tTo8Jb3MOi0bIOnpVC5/nbSFfJ+u6oa2TQ1xIcDYHl1oaekudj
-	 6DOp/VDpl8DVPn1HEeqDN25GAi85kzi3IgBBLKM8v6iHT9oFvgFSEBBG3tHG2Kq1PZw==
+	t=1794506340;
+	b=muCgsEwjVuWSjpi/gTPiIOZh3QPwXb9UjjODjpU4mgJ/dSYcU5dvKnNfZJHvE5rIEjQN
+	 iZ8E5OP+/bs6ULtiY6YEWgZRLEINhChJ2XmjdLXWdXAb6MO41VE7B91L0YmpbYa5EUz/Y
+	 dcaBTgv7z7ZiFEGvchRs8inesz9xz3vDOZLycb4gF86+eP8lk5coLRgYAougw9XTIvecr
+	 q2M6+kWkYUJW5OEAvOENeunxvVEDwQMNzMWSWwiEl03USSVLHJJmFY3zDfMz/FlXmb9jI
+	 qD8kXFPg8X0F1G1qPiH7P23twG7Ivfxv0ieZCF2UFWXPbn1MVPq7OSwYantVC5YbfMQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794499515;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=GqVMC0wC5O4rqtGbrG6Pdff5be1hDQg85nj0i72Ii/g=;
-	b=w5WRDXAH64j5aaTgtTtUup6mPoXosOW2e/wuuNsFyva7vjQtkljVgFCbWuBCdYrYRIzF
-	 gapwPj6FPh6FWOZuM02j++31ePOzEdhX7vbajr1PoI9adYMh0q2yCaFvKMhPwgPyDOskV
-	 iGDaMilkjHeKeb4uKvVxRuRTv1FT/1ueq2ZLUNM1l2vCG6QwfVGvuWrBjip6rISZZUzgo
-	 Jc5jnFENERKDmREOIGM3umzUsuQHV94pif4BP979MV75/dccSMiphmqtSOrcxcgpJvs5T
-	 1rWK/9c8veQQE2vxsqMvFbTrnenr/kTys59BEHLXXqD/mzD2DdooJYexeMjhbomT0SQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794506340;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Message-ID:
+	 MIME-Version:Date:Content-Type:Content-Transfer-Encoding;
+	bh=aYF/HEUDm76gfL+wC4hXPsZI2t2dHNPWYywmlerUfvg=;
+	b=AxaL0p3By7cOv2QgJGBZ58y5J/TcjrSNf94XPEfc8FiRtJD9Wq/kIjgOXxORBajYj5HZ
+	 Ur7/xv2N0RafWgB2eJndrGGiyetUBZAeNiEiM5e72JgMl06ED1S7rTGmRdNAhLFCd6mfc
+	 r4udgvAGGyfCO7K5Scp+oZLmCo6t2rH8eRPZ65tVBiaDDbS+Xg025wRMj+wFlMQRM0yE3
+	 5ptBcPC0XeOuZ8by8NGc0YTh6udinQ7cTjRs5bVIzb9KVFOileXgN/jreoFh/Ujlkfo9W
+	 Qqrkxs2tBxq+jhCoJcF1xr/CzyCY1ysjz+XbqSn5ynm0+Zz3+4F22dcmC1ocyBuAs0w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=NMdNuNUX;
-	arc=none smtp.remote-ip=209.85.128.49
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=detoutefacon.com;
+	spf=pass smtp.mailfrom=detoutefacon.com;
+	dkim=pass header.d=detoutefacon.com header.i=@detoutefacon.com header.a=rsa-sha256 header.s=mail header.b=SqmrnMAM;
+	arc=none smtp.remote-ip=143.244.207.79
+Received: from hst.foliovision.net (hst.foliovision.net [143.244.207.79])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D19A606A330
-	for <linux-hwmon@vger.kernel.org>; Thu, 12 Nov 2026 16:05:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9D19A606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F495606A327
+	for <linux-hwmon@vger.kernel.org>; Thu, 12 Nov 2026 17:59:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7F495606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=detoutefacon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=detoutefacon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=NMdNuNUX
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a20bdaf39cso47923575e9.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 12 Nov 2026 08:05:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794499513; x=1795104313; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=GqVMC0wC5O4rqtGbrG6Pdff5be1hDQg85nj0i72Ii/g=;
-        b=NMdNuNUXSgyTtbIp1Px92Wy6CYT4KOpXJgb6wgX89IVDpHoiYLq5H46PE8QjI+60WD
-         BYzg8cYdLB5BJCFJeioM6ktUkZ5hJGqFqII5TNJddyAbHC+zGM5HCx9aJ+prHEHOK5rN
-         5hkMbwaDIUhnIDgZ0SFLKSRrUSxKTDcaC/NJ9lhtjB8KcY/14VQTtmzet3b4eJwypnOX
-         875fu9USDLNPRYKo8OLfzIHOv15/2UJ+6qsWAp9SYQgnOgFvQ5UOynDfdhUpa+ZG3iAB
-         4eZs0J9RtrQjQohKAvzrq0byVRLR+bUoPjVnvXeaOWa3hxJ35qsy7cWddzh0WdeOEMqB
-         vqMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794499513; x=1795104313;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GqVMC0wC5O4rqtGbrG6Pdff5be1hDQg85nj0i72Ii/g=;
-        b=Fn3w3rWT0Cn/kmMgJuyen7/D8dOpaeZIP+NW+KYnf4I3J9+nD79ucXOGAVRvAeWzGq
-         s1L+cXjynhg/F1CqgwVZ8/b82f9pHyXT+cByIcn9mqirHtWcllx0/4v5ov5QhTPHswMI
-         jipTQ0LI2oHnn0nI2wBZFIvu2SOI8UJBTlDhp1dnS8FvB+AgAEaFRuhVszsA3zjw3Uwm
-         8yO+oK0vQfj9pqHFljH4wEHofgQV9u0jRqDP+e7FNieJeZXGnOGBRs5JPKgBhYbKjsJ1
-         1oAfGGaxdQxW8ZfxxjWAfpSNSdc0M9m9VsgqNs8hjN3RbtUj0soK/APvHI7KVB1nMW+N
-         L2mQ==
-X-Gm-Message-State: APuU4Z97E5ZJNYMSBJXXQeSpJL2TQiUSBKj6dwubnQ0WycLg4f5XHAHv
-	CRjY+v8m/zxwsGVCUPEw2V6hHMXuEh2xkPh9NYWsFeVuWKsQY9BVoyBw
-X-Gm-Gg: AYBFou3agOiGDtCJ97eq3pajSaICAGtekcToNjY3d2h55i+os8V9gdspNgjAn5sfNp+
-	wKuJwX6WJALFZW9b0R2NPNKhZX0HM1tj3ySa40L5UlSY42JHM60uJnJeABC2dzvGXtdZ5wHBW4T
-	McyxLmrWU+pbpcO2/WOMJTbqJobUDlc5rakY7/fr5GeAXmiFwmG8t2EL/YdHbMAvoxDjDsCcb2l
-	f5T5absMjKbzZc45lkEZFU4mSgKbDqeXrcZ/bcBuz0O+Yy962K74Ng0wLND/HDtT+BvLl0X7E2+
-	5x2xj5KV4IVTAMFicxI17ES2NY/jFJvwdhb58E+whctq2FRnsD46mPgraER/ulIEXjJte6b8zzh
-	53O3QIH9jzNvLo2h8P4vZPxvXFOCfd2xwA+z944cEQ+1TzbBm5LCu2YpWrwWVPY4ys+/4f5ORXa
-	j1BmFQKe6SWZheafCoBXV+RM09NMv2lTT3aTwgymuyn6JaJDtticm0Rb8bpf0bM0+hjLFR3wX7k
-	4J5Q8fz8EQemXjjSR50QwQJjnoU2ACwlzDuRS9jrcunsNitiNsbkfaZt78Xd9EiQtiB9KO2aQpI
-	2cgyvKPNfSGKV7GZbIbMIg==
-X-Received: by 2002:a05:600c:3491:b0:4ba:761:97a1 with SMTP id 5b1f17b1804b1-4ba093aa693mr118356885e9.14.1794499512628;
-        Thu, 12 Nov 2026 08:05:12 -0800 (PST)
-Received: from sd-lap ([212.104.214.68])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb4e26700fsm88361955e9.10.2026.11.12.08.05.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 08:05:12 -0800 (PST)
-From: Shady Abu-Hussein <shady.abh@gmail.com>
-To: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Shady Abu-Hussein <shady.abh@gmail.com>
-Subject: [PATCH v3] hwmon: (dell-smm) Add Dell Pro Precision 7 16 PW716260 to fan control whitelist
-Date: Thu, 12 Nov 2026 16:04:47 +0000
-Message-ID: <20261112160447.136279-1-shady.abh@gmail.com>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261111172707.84072-1-shady.abh@gmail.com>
-References: <20261111172707.84072-1-shady.abh@gmail.com>
+	dkim=pass (2048-bit key) header.d=detoutefacon.com header.i=@detoutefacon.com header.a=rsa-sha256 header.s=mail header.b=SqmrnMAM
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=detoutefacon.com; s=mail; h=Content-Transfer-Encoding:Content-Type:Date:
+	MIME-Version:Message-ID:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=aYF/HEUDm76gfL+wC4hXPsZI2t2dHNPWYywmlerUfvg=; b=SqmrnMAMFbdmK0RJTIOYcJTwL2
+	RO1GQkkRdjlxEBzEYBrUobfMWvOt6ES0M3HB+rS6hpqinbvdM7RaDoJeB+p7AMEGZnaERxITHDXMu
+	7b0ptSYdjlmaCf4ny4nBGf0lmwRr5F59jyFRi6yyZ8NSmjGmLbI0lzD9JWle7/SwShSa0PEwhva7Y
+	h06iIxPC/MT7TO17g2pKxsLmWu7kk0a8NDqqrRsff/ZNXLburlstiZKo54RPMEpHSHeqTeSb+8XbU
+	gt4KyntVqKbdxUoGiNQosUKbdpJqD9eJ3ZqxMDwxqIA9A7Lk0ngbJxIsVI1gTLndd3J4sc/aW3gWg
+	FOAz0vEw==;
+Received: from proxy.recruitment.sk ([82.119.109.194] helo=[127.0.0.1])
+	by hst.foliovision.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.97)
+	(envelope-from <alec@detoutefacon.com>)
+	id 1xRZ4c-00000005lGq-2tiG;
+	Thu, 12 Nov 2026 17:58:58 +0000
+From: Alec <alec@detoutefacon.com>
+To: linux-hwmon@vger.kernel.org
+Cc: rydberg@bitmath.org, linux@roeck-us.net
+Subject: applesmc: include Mac Pro 5,1 Power Draw in hwmon reports
+Message-ID: <hylki-k6w7PeynXP0LYj6yqn@detoutefacon.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -98,50 +64,56 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Thu, 12 Nov 2026 17:58:58 +0000
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On the Dell Pro Precision 7 16 PW716260 the firmware fan control
-cannot be overridden using the default SMM method, writes to pwmX
-are ignored and pwmX_enable returns -EINVAL. The firmware AC fan
-policy also requests speeds below the minimum sustainable speed of
-the fans, so one fan repeatedly stops and restarts every few
-seconds at low load.
+Hello,
 
-Add the machine to the fan control whitelist using the
-I8K_FAN_30A3_31A3 SMM codes. With this, writing 1 to pwm1_enable
-disables automatic fan control, the fans follow the requested
-state (0: off, 1: ~2500 RPM, 2: ~3950 RPM), and writing 2 to
-pwm1_enable restores automatic fan control.
+This is my first mail to the list. I have a Mac Pro that began as a 4,1 and=
+ has a 5,1 firmware. It runs Fedora 44. The applesmc driver reports the fan=
+s and the temperatures. The same controller also has current and voltage ke=
+ys, and the driver does not publish them, so nothing on the system can show=
+ how much power the machine is using.
 
-Tested on BIOS 1.5.0 with kernel 7.2.15.
+I was interested in this number 1. to see how (in)efficient my Silver Tower=
+ is and 2. to gauge how long it would run on an UPS.
 
-Signed-off-by: Shady Abu-Hussein <shady.abh@gmail.com>
----
-v2: Use real name in Signed-off-by instead of a handle, per review
-v3: No code change; adding this changelog, which v2 was missing
+When running on macOS, I monitored power via iStats Menu which does give th=
+is information. It turns out the power readings are available in SMC which =
+hwmon already reads for temperature and fans.
 
- drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Temperatures are collected in applesmc_init_index() from the sp78 keys betw=
+een T and U. Fans are counted just above that. Both are published from appl=
+esmc_init() with hwmon_device_register_with_info(). The current and voltage=
+ keys are already in that key cache. The Apple Silicon SMC hwmon driver alr=
+eady exposes voltage, current and power for its own controller.
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-index 5ec487843..250d8c1e6 100644
---- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -1687,6 +1687,14 @@ static const struct dmi_system_id i8k_whitelist_fan_control[] __initconst = {
- 		},
- 		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
- 	},
-+	{
-+		.ident = "Dell Pro Precision 7 16 PW716260",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Dell Pro Precision 7 16 PW716260"),
-+		},
-+		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
-+	},
- 	{ }
- };
- 
--- 
-2.56.0
+The reading we are missing for power is not too hard to get. The 12 V outpu=
+t. Key Ip0C is 10.5 A, type sp78, and Vp0C is 12.125 V, type sp78. Multipli=
+ed, that is about 127 W. It is the supply=E2=80=99s whole 12 V rail. The 5 =
+V pair, IH5Z and VH5Z, is only the drive bay: 0.19 A at 4.94 V. The 3.3 V k=
+ey, VS8C, reads 3.30 V and has no current key beside it. The revision bytes=
+ are 01 39 0f, which is 1.39f15. At boot the driver logged key=3D404 fan=3D=
+5 temp=3D75. The eight old 4,1 branch currents, Ip1M through Ip8M, are stil=
+l present.
+
+I have not written a patch. If you would like the sp78 and sp87 current and=
+ voltage keys registered as hwmon channels, with one power channel for Ip0C=
+ times Vp0C, I will have a go. I could not find an existing thread about th=
+is.
+
+The numbers are from my own Apple Inc. MacPro5,1 with firmware 144.0.0.0.0 =
+with a single Intel=C2=AE Xeon=C2=AE X5690 and a Radeon RX500 running Fedor=
+a Linux 44 (Workstation Edition: Linux 7.2.15-200.fc44.x86_64). Grok helped=
+ me isolate the correct sensor keys, the initiative and the reasoning are m=
+ine.
+
+Thanks, Alec
+
+--
+ Alec Kinnear
+
+Creative Director
+Foliovision
 
