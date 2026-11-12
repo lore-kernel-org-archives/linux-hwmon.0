@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.35
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794510874;
-	b=kwvQkc1fkzuK+XbsNt0fNQ330TH10rtRP9zbHJe3827349RVkt39cN3VmJjBtnwHd1Ll
-	 0QgWE6MgGU0lqZ4+dlM3jj+tMvomxwwdBJaTV2eFra8NmsZ2Yoi7Fgjx6nU0l8v6EyEwq
-	 cs/70mzQob9B26VmOSIzJKL88jhMLw0Iw4Bo8C+zMZil2u/QtebtA1abKMI/jI+S0x8b3
-	 uVT+FLGpCq3R50hhmmg58D1nOzl2D9ekiukc5E36O5Yzwfvu+7p/YUAZb2R2eC3bFKkfi
-	 61y4JUiDXK24ysEE13fhwNpKukLmCu1+TYjNVkpEB2Yhc5iwNiNmY5dWUqd03cERxAw==
+	t=1794511106;
+	b=OzJR7wVdFH+sc7iEkXmaejAnSunlAgNK726M68yWLecYuYPnSF7ZevdqVgBcCKbL69iz
+	 Poiq1JGgheop2vj9lvMxBGmgu3djjFcNe08Bfs/yOHAT47Vv8dvw1+a0LcjUymrEOVAe5
+	 HAX1HkxRaxylCUcFSrTAp/RmpwPatdgKULxCyk+2uhsNGVRqBGViYTyG3RtG0/Cuk+gk8
+	 EvrczBnecURZ1lJYI7hSCjR41aA7sRkGWHEZg9VGYSWysggeeTb9MDIcrwtgVoZsJ5DLh
+	 SJMS6h/GijnZxUXTNptpT+ZHHIZiQUPGJtdaq0Rw+M7t8F2LOLAEQtLnmYaw8IHGnOg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794510874;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794511106;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:
 	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
@@ -15,37 +15,37 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
 	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=fAz7r+uXyuqUy2LkQsavzaaAtG7XHoyl1mSbgvYiRyg=;
-	b=jM4eFvHWNUgct8U6VSyxP0fKqD1FwgdH+MzKnxgJUuklxaNI/iYn868dOrAbB3c1Dvmm
-	 Wa3KCqFbY4xD5Whe3cyGJDZMv68k8W6FaUotMxo0s5cZXZWHMyr+d7h21qeVOW7BdRu8z
-	 7CfQfmXbzsGUdqudZX3lPPLPF4czl3tRsoqLSRg+A6EZurL5Om31K1GsuW9o3xNtxAJrO
-	 gJKun2sx3Z4C4eDRyaXD2Dip6VojItChLiNjtfpnXDQ1lllhZxr3PFASHwXJQCGNXrUXd
-	 7cJa2A3hI3oVgbXeCR2SsfHlHU7QbgEVOnGxQDNpY+Dr0uP60WPuiIl3R8aBVmNHaKA==
+	bh=Awa6E8sVwib6OrR3ZZ41kLr59fetv3wxxNPs6I7M+V0=;
+	b=IfeDSQoKsq1P5JFuACqWtPJQnmX9O0SJrUuPRZZns4d/CAlWRpgf1L671QS3YXDQKWav
+	 wPgqncKcE2I8bk3dqQuagA1zJM8rgW8GaM2ZIni+hiXdCvXPoid97SV/vdwBPZ8ccUhBR
+	 kC2kprwwrm++TR2JK52Q8PEP8n5MGHWkhYryOnqkiSRUaIF9Q6G9FQ5LtG9vS16W1X+5X
+	 6R1TRKB9Re5LgJYT90wRxSIfPpevCNSzEPlg6fHXEgHKrwZCwA0PZh3j3dqQFMiQfrluu
+	 QNNe9kKYTj7CREqBktuZxRYBToS19HH1Pf00LDwEs4gd9v4PmaQ4S2Fl8j93FApEy6g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=j9gj3Vyg;
-	arc=none smtp.remote-ip=44.202.169.37
-Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=HKsOr9XH;
+	arc=none smtp.remote-ip=44.202.169.35
+Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01DC2606A31C
-	for <linux-hwmon@vger.kernel.org>; Thu, 12 Nov 2026 19:14:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 01DC2606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8533606A31C
+	for <linux-hwmon@vger.kernel.org>; Thu, 12 Nov 2026 19:18:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B8533606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=j9gj3Vyg
-Received: from eig-obgw-5003b.ext.cloudfilter.net ([10.0.29.155])
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=HKsOr9XH
+Received: from eig-obgw-5005b.ext.cloudfilter.net ([10.0.29.189])
 	by cmsmtp with ESMTPS
-	id RXeuxo8lAJFmFRaFlxfq3R; Thu, 12 Nov 2026 19:14:33 +0000
+	id RZ0gx6aOZ4vCDRaJUxhZMN; Thu, 12 Nov 2026 19:18:24 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id RaFixgs3ESgq1RaFjxIZ5i; Thu, 12 Nov 2026 19:14:31 +0000
-X-Authority-Analysis: v=2.4 cv=c8KrQQ9l c=1 sm=1 tr=0 ts=6af61019
+	id RaJTxe9pPYskhRaJUxOOm8; Thu, 12 Nov 2026 19:18:24 +0000
+X-Authority-Analysis: v=2.4 cv=CKMqXQrD c=1 sm=1 tr=0 ts=6af61100
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
  a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8
- a=hCitAxpnIUga3RlqrOAA:9 a=QEXdDO2ut3YA:10 a=nlm17XC03S6CtCLSeiRr:22
+ a=TUUkVAhzJrhg2LysjsMA:9 a=QEXdDO2ut3YA:10 a=nlm17XC03S6CtCLSeiRr:22
  a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
@@ -53,20 +53,20 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=fAz7r+uXyuqUy2LkQsavzaaAtG7XHoyl1mSbgvYiRyg=; b=j9gj3VygS1WB
-	7epTsK4WP3lkID83y6CCUdiIaE1b62PkUN1zvPiwlzAonNx9Z4nzRfvaVsETYsJvbPZnxWP6SjJ/e
-	gIXylDsWYMmaoPynrKCsXO2/2juP6DC4YxV6jZ0BO2muGiM8RWLmOQxOPaQaIjqe5alEMYSPVqiSU
-	9c9/+04Qz1PzW2Apt3K3A5yfWf5QCgaJryu1GCpHeS+jFVmuYS3H4s2J87Me+HT+q8AyjqU0W26Mp
-	8Lls6caLrFpxTIdl3gIAR4gsDtRbDjhdz1psO35DGazohD6iCotf+af6Bi8igV5l4V+rdCaSv5RYQ
-	m1QvOf3crr8yDk3GhqZmrA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:55750)
+	List-Archive; bh=Awa6E8sVwib6OrR3ZZ41kLr59fetv3wxxNPs6I7M+V0=; b=HKsOr9XH8c1w
+	CIzZBbNWMaulQK0yLYStM6HwhvO/Nw+nT9BW5kvYXhXT6cX6GETs/1RmiezaNS8o+xM2JwUk6d6zk
+	0JwkqfkSBt8UAuw02xzXEZHw/pkK92x3ZwQovPgv6AfuHFtjHb4E/5S/+fYnrbHJWyFg77rhxWPjU
+	Kx3PjovCA90gLpy+vH0Nagg+WYKHVc/rMJAEBc8exym5sB7UiNutGE9tNdI/tHBcoxEQ8D4dJ6MS/
+	J+i8usa6ry5xUONYXl7MBlQnxx50Rb8hKfS/ZQuk15brDBONsuv02SGw7F/5JeqNO1o+rfJMJI278
+	6fGII0OKYXiHFKdViE3xew==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:48632)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xRaFi-00000000ojg-2LfI;
-	Fri, 13 Nov 2026 00:44:30 +0530
-Message-ID: <7333a27c-0b4d-47dc-85c1-57ddf838f00d@roeck-us.net>
-Date: Thu, 12 Nov 2026 11:14:29 -0800
+	id 1xRaJT-00000000q9B-2EGj;
+	Fri, 13 Nov 2026 00:48:23 +0530
+Message-ID: <c44b6b77-9c4f-4c20-ba95-ee1bc4f198f0@roeck-us.net>
+Date: Thu, 12 Nov 2026 11:18:22 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -77,11 +77,11 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 06/10] hwmon: (mcp3021) Drop platform data support
+Subject: Re: [PATCH 07/10] hwmon: (shtc1) Drop platform data support
 To: Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org
 References: <20261110183434.181711-1-linux@roeck-us.net>
- <20261110183434.181711-7-linux@roeck-us.net>
- <cf6c8c21-1d86-42a9-8b15-ac1d747ad4d3@app.fastmail.com>
+ <20261110183434.181711-8-linux@roeck-us.net>
+ <fbc64b65-6ff9-483e-a922-d3a49bd728f3@app.fastmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -127,7 +127,7 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <cf6c8c21-1d86-42a9-8b15-ac1d747ad4d3@app.fastmail.com>
+In-Reply-To: <fbc64b65-6ff9-483e-a922-d3a49bd728f3@app.fastmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -138,63 +138,45 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xRaFi-00000000ojg-2LfI
+X-Exim-ID: 1xRaJT-00000000q9B-2EGj
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:55750
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:48632
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 11
+X-Email-Count: 13
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfFJQbhvd/0QttnS9O58CUC2yXRu7d0WmDnt0n4bqmMd6bLvT32uvnT03I0rqErYcnPuRJl1ldvxyu7FhOxYMwrPxYn9n48DYJgqu3ye8bM+Ai4UnLMH9
- GaST1LqfpvLIQNz+i7eZEsD2jmry/R25RyqTdOTPx7RdB/y3mJjgmtcWnPry/vk0xDrnHarqE+HZUWYyN63t1eYhiHBOGrzYt2Fy/VwPXXz0S77o+0gioSpE
+X-CMAE-Envelope: MS4xfJopLJMiIto0X3P/KqVUQh7SmRWMkdURtaxqSOaYUpbNROGE5R1ME/eGYCKMkenIXetj6iub148+xDJjgH/gXjN5hUHIXCY7XBUAkeOBKHTZ6Gev/aB+
+ w8IN9SJESH/ifm8IQmEQJTc8nfYOo46jAHr1DRMVmansJKavikefCjTk76f2B+vaEUhy4Nkxb+yfzhEw40oI/AusCCriblvInaPyPA1lUo3Xz5aBB7RXae6S
 
-On 11/10/26 11:12, Arnd Bergmann wrote:
+On 11/10/26 11:00, Arnd Bergmann wrote:
 > On Tue, Nov 10, 2026, at 19:34, Guenter Roeck wrote:
->> No in-tree boards supply platform data to the mcp3021 driver. Reference
->> voltage is already configurable via the "reference-voltage-microvolt"
->> devicetree property, defaulting to 3300 mV otherwise.
+>> There are no in-tree users of shtc1_platform_data. Blocking I/O and
+>> measurement precision modes are already configurable via the
+>> "sensirion,blocking-io" and "sensirion,low-precision" devicetree
+>> properties.
 >>
->> Drop platform data handling from mcp3021_probe().
+>> Move blocking_io and high_precision directly into struct shtc1_data,
+>> drop platform data support, remove the unused platform_data header file,
+>> and update the driver documentation.
 >>
 >> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > 
 > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 > 
-> but I would suggest including this extra bit from my version:
+>>   	if (np) {
+>> -		data->setup.blocking_io = of_property_read_bool(np,
+>> "sensirion,blocking-io");
+>> -		data->setup.high_precision = !of_property_read_bool(np,
+>> "sensirion,low-precision");
 > 
-
-I picked your version.
+> The only difference in my patch is that I removed the redundant
+> 'if (np) {}' check.
+> 
+Your patch wins.
 
 Thanks,
-
 Guenter
-
-> diff --git a/drivers/hwmon/mcp3021.c b/drivers/hwmon/mcp3021.c
-> index d6b0ebf27941..b0839b2c2e53 100644
-> --- a/drivers/hwmon/mcp3021.c
-> +++ b/drivers/hwmon/mcp3021.c
-> @@ -183,19 +174,17 @@ static const struct i2c_device_id mcp3021_id[] = {
->   };
->   MODULE_DEVICE_TABLE(i2c, mcp3021_id);
->   
-> -#ifdef CONFIG_OF
->   static const struct of_device_id of_mcp3021_match[] = {
->   	{ .compatible = "microchip,mcp3021", .data = (void *)mcp3021 },
->   	{ .compatible = "microchip,mcp3221", .data = (void *)mcp3221 },
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(of, of_mcp3021_match);
-> -#endif
->   
->   static struct i2c_driver mcp3021_driver = {
->   	.driver = {
->   		.name = "mcp3021",
-> -		.of_match_table = of_match_ptr(of_mcp3021_match),
-> +		.of_match_table = of_mcp3021_match,
->   	},
->   	.probe = mcp3021_probe,
->   	.id_table = mcp3021_id,
 
