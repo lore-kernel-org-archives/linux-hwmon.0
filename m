@@ -1,76 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794513114;
-	b=4q2Wky8Vl8tyyJXpAiHwPV2mg/42sBpZJW4dtyKRNctef7pSfulb3Pfn1PiA/Nqam8JB
-	 fW+Zm4e8CmaDlfqpmftSpJmS9TzLVKzEFFM1Vaw+NDUvPktZU9L6kw/wU5/NGzllb0R2D
-	 3pB2wKFLaORcBXLOUb5CjdnSST1xVs2ylmcbho7Oi1sRnjWxK9uBAxHQtN82A8PU1jXDE
-	 DhAOxZ2g0kw99N5Jvi3Hhf4zCdmpxZFa+e8smwcKoh16PYaBfA5ySsW33j70S+NnMc/mV
-	 5T2kQn+9CLwTTx/QV4wOEaNRXfNYJBfyqP7ECPhxmnyDgHeqUNnR4Dgdbp+DToPy04A==
+	t=1794516788;
+	b=lFOcPF+WiL1KRXoBUDWW1VHFo+Ur+7kVuALld+WIndJqLyiH0xalRuRYpTE/he44qNXo
+	 OjFHvuExZ6im2novRh6LTWu8OTfi36qYIKsQsg4XYcz4+KMDgL6YeDR0/8rO4i1TxtqWU
+	 x0ZSWfJ9hDM/obJYoOucBRkJUX7D7SMP94u7pawUA66ouhQuWxuFoi/ezVEGkB1ctLhzb
+	 WvKP0Vo+pCBzPRI2AVzfuGBkxMqKbb3OQE3ldHQaeG7uHPGZb2aDpQ/Cd6Tskptpd56Ii
+	 5Yq2gNNE2xs0X3GGEHJLDcOOG957XzTKHkwSwSW6h1cKF2ISjzMtWMLlrGmTIvP64Pw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794513114;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
-	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
-	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
-	 X-Local-Domain:X-CMAE-Envelope;
-	bh=3MfZj507MMC+kYJd+NbJOCDQqm4lY2g+JzGBMiwexkc=;
-	b=c1nh+FfhLjPy0XQrxwX/UXZgctd5ZmlW8dHuSy5owa/qXozAEr/tiNeoSlL7FbTZTkXb
-	 VoNbjMFVh/Vgci5QY78jhx48/NobdKTx1I31hy2f9K1xGCIkJAv+GCQbY9pvZxMgLJYy0
-	 kKRSwHjC2+ywxXDCfG74AsdR1G8yKpZWpnGZhP777GrX/F8Ov40qw/8i+pTtg1Yek/uHf
-	 DMPZDruJDVuhzxNA3LpW7aAvJGMR6nw6nnSLxYTyfdeBFSxtRO2hUvKkI+sl4NVhywHDD
-	 IcMludq6PwVyPpRNAKj21QikldahT/9laAXXpXuTugtkplWeoazSLJiVkDNa7Wr/wKw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794516788;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=J9Xq00oiLiGc2yCeGUcv5F3wCwBZ2E2IXMCXnDTbHcs=;
+	b=oRTgkEM+CpH5ql26ihf5kRalq6Y2La0abmTGq68m8Mym9R/v0Bo4lpL7xlZzCw8UDy1V
+	 eMcyzS/pK35y0zu6ohQT7XDCIqE7pfNrG8bVRNVUtsHSTCGtvXPmL2bivbIrvSVArfThs
+	 8LBbgUHhFYjQuLPPNTiMhRlvEwtPmczUDGrFwamHWtQDzpWQ11qWUSMwOY+EWqwvakBcp
+	 MWegHaVDmtt0Q1FWTn8TLJsO4+jiAs59MAF1AeiMBIn6gYjuTH8b0FqqFh7MNJPEupdcE
+	 0LPEqnKpv4l1SgRmGy3k5HGxoX1Q/dhOqzpI7GcZpM1hvfIEd43gn96xQ0jaCrqIBmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=s5MNDvrn;
-	arc=none smtp.remote-ip=35.89.44.39
-Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jj11fDnO;
+	arc=none smtp.remote-ip=209.85.128.45
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BEE2606A327
-	for <linux-hwmon@vger.kernel.org>; Thu, 12 Nov 2026 19:51:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0BEE2606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59516606A33E
+	for <linux-hwmon@vger.kernel.org>; Thu, 12 Nov 2026 20:53:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 59516606A33E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=s5MNDvrn
-Received: from eig-obgw-6004b.ext.cloudfilter.net ([10.0.30.210])
-	by cmsmtp with ESMTPS
-	id RYn5xUKAJyb4YRaptxNog3; Thu, 12 Nov 2026 19:51:53 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id RapsxKkStlaNKRaptxhHwO; Thu, 12 Nov 2026 19:51:53 +0000
-X-Authority-Analysis: v=2.4 cv=UbpRSLSN c=1 sm=1 tr=0 ts=6af618d9
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=sozttTNsAAAA:8
- a=3OfnbWqpRXkE7MXKp-4A:9 a=CjuIK1q_8ugA:10 a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=3MfZj507MMC+kYJd+NbJOCDQqm4lY2g+JzGBMiwexkc=; b=s5MNDvrnZfVFU0eoxUz96jY+9a
-	+sDLh5t+2OLuO1qHSYRp2Jh4PNJKff6xWIZhhNjeusu0CRlYpEA9ufKafpUVV+QPe6l2RsTgKIRDa
-	yg6RkQhTjGZ6bMjviG5PgyrhE06NsJ0ke4vcmVuwokGV+1eOMO2hVm65uRUmwSWF60aIWoe0i0xg8
-	CxKjsz7L/16Rv4YHNSTiR0KHmLrPvpMtviVVscfNIQWTPCaOeZ7d4a21o+WrAcgSv2x1VtPS5UVh3
-	PunOrtLlhd5peVwknvVP5gkx/IDZd+/otI8wEaR7aWbFlAJNnyU6uWrsDqnqL+eQbjZSaxgvBoX0W
-	zKJ2Q+iw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:48542 helo=server.roeck-us.net)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xRaps-000000016KU-2p9m;
-	Fri, 13 Nov 2026 01:21:52 +0530
-Date: Thu, 12 Nov 2026 11:51:51 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Andrew Davis <afd@ti.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (emc1403) Fix table name to match driver
-Message-ID: <d93134c3-2635-4ee3-a13b-34b005dfc2e2@roeck-us.net>
-References: <20261111181154.445315-1-afd@ti.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jj11fDnO
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4ba013938d7so2467485e9.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 12 Nov 2026 12:53:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794516787; x=1795121587; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=J9Xq00oiLiGc2yCeGUcv5F3wCwBZ2E2IXMCXnDTbHcs=;
+        b=jj11fDnOHoMXE1/1iA5tdgvmutB9Kx9RAGeGlas9T56PIvka3YiTIr1T8DvxL405yx
+         edBIGR9Dqg7gXrdCX1sDfyYgcbSVInLCtEFOpwQ56gp212OdAs8OOnKiuex0efKuv4+7
+         pQsQaX4Jxwgdm8G/RcDhPWnL78DLcmTZsUHlZKKZnQ606IRDHnaGtfnJ4WCV00ybXIq6
+         mdvDEsEeBAu2nxbDKOOgKZXRctvzlaB9Nkpay+TLLTNhbhdTp5rZZKhDneiHl2NRD3SN
+         uCtcBMnVIhgHAlvqPtVUH42Up9nNQKrvlQdW8eEJZZSAFt+BM+N4OurBmSbCFnVkJVv/
+         TjnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794516787; x=1795121587;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=J9Xq00oiLiGc2yCeGUcv5F3wCwBZ2E2IXMCXnDTbHcs=;
+        b=WS+PGQskwSoc0nhGc8XAXhzqIsFwwss6G2yt3dxtER0xIU1k4WXJvCS74BvRk0gtUH
+         fSVpq6t8Q7Up2P1zqIcUGPlpfZxm2Uq5LWTc9NetCjY6dxZE6hwooR/fEgdZ7s5RAWOQ
+         dabEoU0gJGlhVyH/BekBALfkLmZnttUIMWy7ss10jm/fA/tXRpty+wT0mY4St2RT+/66
+         9LD4yyFIL20TDwvDAWZBhwZsJ8hT+S+9PLBsuxOJ0jhZ/7k3kvsVar6uFyrrVyqWgQlc
+         sV598VqamOZ38bxuBGXK52YyzKnohfr1lyDlOE/tRVQT3/cUm/ZoCkeR/3psHFuhKpcC
+         CFMA==
+X-Forwarded-Encrypted: i=1; AL+hErG3WSMKnbWOmEIkhBNieCM4W823R6DBnAJpvNFRT5UMmqvLz9fQ34RbC8UNOlcDZ+JejJ2aVD1B1hjFLQ==@vger.kernel.org
+X-Gm-Message-State: APuU4Z9cIHiHwEEOEIqc3/JJgkVX2SLcfTG9uTIEYqxMyE1ewFfV8bAP
+	uGNgPqgieBfx10TZee2yXEMsjbcZXr3Jo1DjFjXOaX+HM7nuB2noTCqk
+X-Gm-Gg: AYBFou1w92Q6Rcd1qbgJCdw6i0jkJJLqzbngnj12SLKMEuWfwN9UFQNBWPFaE8rQU7h
+	5ymoPJNXVCYgEOzhr2ggz2TjMRHmD1LyKWcIuKFoda7zxT8mRyUiLr6eDaWkxDgGabkQcYlQ388
+	kNTgigK0sPG9E2aJexZdY39Ph3HTWU35xlmj3lFNoJ026WQ9rfXvJKab6vukyeIlsQJ+bYto1zK
+	VmrFetX/JVHonBeA/sFQW5lQ6PyWiiRFHK/StfN1PmqEvRer4HEgZ+hgmY9CoV5L0YeUOLBIJFL
+	8iEmd8MyvaJnviAdwRRXADUQ83Bb6KR2ZPN/ng9QWutaLIf3At+rEwQaiAAkoaIKEHnKfX3tNIz
+	XHvXXVwj2YumaemZzn1Sn4nsDa7Zwp/W4fSJpgE3GQZrfA3L+z5z4jvB9CC1C0Mfn177CEkW58o
+	LdY9qDdUGq6RVGPyoYkBpLloVFoIHQ1cVuFKRKBvLwLsrfWAEHjA2LabY10FHRKyVyqF9wbqq90
+	P5/0lEr/rfxLbvDigzf21GhOIXWZEn2u4vhJTP1VZstjVEVisvSQ9Ejc50rY0LhpFqBK5Qlxk72
+	HMYKQnwpvqlqyFySwSg7TrU8SrjTrlDol3Pkx4ekThtwI1MmY8TSA/5n+chgHxgQzDthj/JDh6j
+	eDrN6fuF9
+X-Received: by 2002:a05:600c:8010:b0:4a7:9025:5c3b with SMTP id 5b1f17b1804b1-4bb55a6a5f0mr9195935e9.19.1794516786608;
+        Thu, 12 Nov 2026 12:53:06 -0800 (PST)
+Received: from debian (ip-78-137-176-146.broadband.digiweb.ie. [78.137.176.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb55ae501bsm8695655e9.10.2026.11.12.12.53.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Nov 2026 12:53:06 -0800 (PST)
+From: Pablo Mazzini <pmazzini@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Pablo Mazzini <pmazzini@gmail.com>,
+	Alistair Francis <alistair@alistair23.me>,
+	Andreas Kemnade <andreas@kemnade.info>,
+	Mark Brown <broonie@kernel.org>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/2] hwmon: sy7636a: read the temperature only while the rails are on
+Date: Thu, 12 Nov 2026 20:52:27 +0000
+Message-ID: <20261112205228.42630-2-pmazzini@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261112205228.42630-1-pmazzini@gmail.com>
+References: <20261112205228.42630-1-pmazzini@gmail.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -80,38 +102,85 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261111181154.445315-1-afd@ti.com>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xRaps-000000016KU-2p9m
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:48542
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 33
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfJ/glbB2FJO7DT93a0pnTyQYaFrn1U+5I9G5oyAdt4/ifu3kManh6ace9dizP3de4EGJvtmqh0v3gMCG3R+yPj/yh+6t74ILEHJqj+5wS6HQMJQsQjSS
- UrkrTXmmfMulTjBE7qTLbDJVEPBN3oHhQJfvS6smGLO0HIMtMw3dXbq+OvPopzmgRRAJ1spoiCd7Av76b97hGB9eHImQVUgTP6sAWRN1wnL+/nRz2NMdf/9h
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 11, 2026 at 12:11:54PM -0600, Andrew Davis wrote:
-> The temperature conversion time table is called "ina3221" but this
-> driver is "emc1403", this looks to be a copy/paste error. Rename
-> the table to match the driver.
-> 
-> Signed-off-by: Andrew Davis <afd@ti.com>
+The driver enables VCOM at probe, which keeps the panel's high voltage
+rails on for good. Read the temperature only while the rails are on, when
+the chip samples it, and return -ENODATA otherwise. Read power good with
+it in one transfer, so the value can not be from before the first sample
+or after the rails went off.
 
-Applied.
+Signed-off-by: Pablo Mazzini <pmazzini@gmail.com>
+---
+ drivers/hwmon/sy7636a-hwmon.c | 35 ++++++++++++++++++++++++-----------
+ 1 file changed, 24 insertions(+), 11 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
+index a0d0b4119bb3..a8bfbf1716a1 100644
+--- a/drivers/hwmon/sy7636a-hwmon.c
++++ b/drivers/hwmon/sy7636a-hwmon.c
+@@ -9,26 +9,43 @@
+  */
+ 
+ #include <linux/auxiliary_bus.h>
++#include <linux/bits.h>
+ #include <linux/err.h>
+ #include <linux/hwmon.h>
+ #include <linux/module.h>
+ #include <linux/regmap.h>
+-#include <linux/regulator/machine.h>
+ 
+-#define SY7636A_REG_TERMISTOR_READOUT	0x08
++#define SY7636A_REG_FAULT_FLAG		0x07
++#define SY7636A_FAULT_FLAG_PG		BIT(0)
+ 
+ static int sy7636a_read(struct device *dev, enum hwmon_sensor_types type,
+ 			u32 attr, int channel, long *temp)
+ {
+ 	struct regmap *regmap = dev_get_drvdata(dev);
+-	int ret, reg_val;
+-
+-	ret = regmap_read(regmap,
+-			  SY7636A_REG_TERMISTOR_READOUT, &reg_val);
++	u8 buf[2];
++	int ret;
++
++	/*
++	 * The thermistor is sampled while ON_OFF is set, but the first sample
++	 * is only ready after the ADC sampling and conversion time (ADC_SPL +
++	 * ADC_DEL in the datasheet); until then it holds its reset value, 0.
++	 * PG is only set once all rails are up, after the first sample, so
++	 * read it in the same transfer and report the temperature only while
++	 * it is set.
++	 *
++	 * With ON_OFF set but PG low (rails still ramping up, or a fault), no
++	 * temperature is reported even if one may be available. That is
++	 * accepted: the display driver reads the temperature only while it
++	 * holds the rails on, after power good.
++	 */
++	ret = regmap_bulk_read(regmap, SY7636A_REG_FAULT_FLAG, buf, sizeof(buf));
+ 	if (ret)
+ 		return ret;
+ 
+-	*temp = reg_val * 1000;
++	if (!(buf[0] & SY7636A_FAULT_FLAG_PG))
++		return -ENODATA;
++
++	*temp = (s8)buf[1] * 1000;
+ 
+ 	return 0;
+ }
+@@ -72,10 +89,6 @@ static int sy7636a_sensor_probe(struct auxiliary_device *adev,
+ 	if (!regmap)
+ 		return -ENODEV;
+ 
+-	err = devm_regulator_get_enable(&adev->dev, "vcom");
+-	if (err)
+-		return err;
+-
+ 	hwmon_dev = devm_hwmon_device_register_with_info(&adev->dev,
+ 							 "sy7636a_temperature", regmap,
+ 							 &sy7636a_chip_info, NULL);
+-- 
+2.52.0
+
