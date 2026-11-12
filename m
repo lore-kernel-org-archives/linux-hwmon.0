@@ -1,60 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=143.244.207.79
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.33
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794506340;
-	b=muCgsEwjVuWSjpi/gTPiIOZh3QPwXb9UjjODjpU4mgJ/dSYcU5dvKnNfZJHvE5rIEjQN
-	 iZ8E5OP+/bs6ULtiY6YEWgZRLEINhChJ2XmjdLXWdXAb6MO41VE7B91L0YmpbYa5EUz/Y
-	 dcaBTgv7z7ZiFEGvchRs8inesz9xz3vDOZLycb4gF86+eP8lk5coLRgYAougw9XTIvecr
-	 q2M6+kWkYUJW5OEAvOENeunxvVEDwQMNzMWSWwiEl03USSVLHJJmFY3zDfMz/FlXmb9jI
-	 qD8kXFPg8X0F1G1qPiH7P23twG7Ivfxv0ieZCF2UFWXPbn1MVPq7OSwYantVC5YbfMQ==
+	t=1794506731;
+	b=eTH7O7ehGJdgJWk9RJBksBPBzbmSGm7bfYBrfoqKp3jQDPjzAncsXD8z2p3JeUZZwDkq
+	 y5SRKMyN6gmZcXelRctdBt5cIz3NmkqkZmBbf8sQOjiYXsX8ijw1OpL+ZsEqBgXQGDJwp
+	 UMd7+zLd5VnSOnuf3CZtsghFeHCV/0l0ogEy5n5Ll0LMYIQ+rJL2+mAc8nKron2pCgIWP
+	 ByvaM8DVpH0H5a9OETwaaNpKqQ0EriqMGvVmKVOANDGn7r/fZbhRg0IVEMp5RKCewjJd+
+	 3+qUfw4LE0I/Gc+RoOCkA4zqRC0vwMVXDoTfleESBTre4so9VTgDkDrZJQLaQMCqT1A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794506340;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Message-ID:
-	 MIME-Version:Date:Content-Type:Content-Transfer-Encoding;
-	bh=aYF/HEUDm76gfL+wC4hXPsZI2t2dHNPWYywmlerUfvg=;
-	b=AxaL0p3By7cOv2QgJGBZ58y5J/TcjrSNf94XPEfc8FiRtJD9Wq/kIjgOXxORBajYj5HZ
-	 Ur7/xv2N0RafWgB2eJndrGGiyetUBZAeNiEiM5e72JgMl06ED1S7rTGmRdNAhLFCd6mfc
-	 r4udgvAGGyfCO7K5Scp+oZLmCo6t2rH8eRPZ65tVBiaDDbS+Xg025wRMj+wFlMQRM0yE3
-	 5ptBcPC0XeOuZ8by8NGc0YTh6udinQ7cTjRs5bVIzb9KVFOileXgN/jreoFh/Ujlkfo9W
-	 Qqrkxs2tBxq+jhCoJcF1xr/CzyCY1ysjz+XbqSn5ynm0+Zz3+4F22dcmC1ocyBuAs0w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794506731;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
+	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
+	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
+	bh=YIV8AzjRKQ457fVdvC9cmzWy207wxkKwWswzLM1Rqq0=;
+	b=nQ9PO8jWGs3WPpWtotrCXa1bFB4Ta29fpsnxIPdwHi0LrYdpgSL/kqjydubScMx7nGWq
+	 7Xi8PRIHhrTVAiwT2P4xE6I0VZN2AW/JJBvPCU0asrRUl5wnblsObQMzho8cEthyxt3Rk
+	 9LIx0eUfWy2N1V27M/eROaRyw2OBCJR4p2P6gPdCTuxLFy5SVbOpt3l+SOm1KrRrC6e/R
+	 kix4IcxzM0VkpB/tcJ99TXtbsL9i5Dxudbtuv2IcQgeD+HGjOzBgKk1cgvn6ArE2Ju0yK
+	 6pFctHcx8JGGvfjgPBaBwdWFcCyjtelo+wwAEIE8HayxLWiABoEMIC/9gWvnd9ayzfw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=detoutefacon.com;
-	spf=pass smtp.mailfrom=detoutefacon.com;
-	dkim=pass header.d=detoutefacon.com header.i=@detoutefacon.com header.a=rsa-sha256 header.s=mail header.b=SqmrnMAM;
-	arc=none smtp.remote-ip=143.244.207.79
-Received: from hst.foliovision.net (hst.foliovision.net [143.244.207.79])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=none header.from=roeck-us.net;
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=C1I9mPie;
+	arc=none smtp.remote-ip=35.89.44.33
+Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F495606A327
-	for <linux-hwmon@vger.kernel.org>; Thu, 12 Nov 2026 17:59:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7F495606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=detoutefacon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=detoutefacon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FF85606A33D
+	for <linux-hwmon@vger.kernel.org>; Thu, 12 Nov 2026 18:05:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4FF85606A33D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=detoutefacon.com header.i=@detoutefacon.com header.a=rsa-sha256 header.s=mail header.b=SqmrnMAM
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=C1I9mPie
+Received: from eig-obgw-5006b.ext.cloudfilter.net ([10.0.29.217])
+	by cmsmtp with ESMTPS
+	id RY9axfXrlAR1iRZAqx4clE; Thu, 12 Nov 2026 18:05:24 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id RZApxd8udSeuLRZAqxkaM1; Thu, 12 Nov 2026 18:05:24 +0000
+X-Authority-Analysis: v=2.4 cv=NYvm13D4 c=1 sm=1 tr=0 ts=6af5ffe4
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8
+ a=mgGIjpb2KhxFcZy2RHUA:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=detoutefacon.com; s=mail; h=Content-Transfer-Encoding:Content-Type:Date:
-	MIME-Version:Message-ID:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=aYF/HEUDm76gfL+wC4hXPsZI2t2dHNPWYywmlerUfvg=; b=SqmrnMAMFbdmK0RJTIOYcJTwL2
-	RO1GQkkRdjlxEBzEYBrUobfMWvOt6ES0M3HB+rS6hpqinbvdM7RaDoJeB+p7AMEGZnaERxITHDXMu
-	7b0ptSYdjlmaCf4ny4nBGf0lmwRr5F59jyFRi6yyZ8NSmjGmLbI0lzD9JWle7/SwShSa0PEwhva7Y
-	h06iIxPC/MT7TO17g2pKxsLmWu7kk0a8NDqqrRsff/ZNXLburlstiZKo54RPMEpHSHeqTeSb+8XbU
-	gt4KyntVqKbdxUoGiNQosUKbdpJqD9eJ3ZqxMDwxqIA9A7Lk0ngbJxIsVI1gTLndd3J4sc/aW3gWg
-	FOAz0vEw==;
-Received: from proxy.recruitment.sk ([82.119.109.194] helo=[127.0.0.1])
-	by hst.foliovision.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.97)
-	(envelope-from <alec@detoutefacon.com>)
-	id 1xRZ4c-00000005lGq-2tiG;
-	Thu, 12 Nov 2026 17:58:58 +0000
-From: Alec <alec@detoutefacon.com>
-To: linux-hwmon@vger.kernel.org
-Cc: rydberg@bitmath.org, linux@roeck-us.net
-Subject: applesmc: include Mac Pro 5,1 Power Draw in hwmon reports
-Message-ID: <hylki-k6w7PeynXP0LYj6yqn@detoutefacon.com>
+	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
+	List-Archive; bh=YIV8AzjRKQ457fVdvC9cmzWy207wxkKwWswzLM1Rqq0=; b=C1I9mPieXNcv
+	oHOUYfWctNuFFHM33sSKWajvNIMDaqnmlrG58MInrr9zP0b1W/yVTXM4cb/ir5pIqZWavw190NN4n
+	AXfRxNK16t/DskcbXf5pzJ8PEx0JwreKN1A88+/Zo64kjfCdCSfbCAOc8o/YtMziLYG39uuJZ5P24
+	rTBqhIrVJCv8GnwjdksVbBRS25YITN/KSB/uNByCz6McWc4ffIja+uwPyGaz2pAh7X2JTLqyC667o
+	eOUxkN4rKVpsi1NYV9gphpfcEDlv0FgZ9URMw4apYmuxnhJqHxkNj3+Zq4UR2CY71NENv4LAuwq8I
+	KwkKsOK11L/BEL4kGwWMEQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:44674)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xRZAp-00000000Bxe-2DHq;
+	Thu, 12 Nov 2026 23:35:23 +0530
+Message-ID: <05bae14d-5530-45ab-a14c-d068f7587724@roeck-us.net>
+Date: Thu, 12 Nov 2026 10:05:22 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -64,56 +75,135 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Date: Thu, 12 Nov 2026 17:58:58 +0000
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (sht3x) Fix alarm attribute names in documentation
+To: Wayne Ho <wayneho219@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>,
+ Pascal Sachs <pascal.sachs@sensirion.com>, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261112-sht3x-doc-alarm-attr-v1-1-91676362d133@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20261112-sht3x-doc-alarm-attr-v1-1-91676362d133@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xRZAp-00000000Bxe-2DHq
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:44674
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 3
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfJB3hoOSVB4h7eH3zLGj9Kw87cz7/UYhQ/G8cuubtPLRkTmELZgRZO8f327HaZKKH/TDmU56/glSrS4okg65Is5whOMpPoeC3ZedOewqF4U11CPx79VG
+ kTUCXbKulJWGOEpNs6Zg1G0JjTqK4Xo6ELzX8Y5BvemZRrGAB0AXGjGIOjpZiZ+4KvFocbgr/Dtq7xsdVXzqpOoNDKAWKAJGVrKPAm2kwWzoNzfn0H9i5tMV
 
-Hello,
+On 11/11/26 22:01, Wayne Ho wrote:
+> The description of the periodic measure mode says that "the alert
+> attribute" is set when a reading exceeds the configured limits. The
+> driver has no such attribute, and never had one. The alarm state has
+> been exposed through temp1_alarm and humidity1_alarm since the driver
+> was added, which is also what the sysfs interface table further down in
+> the same document lists.
+> 
+> Refer to the actual attribute names.
+> 
+> Fixes: 7c84f7f80d6f ("hwmon: add support for Sensirion SHT3x sensors")
+> Signed-off-by: Wayne Ho <wayneho219@gmail.com>
+> ---
+>   Documentation/hwmon/sht3x.rst | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/sht3x.rst b/Documentation/hwmon/sht3x.rst
+> index 4f67671eb0c..3c022c058be 100644
+> --- a/Documentation/hwmon/sht3x.rst
+> +++ b/Documentation/hwmon/sht3x.rst
+> @@ -78,11 +78,11 @@ The allowed update_interval in milliseconds are as follows:
+>   
+>   In the periodic measure mode, the sensor automatically triggers a measurement
+>   with the configured update interval on the chip. When a temperature or humidity
+> -reading exceeds the configured limits, the alert attribute is set to 1 and
+> -the alert pin on the sensor is set to high.
+> +reading exceeds the configured limits, the temp1_alarm or humidity1_alarm
+> +attribute is set to 1 and the alert pin on the sensor is set to high.
 
-This is my first mail to the list. I have a Mac Pro that began as a 4,1 and=
- has a 5,1 firmware. It runs Fedora 44. The applesmc driver reports the fan=
-s and the temperatures. The same controller also has current and voltage ke=
-ys, and the driver does not publish them, so nothing on the system can show=
- how much power the machine is using.
+Just replacing "alert" with "alarm", as below, would do the trick as well.
 
-I was interested in this number 1. to see how (in)efficient my Silver Tower=
- is and 2. to gauge how long it would run on an UPS.
+If you resend with those changes, I'll apply it, but for the future please
+refrain from sending cosmetic patches. If you want to contribute, please
+consider fixing real bugs.
 
-When running on macOS, I monitored power via iStats Menu which does give th=
-is information. It turns out the power readings are available in SMC which =
-hwmon already reads for temperature and fans.
+Thanks,
+Guenter
 
-Temperatures are collected in applesmc_init_index() from the sp78 keys betw=
-een T and U. Fans are counted just above that. Both are published from appl=
-esmc_init() with hwmon_device_register_with_info(). The current and voltage=
- keys are already in that key cache. The Apple Silicon SMC hwmon driver alr=
-eady exposes voltage, current and power for its own controller.
-
-The reading we are missing for power is not too hard to get. The 12 V outpu=
-t. Key Ip0C is 10.5 A, type sp78, and Vp0C is 12.125 V, type sp78. Multipli=
-ed, that is about 127 W. It is the supply=E2=80=99s whole 12 V rail. The 5 =
-V pair, IH5Z and VH5Z, is only the drive bay: 0.19 A at 4.94 V. The 3.3 V k=
-ey, VS8C, reads 3.30 V and has no current key beside it. The revision bytes=
- are 01 39 0f, which is 1.39f15. At boot the driver logged key=3D404 fan=3D=
-5 temp=3D75. The eight old 4,1 branch currents, Ip1M through Ip8M, are stil=
-l present.
-
-I have not written a patch. If you would like the sp78 and sp87 current and=
- voltage keys registered as hwmon channels, with one power channel for Ip0C=
- times Vp0C, I will have a go. I could not find an existing thread about th=
-is.
-
-The numbers are from my own Apple Inc. MacPro5,1 with firmware 144.0.0.0.0 =
-with a single Intel=C2=AE Xeon=C2=AE X5690 and a Radeon RX500 running Fedor=
-a Linux 44 (Workstation Edition: Linux 7.2.15-200.fc44.x86_64). Grok helped=
- me isolate the correct sensor keys, the initiative and the reasoning are m=
-ine.
-
-Thanks, Alec
-
---
- Alec Kinnear
-
-Creative Director
-Foliovision
+>   When the temperature and humidity readings move back between the hysteresis
+> -values, the alert bit is set to 0 and the alert pin on the sensor is set to
+> -low.
+> +values, the alarm attribute is set to 0 and the alert pin on the sensor is set
+> +to low.
+>   
+>   The serial number exposed to debugfs allows for unique identification of the
+>   sensors. For sts32, sts33 and sht33, the manufacturer provides calibration
+> 
+> ---
+> base-commit: 44c8ceae2dd3ae536c5f4f956cedb24c157aac23
+> change-id: 20261112-sht3x-doc-alarm-attr-118ddfebc6ae
+> 
+> Best regards,
+> --
+> Wayne Ho <wayneho219@gmail.com>
 
