@@ -1,71 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.33
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794531341;
-	b=SyF7VPIj6InYDincyjNO45sVaDze8IyOVuYkyiDFV+UveYsuNyXp/xzpxSIYpNv1eeOI
-	 HvvGj6jUd+5Tf0S2sGDMpYbQB8b8ID98ADxiCpZTb0IyvTIzwKukRzKpw61kZd3HikeOK
-	 2vl4vt02Bh1suRI3/B/3j+WTbYKmWdYM6nA/r2ajrcC757IseAkZxGMESBTGGb7WahtSj
-	 LtA54NjrcyQLkQk6E9i2k1a+Xe4C6P6GyTO6EMHP2ifijr6bzc+mi2F1/3kQCMuBpKH5e
-	 AA5V6FxzFhI2ljIr3DIwK1OEnWrg3pWtsTyyOSpDGMfMwAEEc7rFde4m06VprND5svg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794531341;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Message-ID:Date:MIME-Version:User-Agent:From:Subject:To:Cc:
-	 References:Content-Language:Autocrypt:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
-	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
-	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=YIV8AzjRKQ457fVdvC9cmzWy207wxkKwWswzLM1Rqq0=;
-	b=A/wp/orxWeMHLuQv1AGTPm20sSXQp3JP5+B15TBtaYjP43OVhK+v0K86YjeAz6bFwbd5
-	 Ilv7Si/plC2axPPK4Q/vmANG51KLZzKAs2x/GPuzDI17xpI+oxSudoRH6TEboh/CEbnpB
-	 0Jse/pSsyW0a+lK5/Eb1u3SV8TgWX8DjRjlUFhnl3MLX1rOKyplr9RFPbp/Qc2s4ARDVn
-	 8WapwieV1qJQKDh4DRoJM2TIm8Dnkkq/XMrhBukMcsa4oC0qUBGErs523fp9EqGgVL1T/
-	 Wksq/34SX4LPTXvnqTKy+DveLQZsGKm8Q/9nID1Q0/XwVvTnlXxDEQ4/d9CsPHjTRow==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=hEmVTqqz;
-	arc=none smtp.remote-ip=35.89.44.33
-Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.53
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794533234;
+	b=tqHB5TmQHlotY9112RvG8iWFCjwFD4soAbkVH30eL8i0gleAgMBt0Sup1etrS2LiFOdh
+	 B4wd6Rs5VrhHQ8M2jg0vepp7qI9NxxxwoDEftXltyRO7nDigrHR9KBx0cxTFXqmg8gjoB
+	 jTgjlM32/rk0gt4YRnhVfCcVEFg1way5Ey1wZVejphvSxrI+1vULhRJYg/bsqdQvGOc9E
+	 jUwowmQe1LDQT7K5W4Vu0qupyDfz4DweElcRhJw2WIFgzhnaki40oys4TpZhSSUAkmlHK
+	 m8JfAtBZAJXpfpqot+J8eKpyPmEKxrGrVia5zxmYoGRbTKyI8VaL+VtEAqZIFnCVkRQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794533234;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:MIME-Version:From:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Content-Type;
+	bh=PNVU441C08fdqPtRKv8FnttRbifJOT0o+PhRQECQRXk=;
+	b=kPLjWzBA55wiCtz7WesEfTBOxhj3EOHn7qf9UHJKvGC0l4fEgTPNSL8ViFXHeOkjTsrS
+	 vbolj8zGxZQGb1quDGg430MorrDupXcbYCvJV0StWmLnmWthkJCH1g2KTSG9Td4SjCtj0
+	 dY6i/JXKbAXlPgFYc8TGYTyZm1PiSpR4okoPz6QRWDlgQ3DlJUMV1+JsODV4hj2JfSEAY
+	 1ms3MxulQB4PtBaAxZdYHRs6asL71sqNX4y2GToshitePUt7ht2m2QlSqLMkbYwSPuSrO
+	 R3k5LEZ+mulWm7FD9dBWODGIJmrv+n5kd6opnIdQ0klCYPTXssK37/O889Ely8EuzSA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=uS+RoLzf;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.53
+Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EC5B606A31C
-	for <linux-hwmon@vger.kernel.org>; Fri, 13 Nov 2026 00:55:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7EC5B606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB80606A31C
+	for <linux-hwmon@vger.kernel.org>; Fri, 13 Nov 2026 01:27:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DEB80606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=hEmVTqqz
-Received: from eig-obgw-6006b.ext.cloudfilter.net ([10.0.30.211])
-	by cmsmtp with ESMTPS
-	id RcgDxhULZAR1iRfZtxB6p6; Fri, 13 Nov 2026 00:55:41 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id RfO6xQxorFhzrRfO6xLQll; Fri, 13 Nov 2026 00:43:30 +0000
-X-Authority-Analysis: v=2.4 cv=JY+8rVKV c=1 sm=1 tr=0 ts=6af65d32
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8
- a=mgGIjpb2KhxFcZy2RHUA:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:References:Cc:To:Subject:From:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=YIV8AzjRKQ457fVdvC9cmzWy207wxkKwWswzLM1Rqq0=; b=hEmVTqqzt0Mu
-	YE82aP7gKX+rOup052yGbDoYaDOnfVb5qmTBWH8/bfyOXMuwFEPeu3IgegcRyr8qWlrvDmlKVSeRo
-	LRW+tQZ7mCS8LaiEu3QYV7Q5+da9itqfLV8fVFrE+aGtYureF1+lzs/ei87LK2FCg2iVtk2CXQEH9
-	w47NktigSijrZFqWgMWOjrha7+GPWan29/ERuotvDy/NDfSHnf0GnrQjRpzTEwIrXXmJ0eEoFuYOo
-	2i/KSIhnnxgTAZUGTjVy1eYlWM1DqPuSNhtFUI8GOrhtt7+U1hFqAuXQ8Z/EHRvsuzyZ7O1fPRngf
-	JqckjbTPvnJ5UFlN8+A4NQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:37778)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xRfO6-00000003MQm-0cyO;
-	Fri, 13 Nov 2026 06:13:30 +0530
-Message-ID: <5f914d65-5e5f-456a-bfc7-5dcf830cce69@roeck-us.net>
-Date: Thu, 12 Nov 2026 16:43:28 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=uS+RoLzf
+Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-67be7b9abc8so341831d50.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 12 Nov 2026 17:27:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794533233; cv=none;
+        d=google.com; s=arc-20260327;
+        b=n0aQyYCPod7aIshiNA7yCE0aMXgEl4U7axgZyYIlftMtaou86lAWZAdo+sa9BC+zXt
+         bkgbYqCKrzIdZ9sYq5cYtEoS3zQAmBfRoeOYJQxcGYHYPZg3o8rdsWvTGLoXujFydXcF
+         vqnYoQYI509iFfRsjZcnUo9RMD/SJ8hZyX1rNfKKxeg4txirjgr2gpxXm9G58KSX+uHp
+         WjlTQxW7MbVQJqV7DHzzg82J9BF12MP7sLftMR4qJFjPa/XHr4Q0rFmBYANosKp2QVl8
+         7/29vz5jjTgxkA42UNcW+07zZJENtL8GicQFukBlNZGPy+4MoGoXiZ9rT11816jMdJoz
+         sigQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=PNVU441C08fdqPtRKv8FnttRbifJOT0o+PhRQECQRXk=;
+        fh=RMsWBsZ6SZ6r9IVm942FKhkB5XsUuU602NFjH0Mdz/0=;
+        b=kkzc8r/9r7Yj31L5Vrq/Bu0GXblPEk8Gc1KzJt8B4BFs+tu5eAMYZ7spiE5Ott0MBU
+         pPLgXbRAW2/Di6R9k5QGAbybBy9HvTmdkuryn4lkNO+rkbkIpaG12yB7KORKgsCXBYGD
+         V+KP3+mhFSiNfrPUAaLa5ST8pac96s1AHIVlHnPBS6cV89GV/er1K1MBE9HlrpKh+XbB
+         bUb28d3RTdlZ88XpWlrUpkoE0c6PycaQSZOxdT+LG92v4J+DeVGWrJ2fUCJG+PJXofA5
+         UPyV2wcN2CkHgo7xLD5zCdvI7yp/kna0fd2aCHEgBzEut3h8B019/d6cg5Ur8M8xFCHZ
+         vACA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794533233; x=1795138033; darn=vger.kernel.org;
+        h=content-type:to:subject:message-id:date:from:mime-version:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=PNVU441C08fdqPtRKv8FnttRbifJOT0o+PhRQECQRXk=;
+        b=uS+RoLzfEinp/LXeAKi6REEAVQh+EfrxkQi/XivGL1lzZuBEJdiz/FdGgx5ZXF0lch
+         kqf7jjW/J8Sd6Vw01xN2RvOn+kIalrOBK6eF5FJ1JyX7brJ9+cOm0WK8wCvz87xZoBYr
+         gOt8ziY1CzmC8gstRYxmoz4Mti8MFRsz62RWNYS63kcf3xDHZIuoEuAwzLOXuVT3uIT6
+         l8ZKxo+uPogQud8ex/1ornHvoP4X75MjbyfPFyVIzi2VL9AxtqdIxf1UPxHlR3dJS4ZF
+         9meR5PQZv4AUbjCJQjy9Gbq0/CC40pnt50Ascr/DJ4X2kaBWI7N9JNFI7LAGsmTwaiTi
+         EFYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794533233; x=1795138033;
+        h=content-type:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=PNVU441C08fdqPtRKv8FnttRbifJOT0o+PhRQECQRXk=;
+        b=JS8CSfCbAS7hsWoUWXmg2kflNPDhVsDJ2+1ykD+hAj2OGvOJhgtifP9QPgrjYHgdjS
+         smWYIYFF/5EP+KEnDkpW7jLMFaQRtUER0ZufDBt53HaQFr28osb4QsVWygD63mXYj1CX
+         l+K7kNR03ziR3cvA0opcT/4MQXZBsdrXvBgspXJ3LCEAoAuDzRcDmB9vXmJZ7MJYp01T
+         u09DfK1iqZM45oP9cSYaP2sqO5LR59yMG5grM+M5HTF2nYGS49SepPADNQ0KT4YR+B0B
+         sO4KTEieRdrDwW9fEUlWpT3SIjtPZ5YSR/9z4XdYJotLEslXbLKYX0Y59x+dBV8VGnma
+         UflA==
+X-Gm-Message-State: APuU4Z+eVgvkVEvcxXuqYUvsnE80lubQVPHm64txBBodMb4mGeH2+xtu
+	cGtq0LNLAy3hQv2MesgP8aMvHwa0rQ9B9wnk3TbJ9fvbZ5ghpYHMQRN9AngggOswrrT2EXKZLrs
+	kfubpeGDQ4+afpNTCYRYKmw8LTIuDCpBo9Q==
+X-Gm-Gg: AYBFou2yZMsaXgiNCWo/nQ53GJcKC/QcEc6QcfshexKhEishxJrjuGrzxbYK47pIgYK
+	U7ENLxw9q9FOfFk6TyFIj7kVqqChhZGqgQaFMEEBxOHyNxV/TSUxz5iGsYDQo5cZH2yf0joor9a
+	bsZpu53LTzmbB3AMEeEC4qZFqklCgsqEmLAQ2jbAXDxtZoT09zpplBnUnWFbMExdzMVYu9jBfF2
+	+nVr00e7+vsWxwwoeUqR4eckviC10guwuRfz9Nptha7h9WbvAghQktJOMCvmp2pjRY9RfGdDDAJ
+	kq6Xc76gu8EpDa6ipCNP36i44mwiiHXERoYmDy7SCy7LAe7stHfobhhj3vPvjegN9/4oLbS8cQ9
+	ujdjvG2p9EqY2B/C7hE9Rjf2cGKErJ3JfJjHnGw==
+X-Received: by 2002:a05:690e:47c9:10b0:67b:f09e:da86 with SMTP id
+ 956f58d0204a3-67d8965a4fbmr549470d50.34.1794533232934; Thu, 12 Nov 2026
+ 17:27:12 -0800 (PST)
+Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
+ Thu, 12 Nov 2026 20:27:12 -0500
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -75,136 +101,61 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] hwmon: (sht3x) Fix alarm attribute names in documentation
-To: Wayne Ho <wayneho219@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>,
- Pascal Sachs <pascal.sachs@sensirion.com>, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261112-sht3x-doc-alarm-attr-v1-1-91676362d133@gmail.com>
-Content-Language: en-US
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20261112-sht3x-doc-alarm-attr-v1-1-91676362d133@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xRfO6-00000003MQm-0cyO
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:37778
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 11
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfKYlXCM/umW6YCFxXWKvwmd+yJUgxmnL8eLyMV1Vb7PMKkzWEfDX8pxjwGjBE/iYOuyXbB5R0FJxYQ80n1IqPDPvrXl1rqWc/8qwJ6iny3JrmsjyD2Ix
- 5gVq0h5loXurfb4hZd4hwL6mfxUaEVD3gNTFW5IBRN6yqO/+S5uEkhHRLR1vOLIs5CdRgWlGhUMPSMB6pdr6EFf6c2WWNIhodRnD76w49J9ksJ3eJtugplDH
+From: Oscar P <niviuq@gmail.com>
+Date: Thu, 12 Nov 2026 20:27:12 -0500
+X-Gm-Features: AclHuK-eLi6QFP1ScZMsmCSI7JupQHwdGVEELmTttWL98qzhzKDKamI3y927pok
+Message-ID: <CAHd3fE8xHMq4Eb7NsP+ofBzUch6AsTNfb7Fo5pU+qopiXZsM1Q@mail.gmail.com>
+Subject: Razer PWM PC Fan Controller (1532:0f3c) - guidance on potential
+ upstream hwmon support
+To: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 11/11/26 22:01, Wayne Ho wrote:
-> The description of the periodic measure mode says that "the alert
-> attribute" is set when a reading exceeds the configured limits. The
-> driver has no such attribute, and never had one. The alarm state has
-> been exposed through temp1_alarm and humidity1_alarm since the driver
-> was added, which is also what the sysfs interface table further down in
-> the same document lists.
-> 
-> Refer to the actual attribute names.
-> 
-> Fixes: 7c84f7f80d6f ("hwmon: add support for Sensirion SHT3x sensors")
-> Signed-off-by: Wayne Ho <wayneho219@gmail.com>
-> ---
->   Documentation/hwmon/sht3x.rst | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/sht3x.rst b/Documentation/hwmon/sht3x.rst
-> index 4f67671eb0c..3c022c058be 100644
-> --- a/Documentation/hwmon/sht3x.rst
-> +++ b/Documentation/hwmon/sht3x.rst
-> @@ -78,11 +78,11 @@ The allowed update_interval in milliseconds are as follows:
->   
->   In the periodic measure mode, the sensor automatically triggers a measurement
->   with the configured update interval on the chip. When a temperature or humidity
-> -reading exceeds the configured limits, the alert attribute is set to 1 and
-> -the alert pin on the sensor is set to high.
-> +reading exceeds the configured limits, the temp1_alarm or humidity1_alarm
-> +attribute is set to 1 and the alert pin on the sensor is set to high.
+Hello Guenter and hwmon maintainers,
 
-Just replacing "alert" with "alarm", as below, would do the trick as well.
+I hope you don't mind me reaching out with a question regarding an
+existing community driver.
 
-If you resend with those changes, I'll apply it, but for the future please
-refrain from sending cosmetic patches. If you want to contribute, please
-consider fixing real bugs.
+I'm a Linux user interested in getting proper support for the Razer
+PWM PC Fan Controller (USB HID, VID 1532:PID 0f3c), an eight-channel
+fan controller that currently lacks an upstream Linux driver.
 
-Thanks,
-Guenter
+Some promising community work already exists:
 
->   When the temperature and humidity readings move back between the hysteresis
-> -values, the alert bit is set to 0 and the alert pin on the sensor is set to
-> -low.
-> +values, the alarm attribute is set to 0 and the alert pin on the sensor is set
-> +to low.
->   
->   The serial number exposed to debugfs allows for unique identification of the
->   sensors. For sts32, sts33 and sht33, the manufacturer provides calibration
-> 
-> ---
-> base-commit: 44c8ceae2dd3ae536c5f4f956cedb24c157aac23
-> change-id: 20261112-sht3x-doc-alarm-attr-118ddfebc6ae
-> 
-> Best regards,
-> --
-> Wayne Ho <wayneho219@gmail.com>
+- Original experimental driver:
+  https://github.com/SlimRG/razer-pwm-pc-fan-hwmon
+- Pull request addressing USB communication and stability issues:
+  https://github.com/SlimRG/razer-pwm-pc-fan-hwmon/pull/3
+- More recent fork with Bazzite/Fedora integration:
+  https://github.com/ANeuen/razer-pwm-pc-fan-hwmon
 
+The author of the last fork reports successful operation with
+CoolerControl on Bazzite, including tests involving USB disconnection
+and reconnection:
 
+https://github.com/openrazer/openrazer/issues/1809#issuecomment-6838865434
+
+The driver exposes fan RPM readings and PWM controls through the
+standard Linux hwmon interface. However, earlier versions experienced
+communication and stability problems, and the current implementation
+still requires external kernel module compilation.
+
+I am not the author of the driver, and I cannot claim that the
+existing code is ready for upstream inclusion. My intention is simply
+to help bring these efforts to the attention of people with the
+appropriate kernel development experience.
+
+Would a USB HID driver exposing standard hwmon attributes be a
+suitable approach for upstream support of this device?
+
+If so, could you suggest the most appropriate next steps for the
+existing contributors, particularly regarding stability testing, error
+recovery, PWM safety and preparation for an eventual upstream
+submission?
+
+Any technical guidance or pointers to interested developers would be
+greatly appreciated.
+
+Thank you very much for your time and for your continued work on Linux
+hardware monitoring.
+
+Best regards
