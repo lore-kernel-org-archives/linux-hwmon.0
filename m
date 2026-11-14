@@ -1,76 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.39
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794638672;
-	b=W4hcv5iNCAF54azmXsAb0l5j+LgmMA3UBrAEoeg7FhaqUTAgXE1wWAJbv2FQPK5id2L3
-	 9VwgGjhsiG0upAm5okzFU+1wJGXRs4fKAm227mpaMJzW5tcsP0YqvjmLunqhjYxoKtbQ7
-	 3NZO8MpuFISsyyHwLhdfu6ynePX2+at3juVH3Nsp5/TlklxZ8PnbDSuBr3EmH0zQgWOXm
-	 lFjsahZ83X2gWyuJ5If0cBYK6i5vuEkc+t/TaQii4JeIkVjEnxSKym86fxE15S4rkg8ef
-	 9HOe/Hnl0rE9i3+CnVfCjdsKLUqn0KYwWIuhDLEFqp3x5kqi7S8pbWhdMRGjaXK0ZPg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794638672;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
-	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
-	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=aL543kydGu3Z9WJl9D/pxWL683tGWWiFwX80/nLuatE=;
-	b=S105gj4eF9d7dRadiQN4O+2CIYRAtJ/w+tCeDe5IWURDGP8YqqquTIs6IuKUV8KrBYaL
-	 Z5NeVQLiCelaISIJefdU8w+Yf2I4vo6rIiQDz8ksLur1zr8m5Wp01rokMevCPE5tcnRjk
-	 LUkTh7lyYq55mooweZoYnPtzSHEPAyXyQJmQiBB7NgK0mUVxDIds8W/rdL+LZLDIqFRx1
-	 jiKVeuHpURnYWTHur+0Js8ZX8jvBhXhreNtVRpO6nJimJWwkMhkyJvSbNLVgfxZPlCAjh
-	 ROXQprCmgU/R9uhaknhtHtRm0LLZ3IvcDu5LDcHYRFe3AlPMGnM06SZJxB98e+zRTgw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=YIjZpVUk;
-	arc=none smtp.remote-ip=35.89.44.39
-Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794649033;
+	b=vqU+hk0l4+UE5yVZkREL7y1DjIM+khmzKlMyqh8O+Lu+rGT5mltmeF1Z1eXk9BMkB0pC
+	 CskUFQU9RyMKaS+nCcEE/V7/IxKjoF5PF59CaXPd7MJv1pxAvThL/883fOhBa/cMz/WAI
+	 lDVCGJHnaCGU+xiig+fi3xGBIEIwhBgX6i05mMDmxrqsF79wybLmADETQOjqjTsxLQsHK
+	 pLz4SZ4eysjTmW9T9293f7HPIActYZhL8JzGWvxebJDfEbU5dFRS1q9bnHCvX8XBLH6XF
+	 tKXVKzo86a/r/46RHAMaNKrLVATlBWcaFOwhbtPcQKxyBSCSsPuKlrZ38sDh5U+7QLA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794649033;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=LVmatjt0Kpf1teZNpyx311evR/TYigEPlZv/+0j5x0Y=;
+	b=DDYc/akq30GzUd6eM4n2zCeyGywh4e9TdbqWrAeOnPWl1rQqg7NfLY6qC3B6Yc4bf1VJ
+	 UmXoF5dWf69cmdgt24F16zSJIv6hKsK8ioOGwfOi3Pyn9I8mCDRwJmHBG9hGikNzq4KDV
+	 cT6aiASxMivgj0B/tPBmlhoWQAaL2PDE+IL98vyJ3e7ooNI9tsCrCKuWrh47Z6TcCvup5
+	 5tYp4IFpO2bGO7ipby52zmgruiBJMpAAFy1/8ysOl3m8WrmtRb/N2MffsqgEKW1NFGkUu
+	 fCnUGWzvh6foRe2GTb1Q1aJlL2ZGeRcNwMSR6EvGbpqTe4ywlX44JyAybAVFeZh9AgQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VCSTWvGH;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB26C606A337
-	for <linux-hwmon@vger.kernel.org>; Sat, 14 Nov 2026 06:44:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB26C606A337
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 266E5606A323;
+	Sat, 14 Nov 2026 09:37:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=YIjZpVUk
-Received: from eig-obgw-6006b.ext.cloudfilter.net ([10.0.30.211])
-	by cmsmtp with ESMTPS
-	id RzKRxcyCtyb4YS7V1xdzOF; Sat, 14 Nov 2026 06:44:31 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id S7V0xHT8gFhzrS7V1x6vkn; Sat, 14 Nov 2026 06:44:31 +0000
-X-Authority-Analysis: v=2.4 cv=JY+8rVKV c=1 sm=1 tr=0 ts=6af8034f
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=VwQbUJbxAAAA:8 a=BDRlbv-OHeEz9Lyx7CoA:9
- a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=aL543kydGu3Z9WJl9D/pxWL683tGWWiFwX80/nLuatE=; b=YIjZpVUke8MslLUsS1TpjXa7KE
-	olL0ba4Yh7r1QIXKf6Qq96ygKVX/d2bmJ9/XjtBKLIxkaPKt+7C0aDKzQbG+FUgAmE3MC9EJ++qOa
-	JoH+Uls/t9V3qBBIaT0F1tbfDzEO9Vpll+KLeeV6y0W10rAGoYkJP17W6OEwxFcsmHn/XZKnWWLN3
-	oycJzNjZnn8QAqoGClUV+rMmhsLYNbd0BviwAKSwn03GVm7sOx86L65eAj0dOvOfcAoK1fwRO00SW
-	lzHn2wCMUYjDZ0uCT+OkkV+3ab/XLs+9914k9BlDpb8LEHhjQmwUE319CC2FbMhh2ZTHgTWNIxVvW
-	WiB1OMHw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:38024 helo=server.roeck-us.net)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xS7V0-000000000he-2pAy;
-	Sat, 14 Nov 2026 12:14:30 +0530
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v7.4-rc3
-Date: Fri, 13 Nov 2026 22:44:29 -0800
-Message-ID: <20261114064430.2779677-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VCSTWvGH
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1794649032;
+	b=qUAuv4brtcH8cHKz39ppAMs8tC6+zlcKkkN7i0SFUKQu9Sl4qgYMmyvo+QqwTli2KlUC
+	 xCJ5T/Xt+UWtQKzqbeUvYllt+MHK5sx8WRgtotXbUPps4VP4AJuwXeJe7tn3NfeuGFCzv
+	 L72qbjkwmubf47DZVUilFbx9kTuedo9Gi91YdC4Q8I6yU7PyLv1csLDRN/k4IKJh6Ttww
+	 rpU47t/P/NPAGeLRONoyCZdK5QPoa83HxIeE2ldV4vCRP1wgEG4yZ8tha7zLtcmXVcIKt
+	 LyERu+JZpBy+h9+Hqu9rB9ISJsUGtfNi6wqu31uwHyDSHOrDV4z2brcJ9Ul89uU1diQ==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1794649032;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=LVmatjt0Kpf1teZNpyx311evR/TYigEPlZv/+0j5x0Y=;
+	b=nhUPlDm/m9Rvyvws/+ozS5HeI56fDFPNeWyLZlsRTtQpXIx7iwXYCiiXi7nw9AHwLoik
+	 IuHtYpg8y+sAU4i6iOTDBHRVlpI5w7SQQWObn1wXHrJo7Kqh4hW60uoXfhJwko7Is4b9v
+	 iI3RI+qxSWjMFfvwdug9l60JlnWZpU2HjGBBbuCM7RW4Ff/WQ+FaoLGBZszs4CsGPVH64
+	 8ZBp8k7UMbrw7LFFM6ahfqdJ3neQhd192Ob5lOH38CQOf4titeTOIWbx0Pxzje9KcI8CF
+	 dNdHUqHnK53fm5JA4oe6yuV5zVBib+fRxNIu/eudizwgVCWMWbVe4rZBFGTM1J3j/2w==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 53E5F1F000C4;
+	Sat, 14 Nov 2026 09:37:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794649032;
+	bh=LVmatjt0Kpf1teZNpyx311evR/TYigEPlZv/+0j5x0Y=;
+	h=From:Date:Subject:To:Cc:Reply-To;
+	b=VCSTWvGHTh/0Hom/YWP39/gmX6A5ofRy/cVaDzDo71kn2esSmm2XdM+dDU56Axg47
+	 C4lgGgstfFDG9wpiHExHvfQ6hEfI7B6p+Tn+5mbMveo+Puj9IHr6b/LUmtsKdzy7Ww
+	 uX1PV1i6QntieUgfAu7yni0rMwqkwtmjPYbZJMIy2yW7pTVBzLXACvIePD8S8XwoZ3
+	 28SSq0QCT6ta4VR55Z4jROOMVSIMwYwgYMMhcSVJNlwMivCt0JfO9AHJgzN95lO6yU
+	 ejMvGBG2uXPwaaoV1YPuTC+b8z4g4ohnbZpdCXGmRx9ZrSh+KPG6ZQLbh+7ON1bzgZ
+	 XGl5KpxxXIE6g==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id A53C149D2F;
+	Sat, 14 Nov 2026 09:37:11 +0000 (UTC)
+From: Samuel Herdman via B4 Relay <devnull+lk.gzpc0.passmail.com@kernel.org>
+Date: Sat, 14 Nov 2026 20:37:11 +1100
+Subject: [PATCH] hwmon: (nct6683) Add customer ID for ASRock X600DC-ITX
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -80,103 +82,110 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xS7V0-000000000he-2pAy
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:38024
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 33
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfDo1qyib5idqn1mjkbmVUR1Z2f0siPWNgf074xmNjD660MpXNdzhGPLXUmMN8i+WG4oyaTew+BQzshc9V8CQ+c/9Lq/nmgWRASg8SHJAkCvXFKgFc4q5
- QkOIDwih8mL/WFUiTbilWcgfiOLHN8o0LlFTGsyL1b2VS9JlzvBZtBfZaS0f0Vg78CQIP0ASNgWx+tZw3ZX7tmUolYHdsRrxR/R5tJvoBEeLU+XtRVRiG5r7
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261114-nct6683-asrock-x600dc-itx-v1-1-cbccf1a627fe@passmail.com>
+X-B4-Tracking: v=1; b=H4sIAMYr+GoC/yXMSw7CMAwA0atUXmMpbkr4XAWxaB0DBilFcUCRq
+ t6dAMu3mFnAJKsYHLsFsrzVdE4NtOmAb2O6Cmpsht71gYgGTFxC2HscLc/8wBqci4xaKvpIu2l
+ wh+i3Hlr/zHLR+nufzn/ba7oLl+8Q1vUDqnQOyX0AAAA=
+X-Change-ID: 20261114-nct6683-asrock-x600dc-itx-3d17b409d353
+To: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Johan Dahlin <jdahlin@gmail.com>, 
+ Samuel Herdman <lk.gzpc0@passmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794649030; l=3221;
+ i=lk.gzpc0@passmail.com; s=linux-kernel-email; h=from:subject:message-id;
+ bh=r00174raxcwNDJ0unlfuiA9FEN/TRz6+o/AOvvcTaUE=;
+ b=r/OEHth9ckNwibOkJ4agSSH0EI4C5VV6R/ALYCm8m8Mc4qhxhGiCaD8JxZVzYX7weoH7ZenUu
+ DPTXBRBQ7lxA8ovEtGlACvNNRP4QcttEk0GCMTOxvzTvD2l1tH/7fdp
+X-Developer-Key: i=lk.gzpc0@passmail.com; a=ed25519;
+ pk=tqivbAq+N5SMZTlmU8VfcD5yzezM4r5J8zXeFSl+KIE=
+X-Endpoint-Received: by B4 Relay for
+ lk.gzpc0@passmail.com/linux-kernel-email with auth_id=1519
+X-Original-From: Samuel Herdman <lk.gzpc0@passmail.com>
+Reply-To: lk.gzpc0@passmail.com
+Content-Transfer-Encoding: 7bit
 
-Hi Linus,
+From: Samuel Herdman <lk.gzpc0@passmail.com>
 
-Please pull hwmon fixes for Linux v7.4-rc3 from signed tag:
+The ASRock X600DC-ITX (BIOS 2.02) has an NCT6686D with customer ID
+0x165f, which the driver does not know, so it only binds with force=1:
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.4-rc3
+  nct6683: Found NCT6686D or compatible chip at 0x2e:0xa20
+  nct6683 nct6683.2592: Enabling support for unknown customer ID 0x165f
+  nct6683 nct6683.2592: NCT6686D EC firmware version 1.0 build 12/23/25
 
-Thanks,
-Guenter
-------
+The change:
 
-The following changes since commit 7475ea8b58616b33c04afb976cf0fbaad9dd63fb:
+Add the customer ID so the driver binds on this board without force=1,
+and add the board to the list of tested boards.
 
-  Linux 7.4-rc2 (2026-11-08 16:22:20 -0800)
+Tests:
 
-are available in the Git repository at:
+- With force=1 the readings are plausible: the CPU temperature (AMD TSI
+  Addr 98h) is within a few degrees of k10temp's Tctl, VCC, VSB and
+  AVSB read 3.36 V, VBAT reads 3.2 V, and fan1 reads about 1450 RPM.
+- With the same change applied to v7.3.3 on this board, the driver
+  binds without force=1 and reports temperature and fan readings.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v7.4-rc3
+The patch and this changelog were drafted with an AI coding assistant
+(Claude Code); I reviewed them and ran the tests above on my board.
 
-for you to fetch changes up to b5c5b67e02406fb48acf57cf2c30a570230fd6aa:
+Signed-off-by: Samuel Herdman <lk.gzpc0@passmail.com>
+---
+This overlaps with Johan Dahlin's pending series "hwmon: (nct6683) Fan
+control and sensor names for ASRock NCT6686D boards" (v2, 11 Nov 2026).
+Its first patch also adds NCT6683_CUSTOMER_ID_ASROCK8 (0x164a) and a
+table row at the same spot, and its later patches key fan control on
+that macro. Whichever lands second needs its macro renumbered
+throughout; I'm happy to rebase on top of that series if preferred.
+---
+ Documentation/hwmon/nct6683.rst | 1 +
+ drivers/hwmon/nct6683.c         | 3 +++
+ 2 files changed, 4 insertions(+)
 
-  hwmon: (aht10) Fix update_interval overflow on 64-bit (2026-11-13 12:08:12 -0800)
+diff --git a/Documentation/hwmon/nct6683.rst b/Documentation/hwmon/nct6683.rst
+index 62da8fd01..e2e95a33e 100644
+--- a/Documentation/hwmon/nct6683.rst
++++ b/Documentation/hwmon/nct6683.rst
+@@ -97,6 +97,7 @@ ASRock X570			NCT6683D EC firmware version 1.0 build 06/28/19
+ ASRock X670E			NCT6686D EC firmware version 1.0 build 05/19/22
+ ASRock B650 Steel Legend WiFi	NCT6686D EC firmware version 1.0 build 11/09/23
+ ASRock Z590 Taichi		NCT6686D EC firmware version 1.0 build 01/25/21
++ASRock X600DC-ITX		NCT6686D EC firmware version 1.0 build 12/23/25
+ MSI B550			NCT6687D EC firmware version 1.0 build 05/07/20
+ MSI B550M			NCT6687D EC firmware version 1.0 build 05/07/20
+ MSI B650			NCT6687D EC firmware version 0.0 build 09/27/22
+diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
+index de5b0194c..01784fa6a 100644
+--- a/drivers/hwmon/nct6683.c
++++ b/drivers/hwmon/nct6683.c
+@@ -209,6 +209,7 @@ superio_exit(int ioreg)
+ #define NCT6683_CUSTOMER_ID_ASROCK5	0x1621
+ #define NCT6683_CUSTOMER_ID_ASROCK6	0x1633
+ #define NCT6683_CUSTOMER_ID_ASROCK7	0x163d
++#define NCT6683_CUSTOMER_ID_ASROCK8	0x165f
+ 
+ #define NCT6683_REG_BUILD_YEAR		0x604
+ #define NCT6683_REG_BUILD_MONTH		0x605
+@@ -1640,6 +1641,8 @@ static int nct6683_probe(struct platform_device *pdev)
+ 		break;
+ 	case NCT6683_CUSTOMER_ID_ASROCK7:
+ 		break;
++	case NCT6683_CUSTOMER_ID_ASROCK8:
++		break;
+ 	default:
+ 		if (!force)
+ 			return -ENODEV;
 
-----------------------------------------------------------------
-hwmon fixes for v7.4-rc3
+---
+base-commit: f9f5501d60c77c71f60bf5b273375e3777d66080
+change-id: 20261114-nct6683-asrock-x600dc-itx-3d17b409d353
 
-* Read tracking-mode voltage fault limits dynamically in the mp2975
-  PMBus driver instead of caching probe-time snapshots, avoiding false
-  over-voltage alarms when CPU voltage changes at runtime.
+Best regards,
+--  
+Samuel Herdman <lk.gzpc0@passmail.com>
 
-* Fix SCMI sensor probe by enabling supported sensors via firmware IDs
-  before exposing channels and checking channel config allocations.
 
-* Fix runtime PM enable and reference count imbalances during probe and
-  teardown in the gpio-fan driver.
-
-* Fix max31760 fan controller initialization and reporting, including
-  leaving standby at probe, initial 0 RPM reporting, and swapped
-  temperature limit registers.
-
-* Assorted minor sensor reading, interval clamping, and register
-  handling fixes in other drivers.
-
-----------------------------------------------------------------
-Anton Lundin (1):
-      hwmon: (nct6775) Handle dual use registers
-
-Felix Radensky (1):
-      hwmon: (pmbus/mp2975) Get vout fault limits dynamically
-
-Guenter Roeck (1):
-      hwmon: (gpio-fan) Fix runtime PM imbalance in probe and teardown
-
-Pablo Mazzini (1):
-      hwmon: (sy7636a) fix negative temperatures
-
-Rupesh Majhi (1):
-      hwmon: (aht10) Fix update_interval overflow on 64-bit
-
-Stanislav Aleksandrov (3):
-      hwmon: (max31760) Fix the local temperature limit registers
-      hwmon: (max31760) Leave standby mode at probe
-      hwmon: (max31760) Report 0 RPM before the first fan speed measurement
-
-Sudeep Holla (2):
-      hwmon: (scmi) Check channel config allocation
-      hwmon: (scmi) Configure sensors before exposing channels
-
-Xu Rao (1):
-      hwmon: (scmi) Enable temperature sensors using their sensor IDs
-
- drivers/hwmon/aht10.c         |   2 +-
- drivers/hwmon/gpio-fan.c      |  24 +++--
- drivers/hwmon/max31760.c      |  12 ++-
- drivers/hwmon/nct6775-core.c  |   6 +-
- drivers/hwmon/pmbus/mp2975.c  | 207 +++++++++++++++++++++++-------------------
- drivers/hwmon/scmi-hwmon.c    |  25 ++---
- drivers/hwmon/sy7636a-hwmon.c |   2 +-
- 7 files changed, 150 insertions(+), 128 deletions(-)
