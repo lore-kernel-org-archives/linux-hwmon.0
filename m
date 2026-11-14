@@ -1,80 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.33
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794675281;
-	b=Z8srCAQnVjPXh2JtCtEBKFSvAw4NdefZIzO9zdjuwDeB8qUXJOyioL/LQK5NX3H+88h8
-	 R/5UmSnHgaqH0WbJzXDF90Eh8cP9jWBmIFm0L22TEOB4bBPkhuv828nZwlWp+M1IFFFGZ
-	 cqKKZ2FCOUI+Cdw5fUziHLlqj/IqjuJxwN8V1LQHEx0xwRBECqLOlTNGTiutoJIVV6GuW
-	 9aGTzYhkRYYlp6F+I78ZrP1s9gCDVMhkTlGllNB8biDaxrs/OrpDYY5XoL1TGJz7UpEPA
-	 vWwT8POgoGdy+6UsleywvseAyO1Fv6OnzpOpt7FfHHlTNWnBwrIbCN6UdpOfszMLJrg==
+	t=1794677992;
+	b=ErZ1GAuNhGsKVRzTkKgrYWWrnxxlIvoZye1RplJdm3B1wSfKAX0l8QwdwXWPFZssvz0e
+	 hCOsVe25vWLtrDRFlRydjEs/+WDuJ9tQs20e6G2Trl07FJt5KfGLJVoEamnfN9jWqXj0a
+	 cKYf8yXtT2i0SK9aMrZwIyoKkT5mStDX5RVHgEbgkV25hUfkPuNM5OjZb+aiE4CO2BN4D
+	 /CvG7M8BXtwne5TtE4FXvGbTgiswaa+A5Sj7HTU7S2a23VpgijXOeFpiR7J/StkNwcAM8
+	 fXLqB7JxFK+ITJyKb7UIlM/NztxW7xtZUtHGGK543GqRBRTIkFXYlytEydRQE/cXHoA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794675281;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
-	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
-	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
-	 X-Local-Domain:X-CMAE-Envelope;
-	bh=n5UsVPtZvhQiUvUeNRBWwsmppzZEReyOurASB6aSeh8=;
-	b=0AwibNUk0uRA7wmT8QqZipI2dP5spV213tUltiBNyqPRmdWUOX1rYPNM8EMzFdOiXyJU
-	 d9nDODvk6Fee7HtGc3c9cvRhP9h+hmV4q8kgyIHMwTxgDI9YpQi7IT1aSwHXbv70kOdwi
-	 OPkusb5GqRA9RVF69ggcAGwqpk2pSI1K+LV2fnETziECy3u4okJ66RCi/B6xvlCiGs8YI
-	 JuYsBebDZW51/+K/HDXnRiZTHRnYM13HQEhF2SPeJfGfWDu+PQPWpa3+IEnEmX68ClYkC
-	 qWmyWHYAlwX2NtEkBLcX66chP/+kubvzczYPLRLBGGbgRn9YNZOy2IfguLLql31GSrQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794677992;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key;
+	bh=XZ4jEuzVPhQxDlu9ccpWTmq5Uzqra9S6JEfPfNphmHc=;
+	b=qXfsfxP3Rds4v0VZhor2pKd7ojeBdp3KXfqZFNTruuD13+/mzT7nGmWDETVIFzpZxJEP
+	 87hyQcnJ+Bp4zhXSfllLO9yxbeCbVPA1M3lSoEjzTLvT5AEqRC3CBy97ziL1W9cJ0S3Av
+	 vW2PpftKZcpXyBW6KZuFi1j8aiQzK8bmXB9szCISovKNu7RqxJ6N/eJXyDzS/Hrg7cQ6c
+	 4xU8eceRglXiZtUfcLZTPqHP8b4wuIL6iFfyeBajB7KcPyz/cnMMo327swQTjzBbwbK+L
+	 t8aWCHBlblwSP1suM6uCfkzLhXLi2XC/zsOHuy6/2PfwLQc4jYVi1H7wdP76Khb43+g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=Mhn270Wx;
-	arc=none smtp.remote-ip=35.89.44.33
-Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lTQSU8uV;
+	arc=none smtp.remote-ip=209.85.128.178
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1234B606A327
-	for <linux-hwmon@vger.kernel.org>; Sat, 14 Nov 2026 16:54:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1234B606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD931606A330
+	for <linux-hwmon@vger.kernel.org>; Sat, 14 Nov 2026 17:39:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DD931606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=Mhn270Wx
-Received: from eig-obgw-5003b.ext.cloudfilter.net ([10.0.29.155])
-	by cmsmtp with ESMTPS
-	id SAYExqDBCAR1iSH1UxOGVC; Sat, 14 Nov 2026 16:54:40 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id SH1UxzxjeSgq1SH1UxTxne; Sat, 14 Nov 2026 16:54:40 +0000
-X-Authority-Analysis: v=2.4 cv=c8KrQQ9l c=1 sm=1 tr=0 ts=6af89250
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8
- a=CTxgCXsYzwGYwadptLEA:9 a=CjuIK1q_8ugA:10 a=ZXulRonScM0A:10
- a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=n5UsVPtZvhQiUvUeNRBWwsmppzZEReyOurASB6aSeh8=; b=Mhn270WxrsvwR0XKkiCAka/6g0
-	8RYgA4rLnAH4/dcm6iIHaDYcqOoF+DAIWqGXUji8+ajq4FHCLkmIRSGevPO32b5FC+yZ5t3Lmo+Hj
-	VjXOIA2nRU3ARhjjZV53jSFXVgVagKSOYYz6DwcvXE6WLks7mhx1yvU+rFeHfPcjTCpu9Rf1f8Jz9
-	Y+iX1ttgu0B5BYC/jN3cxRL2PZlG+djFRuvnimPlugzxCPdTgWSUvODGTOSPemBY9ZEzCdebpRK4p
-	ixRghwxFvbdTZwoSmmMHEsF8vIuOhmkia2zksl1r+eaWw30UWo6UU1gRK12I/6CesDrSsBxFy6SZ8
-	6U4UrUEw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:41990 helo=server.roeck-us.net)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xSH1T-00000000Pyj-3jJB;
-	Sat, 14 Nov 2026 22:24:39 +0530
-Date: Sat, 14 Nov 2026 08:54:39 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Shady Abu-Hussein <shady.abh@gmail.com>
-Cc: Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] hwmon: (dell-smm) Add Dell Pro Precision 7 16
- PW716260 to fan control whitelist
-Message-ID: <996a06e5-3b2a-4cf7-aa27-49bfb896e725@roeck-us.net>
-References: <20261111172707.84072-1-shady.abh@gmail.com>
- <20261112160447.136279-1-shady.abh@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lTQSU8uV
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-8b305d38bafso15399277b3.3
+        for <linux-hwmon@vger.kernel.org>; Sat, 14 Nov 2026 09:39:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794677991; x=1795282791; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=XZ4jEuzVPhQxDlu9ccpWTmq5Uzqra9S6JEfPfNphmHc=;
+        b=lTQSU8uVsfdWtv5lFWi8oI96fpZ7chFSLTW1MkdhL2aJM/YWp0P8h8pJQH3FsIMGuL
+         9tqgmuPMG1HHCbeNdpj+ZsyiAA03hdYCisY04HbNyU9h8VomIWFukyO/rcQUSDYJPc4X
+         v6Vu4vfIFHSXQpg3rzDf9M62DuDOPXw/99EQRXowFGIASxR278XNQg2O4d7JiXJjZ1j3
+         UMapZXz6AavCH5LjAoySZTpN62kZ6eWeVaKyAfr7afZItxTqpHS31C0dC3tALYAASwmW
+         OPgqMPsnyop+TOt1J35ozAw8FytaUL0YPubxz3YhO7TpLBTQWd0mkrjUJWmysRDDrpV+
+         qi9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794677991; x=1795282791;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=XZ4jEuzVPhQxDlu9ccpWTmq5Uzqra9S6JEfPfNphmHc=;
+        b=ZbVH1LYuX6QSK0iJ0jtlkgqnznPDLiBrp1bnIttr5CGvlYPNKGPGPlcP11VAY7gxgz
+         mQDL0OsCQD8xanAVIFvLDAEGbAu/70zhodwxgtgLTnFL2lsVGHmHsNwB2hGZG0dIi0TO
+         Dz/APRnpnEXfuXMWWcmv7EXS7j8XN7F7rt6d8989xEY9BVYj4AJvEwMzykVeJq5aUf7s
+         fF7bS5zGEItm8qzgmiV5sqQq7YcvRLXtVetdNqFNDmYtv8sNawVT3PIntzKUj+RQU/R5
+         A4CGrwBeBwJA9FOKWrVSFwEFzlqxvh3+f4VISV9gqff+9Gl7ASe+V/FcY2IWEPvva5yT
+         CUrw==
+X-Forwarded-Encrypted: i=1; AL+hErFqsMOmhaAwHMe4GtIxcphjBokX9prmSzDsHtaJOno7abXELvxkz9TE5JEXep85FrzgTUBtEglmxiXJzQ==@vger.kernel.org
+X-Gm-Message-State: APuU4Z/vldu2tfSyT/KwtCYFBYGgXrxzkj0n+h6IJoN1bsMWzkgOC5yx
+	L/fr29zMEMx68JnPmXy0nAnf44dLO0pR+CeDvnGULU8PCCP6T1bOJkau
+X-Gm-Gg: AYBFou3EkVu/EEot59JLX+KOMWAezXph0+bmVOJCFHHol1EegYBGCETaEZWv8pjm/lr
+	NThRtsz9q30iRFLn+oDTvtR7MA/PAgZq3ovcWdTSdMLlLJ5E/3mkGb3WsXs35QwnrbA9+rxUduV
+	HXgStVb1PVz5ex8tG/qdaKGgaLDPhY9g353EM1yIAshebKPDfcpxv0updWm39Jq33niGRdUFlsi
+	TpGgGW3zras+QFPm8/5IxKYFaA2K6+4TWu6k6bxh7WP/xST4SEdXCs/xoEMAgZFflximjTz/g7l
+	i2qNsDI06B5k11PE7ansYSAoEiqNjV/ABl7BCy4nGCSqu1znykGImCizD2r4xuXJG8AoNsAErcc
+	VTMGesG1GMXyQuvGcCzHBtFjdVR43hF9fr/CtjYKC0tr9qByUhKVPJu/uqacIY146cnKXXLvbLZ
+	dScFlo5sBITBNlw4dRIdMSwKnG9ogRgB22zHRkJve9NuYC+7lyeqKMV1J9CuT3HLScYQIbpZqKI
+	jD7XLS4WI52JZye7tJD8XeoiQQAToas3rrk/5okJ/S0eDlvVQG25Wj8e7yyDszdmwT9U/ss1KfJ
+	uCUuZV+SHqWr9mEXCqb2+mCcSprk04VirCTcoq88gGYntWfp5kcRgxyINDr8x/B67O2yn/Sd6B0
+	JSJCicrT2XeNjb7ByRdz8EXWgQRPbvyoGLvMDsRBBtwcKNJp3ylYZr7STU8dNsBM=
+X-Received: by 2002:a05:690c:f03:b0:88f:ccf7:25d9 with SMTP id 00721157ae682-8b4aa2f4a19mr36899437b3.60.1794677990741;
+        Sat, 14 Nov 2026 09:39:50 -0800 (PST)
+Received: from localhost (107-220-129-194.lightspeed.chrlnc.sbcglobal.net. [107.220.129.194])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b4aaa1361fsm47674277b3.43.2026.11.14.09.39.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Nov 2026 09:39:49 -0800 (PST)
+From: Matt Turner <mattst88@gmail.com>
+Subject: [PATCH 0/7] alpha: marvel: environmental sensors
+Date: Sat, 14 Nov 2026 12:39:46 -0500
+Message-Id: <20261114-marvel-env-v1-0-890328e4b7e5@gmail.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -84,49 +93,79 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261112160447.136279-1-shady.abh@gmail.com>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xSH1T-00000000Pyj-3jJB
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:41990
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 144
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfAXb/Xq5lYoKGubvho6chDBJvfKcipmY6Q0iswXjEpyfPHrH1yayEmCnHu4cYTY70XrdNWGBqawZnf/kHQJtjYTjxvboSclnUgF21sFh85w3M9iH8BUB
- uFmAcHadCkMo7HJ0MMwy5e1jqj6+/ZC78c7nWj2ljkBSVssXRPxjDQl7IPGfewMdfzStXhCRJyf77OvKwX7W7fmdx8NgiY7q1cWrjQn5UE+zt/Fjc9/YFUF3
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMTQ5AMBBA4avIrDXRVvxdRSyqBiOUtDQScXfF8
+ lu8d4FDS+igii6w6MnRagJ4HIEelRmQURcMIhEZ5zxli7IeZ4bGsy4RRalzmbVKQgg2iz2d36x
+ ufrujnVDv7wHu+wHOhOJ0bgAAAA==
+X-Change-ID: 20261114-marvel-env-d0289c736ba3
+To: Richard Henderson <richard.henderson@linaro.org>, 
+ Magnus Lindholm <linmag7@gmail.com>, Guenter Roeck <linux@roeck-us.net>
+Cc: linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Matt Turner <mattst88@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2461; i=mattst88@gmail.com;
+ h=from:subject:message-id; bh=RmT7r+x1GuIUeyBqSvzPUTJFmGQwU2dkow/VD15WaTo=;
+ b=owGbwMvMwCW25rVmCc8sv+mMp9WSGLJ+zHnMtu/Z2ta8jT+qZZPfi+980fYr1zhu/aEyEaenk
+ udant9+3PGRhUGMi2GmmCJL3HpFllltO5b6nJb+BTOHlQlkiLRIAwMQsDDw5SbmlRrpGOmZahvq
+ GQIZOkbxEDk9Bo3M4uLS1CLdtIIih7z8ksSSzPy8Yr38gtS8gvQCvbTMtJKMjPyi4lSgEXp5qSW
+ mro5uRoYGJpaOFmZOFo6mJs7OToZObo6Ozq5ORpbmJgbOlo4mrpbmDFycAjDXpNQy/Hc4faLU+0
+ xn/RY7N77NCzWu13abzV9y/MfbQwFJ5+TXu/Iz/I+3P5U3SVjrr9gnsYdmfMKKK9qqRQqXf7q4K
+ md92c1X2/kA
+X-Developer-Key: i=mattst88@gmail.com; a=openpgp;
+ fpr=3BB639E56F861FA2E86505690FDD682D974CA72A
 
-On Thu, Nov 12, 2026 at 04:04:47PM +0000, Shady Abu-Hussein wrote:
-> On the Dell Pro Precision 7 16 PW716260 the firmware fan control
-> cannot be overridden using the default SMM method, writes to pwmX
-> are ignored and pwmX_enable returns -EINVAL. The firmware AC fan
-> policy also requests speeds below the minimum sustainable speed of
-> the fans, so one fan repeatedly stops and restarts every few
-> seconds at low load.
-> 
-> Add the machine to the fan control whitelist using the
-> I8K_FAN_30A3_31A3 SMM codes. With this, writing 1 to pwm1_enable
-> disables automatic fan control, the fans follow the requested
-> state (0: off, 1: ~2500 RPM, 2: ~3950 RPM), and writing 2 to
-> pwm1_enable restores automatic fan control.
-> 
-> Tested on BIOS 1.5.0 with kernel 7.2.15.
-> 
-> Signed-off-by: Shady Abu-Hussein <shady.abh@gmail.com>
+The service processors of the Marvel AlphaServers (GS1280, ES80, ES47)
+monitor temperatures, fans, voltages and power supplies. Linux can't read
+these sensors, and the events the firmware raises when one changes state
+are printed only with CONFIG_VERBOSE_MCHECK, and then decoded wrongly.
 
-Applied.
+Patches 1 and 2 fix the event reporting. Patch 3 adds the SRM callback
+that refreshes the readings of one config tree node, and patch 4
+registers a platform device. Patch 5 is the hwmon driver, which polls.
+Patches 6 and 7 make it reread the sensors and notify userspace when the
+firmware reports an event.
 
-Thanks,
-Guenter
+The hwmon patches depend on the alpha ones, so I'd suggest the whole
+series go through the alpha tree with an ack from Guenter.
+
+Tested on an ES47, where sensors(1) shows the temperatures, fans,
+voltages and power supply alarms. No environmental event fired during
+testing, so patches 6 and 7 are only build tested.
+
+Signed-off-by: Matt Turner <mattst88@gmail.com>
+---
+Matt Turner (7):
+      alpha: marvel: report environmental events without VERBOSE_MCHECK
+      alpha: marvel: fix the environmental subpacket layout
+      alpha: marvel: refresh environmental readings through the console
+      alpha: marvel: register a platform device for the environmental sensors
+      hwmon: Add driver for Marvel AlphaServer environmental sensors
+      alpha: marvel: notify environmental events
+      hwmon: (marvel-env) Notify userspace of environmental events
+
+ Documentation/hwmon/index.rst         |   1 +
+ Documentation/hwmon/marvel-env.rst    |  64 ++++
+ MAINTAINERS                           |   8 +
+ arch/alpha/include/asm/console.h      |   2 +
+ arch/alpha/include/asm/err_ev7.h      |  16 +-
+ arch/alpha/include/asm/marvel_env.h   |  17 +
+ arch/alpha/include/uapi/asm/console.h |   2 +
+ arch/alpha/kernel/core_marvel.c       |  59 ++++
+ arch/alpha/kernel/err_marvel.c        |  39 ++-
+ arch/alpha/kernel/proto.h             |   1 +
+ arch/alpha/kernel/srmcons.c           |   3 +-
+ arch/alpha/lib/callback_srm.S         |   1 +
+ drivers/hwmon/Kconfig                 |  12 +
+ drivers/hwmon/Makefile                |   1 +
+ drivers/hwmon/marvel-env.c            | 633 ++++++++++++++++++++++++++++++++++
+ 15 files changed, 840 insertions(+), 19 deletions(-)
+---
+base-commit: 0b4cadbe7c39d830dec35c4a2655483de0dae568
+change-id: 20261114-marvel-env-d0289c736ba3
+
+Best regards,
+--  
+Matt Turner <mattst88@gmail.com>
+
