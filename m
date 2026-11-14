@@ -1,72 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.35
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.39
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794638423;
-	b=wftzwP2SIe2GelgdeA6egJN8BDmWqTUxxfdLiYFXE2kyyPDHSNrJGbrC68M+vfsA7j71
-	 uraERouSr1Nr9DGDc4g6NtbNHKbvzMeJI4hvigJOKVqDxyPFiJ+uHC4lQK78UZo2wS7sY
-	 AXJ8DjLJlzjB6pGuv9gWWCP9/KqTM4EkCenI3arp0uRC4+gQaBzj3Fh4ClIUvvikWX4Ke
-	 B/XnG3YtyN7agYgU1t5DYdw43D5U9MS0OhEoV4/KOjNBfZndlptZS9sNrLfOP5Z66S5rB
-	 3yb5jVqysrklKGLgZgR36KT8QXqv7/rPxGe15HA3lpH5EUNtPspQudMt7elzDVTx4IA==
+	t=1794638672;
+	b=W4hcv5iNCAF54azmXsAb0l5j+LgmMA3UBrAEoeg7FhaqUTAgXE1wWAJbv2FQPK5id2L3
+	 9VwgGjhsiG0upAm5okzFU+1wJGXRs4fKAm227mpaMJzW5tcsP0YqvjmLunqhjYxoKtbQ7
+	 3NZO8MpuFISsyyHwLhdfu6ynePX2+at3juVH3Nsp5/TlklxZ8PnbDSuBr3EmH0zQgWOXm
+	 lFjsahZ83X2gWyuJ5If0cBYK6i5vuEkc+t/TaQii4JeIkVjEnxSKym86fxE15S4rkg8ef
+	 9HOe/Hnl0rE9i3+CnVfCjdsKLUqn0KYwWIuhDLEFqp3x5kqi7S8pbWhdMRGjaXK0ZPg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794638423;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794638672;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
-	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
+	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
 	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
 	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=munElVZBrcu+Jft3HRVna7FRlAjoYAC5AW/VbIuGOFY=;
-	b=aonMQZh4lYewHF8CusruAvmucYkhjafEU/gLlIucUdsyw6Q0CactuL2lx5nc3Af1fmjo
-	 3u51iE+/FN1Lx/SIn0sofzXya3hvnl0+UoQ1JXR+h+laRhtERI4O2f4DP4Rvi7aRzPbyE
-	 CCX52knJlXB2QlMeBrGb6YKPcgtaT5S35KGgXdckSeQVuH6aiYSuk1iyrYWqruv+hHJMq
-	 Vb9bTZkGLWC/KwiiCP5WeoNXnPUK4uiAPCIndtteBeAo1t6LH+LEULRXk+MF3vzlEfhs3
-	 ObuNNcnuJBsc3h5iZlWfX2e5y6Esrz7LyHjhtJV83LdzUrRN4ZTvmH0rWuQrLCK0BUw==
+	bh=aL543kydGu3Z9WJl9D/pxWL683tGWWiFwX80/nLuatE=;
+	b=S105gj4eF9d7dRadiQN4O+2CIYRAtJ/w+tCeDe5IWURDGP8YqqquTIs6IuKUV8KrBYaL
+	 Z5NeVQLiCelaISIJefdU8w+Yf2I4vo6rIiQDz8ksLur1zr8m5Wp01rokMevCPE5tcnRjk
+	 LUkTh7lyYq55mooweZoYnPtzSHEPAyXyQJmQiBB7NgK0mUVxDIds8W/rdL+LZLDIqFRx1
+	 jiKVeuHpURnYWTHur+0Js8ZX8jvBhXhreNtVRpO6nJimJWwkMhkyJvSbNLVgfxZPlCAjh
+	 ROXQprCmgU/R9uhaknhtHtRm0LLZ3IvcDu5LDcHYRFe3AlPMGnM06SZJxB98e+zRTgw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b="Mn/utNdo";
-	arc=none smtp.remote-ip=35.89.44.35
-Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=YIjZpVUk;
+	arc=none smtp.remote-ip=35.89.44.39
+Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD8D606A323
-	for <linux-hwmon@vger.kernel.org>; Sat, 14 Nov 2026 06:40:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DAD8D606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB26C606A337
+	for <linux-hwmon@vger.kernel.org>; Sat, 14 Nov 2026 06:44:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB26C606A337
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=Mn/utNdo
-Received: from eig-obgw-6005b.ext.cloudfilter.net ([10.0.30.162])
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=YIjZpVUk
+Received: from eig-obgw-6006b.ext.cloudfilter.net ([10.0.30.211])
 	by cmsmtp with ESMTPS
-	id S74ixFiQCRiNxS7R0x9yrp; Sat, 14 Nov 2026 06:40:22 +0000
+	id RzKRxcyCtyb4YS7V1xdzOF; Sat, 14 Nov 2026 06:44:31 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id S7QzxO6sM0288S7R0xLHQf; Sat, 14 Nov 2026 06:40:22 +0000
-X-Authority-Analysis: v=2.4 cv=a5Iw9VSF c=1 sm=1 tr=0 ts=6af80256
+	id S7V0xHT8gFhzrS7V1x6vkn; Sat, 14 Nov 2026 06:44:31 +0000
+X-Authority-Analysis: v=2.4 cv=JY+8rVKV c=1 sm=1 tr=0 ts=6af8034f
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=p-LfKV-GAAAA:8
- a=y4plAFqO-4hS0y8kEXsA:9 a=QEXdDO2ut3YA:10 a=97BuGM4RKn6GwmfqMd6i:22
+ a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=VwQbUJbxAAAA:8 a=BDRlbv-OHeEz9Lyx7CoA:9
  a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=munElVZBrcu+Jft3HRVna7FRlAjoYAC5AW/VbIuGOFY=; b=Mn/utNdoviNi
-	MVvrUK3SjGTX7kARH94HXjA9NgnjWWEPAg+OBKTtnc2R2A0fSO54OAwMbDnqm6vldUafoVPS3cKhL
-	h/v2NBIf/DfJEybNlUrWaCqeZnNMlnh9T6E5SQmQ4ac/mOJVvnWWIoo0HcE09fmsWeyKVw8NreWWm
-	rMvxVwIiUzdvZ1v2Kj9zufDqh7NPySkIMfxm5jOWVQbg3h1+j6JIdGWz22Kf83tqni/xfoiVlFL2F
-	SLddaC4CAfvuNVbyAscPQV8lTUbhJeppqNLpVmJfL2B/BF4Dl759unx6BWOwLddx4sS+N5Kmql5dZ
-	UVH4xVuNPT2yu+19x4oC/A==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:48178)
+	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=aL543kydGu3Z9WJl9D/pxWL683tGWWiFwX80/nLuatE=; b=YIjZpVUke8MslLUsS1TpjXa7KE
+	olL0ba4Yh7r1QIXKf6Qq96ygKVX/d2bmJ9/XjtBKLIxkaPKt+7C0aDKzQbG+FUgAmE3MC9EJ++qOa
+	JoH+Uls/t9V3qBBIaT0F1tbfDzEO9Vpll+KLeeV6y0W10rAGoYkJP17W6OEwxFcsmHn/XZKnWWLN3
+	oycJzNjZnn8QAqoGClUV+rMmhsLYNbd0BviwAKSwn03GVm7sOx86L65eAj0dOvOfcAoK1fwRO00SW
+	lzHn2wCMUYjDZ0uCT+OkkV+3ab/XLs+9914k9BlDpb8LEHhjQmwUE319CC2FbMhh2ZTHgTWNIxVvW
+	WiB1OMHw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:38024 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xS7Qz-00000004Nzw-2muf;
-	Sat, 14 Nov 2026 12:10:21 +0530
-Message-ID: <c26e6dfa-c93d-4995-8d9b-69017c116e96@roeck-us.net>
-Date: Fri, 13 Nov 2026 22:40:20 -0800
+	id 1xS7V0-000000000he-2pAy;
+	Sat, 14 Nov 2026 12:14:30 +0530
+From: Guenter Roeck <linux@roeck-us.net>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v7.4-rc3
+Date: Fri, 13 Nov 2026 22:44:29 -0800
+Message-ID: <20261114064430.2779677-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -76,60 +80,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (lm77) Provide of_match_table to allow module auto
- loading
-To: Lukasz Majewski <lukma@nabladev.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261113130133.4094280-1-lukma@nabladev.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20261113130133.4094280-1-lukma@nabladev.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -138,61 +89,94 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xS7Qz-00000004Nzw-2muf
+X-Exim-ID: 1xS7V0-000000000he-2pAy
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:48178
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:38024
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 30
+X-Email-Count: 33
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfO2H975nY6Lvh4dVG9YxAjUpj7uEVc/HHGpmQcegIZF2RWou08NruaAR4LcUkGRDSpGVmcfn9dlB50nftjP1qLS54paZKuavv41ZVUx8BMiwGGJDY+LG
- UPsvoT1jdeAXox8vohFH5TxmiloP5TkfASu8ZSV0Nru9xuJeTutObuqKl5RPeXYFN7WCdLSeh27MJCX24KrNh8ST4C0Sdx+zQbMJ4jijWy0LwPZsrJ8nna+v
+X-CMAE-Envelope: MS4xfDo1qyib5idqn1mjkbmVUR1Z2f0siPWNgf074xmNjD660MpXNdzhGPLXUmMN8i+WG4oyaTew+BQzshc9V8CQ+c/9Lq/nmgWRASg8SHJAkCvXFKgFc4q5
+ QkOIDwih8mL/WFUiTbilWcgfiOLHN8o0LlFTGsyL1b2VS9JlzvBZtBfZaS0f0Vg78CQIP0ASNgWx+tZw3ZX7tmUolYHdsRrxR/R5tJvoBEeLU+XtRVRiG5r7
 
-On 11/13/26 05:01, Lukasz Majewski wrote:
-> When lm77 is built as a module and it is properly described in the
-> board's DTS file (i.e. with proper compatible) it is required to have
-> the in-driver compatible definition as well to allow automatic loading
-> of it.
-> 
-> Up till now the lm77 used I2C discovery fallback routine to bind it with
-> its name.
-> 
-> Signed-off-by: Lukasz Majewski <lukma@nabladev.com>
-> ---
->   drivers/hwmon/lm77.c | 7 +++++++
->   1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/hwmon/lm77.c b/drivers/hwmon/lm77.c
-> index 1f8402be599c..440dd91de39d 100644
-> --- a/drivers/hwmon/lm77.c
-> +++ b/drivers/hwmon/lm77.c
-> @@ -336,6 +336,12 @@ static int lm77_probe(struct i2c_client *client)
->   	return PTR_ERR_OR_ZERO(hwmon_dev);
->   }
->   
-> +static const struct of_device_id lm77_of_match[] = {
+Hi Linus,
 
-Requires "#include linux/mod_devicetable.h"
+Please pull hwmon fixes for Linux v7.4-rc3 from signed tag:
 
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.4-rc3
+
+Thanks,
 Guenter
+------
 
-> +	{ .compatible = "national,lm77" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, lm77_of_match);
-> +
->   static const struct i2c_device_id lm77_id[] = {
->   	{ .name = "lm77" },
->   	{ }
-> @@ -347,6 +353,7 @@ static struct i2c_driver lm77_driver = {
->   	.class		= I2C_CLASS_HWMON,
->   	.driver = {
->   		.name	= "lm77",
-> +		.of_match_table = lm77_of_match,
->   	},
->   	.probe		= lm77_probe,
->   	.id_table	= lm77_id,
+The following changes since commit 7475ea8b58616b33c04afb976cf0fbaad9dd63fb:
 
+  Linux 7.4-rc2 (2026-11-08 16:22:20 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v7.4-rc3
+
+for you to fetch changes up to b5c5b67e02406fb48acf57cf2c30a570230fd6aa:
+
+  hwmon: (aht10) Fix update_interval overflow on 64-bit (2026-11-13 12:08:12 -0800)
+
+----------------------------------------------------------------
+hwmon fixes for v7.4-rc3
+
+* Read tracking-mode voltage fault limits dynamically in the mp2975
+  PMBus driver instead of caching probe-time snapshots, avoiding false
+  over-voltage alarms when CPU voltage changes at runtime.
+
+* Fix SCMI sensor probe by enabling supported sensors via firmware IDs
+  before exposing channels and checking channel config allocations.
+
+* Fix runtime PM enable and reference count imbalances during probe and
+  teardown in the gpio-fan driver.
+
+* Fix max31760 fan controller initialization and reporting, including
+  leaving standby at probe, initial 0 RPM reporting, and swapped
+  temperature limit registers.
+
+* Assorted minor sensor reading, interval clamping, and register
+  handling fixes in other drivers.
+
+----------------------------------------------------------------
+Anton Lundin (1):
+      hwmon: (nct6775) Handle dual use registers
+
+Felix Radensky (1):
+      hwmon: (pmbus/mp2975) Get vout fault limits dynamically
+
+Guenter Roeck (1):
+      hwmon: (gpio-fan) Fix runtime PM imbalance in probe and teardown
+
+Pablo Mazzini (1):
+      hwmon: (sy7636a) fix negative temperatures
+
+Rupesh Majhi (1):
+      hwmon: (aht10) Fix update_interval overflow on 64-bit
+
+Stanislav Aleksandrov (3):
+      hwmon: (max31760) Fix the local temperature limit registers
+      hwmon: (max31760) Leave standby mode at probe
+      hwmon: (max31760) Report 0 RPM before the first fan speed measurement
+
+Sudeep Holla (2):
+      hwmon: (scmi) Check channel config allocation
+      hwmon: (scmi) Configure sensors before exposing channels
+
+Xu Rao (1):
+      hwmon: (scmi) Enable temperature sensors using their sensor IDs
+
+ drivers/hwmon/aht10.c         |   2 +-
+ drivers/hwmon/gpio-fan.c      |  24 +++--
+ drivers/hwmon/max31760.c      |  12 ++-
+ drivers/hwmon/nct6775-core.c  |   6 +-
+ drivers/hwmon/pmbus/mp2975.c  | 207 +++++++++++++++++++++++-------------------
+ drivers/hwmon/scmi-hwmon.c    |  25 ++---
+ drivers/hwmon/sy7636a-hwmon.c |   2 +-
+ 7 files changed, 150 insertions(+), 128 deletions(-)
