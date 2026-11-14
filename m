@@ -1,72 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.70.43.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794616903;
-	b=ACG5HLMZtF2E21OZAxBGqDDt48n/GpVyDtbH6FHvkocxJLYiQ384erTyy+oZtmxOYCNA
-	 Mj2Algc3ji7u6O0LIYCxh0u+cz5uPubeu9xDBeFQf3L4rby8wKeTHlVy4i10Qq3mJOT+v
-	 Kc34Dt+A7EAubw8MZ02hf23L8PBbazyPMwxM3iFq30tDk83sXb6W/26rpyZeqaCIdvVa9
-	 o0tGlaZPC+VH/vX+NuShpwRTL0Q/5XYGa5wORCAhkuzhP0/l2Id3XJKc7HkwZJY4bGNoG
-	 S6x7ARkyIxntHv6vJy6WPoRfCP+jJNa1ypMGYNvf3Xr+w7TbpFG0wRnSIrh0XM/qK6w==
+	t=1794617163;
+	b=3mo16K4Gj0ea6wpQHPRaoGsThfflUzeUGc613p3D5bp78BP//FuUzF7YToIYqxV1XDBO
+	 GRWO7gPdSZQrhEWyHUk5oP5M+5HLg1eKtzQRBRHy21KCSFXxQt5wteO9dy/WT+wVsZ8NO
+	 DstRjT10/ynzHotgUW/Emz6U8YqSAJeYkRcFKmLTLzHa8cohlSjQr3zXBW58grievwkIL
+	 VjeVUplhXuGq+EGUw7mO2NfghojZXdgFFeQNRQOJfNlA/BtwmyPRsUQRGUDDMKfES9Myw
+	 /WNL5TrzmSZWAC8llhxy1/JHaN3PYRVyWVBlx9Pb7Jomi8txFnk+GKnlb6mG2o4k4Bg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794616903;
-	h=DMARC-Filter:DKIM-Signature:X-Pm-Submission-Id:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=AQsGauJKdPhIbg7LjlfDdvI2RAVdzJHo8BYHlldEG5E=;
-	b=eQBGuLfbYyAx9d71chN+T55GOdUPeG9G5TUNET3IMJB9yf5tHv3eYI0YmXc7hOJn47Tt
-	 GeIP7c+QuJHS63yUkBbrIDKJxg6rtrfOid2eXXlfq8/ddQkIncd+MeKK3vVhWHchlnmrl
-	 BnoIAJMckCydcx1hl3JG7lF4WsxhjT2d/dbYt7LfzsYYIfGfCJbAeu27x7Xg1YrG/2C8G
-	 FB2AzwpuiLaeCuQl6gDV6DPdp6K+LfAXA4Gj+ksCBTBNHLvExXFvd1b9Qe/CAxddyGS4i
-	 Bw/D1utRCbSn67GuC2/m2i2PUXfcoYgZteNiXY82eRCBLK6Wi9iZHH5uuQtN3/aCXqg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794617163;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=siFKUSQ98d/aOk9+Ou6YXIP8DfN69LVHzc8AFLt7Aug=;
+	b=D7DTCF/iuz11vgo3kP2ZRiDtnw/Rv1Ov+V/MARBJ026G9IUTedCxtbpIvCNzhpOMCMCM
+	 GinYOHEzdCqx1SOkGq0km1p8ZziuS+Ym7Unn3b15u5i8RZK5dKr8GITG7bnYmTFcRN7gd
+	 md30UnOO3XtAcdb0Fom+D5hJaE2e7xdIR0ft6cIt4kx6WhwpxORsIx+QgQPPXneQMp8wU
+	 72E+MlqPeL5h3m05vTcSoVNzNmisX4GjYdns98ikTuv8QKLVOZdQYLAl3AKxyWSvk8O2s
+	 xWJjUBSA09ITDmNmA4ucPxD4DD72iHfNlH13wrl31QTppLXgie9ArOMMcKEDfOS5MxQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=dsg.is;
-	spf=pass smtp.mailfrom=dsg.is;
-	dkim=pass header.d=dsg.is header.i=@dsg.is header.a=rsa-sha256 header.s=protonmail2 header.b=htc9MkFY;
-	arc=none smtp.remote-ip=185.70.43.170
-Received: from mail-43170.protonmail.ch (mail-43170.protonmail.ch [185.70.43.170])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UMnlDyIx;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84F4F606A89A;
-	Sat, 14 Nov 2026 00:41:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 84F4F606A89A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=dsg.is
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dsg.is
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8937B606A32D
+	for <linux-hwmon@vger.kernel.org>; Sat, 14 Nov 2026 00:46:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=dsg.is header.i=@dsg.is header.a=rsa-sha256 header.s=protonmail2 header.b=htc9MkFY
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dsg.is;
-	s=protonmail2; t=1794616899; x=1794876099;
-	bh=AQsGauJKdPhIbg7LjlfDdvI2RAVdzJHo8BYHlldEG5E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:From:To:
-	 Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=htc9MkFY73t7pifXtx8chuQruTtxlAsy6oCMZTP3ss3Lh/nZXlmznWgakw4yO2Qba
-	 9E/RWUublCbl0AYGJaZx5ByDFu/bUy55l2R30KXzEXwQa05tm4mhCDFCZO7g3tqfMb
-	 nHPsYQIOh19W69iijFRWj9Vi5eUv5U4rrknbk1wyFQ1bANvzOllQIdvs/O8gWP5LUv
-	 6s3nm/Nn/Yljx2m/l0lhuAIBdUELHrvWYRzKgVntM22muMBgqWtl+QMNuRxYb0FDya
-	 7pten63u1ZhKfTVhJF7P/ivvwLfJR3Oe1dvEeGlWtNe4FQGGfsaCSQ0RgfquT6jNHe
-	 ixnMZZfK974NA==
-X-Pm-Submission-Id: 4jRFgM4dRYz2ScQD
-From: =?UTF-8?q?Dav=C3=AD=C3=B0=20Steinn=20Geirsson?= <david@dsg.is>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
-	linux-hwmon@vger.kernel.org
-Cc: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	devicetree@vger.kernel.org,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
-	linux-pwm@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Dav=C3=AD=C3=B0=20Steinn=20Geirsson?= <david@dsg.is>
-Subject: [PATCH 4/4] hwmon: (adt7475) Expose fan control via PWM framework
-Date: Sat, 14 Nov 2026 00:41:10 +0000
-Message-ID: <20261114004110.328050-5-david@dsg.is>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261114004110.328050-1-david@dsg.is>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UMnlDyIx
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0132D1F000C5;
+	Sat, 14 Nov 2026 00:46:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794617163;
+	bh=siFKUSQ98d/aOk9+Ou6YXIP8DfN69LVHzc8AFLt7Aug=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=UMnlDyIxm7EewLW02cu4gFgGL3UuRt6jpfdebqEvlxvhXDdr7gLsZn/IVowhT8dAt
+	 +wB0vkQyMB3TVhteACvCre1FU+wdKsjAgcUpLRoQSoDCAbc6v4geqKJ4PrCsTvQ2tO
+	 h6Jy242AC5Mg7mX/NOVPyd7czqxY9UjtK/Wi/9feu2+GYms7vo20+SxgKvCaqu1Fmr
+	 qu6CDf8SJ/+LUotU7j2ZQDKp8nipZ3R3MvdU9VYhY1HrHc/4UZ6JjQNxfi1Iys3XTG
+	 ZfE+DniKmrIZZ8m0TN4xDRFzGsJ/PB+DorZV7TMo37MiRK0zwScjTM3zXBdmuQXGBn
+	 uUCmqqlLTuPkg==
+Message-ID: <sashiko-outbox-213946@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 3/4] hwmon: (adt7475) Add thermal zone sensor support
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?RGF2w63DsCBTdGVpbm4gR2VpcnNzb24=?= <david@dsg.is>, linux-hwmon@vger.kernel.org
+In-Reply-To: <20261114004110.328050-4-david@dsg.is>
 References: <20261114004110.328050-1-david@dsg.is>
+ <20261114004110.328050-4-david@dsg.is>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 14 Nov 2026 00:46:02 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -75,530 +58,29 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-Register the PWM outputs with the PWM framework when the node has
-"#pwm-cells", so that generic consumers such as pwm-fan can drive them,
-for example as thermal cooling devices. This follows the ADT7470
-driver. A failure to register the PWM chip fails the probe. Without
-CONFIG_PWM, no PWM chip is registered. Unlike ADT7470, the driver does
-not warn about "#pwm-cells" without CONFIG_PWM: fan-N children use the
-property too, so its presence does not imply a PWM consumer.
-CONFIG_PWM is bool, so no Kconfig dependency is needed.
+> Register the temperature channels as thermal zone sensors. Sensor id N
+> is temperature channel N, i.e. temp(N+1). Document this in adt7475.rst.
+>=20
+> The hwmon core reads a sensor's temperature while registering the
+> thermal zone, from within hwmon_device_register_with_info(). Read the
+> chip limits before registering, so that the temperature encoding
+> (CONFIG5 two's complement bit) is known for that first read.
+>=20
+> With CONFIG_THERMAL_OF, devices that have a devicetree node, or sit
+> below one (the hwmon core uses the nearest ancestor's node), see two
+> changes:
+> - Each temperature channel that no thermal zone uses logs
+>   "tempN_input not attached to any thermal zone" once at probe.
+> - When a thermal zone uses a channel, the hwmon core sets that
+>   channel's min and max limit registers to the zone's current trip
+>   window, as it does for other drivers registering thermal sensors.
+>=20
+> Signed-off-by: Dav=C3=AD=C3=B0 Steinn Geirsson <david@dsg.is>
 
-The binding also documents "#pwm-cells" without a PWM consumer: fan-N
-child nodes reference the chip itself to configure a channel at probe.
-Device trees that do this keep working unchanged. Registering the PWM
-chip does not touch the hardware, and requesting a channel only marks
-it as held. Nothing changes for a channel until a consumer applies a
-waveform to it.
+Sashiko has reviewed this patch and found no issues.
 
-The driver implements the waveform callbacks:
-* The period selects the longest supported period that does not exceed
-  the request. The periods are 1 s divided by the table frequency,
-  rounded down, so 44444 ns selects 22.5 kHz exactly. A shorter period
-  is rounded up to 44444 ns. pwm_set_waveform_might_sleep() applies
-  that unless an exact match is requested; pwm_apply_might_sleep()
-  rejects it with -EINVAL.
-* The duty cycle is the high time in 1/255 steps of that period, rounded
-  down. The duty offset is always 0.
-* Writing an enabled waveform puts the channel in manual mode, clears
-  the output inversion bit and writes the duty cycle and the per-channel
-  frequency. Once a consumer has enabled a channel, the consumer's
-  polarity flags therefore replace "adi,pwm-active-state" and the fan-N
-  flags for that channel.
-* A disabled waveform gives duty 0 (constant low) on a channel in manual
-  mode, and leaves a channel in any other mode alone.
-* An I2C error is returned to the PWM core. The hwmon register cache
-  follows each successful register write, so pwmN_enable reports manual
-  mode (1) once a consumer has enabled the channel.
-* Reading returns the hardware state. A channel that is not in manual
-  mode is not driven by the PWM framework and reads as disabled, so a
-  consumer's first enabled request always differs from the read-back
-  state and is never skipped by the core. An inverted output reads as
-  its high time.
-
-While a consumer holds a channel, writes to that channel's pwmN,
-pwmN_enable, pwmN_freq, pwmN_auto_channels_temp,
-pwmN_auto_point{1,2}_pwm and pwmN_stall_disable fail with -EBUSY, so
-userspace cannot fight the kernel. The attributes stay readable. The
-other channels and the temperature-based auto points stay writable: the
-auto points only matter in automatic mode, and other channels may use
-them.
-
-The ADT7470 driver hides its PWM attributes when "#pwm-cells" is
-present. This driver returns -EBUSY instead:
-* The ADT7475 binding has documented "#pwm-cells" for fan-N children
-  since v6.12. Device trees that follow it must keep their attributes.
-  No in-tree device tree uses "#pwm-cells" on these chips today.
-* Attribute visibility is fixed when the hwmon device registers, but a
-  channel is only held once a consumer requests it, after the attributes
-  exist.
-
-Document the PWM provider in adt7475.rst.
-
-Signed-off-by: Davíð Steinn Geirsson <david@dsg.is>
----
-This patch was written with Claude Code, using the models Claude
-Opus 5.5 and Claude Fable 5.2. They wrote the code and the initial
-commit message draft, which I cleaned up. I directed the design,
-reviewed the result, compared against the datasheet as far as I
-could, and ran tests including on actual hardware.
-
- Documentation/hwmon/adt7475.rst |  15 ++
- drivers/hwmon/adt7475.c         | 319 ++++++++++++++++++++++++++++++--
- 2 files changed, 322 insertions(+), 12 deletions(-)
-
-diff --git a/Documentation/hwmon/adt7475.rst b/Documentation/hwmon/adt7475.rst
-index b5976e3ff3d4..0a864adda5e0 100644
---- a/Documentation/hwmon/adt7475.rst
-+++ b/Documentation/hwmon/adt7475.rst
-@@ -152,6 +152,21 @@ The responsiveness of the ADT747x to temperature changes can be configured.
- This allows smoothing of the fan speed transition. To set the transition time
- set the value in ms in the `temp[1-*]_smoothing` sysfs attribute.
- 
-+PWM Provider
-+------------
-+
-+With CONFIG_PWM enabled and a ``#pwm-cells`` property in the device node, the
-+driver registers the PWM outputs as a PWM chip, so that a consumer such as
-+``pwm-fan`` can drive them.
-+
-+While a consumer holds a channel, writes to that channel's ``pwmN``,
-+``pwmN_enable``, ``pwmN_freq``, ``pwmN_auto_channels_temp``,
-+``pwmN_auto_point[12]_pwm`` and ``pwmN_stall_disable`` attributes fail with
-+-EBUSY. Reads still work. Once a consumer has enabled a channel, the channel
-+is in manual mode and ``pwmN_enable`` reads 1. When the consumer releases the
-+channel, the attributes become writable again and the channel keeps its last
-+mode and duty cycle.
-+
- Notes
- -----
- 
-diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-index 73c19c10bb34..6577a73f71a7 100644
---- a/drivers/hwmon/adt7475.c
-+++ b/drivers/hwmon/adt7475.c
-@@ -18,8 +18,10 @@
- #include <linux/hwmon-vid.h>
- #include <linux/err.h>
- #include <linux/jiffies.h>
-+#include <linux/math64.h>
- #include <linux/of.h>
- #include <linux/property.h>
-+#include <linux/pwm.h>
- #include <linux/util_macros.h>
- 
- #include <dt-bindings/pwm/pwm.h>
-@@ -219,6 +221,7 @@ struct adt7475_data {
- 	u8 pwmctl[3];
- 	u8 pwmchan[3];
- 	u8 enh_acoustics[2];
-+	u8 pwm_held;		/* Channels requested through the PWM framework */
- 
- 	u8 vid;
- 	u8 vrm;
-@@ -668,14 +671,32 @@ static ssize_t pwm_show(struct device *dev, struct device_attribute *attr,
- 	return sprintf(buf, "%d\n", data->pwm[sattr->nr][sattr->index]);
- }
- 
--static void adt7475_pwm_set(struct adt7475_data *data, int nr, int index,
--			    long val)
-+/*
-+ * Writes to the hwmon attributes of a PWM channel fail while a PWM consumer
-+ * holds it. Call with data->lock held.
-+ */
-+static int adt7475_pwm_check_held(struct adt7475_data *data, int index)
-+{
-+	lockdep_assert_held(&data->lock);
-+
-+	return data->pwm_held & BIT(index) ? -EBUSY : 0;
-+}
-+
-+static int adt7475_pwm_set(struct adt7475_data *data, int nr, int index,
-+			   long val)
- {
- 	struct i2c_client *client = data->client;
- 	unsigned char reg = 0;
-+	int ret;
- 
- 	mutex_lock(&data->lock);
- 
-+	ret = adt7475_pwm_check_held(data, index);
-+	if (ret) {
-+		mutex_unlock(&data->lock);
-+		return ret;
-+	}
-+
- 	switch (nr) {
- 	case INPUT:
- 		/* Get a fresh value for CONTROL */
-@@ -688,7 +709,7 @@ static void adt7475_pwm_set(struct adt7475_data *data, int nr, int index,
- 		 */
- 		if (((data->pwm[CONTROL][index] >> 5) & 7) != 7) {
- 			mutex_unlock(&data->lock);
--			return;
-+			return 0;
- 		}
- 
- 		reg = PWM_REG(index);
-@@ -706,6 +727,8 @@ static void adt7475_pwm_set(struct adt7475_data *data, int nr, int index,
- 	data->pwm[nr][index] = clamp_val(val, 0, 0xFF);
- 	i2c_smbus_write_byte_data(client, reg, data->pwm[nr][index]);
- 	mutex_unlock(&data->lock);
-+
-+	return 0;
- }
- 
- static ssize_t pwm_store(struct device *dev, struct device_attribute *attr,
-@@ -714,13 +737,14 @@ static ssize_t pwm_store(struct device *dev, struct device_attribute *attr,
- 	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
- 	struct adt7475_data *data = dev_get_drvdata(dev);
- 	long val;
-+	int ret;
- 
- 	if (kstrtol(buf, 10, &val))
- 		return -EINVAL;
- 
--	adt7475_pwm_set(data, sattr->nr, sattr->index, val);
-+	ret = adt7475_pwm_set(data, sattr->nr, sattr->index, val);
- 
--	return count;
-+	return ret ? ret : count;
- }
- 
- static ssize_t stall_disable_show(struct device *dev,
-@@ -749,6 +773,11 @@ static ssize_t stall_disable_store(struct device *dev,
- 
- 	mutex_lock(&data->lock);
- 
-+	if (adt7475_pwm_check_held(data, sattr->index)) {
-+		mutex_unlock(&data->lock);
-+		return -EBUSY;
-+	}
-+
- 	data->enh_acoustics[0] &= ~mask;
- 	if (val)
- 		data->enh_acoustics[0] |= mask;
-@@ -1111,22 +1140,30 @@ static int adt7475_pwm_write(struct device *dev, u32 attr, int channel,
- 
- 	switch (attr) {
- 	case hwmon_pwm_input:
--		adt7475_pwm_set(data, INPUT, channel, val);
-+		ret = adt7475_pwm_set(data, INPUT, channel, val);
- 		break;
- 
- 	case hwmon_pwm_enable:
- 		mutex_lock(&data->lock);
--		/* Read Modify Write PWM values */
--		adt7475_read_pwm(client, channel);
--		ret = hw_set_pwm(client, channel, val, data->pwmchan[channel]);
-+		ret = adt7475_pwm_check_held(data, channel);
-+		if (!ret) {
-+			/* Read Modify Write PWM values */
-+			adt7475_read_pwm(client, channel);
-+			ret = hw_set_pwm(client, channel, val,
-+					 data->pwmchan[channel]);
-+		}
- 		mutex_unlock(&data->lock);
- 		break;
- 
- 	case hwmon_pwm_auto_channels_temp:
- 		mutex_lock(&data->lock);
--		/* Read Modify Write PWM values */
--		adt7475_read_pwm(client, channel);
--		ret = hw_set_pwm(client, channel, data->pwmctl[channel], val);
-+		ret = adt7475_pwm_check_held(data, channel);
-+		if (!ret) {
-+			/* Read Modify Write PWM values */
-+			adt7475_read_pwm(client, channel);
-+			ret = hw_set_pwm(client, channel,
-+					 data->pwmctl[channel], val);
-+		}
- 		mutex_unlock(&data->lock);
- 		break;
- 
-@@ -1136,6 +1173,12 @@ static int adt7475_pwm_write(struct device *dev, u32 attr, int channel,
- 
- 		mutex_lock(&data->lock);
- 
-+		ret = adt7475_pwm_check_held(data, channel);
-+		if (ret) {
-+			mutex_unlock(&data->lock);
-+			break;
-+		}
-+
- 		data->range[channel] =
- 			adt7475_read(TEMP_TRANGE_REG(channel));
- 		data->range[channel] &= ~0xf;
-@@ -1804,6 +1847,250 @@ static int adt7475_fan_pwm_config(struct i2c_client *client)
- 	return 0;
- }
- 
-+/*
-+ * PWM framework provider. Requesting a channel only marks it held: the
-+ * hardware is left alone until the consumer applies a state.
-+ *
-+ * Limitations:
-+ * - Only the fixed periods of pwmfreq_table (11 Hz to 22.5 kHz) are
-+ *   supported. The duty cycle is set in 1/255 steps of the period.
-+ * - The duty offset is not supported and is always 0.
-+ * - Disabling a channel in manual mode sets its duty cycle to 0, so the
-+ *   output is constant low. A channel in any other mode is left alone.
-+ * - Mode, duty cycle and frequency are separate register writes, in that
-+ *   order. An update is not atomic, and the output can briefly run with
-+ *   a mix of old and new settings.
-+ */
-+static int adt7475_pwm_request(struct pwm_chip *chip, struct pwm_device *pwm)
-+{
-+	struct adt7475_data *data = pwmchip_get_drvdata(chip);
-+
-+	/* The PWM2 pin is the SMBALERT# output */
-+	if (pwm->hwpwm == 1 && !data->has_pwm2)
-+		return -ENODEV;
-+
-+	mutex_lock(&data->lock);
-+	data->pwm_held |= BIT(pwm->hwpwm);
-+	mutex_unlock(&data->lock);
-+
-+	return 0;
-+}
-+
-+static void adt7475_pwm_free(struct pwm_chip *chip, struct pwm_device *pwm)
-+{
-+	struct adt7475_data *data = pwmchip_get_drvdata(chip);
-+
-+	mutex_lock(&data->lock);
-+	data->pwm_held &= ~BIT(pwm->hwpwm);
-+	mutex_unlock(&data->lock);
-+}
-+
-+/*
-+ * The waveform API has no polarity: duty is the high time in 1/255 steps of
-+ * the period.
-+ */
-+struct adt7475_pwm_wfhw {
-+	bool enabled;
-+	u8 duty;
-+	u8 freq_idx;	/* Index into pwmfreq_table */
-+};
-+
-+static u64 adt7475_pwm_period(int freq_idx)
-+{
-+	return NSEC_PER_SEC / pwmfreq_table[freq_idx];
-+}
-+
-+static int adt7475_pwm_round_waveform_tohw(struct pwm_chip *chip,
-+					   struct pwm_device *pwm,
-+					   const struct pwm_waveform *wf,
-+					   void *_wfhw)
-+{
-+	struct adt7475_pwm_wfhw *wfhw = _wfhw;
-+	u64 period;
-+	int i;
-+
-+	if (!wf->period_length_ns) {
-+		*wfhw = (struct adt7475_pwm_wfhw){ .enabled = false };
-+		return 0;
-+	}
-+
-+	/* The longest supported period that does not exceed the request */
-+	for (i = 0; i < ARRAY_SIZE(pwmfreq_table) - 1; i++)
-+		if (adt7475_pwm_period(i) <= wf->period_length_ns)
-+			break;
-+	period = adt7475_pwm_period(i);
-+
-+	wfhw->enabled = true;
-+	wfhw->freq_idx = i;
-+	if (wf->duty_length_ns >= period)
-+		wfhw->duty = 0xFF;
-+	else
-+		wfhw->duty = mul_u64_u64_div_u64(wf->duty_length_ns, 0xFF,
-+						 period);
-+
-+	/* Requested period shorter than the shortest supported one */
-+	return period > wf->period_length_ns ? 1 : 0;
-+}
-+
-+static int adt7475_pwm_round_waveform_fromhw(struct pwm_chip *chip,
-+					     struct pwm_device *pwm,
-+					     const void *_wfhw,
-+					     struct pwm_waveform *wf)
-+{
-+	const struct adt7475_pwm_wfhw *wfhw = _wfhw;
-+	u64 period;
-+
-+	if (!wfhw->enabled) {
-+		*wf = (struct pwm_waveform){ };
-+		return 0;
-+	}
-+
-+	period = adt7475_pwm_period(wfhw->freq_idx);
-+	wf->period_length_ns = period;
-+	wf->duty_length_ns = DIV_ROUND_UP_ULL((u64)wfhw->duty * period, 0xFF);
-+	wf->duty_offset_ns = 0;
-+
-+	return 0;
-+}
-+
-+/*
-+ * A channel that is not in manual mode is not driven by the PWM framework
-+ * and reads as disabled. A consumer's first enabled request then always
-+ * differs from the read-back state, so the core does not skip it.
-+ */
-+static int adt7475_pwm_read_waveform(struct pwm_chip *chip,
-+				     struct pwm_device *pwm, void *_wfhw)
-+{
-+	struct adt7475_data *data = pwmchip_get_drvdata(chip);
-+	struct i2c_client *client = data->client;
-+	struct adt7475_pwm_wfhw *wfhw = _wfhw;
-+	int config, duty, range;
-+
-+	mutex_lock(&data->lock);
-+	config = adt7475_read(PWM_CONFIG_REG(pwm->hwpwm));
-+	duty = adt7475_read(PWM_REG(pwm->hwpwm));
-+	range = adt7475_read(TEMP_TRANGE_REG(pwm->hwpwm));
-+	mutex_unlock(&data->lock);
-+
-+	if (config < 0)
-+		return config;
-+	if (duty < 0)
-+		return duty;
-+	if (range < 0)
-+		return range;
-+
-+	if (((config >> 5) & 7) != 7) {
-+		*wfhw = (struct adt7475_pwm_wfhw){ .enabled = false };
-+		return 0;
-+	}
-+
-+	wfhw->enabled = true;
-+	wfhw->duty = config & BIT(4) ? 0xFF - duty : duty;
-+	wfhw->freq_idx = clamp_val(range & 0xf, 0,
-+				   ARRAY_SIZE(pwmfreq_table) - 1);
-+
-+	return 0;
-+}
-+
-+/*
-+ * Switch the channel to manual mode with normal polarity and write the duty
-+ * cycle. A negative freq_idx keeps the current frequency. A negative duty
-+ * means disabled: a channel in manual mode gets duty 0, a channel in another
-+ * mode is left alone. Each cache is updated as soon as its register write
-+ * succeeds. Call with data->lock held.
-+ */
-+static int adt7475_pwm_write_hw(struct adt7475_data *data, int index,
-+				int duty, int freq_idx)
-+{
-+	struct i2c_client *client = data->client;
-+	int ret;
-+	u8 val;
-+
-+	ret = adt7475_read(PWM_CONFIG_REG(index));
-+	if (ret < 0)
-+		return ret;
-+	if (duty < 0) {
-+		if (((ret >> 5) & 7) != 7)
-+			return 0;
-+		duty = 0;
-+	}
-+	val = (ret & ~(0xE0 | BIT(4))) | (7 << 5);
-+	if (val != ret) {
-+		ret = i2c_smbus_write_byte_data(client, PWM_CONFIG_REG(index),
-+						val);
-+		if (ret)
-+			return ret;
-+	}
-+	data->pwm[CONTROL][index] = val;
-+	data->pwmctl[index] = 1;
-+
-+	ret = i2c_smbus_write_byte_data(client, PWM_REG(index), duty);
-+	if (ret)
-+		return ret;
-+	data->pwm[INPUT][index] = duty;
-+
-+	if (freq_idx < 0)
-+		return 0;
-+
-+	ret = adt7475_read(TEMP_TRANGE_REG(index));
-+	if (ret < 0)
-+		return ret;
-+	val = (ret & ~0xf) | freq_idx;
-+	if (val != ret) {
-+		ret = i2c_smbus_write_byte_data(client, TEMP_TRANGE_REG(index),
-+						val);
-+		if (ret)
-+			return ret;
-+	}
-+	data->range[index] = val;
-+
-+	return 0;
-+}
-+
-+static int adt7475_pwm_write_waveform(struct pwm_chip *chip,
-+				      struct pwm_device *pwm,
-+				      const void *_wfhw)
-+{
-+	struct adt7475_data *data = pwmchip_get_drvdata(chip);
-+	const struct adt7475_pwm_wfhw *wfhw = _wfhw;
-+	int ret;
-+
-+	mutex_lock(&data->lock);
-+	if (wfhw->enabled)
-+		ret = adt7475_pwm_write_hw(data, pwm->hwpwm, wfhw->duty,
-+					   wfhw->freq_idx);
-+	else
-+		ret = adt7475_pwm_write_hw(data, pwm->hwpwm, -1, -1);
-+	mutex_unlock(&data->lock);
-+
-+	return ret;
-+}
-+
-+static const struct pwm_ops adt7475_pwm_ops = {
-+	.request = adt7475_pwm_request,
-+	.free = adt7475_pwm_free,
-+	.sizeof_wfhw = sizeof(struct adt7475_pwm_wfhw),
-+	.round_waveform_tohw = adt7475_pwm_round_waveform_tohw,
-+	.round_waveform_fromhw = adt7475_pwm_round_waveform_fromhw,
-+	.read_waveform = adt7475_pwm_read_waveform,
-+	.write_waveform = adt7475_pwm_write_waveform,
-+};
-+
-+static int adt7475_pwm_register(struct i2c_client *client)
-+{
-+	struct adt7475_data *data = i2c_get_clientdata(client);
-+	struct pwm_chip *chip;
-+
-+	chip = devm_pwmchip_alloc(&client->dev, ADT7475_PWM_COUNT, 0);
-+	if (IS_ERR(chip))
-+		return PTR_ERR(chip);
-+
-+	chip->ops = &adt7475_pwm_ops;
-+	pwmchip_set_drvdata(chip, data);
-+
-+	return devm_pwmchip_add(&client->dev, chip);
-+}
-+
- static int adt7475_probe(struct i2c_client *client)
- {
- 	enum chips chip;
-@@ -1962,6 +2249,14 @@ static int adt7475_probe(struct i2c_client *client)
- 		return ret;
- 	}
- 
-+	if (IS_ENABLED(CONFIG_PWM) &&
-+	    device_property_present(&client->dev, "#pwm-cells")) {
-+		ret = adt7475_pwm_register(client);
-+		if (ret)
-+			return dev_err_probe(&client->dev, ret,
-+					     "Failed to register PWM chip\n");
-+	}
-+
- 	dev_info(&client->dev, "%s device, revision %d\n",
- 		 names[chip], revision);
- 	if ((data->has_voltage & 0x11) || data->has_fan4 || data->has_pwm2)
--- 
-2.56.0
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261114004110.3280=
+50-1-david@dsg.is?part=3D3
 
