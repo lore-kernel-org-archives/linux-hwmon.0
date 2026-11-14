@@ -1,57 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794678298;
-	b=1uEtkKuHbxk74uvsGR8caPG4+tmttO/mB+EU6FwgPRQTIyADhUj45m9025OSS5V5bImM
-	 VRjm/lF7wj+7frxo3MEO1ehVQQ/aqwqBv7FSxSGjEKPCByEu0CD2n1G0KN8wsex9zcsIh
-	 5wVDiq+bk7Z8wIaAmYkTla/26m3f1Kzr4vpql+YMYPLzBn1hRn3Sa8MkEOuoIl/1PqRYR
-	 lH7zaOg6HRNjwk+ggfMOt6wNGPw4Fu9b5yxtj04bZ/LkLuJX8jsd/G2mR1qpU1hTw6jyE
-	 HBp6aNydeAe1oDUsc6CC3Kfcqn+zTDiGSmkoWydKPQZJrpE3AgKTLJGeUlZDNGtKFDg==
+	t=1794678319;
+	b=Pe6+kbSSe5Nl8qXjuMmnO48hzWwZDtBPYQEKCoEhIOenTzqAzXQnxGRrGVaAX3OsJLT3
+	 gKz6zHLpv0D8jhMUQVtLaVQITvRvJtNXPPlt3R0xWL+rgAWKhahbuNowAu978ah0qHFpS
+	 AljL3jZW1q/xyPvT/W23gntSdljVXehg/Zr9MC6cC9at3piBdNV47LFDGMWSoB1a//Siw
+	 pLeQKtzb9oPkHyE1/FKPELr453FgT8w0gpKaKJL5/uee4rxZ7XcjTKEI4ZOVz/RHsRULw
+	 tAHPRAQhiUE2m+gaC/IMBiIVHmSUR9YLxSX7KVfMseXUKIlQH9RDPWPD9qVxHB9krEg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794678298;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794678319;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=qXp31bazNP4y32g83J5KzrKVIrwqh2bDdCM2dbOJXvE=;
-	b=rWWhJnAK2a/R7g+zOV6jN0IBOIMPtrOJRXAIXeYToBJnkJNHkhp2fQKNMzee5cAG0oZ9
-	 32DbYV4XFNKtz7XKw37+aLE9kua6QH17olnjyd2RQzXjBXcZMxLaulL3XeU2AUsKB/s5w
-	 Iw6ogEqfizl/doIJ0DFox9D9FGjX4sBJh8ueXvqvECSXWbmQBqL3Oeou24yD1SL+6XtwD
-	 M7/nb83swa95G8+B4A2IV7RhOIw5UQXdTnjNeeaOws+juHHZGIUCTT1EKtz+BrpOTkV82
-	 D7+7EthSAr9nDXFKfUh1TJ+xV7C0J6qJB+BtrrUo5TjhLAAFsZb1crQ4v+Cg++p+bCw==
+	bh=LkOd4wa6dj55P+4i1tp5cR9JO01Zf1YXFB9EHa/PFg0=;
+	b=JmhNkry1omyn75q1NT9v54zPCd8tNwetpqF6oeuo4MAPlV/sn2+nlYrVJlMVqvjRkg7A
+	 fHWQkVfYVn22fPQpZN/Af6pHCIE0IFyJhubFSKnscrnNpLWZSSJkxoq3zk6a0UuIULpjW
+	 xYZI9KSvLSpxBm0MBUlHUhxm5ErbL0ADj+IYLh9lSCMNqqs8OA0adKY+5tYgHlRIG9zyv
+	 EzmkNiDTl4Ia9ll3wIHDg2p3MURm6ONRBwILwKEYim3sQKLsdrB8ywnlwNCwMLJ/1DgAt
+	 XPVntXO/A/GWcYDRKcED5rrlI1MHqHHtOyiCC7pSDWLoB6y3fHh3lSLzKtqC0QgNHXQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Pt1Sgne/";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IOQuQ142;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA49B606A32E
-	for <linux-hwmon@vger.kernel.org>; Sat, 14 Nov 2026 17:44:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD63606A32D
+	for <linux-hwmon@vger.kernel.org>; Sat, 14 Nov 2026 17:45:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Pt1Sgne/
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5620F1F000C4;
-	Sat, 14 Nov 2026 17:44:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IOQuQ142
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 281861F000C4;
+	Sat, 14 Nov 2026 17:45:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794678297;
-	bh=qXp31bazNP4y32g83J5KzrKVIrwqh2bDdCM2dbOJXvE=;
+	s=k20260515; t=1794678319;
+	bh=LkOd4wa6dj55P+4i1tp5cR9JO01Zf1YXFB9EHa/PFg0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Pt1Sgne/4K7bYohwkgF0MviZ8+Iiuuoj0x9NZ/12EOzWh9pHaON+dExvMPtR6HW7h
-	 r+YRn2O+AJLvq8RSRKMHPFF4lodS/rfZwQBuztPIT1XrU+ZsoY6AiWfH8iXO8bAEU4
-	 coDudC1cZ3X7b7tuA8F37+QcO5k/nIC0Tza9KJCTM7+bRBrgh1aetbAMhzBOBEJ1fi
-	 +dEeO1l10GaSebcLGkHFwDD+cwlZW9oYBOAJItca7cs4UqDSHB7wrtzbmmyoaOfJjN
-	 ttHBa0CIGB8k3jQnPYlw85n/QmknMM+fE1pVCRNDv2KjJWxn1N6RrAIRxt689c+fOR
-	 ruYWeDGVyHfYg==
-Message-ID: <sashiko-outbox-214852@kernel.org>
+	b=IOQuQ142uiz7ycNqYjrZkJBNpIe0l6SDJPMgraSg3HN8m67evOuszJpQrGMXcBFUD
+	 +Z0gdi971TTFRfhnZ3fWNMH0LcQa3Hqtu8AaH6tuHCxht0HDJzGBp5SAU3l9c9TFa3
+	 sE2zpOfE8FjhRyZmXnrCKtw0uPme68aIjTqxBJuOwurCccA2GWPR80emPXGMVhJCZ8
+	 QWpE94bhNABg0vJ2J4WRkIHzgsk8FFy9+q8rFlgJDqrSrnbkIAeBiIzEHqTTAE4bqp
+	 qVCUSTGlGty04FCycMMVKnW8hlLjf4gyN2KO02RUApX/96PNetawAN+vptWtQF/xWj
+	 xKognbk2ROs5A==
+Message-ID: <sashiko-outbox-214853@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 4/7] alpha: marvel: register a platform device for the
- environmental sensors
+Subject: Re: [PATCH 6/7] alpha: marvel: notify environmental events
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Matt Turner" <mattst88@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261114-marvel-env-v1-4-890328e4b7e5@gmail.com>
+In-Reply-To: <20261114-marvel-env-v1-6-890328e4b7e5@gmail.com>
 References: <20261114-marvel-env-v1-0-890328e4b7e5@gmail.com>
- <20261114-marvel-env-v1-4-890328e4b7e5@gmail.com>
+ <20261114-marvel-env-v1-6-890328e4b7e5@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 14 Nov 2026 17:44:56 +0000
+Date: Sat, 14 Nov 2026 17:45:17 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -61,8 +60,9 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> Register a "marvel_env" platform device on Marvel systems booted from
-> SRM, for the hwmon driver to bind to.
+> A change in the state of a sensor arrives as a system event logout
+> frame. Call an atomic notifier chain on each one, so that a sensor
+> driver can reread its sensors and tell userspace without polling.
 >=20
 > Assisted-by: Claude:claude-opus-5-5
 > Signed-off-by: Matt Turner <mattst88@gmail.com>
@@ -71,5 +71,5 @@ Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261114-marvel-env=
--v1-0-890328e4b7e5@gmail.com?part=3D4
+-v1-0-890328e4b7e5@gmail.com?part=3D6
 
