@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794637493;
-	b=YCNIYQBrgAlJtrqcX6fKECQOSzBaj9RT5wf9UDeFUfGh5Tk4cuLoIZSsxu6rSMfKViUg
-	 IyQl3fO7RRvRSiIfw3t7VTgtO66KQQACn2ScCX7AsZXcvHAlmE6SVPBpmYH9Ci97bPAyG
-	 +t55+XxWmtn6/Vc221AN1Rw6+CL+1sFSrt+7pW7g6jDQXABSnL+mGj2txGQmnfrxa9pSH
-	 MfGKeBejzKNJ3tiAUBIsLrfub63B4RLs0MrIk/hkew2Uh6Hz6ALtazQdz1eSdV5pSt1Gw
-	 P3JtqEJ7GMLFZYDdw+96zFrbEw3AkfJkdpoWTjEh0FvFJW6LzQDm65+x+cWfV5Bluew==
+	t=1794637509;
+	b=nxCKl9qUHmeangy5Z8EzqOHkf6Qoy8JledciJv1/EOTvVO53GlmK7EZ2YW3ITi4xQSQF
+	 EsIcH49Q48nPW3xPbC98CUgil3OXkKx5FdGH01BMS6HmNgTBhbalHDenA9k5OFwN48r3V
+	 +qyDAA9ZcjTED9ktLPrKiJPu202OBQQuZpFd3x+tP203ulEmoUyIpXq1xyGZxs9Gu8qEB
+	 9/i7tR6e9uFAQ1Oboez/cfX6bV+mPk7whONsUmvYifq96opYB5bgLBrsamrVCYqIiNK++
+	 v6SU/EKI+0oeTF5vYSja1uIY22TRFy2fYiyIFfo37Pz42ciwBMk933YAMU/vHYRxkgQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794637493;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794637509;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=sr9gxTIL8g12ygSN7FesMgOdQxM8Y3CGXLoTIiNYtU8=;
-	b=z4ltYQQZInKd17OQ/JrNFNI+CRbj3BruhX1rYQhfXJxQF0lSsID8+vytvzRQRePa1Wa+
-	 /3Q3lyk0e7mVYyTE7Kq4r6nHoWCcb5Y/xJD0KOnS6YeU14Oo4+sPMePhlUdsv/VQXx+BZ
-	 p9fSInzwMGPowIjOISVW+r25aWbS0DeBsFDZPIRLkz7G9T6+Hmu0fqumuldBZm0qAO2S0
-	 qDKadu63pmjqxmL1khZBxVVssIkd9WENZGiZrmZIyxQDJWU8ZC7W554jep4KwmQcSwfEq
-	 ymFxfC9CKRQ4O4/Jn1DnB3QbKopR2Xk/XyiJW5Q0YmmVrNAQFK7pKI/HcBkj0s41i1w==
+	bh=4ydJj6KzbNEJuL3l3t5zHdqyNMAtDfNuZFfVb651Ius=;
+	b=xK2HHhX/kJ3KxqduBphFpRyFJYjYt9SGCi5+tRHiIWrAQs3zKjh/Yq8l4yUQSCfxSIHm
+	 tcmJMM5iTgSlqE4J2eJB++xVIecwfF/33a3Zf4R+7p66/cxl8zhf+oDFDaMcDuwyKyRFS
+	 Yh3Zed78H9BaNeg0Oreqnl56lb6FIEKyStyDi/xZB5sIpwsctlyMV38v9ZlGPsuRrr1v+
+	 RA1+byB00Deekb99J9uOidyuL/No9rkJ7BWbuyLjmAIMTPT7qMjaMdimtPk8NC1s5eP4I
+	 zBtP5c3xxvWIUEXmOUFSvcvLihIcLaSRbWR+eyYsjXfpNn2raErJfGaLk8RxC+uSJwA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=W2bonDR2;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fDw5GvHI;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D51606A327
-	for <linux-hwmon@vger.kernel.org>; Sat, 14 Nov 2026 06:24:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564C7606A327
+	for <linux-hwmon@vger.kernel.org>; Sat, 14 Nov 2026 06:25:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=W2bonDR2
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 392441F000C4;
-	Sat, 14 Nov 2026 06:24:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fDw5GvHI
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D56A51F000C4;
+	Sat, 14 Nov 2026 06:25:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794637493;
-	bh=sr9gxTIL8g12ygSN7FesMgOdQxM8Y3CGXLoTIiNYtU8=;
+	s=k20260515; t=1794637509;
+	bh=4ydJj6KzbNEJuL3l3t5zHdqyNMAtDfNuZFfVb651Ius=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=W2bonDR2HsOWFfqXpu4pnLzyGEKAe2E0CGtuU1jpoLv2zZfi6DTtyKmyn892P9Rk0
-	 cuSVDUmlNprpshsriwrOum2PyGAa7KEdJnq13iWU/1CpAwN7q8cv/0cHJoFKViJXer
-	 swcKAxWs1zeZ/LAHR22T6nRSbRxHY6aJNG+pXyoZgiM191hMu7LlQwstAEqG7pkuCP
-	 hyLxXPNHcLx0Tf4Uk+dMdUAM9E4FsQ7IIolZf6mHyI+mwiJwEPPYe4QZltCVSzpQ2S
-	 F42DPQQRvf9+ZmRllo+JfP4osrYQexiXnhsYtU4aXtaD3xoPlQGXiTHqqYb/xtVsiO
-	 NnfTLrpIMJUtg==
-Message-ID: <sashiko-outbox-214217@kernel.org>
+	b=fDw5GvHIvJWi6anaouyHHiOAgLux2WX2BuUN53MX+LMZDen02xQI+cl6T7ld4nCAx
+	 icaebrKMBQC+qmh6f0UsALDSDgPlcJZbu2PPCFP0YOJ49A6hiqpscJYyQlA+y6RCGV
+	 XLqZ8hD67+ue2R7JnZlFLAKAiVWCi9W53b0RAIEk3Mi2Ewy5xPow+Je3XpunfORt7A
+	 k+pkw7os3+q28bavlhGGqHlom+B7JOIu6mnePBRh90eIEeQuyTztDYjzgjHCta0A7/
+	 MVGhvuWR1JIiQEnMp+iJS3tUQ50D9PwJJmi5U+7oPj0HpH4TAWfSES3vjSLJDsmcpe
+	 c3Q51EtS8dXHA==
+Message-ID: <sashiko-outbox-214218@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/2] hwmon: (dell-smm) Clamp the pwm value before
- scaling it
+Subject: Re: [PATCH 2/2] hwmon: (dell-smm) Reject a fan_max that the BIOS
+ cannot take
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Rosen Penev" <rosenp@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <3c36959a51788bbc5d08f364fe7d922b5c4d4d87.1794633179.git.rosenp@gmail.com>
+In-Reply-To: <6d3b86acf6713e9286e60ecf788582e840946238.1794633179.git.rosenp@gmail.com>
 References: <cover.1794633179.git.rosenp@gmail.com>
- <3c36959a51788bbc5d08f364fe7d922b5c4d4d87.1794633179.git.rosenp@gmail.com>
+ <6d3b86acf6713e9286e60ecf788582e840946238.1794633179.git.rosenp@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 14 Nov 2026 06:24:52 +0000
+Date: Sat, 14 Nov 2026 06:25:08 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -61,25 +61,30 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> dell_smm_write() scales the value written to pwmN with
+> The fan_max module parameter is used without any range check, unlike
+> fan_mult. dell_smm_init_hwmon() allocates the nominal speed table with
 >=20
-> 	DIV_ROUND_CLOSEST(val, data->i8k_pwm_mult)
+> 	devm_kmalloc_array(dev, data->i8k_fan_max + 1, ...)
 >=20
-> before clamping the result to the valid fan states. The rounding adds
-> i8k_pwm_mult / 2 to val first, which overflows for values near
-> LONG_MAX and wraps to a large negative number. That is then clamped to
-> 0, so writing a huge value turns the fan off instead of running it at
-> the highest speed. With the default fan_max of 2, writing any value
-> from LONG_MAX - 63 up to LONG_MAX selects fan state 0.
+> and fan_max=3D4294967295 wraps the count to 0. devm_kmalloc() then
+> returns ZERO_SIZE_PTR, which the first successful nominal speed call
+> writes through.
 >=20
-> Clamp val to the pwm range of 0 to 255 first.
+> Values above 255 are also meaningless: the fan state is passed to the
+> BIOS as fan | (speed << 8), so the higher bits end up in other parts of
+> the request. Large values that do not wrap still cost one SMM call per
+> state and fan while probing.
 >=20
-> Fixes: e7f5f275c62a ("i8k: Implement hwmon based fan speed control")
+> Fail probing if the maximum fan state does not fit in a byte, like the
+> existing check for fan_mult.
+>=20
+> Fixes: 81474fc2fae9 ("i8k: Add support for configurable maximum fan speed=
+ value")
 > Signed-off-by: Rosen Penev <rosenp@gmail.com>
 
 Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1794633179.gi=
-t.rosenp@gmail.com?part=3D1
+t.rosenp@gmail.com?part=3D2
 
