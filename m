@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794617384;
-	b=tXoVZnqL9bKE5AT74Hcph80relr/lp/T+TQw4Mv4Wswxi+L3IYeIsX+1SR+V2dULZytG
-	 6pvinNWJTXQ/pCiGho5EClStmQc9rmZ6RVVfV4HaXDW8//fo2z6WDearxkY2FU9uPnEn9
-	 AdoxGp7FcaYAcwPz9UYbS3UqfPnFlUZkeeB3+Q9PUrGb4CTGsAWzKvT+7/Hms6xjwnBRq
-	 vkBiPswIwKyIAGe3br3G5mTdP0udUkc62VAhIcBsPK9IaPXSQssfsjtLWg9AG7i9SuOYk
-	 BKbfYO+79igJA5gy98U/PDr5Os8h35SkbQO7ZOOKHsMCZX//IKHIzySU0tBQ2PZIWYw==
+	t=1794617496;
+	b=sJHpjJbfQXZQBqQxdR2VZDraJp5pq/bmKM9s9s/yc6nWdKaH/NJfIXM9WCF8QAnIm7GF
+	 hGainjp+SwY6dLGkWzrKP2nntnBTVEW4RGPswCk3U/5inRIQXgTmUtcGJkYxbs0/H23oi
+	 Q8T3RlcNnAptTDm3VLLUV34ycvAVd4vdW4k86s6V8XFvKeqwHWt0hbQWKLX+d/6sJStga
+	 YVZLPD4uY8on7KQhkYgM9MoSgpjwFWh4PP4RSv0l4BOWj60SV4PzNUZpVPk9q+7lqcvRt
+	 c5u9VdOwrmiyBvWySwW5VGarTsfs5xrDP/nvmUze61Sw9AmPP9SCfp5oAn2wLWqpfEg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794617384;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794617496;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=62Ih2Y/07M8ZQccvxQBhH6Td5Mj+dyw8y78BKxAQh8I=;
-	b=fFF9oxk6RAK5V7ySnKoFu5G6lwOlYOE1D/0XxMfr7+1jG6PQncnJrIGIqQ7dSwvVOTp0
-	 34v8PXeSLTnG6L7Yu9ZYiKXZdTtll8CJGQiGnKf1oN8uyP0BfSqbijGYJXfKarfhe/mhn
-	 TpCYeeJLwQcKXrOarcmjQAp1StHOoOU3QJL/GYMDH61kQaR+YCpHleNIO2nTDe6QqbBnK
-	 wEQXCAHU4jEHRenZKmjBhohz00B/79kkpopc7NhPO4o4uUAZrYJyoo6sADHjSE62k4NPV
-	 4v1hX1abwg/KmOO+S3ELmDuBy9VwpytYYquciEZILVORYC3aRve/5iR9ULoxz1q4S/Q==
+	bh=j72DktMOO2DBFoLK4bDRTTWq1cVQ4dvknVDqpN1MLDg=;
+	b=rKnQF8udKuCx2gRj/esTdOfiVIPJIgzPrYQj9SsC6dIV+dhq/lg+2YP18IRjLVPSEJax
+	 iBTqZZ/lgDcKmYD6804Y7rHRrOUiub2GDpTvM3684lGIjnGv320SXJuqY1CZDMskP3aOF
+	 ZQwFeilRoFhcyWbvaks6uPqL2XfUB6SH1L5PgxgYWN6uSmDnr8SlQ9cIuLMspU3HJ51hU
+	 PK30wfbDJmE/dT3gekP3bi7uiagiXGfLItjlsnvGGqn16fPIdTtsReVB0RLhGGn4CHUTF
+	 cKOGPuXfbtN+M/bNfsfvjLUNTWPZaJnrAr1HDCfwWwMQDzNelXNEH5JFXN7OnkOJIoQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Dr1r3mlc;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TDo4lnTs;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA19606A333
-	for <linux-hwmon@vger.kernel.org>; Sat, 14 Nov 2026 00:49:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8A65606A32D
+	for <linux-hwmon@vger.kernel.org>; Sat, 14 Nov 2026 00:51:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Dr1r3mlc
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C3CA1F000C4;
-	Sat, 14 Nov 2026 00:49:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TDo4lnTs
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D7051F000C4;
+	Sat, 14 Nov 2026 00:51:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794617384;
-	bh=62Ih2Y/07M8ZQccvxQBhH6Td5Mj+dyw8y78BKxAQh8I=;
+	s=k20260515; t=1794617496;
+	bh=j72DktMOO2DBFoLK4bDRTTWq1cVQ4dvknVDqpN1MLDg=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=Dr1r3mlcFDzuqhK49g3S856ytlZExyWdTPYdCV2krh/v9WbElt0ynvgp9b0bBmaXW
-	 Bu7ubZBB5RCrv5znusgVQr8cMnpWzno9UKvCEIrerCDk0oM/+rbGyhgUGrhKsFrI8+
-	 8f6t27Aq71CtSRqsoTn3lCF0B8nI1dWmwSb2RPc2Vad9SkAzrona/bOkA7TdOMoQrQ
-	 pkt1MP030etgtc2Rt3yxwmljBunT63/Gysuo4eoP97hCEB199V4/AA5rGUnaE4w3EP
-	 pO10bbgJtY/zzAB1CVWMY6bSqmuRj962y8O4eNm0wFK/cpe1NIyeQgG1N/QgEDJxbj
-	 ipKcbuIZ1KSYg==
-Message-ID: <sashiko-outbox-213954@kernel.org>
+	b=TDo4lnTsLY5FXm8XNlXB2Msq/g8TEi8XJNw5Oy57rmr+Ym0GxAFBjK54tMKPGy/I3
+	 vxqOocKArDJ4wA5z7SgA70evmPUsWy/ukJPDHChHpq5J9c0s5jessk2HZz30VDT/4U
+	 FrSFiOtojvrefPuIv9MO4tl4lKoexcKJ2TSL153IqwwPbXvwYAfdrs1cQ/LnZxysMn
+	 cQUhTh5L+349+kZzxHPFX9aCg6oSkNfORFEZHndPgbZ6Z32rXePNWBFvWGHiW0P1Od
+	 QzWwvMtQNorY7MB9GWBVdRzC1vCtbT/Ogs/U2vq3vkyJ7lPiTfFiHHiHqb4HUThuMt
+	 oKJtMyZUP452A==
+Message-ID: <sashiko-outbox-213956@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: hwmon: adt7475: Add
- #thermal-sensor-cells
+Subject: Re: [PATCH 4/4] hwmon: (adt7475) Expose fan control via PWM
+ framework
 Reply-To: sashiko-reviews@lists.linux.dev
 To: =?utf-8?b?RGF2w63DsCBTdGVpbm4gR2VpcnNzb24=?= <david@dsg.is>, linux-hwmon@vger.kernel.org
-In-Reply-To: <20261114004110.328050-2-david@dsg.is>
+In-Reply-To: <20261114004110.328050-5-david@dsg.is>
 References: <20261114004110.328050-1-david@dsg.is>
- <20261114004110.328050-2-david@dsg.is>
+ <20261114004110.328050-5-david@dsg.is>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 14 Nov 2026 00:49:42 +0000
+Date: Sat, 14 Nov 2026 00:51:35 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -60,10 +60,25 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> The ADT7473, ADT7475, ADT7476 and ADT7490 measure two remote
-> temperatures and their own. Add the "#thermal-sensor-cells" property so
-> that thermal zones can use these as sensors. Its single cell selects the
-> temperature channel: 0 for Remote 1, 1 for Local and 2 for Remote 2.
+> Register the PWM outputs with the PWM framework when the node has
+> "#pwm-cells", so that generic consumers such as pwm-fan can drive them,
+> for example as thermal cooling devices. This follows the ADT7470
+> driver. A failure to register the PWM chip fails the probe. Without
+> CONFIG_PWM, no PWM chip is registered. Unlike ADT7470, the driver does
+> not warn about "#pwm-cells" without CONFIG_PWM: fan-N children use the
+> property too, so its presence does not imply a PWM consumer.
+> CONFIG_PWM is bool, so no Kconfig dependency is needed.
+>=20
+> The binding also documents "#pwm-cells" without a PWM consumer: fan-N
+> child nodes reference the chip itself to configure a channel at probe.
+> Device trees that do this keep working unchanged. Registering the PWM
+> chip does not touch the hardware, and requesting a channel only marks
+> it as held. Nothing changes for a channel until a consumer applies a
+> waveform to it.
+> [ ... ]
+>   exist.
+>=20
+> Document the PWM provider in adt7475.rst.
 >=20
 > Signed-off-by: Dav=C3=AD=C3=B0 Steinn Geirsson <david@dsg.is>
 
@@ -71,5 +86,5 @@ Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261114004110.3280=
-50-1-david@dsg.is?part=3D1
+50-1-david@dsg.is?part=3D4
 
