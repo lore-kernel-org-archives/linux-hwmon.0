@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794753665;
-	b=Tx8A3+aFd6ybuhnHK6UptmERPjbDLSUpGWn9yVtK1q7fd3y/V3291LC3U6IQ1hhVWC1U
-	 yGSulaylFjReBax51c6wyUXltlUwIAQj7P4v7+ln0d3BHDL/6zW4/CKE5rTBNuiz3Pqeh
-	 T7MsaNzCLhMadc41WuZXmfFs+e3gE94L3N3np6yw42wa5/4xN4hOTDfLdL8xqn1WD1cPH
-	 6UhDwVlQ8cDPOIUOWeRj4B8wrbbkT+Cmz4LPbKE37xkePfMEY3WfV24Tp1NbYzdChFHeh
-	 oo8owd2A8OxNr3bqSPrMtyMW1KW6k63iB+a69pMCEANEKaP1hKRIezKBJ4l+m0SvR0A==
+	t=1794753681;
+	b=nv8KcB+VWhjE+dZFz9zZib6dauo2O0kqrSfzZzCFg5tM4Nxi9Xk69iVUd7QF9l5MBEMz
+	 +27HLUZ59CtUyqZzSeTZEOn0xPFNYYjNsWPFHNnvdr3E6BuD4yGUE61h2LPk4zUS4ajJP
+	 h43z30FLAckRTNxnj+bOuFuHkJyrUZmuNxjh79IDD+EFyfBK4sAnNtY0XgmeSEcYAhMlv
+	 OlxIg3nl2NvtB5by50286fMkrS2C0pbjCW7OHqd7AuIQEwtyT1EwsshYbs/pP2tJ1exmk
+	 u6oKUc+Anf+YfQAQH6JglXPeII69uzLwMMsU/U2RnbPB8+1pzmJhA0H8EyjTdeKzRnA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794753665;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794753681;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=RaY0e8Izl3BmEW/esELXhTOqJfxYUBAX8ldwbxhT+VY=;
-	b=Qr+ejt5AWwbColRS+knftJpP7h4/CFtOaj2IWuM8LOPdkr8t/EBqXXru+Z7yS8gr6jIt
-	 bedxfQNM2MbzFtl8KppW92P4q0+8/CmLG0xOJxTtit3GL1jAx1ET20CRq3qhRTZZ0ThS6
-	 WGP4kZ6r9bFk5HcJz/M6hmJcAqujr7wsMkizx1fr74beZ40dFwDAOmxchD/hWa32GrKcw
-	 kh0th/SK3IgCIsM6SdNWlZBmki10Hw9gqh/YQLkw5vcuM/CD2sWIhC+P4AG9Mccd2GoP8
-	 pQw6yZN94lnNPrLsfkcZg9k4Gw4SqhfK5MY4uLbsvry0/lrtrdQvLRXZrrxkFS0TBtA==
+	bh=f15A/MscD3qzDiaRVv38lGdmq6IPg9tS2k5ldVs+6Hs=;
+	b=eEr7t4YUIAnR+QMaMMnZQTWg2Dc5Vy3O4ikaYGB4jvxFvpbaOcB7kPjhhpyf6/Bx7Un3
+	 8uzn30tx8ltbjhDRpODcWA7NCfsgiczDxSgGyxiIp2V4D2wz/Dgup22XI4VJT4J8XkkKa
+	 rNR9oOzL7v6akpFtr2xjIBZVdaJQc0RwB2rBXvqtF+1AX9bQZVQ7vHukkpT4roJKXPPlD
+	 +fBttSgdOUxFdT8RP6QAyv2vIkjf+xbzWaJSdp5coEe47r8WJ42iJWBbYBambUO9C7I3A
+	 POuVmiWayKQtiNJaWYvofiz4+FFpdHTAUEujoAy8cJ6IDOZDhktcYBnKOw5cpUJMKaw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LoxIDEe0;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AANTUtFI;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65B02606A32D
-	for <linux-hwmon@vger.kernel.org>; Sun, 15 Nov 2026 14:41:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEBA8606A31D
+	for <linux-hwmon@vger.kernel.org>; Sun, 15 Nov 2026 14:41:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LoxIDEe0
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 061901F000C5;
-	Sun, 15 Nov 2026 14:41:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AANTUtFI
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 740FF1F000C4;
+	Sun, 15 Nov 2026 14:41:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794753665;
-	bh=RaY0e8Izl3BmEW/esELXhTOqJfxYUBAX8ldwbxhT+VY=;
+	s=k20260515; t=1794753681;
+	bh=f15A/MscD3qzDiaRVv38lGdmq6IPg9tS2k5ldVs+6Hs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=LoxIDEe0vaFoq+aGOx5pJz8oiox4u2DQ0//gtl5K266P4qlg5jCQxdYctKr+GYIhD
-	 NFBAL8BpWQNe6E00Arui9W+ZoXsVttgj0vPyBNXWmg24aSq8I9uH/m+sDxkcyRuAhP
-	 RrLtysEc4kE7LLygG7RBZOx9FJsvPwumyHJme4r4hOkFJn1YdY33CR7d7rjkxbUPx3
-	 7o6L1dhthpb1ahX6KNpFBcSBQ4P9nutfFofybavjmuNt7eFpZ76IzEBccpAuE+KxTJ
-	 Ix0WZ1cFEKRwGI+ug0iIi9v4dUgBbeMmc6/4eNEeZa5IrDak335n1B2R2TszD70tvs
-	 8374zxmn3ks3Q==
-Message-ID: <sashiko-outbox-215586@kernel.org>
+	b=AANTUtFI2zPEUXuqElgwaf6kbL/46NOG6Lb0PPXoa6tNnRtEvhnMgN7XY5nhWFQLU
+	 OqkZ9F+ZC0f8fPLlI/FDBjKI9u5pkylTVt2ah4y9t+I68xNBa7ncARZCqSu1HZnPSS
+	 I0CP4i0UoGL2bjPdCxXwHWT4ujurEKsXOkRHUgOIXRMeu3hFcCitNyKKp0XOeEakHp
+	 +17584LFlqEBeGBwhb10B0oHatJ5VNK6TzbF1nSJ5tlRHdfEMSpXNVgS1I/B44zqrF
+	 vO201yJwDOM3h/wcrrNY/r6Cm8lWFU16xIIpRzWg8GBpFA3nbJPQFC9dMXdXoCuF5C
+	 oEqjnWY1J6SrQ==
+Message-ID: <sashiko-outbox-215587@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/3] hwmon: (asus-ec-sensors) add ROG CROSSHAIR X870E
- DARK HERO
+Subject: Re: [PATCH 3/3] hwmon: (asus-ec-sensors) add ROG STRIX X670E-F
+ GAMING WIFI
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Eugene Shalygin" <eugene.shalygin@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261115143708.492883-3-eugene.shalygin@gmail.com>
+In-Reply-To: <20261115143708.492883-4-eugene.shalygin@gmail.com>
 References: <20261115143708.492883-1-eugene.shalygin@gmail.com>
- <20261115143708.492883-3-eugene.shalygin@gmail.com>
+ <20261115143708.492883-4-eugene.shalygin@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 15 Nov 2026 14:41:04 +0000
+Date: Sun, 15 Nov 2026 14:41:21 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -61,14 +61,16 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> Add ROG CROSSHAIR X870E DARK HERO board, which provides the same sensors
-> as the non-DARK version.
+> From: John Roden <jonathan.roden@gmail.com>
 >=20
+> Add support for the ROG STRIX X670E-F GAMING WIFI model.
+>=20
+> Signed-off-by: John Roden <jonathan.roden@gmail.com>
 > Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
 Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261115143708.4928=
-83-1-eugene.shalygin@gmail.com?part=3D2
+83-1-eugene.shalygin@gmail.com?part=3D3
 
