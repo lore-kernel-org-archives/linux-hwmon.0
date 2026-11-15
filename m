@@ -1,80 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=109.224.244.119
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794749920;
-	b=PQZWXi4NK6uEuR0o9UQN/fdboLxRPvaQJBRGOMEDh2cIJ+ISDLpHkkOWogsQVZbN3pVx
-	 FA4CagpITM+3zDDtEroJJfueahyMeu708kpzw1ZIA7SLpVmyurIBvtOuDmB4jyidQeBpH
-	 AInVYH7+Lxz9XQmETJAYfD9ARtGFVyLmuoA+gQTYh1oVN2qZc+BJVb56DCmOHcUFrLj8U
-	 6yJ8L4UVxyD4N0BE0xusf7xpV+LkVpG8a99jtwNYYN2mDkGQ7Ix5lWRMUzIsKnNY1cINt
-	 yQvRLCQXy6qfiGO+TuSVUOhR5oMRpU8pK1n79A8w5vg0Rc3qhnwZPTsSV4lLAJGexkA==
+	t=1794752198;
+	b=UcaYabnRlJf/9k1KFr7BO1M0aj60ZE8hV1mD98LMVX/LHt0mZsjg/mgLRC1KIo+DKX5g
+	 Fk0m4mMV5v7VPDCjqmIcMJ5UkVnSMIPQBiliDi00PsL6THq4ugaaz2OUd06X3VEtEGfdo
+	 XZ3qAzp8htVqofoMfy8IrxhfMertHvb/aPw/NCi2CzWoKabCbyBbXahyYzM1Xv6Uw7HYW
+	 v2ug7lD5bvEhUugYl7zXro5uVL2kX45yvIKFUQg397zxWqPXDoQ+RYRFjkD7Sop2Xq80C
+	 r3cOCB72H3gKOMgLN5/IoT0vc3wsk62jwNBTw/OqGc+nW/gFODwicdNObTitqg0acxQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794749920;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
-	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
-	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
-	 X-Local-Domain:X-CMAE-Envelope;
-	bh=PeNZzg3oK75/b0ly5y0MeZF2YmpGhG/qY/Asr9C+wmU=;
-	b=PP1UYbZqRsff3PjFe0Tf4Rmv+4lGFme9t/ytwo5MBmhSZnT09zh6tQRRezGXRkFjHemR
-	 XtRfCIMMwlObxydvpxeJk9b9fqX3sEV94GnY3IBu01JMZ6nu7x9/ir03p6Z4wmyGnTfpt
-	 ACSWXTHkii0Thv73msdNyjjHDTQHNkj+Rni5sZZ3eYHMds79FkujnI2yVp33cxvENHDpa
-	 TlX4tSUy67QBQK/khOE+tXHmkBbYJQFI/WnR7QMkVu3EmYGgwN7EK9FiEFovD0ZLUiUDJ
-	 kK8CfL+tzXwfEGgY2yOg8gsgkX71Haj7t3TlrYOfR07wfchUlN69dqYSxCMexNayCyA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794752198;
+	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
+	 In-Reply-To:References:Feedback-ID:X-Pm-Message-ID:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=GYlTKVMNt6BGcFlMeO/BV1sAsdx0ZWW7cLqsRE9HwwQ=;
+	b=1Sd9NT0FLUhYXUniN/p3gC98cZg12XoVGcyLXCXVQBwCLngUob2DPXQYSm1Ig3MxiN1x
+	 vzB2/dG/u+wWTSuxxg5hHay/FddNNAtOjOFBWubigC1oORZjNi0a9S6BsqIzMXR7BwMVf
+	 4zAnf6tx12hAWCA7lbZmovTeVOe9D//nZei7JXkJ6i2CPeCQf/oQRAWAyu7kgAUlF77xY
+	 ev7ehXiPKN2bhDp6mUfe9hs9xjj/tJ6NwSA0HnH6Fjk+xf/sP3t7hwMTJ2J6DxnEzUWI+
+	 P+1NWRAb03I4Vtmqro/MwMZ52ktJ4xNYtt1Ox+/PIKf+zpp0B5xotw8jfBvRcK4Lm7g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=jaxrtMs9;
-	arc=none smtp.remote-ip=44.202.169.37
-Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=dsg.is;
+	spf=pass smtp.mailfrom=dsg.is;
+	dkim=pass header.d=dsg.is header.i=@dsg.is header.a=rsa-sha256 header.s=protonmail2 header.b=e13TolbH;
+	arc=none smtp.remote-ip=109.224.244.119
+Received: from mail-244119.protonmail.ch (mail-244119.protonmail.ch [109.224.244.119])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BFC4606A31E
-	for <linux-hwmon@vger.kernel.org>; Sun, 15 Nov 2026 13:38:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8BFC4606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E19A606A323;
+	Sun, 15 Nov 2026 14:16:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8E19A606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=dsg.is
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dsg.is
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=jaxrtMs9
-Received: from eig-obgw-5004b.ext.cloudfilter.net ([10.0.29.208])
-	by cmsmtp with ESMTPS
-	id SaN6x2KgnJFmFSaRKx2bTC; Sun, 15 Nov 2026 13:38:38 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id SaRKxYuUguJrPSaRKxGG9h; Sun, 15 Nov 2026 13:38:38 +0000
-X-Authority-Analysis: v=2.4 cv=WLZ/XmsR c=1 sm=1 tr=0 ts=6af9b5de
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=VwQbUJbxAAAA:8
- a=Byx-y9mGAAAA:8 a=p5UCd2gWKyfE8sLfB1wA:9 a=CjuIK1q_8ugA:10
- a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=PeNZzg3oK75/b0ly5y0MeZF2YmpGhG/qY/Asr9C+wmU=; b=jaxrtMs9y5BthYT+TG31FZCnkH
-	1OydYFXnDUVdepNvMva0wQ8mn6nli6Z09ocUs+5HmUxPPxolY2vL3bq0NwuWAAe5XJMm2FRNCrZew
-	l1uffQvr6WavSMAyyjZO63lHuReAwX3Mr3UX+op7M27Tvkbu9WO8Um21QNS9xPHQQBrW+ncMOEDfM
-	pQsovE1uoTy1UKOjnX20r7fX7CVFVXeHj2aX8nidA8hqMb8JO5WVH2bx5RE/lnA4A97fMYkLqEnVT
-	Ockz3GyeH8r0rMsVfEsdi48PVqJr/d+x8Ym9GcYdSjYtEZWn3RYsr+aomNz2q+gpZbBqwMDiRnK6o
-	SATN2Wqg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:39426 helo=server.roeck-us.net)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xSaRK-000000013mU-0Wu0;
-	Sun, 15 Nov 2026 19:08:38 +0530
-Date: Sun, 15 Nov 2026 05:38:36 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Ziheng Wei <zihengw03@163.com>
-Cc: Marc Hulsman <m.hulsman@tudelft.nl>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 3/3] hwmon: (w83792d) Fix incorrect struct cast in
- show_temp1() and store_temp1()
-Message-ID: <b54bc0c0-1357-46a9-85e8-2fd38bb41b17@roeck-us.net>
-References: <20261115080203.910033-1-zihengw03@163.com>
- <20261115080203.910033-4-zihengw03@163.com>
+	dkim=pass (2048-bit key, unprotected) header.d=dsg.is header.i=@dsg.is header.a=rsa-sha256 header.s=protonmail2 header.b=e13TolbH
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dsg.is;
+	s=protonmail2; t=1794752194; x=1795011394;
+	bh=GYlTKVMNt6BGcFlMeO/BV1sAsdx0ZWW7cLqsRE9HwwQ=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=e13TolbHBeyVY5pkcUgy+JHDw65snYt3C7zAEPoYa9uJgZupUsUjnc7D3EJsPdMx9
+	 WY7RvszSS6OssyXjLIl3XrVp+KqpVdvcZhpVfeVZi1s91zQxL+jOxWNKpWlQDKl2cM
+	 cCVY4ly5Q4WEoUHQOJMUgaAbvnicktJ4Qd+HCfSozDthihiVBE+zxbAJx2tCsJsOJ5
+	 awMVecHGB2u/FA95KrvJdiKil99I9qeTaVcr8eXxyWNmZsdsRS1T4DgaLzrj3cnDN/
+	 R2tu7jl0OkyHZ+zzCuVk0ejh+Xi4zbpSzo4rBV9AFcrjAdZtVZSgbl9/LwTzb/Pyl7
+	 RIAp29HHihSxw==
+Date: Sun, 15 Nov 2026 14:16:30 +0000
+To: Guenter Roeck <linux@roeck-us.net>
+From: =?utf-8?Q?Dav=C3=AD=C3=B0_Steinn_Geirsson?= <david@dsg.is>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org, =?utf-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, linux-pwm@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] hwmon: (adt7475) Convert to hwmon_device_register_with_info()
+Message-ID: <avm-tbgWgTJNFTBj@dsg.is>
+In-Reply-To: <d28f392e-82ea-44d6-83e5-9593b341a722@roeck-us.net>
+References: <20261114004110.328050-1-david@dsg.is> <20261114004110.328050-3-david@dsg.is> <d28f392e-82ea-44d6-83e5-9593b341a722@roeck-us.net>
+Feedback-ID: 186389362:user:proton
+X-Pm-Message-ID: 3bc10b9a433e40daf2a48c55b7baf60def69b5fc
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -84,62 +64,61 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261115080203.910033-4-zihengw03@163.com>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xSaRK-000000013mU-0Wu0
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:39426
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 16
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfBwpYt71QY1UMhKzomPlVKhMfOnfltakoXN4iG4YjI7tWV/+qrZqXMMkxFHg251s4zxBlIg/FRqZS5sm9aTra28gUW3rtNN/M/QzrkVO77EkJq090631
- tC4eKiWZOC2ZsVkgARjvudgjjIlVsd8EsC6z29HCMtT5JQznleaLchG4i+6Pkdut7IhB6ALZdIH9KRk5HGFyj38/5F8zMFGeohqsTFK99O3bMl2RCo3MjtUz
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Nov 15, 2026 at 04:02:03PM +0800, Ziheng Wei wrote:
-> On big-endian architectures, accessing the temp1_max and temp1_max_hyst
-> sysfs attributes in the w83792d hardware monitoring driver uses a huge
-> out-of-bounds index, because show_temp1() and store_temp1() downcast the
-> attribute to the wrong struct.
-> 
-> The driver defines the temp1_* attributes with SENSOR_DEVICE_ATTR_2(),
-> which initializes them as struct sensor_device_attribute_2 (where the
-> index is an 8-bit u8). The temp1_input attribute has index 0, temp1_max
-> has index 1 and temp1_max_hyst has index 2. However, show_temp1() and
-> store_temp1() downcast the attribute to struct sensor_device_attribute
-> (where the index is a 32-bit int) and use it to index data->temp1[].
-> 
-> Because both structs start with struct device_attribute, container_of()
-> resolves to the same base address, but the field widths differ. On
-> big-endian architectures, reading the 32-bit int from the memory layout
-> of the two u8 fields yields index << 24: 0x01000000 for temp1_max and
-> 0x02000000 for temp1_max_hyst, instead of 1 and 2. data->temp1[] has
-> only 3 elements, so the access runs off the end of the array by up to
-> 32 MiB.
-> 
-> Fix the type casts in show_temp1() and store_temp1().
-> 
-> Confirmed on a big-endian s390x QEMU guest with the driver bound to an
-> emulated chip: temp1_max and temp1_max_hyst read 0 instead of the
-> register values. Not tested on real hardware.
-> 
-> Fixes: 1f8dae31fe8d ("[PATCH] hwmon: w83792d use arrays of attributes")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Ziheng Wei <zihengw03@163.com>
+On Fri, Nov 13, 2026 at 10:07:53PM -0800, Guenter Roeck wrote:
+> On 11/13/26 16:41, Dav=C3=AD=C3=B0 Steinn Geirsson wrote:
+> > Convert the driver from hwmon_device_register_with_groups() to
+> > hwmon_device_register_with_info(). The standard voltage, temperature,
+> > fan and PWM attributes move to hwmon_ops. The chip-specific attributes
+> > stay driver-defined and are passed as extra groups: the automatic fan
+> > control points, temperature smoothing, PWM stall disable,
+> > pwm_use_point2_pwm_at_crit and the VID attributes.
+> >
+> > The driver keeps data->lock, although the hwmon core serialises the
+> > hwmon_ops callbacks. The attributes in the extra groups run outside tha=
+t
+> > serialisation, and they share the register cache and its periodic updat=
+e
+> > with the hwmon_ops callbacks. They do not take hwmon_lock() instead, to
+> > keep this conversion free of locking changes.
+> >
+>=20
+> I disagree here. If you don't want to change the locks to use the hwmon
+> subsystem lock in this patch, add another patch to change the code to
+> use it. The subsystem lock was not introduced to be ignored.
 
-Applied.
+Understood. I did notice one issue while planning that change. Patch 4
+makes the chip a PWM provider, so its callbacks will also need the
+lock. If the consumer is pwm-fan, then when userspace writes pwm-fan's
+pwm attribute, the hwmon core holds pwm-fan's lock. pwm-fan then calls
+into the PWM core, which calls into adt7475, which then needs to take
+its own hwmon lock:
 
-Thanks,
-Guenter
+  hwmon_attr_store()              takes pwm-fan's hwmon lock
+    pwm_fan_write()
+      pwm_apply_might_sleep()
+        adt7475_pwm_write_waveform()
+          hwmon_lock()            takes adt7475's hwmon lock
+
+As far as I can tell no driver does this today. adt7470 and
+aspeed-g6-pwm-tach are the other PWM providers I found in drivers/hwmon,
+and neither takes the subsystem lock in its PWM callbacks.
+
+I haven't written any code for this yet, so this is based on my read
+of the current code only. If correct, I think this would need a hwmon
+core change to give each hwmon device its own lockdep class.
+
+I'm not quite confident enough in my understanding of the core to
+commit to implementing such a change. But I'd appreciate your thoughts
+on this.
+
+>=20
+> Thanks,
+> Guenter
+>=20
+
+Thanks again,
+Dav=C3=AD=C3=B0
+
