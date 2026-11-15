@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.33
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794749719;
-	b=FSWl0423UPvfXy+MMmdFe0mmvXcTG+A6yUsGi20dvBpyYrQaIDUhCx8HffmPDrV1Qq4Z
-	 ocKHJ0DVg0PS1BG5603iN5hWl2SvcRLMIYBklnRaLzEuYaME3VcAJxN0LKOlBjgeFVcH4
-	 RTwf95wB+ELJB+SQ9dkidu1jwg4z7ee1Rg0UhdCKuW8JRjg6xlvIXv+FmocFOMLWvFS8a
-	 YrlITKPHAy5u1+1P3yrKPll9VPi/SLMAGyb5slOX/dGCr/UP4owwJDwi9RpbNTXcy6KiB
-	 mLtsy76rmEnXdr4tYj83Jr8cMlhyTJp4FT6NY7e8La504PVPJcAKiPTN97cyOCwLtxw==
+	t=1794749773;
+	b=RFvfp+myHo+a5JbpPApi0OhU1wzzDXKutPLdGOObidA1qtxZKbUzTdy3ah36SrXo2or1
+	 9C7u+xSiiJ9T906TDwisdM+KrXHd0HZgoJj7915FrGQ7d3VlSdPYwrMZJ6mORsPc0MQjf
+	 ny4CbVaXSTZoxvTjl57N/HUIfbbGNleVAECef6Lz4xX5ycWXk2QjcUzgHLTWAkjSnXoFJ
+	 m5Q4eUxPlxrk7HW+7y9tqNGUKZFHYI+Ax9JOeD17ssZmMWZGptQ2Q4fMHOjhGHidtQdRG
+	 1xpUWFdvX1ctMEfOdRHl6zMPuGEehkwMJe1GW/Zehbiu/rBhVzsATdHLoTUqmv8GiFg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794749719;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794749773;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
@@ -15,37 +15,37 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
 	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
 	 X-Local-Domain:X-CMAE-Envelope;
-	bh=aSapEaH/NuRU2jX6S12LQSO8bYKdhcI+xgkonqmfsqs=;
-	b=2m/bRnWataZQ6lKqGxho6RW9tnMSsmEzPMSszXUKYkpPI4FBYh/3WHq2kSK+5bFfy1XA
-	 V/+9iRFerdB10QxR8CUbTuPwGnKT5ECNyFkyaj/aFIA2meiPeGi3aNwe/pg7Lq/i7cz11
-	 JkG+Jqi079gXM/IDb/8eABaup/kZD6chtTqNmpTufuWiOUEDOFo7+3MIBNBde5ntKpkg1
-	 uu+wEBi/vTJAHocr77y/G+9YN4o9zCJjKKr1cTlG1okEwhUdu9NRtRjBtd2BAt9c1mQAu
-	 xDr9u4fa16umyBh1IwUZPFM3y+Fi4bqcGotHa3QN3AJroWmQ7z41/AoI/H2wR5ECwiQ==
+	bh=bakunlIFWEDfHo2ZFFXHGFCwrwenum6e3Vhu2vGh9ds=;
+	b=5pzvPJlvp03GPO6ym1yxJTq0lR40u2cl6YIUNj5gfycUfce580vxsEVfJpbCD4j3JyT9
+	 /hXgpmeC2wGPZ1mGLiRP69zjm+amNSdiNc10rCmcZ0QUGE+bQcrwfEmHUyMyOiDLbQIc3
+	 3yv3ul458VF7a54kodIxoYv1vTsbqzg/+LyMm32ixAXPCj4CEBT5AhhhMDa5VVSaN59AV
+	 kASBAAtu336/4x8Cwy4J6mzJdU+FfVVttu2Si0yezADWuuucVVYaUOur/6W5TCNW3ts44
+	 Jy0d0OucotjxO7dtAanA2AHqXfNru961l1F5NnjVqw6Vr9PgG8BmTjUmbhYfv30Qm7g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=f9WBXsKM;
-	arc=none smtp.remote-ip=44.202.169.37
-Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=pViYBZe4;
+	arc=none smtp.remote-ip=35.89.44.33
+Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 943B9606A327
-	for <linux-hwmon@vger.kernel.org>; Sun, 15 Nov 2026 13:35:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 943B9606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA0A606A31D
+	for <linux-hwmon@vger.kernel.org>; Sun, 15 Nov 2026 13:36:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8BA0A606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=f9WBXsKM
-Received: from eig-obgw-5004b.ext.cloudfilter.net ([10.0.29.208])
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=pViYBZe4
+Received: from eig-obgw-6003b.ext.cloudfilter.net ([10.0.30.175])
 	by cmsmtp with ESMTPS
-	id SaN6x2KgnJFmFSaO0x2aq5; Sun, 15 Nov 2026 13:35:12 +0000
+	id SYU5xtMByAR1iSaOzxS8mp; Sun, 15 Nov 2026 13:36:13 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id SaNzxYq45uJrPSaNzxGCHp; Sun, 15 Nov 2026 13:35:11 +0000
-X-Authority-Analysis: v=2.4 cv=WLZ/XmsR c=1 sm=1 tr=0 ts=6af9b50f
+	id SaOyxHt5EGh2BSaOyxJnUw; Sun, 15 Nov 2026 13:36:12 +0000
+X-Authority-Analysis: v=2.4 cv=Aszu3P9P c=1 sm=1 tr=0 ts=6af9b54c
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
  a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=VwQbUJbxAAAA:8
- a=Byx-y9mGAAAA:8 a=YlH-AGZLenAcjOw3p3AA:9 a=CjuIK1q_8ugA:10
+ a=Byx-y9mGAAAA:8 a=p5UCd2gWKyfE8sLfB1wA:9 a=CjuIK1q_8ugA:10
  a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
@@ -53,28 +53,28 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
 	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=aSapEaH/NuRU2jX6S12LQSO8bYKdhcI+xgkonqmfsqs=; b=f9WBXsKMx+AxcyyUHrh3/0Gv6H
-	n9FaCar2PKDAsnj/XFLBflZL/3lYxXy8UXiYLvlDXOS2wjoyTqV5l2PrODsNaJwyXZ22jcLkXLB6h
-	A8AiqA0jyaEpX0HBtdSQj2rS4tQlTzHeeBExazgh63F/ghXq2d7XUubsU5UDLInNlPcraL/cTi30L
-	P9/HDY8J0fHyFVpxIr+Sf0Tynf6rJGOVVs3UwnqgXsFPfIYg+WehnpZXerdmeCAfBsGbO8iaWAsI8
-	oidN3LeLknD06YHwa5dH6y7ghqaSaYApiXjekQNY9shPMaPRkZV8qxwm357X4ufT95OvuUqVIJ2Km
-	KRi5yE5A==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:50512 helo=server.roeck-us.net)
+	bh=bakunlIFWEDfHo2ZFFXHGFCwrwenum6e3Vhu2vGh9ds=; b=pViYBZe4u8gXk1+FDOU6Q7g5wW
+	dkM+tS80SNG9P4UKCbbsHEz+sxCYjpE6InFhxpeKVotbDDmziaN+0sDROYcN0i1hG3E+CPdqQqrUc
+	lNxeon79faVFpVIUwCr/yaPbYEaEdiucnEtE5DbX1Ys0Yv916ls/QkCldglerUGQ+bzqQ1QBrb50F
+	EXAmk2RDBwS0prMoz55D7hZ5bdgmYFfRtzUjEfX0+yqLytnIECNRrAje17TyEmMvPGkZyMejMWvAu
+	hLFSrib0H8dlREeCnAt911TiB4I9gU5kCW0st7YovCKYMeoC6rTWhHp1rNK3w512Kh0tJq02fUC6E
+	cfQn08ZA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:52212 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xSaNz-000000011nP-0obe;
-	Sun, 15 Nov 2026 19:05:11 +0530
-Date: Sun, 15 Nov 2026 05:35:10 -0800
+	id 1xSaOy-000000012kJ-07Da;
+	Sun, 15 Nov 2026 19:06:12 +0530
+Date: Sun, 15 Nov 2026 05:36:11 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Ziheng Wei <zihengw03@163.com>
 Cc: Marc Hulsman <m.hulsman@tudelft.nl>, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/3] hwmon: (nct6775) Fix incorrect struct cast in beep
- callbacks
-Message-ID: <adcfae11-f8f2-477f-bb4d-4512caa089a1@roeck-us.net>
+Subject: Re: [PATCH 2/3] hwmon: (w83791d) Fix incorrect struct cast in
+ show_temp1() and store_temp1()
+Message-ID: <bf6b651f-8739-4981-91cc-48925d3547e5@roeck-us.net>
 References: <20261115080203.910033-1-zihengw03@163.com>
- <20261115080203.910033-2-zihengw03@163.com>
+ <20261115080203.910033-3-zihengw03@163.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -86,7 +86,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261115080203.910033-2-zihengw03@163.com>
+In-Reply-To: <20261115080203.910033-3-zihengw03@163.com>
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -95,47 +95,47 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xSaNz-000000011nP-0obe
+X-Exim-ID: 1xSaOy-000000012kJ-07Da
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:50512
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:52212
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 6
+X-Email-Count: 11
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfEFjN18HVLz7ZKV9ZR1Bu4RSTtn7i1qmll0Q/ELV9zExESPbglVXBETn9zhGkyYrngu0JUNZp0NrPalHjZkfjq3bGcr1ITPBUCFE1DXcKR0L3g9E9/S0
- P4IpmsYru2Bflxt44mwxek5DrTVdnJkL/RT7TQrjjNx1IeDjhmFj56brxSr9vJYyZPB7fS5z9sdWZpjXIoAzrvopxKhT9PScQlH3MwCu4UtJN7Z5TWSKMoOs
+X-CMAE-Envelope: MS4xfJwNezVwD21R5S8d9wE0FcRwp41YJh4aAenBTtlEzxQiZrCd2XwTyQOyULP1rsS1+phVeQaRqEn6PBkBXW0aBX6qvWxS8KWlZoFpjLDucqLIhzhokMay
+ 6hfKrz6TVqfhHunkjX5n6lZpgvIZQIIzZ+dAPCQfAkcTGCPA8HpBZhI7thKMW/ZyFyosUsBHCaz81wL5YPtVrTjzszZJfbvMqgiChkVCg5N0CuWusumdleYa
 
-On Sun, Nov 15, 2026 at 04:02:01PM +0800, Ziheng Wei wrote:
-> On big-endian architectures, writing the in[1-*]_beep, fan[1-*]_beep
-> and temp[1-*]_beep sysfs attributes in the nct6775 hardware monitoring
-> driver always changes channel 0 due to an incorrect struct downcast in
-> the beep store callbacks.
+On Sun, Nov 15, 2026 at 04:02:02PM +0800, Ziheng Wei wrote:
+> On big-endian architectures, accessing the temp1_max and temp1_max_hyst
+> sysfs attributes in the w83791d hardware monitoring driver uses a huge
+> out-of-bounds index, because show_temp1() and store_temp1() downcast the
+> attribute to the wrong struct.
 > 
-> The driver defines these sysfs attributes using SENSOR_TEMPLATE(),
-> which initializes them as struct sensor_device_attribute (where the
-> index is a 32-bit int). However, the sysfs store callbacks
-> nct6775_store_beep() and store_temp_beep() incorrectly downcast the
-> attribute to a struct sensor_device_attribute_2 (where the index is
-> an 8-bit u8).
+> The driver defines the temp1_* attributes with SENSOR_ATTR_2(), which
+> initializes them as struct sensor_device_attribute_2 (where the index is
+> an 8-bit u8). The temp1_input attribute has index 0, temp1_max has
+> index 1 and temp1_max_hyst has index 2. However, show_temp1() and
+> store_temp1() downcast the attribute to struct sensor_device_attribute
+> (where the index is a 32-bit int) and use it to index data->temp1[].
 > 
-> Because both structs start with struct device_attribute,
-> container_of() resolves to the same base address. On big-endian
-> architectures, reading the 8-bit index field from the memory layout
-> of a 32-bit int fetches the most significant byte (which is 0),
-> rather than the intended channel number.
+> Because both structs start with struct device_attribute, container_of()
+> resolves to the same base address, but the field widths differ. On
+> big-endian architectures, reading the 32-bit int from the memory layout
+> of the two u8 fields yields index << 24: 0x01000000 for temp1_max and
+> 0x02000000 for temp1_max_hyst, instead of 1 and 2. data->temp1[] has
+> only 3 elements, so the access runs off the end of the array by up to
+> 32 MiB.
 > 
-> This type mismatch causes all beep writes to change the beep setting
-> of channel 0, regardless of which channel the user targeted.
+> Fix the type casts in show_temp1() and store_temp1().
 > 
-> Fix the type casts in the two store callbacks.
+> Confirmed on a big-endian s390x QEMU guest with the driver bound to an
+> emulated chip: temp1_max and temp1_max_hyst read 0 instead of the
+> register values. Not tested on real hardware.
 > 
-> Not runtime-tested: the only big-endian machine available to me (s390x
-> under QEMU) cannot build the platform driver (no HAS_IOPORT).
-> 
-> Fixes: 30846993047b ("hwmon: (nct6775) Add support for beep attributes")
+> Fixes: 9873964d6eb2 ("[PATCH] HWMON: w83791d: New hardware monitoring driver for the Winbond W83791D")
 > Cc: stable@vger.kernel.org
 > Signed-off-by: Ziheng Wei <zihengw03@163.com>
 
