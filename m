@@ -1,57 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.39
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794753758;
-	b=Nmph/HLDr8kgWtXlS6L8jJ09Ocq4NGTDdxWXuJ41C53IFDbPsg/oAlyXvGOkNOuyyJ6o
-	 4gOLzL2lB3+h/cd4+Ez3p0utszP5N1EZEfCoOQSGIJ/grZceODfKdUIT5zj1Y/5MrhT4k
-	 zTtrv7RKp2X4F8sI9gUj94TkpcCCsqKQKDyIhHR+oZFVwwdgpQ7mh0IwbNHpQfTVAp/QO
-	 wmwQXHR1+jE/01afPTQu+ZXJigXPlpWlwR0134mapJhlZb6o97MOK1aqx8qlQp9gzLcZt
-	 eN5lQg0G3sN5NE5R98hQRxdjHyE9rmXiBh3Ek1/5n6QIf+aLVhG305zSQ8A181oOl5Q==
+	t=1794778817;
+	b=mKNmrRXE+zHDYYgA2Milp8RtbU60SNhATDbvzVs3rwa1jy2q9z0qO46gI31LtbIa9uSg
+	 8Mj2itgv0obYnhrz5rAqkLFVqSsyoEknLwHI+8Hz/5wAh/00d6/Q03eowLHnuxoyoEVYO
+	 bUWRf7fF0dkXe3/PQ0a93d9nb8/StdCRBB2pWECzgbvISuHkr+3fAlMArNstfLFaieQCj
+	 buD5aIi9Y5lOqo+duD9ABwY7ZjT63dwlxXAaNVHEqIVa5x6I+RF/j5VtHQ3Hzc4h/XdVi
+	 Lj0heVGz1ESH+9MBBmv3FveY8FeK/wjWvAcJqouPnVTtRoy6o0eIWx9p/ReeyQkYMmQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794753758;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=i8eT45ncSIbUqWvcs86TaMeI1dWfh4eHsmd3LqUmEEg=;
-	b=lY7gDid/hthba8W09lTqH7cTUV/UeTVLt7aeTUjgMW1b1uD+W22w/v0sh0gnpW0ceCqg
-	 GoJDhmy1znKSWgrwjQWAlgoL0AdZjczubMq+0f4xZk++DMOaggm5NIDRAherARFwNvfs+
-	 fhJJGWhOHhLmgIGO0MlJcXklYMyKzTeymi6J5wKE79IgI0EeJpl/5hTu7a04EPir3DJQU
-	 /0VyxjVIgwaNpRO0ZhSW2I+PswHwUX84+qcZNlrm3JZn38pAS/1V+Rp1VFZpLBdtUYgGE
-	 ddgR35V8fsTCL4+TgCrJtNfT73gVNz73QTA+lx1GuBpPTsA4YR6jX1BX8/8dG3R1VuA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794778817;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
+	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
+	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
+	bh=KVX7vPJ9OTeTzfoMFASmwz/gzFZvz1nh0dPEPAyIr0I=;
+	b=xDGWu2rc4SSdQsrFe6c9+Szk7RSeICmiLWtd2YmEjh7V8HhTDRKu0TcrYEMJRPsmx95T
+	 2w2b7sBPxe5MIcp75N5xfkP6H61L41v3Uov07S6jT/ZKPVjfwf4yIj2mW1/cR/eGzKZFb
+	 6ZWuS3ZBUdFqJJamXtyvV9h2PMstzaEa35R9SZjFsOPnwToaAtb0R0ClYNbAiaMoqf26e
+	 OYcwcIKpwzxi5cDOWGM0I0F2NejBxioRZTaYKrPkrf78N7SCV6qicCDQ16a6MeLYGXLYO
+	 cE1mwj2RbxW+lPbBBHmvpO+n3BO8jIdHDQPd2vl3c97nu7zFjzOkz6vmqciKBFLbYWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QJ99Ko1T;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=roeck-us.net;
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=YxtgJo2W;
+	arc=none smtp.remote-ip=44.202.169.39
+Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE51606A31A
-	for <linux-hwmon@vger.kernel.org>; Sun, 15 Nov 2026 14:42:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3832606A32F
+	for <linux-hwmon@vger.kernel.org>; Sun, 15 Nov 2026 21:40:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3832606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QJ99Ko1T
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DFC11F000C4;
-	Sun, 15 Nov 2026 14:42:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794753757;
-	bh=i8eT45ncSIbUqWvcs86TaMeI1dWfh4eHsmd3LqUmEEg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=QJ99Ko1TjSewrVhOfQHksnxr3+7jVPr0Bpe62ZvsoWNBO4bIb3QTZ0CtDT5GSpeSZ
-	 pF5+hYgDyGrg0oEkbdraZqLE75P3i3RX1W2JYGRJdOEfvQnxpmDEBZJWXFiGp0dxBB
-	 wHWBlqcp1tISlXxRfE4ChEw/9tlPbdWSpUvaF5E9eHCpXwB0hFeOczTTZ7vLsCXsSg
-	 VFIMrM2CpPODFld6EUy6WMOm+gM5hYYLfNE+ZZzvK8D5k7zbaK0+ea4X5R8R6VVTO8
-	 nVKzacnxxLqWoMqbeR42ltJaJtwTvOqJB6YmqrIK9NQb0HAxMD9T1DQl7KBs5pDwd9
-	 5mn5wp7H1wZxw==
-Message-ID: <sashiko-outbox-215588@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/3] hwmon: (asus-ec-sensors) Add support for PRIME
- Z590-A
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Eugene Shalygin" <eugene.shalygin@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261115143708.492883-2-eugene.shalygin@gmail.com>
-References: <20261115143708.492883-1-eugene.shalygin@gmail.com>
- <20261115143708.492883-2-eugene.shalygin@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 15 Nov 2026 14:42:37 +0000
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=YxtgJo2W
+Received: from eig-obgw-5004b.ext.cloudfilter.net ([10.0.29.208])
+	by cmsmtp with ESMTPS
+	id SfVexfByLOOJnShxKx0xUQ; Sun, 15 Nov 2026 21:40:10 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id ShxJxlHoauJrPShxKxRK3m; Sun, 15 Nov 2026 21:40:10 +0000
+X-Authority-Analysis: v=2.4 cv=WLZ/XmsR c=1 sm=1 tr=0 ts=6afa26ba
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10
+ a=T8OswTi7en7Lat6lzKAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=KPbNTLLc3YvdawN95zVk:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
+	List-Archive; bh=KVX7vPJ9OTeTzfoMFASmwz/gzFZvz1nh0dPEPAyIr0I=; b=YxtgJo2WD6n0
+	WmJugJPeVh5UlVsUmIS8e5Uyd3ctxtWEj5FuNKBl6gdX2sFInUqR3GphGv5cXNZ88vWiD3QE5gs5Z
+	zSQqvxcG3YVBlpPgUch8bEShrjW7PeCAYfSAhQpT6JNlZbPLe69eVO1LzFNWtoYvzZSe1hoTv5Eww
+	rAKxglVx4fEdEbGv1IUMhq42k22kHuPkoh3KUy/0hrHLq2N6ZohmfO2wIf+H3z3sjP9JpedudAF4f
+	6AuyWAnDp82UyMlhSQ9NERocloE+PRFwt3zCNbaSWjTmnwIsfkVBDeROSkwKVO4Znb8+SYuWRb5wF
+	BqVeYesa5vS1sVrvvIqKuA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:50662)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xShxJ-00000000Je9-288q;
+	Mon, 16 Nov 2026 03:10:09 +0530
+Message-ID: <62350363-b796-4637-a102-c668037bbbdd@roeck-us.net>
+Date: Sun, 15 Nov 2026 13:40:08 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -60,17 +75,159 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/4] hwmon: (adt7475) Convert to
+ hwmon_device_register_with_info()
+To: =?UTF-8?Q?Dav=C3=AD=C3=B0_Steinn_Geirsson?= <david@dsg.is>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+ linux-pwm@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20261114004110.328050-1-david@dsg.is>
+ <20261114004110.328050-3-david@dsg.is>
+ <d28f392e-82ea-44d6-83e5-9593b341a722@roeck-us.net> <avm-tbgWgTJNFTBj@dsg.is>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <avm-tbgWgTJNFTBj@dsg.is>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xShxJ-00000000Je9-288q
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:50662
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 18
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfG2fW89xa4wl91HOs5ztQRdLwpNNpS/LZ/Ul3D3TueriEjWegiIuDgTB3yhPZevVOZlpPJNgv+jvrM9nQlRXJnruLz8QdSho7jrujglpNQK8XsjyxDc0
+ qZ9XvG/hSDk+Ow+tlk8bsCCl6u7yYraOdTWViYSQ6LhvrAdYEOT+Dw9KFdgRD6rURTz2EmsdFfprYtC8oAu2i81qWYgS3LzJ56CEoMx5RsG+jwqwB5PKfdgj
 
-> From: Kostiantyn Korn <korn@korn.im>
->=20
-> Add support for the PRIME Z590-A board.
->=20
-> Signed-off-by: Kostiantyn Korn <korn@korn.im>
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+On 11/15/26 06:16, Davíð Steinn Geirsson wrote:
+> On Fri, Nov 13, 2026 at 10:07:53PM -0800, Guenter Roeck wrote:
+>> On 11/13/26 16:41, Davíð Steinn Geirsson wrote:
+>>> Convert the driver from hwmon_device_register_with_groups() to
+>>> hwmon_device_register_with_info(). The standard voltage, temperature,
+>>> fan and PWM attributes move to hwmon_ops. The chip-specific attributes
+>>> stay driver-defined and are passed as extra groups: the automatic fan
+>>> control points, temperature smoothing, PWM stall disable,
+>>> pwm_use_point2_pwm_at_crit and the VID attributes.
+>>>
+>>> The driver keeps data->lock, although the hwmon core serialises the
+>>> hwmon_ops callbacks. The attributes in the extra groups run outside that
+>>> serialisation, and they share the register cache and its periodic update
+>>> with the hwmon_ops callbacks. They do not take hwmon_lock() instead, to
+>>> keep this conversion free of locking changes.
+>>>
+>>
+>> I disagree here. If you don't want to change the locks to use the hwmon
+>> subsystem lock in this patch, add another patch to change the code to
+>> use it. The subsystem lock was not introduced to be ignored.
+> 
+> Understood. I did notice one issue while planning that change. Patch 4
+> makes the chip a PWM provider, so its callbacks will also need the
+> lock. If the consumer is pwm-fan, then when userspace writes pwm-fan's
+> pwm attribute, the hwmon core holds pwm-fan's lock. pwm-fan then calls
+> into the PWM core, which calls into adt7475, which then needs to take
+> its own hwmon lock:
+> 
+>    hwmon_attr_store()              takes pwm-fan's hwmon lock
+>      pwm_fan_write()
+>        pwm_apply_might_sleep()
+>          adt7475_pwm_write_waveform()
+>            hwmon_lock()            takes adt7475's hwmon lock
+> 
+> As far as I can tell no driver does this today. adt7470 and
+> aspeed-g6-pwm-tach are the other PWM providers I found in drivers/hwmon,
+> and neither takes the subsystem lock in its PWM callbacks.
+> 
 
-Sashiko has reviewed this patch and found no issues.
+Ah, the usual "someone else does (or does not) do it".
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261115143708.4928=
-83-1-eugene.shalygin@gmail.com?part=3D1
+> I haven't written any code for this yet, so this is based on my read
+> of the current code only. If correct, I think this would need a hwmon
+> core change to give each hwmon device its own lockdep class.
+> 
+
+Hmm, if that is true (I'd like to see a lockddep warning), that will
+need to be fixed anyway. The situation above will be more common with the
+pwm subsystem maintainer pushing for that kind of architecture, so it will
+need to be fixed. Introducing / maintaining another layer of locks is not
+the solution.
+
+Anyway, you want to add the complexity of getting the pwm subsystem and
+the pwm-fan driver involved, even though this could as well be handled
+in the adt7475 driver, so you'll have to suffer the consequences.
+
+Thanks,
+Guenter
+
+> I'm not quite confident enough in my understanding of the core to
+> commit to implementing such a change. But I'd appreciate your thoughts
+> on this.
+> 
+>>
+>> Thanks,
+>> Guenter
+>>
+> 
+> Thanks again,
+> Davíð
 
