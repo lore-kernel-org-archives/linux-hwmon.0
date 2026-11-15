@@ -1,101 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.172
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794711057;
-	b=Q4uovMjwnCLQJR37SssS+Pvv3Lv7GYPy8H0Ylbai1Bptn1hAzyjOpKaRYh17wFTQbIiZ
-	 MHcMNqo50JuUMunNf8n5AiWl+/EPiLgoLCFSxlc90df4DZWOW3njTlUZ+Haxv9Kjhhf+8
-	 lhWzllGeWlBMb7Iw0JQsiUpOsdtWgq+X57AQG0xBR3h83ooYTI/6jP/SXWheMUssWh7FL
-	 bge2zHq6rcPAEGN80b6WD5rgNDTk89QY1+6kg/VQAJfhB0N+5QriGCmYsAmF0Zmv8GbmM
-	 +a7Z8ob1aFF7mZrmJ6FRrTKoXN0CYJ39BtqJNdK0ORI19luPqV91jNaDKDhP6bal3Yw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794711057;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=b8DaGQKhtDEoI1MBNX5hHcCd5cxhj/+80fP7TfFs+sc=;
-	b=MuBvSSB3pyaWCbBIYvPtYdFMcVNrOgN6wzxfF2V6txNrL8+J80P3topyunmgcGEo6IIi
-	 cc/rLZzR7na85QDfebmynoXQde/7TLdIQy/GoHxaSiYbVB8zJXJout3z6WPIuMXJm43mu
-	 UrLdsHHsvDSqJK7YFHx/BhvCm3o7PhhE+Z8c+i+AoKa0cgAPO4hL0mcGyKEbN4knJ1UpN
-	 fAXXZrYcKxdsGalmKXA4DEEuKPaPt9JLl9Pz4+EqruvqHrY9KRADob9o++RnZkNwLQJVu
-	 XYY59UYfHEPb58a/VxbBu/krof1E7NbGuK65uwYxTJY+E3/kTnVQwJ0PWNn7gyrmkoQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=C3YL84B5;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.172
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794714417;
+	b=GQQMVx+XnglHOFmpveJnhPbEKfgfCYL0VmtVoMMmx066G4VcThiSWZnhScmSN8dZ0jQD
+	 /dpYAhIDAIIlHeUrVkyMzbV4i0Bbpn6esasE9JiXxgem8o6E5UkP7he74lvXgOI93sPFo
+	 CHRVS4AggkTqwjS8pOcxZYiRZzAKYCvlmcDVNjQT/jdYqdqD1GxQoJHhqWa+3vYwGzo7w
+	 DowNuEtre5f+jgGsucxCowAi2zWEokdhskbs4tmC39MT8W7xGmaZqFXSa/cfkqEx5wvdT
+	 g8cJCULyCaFkr6TksXMXhl2oCguQ3OSy2sFhKVri8glgjC3wIbQae4yXPGSqlWiegiw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794714417;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
+	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
+	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
+	bh=a59LCBhRE1d9bXmOZ7i0Prcj6qHWyazOhlcg1JcydFs=;
+	b=WthrhQbmQpoFkXlAckjhGibazSbJmRHppbbeLbge5Dehqhjvl9eoh3Vye+9M5JkIPVrP
+	 eLwa4j6CyGiYcVUCkqQJ51o8OFRPtqJ0KXT8T94La8EAZgcleW4xBktSDGCV+pM10ZaFv
+	 oJT8VSzXPmV9qvx96fFduYWH6kSRm+KaU4aftVx4WGdd7ff9VxH3EuXZb6piIe5PhB+ym
+	 KNKnoW7x7JhJl/3+7AIitU+BAO9/UMJedZ67hDZnKPkg5HGR8dy7dRzGQt7YzQsqOUDHw
+	 t/W5Lp5yAOq3BAaXqxaqLnccVG+vSFGnofUQtsudscHet/toEaFO1xhk6s9xm58rfVw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=none header.from=roeck-us.net;
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=AuKAC+Sk;
+	arc=none smtp.remote-ip=35.89.44.37
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B42606A329
-	for <linux-hwmon@vger.kernel.org>; Sun, 15 Nov 2026 02:50:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 76B42606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAEC2606A323
+	for <linux-hwmon@vger.kernel.org>; Sun, 15 Nov 2026 03:46:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DAEC2606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=C3YL84B5
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-3ada7d53082so32357001fa.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 14 Nov 2026 18:50:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794711056; cv=none;
-        d=google.com; s=arc-20260327;
-        b=kfz0u+0KowSJIA6LRsriH5w2eKXNbJYgjEl+HvASdfQRk4ybO8/uVD9V1Do/IPjf1D
-         MCdSh8yA9By4j683ZhumvLbRE4kmm6FqJD68qTUCtlpKn+RfA/Eqot2i0XRH5kNyfR6g
-         5i0bZinEun6jyV4gzNQFb2dZsF0ab3orfymerAKLODOx0hC9/qIp7/KlFxQveKNVI9x4
-         dA6mzegNCZVGJWq4VVQF2tPP8XWlt8PFnAsLFBKncUyFmpAI8YiWBOIpW1+lHQY/ejEZ
-         UhpllOJlupMew8a5RRgVwpEw3SXUvXyZT7oE+aOH9E3Fu7n38XPNv1v81kudBvRzZmWS
-         IOcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=b8DaGQKhtDEoI1MBNX5hHcCd5cxhj/+80fP7TfFs+sc=;
-        fh=o3ZvmUhMhlmMcncmKWdrkNPdmT1mD7n20OkWN0dIvRk=;
-        b=eG/1MieFwovJyLZBjrO/bc+tferB7wbtaDti7KImdbg3ndF35aCIHyw+MemQbF7lQI
-         Fnsj/k2OoPuBtm4/mC1nmfw2HGKyiLTcRSbGyTue4t8y1Se/hqbtJ03rxircVSRPGeZ1
-         PeOA/vEGs6c13QoE65fjTDx0v4jfiO7Mmql43H61BlyEjgy9XRUgPGmNZSvSx+x8oGjz
-         Reo9TuI8+EzhsYyBUZrI+cTNa/uV77uLv39aokM3jNd7n9VAG2QdAytckLlLi2kH3Kkk
-         0jSGQq6U8NIbQsU0AA0PqSfKqPIVl6UJplb37nxw/VDFQcmtXyPt1lH7L/gDA1NfUkl2
-         uY2Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794711056; x=1795315856; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=b8DaGQKhtDEoI1MBNX5hHcCd5cxhj/+80fP7TfFs+sc=;
-        b=C3YL84B5AdvG1vULn8iIHu0VOFFhm8wHMS7GIQReErW5xay/xayGeFR2v08rTSLBHg
-         s0D5TfL77gY8I94LYeTsFZ992NL+FrL0HWYEWfoEgohVgSQWYiMOJI1Q0gXgjnELGusG
-         yxGe1vxxfx5tEGjZ42nNjhQFu17xAWNFif3Zt759/IlE1SQWPCM5e2ohCHekYZ4bsB1V
-         n3pG0iYYk3h1AJhj2x4Ieuyy4fcS5ftmtqComvfDS76iK4MnePo4uty6tbbuhU6daKVT
-         rxRNMxf1URagtGlMtyv0/DBqu6w02chfXl3qI1cxbSPefPUuGOIIT8LkwnouANQ+pQk6
-         B1LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794711056; x=1795315856;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=b8DaGQKhtDEoI1MBNX5hHcCd5cxhj/+80fP7TfFs+sc=;
-        b=BCk1J8u5ws76Tbpexr0/cScQhekNrm7FQEdwv7IhYnjm/M3GMdKgH1dOmrNXfPMDCF
-         5yv/giZsfHle01Tgw8K66LzUQ567olK0u4xjTbYq4iPewKXHQUu+082+0MePScWcTwom
-         nREE5J+OQ7UPUZmd4/0JGTmN5CzYbBebUPWMHCIe0tvzeEV1J9VuJnSFopB26HBQfjLt
-         JMuwkmBkFF/DkFWyaukHitObaFSAeXv09hahFhxuoEs4HjEeZmvusFFmgS9MT5jinMiU
-         wQK3p+OurYbCH8xjg2Je8f3V8+F4UMN1y5qI28T5TiE7vHiXkhB3gX9cgatvVUCLtX5A
-         Qz9g==
-X-Forwarded-Encrypted: i=1; AL+hErHGtmtMrasIxz2BrkKS40Ec/kICLM2dRRYR1dCWxMXI7yOdhzVpH6OY7Vunh8YstbOldVE0LEX2ntqsoA==@vger.kernel.org
-X-Gm-Message-State: APuU4Z+I9t5U704RJs4SHv4m26zwXZRzaDUgluUzPDKIX+z19KV3lwr8
-	2g/Qx9Jhl12kRqhkFDoK+rnZyKVxC5NNAaudWjknPn+clr8tuunXr4XMDoxK/ED3e41hq5epcGw
-	E0f+DspC39Kp4DJjr29flDCPw23SHIIY=
-X-Gm-Gg: AYBFou2fOjaWv1Urp6GOGeH6r6dmiZZouv2K/oobNsDOD/3cmR9rqslfoCbBw8Qr7U+
-	2ygKRFNMZtIa2706XQcVYdO1t7jb5lAg069D3/9xmV8RVEi0MNugMg3ah363lEApVGyDdYpQYLP
-	bhbgJwMReGNUcvOs6SwzuqzFW9ES1IysApymXfjRNvTGt8Neqw+l+35nlgLLGmijP6yie6cFAbM
-	vL3dOKtacznYnwsxzZOqdUoENIn1yO1FM5c6mD5zZjzpfIwnjL0rkCSZfUo9aWqZa1aWOFytrYB
-	QQasp8oCPZf1vO+Pmh3Us2gStBQay4DxH/U79Pszb7XJK/+qvGQgp1brSU3jPnpsKLKoTWXEuXV
-	uBo9HmP6ySwzlGNTSVdqOV02DAqp8JAEM1q3BioWqX7+OWIK7eVVipDy9hy0twKXXGBAigCCVhn
-	pJtzMG0jBGR9fdit3n3Lrmq6aH8BNRii6ZPAQP85WObA==
-X-Received: by 2002:a2e:9a14:0:b0:3aa:f4c5:8920 with SMTP id
- 38308e7fff4ca-3ae2b5244eemr16617881fa.12.1794711055318; Sat, 14 Nov 2026
- 18:50:55 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=AuKAC+Sk
+Received: from eig-obgw-5005b.ext.cloudfilter.net ([10.0.29.189])
+	by cmsmtp with ESMTPS
+	id SBxMxK2ZLVK9USRCixobKL; Sun, 15 Nov 2026 03:46:56 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id SRChxF9LuYskhSRChxpyku; Sun, 15 Nov 2026 03:46:56 +0000
+X-Authority-Analysis: v=2.4 cv=CKMqXQrD c=1 sm=1 tr=0 ts=6af92b30
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10
+ a=jIWYvuuSJCPT6OUaZJ0A:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
+	List-Archive; bh=a59LCBhRE1d9bXmOZ7i0Prcj6qHWyazOhlcg1JcydFs=; b=AuKAC+SkTESO
+	5QXjdOA/fknzd/KhwdAgHqwsz3cNZCyZH/TCa1lMIOZQ9aryKUO48nNAwWn4/uVZA2yB8LcQYl6Ag
+	bvaUV6I4KVxCJ2JgawGietfmn7uNxCUctVetTC64qGkg9W68TuLIhBgsFsXOR3KRsmDJ6B92SSOYo
+	6Lm+i4kDGX/lmsGi7UCi8Ttv/TUnzI+jdLrsSsKJrTP0o59XgJF+ueu+m/5DBlsVvJ0USn0Kvf5+v
+	WAXXtyF4Mx6E9U9GKgwRJ6PZbGli/pCzTUd7vfLPt0whcvsLyCAGskPsUe7YseO1xgazV7Mi4+ygw
+	Y8D9gP3pXV45aicJe1ywyQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:46110)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xSRCh-00000000wN7-1XXL;
+	Sun, 15 Nov 2026 09:16:55 +0530
+Message-ID: <3f6d66cf-8a1a-4074-a234-dfe571622aee@roeck-us.net>
+Date: Sat, 14 Nov 2026 19:46:53 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -105,87 +75,104 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261114-marvel-env-v1-0-890328e4b7e5@gmail.com>
- <20261114-marvel-env-v1-5-890328e4b7e5@gmail.com> <e8ffe364-5c98-4987-b6bd-c263122aeae8@roeck-us.net>
-In-Reply-To: <e8ffe364-5c98-4987-b6bd-c263122aeae8@roeck-us.net>
-From: Matt Turner <mattst88@gmail.com>
-Date: Sat, 14 Nov 2026 21:50:43 -0500
-X-Gm-Features: AclHuK-sqqPXlIQFX4lO3FN1NrvQTjfvTZhocvr9YoyjI16C5qy2nZEmwXZkKgs
-Message-ID: <CAEdQ38GEckm8oU9pmg_t-_EC85brP4ghWAE4tYBNEvF+gcqMKA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 5/7] hwmon: Add driver for Marvel AlphaServer
  environmental sensors
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Richard Henderson <richard.henderson@linaro.org>, Magnus Lindholm <linmag7@gmail.com>, 
-	linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Matt Turner <mattst88@gmail.com>
+Cc: Richard Henderson <richard.henderson@linaro.org>,
+ Magnus Lindholm <linmag7@gmail.com>, linux-alpha@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org
+References: <20261114-marvel-env-v1-0-890328e4b7e5@gmail.com>
+ <20261114-marvel-env-v1-5-890328e4b7e5@gmail.com>
+ <e8ffe364-5c98-4987-b6bd-c263122aeae8@roeck-us.net>
+ <CAEdQ38GEckm8oU9pmg_t-_EC85brP4ghWAE4tYBNEvF+gcqMKA@mail.gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <CAEdQ38GEckm8oU9pmg_t-_EC85brP4ghWAE4tYBNEvF+gcqMKA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xSRCh-00000000wN7-1XXL
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:46110
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 2
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfAN9CRipn4Sf3Onu2KY//pfLDo4ycjEX5wl8vGru8Wl7378apMfWowtflWtFVkHWZJOATWnp6SxCOjd4yrsXPzF6gwfZvjkt4vQ3uVU+gj7sEW77Ju9x
+ vxDVYPY1M98oH1+ZB+XBLRFUbxamwc8HPZp0nJdSkShu2orWZThTwou82CPwUn6BD5E3yqyaYxAqL007ldxlzlx6BUhv4ymrY4qQfjuA+OR8IH/zJEK3plKD
 
-On Sat, Nov 14, 2026 at 6:00=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
->> +``temp[1-*]_max_alarm``     Sensor is in the warning or fault state
->
-> "fault": Sensor is broken.
-> "max_alarm": Temperature is too high.
->
-> That is distincly different. A faulty sensor should not be reported
-> as "temperature too high".
+On 11/14/26 18:50, Matt Turner wrote:
+...
+>>> +``in[0-*]_alarm``           Sensor is in the warning or fault state
+>>
+>> Which one is it ? Is it distinct ? A "fault" means
+>> that the hardware is broken/defective. An alarm means that
+>> the voltage is too high or too low. A faulty channel
+>> should not be reported as alarm but as fault.
+> 
+> It is always the voltage being out of range: Warning is the reading
+> outside the warning limits (5% from nominal), Failure outside the
+> failure limits (10%). Both are reported as in_alarm in v2. The limits
+> are not in the console's packet, so they are not exported.
+> 
 
-My wording was the problem here, sorry. "Fault" was my name for what
-the firmware calls the Failure state, and it does not mean the sensor is
-broken. The AlphaServer Management Utility user guide [1] (section 3.16)
-says the firmware keeps a warning limit and a failure limit for each
-fan, voltage and temperature sensor, and puts the sensor in the Warning
-or Failure state when a reading meets or exceeds the matching limit.
-The status byte in the console's packet only says OK, Warning, Failure,
-Unknown or Not present (Table B-1 of the same guide), so a broken
-sensor cannot be told apart from a bad reading at all.
+This could be reported as inX_max_alarm and inX_crit_alarm.
 
-For temperatures, v2 reports Warning as temp_max_alarm and Failure as
-temp_max_alarm plus temp_crit_alarm, with temp_max and temp_crit being
-the warning and failure limits. Nothing is reported as a fault.
+Thanks,
+Guenter
 
->> +``fan[1-*]_min_alarm``      Fan is in the warning or fault state
->
-> This is wrong since there is also a separate fault attribute,
-> and "fault" means defective, not "speed too low".
-
-A fan in the Failure state has slowed to its failure limit, and the
-firmware treats it as a failed fan (a drawer is powered off for having
-too few running fans). v2 reports Warning as fan_min_alarm and Failure
-as fan_min_alarm plus fan_fault. If you would rather keep fan_fault for
-something else, I can report Failure as fan_min_alarm only, but then
-nothing in sysfs separates a slow fan from a stopped one.
-
->> +``in[0-*]_alarm``           Sensor is in the warning or fault state
->
-> Which one is it ? Is it distinct ? A "fault" means
-> that the hardware is broken/defective. An alarm means that
-> the voltage is too high or too low. A faulty channel
-> should not be reported as alarm but as fault.
-
-It is always the voltage being out of range: Warning is the reading
-outside the warning limits (5% from nominal), Failure outside the
-failure limits (10%). Both are reported as in_alarm in v2. The limits
-are not in the console's packet, so they are not exported.
-
->> +``power[1-*]_alarm``        Power supply is in the warning or fault sta=
-te
->
-> "power" is supposed to report the system power, not
-> a "power supply warning or fault state". If there is
-> nothing else, this should be identical to the matching
-> inX_alarm and/or inX_fault attribute.
-
-There is nothing else: the firmware reports a supply only as OK or
-Failure, with no reading. Failure means the supply itself has failed
-(lost AC, power not OK, supply fail, over temperature or fan), so v2
-reports each supply as an in channel with only in_fault and in_label.
-
-I'll send v2 tomorrow.
-
-Thanks a bunch for the review!
-Matt
-
-[1] https://ftp.zx.net.nz/pub/archive/ftp.digital.com/pub/DEC/Alpha/firmwar=
-e/interim/ams/releases/Version_5_2_0/ams-user-guide.pdf
