@@ -1,101 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.172
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794710649;
-	b=pNF126IF6z69IlVHrUG/vD13S0UvxFvhfJ4VIpY6FMHlThH0sYEb3ZFQabUgcyhkSlB8
-	 cm0u3aNruVfIZ5fEIxK57Nl4cTkNQo8ltIvroZCIGIx1wYlL6Bh9F9JJdokE/FHfo4Pyc
-	 ekILA38UknyNX4tE5gBknrL7iwB9lEWRp4EEAgZ4c+Ujntq+5yX7HNt5RMFT7QihsYBxq
-	 4nFu2vLV0awhy0m26qqLlUgnY0yuSbuFS903WQrF7j6DKXOsv2Kw8ZZ+TC+CaeoYM1Bye
-	 wdNeFbPQQvsVgbPGDCcukuC3g35f+Z1+2gE3gZWNxvJmB1U7p3kCdd85v2SsZ3bqWqQ==
+	t=1794711057;
+	b=Q4uovMjwnCLQJR37SssS+Pvv3Lv7GYPy8H0Ylbai1Bptn1hAzyjOpKaRYh17wFTQbIiZ
+	 MHcMNqo50JuUMunNf8n5AiWl+/EPiLgoLCFSxlc90df4DZWOW3njTlUZ+Haxv9Kjhhf+8
+	 lhWzllGeWlBMb7Iw0JQsiUpOsdtWgq+X57AQG0xBR3h83ooYTI/6jP/SXWheMUssWh7FL
+	 bge2zHq6rcPAEGN80b6WD5rgNDTk89QY1+6kg/VQAJfhB0N+5QriGCmYsAmF0Zmv8GbmM
+	 +a7Z8ob1aFF7mZrmJ6FRrTKoXN0CYJ39BtqJNdK0ORI19luPqV91jNaDKDhP6bal3Yw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794710649;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794711057;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=WImIugUvsCB3dULRzrcWqUtpzfjQNdC7aiK6me5zFHM=;
-	b=XXETlu//bETK2tSGkbgnn9qJM7rOoYZlLeLuc71fD5FMXPBD8TWTRYS9b4d8M99pPtA/
-	 gTjuESdRE+/uBCZT4E8XaEsLO4YUG+VLr2C8SB/JKoBtmeDgazYftP7kBmINfgT31Mp7W
-	 WbM2KAXw8aGTGIdL0BFvbJBICCgb19w98PLpR4XJhHdExO4HZLaQu2zSt7U3GAnzznjdc
-	 vPMxpfnnsvm+BX5nlHfRBOgmBYarjHfIp4W0MchmQNggVMMIXWP6GApxe19/HYr4bYRSW
-	 hmcK2PpCFOBJoddDWVHu9GvG5edZtPDw4CUS6rHp14M3MmJaPsrq7TvK2ph/tsA75FQ==
+	bh=b8DaGQKhtDEoI1MBNX5hHcCd5cxhj/+80fP7TfFs+sc=;
+	b=MuBvSSB3pyaWCbBIYvPtYdFMcVNrOgN6wzxfF2V6txNrL8+J80P3topyunmgcGEo6IIi
+	 cc/rLZzR7na85QDfebmynoXQde/7TLdIQy/GoHxaSiYbVB8zJXJout3z6WPIuMXJm43mu
+	 UrLdsHHsvDSqJK7YFHx/BhvCm3o7PhhE+Z8c+i+AoKa0cgAPO4hL0mcGyKEbN4knJ1UpN
+	 fAXXZrYcKxdsGalmKXA4DEEuKPaPt9JLl9Pz4+EqruvqHrY9KRADob9o++RnZkNwLQJVu
+	 XYY59UYfHEPb58a/VxbBu/krof1E7NbGuK65uwYxTJY+E3/kTnVQwJ0PWNn7gyrmkoQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RJnm5XLx;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.179
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=C3YL84B5;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.172
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 644CC606A32C
-	for <linux-hwmon@vger.kernel.org>; Sun, 15 Nov 2026 02:44:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 644CC606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B42606A329
+	for <linux-hwmon@vger.kernel.org>; Sun, 15 Nov 2026 02:50:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 76B42606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RJnm5XLx
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-3adfe77d35aso25253351fa.1
-        for <linux-hwmon@vger.kernel.org>; Sat, 14 Nov 2026 18:44:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794710647; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=C3YL84B5
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-3ada7d53082so32357001fa.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 14 Nov 2026 18:50:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794711056; cv=none;
         d=google.com; s=arc-20260327;
-        b=BW2dIEX8YY9aZKXTAnzoB5JFJDfAxshrHvsnB72luVLgwGdGrG26adQZ5UKAcBxkVG
-         P2EPLSRMnppguMD4cesSe5mEQTny5jHJn6EGT4/mfzm+9ex6SjNNMEl1aRJDPaCbU13k
-         bIsAekw1IQaM0B8EKXCF7KG6dH4PokDyWQWwttVY0CvAm/26LHunVm8dxjRBe6jnXZbd
-         FM37eOtrtGxuT4cP3vo8Zt6KpiiHB2e3nQxDFU89i3wvvzUu28PlXrBVitIexaSeLsHr
-         jg/u6euTDOKUhKTK4pURXu7SaehjZ6SE6AdP8poJEei5esfTf6RJcA/Z2B5bFMRennfH
-         pizw==
+        b=kfz0u+0KowSJIA6LRsriH5w2eKXNbJYgjEl+HvASdfQRk4ybO8/uVD9V1Do/IPjf1D
+         MCdSh8yA9By4j683ZhumvLbRE4kmm6FqJD68qTUCtlpKn+RfA/Eqot2i0XRH5kNyfR6g
+         5i0bZinEun6jyV4gzNQFb2dZsF0ab3orfymerAKLODOx0hC9/qIp7/KlFxQveKNVI9x4
+         dA6mzegNCZVGJWq4VVQF2tPP8XWlt8PFnAsLFBKncUyFmpAI8YiWBOIpW1+lHQY/ejEZ
+         UhpllOJlupMew8a5RRgVwpEw3SXUvXyZT7oE+aOH9E3Fu7n38XPNv1v81kudBvRzZmWS
+         IOcw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=WImIugUvsCB3dULRzrcWqUtpzfjQNdC7aiK6me5zFHM=;
-        fh=5fgpikO2IJ2b9LI4vas6AUSXBMRxKJQZEkmyq4ZosKU=;
-        b=YfoTAMQC7Az+OcXftY3/NijvOMtjkSQL9g+bxxXfrpoC/sl7ctPNkrrZWo6yoj66sF
-         tdll8vuvKw6j4ktPUZOUPT4xKi96ayRLACpQA9p6AD+GDJN2nb066G7csjQn/fYr0MdS
-         YnjQc9yOSFoAQ7Xc/Cnq81nIZCdXz1GSNnrbeyeDh3XtwBpHNKaVoeUiQZ/uW6s93Jz8
-         QvuhMQ/dvNE3FpEFJ7MqbcZ9Rwbs96hOML4EpfIrdAveQ7bE3G9NXe9eCfFdJNd1i2Aq
-         o3FvG/cPaSVNFkTLHpDikcMA5ajWdg6NQxw1j2/EFeIs1Ol3GEwARukmj22X10XTOxuc
-         wjCg==;
+        bh=b8DaGQKhtDEoI1MBNX5hHcCd5cxhj/+80fP7TfFs+sc=;
+        fh=o3ZvmUhMhlmMcncmKWdrkNPdmT1mD7n20OkWN0dIvRk=;
+        b=eG/1MieFwovJyLZBjrO/bc+tferB7wbtaDti7KImdbg3ndF35aCIHyw+MemQbF7lQI
+         Fnsj/k2OoPuBtm4/mC1nmfw2HGKyiLTcRSbGyTue4t8y1Se/hqbtJ03rxircVSRPGeZ1
+         PeOA/vEGs6c13QoE65fjTDx0v4jfiO7Mmql43H61BlyEjgy9XRUgPGmNZSvSx+x8oGjz
+         Reo9TuI8+EzhsYyBUZrI+cTNa/uV77uLv39aokM3jNd7n9VAG2QdAytckLlLi2kH3Kkk
+         0jSGQq6U8NIbQsU0AA0PqSfKqPIVl6UJplb37nxw/VDFQcmtXyPt1lH7L/gDA1NfUkl2
+         uY2Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794710647; x=1795315447; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794711056; x=1795315856; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=WImIugUvsCB3dULRzrcWqUtpzfjQNdC7aiK6me5zFHM=;
-        b=RJnm5XLxoNK866TvF2CkdY9AW+tb0cJ1wYfWzlZZh4X3OnWmWeykxS1NvAKwM8nW4T
-         R0GTMYqQAqdx2m+VPUhijNqDi8cWar7oJaJKzJJHy3fk2ZhupkgqBuEO2Dm1/9fLTVli
-         B4TTFx8z1iautbvXT5v2AYyLPiC1D5IFu0cThMCSZq2yjUxVximJ9/eQK3h4Y8PNalZJ
-         T0bhpinyLP3mCG8jD9SPRJAwIQG6O46nBkuNR5hDYOKD8kgPQNHFOx2jEmOVhY8xIlii
-         X65pjY/kWAjU8ccru4oBjZFJoMbyWVKnyH3W5/nrAP0JqE/t4MtEabZ0HgYpG0dll8c1
-         OYAQ==
+        bh=b8DaGQKhtDEoI1MBNX5hHcCd5cxhj/+80fP7TfFs+sc=;
+        b=C3YL84B5AdvG1vULn8iIHu0VOFFhm8wHMS7GIQReErW5xay/xayGeFR2v08rTSLBHg
+         s0D5TfL77gY8I94LYeTsFZ992NL+FrL0HWYEWfoEgohVgSQWYiMOJI1Q0gXgjnELGusG
+         yxGe1vxxfx5tEGjZ42nNjhQFu17xAWNFif3Zt759/IlE1SQWPCM5e2ohCHekYZ4bsB1V
+         n3pG0iYYk3h1AJhj2x4Ieuyy4fcS5ftmtqComvfDS76iK4MnePo4uty6tbbuhU6daKVT
+         rxRNMxf1URagtGlMtyv0/DBqu6w02chfXl3qI1cxbSPefPUuGOIIT8LkwnouANQ+pQk6
+         B1LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794710647; x=1795315447;
+        d=1e100.net; s=20260707; t=1794711056; x=1795315856;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=WImIugUvsCB3dULRzrcWqUtpzfjQNdC7aiK6me5zFHM=;
-        b=dO03nt+Zr2YPlScgOImZSAhknzxhRuSGjVbllTRoF4OMveC2Q2sWNwc38OnFlL8uCR
-         0VutvLDD2Y5QRU/llDWj6UwmRea2brc22RTrfxkBT69QPiV5/OyYcMlkkTzjfXQxToEz
-         QqX0FNq7fvIZ3oNANGvGAx178p5i7tI2AGXbzkMN9xZvZJ88bfBDvyzFJ1CxYFqP0Cl7
-         JyRuc/GFvJS4PjQ+Zumfkabg3tH0OVj92zS0gg0MhdoR+4kcH9AN96hISlmKX/LUZm60
-         2YbjfSw4aUI8887UplXOtLmp6bRUpyK80b0rEIBD/I0zMG95rDIMkPOu3M6FaCY05TBc
-         pYvQ==
-X-Forwarded-Encrypted: i=1; AL+hErG+azWgo2pF5E7DOwg7bHkB7iIGZEM0nTE8t6vjXM/aFtLCzyRKMan3j0fgw8Se/AzhGjCA/pstKFCR7g==@vger.kernel.org
-X-Gm-Message-State: APuU4Z9TIUDCHbhaQe6Van08WaUX1BOqKksZPXZ0JQhOBz2sLGRSpYD+
-	sqtvSjX8nrWM9mwG5TKnS91z7etm5myz9QuLpwYNFapxsemmfJ/+zc8cK1aU3lb2n7ci95OqHXH
-	BRI6TNhj9sgnXxMKcTCNDdqTGuZIXBjM=
-X-Gm-Gg: AYBFou2GgTZjgmozZi61h5X2x8UL4RQRI+iLDq41EuxG7y85lLPjjJ5/G+GuauN0reA
-	VqudB5fAZipw3hDJg3y8eflB8MFlHMgGTSMHqcVzT0T5JH/Qx1pcYC3mYxPTwUbzIV3PgUltfnp
-	7zlj/s1XwRc+QimSqSTOLNm6ZT1lO3zEJxnK+fcyr100lXcGniO/cugmngoSZOUOEkTJ+MhlvNc
-	uBBaPGyebjPpPjg8L90mCSNRzW7L18f9gOW7DJESxD26HQYcpWL2Zz66yaHDvTKYz3jgwueWOjF
-	pfENXcaJZv/zp0s+/FXoZfXde6rrXDPXnpD61xrCwpkN5/otfL4gfVLGgrfp6qui7zqrw9oX2iW
-	GqX8PoLDqu/zHDNyrN35pREa5o/AxPoWS7OTnwbbELuk1uq5MWZMLHOddDtlD07eUGqH53LjCuM
-	b1qOv81y2vdd+//aTv5+VY
-X-Received: by 2002:a2e:bc90:0:b0:3aa:ee7a:5466 with SMTP id
- 38308e7fff4ca-3ae2b4f52f0mr22163651fa.16.1794710647252; Sat, 14 Nov 2026
- 18:44:07 -0800 (PST)
+        bh=b8DaGQKhtDEoI1MBNX5hHcCd5cxhj/+80fP7TfFs+sc=;
+        b=BCk1J8u5ws76Tbpexr0/cScQhekNrm7FQEdwv7IhYnjm/M3GMdKgH1dOmrNXfPMDCF
+         5yv/giZsfHle01Tgw8K66LzUQ567olK0u4xjTbYq4iPewKXHQUu+082+0MePScWcTwom
+         nREE5J+OQ7UPUZmd4/0JGTmN5CzYbBebUPWMHCIe0tvzeEV1J9VuJnSFopB26HBQfjLt
+         JMuwkmBkFF/DkFWyaukHitObaFSAeXv09hahFhxuoEs4HjEeZmvusFFmgS9MT5jinMiU
+         wQK3p+OurYbCH8xjg2Je8f3V8+F4UMN1y5qI28T5TiE7vHiXkhB3gX9cgatvVUCLtX5A
+         Qz9g==
+X-Forwarded-Encrypted: i=1; AL+hErHGtmtMrasIxz2BrkKS40Ec/kICLM2dRRYR1dCWxMXI7yOdhzVpH6OY7Vunh8YstbOldVE0LEX2ntqsoA==@vger.kernel.org
+X-Gm-Message-State: APuU4Z+I9t5U704RJs4SHv4m26zwXZRzaDUgluUzPDKIX+z19KV3lwr8
+	2g/Qx9Jhl12kRqhkFDoK+rnZyKVxC5NNAaudWjknPn+clr8tuunXr4XMDoxK/ED3e41hq5epcGw
+	E0f+DspC39Kp4DJjr29flDCPw23SHIIY=
+X-Gm-Gg: AYBFou2fOjaWv1Urp6GOGeH6r6dmiZZouv2K/oobNsDOD/3cmR9rqslfoCbBw8Qr7U+
+	2ygKRFNMZtIa2706XQcVYdO1t7jb5lAg069D3/9xmV8RVEi0MNugMg3ah363lEApVGyDdYpQYLP
+	bhbgJwMReGNUcvOs6SwzuqzFW9ES1IysApymXfjRNvTGt8Neqw+l+35nlgLLGmijP6yie6cFAbM
+	vL3dOKtacznYnwsxzZOqdUoENIn1yO1FM5c6mD5zZjzpfIwnjL0rkCSZfUo9aWqZa1aWOFytrYB
+	QQasp8oCPZf1vO+Pmh3Us2gStBQay4DxH/U79Pszb7XJK/+qvGQgp1brSU3jPnpsKLKoTWXEuXV
+	uBo9HmP6ySwzlGNTSVdqOV02DAqp8JAEM1q3BioWqX7+OWIK7eVVipDy9hy0twKXXGBAigCCVhn
+	pJtzMG0jBGR9fdit3n3Lrmq6aH8BNRii6ZPAQP85WObA==
+X-Received: by 2002:a2e:9a14:0:b0:3aa:f4c5:8920 with SMTP id
+ 38308e7fff4ca-3ae2b5244eemr16617881fa.12.1794711055318; Sat, 14 Nov 2026
+ 18:50:55 -0800 (PST)
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -106,13 +106,14 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 References: <20261114-marvel-env-v1-0-890328e4b7e5@gmail.com>
- <20261114-marvel-env-v1-1-890328e4b7e5@gmail.com> <4d69d3e9-9e05-485d-87e2-428616cd5d9d@roeck-us.net>
-In-Reply-To: <4d69d3e9-9e05-485d-87e2-428616cd5d9d@roeck-us.net>
+ <20261114-marvel-env-v1-5-890328e4b7e5@gmail.com> <e8ffe364-5c98-4987-b6bd-c263122aeae8@roeck-us.net>
+In-Reply-To: <e8ffe364-5c98-4987-b6bd-c263122aeae8@roeck-us.net>
 From: Matt Turner <mattst88@gmail.com>
-Date: Sat, 14 Nov 2026 21:43:55 -0500
-X-Gm-Features: AclHuK-rDAmxPKOpteTkagDnbYP3PTwmOyt-Q5uXcex0poBTc5yw5ifEj6zGwJs
-Message-ID: <CAEdQ38E=+Yb2hJs3L1KHgR1Kbe796NDD2z=n=7YytQ+uiJJWEg@mail.gmail.com>
-Subject: Re: [PATCH 1/7] alpha: marvel: report environmental events without VERBOSE_MCHECK
+Date: Sat, 14 Nov 2026 21:50:43 -0500
+X-Gm-Features: AclHuK-sqqPXlIQFX4lO3FN1NrvQTjfvTZhocvr9YoyjI16C5qy2nZEmwXZkKgs
+Message-ID: <CAEdQ38GEckm8oU9pmg_t-_EC85brP4ghWAE4tYBNEvF+gcqMKA@mail.gmail.com>
+Subject: Re: [PATCH 5/7] hwmon: Add driver for Marvel AlphaServer
+ environmental sensors
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Richard Henderson <richard.henderson@linaro.org>, Magnus Lindholm <linmag7@gmail.com>, 
 	linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
@@ -120,23 +121,71 @@ Cc: Richard Henderson <richard.henderson@linaro.org>, Magnus Lindholm <linmag7@g
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Nov 14, 2026 at 6:01=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
+On Sat, Nov 14, 2026 at 6:00=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
 wrote:
+>> +``temp[1-*]_max_alarm``     Sensor is in the warning or fault state
 >
-> On 11/14/26 09:39, Matt Turner wrote:
-> > The service processors report temperature, fan, voltage and power suppl=
-y
-> > alarms as system event (0x680) logout frames. The frame is already
-> > classified as reportable, but without CONFIG_VERBOSE_MCHECK only the
-> > header line reaches the log, which does not say which sensor or what
-> > happened. Print the subpackets unconditionally.
-> >
-> > Assisted-by: Claude:claude-opus-5-5
+> "fault": Sensor is broken.
+> "max_alarm": Temperature is too high.
 >
-> For all patches: This is obsolete. Please base your patches on the latest
-> kernel and ask the agent to follow AGENTS.md.
+> That is distincly different. A faulty sensor should not be reported
+> as "temperature too high".
 
-Sorry about that. The series is on v7.4-rc1, which already has the
-removal, so the trailer was my mistake rather than a stale base. In v2
-I've dropped it from every patch and mentioned the tool use in the
-cover letter instead.
+My wording was the problem here, sorry. "Fault" was my name for what
+the firmware calls the Failure state, and it does not mean the sensor is
+broken. The AlphaServer Management Utility user guide [1] (section 3.16)
+says the firmware keeps a warning limit and a failure limit for each
+fan, voltage and temperature sensor, and puts the sensor in the Warning
+or Failure state when a reading meets or exceeds the matching limit.
+The status byte in the console's packet only says OK, Warning, Failure,
+Unknown or Not present (Table B-1 of the same guide), so a broken
+sensor cannot be told apart from a bad reading at all.
+
+For temperatures, v2 reports Warning as temp_max_alarm and Failure as
+temp_max_alarm plus temp_crit_alarm, with temp_max and temp_crit being
+the warning and failure limits. Nothing is reported as a fault.
+
+>> +``fan[1-*]_min_alarm``      Fan is in the warning or fault state
+>
+> This is wrong since there is also a separate fault attribute,
+> and "fault" means defective, not "speed too low".
+
+A fan in the Failure state has slowed to its failure limit, and the
+firmware treats it as a failed fan (a drawer is powered off for having
+too few running fans). v2 reports Warning as fan_min_alarm and Failure
+as fan_min_alarm plus fan_fault. If you would rather keep fan_fault for
+something else, I can report Failure as fan_min_alarm only, but then
+nothing in sysfs separates a slow fan from a stopped one.
+
+>> +``in[0-*]_alarm``           Sensor is in the warning or fault state
+>
+> Which one is it ? Is it distinct ? A "fault" means
+> that the hardware is broken/defective. An alarm means that
+> the voltage is too high or too low. A faulty channel
+> should not be reported as alarm but as fault.
+
+It is always the voltage being out of range: Warning is the reading
+outside the warning limits (5% from nominal), Failure outside the
+failure limits (10%). Both are reported as in_alarm in v2. The limits
+are not in the console's packet, so they are not exported.
+
+>> +``power[1-*]_alarm``        Power supply is in the warning or fault sta=
+te
+>
+> "power" is supposed to report the system power, not
+> a "power supply warning or fault state". If there is
+> nothing else, this should be identical to the matching
+> inX_alarm and/or inX_fault attribute.
+
+There is nothing else: the firmware reports a supply only as OK or
+Failure, with no reading. Failure means the supply itself has failed
+(lost AC, power not OK, supply fail, over temperature or fan), so v2
+reports each supply as an in channel with only in_fault and in_label.
+
+I'll send v2 tomorrow.
+
+Thanks a bunch for the review!
+Matt
+
+[1] https://ftp.zx.net.nz/pub/archive/ftp.digital.com/pub/DEC/Alpha/firmwar=
+e/interim/ams/releases/Version_5_2_0/ams-user-guide.pdf
