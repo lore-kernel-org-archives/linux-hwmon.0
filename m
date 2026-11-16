@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.208.56
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.196.3
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794830581;
-	b=duFqoOMzsDbsISyJXXuw5MoHzohGnQ08MdgQ9lb3m9LKiSfiFheEHWkEoiFLMU7W/4zH
-	 7XU0v9Pu9fJ5ZwKiNnMtyF7N9In/TUKbQFGTl/w9eclF6lV/NMQTF5EKgCjvaQVtPAgzC
-	 IIcn88igYqf6OGXF2wL8ymncyBTUrGJuN/kMf0igrKsaGtQYhiCcEG3LB6PJLydikNU+z
-	 HzgfjMlUhVIRH5KSTImCRshBEoKzSzbosZN0KMBe8jsasDsNNR5CK3Kn7xRcFPqyTcaNl
-	 5rK4RNbxzhSBiTVveeUlRF7Zea1T2YFR9ILIfehpWBoTvQWKJIuN2OE2+1/IFW7HV5A==
+	t=1794830593;
+	b=RR6yADP7VIFS77aEwCqu+rlFxad5hWmTp+sTRRFKmz7BELr/e+kkxYjfGki0b8vayIaT
+	 BBHHowcfO8/cFvEMocHHmr6R5stG+Hd6Vu1APCwTxJ+PulBaDX4/k/d+j3xsEZIs/uTit
+	 YYMQmhbaAL+G6LUQjJLAdYGvcPLJeXI/eZgF6qzyX0NQaQwyGlS1V3xqb59qFZjkkp0uV
+	 aCQDqlOK4mps1PqAyaEETtqeBuzYPLSjUwGLoOig3M/EfSrMbV/UkzwezAKXjs5B96pZp
+	 QCmo9On33WnuV/3nS2vdQh1WTddZ7JkJCv37d+acjiRdm29FRWeaRJcdNQvp1wNw5kA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794830581;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794830593;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:
 	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
 	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
@@ -26,53 +26,53 @@ ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
 	 X-MS-Exchange-CrossTenant-FromEntityHeader:
 	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=wuWcbgNYSVDsqxjdAEqiEl8CO4l3cmA/8WN86nGSZOw=;
-	b=lKjkX2cc3fjF6639o0XSpqRdwZn0FuMPjyrvPySx9dR31rlV5tbv2vKuOinuTdt6EI5Z
-	 ke1vt/v2C8LDSzHViyXok16WhYXDtrASklLUY/OmpPtxjFJhaE1D5s9odpFy8Ck99UOFT
-	 NG5rMz7vdv+GFdsfs4fxkq1VNsRxJloKtR8znTCEIAxTpIcRkNpGujm8MQVdmfjiBR3v3
-	 jaeI+cvvggbr7CdHa89wIqb8+UXdXMp98gHH9vzrOQ4tp6BsYTBHWaVGPgI96Kz3T8ydw
-	 DMbBBYUcCJL15WvfR747lGIEahpl2w9neZknBKmEmCUTjGTtAxA9caRBPfr+Vx9QwhA==
+	bh=I9LsgJZq8ouU0Tva1N5V9mJR0tKXDNZuwtU4bYcwD/E=;
+	b=JG4BEh0GEQMq4U+4wX6mRunBX/Fa9+i8CQL4BVADVMrn0yKGfYgQRosPfrpGSCf9ezti
+	 f6HFBFor1KQ4H1F9v8oHk9PZ/4bUwXKN9Sz8jaDD//ha62+2skpdx6RoVsfZs6MZXhJIC
+	 KW3B6K85DVImSrqUNP+bHeXkKr/tfGC3nH+nA2O+f8wLRX6trdCpHGgfXR/4GZhBboAIT
+	 J/VvcLJEB2N+zStzlQ4CJ4yTpoS9p6TxWL4bUobDJhhd1DLAbmno0cEDP6pnNPYdlMfRy
+	 imWQD1Oexcnmr1fMdDW0AxxEyZ1l/UHp0qYP6Zkb8N3MOW2ugA2y2VkE3DFACPoxtTQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=amd.com;
 	spf=fail smtp.mailfrom=amd.com;
-	dkim=pass header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=2iGuH0Z3;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.208.56
-Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011056.outbound.protection.outlook.com [40.107.208.56])
+	dkim=pass header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=svQLaKSg;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.196.3
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013003.outbound.protection.outlook.com [40.93.196.3])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47662606A33E;
-	Mon, 16 Nov 2026 12:03:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 47662606A33E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4818A606A323;
+	Mon, 16 Nov 2026 12:03:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4818A606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=2iGuH0Z3
+	dkim=pass (1024-bit key, unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=svQLaKSg
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=m4/QUut+SfAkbNarQczxvLYVXlfbD5mxexgX4zrQrsPw4UqovW3CWoehT9l4HKHC6fMCSvfA88ZI1B1W7L8oM9HgD61EdYEmej4T+BSrBgdrZbIvMn9tXGA9iZJyKgDwtm8mrrbLWI2xCvzaS4bnEBsWxnoexb4/anE9DrYsChy8ROiqwQF7ocP0TR6Q1zZfhPNr1nOMNcasScCDqOz3Th9uGElUVZ4XY4PzrSY+j3ojyNVu8c+l76MdMUfd0JTvNWiY3Q6t6vnv6MukwUVwIRetIxzxCLjtsleVRhtV5Kpfq6xa20xhYIjaOsrCtHOiNwl+qyPN5BXLLU6cVxJqeA==
+ b=v4RgiU6OIKAGQ8Np6qk1GpBRJFswCxBioXZ01eeUSPj376HOxdtuRMUSqlj6HC5fdZAg66zP2WHutJM9JIw2ISfRM5675e6wHRu0ubKlGDQtH/YgvbCtyvV5EvywhEXtUMP3yTjhvK2aR9UeSUFxczc78U4rVtBkIdk4sG994CWIb+oyL6iyQOGgnqVpv5+90vyaOkYABF/GxJbHwIKzJeB2xwO4YJm3jnU3ODduqTH9wwkZbJWJ/4u92SuAfVsA+winyYSZ/FfHpkpWD0ciOemIMkeCAdoeRhfNcMh/cHmIDobXXt9ZZObTYV0r1KZnmexoNuFF0VICkRmuHGGsIw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wuWcbgNYSVDsqxjdAEqiEl8CO4l3cmA/8WN86nGSZOw=;
- b=SRQR/cnqEaPA9ynt9YrVxZfwX/ckEq+w9TfWSGZu7RM8cSTk0VY8CdPk6lfsd2xJRcpByHjxghzYCn/hKJQCyVL0hkperboyntSHJvSjdYt4ZA9wBZWQD8MuXpCzJde+wqEwIswmj15rC0OEmT76hA4zBQYvQ3M7MCxFDI9s5p5nyo+t3gxrCvhH5un2uS9l/8C/mE5VBRAiggr+aixlKgPPvnJpIemo/2muzLPUStvIGivzvQ4TpCxmHT17zYO/vo5/soY2LNBpQ1qpyvDuCxESflf71sDg4H7AOOP5+mSWvfPWJfYfzT4b50vgi1GltmA5Yl+i8yIJm6h5DUp+qQ==
+ bh=I9LsgJZq8ouU0Tva1N5V9mJR0tKXDNZuwtU4bYcwD/E=;
+ b=y0UpBY1/AWAgfMA36O2KCFh2sIojwM4hddqxtEhQyhEdVU3De7fCcxSdA+4K8Uy3e/ej62LJRkYg6M6AeVPBR+BNJ5hBd3ukAxsZni8v/FDTMeUBF4pbvkfN+SFBHdb9FdEsgBxfefSUOzqrTafMaaQy4tef2Q2bRclLfipojcic9y30NAqxpn5SmxEdXyuwko8n6oXPuk6LlZtTWCV3e8TqW135ukVvEootFbg2/aQXWK7kXj4+x0p3dn07P6LtnA6s7fMRdFSprBq0epm6WhB4HgvaqPHgMmM1yQB5MTB6X6ZQYNNLJA36daQKTkMYKLGln+Tkbexj2xUA12AbOg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wuWcbgNYSVDsqxjdAEqiEl8CO4l3cmA/8WN86nGSZOw=;
- b=2iGuH0Z3HqB50tFMQ9kdiuJ9Pxd9c4kY4TeSC/IeSiRSu+v0XHUUJ5j5prPr/0KSlNMIiOdwxN86RshB23vj6VkajlgS36OiV2CdPYBjuxkcb300OmCbs+grXkYw7Z/M7LCAE/LbX+c+B/zu8SlGvgXj6JI/GuOKQO7YUqk3+L0=
-Received: from DS7PR03CA0209.namprd03.prod.outlook.com (2603:10b6:5:3b6::34)
- by CH3PR12MB8712.namprd12.prod.outlook.com (2603:10b6:610:171::20) with
+ bh=I9LsgJZq8ouU0Tva1N5V9mJR0tKXDNZuwtU4bYcwD/E=;
+ b=svQLaKSgKdLGZ/hZ4VaoAwjAYj4+EtiadBLKD2nVnwYCH546kQ1+zg2MUUzzdLd28gunVwtATFJM6NTLVcxUc6yxAYYiz5TqORB6MJm42JjoZ5jtZhYhUBfWfskjZPkncTk5m9Ru/7D3hbL6ldK8r5GQVGTNWVBOPu+29yyaDG0=
+Received: from DS7P220CA0066.NAMP220.PROD.OUTLOOK.COM (2603:10b6:8:224::17) by
+ MN6PR12MB8491.namprd12.prod.outlook.com (2603:10b6:208:46f::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.10; Mon, 16 Nov
- 2026 12:02:55 +0000
-Received: from CY5PEPF00000E7A.namprd02.prod.outlook.com
- (2603:10b6:5:3b6:cafe::6d) by DS7PR03CA0209.outlook.office365.com
- (2603:10b6:5:3b6::34) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Mon, 16 Nov
+ 2026 12:03:06 +0000
+Received: from CY5PEPF00000E7B.namprd02.prod.outlook.com
+ (2603:10b6:8:224:cafe::36) by DS7P220CA0066.outlook.office365.com
+ (2603:10b6:8:224::17) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.21.615.13 via Frontend Transport; Mon,
- 16 Nov 2026 12:02:54 +0000
+ 16 Nov 2026 12:03:06 +0000
 X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
  is 165.204.84.17) smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -80,13 +80,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
 Received: from satlexmb07.amd.com (165.204.84.17) by
- CY5PEPF00000E7A.mail.protection.outlook.com (10.167.247.42) with Microsoft
+ CY5PEPF00000E7B.mail.protection.outlook.com (10.167.247.43) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.615.4 via Frontend Transport; Mon, 16 Nov 2026 12:02:54 +0000
+ 15.21.615.4 via Frontend Transport; Mon, 16 Nov 2026 12:03:05 +0000
 Received: from dcsm-trdripper1.amd.com (10.180.168.240) by satlexmb07.amd.com
  (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.57; Mon, 16 Nov
- 2026 06:02:49 -0600
+ 2026 06:03:00 -0600
 From: Akshay Gupta <Akshay.Gupta@amd.com>
 To: <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
@@ -95,9 +95,9 @@ CC: <linux@roeck-us.net>, <robh@kernel.org>, <krzk+dt@kernel.org>,
 	<rdunlap@infradead.org>, <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
 	<naveenkrishna.chatradhi@amd.com>, <Anand.Umarji@amd.com>, Prathima Lk
 	<Prathima.Lk@amd.com>, Akshay Gupta <Akshay.Gupta@amd.com>
-Subject: [PATCH v1 1/4] misc: amd-sbi: use guard() for data->lock mutex
-Date: Mon, 16 Nov 2026 17:32:25 +0530
-Message-ID: <20261116120228.865196-2-Akshay.Gupta@amd.com>
+Subject: [PATCH v1 3/4] misc: amd-sbi: add DIMM thermal sensor support
+Date: Mon, 16 Nov 2026 17:32:27 +0530
+Message-ID: <20261116120228.865196-4-Akshay.Gupta@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261116120228.865196-1-Akshay.Gupta@amd.com>
 References: <20261116120228.865196-1-Akshay.Gupta@amd.com>
@@ -116,372 +116,398 @@ X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
  (10.181.42.216)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PEPF00000E7A:EE_|CH3PR12MB8712:EE_
-X-MS-Office365-Filtering-Correlation-Id: b2b24602-488e-44e4-699b-08df43d98c2d
+X-MS-TrafficTypeDiagnostic: CY5PEPF00000E7B:EE_|MN6PR12MB8491:EE_
+X-MS-Office365-Filtering-Correlation-Id: 75536462-97ce-43bc-e925-08df43d99291
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|36860700016|82310400026|23010399003|7416014|6133799003|22082099003|18002099003|3023799007|10067099003|56012099006|261026140227099003|11063799006|261021123027099003|261028144727099003|261026121527099003|261102123227099003|261022105027099003|261021121427099003|261009223027099003;
+	BCL:0;ARA:13230040|23010399003|1800799024|82310400026|36860700016|376014|7416014|10067099003|56012099006|11063799006|261026121527099003|261026140227099003|261028144727099003|261021121427099003|261022075727099003|261021123027099003|261022105027099003|261102123227099003|261009223027099003|18002099003|22082099003|6133799003;
 X-Microsoft-Antispam-Message-Info:
-	FE61kGIsKc6XDAYXxeZoIl/uHB6EAy1tAY8ob89st+3O8B4nGs6KRa/smrqSOg60CXPdfd3pLJqYh+yQZB8CHmW4eaTHtXka9FHffnLWxbCxjhFvfUWMy2XO8wKPE2v72SfXSK423lxcMfoTB25gwMP6RzN/+2N5Ib2EVyGaq2hBpNYHKM06/O738tMDNee/YiurVWbCBN/D9AwU+HLUO29DzBrVCO5dTpaQuq3kjABYwdOrTTUhjkAmT+2Z9LW7mMQovDboG3/XS8glpqhJCrWH5gkUoprvWha/+L/xkdgC9UOwMbCj19d1Yu0dqDuq8bey5toBo4YCqQEEIBeAZfB9w+Xz/wzOhAOjmxD8LB7eaWEga5B2N9hnkVvUhn57skfqjSYnqqQ1wOZO7i2i74lzTa0taylELzO+jNTNi7GYQOsEYJeYhpzfqj+3QmJpwwWPQpiZ1UPHrY8L1BYbxd31DmGbg0hhy3f/UQsnS3wpldiitqFgOZebF5t60pZAHNuwEA2bDc2M3fGnJz5vBQ7iTj8nCV/Wnewq653TJtBklHvBiXNNGQXxmGoHFXP5FFtSwAc/t6q086kfKFSEoefXbEd3NFXc5Bdb8seLa7uxI3CUVCCqJfI7USgv0xaQt3OICQEnA2seeKM/gjT+EfgQIfFeTW5bCoV9jv2hncVVfWdshFKwdAjqVi2nC0za9qXThavxI2jwwolMla5WGA==
+	8SQKBa9lmukor9XNK/ySRndnnJHVUS3e4H/uvXBIzwuN1qHZxO9aVs6ArI+tk+RV0eCAOb9fs9JhoQIaZwRcLc8eVZVnH43JBDB5ntx+jYzQEpLsSoQ+mhadOTXDT7Bxs1YEfYDjjXiou9H1QaYzKXxHJdheIiWZ2JGbX8pQtmW957B5cvvQzOyk66aPRXAONN3sx33Jr20dO4RnlVHI4erPz1vz5OtAhD490c1FlhJpI3NWL2I5CR3XZZYxawfeHF8umHpkXcWuGe6rwYYAnWLGyCUIeieLxmTyZT9Rl8eRuZx11J7agg1qLlVCIV8cmxogwM/yWnfp2Waj9UjI2cfU+fWkS0kAjI29htf+5HmvJHMGuCBRroy81DbhqDjP/wLHL4VyYJn9izIswDTan9Q43I1ltmzgi2CwYJTM3xNo6vKCQhEHaGsxSQQ6lgBqHj99culMdIJS909Ep3X2qRdbqvn273zjSD0LXniub+/5uu8Xfxnc2ar2IMat5xHMOMwqB6eJaOABKmrxODLbctGZjtuLNXMgVAtml0VtOk3wykrBi1Ccx5AfgfhAxYwatT+yPLZ6iUiYZmRd2tBQeNRULD80SfcW9j5CK+6zIZjCl/LIbuo4FOFnGcj3ziFRD1eOqILlsMuLC22fd+u/lWhi1WnrYKSZusxgEEUfO3y+4DAE/PKrzoD1cA0nfOyTPkSRXoV/YmV71IZvdu/bcQ==
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(36860700016)(82310400026)(23010399003)(7416014)(6133799003)(22082099003)(18002099003)(3023799007)(10067099003)(56012099006)(261026140227099003)(11063799006)(261021123027099003)(261028144727099003)(261026121527099003)(261102123227099003)(261022105027099003)(261021121427099003)(261009223027099003);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(82310400026)(36860700016)(376014)(7416014)(10067099003)(56012099006)(11063799006)(261026121527099003)(261026140227099003)(261028144727099003)(261021121427099003)(261022075727099003)(261021123027099003)(261022105027099003)(261102123227099003)(261009223027099003)(18002099003)(22082099003)(6133799003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	IDDdouFlPAmR8UYiidq5Vs1949ooRMoz7bsk4MrGphdHp+v3oUBkmEm8Adb+RBU5aE4HF0bcUkFDcsXWwoLFJMr2R0CSmginBmHYwfBGk0tIzLxjsHcECwTEr/PZzbjTxW2kndSEAetGzS/w5wHe9CgMpHW3pX1esyDi0yQ9MbXbxb5q7jGvT2Arcb6k2eNkPJBq3DQV7zczl8Tk6GoOFUtKvoZTgFtynmQzAdzvl6msDcCNDBpDlIO/O6WrE3KRpgCCqV6jxCF0Hjxq28xtglwIbNYBKLbPxdsitXLR01n8rAXWaVsGNBWNoIYACUrnRmNwmJuLQo72I/u3bhsOC7rQHWWuQzZyNM7IYleu5EGqx3bwXQoGDRiEkLBxbHET+bUEgH95zAIddEx+v0fdVy/CjHOkSFdtlrlO7DVrm8aOA+qK1biwf/t9pHz2fRW1
+	v7jNvHxKW9NAg2H7kvEeZ4W1bntXJCPjN2BLTZfqW+Tlj7drTo25gNG2GfhW1LXbFzyk9n0Imdd5XY+g33dG17tB3/adBhLKV7CB6jOxixbc88Pr/h8Vf1u7EiDwBEBGpGCfOBkuIVrsFoUyxSdqadznKDiRKHDd/zX7Ke1T5b3BSMoUE40ZN5TlQnm3N5VjvQCV/NhCpfJM8rLOmlWqI/EWDowUJFtznQmMAVR1FLxmHs+7fJABJNFyGGm3Qr5Spf6QHmZbc3HUctQVMaamiq+L/tQzToSRdnC+KQ53JKRKg7cLcGaX7sj454ydhW/lHbDIigI4G1FBUpH7SEkPMSUVQNG7xP9Nas1ordu14Bs47R39Sx1OmZUXmxe8tRVjJw0UTf+3LChEb83OC5y7gKNvIKiROOI8D3USlfPdFSZTpyl54OI8PSh0d5ZMKiIL
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2026 12:02:54.7798
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2026 12:03:05.5176
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2b24602-488e-44e4-699b-08df43d98c2d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75536462-97ce-43bc-e925-08df43d99291
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CY5PEPF00000E7A.namprd02.prod.outlook.com
+	CY5PEPF00000E7B.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8712
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR12MB8491
 
 From: Prathima Lk <Prathima.Lk@amd.com>
 
-Convert the manual mutex_lock()/mutex_unlock() pairs protecting
-sbrmi_data->lock to guard() from <linux/cleanup.h>. The lock is released
-automatically on return, so the exit_unlock labels and their trailing
-mutex_unlock() calls are removed and error paths return directly.
+Report the TS0 and TS1 thermal sensors of up to 16 DIMMs as 32 hwmon
+temperature channels using SB-RMI mailbox command 0x48 with the Mode 1
+DIMM_ADDRESS encoding:
 
-rmi_cpuid_read() clears msg->cpu_in_out on every error path, which the
-exit_unlock label used to do. Move the body into __rmi_cpuid_read() and
-keep the clearing in the locked wrapper. In rmi_mailbox_xfer(), the goto
-to exit_clear_alert becomes an if block.
+  bit[7]   1 (Mode 1)
+  bit[6]   sensor select (0 = TS0, 1 = TS1)
+  bit[5]   reserved
+  bit[4]   DIMM slot
+  bit[3:0] memory channel
 
-No functional change intended.
+Board DIMM n is reported on temp(n+1) (TS0) and temp(n+17) (TS1), where
+n = memory channel * DIMMs-per-channel + slot. With one DIMM per channel
+n is the memory channel; with two, the slots interleave (0x80, 0x90,
+0x81, ...). Each channel is labelled DIMM_TS<t>_UMC<n>.
+
+The layout comes from two optional firmware properties:
+
+ - amd,dpc: DIMMs per channel, 1 or 2 (default 1).
+ - amd,dimm-ids: the DIMM_ADDRESS of each sensor to report. Only the
+   listed sensors are exposed. Entries without bit[7], with the
+   reserved bit[5], with a slot bit when amd,dpc is 1, with a memory
+   channel above 7 when amd,dpc is 2, or listed twice are rejected,
+   as is an empty or unreadable property.
+
+Without amd,dimm-ids all 32 channels are exposed, and reading a sensor
+that is not fitted returns the firmware error.
+
+The temperature is returned in DataOut[31:21] as an 11-bit two's
+complement value in 0.25 degC steps and is reported in millidegrees
+Celsius.
 
 Signed-off-by: Prathima Lk <Prathima.Lk@amd.com>
 Signed-off-by: Akshay Gupta <Akshay.Gupta@amd.com>
 ---
- drivers/misc/amd-sbi/rmi-core.c | 148 ++++++++++++++++----------------
- 1 file changed, 72 insertions(+), 76 deletions(-)
+ drivers/misc/amd-sbi/rmi-core.h  |  10 ++
+ drivers/misc/amd-sbi/rmi-hwmon.c | 236 ++++++++++++++++++++++++++++---
+ 2 files changed, 228 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/misc/amd-sbi/rmi-core.c b/drivers/misc/amd-sbi/rmi-core.c
-index 95c9109101b5..277f12140972 100644
---- a/drivers/misc/amd-sbi/rmi-core.c
-+++ b/drivers/misc/amd-sbi/rmi-core.c
-@@ -5,6 +5,7 @@
+diff --git a/drivers/misc/amd-sbi/rmi-core.h b/drivers/misc/amd-sbi/rmi-core.h
+index 975ae858e9fd..15a0efa5dd02 100644
+--- a/drivers/misc/amd-sbi/rmi-core.h
++++ b/drivers/misc/amd-sbi/rmi-core.h
+@@ -48,6 +48,14 @@ enum sbrmi_msg_id {
+ 	SBRMI_WRITE_PKG_PWR_LIMIT,
+ 	SBRMI_READ_PKG_PWR_LIMIT,
+ 	SBRMI_READ_PKG_MAX_PWR_LIMIT,
++	SBRMI_READ_DIMM_THERMAL_SENSOR = 0x48,
++};
++
++/* DIMM thermal config; dimm_ids[] is indexed by hwmon channel */
++struct sbrmi_dimm_config {
++	u8 *dimm_ids;
++	const char **labels;
++	u8 dpc;			/* DIMMs per memory channel */
+ };
+ 
+ /* Each client has this additional data */
+@@ -56,6 +64,8 @@ struct sbrmi_data {
+ 	struct regmap *regmap;
+ 	/* Mutex locking */
+ 	struct mutex lock;
++	/* DIMM thermal config (hwmon) */
++	struct sbrmi_dimm_config dimm;
+ 	u32 pwr_limit_max;
+ 	u8 dev_static_addr;
+ 	u8 rev;
+diff --git a/drivers/misc/amd-sbi/rmi-hwmon.c b/drivers/misc/amd-sbi/rmi-hwmon.c
+index f4f015605daa..f4a64a4a33a8 100644
+--- a/drivers/misc/amd-sbi/rmi-hwmon.c
++++ b/drivers/misc/amd-sbi/rmi-hwmon.c
+@@ -4,14 +4,109 @@
   *
   * Copyright (C) 2025 Advanced Micro Devices, Inc.
   */
-+#include <linux/cleanup.h>
- #include <linux/delay.h>
++#include <linux/bitfield.h>
++#include <linux/bits.h>
  #include <linux/err.h>
- #include <linux/fs.h>
-@@ -185,19 +186,18 @@ static int rmi_cpuid_input_ext(struct sbrmi_data *data, struct apml_cpuid_msg *m
- }
+ #include <linux/hwmon.h>
++#include <linux/property.h>
+ #include <uapi/misc/amd-apml.h>
+ #include "rmi-core.h"
  
- /* Read CPUID function protocol */
--static int rmi_cpuid_read(struct sbrmi_data *data,
--			  struct apml_cpuid_msg *msg)
-+static int __rmi_cpuid_read(struct sbrmi_data *data,
-+			    struct apml_cpuid_msg *msg)
- {
- 	struct cpu_msr_outdata output = {0};
- 	int ret, hw_status;
- 	u16 thread;
+ /* Do not allow setting negative power limit */
+ #define SBRMI_PWR_MIN  0
  
--	mutex_lock(&data->lock);
- 	/* cache the rev value to identify if protocol is supported or not */
- 	if (!data->rev) {
- 		ret = sbrmi_get_rev(data);
- 		if (ret < 0)
--			goto exit_unlock;
-+			return ret;
- 	}
- 
- 	/* Extract thread from the input msg structure */
-@@ -206,22 +206,20 @@ static int rmi_cpuid_read(struct sbrmi_data *data,
- 	switch (data->rev) {
- 	case 0x10:
- 		/* CPUID protocol for REV 0x10 is not supported*/
--		ret = -EOPNOTSUPP;
--		goto exit_unlock;
-+		return -EOPNOTSUPP;
- 	case 0x20:
- 		ret = rmi_cpuid_input(data, msg, thread);
- 		if (ret)
--			goto exit_unlock;
-+			return ret;
- 		break;
- 	case 0x21:
- 	case 0x31:
- 		ret = rmi_cpuid_input_ext(data, msg, thread);
- 		if (ret)
--			goto exit_unlock;
-+			return ret;
- 		break;
- 	default:
--		ret = -EOPNOTSUPP;
--		goto exit_unlock;
-+		return -EOPNOTSUPP;
- 	}
- 
- 	/*
-@@ -233,32 +231,40 @@ static int rmi_cpuid_read(struct sbrmi_data *data,
- 	ret = regmap_read_poll_timeout(data->regmap, SBRMI_STATUS, hw_status,
- 				       hw_status & HW_ALERT_MASK, 500, 2000000);
- 	if (ret)
--		goto exit_unlock;
++/* DIMM temperature (SB-RMI Mode 1 DIMM_ADDRESS) */
++#define DIMM_BASE_ID		0x80	/* Mode 1: Bit[7]=1 */
++#define DIMM_TS_SELECT_BIT	BIT(6)	/* 0 = TS0, 1 = TS1 */
++#define DIMM_RSVD_BIT		BIT(5)
++#define DIMM_SLOT_BIT		BIT(4)
++#define DIMM_CHAN_MASK		GENMASK(3, 0)
++#define DIMM_TEMP_MASK		GENMASK(31, 21)
++#define DIMM_CHANNELS_PER_TS	16
++#define SBRMI_MAX_DIMMS		DIMM_CHANNELS_PER_TS
++#define SBRMI_NUM_DIMM_CHANNELS	(DIMM_CHANNELS_PER_TS * 2)	/* TS0 + TS1 */
++
++static bool sbrmi_dimm_channel_valid(const struct sbrmi_data *data, int channel)
++{
++	return data->dimm.dimm_ids && data->dimm.dimm_ids[channel];
++}
++
++/* Fill dimm_ids[] from the "amd,dimm-ids" entries, one sensor per entry */
++static int sbrmi_read_dimm_ids(struct device *dev, struct sbrmi_data *data)
++{
++	u8 raw_ids[SBRMI_NUM_DIMM_CHANNELS];
++	int count, i, ret, ch;
++	u8 addr;
++
++	count = device_property_count_u8(dev, "amd,dimm-ids");
++	if (count <= 0 || count > SBRMI_NUM_DIMM_CHANNELS) {
++		dev_err(dev, "amd,dimm-ids must have 1..%d entries, got %d\n",
++			SBRMI_NUM_DIMM_CHANNELS, count);
++		return -EINVAL;
++	}
++
++	ret = device_property_read_u8_array(dev, "amd,dimm-ids", raw_ids, count);
++	if (ret) {
++		dev_err(dev, "failed to read amd,dimm-ids: %d\n", ret);
 +		return ret;
- 
- 	ret = regmap_bulk_read(data->regmap, CPUID_MCA_CMD,
- 			       &output, CPUID_RD_REG_LEN);
- 	if (ret < 0)
--		goto exit_unlock;
-+		return ret;
- 
- 	ret = regmap_write(data->regmap, SBRMI_STATUS,
- 			   HW_ALERT_MASK);
- 	if (ret < 0)
--		goto exit_unlock;
-+		return ret;
- 
--	if (output.num_bytes != CPUID_RD_REG_LEN - 1) {
--		ret = -EMSGSIZE;
--		goto exit_unlock;
--	}
-+	if (output.num_bytes != CPUID_RD_REG_LEN - 1)
-+		return -EMSGSIZE;
- 	if (output.status) {
--		ret = -EPROTOTYPE;
- 		msg->fw_ret_code = output.status;
--		goto exit_unlock;
-+		return -EPROTOTYPE;
- 	}
- 	msg->cpu_in_out = output.value;
--exit_unlock:
++	}
++
++	for (i = 0; i < count; i++) {
++		addr = raw_ids[i];
++		/* Board DIMM n = memory channel * dpc + slot */
++		ch = (addr & DIMM_CHAN_MASK) * data->dimm.dpc + FIELD_GET(DIMM_SLOT_BIT, addr);
++
++		if (!(addr & DIMM_BASE_ID) || (addr & DIMM_RSVD_BIT) ||
++		    ch >= SBRMI_MAX_DIMMS ||
++		    (data->dimm.dpc == 1 && (addr & DIMM_SLOT_BIT))) {
++			dev_err(dev, "invalid amd,dimm-ids[%d] = 0x%x for %u DIMM(s) per channel\n",
++				i, addr, data->dimm.dpc);
++			return -EINVAL;
++		}
++
++		if (addr & DIMM_TS_SELECT_BIT)
++			ch += DIMM_CHANNELS_PER_TS;
++		if (data->dimm.dimm_ids[ch]) {
++			dev_err(dev, "amd,dimm-ids[%d] = 0x%x duplicates 0x%x\n",
++				i, addr, data->dimm.dimm_ids[ch]);
++			return -EINVAL;
++		}
++
++		data->dimm.dimm_ids[ch] = addr;
++	}
 +
 +	return 0;
 +}
 +
-+static int rmi_cpuid_read(struct sbrmi_data *data,
-+			  struct apml_cpuid_msg *msg)
++/*
++ * Build dimm_ids[], indexed by hwmon channel (TS0 0-15, TS1 16-31), from
++ * "amd,dimm-ids" or, when absent, for all 16 DIMMs.
++ */
++static int sbrmi_init_dimm_config(struct device *dev, struct sbrmi_data *data)
 +{
++	int i;
++	u8 addr;
++
++	data->dimm.dimm_ids = devm_kcalloc(dev, SBRMI_NUM_DIMM_CHANNELS,
++					   sizeof(*data->dimm.dimm_ids), GFP_KERNEL);
++	if (!data->dimm.dimm_ids)
++		return -ENOMEM;
++
++	if (device_property_present(dev, "amd,dimm-ids"))
++		return sbrmi_read_dimm_ids(dev, data);
++
++	for (i = 0; i < SBRMI_MAX_DIMMS; i++) {
++		addr = DIMM_BASE_ID | i;
++		if (data->dimm.dpc == 2)
++			addr = DIMM_BASE_ID | (i & 1 ? DIMM_SLOT_BIT : 0) | (i / 2);
++
++		data->dimm.dimm_ids[i] = addr;
++		data->dimm.dimm_ids[i + DIMM_CHANNELS_PER_TS] = addr | DIMM_TS_SELECT_BIT;
++	}
++
++	return 0;
++}
++
+ static int sbrmi_read(struct device *dev, enum hwmon_sensor_types type,
+ 		      u32 attr, int channel, long *val)
+ {
+@@ -22,29 +117,52 @@ static int sbrmi_read(struct device *dev, enum hwmon_sensor_types type,
+ 	if (!data)
+ 		return -ENODEV;
+ 
+-	if (type != hwmon_power)
++	if (type != hwmon_power && type != hwmon_temp)
+ 		return -EINVAL;
+ 
+-	switch (attr) {
+-	case hwmon_power_input:
+-		msg.cmd = SBRMI_READ_PKG_PWR_CONSUMPTION;
+-		ret = rmi_mailbox_xfer(data, &msg);
+-		break;
+-	case hwmon_power_cap:
+-		msg.cmd = SBRMI_READ_PKG_PWR_LIMIT;
+-		ret = rmi_mailbox_xfer(data, &msg);
+-		break;
+-	case hwmon_power_cap_max:
+-		msg.mb_in_out = data->pwr_limit_max;
+-		ret = 0;
+-		break;
+-	default:
+-		return -EINVAL;
++	if (type == hwmon_power) {
++		switch (attr) {
++		case hwmon_power_input:
++			msg.cmd = SBRMI_READ_PKG_PWR_CONSUMPTION;
++			ret = rmi_mailbox_xfer(data, &msg);
++			break;
++		case hwmon_power_cap:
++			msg.cmd = SBRMI_READ_PKG_PWR_LIMIT;
++			ret = rmi_mailbox_xfer(data, &msg);
++			break;
++		case hwmon_power_cap_max:
++			msg.mb_in_out = data->pwr_limit_max;
++			ret = 0;
++			break;
++		default:
++			return -EINVAL;
++		}
++	} else {
++		switch (attr) {
++		case hwmon_temp_input:
++			if (!sbrmi_dimm_channel_valid(data, channel))
++				return -EINVAL;
++			msg.cmd = SBRMI_READ_DIMM_THERMAL_SENSOR;
++			msg.mb_in_out = data->dimm.dimm_ids[channel];
++			ret = rmi_mailbox_xfer(data, &msg);
++			if (ret == -EPROTOTYPE)
++				dev_dbg(dev, "FW error code:0x%x\n",
++					msg.fw_ret_code);
++			break;
++		default:
++			return -EINVAL;
++		}
+ 	}
+ 	if (ret < 0)
+ 		return ret;
+-	/* hwmon power attributes are in microWatt */
+-	*val = (long)msg.mb_in_out * 1000;
++
++	if (type == hwmon_power) {
++		/* hwmon power attributes are in microWatt */
++		*val = (long)msg.mb_in_out * 1000;
++	} else {
++		/* 11-bit two's complement in bits 31:21, 0.25 degC per LSB */
++		*val = sign_extend32(FIELD_GET(DIMM_TEMP_MASK, msg.mb_in_out), 10) * 250;
++	}
+ 	return ret;
+ }
+ 
+@@ -87,21 +205,55 @@ static umode_t sbrmi_is_visible(const void *data,
+ 			return 0644;
+ 		}
+ 		break;
++	case hwmon_temp:
++		if (!sbrmi_dimm_channel_valid(data, channel))
++			return 0;
++		switch (attr) {
++		case hwmon_temp_input:
++		case hwmon_temp_label:
++			return 0444;
++		}
++		break;
+ 	default:
+ 		break;
+ 	}
+ 	return 0;
+ }
+ 
++static const u32 sbrmi_temp_config[SBRMI_NUM_DIMM_CHANNELS + 1] = {
++	[0 ... (SBRMI_NUM_DIMM_CHANNELS - 1)] = HWMON_T_INPUT | HWMON_T_LABEL,
++};
++
++static const struct hwmon_channel_info sbrmi_temp_channel_info = {
++	.type = hwmon_temp,
++	.config = sbrmi_temp_config,
++};
++
+ static const struct hwmon_channel_info * const sbrmi_info[] = {
+ 	HWMON_CHANNEL_INFO(power,
+ 			   HWMON_P_INPUT | HWMON_P_CAP | HWMON_P_CAP_MAX),
++	&sbrmi_temp_channel_info,
+ 	NULL
+ };
+ 
++static int sbrmi_read_string(struct device *dev,
++			     enum hwmon_sensor_types type,
++			     u32 attr, int channel, const char **str)
++{
++	struct sbrmi_data *data = dev_get_drvdata(dev);
++
++	if (type != hwmon_temp || attr != hwmon_temp_label)
++		return -EOPNOTSUPP;
++	if (!sbrmi_dimm_channel_valid(data, channel))
++		return -EINVAL;
++	*str = data->dimm.labels[channel];
++	return 0;
++}
++
+ static const struct hwmon_ops sbrmi_hwmon_ops = {
+ 	.is_visible = sbrmi_is_visible,
+ 	.read = sbrmi_read,
++	.read_string = sbrmi_read_string,
+ 	.write = sbrmi_write,
+ };
+ 
+@@ -110,9 +262,57 @@ static const struct hwmon_chip_info sbrmi_chip_info = {
+ 	.info = sbrmi_info,
+ };
+ 
++/* Label each channel by its DIMM number, not by the address it queries */
++static int sbrmi_init_dimm_labels(struct device *dev, struct sbrmi_data *data)
++{
++	int ch;
++
++	data->dimm.labels = devm_kcalloc(dev, SBRMI_NUM_DIMM_CHANNELS,
++					 sizeof(*data->dimm.labels), GFP_KERNEL);
++	if (!data->dimm.labels)
++		return -ENOMEM;
++
++	for (ch = 0; ch < SBRMI_NUM_DIMM_CHANNELS; ch++) {
++		if (!data->dimm.dimm_ids[ch])
++			continue;
++		data->dimm.labels[ch] =
++			devm_kasprintf(dev, GFP_KERNEL, "DIMM_TS%d_UMC%d",
++				       ch / DIMM_CHANNELS_PER_TS,
++				       ch % DIMM_CHANNELS_PER_TS);
++		if (!data->dimm.labels[ch])
++			return -ENOMEM;
++	}
++
++	return 0;
++}
++
+ int create_hwmon_sensor_device(struct device *dev, struct sbrmi_data *data)
+ {
+ 	struct device *hwmon_dev;
 +	int ret;
 +
-+	guard(mutex)(&data->lock);
-+
-+	ret = __rmi_cpuid_read(data, msg);
- 	if (ret < 0)
- 		msg->cpu_in_out = 0;
--	mutex_unlock(&data->lock);
-+
- 	return ret;
- }
- 
-@@ -306,12 +312,13 @@ static int rmi_mca_msr_read(struct sbrmi_data *data,
- 	int hw_status;
- 	u16 thread;
- 
--	mutex_lock(&data->lock);
-+	guard(mutex)(&data->lock);
-+
- 	/* cache the rev value to identify if protocol is supported or not */
- 	if (!data->rev) {
- 		ret = sbrmi_get_rev(data);
- 		if (ret < 0)
--			goto exit_unlock;
++	/* amd,dpc: dimms-per-channel, default 1 */
++	data->dimm.dpc = 1;
++	if (device_property_present(dev, "amd,dpc")) {
++		ret = device_property_read_u8(dev, "amd,dpc", &data->dimm.dpc);
++		if (ret) {
++			dev_err(dev, "failed to read amd,dpc: %d\n", ret);
 +			return ret;
- 	}
- 
- 	/* Extract thread from the input msg structure */
-@@ -320,22 +327,20 @@ static int rmi_mca_msr_read(struct sbrmi_data *data,
- 	switch (data->rev) {
- 	case 0x10:
- 		/* MCAMSR protocol for REV 0x10 is not supported*/
--		ret = -EOPNOTSUPP;
--		goto exit_unlock;
-+		return -EOPNOTSUPP;
- 	case 0x20:
- 		ret = rmi_mcamsr_input(data, msg, thread);
- 		if (ret)
--			goto exit_unlock;
-+			return ret;
- 		break;
- 	case 0x21:
- 	case 0x31:
- 		ret = rmi_mcamsr_input_ext(data, msg, thread);
- 		if (ret)
--			goto exit_unlock;
-+			return ret;
- 		break;
- 	default:
--		ret = -EOPNOTSUPP;
--		goto exit_unlock;
-+		return -EOPNOTSUPP;
- 	}
- 
- 	/*
-@@ -347,32 +352,27 @@ static int rmi_mca_msr_read(struct sbrmi_data *data,
- 	ret = regmap_read_poll_timeout(data->regmap, SBRMI_STATUS, hw_status,
- 				       hw_status & HW_ALERT_MASK, 500, 2000000);
- 	if (ret)
--		goto exit_unlock;
-+		return ret;
- 
- 	ret = regmap_bulk_read(data->regmap, CPUID_MCA_CMD,
- 			       &output, MSR_RD_REG_LEN);
- 	if (ret < 0)
--		goto exit_unlock;
-+		return ret;
- 
- 	ret = regmap_write(data->regmap, SBRMI_STATUS,
- 			   HW_ALERT_MASK);
- 	if (ret < 0)
--		goto exit_unlock;
-+		return ret;
- 
--	if (output.num_bytes != MSR_RD_REG_LEN - 1) {
--		ret = -EMSGSIZE;
--		goto exit_unlock;
--	}
-+	if (output.num_bytes != MSR_RD_REG_LEN - 1)
-+		return -EMSGSIZE;
- 	if (output.status) {
--		ret = -EPROTOTYPE;
- 		msg->fw_ret_code = output.status;
--		goto exit_unlock;
-+		return -EPROTOTYPE;
- 	}
- 	msg->mcamsr_in_out = output.value;
- 
--exit_unlock:
--	mutex_unlock(&data->lock);
--	return ret;
-+	return 0;
- }
- 
- int rmi_mailbox_xfer(struct sbrmi_data *data,
-@@ -383,19 +383,19 @@ int rmi_mailbox_xfer(struct sbrmi_data *data,
- 	int sw_status;
- 	u8 byte;
- 
--	mutex_lock(&data->lock);
-+	guard(mutex)(&data->lock);
- 
- 	msg->fw_ret_code = 0;
- 
- 	/* Indicate firmware a command is to be serviced */
- 	ret = regmap_write(data->regmap, SBRMI_INBNDMSG7, START_CMD);
- 	if (ret < 0)
--		goto exit_unlock;
-+		return ret;
- 
- 	/* Write the command to SBRMI::InBndMsg_inst0 */
- 	ret = regmap_write(data->regmap, SBRMI_INBNDMSG0, msg->cmd);
- 	if (ret < 0)
--		goto exit_unlock;
-+		return ret;
- 
- 	/*
- 	 * For both read and write the initiator (BMC) writes
-@@ -406,7 +406,7 @@ int rmi_mailbox_xfer(struct sbrmi_data *data,
- 		byte = (msg->mb_in_out >> i * 8) & 0xff;
- 		ret = regmap_write(data->regmap, SBRMI_INBNDMSG1 + i, byte);
- 		if (ret < 0)
--			goto exit_unlock;
-+			return ret;
- 	}
- 
- 	/*
-@@ -415,7 +415,7 @@ int rmi_mailbox_xfer(struct sbrmi_data *data,
- 	 */
- 	ret = regmap_write(data->regmap, SBRMI_SW_INTERRUPT, TRIGGER_MAILBOX);
- 	if (ret < 0)
--		goto exit_unlock;
-+		return ret;
- 
- 	/*
- 	 * Firmware will write SBRMI::Status[SwAlertSts]=1 to generate
-@@ -425,29 +425,27 @@ int rmi_mailbox_xfer(struct sbrmi_data *data,
- 	ret = regmap_read_poll_timeout(data->regmap, SBRMI_STATUS, sw_status,
- 				       sw_status & SW_ALERT_MASK, 500, 2000000);
- 	if (ret)
--		goto exit_unlock;
-+		return ret;
- 
- 	ret = regmap_read(data->regmap, SBRMI_OUTBNDMSG7, &ec);
--	if (ret || ec)
--		goto exit_clear_alert;
--
--	/* Clear the input value before updating the output data */
--	msg->mb_in_out = 0;
--
--	/*
--	 * For a read operation, the initiator (BMC) reads the firmware
--	 * response Command Data Out[31:0] from SBRMI::OutBndMsg_inst[4:1]
--	 * {SBRMI_x34(MSB):SBRMI_x31(LSB)}.
--	 */
--	for (i = 0; i < AMD_SBI_MB_DATA_SIZE; i++) {
--		ret = regmap_read(data->regmap,
--				  SBRMI_OUTBNDMSG1 + i, &bytes);
--		if (ret < 0)
--			break;
--		msg->mb_in_out |= bytes << i * 8;
-+	if (!ret && !ec) {
-+		/* Clear the input value before updating the output data */
-+		msg->mb_in_out = 0;
-+
-+		/*
-+		 * For a read operation, the initiator (BMC) reads the firmware
-+		 * response Command Data Out[31:0] from SBRMI::OutBndMsg_inst[4:1]
-+		 * {SBRMI_x34(MSB):SBRMI_x31(LSB)}.
-+		 */
-+		for (i = 0; i < AMD_SBI_MB_DATA_SIZE; i++) {
-+			ret = regmap_read(data->regmap,
-+					  SBRMI_OUTBNDMSG1 + i, &bytes);
-+			if (ret < 0)
-+				break;
-+			msg->mb_in_out |= bytes << i * 8;
 +		}
- 	}
- 
--exit_clear_alert:
- 	/*
- 	 * BMC must write 1'b1 to SBRMI::Status[SwAlertSts] to clear the
- 	 * ALERT to initiator
-@@ -458,8 +456,7 @@ int rmi_mailbox_xfer(struct sbrmi_data *data,
- 		ret = -EPROTOTYPE;
- 		msg->fw_ret_code = ec;
- 	}
--exit_unlock:
--	mutex_unlock(&data->lock);
++	}
++	if (data->dimm.dpc != 1 && data->dimm.dpc != 2) {
++		dev_err(dev, "amd,dpc must be 1 or 2, got %u\n",
++			data->dimm.dpc);
++		return -EINVAL;
++	}
 +
- 	return ret;
- }
++	ret = sbrmi_init_dimm_config(dev, data);
++	if (ret)
++		return ret;
++
++	ret = sbrmi_init_dimm_labels(dev, data);
++	if (ret)
++		return ret;
  
-@@ -474,17 +471,16 @@ static int apml_rmi_reg_xfer(struct sbrmi_data *data,
- 	if (copy_from_user(&msg, arg, sizeof(struct apml_reg_xfer_msg)))
- 		return -EFAULT;
- 
--	mutex_lock(&data->lock);
--	if (msg.rflag) {
--		ret = regmap_read(data->regmap, msg.reg_addr, &data_read);
--		if (!ret)
--			msg.data_in_out = data_read;
--	} else {
--		ret = regmap_write(data->regmap, msg.reg_addr, msg.data_in_out);
-+	scoped_guard(mutex, &data->lock) {
-+		if (msg.rflag) {
-+			ret = regmap_read(data->regmap, msg.reg_addr, &data_read);
-+			if (!ret)
-+				msg.data_in_out = data_read;
-+		} else {
-+			ret = regmap_write(data->regmap, msg.reg_addr, msg.data_in_out);
-+		}
- 	}
- 
--	mutex_unlock(&data->lock);
--
- 	if (msg.rflag && !ret)
- 		if (copy_to_user(arg, &msg, sizeof(struct apml_reg_xfer_msg)))
- 			return -EFAULT;
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev, "sbrmi", data,
+ 							 &sbrmi_chip_info, NULL);
 -- 
 2.34.1
 
