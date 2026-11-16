@@ -1,72 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.33
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794789716;
-	b=GSyOsuovjiH2PeUsKh3cojKkn/0usWt+tpd+JkfwtvBW5x5JDLawqTL9o+nyy9oS0Ys4
-	 ODZriXqO+4hLtcIi6m2ccq7kp8hwBnwopkdFhElz8pGCGv6eaYacRzSPysNKjpeZ/60/p
-	 JqAsgOosmfLos5fFHW42wWZaOqBA9fTqieYy5CIEIOyS4u79rDKUaO4zLmRlXn8xz8Upu
-	 Px9UjMZQ2CpykolXlhgWUAaYDBJB3aYPjzj5WM6L+nceRc3Muln+gk+WhiSgBUGh0UOkQ
-	 KVPTjSPtHVttY1xD6eHxuZcqnpJcdY/Az3YQt8sXxsYzvDwYqSzmHBVhc3LFPySfhiQ==
+	t=1794789732;
+	b=Xvm8LoqZQzWfdk6H+5D1eXAd/hKZ3f+LBIwnpDtD2nVXNjRUhLlAS5css7K8wVT4VKNk
+	 t+Mu6L0M2xgr5FDH/mg7iaVKdvULAgn80pNqtjU66CcU5MM/qKscH5xsDwMqlbhf4T1cO
+	 a7FO9s10w0bOUjupe6EfdQL2GoSX2JGnPWQpmkIUwSGWab2eIAMw3ukq1+JrO5gvo/nZD
+	 FE5SAuFvbmufJ9AaK7PkoZrPU5TiHIESpCSEiwlpoUd3kqX/+Y4QSc42PfKPTWhBvX8AZ
+	 lLfgNh07ItK7krZIbk9VenELxLwWHfuHmgCHSFqHyYX0XH0Rj6/yhzXzRLVZDSCU4RA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794789716;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794789732;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
-	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
-	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
-	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=IsW7atzSQ2E7F85ASunl7GLsIyH64EFl27HfndOmRKU=;
-	b=3v/HgXh9KVs+7F9HFZ4khMCatYylnb56VVu1I5050XzOZJ11oF51pm/1xWJ7kO2f+mvZ
-	 2je4G7rFngmqwRHLreveZ0ZrEVtCWyP7czPbcyy9WrHeXVhQfNso+vgSIcNrOObye8Z8f
-	 DLZY9ad0D2OjZHjtxij2zzNc4omC/UCO2Y0yfqVEm5y+Clg/Mt/qZ/yTgBV2MjpYODFqp
-	 3qXoJc4+EF2FNU4n4rOiF8mgbwmkrt/cNG6AsUT8WKl94FoYaWgLUAOUwmhE/u3MtWFXc
-	 KAZggwH2hVGUMkCHOq/i98Ivfy+qdF5uLHHbT46a9bqkWsG0MD1dPtC2FxAMIIh1Kqg==
+	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
+	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
+	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
+	 X-Local-Domain:X-CMAE-Envelope;
+	bh=b6+/Olz0BDlAxDLlENDex5nGSnNQT3v8w8D9omOUT4E=;
+	b=3GObU16t1ZLv61ZJ8StbNVsCtDUH7l+KVZYij/YeXoijKIQwGvUvSbG6cvCVC0lbRra2
+	 nrALz+/RPK+tWpa+l4o+2oO37w7tNJs0zug7ao5daFltDU4ejbiaU3BTVqXcMJ1oluw9I
+	 6rjUL67ceAtvf/Blzh62Ftqqc6BFZbMFUKLH9UJcJ9C+cQ/EJkvkCZSWnNhUPngV/cJkH
+	 tVFRnfSk0Kk37kXRbIvOapjLwiA4tWEwvmOd5E1xlHO5LoKmv9h3FbhXJEgDxFX9PUI8A
+	 Xgyz/0x2hbj6ob6XESkqkPkQ8XNYJjuEjlDhELAG0bNuc/RToKKvuA+1djkwiXav/Ug==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=vnPowUs9;
-	arc=none smtp.remote-ip=35.89.44.37
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=yaT2jS4D;
+	arc=none smtp.remote-ip=35.89.44.33
+Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86686606A323
-	for <linux-hwmon@vger.kernel.org>; Mon, 16 Nov 2026 00:41:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 86686606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FBEE606A329
+	for <linux-hwmon@vger.kernel.org>; Mon, 16 Nov 2026 00:42:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2FBEE606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=vnPowUs9
-Received: from eig-obgw-5003b.ext.cloudfilter.net ([10.0.29.155])
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=yaT2jS4D
+Received: from eig-obgw-6002b.ext.cloudfilter.net ([10.0.30.203])
 	by cmsmtp with ESMTPS
-	id SCQNxK6tFVK9USkn8xsnGH; Mon, 16 Nov 2026 00:41:50 +0000
+	id SkUVxuxzLAR1iSknUxUgKp; Mon, 16 Nov 2026 00:42:12 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id Skn7xoaeBSgq1Skn7xDSOl; Mon, 16 Nov 2026 00:41:49 +0000
-X-Authority-Analysis: v=2.4 cv=c8KrQQ9l c=1 sm=1 tr=0 ts=6afa514d
+	id SknTxD5ba8cn4SknTxhGxN; Mon, 16 Nov 2026 00:42:11 +0000
+X-Authority-Analysis: v=2.4 cv=Qrde3Uyd c=1 sm=1 tr=0 ts=6afa5163
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10
- a=ydwNUxKNuv6kypV7TxIA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=KPbNTLLc3YvdawN95zVk:22
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=_jlGtV7tAAAA:8
+ a=3uNsp3hANkmk-a_pTVMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=IsW7atzSQ2E7F85ASunl7GLsIyH64EFl27HfndOmRKU=; b=vnPowUs9wTU8
-	B79yjVoUVUrbx2/ujA8AXHNkPyruHCMpsIN3AKu+e1D871DV5GbIOdnwL/4mFDNJSFMohdL5VqVzY
-	BV4POrSQfqkGW9qJXO2PM/V2GExnZrk90XLOjCPPLT0krp00lslks5TbB88BFFpdmfoD3378vQu7I
-	wEH2GHOuAyxh2kzd4KpAbgOR+mX9uqNA/WGulFftKZTEqHiuotrJ9/IDzGR6tyAQK4TVFAG34P5Cf
-	nyPUm0uBU0RLQD6ATW2DaTvnzk/c4N6jARp0O8R9v/gv4ACutw2pkbWM2t7D5tE6Xo80n/MDwRoU6
-	DtlPAWNe9DX7nIe2I8VpYQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:47236)
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=b6+/Olz0BDlAxDLlENDex5nGSnNQT3v8w8D9omOUT4E=; b=yaT2jS4DDK0L34iG9A2rgVga4e
+	idgHZJyEd5YLf7q4AaF1Z9LJJOQLhUgk9JzBiZTJm2ScbQdGm4CfnLhJfGTw2ev8SeiadGVPbZBna
+	2cgLWvbgdjmoO5oN/a6DX4WSZ9NM7AHx6rHMx5w0Ga9hQSePiurAYwZS9kI7JGIy9BrDZXj6B4W9i
+	7m1Oq46BMputzaBYHlyYVS8Dl0MC4AtxPD42xQ3LFko9FcSgGXRCaR/19yq5xCLC44PN8upsz1HhF
+	p+j6Y05smD6Yc/4vbo4a78bus3HFZsoP1ZT1gz8nfrXZguYYLFrRdT/5+8PIGurkZogDlKdHA7fFF
+	01Krxx3A==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:43378 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xSkn6-00000001htp-3vOy;
-	Mon, 16 Nov 2026 06:11:49 +0530
-Message-ID: <68615d41-eedf-4178-ac0f-8d9599f24e12@roeck-us.net>
-Date: Sun, 15 Nov 2026 16:41:47 -0800
+	id 1xSknT-00000001iJg-13FF;
+	Mon, 16 Nov 2026 06:12:11 +0530
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	=?UTF-8?q?Dav=C3=AD=C3=B0=20Steinn=20Geirsson?= <david@dsg.is>
+Subject: [PATCH] hwmon: Use per-device lockdep keys
+Date: Sun, 15 Nov 2026 16:42:09 -0800
+Message-ID: <20261116004209.2570779-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -76,69 +82,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] hwmon: (adt7475) Convert to
- hwmon_device_register_with_info()
-To: =?UTF-8?Q?Dav=C3=AD=C3=B0_Steinn_Geirsson?= <david@dsg.is>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- linux-pwm@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261114004110.328050-1-david@dsg.is>
- <20261114004110.328050-3-david@dsg.is>
- <d28f392e-82ea-44d6-83e5-9593b341a722@roeck-us.net> <avm-tbgWgTJNFTBj@dsg.is>
- <62350363-b796-4637-a102-c668037bbbdd@roeck-us.net> <avo1IWkXBQ2fHgKx@dsg.is>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <avo1IWkXBQ2fHgKx@dsg.is>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
@@ -148,71 +92,86 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xSkn6-00000001htp-3vOy
+X-Exim-ID: 1xSknT-00000001iJg-13FF
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:47236
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:43378
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 12
+X-Email-Count: 16
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfON16HRMtrV82k6EOZaRqrjKmnJE9Z8ATfcFXxftg1gOdJY0aqNPfIx3nR4cA1FrpxdyuQz3DAFVZGJvhuFcEclQ2dBU1bNGogQMmg6WFkJBZDS1LdVj
- JWhSdMXqf5Pg0dX6zRz/41AJp4ZBTO0Be+qCoPsjbhGZ3ckyeINSsaTr+7Ox+RyyezHqY1L82dkkfYWsZSB54txqiPxmw9M7JKFsOerjoqEXBZGawlcPWSps
+X-CMAE-Envelope: MS4xfIi5eEP4uvP3aaxEtjwS689QGD6OVMbbjxr9Z0eNwuE3tBHtu3NP4OVUpM/HcGFaWx4CqjRmVSis7E179xWKAJQIVk2GmuUI+mBzWcJ06sZkte6sdZBJ
+ ryqMPEWqJFiMH8BYJxscvYac6fsJwpuSjwo2+o6Wg25c6Rc8V5YiRLWd3d6RyJ4GXXfErK7jS93C8QhD8OLcfik+SKfBe2viqXYI56j39zaoUAR28B9J0r8e
 
-On 11/15/26 14:41, Davíð Steinn Geirsson wrote:
-...
-> Apologies if that's how it came off, that was not the intent. I
-> understand your earlier guidance that new drivers need to use the hwmon
-> subsystem lock for this kind of thing. The reason I mentioned those
-> other drivers was to try to explain why I believe this is a novel issue
-> other hwmon drivers have not hit before.
-> 
+Currently, mutex_init(&hwdev->lock) in __hwmon_device_register() assigns
+a single static lockdep key to all hardware monitoring device locks. If
+one hardware monitoring device accesses another hardware monitoring
+device (for example, pwm-fan controlling a PWM output provided by
+adt7470), lockdep sees two instances of the same lock class acquired in
+sequence and reports a false-positive recursive locking warning.
 
-The pwm maintainer (Wolfgang) insists that all chips with pwm output,
-including fan controllers like this one, register with the pwm subsystem
-as pwm controllers. I resisted that for a long time because I find that
-it adds pointless complexity, but that time is gone. People now find
-reasons, such as claiming that they want to connect LEDs instead of fans,
-to those pwm outputs. This results in recursive calls into the hwmon
-subsystem, for example if such a pwm output is indeed connected to a fan
-and the pwm-fan driver is used to control it. Yes, this is novel. I never
-imagined that this would ever be the case. That happens when new and
-more complex use cases are introduced into a system.
+Give each struct hwmon_device its own dynamic struct lock_class_key,
+registered via lockdep_register_key() and initialized with
+mutex_init_with_key() before any error path that calls
+hwmon_dev_release(), and cleaned up with mutex_destroy() and
+lockdep_unregister_key() in hwmon_dev_release(). This allows nested
+locking across distinct hwmon devices while preserving full lockdep
+deadlock and self-recursion detection.
 
-...
+Cc: Davíð Steinn Geirsson <david@dsg.is>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/hwmon.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-> 
->>
->> Anyway, you want to add the complexity of getting the pwm subsystem and
->> the pwm-fan driver involved, even though this could as well be handled
->> in the adt7475 driver, so you'll have to suffer the consequences.
-> 
-> I have no attachment to this implementation, in truth I just expected an
-> adt7475 driver registering cooling devices itself would be rejected. If
-
-It appears that you had no problems finding examples for drivers not (or rather
-not yet) using the hardware monitoring subsystem lock. Yet, it seems that you
-had trouble finding hardware monitoring drivers which also register cooling
-devices (besides pwm-fan). Here are some for reference.
-
-$ git grep devm_thermal_of_child_cooling_device_register
-amc6821.c:              return PTR_ERR_OR_ZERO(devm_thermal_of_child_cooling_device_register(dev,
-aspeed-pwm-tacho.c:     cdev->tcdev = devm_thermal_of_child_cooling_device_register(dev, child,
-emc2305.c:              devm_thermal_of_child_cooling_device_register(dev, fan_node,
-gpio-fan.c:     fan_data->cdev = devm_thermal_of_child_cooling_device_register(dev, np,
-max6650.c:              cooling_dev = devm_thermal_of_child_cooling_device_register(dev, dev->of_node,
-npcm750-pwm-fan.c:      cdev->tcdev = devm_thermal_of_child_cooling_device_register(dev, child,
-pwm-fan.c:              cdev = devm_thermal_of_child_cooling_device_register(dev, dev->of_node,
-qnap-mcu-hwmon.c:               cdev = devm_thermal_of_child_cooling_device_register(dev, to_of_node(hwm->fan_node),
-tc654.c:                cdev = devm_thermal_of_child_cooling_device_register(dev, dev->of_node,
-
-Of those, amc6821, emc2305 and max6650, are quite similar to adt7475.
-
-Anyway, I instructed my AI agent to look into the problem and fix it,
-so I'll send a patch to fix the problem shortly.
-
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 73a818806d3d..6cfcdb9f60b7 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -18,6 +18,7 @@
+ #include <linux/idr.h>
+ #include <linux/kstrtox.h>
+ #include <linux/list.h>
++#include <linux/lockdep.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/pci.h>
+@@ -37,6 +38,7 @@ struct hwmon_device {
+ 	const char *label;
+ 	struct device dev;
+ 	const struct hwmon_chip_info *chip;
++	struct lock_class_key lock_key;
+ 	struct mutex lock;
+ 	struct list_head tzdata;
+ 	struct attribute_group group;
+@@ -136,6 +138,8 @@ static void hwmon_dev_release(struct device *dev)
+ 		hwmon_free_attrs(hwdev->group.attrs_const);
+ 	kfree(hwdev->groups);
+ 	kfree(hwdev->label);
++	mutex_destroy(&hwdev->lock);
++	lockdep_unregister_key(&hwdev->lock_key);
+ 	kfree(hwdev);
+ }
+ 
+@@ -939,6 +943,8 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+ 	}
+ 
+ 	hdev = &hwdev->dev;
++	lockdep_register_key(&hwdev->lock_key);
++	mutex_init_with_key(&hwdev->lock, &hwdev->lock_key);
+ 
+ 	if (chip) {
+ 		const struct attribute **attrs;
+@@ -993,7 +999,6 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+ 		tdev = tdev->parent;
+ 	hdev->of_node = tdev ? tdev->of_node : NULL;
+ 	hwdev->chip = chip;
+-	mutex_init(&hwdev->lock);
+ 	dev_set_drvdata(hdev, drvdata);
+ 	dev_set_name(hdev, HWMON_ID_FORMAT, id);
+ 	err = device_register(hdev);
+-- 
+2.45.2
 
