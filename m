@@ -1,56 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794871835;
-	b=aQLZLIO+vYaKchDqOvLXmzMejOR6LyYutMEhRMpHoUbgN4WtWZXsabu70Rb+yKCSsLhk
-	 6tChFOheHii/z/wBsjQJrOd9DV+w/m2Lrp9CR4fCSNlPbSssyVn9f42HcklOuhDLStN0A
-	 RxViJWHajjtUU5Mb732OtPPATlj8GtqJs8mgfb93suVv2Pqwbb54elhHXUJQOYr1OmlEY
-	 aWH5dloJd6q69BZIlS9V0ri2eBH3OU+7JKQnWiIVrSlc5CMRKi+RT9Fwx6RxzkoV1Id8T
-	 s/bcq6FckldkjcqSzTg9m6jNz7+4Nmhrv8b80nWm7YzfZ//9icZjh9+iilTtlnvLaRQ==
+	t=1794872623;
+	b=0TGm0jzErUpAteagsNQguz8RYtvp0z/Pt00HXFRI8L4ggnx+0VYVHurWpbp8SES2pC/E
+	 6Mm3y4LRTqKhPImPvXMAwf7Nus1KCmnfO5uiTZMPeLs1nGpcSGj/QSS06VmvRnh3c7U+X
+	 AuMv75R5G6TSJyaUr9ExpbOo0sWYMw+UA7OJzFbiB8gDJUaTiREutYEBVdVpqRTrVLtC3
+	 mexKN5V0UynlUSQsG6/0Et5/XzkePAMbYwCfQzUriroHcBBzIVU5+6wK7GhLUS3FS92Y1
+	 qllqrqIpyQGgxOmSAQPVLiuTk1URErVC2DoEqJBJc1NEEoo/bp04geGbEKBnf0jXBgg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794871835;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=PNyyNTUO6IF/IGDxW9Fo6kL64+tbw9kWzwaytmvtnHA=;
-	b=gikzArFSnZD+KdquGDgVt4dSktzbKcy++S9hhDi2gjuFRTFEfdg1xpPe7JvKBvVTHD9m
-	 HTcSRKCE2loAbwU91K4YlkJmkPHexv4JmxIzPnRKfguU+bXxMZaVHcub6nn8F1/82W2z7
-	 TKpkbdrUmpNScp5rVDHSRZSS7/w7aH7uyb/jLT3vhOIcvVYnG1pERlYKEh3jUb21coBqj
-	 X9w+45zm7l+9FQvIjTkcSpcVkyCaHlaPcqV6h1gG6scXSkfPfVMH/AOmlTHnQLJComemK
-	 C9G6jw6qTtDPes/X5fTxQNh32S2vHMRDJq3oeSCivSNuNvYZH5B6Jx5TjUnzK/l1VZg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794872623;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=tE566DE9NL2ilRzS1obPqo6X//TjT5jTgHN8mNvDPfI=;
+	b=KAm7jKxsPoLiUAtozCRU94NgcXp97WrYIIoquZVsDqoM8zJnIJAbCk48JCghL3AQrPls
+	 IdczTjFavYCTWz5zIvCrT+JKiMZX/Syz/XMFpuDK+T+2Hd6ZsTZPPGQ0uD147mQ251lMZ
+	 53OT81VhR2m3W8M/Q79wNglz0ZRrLukuxFcdEqKr9ErFF993GtA03G5OtJT3oQk7645Uz
+	 fnUKI9EogE5tq/Wby8ECYUyX791lkt5UWrSuzy9QfTuxG83adthVXbZC6fBhhe5yqR8Ht
+	 xokeIw0EiVxONG0T+SYb+ZVOOv1/qS3nuBg1uvv+QKcuGzHTmysMI1JfceXVoam3UbA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JQTPBTee;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eqrb+u8R;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB4E606A31C
-	for <linux-hwmon@vger.kernel.org>; Mon, 16 Nov 2026 23:30:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA959606A331
+	for <linux-hwmon@vger.kernel.org>; Mon, 16 Nov 2026 23:43:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JQTPBTee
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F09001F000C4;
-	Mon, 16 Nov 2026 23:30:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eqrb+u8R
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F9691F000CA
+	for <linux-hwmon@vger.kernel.org>; Mon, 16 Nov 2026 23:43:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794871835;
-	bh=PNyyNTUO6IF/IGDxW9Fo6kL64+tbw9kWzwaytmvtnHA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=JQTPBTeedD4mQOVsZPF0gh4N0BqrD0W9odb9KJoQHw/i6fD2b1GEm9JvmQHJTfQmg
-	 cYgGiKx3wmt8lrBZO8NarDGgteLVEzWfpgsCn1/IUk/F+UiqOn1vnCNacFdtqbr0ES
-	 70YL/p0tBo02tsuNrLbA12UOvcVIdsieIX/Cl47Ipe5tPGXMBPAO1ljOyWooZxSCMX
-	 DYMfWb/c5k+RAuqqKnmHkSbW9Q8cgsqxmHyYzJhx1O0KSW69lzGEHvFDlXeCj7uj2q
-	 cf+zLYe++lipo6XqX9y6GkWYSy5ySLfg+rBW0SNcEtTvBdtc+sS17nj0VxgYhg4hJd
-	 6DYya8upTZMPg==
-Message-ID: <sashiko-outbox-217883@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (nct6683) Make pwmN_auto_channels_temp of
- NCT6687D-R writable
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tomasz Bojanowski" <tomasz@bojanowski.me>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261116232612.501586-1-tomasz@bojanowski.me>
-References: <20261116232612.501586-1-tomasz@bojanowski.me>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 16 Nov 2026 23:30:34 +0000
+	s=k20260515; t=1794872623;
+	bh=tE566DE9NL2ilRzS1obPqo6X//TjT5jTgHN8mNvDPfI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=eqrb+u8R2mS56LFGL+Cm5IYMMCqz4vxyGTiDfq5C+hwS4Ji93k/va2STXI8l5AY/d
+	 IcGT8FaIj9mV8mPdZAdP9a5re9B2DkM54Ot7+mVdC3m5xGt53/m0olioKd2LIIPdDS
+	 SEC/gh/8COtAbm/2iEikhVadaOuGod/abpf6WvYaHe0REL0UaDnUEhuB8kJBqeSn86
+	 b4U+Ohj0exE8NGGaI9FTe5RcVCsV0oOuusb4wrObn9vycHVZ31OMh2IDBuMal9dBpl
+	 mko3DcG3vVVtO+lyjNLaFG4Ve3UIjv8zIx5G3GQt3xM2g/ya/dvZFu181rVwl32+3E
+	 RbvI+4z4NcCvw==
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5c1479be604so150860e87.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 16 Nov 2026 15:43:43 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AL+hErHeN2WlI2Jag6p5LnNgqiOLcvagnzML+LXeac4N0FQbG0kuhlBbLGzj4d7AOvoSIiAJn2qgmiq6oqTSbw==@vger.kernel.org
+X-Gm-Message-State: APuU4Z/0g3/EvkOHWbBhV7EJv857RpdaK16FwTlgBJXwUALZ1NFrbhes
+	u8Lr/A0hv7I0Y2q+F35ee2Qj71OLsbftBp6e161lF+m5JPk6zR7C2Bgi2ZcAK8sONWzbmPWyADc
+	uvu/5klOYTi9px0mZqCiu9ccBaT6kRak=
+X-Received: by 2002:a05:6512:2385:b0:5c1:4a64:ca0f with SMTP id
+ 2adb3069b0e04-5c170795cc7mr4062399e87.31.1794872621897; Mon, 16 Nov 2026
+ 15:43:41 -0800 (PST)
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -59,32 +58,61 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+References: <20261111-xg6846b-bcmbca-xrdp-reset-v4-0-17035a5e8ad2@kernel.org> <CAPx+jO9GW7e0ai2o4Ycc4BKBywTaP=7NiWk68=c2kqcD_VrgRQ@mail.gmail.com>
+In-Reply-To: <CAPx+jO9GW7e0ai2o4Ycc4BKBywTaP=7NiWk68=c2kqcD_VrgRQ@mail.gmail.com>
+From: Linus Walleij <linusw@kernel.org>
+Date: Tue, 17 Nov 2026 00:43:28 +0100
+X-Gmail-Original-Message-ID: <CAD++jL=rqD1G5vR1onTRXJ64n6O2CoiQWFO7Y6Qpctzd8wjrFg@mail.gmail.com>
+X-Gm-Features: Aa3M54ruCJqK0lxxieASqF1PArkor0hKv2Ilo3qPfjVfiTQ9FllSEn7zR_xIKUE
+Message-ID: <CAD++jL=rqD1G5vR1onTRXJ64n6O2CoiQWFO7Y6Qpctzd8wjrFg@mail.gmail.com>
+Subject: Re: [PATCH v4 0/7] BCMBCA PMB power, clock, reset and hardware
+ monitoring support
+To: Ulf Hansson <ulf.hansson@oss.qualcomm.com>
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	William Zhang <william.zhang@broadcom.com>, Anand Gore <anand.gore@broadcom.com>, 
+	Kursad Oney <kursad.oney@broadcom.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	=?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Brian Masney <bmasney+clk@redhat.com>, Jerome Brunet <jbrunet+clk@baylibre.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, Ulf Hansson <ulfh@kernel.org>, 
+	Benjamin Larsson <benjamin.larsson@genexis.eu>, mfd@lists.linux.dev, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-clk@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> Allow selecting the temperature used by a fan curve on MSI boards with
-> an NCT6687D-R (customer ID 0x20d), in manual and in automatic mode.
->=20
-> On an MSI MAG B850M MORTAR WIFI, the BIOS setup offers four temperature
-> sources for the fans: CPU Core, System, MOS and Chipset A. Reading the EC
-> before and after selecting them shows that each sets a single bit in the
-> lowest byte of the fan's source register, the bit of the monitoring
-> channel of temp1, temp2, temp3 and temp4 respectively, and that nothing
-> else in the fan curve registers changes. The other bytes were never seen
-> in use, and how the EC would combine several bits is not known, so only
-> a single temperature reported by the driver on the first eight monitoring
-> channels can be selected; other values return -EINVAL. The range can be
-> extended if a board needs it.
->=20
-> The attribute is writable if, when the driver is loaded, the curve uses
-> [ ... ]
-> manual mode was still restored. With the driver unloaded during suspend,
-> the BIOS restored its own curve but the EC kept the selected source, so
-> restoring the source on resume could not be tested on this board.
->=20
-> Signed-off-by: Tomasz Bojanowski <tomasz@bojanowski.me>
+On Sat, Nov 14, 2026 at 12:25=E2=80=AFPM Ulf Hansson
+<ulf.hansson@oss.qualcomm.com> wrote:
 
-Sashiko has reviewed this patch and found no issues.
+> > Through an MFD immutable branch once everyone ACKs the subdrivers,
+> > it will take time I guess. Queue the bindings and drivers in MFD.
+>
+>  I assume you are referring to patch1, 2 and 3?
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261116232612.5015=
-86-1-tomasz@bojanowski.me?part=3D1
+tt will be 1 and 2 in the next iteration after feedback from Rob H
+but yes.
 
+> In regards to the power domain driver (patch4) at quick review it
+> looks good to me.
+
+Can I record this as Acked-by?
+
+> If Lee decides to host an immutable branch, just let me know so I call
+> pull it in to apply patch4.
+
+I think the usual way is to apply the lot to MFD on a branch and then
+you can pull in that to get all of the changes lock stock and barrel.
+
+But I'm open to Lee just queueing the MFD core and bindings
+(patches 1+2) and then offer that as pull request to other subsystems
+so they pull that in and apply each one patch on top, it's a bit
+elegant like that.
+
+Lee, what works best for you?
+
+Yours,
+Linus Walleij
