@@ -1,56 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.33
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794831536;
-	b=yBgeETi/jMyctjyktRmdaCMeKvr2ew0PW1xEzD8ssdcHCInK1XUbZ9PRmmXEiUSa3aHi
-	 zeRNl1SfQMWrpN5kN4bHddRzYHZPYr+V21sGmllp1grc5GT7G32Lu99l1TyEH0x7P6Ajq
-	 sHCVHBgA8NGDQeyJJH+8MJ06TIZ/UZkRlamXtWqRWXTLjkWEg0jMvalvnU+e5NDBTzI5V
-	 awEATn05fvhqS3SRcMcGO5BCo3jN51uIFvobDbv1W944RzIULNY+Zf5TaLikSoq7TKXRy
-	 l8QQq6lID0SzRDOf9Xl284Be5zxm/+4jhkbrgc5HMo1moPHP39QN5bEasihxo03akqA==
+	t=1794836665;
+	b=z0AqJmnieu9kwkxC8NnxNacjNzjqtnOVqcpM0E7/+fUjlfK/kTwDlC1fPNU6YQoiowtj
+	 i611lA+VfVMdIQWDprRnlh9gfCrgc4PsN381qgO7Oub/L0IuLPHv8SggRBprwkiwY/TRL
+	 XixH0ojAtbyYFauxfZ3QQiw3VFgfRLh9OBkkHB/tgKyeLbw6HfToVfQM4yEDiW0jabMHY
+	 fk9Y57vGNmtGa5IQ78tpWwOfFPofjnP2wApnxh9GjIPNj7ZxbcCRbkxxbJRyyiWnxen6n
+	 LNEh4MFaCTC+2gyG5QPCNVvTrzb8GYmGoTwESwAYxO1srrbyUNuYrNO8Pj1kgYSLWNA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794831536;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=KIadWtWnl3fUyMYBl6K8AFQjfsAUVOtqof9H7aInxd8=;
-	b=R75ls8SYeRb7mWTv9/F6mVCvlsTKEe0aupuY/WkRg7HoaQa1zSGtAPsOROFDDcUd+hjt
-	 Ok35zqvwLuCsOoYqK9qEMPbanhmmY3/8rF8dcT7lKqo7uKO/QmNb1f3sHHpoRarUdmeXd
-	 E7R2pCrXJs7yoOgf/HspLSmFL7GYbS8ioP8DUeFUki4n1au7l83kKSrm7NU5MeyRapp4W
-	 wPp+3udipVGGwOMdhK0IKTk7tcW+inrR0XUG0b1rF0S6hzGDYNiVGwFjBykRJygjVsh3q
-	 W1yQDgms5afgHZeHdQDcGPCHB/t3ZQlUiosjaV9DSX6+OUpPjF+8S3a6yNfkv0ETgWA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794836665;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
+	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
+	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
+	bh=U46TxPnbK3CPBhSRg+zLUd+a0j8QlFSIIIFOHjy2Q9Q=;
+	b=vVHjCotF5ACywTOKVHi8lbxG0ioevWkUIJNrHZJhV51vG+2ma7UqY7KVpS1q7mvDKBmZ
+	 TNqMBj60ODGMXKCMl49I3kpYHUsZb9OqdizzWtFIrMIqxptzeLkJXOrIMM33ZtUHyYwC8
+	 K5PfGaSr/G0yfcSfRtJ5YliQyw2ela48lrUlq3noy89EDeCF7EdqVHirQb/iBpNmcQaci
+	 ZFU98BdSN4zQvpEkiVRbvb328cHH0bOM1FMPCFqXy8VGvUa/M3Jt6d8hBYNT7UtmROOHo
+	 wOGy264Il7lXWl/+fSoGmT03sMHHSV8Ccc2UtwU+ps+pQgKhCc4o8t4wMI6qC7cqt5A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YfQIPI8j;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=roeck-us.net;
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b="Idnnm/X3";
+	arc=none smtp.remote-ip=35.89.44.33
+Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E18C606A31C
-	for <linux-hwmon@vger.kernel.org>; Mon, 16 Nov 2026 12:18:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0DF4606A31C
+	for <linux-hwmon@vger.kernel.org>; Mon, 16 Nov 2026 13:44:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0DF4606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YfQIPI8j
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 898AA1F000CB;
-	Mon, 16 Nov 2026 12:18:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794831536;
-	bh=KIadWtWnl3fUyMYBl6K8AFQjfsAUVOtqof9H7aInxd8=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=YfQIPI8jY6ZSYSpxsNB48O7K7mQZdfj7/1QyjU6ih82yS0zZV734U0ci6m9SQW0DC
-	 MisHWmLQnIEHrorD8yndbUKfY2ouLNcWgLHM0Kecl/jES75mGVkZvDtT55Qc14rp9F
-	 L2tBYAI2R2q11rVQgZj311hYed1esUeSbX5qEjYCLMQOwP4tE8Hr2JyfeiFV3k2BTn
-	 nBiIp68nbO9uvn3e5FIwrs98yENA5083FFjP4+8c/ahW4UFvDgvX/Pc7JDsXqAQxOw
-	 wc1CGbdMEYk9PoCrBVJ7lJ3AhPq0t/zDW0xYmDkNd6VLZ80FWE52ig3/fnLrnDbpiC
-	 u0hGKIN/zUjcA==
-Message-ID: <sashiko-outbox-217002@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 1/2] hwmon: Add driver for the NCT6801D EC sensor
- window
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiqi Li" <lijq9@lenovo.com>, linux-hwmon@vger.kernel.org
-In-Reply-To: <20261116120411.994284-2-lijq9@lenovo.com>
-References: <20261116120411.994284-1-lijq9@lenovo.com>
- <20261116120411.994284-2-lijq9@lenovo.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 16 Nov 2026 12:18:55 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=Idnnm/X3
+Received: from eig-obgw-5005b.ext.cloudfilter.net ([10.0.29.189])
+	by cmsmtp with ESMTPS
+	id SjCdxulOGAR1iSx0MxZ2Ct; Mon, 16 Nov 2026 13:44:18 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id Sx0Lx89AZYskhSx0MxdR0J; Mon, 16 Nov 2026 13:44:18 +0000
+X-Authority-Analysis: v=2.4 cv=CKMqXQrD c=1 sm=1 tr=0 ts=6afb08b2
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10
+ a=lPoQaI6yJYEc5DakdvoA:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
+	List-Archive; bh=U46TxPnbK3CPBhSRg+zLUd+a0j8QlFSIIIFOHjy2Q9Q=; b=Idnnm/X3Nwan
+	+NM8kcwFCPev7hjWSeC1dKmLg5dmZYQk5k2Aln25qv45QWmhD6B8k+bz3zi/N7o1IfFMZLrK/kV5u
+	xhj6tDZz+gqKpix9ruHkeGx8mn8b62a27vu9VAMHwZrH3DLIKQ3jl+GOjUrYyK+CjwR/Q9yWMdNDX
+	XeFyFtaiNzc9M4ZHOmKunS6wT728LlhY+WTypAUqLWlPXIbVsPeSRBDkMgMgwTetf9aSLr1VoyBXB
+	f164Dy0TIo8bmsc128nWvMLU3cvZOQ3fcMKm7YujPLwwhGJK8lVMjwe+99LUpyLiCmhHn3mj/eY7y
+	i1gqk1SGgUu4HnYRAw+2xw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:41030)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xSx0L-00000003Ph8-3Hq4;
+	Mon, 16 Nov 2026 19:14:17 +0530
+Message-ID: <fd8f4f1f-ed79-4c25-8912-01804c966aa2@roeck-us.net>
+Date: Mon, 16 Nov 2026 05:44:17 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -59,32 +74,107 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] hwmon: (pmbus/mp2975) Get vout fault limits
+ dynamically
+To: Felix Radensky <fradensky@nvidia.com>
+Cc: Vadim Pasternak <vadimp@nvidia.com>, linux-hwmon@vger.kernel.org
+References: <8e4410db-66df-44b8-9617-1013545d7b43@roeck-us.net>
+ <20261116070729.2560003-1-fradensky@nvidia.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20261116070729.2560003-1-fradensky@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xSx0L-00000003Ph8-3Hq4
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:41030
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 18
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfHS38P3mxlgiOXtcM2r9/+kKOcPM+RtlROmaPa/AIprx4T4k67Ua4Cbu/x1b3JjtCkOhjYJR74ylPYYb/vLYWwZGW6kNggPpIF9ofyxKq45ZqexL1vXm
+ oP8K5gk2IMRzHh+RrRnc0KsTc0QuFhez1Zp8tsQTb+2m5FcV7hw+T22Q3iAig2ZHmcUNbyCUBCZXB/zPtfLbGnkJXDRyTQjX38COYAHDH8bAUbIQLNd5i3cQ
 
-> The Nuvoton NCT6801D embedded controller does not expose a hardware
-> monitor logical device in its Super-I/O configuration space: LDN 0Bh is
-> the ATXPGD/BEEP/DDR4 block, so the eSIO-style register window that
-> nct6683 relies on does not exist on this part.
->=20
-> Fan and temperature values are instead published by the EC firmware in
-> one of the shared-memory windows of the SHM logical device (LDN 0Fh),
-> which the platform firmware maps as
->=20
-> 	OperationRegion (SHWM, SystemMemory, <base>, 0xFF)
->=20
-> The window base is not hardcoded: it is read back from the SHAW1..SHAW5
-> configuration registers (indices F7h-F4h, FBh-F8h, E3h-E0h, E7h-E4h and
-> EBh-E8h of LDN 0Fh), as documented in the Datasheet. Several windows are
-> normally enabled, so each candidate is checked for plausible sensor data
-> [ ... ]
-> ACPI TCPU reads 100.05 C, TCPU_PCI 100.00 C, x86_pkg_temp 100.00 C and
-> coretemp 101.0 C, i.e. four independent sources agree within 1 C.
-> Readings return to idle values when the load is removed.
->=20
-> Signed-off-by: Jiqi Li <lijq9@lenovo.com>
+On 11/15/26 23:07, Felix Radensky wrote:
+> On Sun, Nov 08, 2026 at 08:14:19AM -0800, Guenter Roeck wrote:
+>> Applied.
+> 
+> Thanks for applying.
+> 
+>> Unrelated, that makes me wonder if we should introduce a device flag such
+>> as PMBUS_FORCE_PAGE_CHANGE to support page changes on single-page devices.
+>> This would retain functionality of pmbus_set_page() and avoid the need
+>> for driver specific code to set the page. Thoughts ?
+> 
+> I think the flag makes sense. With it, pmbus_set_page() would also write
+> PAGE on single page devices whenever the requested page differs from the
+> cached one. mp2975 could then use pmbus_set_page() for the page 3 access
+> in both configurations and drop its direct PAGE write. A single rail
+> device would also get the read-back check, and recover from a failed page
+> change on the next access, as multi-page devices already do. Some other
+> MPS drivers write PAGE directly as well, and might be able to use it.
+> 
+> If you agree, I can send a patch adding the flag, along with a patch
+> converting mp2975 to it.
+> 
+Please do.
 
-Sashiko has reviewed this patch and found no issues.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261116120411.9942=
-84-2-lijq9@lenovo.com?part=3D1
+Thanks,
+Guenter
 
