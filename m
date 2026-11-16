@@ -1,56 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794847847;
-	b=b9Wztwezz+7GeVs6mVhx6nD9g3UsdTHHC/W8eMw2GX7weT6k5dBnjhSxpYd3U/6uOrWU
-	 gVVpIrwPbdMmEnieJHwGMgTTN8a70Qew+V9ixgr/bEzNr2JVHPmly53WFU8g7+DkDP0YH
-	 w+qud6h0QJqQ3Rtw9+PinpAEvIMCJNDcYqQd4XPOkRONwvzJ2Nude8AeqzTnftDy3iWQY
-	 Ke5ePauqSOIv/g/nKxkPF50Y7L+M4FMSQQmealQqPPHTBpxcusJ0HhunBHN0IonJbX+ci
-	 +BmfDO4tFhEHxqoPOvE3q2USjVjTZdjYZ84UA8f8vtYkGnERc5ojAk7C9VqHKoB+4lQ==
+	t=1794852603;
+	b=dw+dgLm9Co7xzAMRD9ZVZFCdn5bUlTSTS5ADVvZMwrJKTIP+6Z7V5KLQgi/nh778ziqx
+	 QVnRj3t45Xz+0qRjT5uDF+b+4jgW7jB0GLelyg2aB9SYXygQtBJ2fOGxsvVEI6o2nvSCQ
+	 U6jsyFZ9S9hKFk7nTn+w0pWC4A81iMAHem/IS00SwF65TbJZMkfH3iVyQ77hpPxdZVyai
+	 46FPeL94RMTkakyhNRxgEYJDhwB5bDhxAUsvqr4SDJbZiXqLPVldkDExqHj1eo82g0JhK
+	 CGGTCiKNlZE52Dq3drhqZDz1+dQLmYpLo6XuGSxsJAlQiHi4b1pfqjJeqesPzW/JPHA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794847847;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=4Bo6iO+FgO6hU2FYWrMOtqecnUaiQ7/lsrijAlSNXIE=;
-	b=ZcO0tET14dcYRoI65YJScuNzYOcRQPQb9XVZdYuXwlpvPi5fa9BfWQbJko4n33zo8j10
-	 yK6aUAS2h5tvb1UqkOoTNIo/P66jiBx0kqbbFXlRpXrCfA9YeoniejEJHZy8D3yzmri2U
-	 gxIeRgRvksz/E0A7+XZ+cK6fOD4K9zuetkQkOyOkCFv9jMKvRMSQtrk9dyPZPa+ihBnwR
-	 wpOVVV195yEL2Wxou96GePwslOrz6yLlNf5+9Qb1WnsQLhXAM0DXYZWBWhQ7rVZ4ttOBK
-	 1ybh5hXd4/ef69fvSeWOdpBzdYGLUJDaAdIqKg1IQ7KURh0Ambp8o9HTJccGdIzjKuA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794852603;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
+	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
+	bh=cBVf5mMNM+rUUCpU78C1Na+O2C5lEgI6gSvRU8cE5Mg=;
+	b=QfsP6ROqw+jeHCnBLIz+8keASFGbFpUw66r4rXZlYkeBUdf//fgKiGNHS14eIuWSy1Dm
+	 2QAfdNQJbWY/oP4hL+hHQkXV9/ViDqKvLFF+TUgieubTjAnAGT8w9WlhejHw68B5qUsDY
+	 bDSohEjTmm5Zm83xvlWULh43pvSteQAxs8ZwAqjx2dy5Hnui74ZuAcF4Yf/qxeNeV3Ron
+	 4DkgVH5Utc7U0DzGmrTO3CbA3GLAfJDZqLA/7AewwJlDPDfS6JjNsXY2YTb0/JAqQ7q/K
+	 A1qeQXkPvntD/mIyGmp5bOgLQpQN6S1ZLnvUziocF4VO6EV/f708fXsfqMo+UPU5+yA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nJpsUNqC;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=baylibre.com;
+	spf=pass smtp.mailfrom=baylibre.com;
+	dkim=pass header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256 header.s=google header.b=n9F9PBR3;
+	arc=none smtp.remote-ip=209.85.128.43
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC99C606A32A
-	for <linux-hwmon@vger.kernel.org>; Mon, 16 Nov 2026 16:50:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90517606A323
+	for <linux-hwmon@vger.kernel.org>; Mon, 16 Nov 2026 18:10:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 90517606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nJpsUNqC
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98C101F000C4;
-	Mon, 16 Nov 2026 16:50:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794847846;
-	bh=4Bo6iO+FgO6hU2FYWrMOtqecnUaiQ7/lsrijAlSNXIE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=nJpsUNqCQHUwW4P2ei6jDvJzQCu5l/grDzlVEbF22u6zVf2k4GjDwhG4dDsDK6xjr
-	 9C/rjYCOexhGSNtLc4hyAPezmSkMLBmlji36BOX/0RknbGjs9DfVQ64GDkVhSZHU/e
-	 3gNyENd/qm9s3Uw+AgOjJ69L1GzsHTqk98dn0m9tO+C9dE2t//xc7W7bkhHhN+0Qs9
-	 Kwx22INYP5FfPsjVk7uXNnyugu2ow41zsUy6XL7ceEvNIqgJzIN72DgSMO4dCt8rPI
-	 7ttMpM3k9/GRWlB8rlkLBn+a7+QJta1UyHCQiMCFxiXRjMJXggq/O//XQ+7fqagEGS
-	 zs++cXRKZzdUA==
-Message-ID: <sashiko-outbox-217386@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/1] hwmon: simatic-ipc-ec-sensors: add BX-54A EC driver
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Benedikt Niedermayr" <benedikt.niedermayr@siemens.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261116163257.1303207-2-benedikt.niedermayr@siemens.com>
-References: <20261116163257.1303207-1-benedikt.niedermayr@siemens.com>
- <20261116163257.1303207-2-benedikt.niedermayr@siemens.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 16 Nov 2026 16:50:46 +0000
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256 header.s=google header.b=n9F9PBR3
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a214c5c4c0so37847665e9.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 16 Nov 2026 10:10:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1794852601; x=1795457401; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=cBVf5mMNM+rUUCpU78C1Na+O2C5lEgI6gSvRU8cE5Mg=;
+        b=n9F9PBR3PlXR2GhSMuifM2drQ6Yok4I50iIDZ8542xFZ/MY2OYK2HQdoe/0hJBFHIv
+         XWbNqVphQtX+2WYMsU/gkeiK5fJd6GTEjAA39ZzDueQbyt1INMYZl5p0eykt2+dF7GN6
+         NGBMRHVOUWa+cZaKahXSM1WxuRUYM8GPY/rXzwA24Fa3KtGzM3ORN3aKoPLd5Bqe/yL5
+         OVDywTx7M7oyyYH2gQ7TLycC0yiWkHkgiBiRJCuPIvlhKPyQCz0/iGt/KP19PwIQz8oC
+         Twee+FF5pXa0tJpQxAL5HSanM2nYND6qIgHRzyKjGYC33MwX+xt565hyA/9nBkUiMvxt
+         oGBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794852601; x=1795457401;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=cBVf5mMNM+rUUCpU78C1Na+O2C5lEgI6gSvRU8cE5Mg=;
+        b=O5kCpsR230+z57/H/G9me/1zWrURwElRGRYmuVN4+xdNMfpual98xuc/V7SGi8S7il
+         rbR93FIv3d3MeoOHt5TUnz0gKJPBQ5D4PjGlk+DgTHLsU7zWQ/caxhIK+s19CHsgP+r+
+         vMuVQPCahWQcFUcdFaRNj0P0Vs46PqUdXLmt8MRh8VYnyLiwbR6CtnFd+LEnoIF8fUJd
+         y+K262yeH6gcfI/BPdoNU4OYALi90+RA43YC5CHEqH4hPqSfmcvtk7KhrCrGKz2kx7du
+         W+shDA+5pXzVFjBHFMyYNkg4u99IM0vz8iH8fVoY9p2ux2Qmdyzxx0lsrSQaf+AyztpJ
+         o8mw==
+X-Gm-Message-State: APuU4Z+mzO8rej7dA/FFbZtLpFzO+IKIMTe1wjRiIS96EC0j6FmHrQMP
+	kGPyc1ptGX7f552AFuX0+chiUYIdDsypGCzXAYAKPqBFYXxmLPeKHcF7ww/hqMihrM8FkW1eaEl
+	xxusg
+X-Gm-Gg: AYBFou0LKyWal0+labdA6kIBkYTMjPI8NtjR4juyZqZl9Yj2baA9fqq8MO4SImO2GzS
+	DdGopXBIoSyYJ27PmsBCpmz9jVUWMs+5PAIcgMEQuMkrdur+t4D4YaiqNRQG++8hZTHZmT+ekG+
+	0XNctBoM3pKw0i2nb1nFRnXDqJMTbrZJV6iTbT8/MKD42khYAzmo22WTVgSEM8KY+DJEU72y6gm
+	RLz/39RkOeRau3P8lcwja/CLMSxgSGQQoDUVxtKe3AS6B6Aid6w7+lrGDXcgDKGzPKVxolAMMzq
+	W8LiZkdkij9mVqTEuRs6En0v5b8X+bdOg9M8+p5Lqtu2v1zvThub3QaA8SnPM0SO7c5AP61tQR2
+	GjTqTDTJbEbAppA1MzZHGQ1ocUc70D+zM9LG1xDwMyJJt/Y+aHvse+nBFVd0V+ZOaizwB5Un2Ax
+	9NrLnAWL50OL5Vkknh/k3uqVnpTy4e3WlzJoo7hMVFzFxXXqIuCy59FVJMZAiJrWaG/iJPRH9dA
+	PeT7xU+xC3Ce8o9JlsNzK8YX2WNrgpNRoJkUb+JYr/r8Jaf788WsOOw/jjgOcE/fR7BsVnK9h0/
+	f7kEVHIrxNEWBQFMhu7YAm4mimkg+PvGnAzgl7j139UPbeeQbaLNszkCcoIdC9NDPtbBH4xMeIk
+	SGLynMywQk1WhxUGu
+X-Received: by 2002:a05:600c:3e17:b0:4bb:69b3:2b42 with SMTP id 5b1f17b1804b1-4bb69b32d31mr116485485e9.16.1794852600961;
+        Mon, 16 Nov 2026 10:10:00 -0800 (PST)
+Received: from localhost (p200300f65f19a90439293c698a65b414.dip0.t-ipconnect.de. [2003:f6:5f19:a904:3929:3c69:8a65:b414])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4bb69ac4e16sm131653625e9.0.2026.11.16.10.09.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2026 10:09:59 -0800 (PST)
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (ltc2947) Make ltc2947.h self-contained
+Date: Mon, 16 Nov 2026 19:09:50 +0100
+Message-ID: <20261116180950.3894659-2-u.kleine-koenig@baylibre.com>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -59,286 +96,42 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1002; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=FNVtl9KAT6PQLlCBkhq7t0uj2wqVo92ScDOnUKyzYGI=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBq+0bvd+IhWDQJX9srO7f1evrOCFaMglAxavbJF jm/VtS/+16JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCavtG7wAKCRCPgPtYfRL+ TgwYB/wPg8brdCByIxPgguTSE9fuNlyZXLPQfDLxdo7R1E5KbYC9X/SKImZ3+cxe4MlPknE1Ma1 Z1GgVQaOvuXMbjP6pDRWeLnQdGXTX1aXkrjiYGX5Rd/aaiU2gUR3mf9EPKo0x+xb/yVP0/lISQR nisKRq6gqQ/Og0RsW3Curtjud3nxR2fBImeG0EEgaFt09K241qkcXMhzewx/uHNCY1vgtmM7uHm 6aiUpZTjnteMW2sLqxtrxHXEZV5oxd6xQKCRAUupI+4anVlDwxPhVKs48Q64POHigbiJ4Tu4za7 sRNDd/cKIzF3mAnr+7mXVb/u5DMdsfw3b6M1qFJOAXMNC6TQ
+X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 8 potential
-issues to consider:
-- [High] hwmon: simatic-ipc-ec-sensors: temp limits exposed as *_alarm
-  attributes
-- [High] hwmon: pointer-sign mismatch passing s8 * to ec_read() in temp
-  read callback
-- [Medium] hwmon: premature s8 cast before clamp() in
-  simatic_ipc_ec_temp_write()
-- [Medium] hwmon: u8 truncation in simatic_ipc_ec_fan_write() bypasses
-  range check
-- [Medium] hwmon: uninitialized reads on ec_read() error in temp and fan
-  read callbacks
-- [Medium] hwmon: devm buffer stored in global struct in
-  simatic_ipc_ec_hwmon_probe()
-- [Low] hwmon: unsanitized and unlowercased chip_name in
-  simatic_ipc_ec_fan_probe()
-- [Low] hwmon: simatic-ipc-ec-sensors: missing Documentation/hwmon/
-  driver doc
---
+When ltc2947.h is included without a previous definition of
+of_device_id, the compiler wails:
 
-commit 830c0088242b1976cce59ca2195a3aaabae749d2
-Author: Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
+	drivers/hwmon/ltc2947.h:11:34: error: array type has incomplete element type ‘struct of_device_id’
+	   11 | extern const struct of_device_id ltc2947_of_match[];
+	      |                                  ^~~~~~~~~~~~~~~~
 
-hwmon: simatic-ipc-ec-sensors: add BX-54A EC driver
+A forward declaration is not enough to fix that, so include the header
+providing `struct of_device_id`.
 
-This commit adds a hardware monitoring driver for temperature sensors and
-fan control on the embedded controller of Siemens SIMATIC IPC BX-54A
-systems.
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
+---
+ drivers/hwmon/ltc2947.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ccbcdc0799b9f..8e567b60f6487 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -25763,6 +25763,12 @@ F:	drivers/media/mmc/siano/
->  F:	drivers/media/usb/siano/
->  F:	drivers/media/usb/siano/
-> =20
-> +SIEMENS IPC EC SENSORS DRIVER
-> +M:	Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/hwmon/simatic-ipc-ec-sensors.c
+diff --git a/drivers/hwmon/ltc2947.h b/drivers/hwmon/ltc2947.h
+index 5b8ff81a3dba..eb3613f4d4cd 100644
+--- a/drivers/hwmon/ltc2947.h
++++ b/drivers/hwmon/ltc2947.h
+@@ -2,6 +2,8 @@
+ #ifndef _LINUX_LTC2947_H
+ #define _LINUX_LTC2947_H
+ 
++#include <linux/device-id/of.h>
++
+ struct regmap;
+ 
+ extern const struct of_device_id ltc2947_of_match[];
 
-[Severity: Low]
-New hwmon drivers require a documentation file under
-Documentation/hwmon/simatic-ipc-ec-sensors.rst per
-Documentation/hwmon/submitting-patches.rst.
+base-commit: 84abb955b1015477aa11a96e2f3ac1b938b77f48
+-- 
+2.56.0.rc1
 
-[ ... ]
-
-> diff --git a/drivers/hwmon/simatic-ipc-ec-sensors.c b/drivers/hwmon/simat=
-ic-ipc-ec-sensors.c
-> new file mode 100644
-> index 0000000000000..690da5dde2bf8
-> --- /dev/null
-> +++ b/drivers/hwmon/simatic-ipc-ec-sensors.c
-> @@ -0,0 +1,568 @@
-
-[ ... ]
-
-> +static umode_t simatic_ipc_ec_temp_is_visible(const struct simatic_ipc_e=
-c_temp *temp,
-> +					      u32 attr, int channel)
-> +{
-> +	switch (attr) {
-> +	case hwmon_temp_input:
-> +		return 0444;
-> +	case hwmon_temp_max_alarm:
-> +	case hwmon_temp_min_alarm:
-> +	case hwmon_temp_crit:
-> +		return 0644;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int simatic_ipc_ec_temp_read(const struct simatic_ipc_ec_temp *te=
-mp, u32 attr,
-> +				    int channel, long *val)
-> +{
-> +	s8 value;
-> +	int ret;
-> +	u8 reg;
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_input:
-> +		reg =3D temp_reg(temp->base, channel, TEMP_REG_VALUE);
-> +		break;
-> +	case hwmon_temp_max_alarm:
-> +		reg =3D temp_reg(temp->base, channel, TEMP_REG_ALARM_HIGHLIMIT);
-> +		break;
-> +	case hwmon_temp_min_alarm:
-> +		reg =3D temp_reg(temp->base, channel, TEMP_REG_ALARM_LOWLIMIT);
-> +		break;
-> +	case hwmon_temp_crit:
-> +		reg =3D temp_reg(temp->base, channel, TEMP_REG_CRITICAL);
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-
-[Severity: High]
-Should the low and high temperature thresholds use hwmon_temp_min and
-hwmon_temp_max (with HWMON_T_MIN and HWMON_T_MAX in
-simatic_ipc_ec_hwmon_probe()) instead of hwmon_temp_min_alarm and
-hwmon_temp_max_alarm?
-
-Under the hwmon ABI, tempX_min_alarm and tempX_max_alarm are read-only
-boolean flags (0 or 1), so exposing writable millidegree Celsius limits
-there causes tools like libsensors to treat any non-zero limit as an
-active alarm while missing the min and max thresholds.
-
-> +
-> +	ret =3D ec_read(reg, &value);
-
-[Severity: High]
-Does passing &value (s8 *) to ec_read(u8, u8 *) trigger a -Wpointer-sign
-warning (and build failure under CONFIG_WERROR)?
-
-> +
-> +	/* Degree Celsius to millidegree Celsius */
-> +	*val =3D value * 1000;
-> +
-> +	return ret;
-> +}
-> +
-> +static int simatic_ipc_ec_temp_write(const struct simatic_ipc_ec_temp *t=
-emp, u32 attr,
-> +				     int channel, long val)
-> +{
-> +	/*
-> +	 * Millidegree Celsius to degree Celsius
-> +	 */
-> +	s8 value =3D (s8)clamp((s8)DIV_ROUND_CLOSEST(val, 1000), (s8)-128, (s8)=
-127);
-
-[Severity: Medium]
-Does casting the result of DIV_ROUND_CLOSEST(val, 1000) to s8 before
-clamp() make clamp() a no-op?
-
-Because the first argument is already truncated to s8, writing a threshold
-outside [-128000, 127499] wraps modulo 256 instead of saturating (for
-example, 130000 wraps to -126 C), and values near LONG_MAX or LONG_MIN can
-also overflow DIV_ROUND_CLOSEST(val, 1000) unless val is clamped before
-division.
-
-[ ... ]
-
-> +static int simatic_ipc_ec_fan_read(struct simatic_ipc_ec_fan *fan, enum =
-hwmon_sensor_types type,
-> +				   u32 attr, int channel, long *val)
-> +{
-> +	u16 value_u16;
-> +	u8 value_u8;
-> +	int ret;
-> +	u8 reg;
-> +
-> +	switch (type) {
-> +	case hwmon_fan:
-> +		switch (attr) {
-> +		case hwmon_fan_input:
-> +			reg =3D fan_reg(fan->base, FAN_REG_SPEED);
-> +			ret =3D simatic_ipc_ec_read_block(reg, &value_u16, sizeof(value_u16));
-> +			*val =3D value_u16;
-> +			return ret;
-> +		default:
-> +			break;
-> +		}
-> +		break;
-> +	case hwmon_pwm:
-> +		switch (attr) {
-> +		case hwmon_pwm_input:
-> +			reg =3D fan_reg(fan->base, FAN_REG_DUTY_LEVEL);
-> +			ret =3D ec_read(reg, &value_u8);
-> +			*val =3D value_u8;
-> +			return ret;
-> +		case hwmon_pwm_enable:
-> +			reg =3D fan_reg(fan->base, FAN_REG_MODE);
-> +			ret =3D ec_read(reg, &value_u8);
-> +			*val =3D CONTROL_MODE_GET(value_u8);
-> +			return ret;
-
-[Severity: Medium]
-When ec_read() or simatic_ipc_ec_read_block() fails here and in
-simatic_ipc_ec_temp_read(), does assigning *val read uninitialized stack
-variables (value_u16, value_u8, and value)?  ec_read() leaves its output
-parameter untouched on error, which triggers KMSAN uninitialized-memory
-warnings when *val is computed before checking ret.
-
-[ ... ]
-
-> +static int simatic_ipc_ec_fan_set_control_mode(struct simatic_ipc_ec_fan=
- *fan, u8 ctrl_mode)
-> +{
-> +	int ret;
-> +	u8 mode;
-> +
-> +	/* 0: full speed, 1: mannual control, 2: auto-control */
-> +	if (ctrl_mode > 2)
-> +		return -EINVAL;
-
-[ ... ]
-
-> +static int simatic_ipc_ec_fan_write(struct simatic_ipc_ec_fan *fan, u32 =
-attr, int channel,
-> +				    long val)
-> +{
-> +	switch (attr) {
-> +	case hwmon_pwm_input:
-> +		if (val < 0 || val > 0xFF)
-> +			return -EINVAL;
-> +		return ec_write(fan_reg(fan->base, FAN_REG_DUTY_LEVEL), (u8)val);
-> +	case hwmon_pwm_enable:
-> +		return simatic_ipc_ec_fan_set_control_mode(fan, (u8)val);
-
-[Severity: Medium]
-Does casting val to u8 before calling simatic_ipc_ec_fan_set_control_mode()
-allow out-of-range values such as 256 or -255 to bypass the ctrl_mode > 2
-check and change the EC fan control mode?
-
-[ ... ]
-
-> +static struct hwmon_channel_info simatic_ipc_ec_temp_ch_info =3D {
-> +	.type =3D hwmon_temp,
-> +	.config =3D NULL
-> +};
-
-[ ... ]
-
-> +static int simatic_ipc_ec_hwmon_probe(struct device *dev, struct simatic=
-_ipc_ec_sensor *data)
-> +{
-
-[ ... ]
-
-> +	temp_config =3D devm_kzalloc(dev, (temp_count + 1) * sizeof(u32), GFP_K=
-ERNEL);
-> +	if (!temp_config)
-> +		return -ENOMEM;
-> +
-> +	simatic_ipc_ec_temp_ch_info.config =3D temp_config;
-
-[Severity: Medium]
-Can storing the per-device devm-allocated temp_config into the static
-global simatic_ipc_ec_temp_ch_info.config leave a dangling pointer on probe
-failure or unbind, or overwrite another instance's config if more than one
-110A5004 device is probed?
-
-[ ... ]
-
-> +static int simatic_ipc_ec_fan_probe(struct device *dev, struct simatic_i=
-pc_ec_sensor *data)
-> +{
-
-[ ... ]
-
-> +	if (fan_name) {
-> +		char *p;
-> +
-> +		snprintf(fan->chip_name, CHIP_NAME_MAX_LEN, "simatic_ipc_ec_%s", fan_n=
-ame);
-> +		for (p =3D fan->chip_name; *p; p++)
-> +			*p =3D tolower(*p);
-> +	} else {
-> +		snprintf(fan->chip_name, CHIP_NAME_MAX_LEN, "simatic_ipc_ec_%s", label=
-);
-> +	}
-
-[Severity: Low]
-What happens if label contains uppercase characters when fan_name is
-absent, or if either string contains characters disallowed in hwmon chip
-names such as '-' or spaces?
-
-The else branch skips the tolower() loop, and neither branch sanitizes
-characters rejected by __hwmon_device_register() (or via
-devm_hwmon_sanitize_name()).
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261116163257.1303=
-207-1-benedikt.niedermayr@siemens.com?part=3D1
