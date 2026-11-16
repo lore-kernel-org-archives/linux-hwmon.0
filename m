@@ -1,126 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.162.8
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794842727;
-	b=HcdnSQY5AdqEo0br9zBHYOaRBR7lHwnBHHhIWoEPhRejgdZaQaL1SytMiSLuPbWYTgag
-	 lAmj7t01kVoEa4Ri1e7vq7NI6S8iVmg8Oo+o24fx+0aUl7kO3mdE5+C76oXTcgeL3zukT
-	 LOe7IKg3xuxpOAaSU4RcmiG6VqcBM3nr0qLQfCXcDf3fOUUSLi2JWTk3r7LH3aZPAC0ob
-	 VdHiwwUHsJUhOc5Ocx5Zbalm6PZBqPubzIc5oQY7xeaniokAx2rPZ0cCrT0S2cOl6ogA0
-	 AbBMnE3rkwW8Rpx6nCdaqqSFtRIwT4ljmN9M5muMa768eqbORnvHanJlep+fcYr3O1Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794842727;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:Content-Transfer-Encoding:Content-Type:
-	 X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=kwU0aqAfTOVb09U8gKdoBVAG+8nbfQGFHmI2srC8srU=;
-	b=0QPAyrUT0g/1dKys1/o40bgVYYug1rOF2Jfji4IBDvWZMBRgumglw0FEwsmkA9Mi4Ypg
-	 yXO/1YkqrCyS0FQd/XSSZrAuWkK/OZmpJxngCrALlsMCi5eN/D0gAthSmijiw9LQHExUj
-	 lJwiuXqpJVtN8yO62JirsIxVuRqB/OhspVKt+0yHixEEqwEpIZqyp5UGSvynPkU5CCgCC
-	 BklUuPWn5PeQ4G/JrnaLNAmk44nRZae7J+TksonEdyt9wSTpL+C6Bhgs8AMihUfbh4EV8
-	 DjKrutGLf/lyqW91aHw6dMcZOyfrekBkon6e3+1DeJIYS5KTgUkqfScHMhceyI7Nf9w==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=oss.nxp.com;
-	spf=pass smtp.mailfrom=oss.nxp.com;
-	dkim=pass header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.a=rsa-sha256 header.s=selector1-NXP1-onmicrosoft-com header.b=kyQBwJEV;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.162.8
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013008.outbound.protection.outlook.com [40.107.162.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.136.64.228
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794846782;
+	b=sbjg9bCshcR6LrNmnEkVrfI2iOC33QVoMwJhqnzJ4QqM1YH88SiEQ1P+zS84MW7okhDu
+	 lRNZ5N0P0YDAZzCkcUFWqx76H0B2CnF2doHD4dl1H+JjR/FlTveTP4nQ4St+4BQTtWHmn
+	 jrq1MQuAIYg2OfKvIX5T0zbakuy7rT9Z9i0UQW0qDa/OdMMpziKOyGDYQ7gL5qjVtN497
+	 IiaKQM15+Ed0WaWNKbY5vdOQk7dO5eOUxKWUwa9f7UqwMtFJNJBiGttcvHKLcNDxeG4q7
+	 CdCT85qsXjS6GDkYnO9ZCYoNrkCcHQbXEcxEmEmjmrVg8jS2SOvbNCysU0oudvjkCig==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794846782;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Flowmailer-Platform:Feedback-ID;
+	bh=guK6UgBMEHbZ9j8YfusM8lb7V1nphQlYNNO1S5rv+M4=;
+	b=G/7gC/jOGXlOX24q0Y6ST9A2ebgqedsJqyvzf4WP230tjXKqAED4jLc5X6QxOoapxDmV
+	 8NsFtsWHrBvk0yHgO0OOyIVtUg/9rDdUu5ImInBZMCTFH2MfpmJ3vNjF//+zTi03OSgZ1
+	 peNV/JE8aQZH+8AoXbRkLxadW+xypYf8ki8C8xn5cWjdxAC3djnR2LveACuJCHkG+680M
+	 IQHNZgybvNOqYJpaUWWOYgLGRGD/LlQ7L6kIvydOr5H6fNK10mL+gTCYfwQAFMakBX34P
+	 POJBlTSP/TYMOLbPsngwPdcWp/pAOotbTQMO0fA5jCPbtI9D3nEmHnWlvlLpQz8Hd3w==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=siemens.com;
+	spf=pass smtp.mailfrom=rts-flowmailer.siemens.com;
+	dkim=pass header.d=siemens.com header.i=benedikt.niedermayr@siemens.com header.a=rsa-sha256 header.s=fm1 header.b="N/vYgnoP";
+	arc=none smtp.remote-ip=185.136.64.228
+Received: from mta-64-228.siemens.flowmailer.net (mta-64-228.siemens.flowmailer.net [185.136.64.228])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50F9606A338;
-	Mon, 16 Nov 2026 15:25:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D50F9606A338
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03F1606A32F
+	for <linux-hwmon@vger.kernel.org>; Mon, 16 Nov 2026 16:33:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A03F1606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.a=rsa-sha256 header.s=selector1-NXP1-onmicrosoft-com header.b=kyQBwJEV
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=T3R9oshvYFZPDrPduCwrtF2mf9HZ71pIkecFZDfWqXJY+S3lC4qFOyxD6WjCWegxCtlXLpH9wVDv7tefSMiseu1kYud9QotU2QtHnrLZJ/ygnPPs6A57t88kSprGwUkQ2dB8IpLoD1N38KqF/M4x+EmtAjd/iskvSVlwpM2RhFjt8062Q+9wlIYm0uMF4wY4gU3dWfTWdZ6L4ZYPvZ9CFjFnLlXCBMXj2cehKq/LQjMz6b+NIaED8a4DG6o9JfR8/y2zk5HcGQJTzJWZ45lvH5ztk1cHszk593OOe6jvtF/C/9oi0YhfugPTCLq6aM6kFMKfbLWSHQmXalfc8dMmLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kwU0aqAfTOVb09U8gKdoBVAG+8nbfQGFHmI2srC8srU=;
- b=H2m6YXooq56e7YRPyIwMiwvqAU7SZ06xm+J3jTqoG8NqVofgEV20PqcjOzjXQTPVOzz5AZqdVd01MflRa/rPsD1AO6vXKXOq996r5DWRCSgehu/58YnAca5WBMaCZSEvyMZVpNKn2rFV12fr53NWtsBadnn+CKso6zc6GO1F1pFzPeZ6PxWBWSM0oCKY2zP9Qez7u3mb9IX56M1WQWPffoewyfQhqDMAVurLi4pCM6lIduQcD/MV9WC3NSb0iNcnmmdLU85jUMNLWYDG8EgwNVRVJkAd9G7pZWhr5Ol+j+GEAOWxZ3tU/EHXNEhcMPX5mKv/qAV6LenvrTaCFo/DQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector1-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kwU0aqAfTOVb09U8gKdoBVAG+8nbfQGFHmI2srC8srU=;
- b=kyQBwJEVUZgO0EPw99NbJvjoBp3KT2Gpg7NsZ1bkFUKBzj4z2KMEPb0u4jqu+U2Maa3Z2SUHD+IQqKYc8A6+GGlYnN0eQUbPp7wSXN7ztSRkY4NUKTSVxwoi76Vf42rgUC4l655pS0dhFkuYFxJ24oqSuD7tlDSCCRu4Y/IcCIVSoccNpN/T4Us/py3dZZoITMCfuyb4que8dS/gcTxdXd36C7bJb1lDnR8hEjiwYad2BaMlLMkdJ5P8wtCly8Dhfi7cZzcaLimNLryvEZdKP2RYrn7d0G2HhldiSQQQe7323CKD3xuNqpVbUuMNxtyFS9azSCk6CwEGhpPWZA3iUQ==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from MI3PR04MB12438.eurprd04.prod.outlook.com (2603:10a6:290:76::14)
- by DU7PR04MB11161.eurprd04.prod.outlook.com (2603:10a6:10:5b3::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Mon, 16 Nov
- 2026 15:25:22 +0000
-Received: from MI3PR04MB12438.eurprd04.prod.outlook.com
- ([fe80::c715:c32:8bb1:b70b]) by MI3PR04MB12438.eurprd04.prod.outlook.com
- ([fe80::c715:c32:8bb1:b70b%4]) with mapi id 15.21.0615.013; Mon, 16 Nov 2026
- 15:25:22 +0000
-From: Frank.Li@oss.nxp.com
-To:
-Cc: Frank Li <Frank.Li@nxp.com>,
-	Alex Elder <elder@riscstar.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andrzej Kacprowski <andrzej.kacprowski@linux.intel.com>,
-	Karol Wachowski <karol.wachowski@linux.intel.com>,
-	Oded Gabbay <ogabbay@kernel.org>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	Matthew Brost <matthew.brost@intel.com>,
-	"Thomas Hellstrom" <thomas.hellstrom@linux.intel.com>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Alex Elder <elder@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	"Joerg Roedel" <joro@8bytes.org>,
-	Rob Clark <robin.clark@oss.qualcomm.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Guan-Yu Lin <guanyulin@google.com>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org,
-	linux-hwmon@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	iommu@lists.linux.dev,
-	linux-arm-msm@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	linux-staging@lists.linux.dev,
-	netdev@vger.kernel.org,
-	imx@lists.linux.dev
-Subject: [PATCH v2 1/2] PM: runtime: fix stub pm_runtime_get_if_active() for !CONFIG_PM
-Date: Mon, 16 Nov 2026 10:25:10 -0500
-Message-ID: <20261116152513.2676573-1-Frank.Li@oss.nxp.com>
-X-Mailer: git-send-email 2.43.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: PH7P223CA0017.NAMP223.PROD.OUTLOOK.COM
- (2603:10b6:510:338::10) To MI3PR04MB12438.eurprd04.prod.outlook.com
- (2603:10a6:290:76::14)
+	dkim=pass (2048-bit key, unprotected) header.d=siemens.com header.i=benedikt.niedermayr@siemens.com header.a=rsa-sha256 header.s=fm1 header.b=N/vYgnoP
+Received: by mta-64-228.siemens.flowmailer.net with ESMTPSA id 2026111616325843b5d7267200020757
+        for <linux-hwmon@vger.kernel.org>;
+        Mon, 16 Nov 2026 17:32:58 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=benedikt.niedermayr@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
+ bh=guK6UgBMEHbZ9j8YfusM8lb7V1nphQlYNNO1S5rv+M4=;
+ b=N/vYgnoPSFumNPoQNqam7ycsg078AvKOzTWLiOf+wkwh4wCkwaytwXTpY97NIaOqM+E7+0
+ zEaUtlIf7oKY+shCrV+nazKYvOuQ2CmGxx8rLfGfNGW2vomRYwkpO0gmVVxnYiGyyZV4WOWk
+ owIiPTP84ipgKczxfOOrynQ47nCyV2qVwtD4Rp8wA5qpKw/f6+xoXyP6Ni/3ZeRUWSY23+1f
+ HJaK9HXhoiqjE5z/Ej/gYTGfB1eFGrckPWrIB/XMOFUH8biAegYx+cL5JRf/hWVduIsbLdbo
+ aZj24tFiYjosmYsxg0nILBQQlaG79dVo56yZJKwJFU1MMrdvt4+Sxtkg==;
+From: Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
+To: benedikt.niedermayr@siemens.com,
+	linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] hwmon: simatic-ipc-ec-sensors: add BX-54A EC driver
+Date: Mon, 16 Nov 2026 17:32:57 +0100
+Message-ID: <20261116163257.1303207-2-benedikt.niedermayr@siemens.com>
+In-Reply-To: <20261116163257.1303207-1-benedikt.niedermayr@siemens.com>
+References: <20261116163257.1303207-1-benedikt.niedermayr@siemens.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -130,188 +63,657 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MI3PR04MB12438:EE_|DU7PR04MB11161:EE_
-X-MS-Office365-Filtering-Correlation-Id: 34e94d89-9953-4c08-4f4e-08df43f5d4bd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|19092799006|7416014|366016|376014|23010399003|1800799024|18002099003|6133799003|11063799006|56012099006|10067099003|261022075727099003|261022105027099003|261028144727099003|261026121527099003|261021123027099003|261021121427099003|261026140227099003|261009223027099003|261009223327099003|261009221227099003|261009220027099003|261102123227099003|261009221727099003;
-X-Microsoft-Antispam-Message-Info:
-	kiz/bkm1v3jdulKiQWNUyJNwErxxuNx2eVWey0BIKtzfA2g5TuGrOJc0aNesYkW/z2K0P81/euDeDl0CMXEzYfENpZkSYfhL+WQoweGNvsm+NWsgwZqdfEQl6QkiNxd1u28yYb45sCCmjesSQHnqwfmHNKiuH0cd52Yq1zg6wh1OMXl6pGfWb7ykBsVHPWfLrOb6H2YHpFY8HSskTQyQgjhCzDNti+XV48LSSNljSBbxSTWVHH6HTeKYYSqF1a4eIsDsH2q5fmq8sO8xku8fKxyjV+GkxqdsfkzT8cNOOg5esY8r0xBZIWaNVdaY2oGlHUTZFxC9b7eVxP0gtUSsASmuTXa00M9zb4LnAthR8K6ZPKs8nZF3J1D6fmoDzJLS8rntVRVHUdwyoECqQlkxyXgmJ65oLhIhi6C3/WvauOXFVIHQLnDh4VMK5b2NslfvIE3eSqqVdZBRTwNau65ZHnTWpDLlT01FyjpmxH1lfmKd7iHr9oVnWJDye0tKZkT47pczFVyjuaIfDJepknCm/+50FOAf9Y22I7XAdNTAR8R2rPl4/LWn5lVNOi7SlcW3BNYEfnX/6tDkU7a2HcqAfMm1lzvenXyBqIePBHoSzg0MT1j2PR8GkgI17PichB6uEGHZmJo5n7jG+3BG/1qxe2+tCwV4aicvzkRoNC/OYcU=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MI3PR04MB12438.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(7416014)(366016)(376014)(23010399003)(1800799024)(18002099003)(6133799003)(11063799006)(56012099006)(10067099003)(261022075727099003)(261022105027099003)(261028144727099003)(261026121527099003)(261021123027099003)(261021121427099003)(261026140227099003)(261009223027099003)(261009223327099003)(261009221227099003)(261009220027099003)(261102123227099003)(261009221727099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?jjsXZKNgmbHP6THel3p6tv7fU6QECNyoCn6OPDoZdn06gAkTkbZGFIF/nVB3?=
- =?us-ascii?Q?MxueDqZePQ+GLQOIReLcN8T73fshjhDGuBoZh//36tajDhEgGCzzkEel7A+p?=
- =?us-ascii?Q?Bt10SKtbUFwvI+twGCcyB/vDUKaLqoivQU7Xjj4oMA01Tr2gmKIFWOYQLJUF?=
- =?us-ascii?Q?Go4LWEc14xikn4ucaCN+ovkarlZuEwiSVsvZqCfO5PxlMd5Y/QZjY44bRxrw?=
- =?us-ascii?Q?JTqJyNU1Isd6UshhFLigtDtJUgpUinzmz096COr9wJKucWvRrDvLP/frNhZd?=
- =?us-ascii?Q?Pms9PoHjeS9x/oK+vGjEvRpVZt0Z4iGpkHmdlAh0HlRJRNQrtcXmFBjbcdzP?=
- =?us-ascii?Q?qvU0uWWRdANCfS22s8c07/ytR6iWHXkXGK4B/uSI4RhbjIcbclQWeSkROW7q?=
- =?us-ascii?Q?N0dzlBha6Soq5tFpAHZX+CGntbSz9gf7N6MzUrP3csqzXn04J9a3GuiD5ihS?=
- =?us-ascii?Q?78JKkP/DfsLB+l1Ai32FckrFfvVOB5VF3eqQbOfx5ZJZrehCv3fIUFYkLVUT?=
- =?us-ascii?Q?Q1yGA76aFpUaIkopiu4Z3kdpWse7cXvU9gZ+C8oagcxp36pL9oUpQV/CStxq?=
- =?us-ascii?Q?04UdlTES35iqy4pxoIAoIWkkehbt1w+QAAsor8rr8TfBqrg1i2qMwKc+LcYn?=
- =?us-ascii?Q?1XepXumUPd++Kh9t9Mdwj9pJtRzvJHw/YiJoF5Sfs7XxW654laf24Uv3QtZ6?=
- =?us-ascii?Q?mBw9bCmbOTTpgbE8N7qNl5xeWRiZ7tIod6Djn9kF+SF6lGjLIWrnPrPfJk5X?=
- =?us-ascii?Q?jOGH8RciVDVFWfMBx/FnyO0L2G8xKWzbG1Jst6UMV3lU9TE6Qiawxj5KBGp8?=
- =?us-ascii?Q?cpjd7A1ab1mgzSxQ6Jr6NYv5j9cgiQjG7KYTXCQPMMs4v4dKQhiWxtiMH/dD?=
- =?us-ascii?Q?iy75LEVHkC5wliTwcRIST1M3Ossy8rjEArne0IQ9dh/iWEdXrOrvPXGb2BuX?=
- =?us-ascii?Q?qOga0f2ZhbP5wvo8qkqdk/4h4cYEffCsOEtzAJ03dHWHIcD8k75nIVxblYNo?=
- =?us-ascii?Q?m9LaxodBXkbXRCt/r3aLdBBk2I4O3mLaY6uBNuAzEfca8Zm0QVdcWw9yhFdO?=
- =?us-ascii?Q?IW0axWzIygqgAWefwAnw8qz6wQ3BDO6ENLAds7CJcWNSixwTCfH8Ys+wcnBB?=
- =?us-ascii?Q?KxSYK9p9xvurRheAbJeOIreqqIfdexb8rIi1/Lv1FACqgyHpdehMOvflQuWY?=
- =?us-ascii?Q?UE4nuqeW1BLW8GK29WDOHq4qyqwDNdJmaVsnx7RDOEY2NwrTGgiqx5dM9e9q?=
- =?us-ascii?Q?/kN1yKFE57lM5XjuGcFfg6zD9+lXBaAK3yHAuLrk1urE/Rw2/CZA66YUkCPD?=
- =?us-ascii?Q?5YYv4/adfeHPW7Bo7yxdqkHClDLihrx6AkjmOwKrPcF4M/H3koj4pqGRaiBv?=
- =?us-ascii?Q?Ny+K5E/WPR96NW7+eSZIoEJa2LJSyOzmhDrT1XUsmiz7P+LQiAsOlhzP86UF?=
- =?us-ascii?Q?LkQv66VaMQmRVq0/zdLkCRxW+pCvqVvwykaAsvfvnP5tyN/hl29VEiwcCOTr?=
- =?us-ascii?Q?u6DERBybMWVRecCjuxwdvc4HuIqACdeAoVvC+40kD0tBoqt6denC+o4TcRNf?=
- =?us-ascii?Q?tlJMLbOuGmaCzWRl9fGWm4EFb4tKM/u/s1xKhlgX+LH5zKtMBJ/2YIwCOiyP?=
- =?us-ascii?Q?HX8DdXBJ3MH8C6DhxnBs+lSCMte9aW+8X17cvoOWTKBHmbsGACx0vFBisfoW?=
- =?us-ascii?Q?EbC+9ch/T5ijSfbZ/fgoYXgZJa4qQOJRQsqWND8V/IAQGelYFrsX5HouQJiz?=
- =?us-ascii?Q?WHkpW34wLYAzDHAXk8kP3Mvn0CdgjxU=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 34e94d89-9953-4c08-4f4e-08df43f5d4bd
-X-MS-Exchange-CrossTenant-AuthSource: MI3PR04MB12438.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2026 15:25:22.6861
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GHBCqLzXO7YQGxkxz3HqKE+328TOvnt2XmPv9gZq0bs/gPBtsNe5U0uXHwjE4X/CNcRBHZi78qqihf23AUTM0f4jkeE14AeF+W9uXFWtlZ0hDstg+Hb1+ENfOauEc3Cv
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU7PR04MB11161
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-1323861:519-21489:flowmailer
 
-From: Frank Li <Frank.Li@nxp.com>
+Add a hardware monitoring driver for the embedded controller on
+Siemens SIMATIC IPC BX-54A systems.
 
-When CONFIG_PM is not enabled, should be treated as if runtime PM were
-enabled for the device and the runtime status is active.
+The driver binds to ACPI devices with HID prefix "110A" which is
+currently a registered PCI ID for Siemens [1].
 
-It's a subtle distinction but the previous behavior returned -EINVAL, which
-means "runtime PM is disabled for the device"
+Looking at Dell, HP, Lenovo and ASUS this seems to be a common pattern
+where vendors define custom ACPI tables for platform-specific features
+that are not covered by standard ACPI tables (used by the ACPI EC
+driver at drivers/acpi/ec.c).
 
-__pm_runtime_resume() returns 1 (called by pm_runtime_get()).
-pm_runtime_get_if_active() is the try-and-get version of pm_runtime_get().
-stub pm_runtime_active() also returns true. So pm_runtime_get_if_active()
-should return the same value as the stub pm_runtime_get(), which is 1.
+[1] https://admin.pci-ids.ucw.cz/read/PC/110a
 
-Analysis of all callers and their behavior with old (-EINVAL) vs new (1):
-
-Pattern A: if (!pm_runtime_get_if_active(dev)) -- no impact
-  Both -EINVAL and 1 are non-zero, so !ret is false in both cases.
-  Callers: drivers/accel/ethosu/ethosu_perfmon.c,
-           drivers/gpu/drm/msm/adreno/a6xx_gmu.c,
-           drivers/gpu/drm/msm/msm_perfcntr.c,
-           drivers/gpu/drm/v3d/v3d_mmu.c,
-           drivers/gpu/drm/v3d/v3d_perfmon.c (x4),
-           drivers/media/i2c/gc08a3.c gc05a2.c og0ve1b.c ov6211.c,
-           drivers/media/i2c/ccs/ccs-core.c s5kjn1.c lm3560.c (x2),
-           drivers/media/i2c/s5k3m5.c thp7312.c imx283.c ov64a40.c,
-           drivers/media/pci/intel/ipu6/ipu6-buttress.c,
-           sound/hda/core/device.c
-
-Pattern B: if (!ret) after get -- no impact
-  Both -EINVAL and 1 are non-zero, !ret is false in both cases.
-  drivers/gpu/drm/amd/pm/amdgpu_pm.c (comment says "allow access"
-    in kernels without CONFIG_PM), drivers/pci/pci.c
-
-Pattern C: ret > 0 / ret <= 0 / ret != 1 checks -- FIXED
-  drivers/usb/core/offload.c: checks (!= 1), old -EINVAL caused
-    -EBUSY even with !CONFIG_PM. Fixed: now returns 1, proceeds.
-  drivers/accel/ivpu/ivpu_job.c: drm_WARN_ON(<= 0), old -EINVAL
-    spuriously triggered WARN. Fixed: 1 > 0, no warn.
-  drivers/gpu/drm/i915/intel_runtime_pm.c: checks (<= 0), old
-    -EINVAL triggered error path. Fixed: 1 > 0, correct path.
-  drivers/accel/ivpu/ivpu_sysfs.c: (> 0), old skipped freq read.
-    Fixed: proceeds correctly without CONFIG_PM.
-  drivers/gpu/drm/xe/xe_pm.c: wraps (> 0), all xe callers
-    (xe_bo.c, xe_shrinker.c, xe_vsec.c, xe_ggtt.c, xe_guc_ct.c,
-    xe_pxp.c) now correctly treat !CONFIG_PM as active.
-  drivers/net/ipa/ipa_smp2p.c: power_on = (> 0), now correctly true.
-  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c: (> 0), now correctly
-    executes stall register update.
-  drivers/staging/media/ipu7/ipu7-buttress.c: active (<= 0) early
-    return now skipped, correctly proceeds.
-
-Pattern D: explicit -EINVAL check
-  drivers/hwmon/prom21-xhci.c: checks (> 0) then (== -EINVAL).
-    Old: took -EINVAL fallback. New: takes (> 0) fast path.
-    Both succeed when CONFIG_PM is disabled; functionally equivalent.
-  drivers/hwmon/eic7700-pvt.c: call is guarded by IS_ENABLED(CONFIG_PM),
-    stub is never reached. No impact.
-
-Fixes: bd3d245b0fef5 ("usb: core: use dedicated spinlock for offload state")
-Fixes: 7806bad76ac39 ("accel/ivpu: Prevent runtime suspend during context abort work")
-Fixes: 9d58aa46291d4 ("drm/i915: Fix the GT fence revocation runtime PM logic")
-Fixes: 1524c28b99527 ("accel/ivpu: Show NPU frequency in sysfs")
-Fixes: 30c399529f4c6 ("drm/xe: Document Xe PM component")
-Fixes: 0d08026ac6099 ("net: ipa: kill ipa_clock_get_additional()")
-Fixes: 70892277ca2db ("iommu/arm-smmu-qcom: Make set_stall work when the device is on")
-Fixes: 9ad65684b9285 ("media: staging/ipu7: Ignore interrupts when device is suspended")
-Acked-by: Alex Elder <elder@riscstar.com>
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
+Signed-off-by: Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
 ---
-Change in v2
-- add fixes tag for patten C.
-- add Alex Elder ack tags
-- change subject to fix stub pm_runtime_get_if_active()
+ MAINTAINERS                            |   6 +
+ drivers/hwmon/Kconfig                  |  11 +
+ drivers/hwmon/Makefile                 |   1 +
+ drivers/hwmon/simatic-ipc-ec-sensors.c | 568 +++++++++++++++++++++++++
+ 4 files changed, 586 insertions(+)
+ create mode 100644 drivers/hwmon/simatic-ipc-ec-sensors.c
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Andrzej Kacprowski <andrzej.kacprowski@linux.intel.com>
-Cc: Karol Wachowski <karol.wachowski@linux.intel.com>
-Cc: Oded Gabbay <ogabbay@kernel.org>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: Tvrtko Ursulin <tursulin@ursulin.net>
-Cc: Matthew Brost <matthew.brost@intel.com>
-Cc: "Thomas Hellstrom" <thomas.hellstrom@linux.intel.com>
-Cc: David Airlie <airlied@gmail.com>
-Cc: Simona Vetter <simona@ffwll.ch>
-Cc: Alex Elder <elder@kernel.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: "Joerg Roedel" <joro@8bytes.org>
-Cc: Rob Clark <robin.clark@oss.qualcomm.com>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Guan-Yu Lin <guanyulin@google.com>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: linux-pm@vger.kernel.org
-Cc: linux-usb@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: intel-gfx@lists.freedesktop.org
-Cc: intel-xe@lists.freedesktop.org
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: iommu@lists.linux.dev
-Cc: linux-arm-msm@vger.kernel.org
-Cc: linux-media@vger.kernel.org
-Cc: linux-staging@lists.linux.dev
-Cc: netdev@vger.kernel.org
-Cc: imx@lists.linux.dev
----
- include/linux/pm_runtime.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-index 64921b10ac74f..de9e7518ecef2 100644
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -280,7 +280,7 @@ static inline int pm_runtime_get_if_in_use(struct device *dev)
- }
- static inline int pm_runtime_get_if_active(struct device *dev)
- {
--	return -EINVAL;
-+	return 1;
- }
- static inline int __pm_runtime_set_status(struct device *dev,
- 					    unsigned int status) { return 0; }
---
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e70b2621ddb8..d54fc6b8c60e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -25908,6 +25908,12 @@ F:	drivers/media/mmc/siano/
+ F:	drivers/media/usb/siano/
+ F:	drivers/media/usb/siano/
+ 
++SIEMENS IPC EC SENSORS DRIVER
++M:	Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	drivers/hwmon/simatic-ipc-ec-sensors.c
++
+ SIEMENS IPC LED DRIVERS
+ M:	Bao Cheng Su <baocheng.su@siemens.com>
+ M:	Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 576ddbfec7ab..6a319c963cd3 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -2931,6 +2931,17 @@ config SENSORS_HP_WMI
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called hp_wmi_sensors.
+ 
++config SENSORS_SIMATIC_IPC_EC
++	tristate "Siemens SIMATIC IPC EC Sensors"
++	depends on X86
++	depends on ACPI_EC
++	help
++	  If you say yes here you get support for the Embedded Controller (EC)
++	  sensors and fan control on Siemens SIMATIC IPCs (e.g. BX54-A).
++
++	  This driver can also be built as a module. If so, the module
++	  will be called simatic-ipc-ec-sensors.
++
+ endif # ACPI
+ 
+ endif # HWMON
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 3ee099699f6f..e3faffbde6e3 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -13,6 +13,7 @@ obj-$(CONFIG_SENSORS_ASUS_EC)	+= asus-ec-sensors.o
+ obj-$(CONFIG_SENSORS_ASUS_WMI)	+= asus_wmi_sensors.o
+ obj-$(CONFIG_SENSORS_HONOR_FMI)	+= honor-fmi.o
+ obj-$(CONFIG_SENSORS_HP_WMI)	+= hp-wmi-sensors.o
++obj-$(CONFIG_SENSORS_SIMATIC_IPC_EC) += simatic-ipc-ec-sensors.o
+ 
+ # Native drivers
+ # asb100, then w83781d go first, as they can override other drivers' addresses.
+diff --git a/drivers/hwmon/simatic-ipc-ec-sensors.c b/drivers/hwmon/simatic-ipc-ec-sensors.c
+new file mode 100644
+index 000000000000..690da5dde2bf
+--- /dev/null
++++ b/drivers/hwmon/simatic-ipc-ec-sensors.c
+@@ -0,0 +1,568 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Driver for sensors and fan control on Siemens SIMATIC IPC embedded controllers.
++ *
++ * Due to historical reasons the ACPI description for the ec doesn't
++ * follow the standard ACPI descriptions for fans and hwmon sensors (using
++ * the generic drviers/acpi/ec.c driver).
++ *
++ * This driver binds to Siemens SIMATIC IPC embedded controller sensor devices.
++ *
++ * Copyright (c) Siemens AG, 2025-2026
++ *
++ * Authors:
++ *  Gao Nian <nian.gao@siemens.com>
++ *  Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
++ */
++#include <linux/acpi.h>
++#include <linux/ctype.h>
++#include <linux/err.h>
++#include <linux/hwmon.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++
++/*
++ * The ACPI ID domain "110A" belongs to Siemens
++ * https://admin.pci-ids.ucw.cz/read/PC/110a
++ */
++#define SIEMENS_FAN_HID		"110A5002"
++#define SIEMENS_HWMON_HID	"110A5004"
++
++#define CHIP_NAME_MAX_LEN	64
++
++/*
++ * All temperature sensors are located in an ACPI device with SIEMENS_HWMON_HID.
++ */
++#define TEMP_REG_CTR_STATUS		0	/* u8 */
++#define TEMP_REG_VALUE			1	/* char */
++#define TEMP_REG_ALARM_LOWLIMIT		2	/* char */
++#define TEMP_REG_ALARM_HIGHLIMIT	3	/* char */
++#define TEMP_REG_CRITICAL		4	/* char */
++
++#define SIZE_OF_TEMP_REG		5
++
++#define CRITICAL_SUPPORT		BIT(5)
++#define ALARM_SUPPORT			BIT(4)
++
++/*
++ * Each fan device is a separate ACPI device with the same SIEMENS_FAN_HID.
++ */
++#define FAN_REG_CTR_STATUS		0	/* u8 */
++#define FAN_REG_SPEED			1	/* u16 */
++#define FAN_REG_MODE			3	/* u8 */
++#define FAN_REG_DUTY_LEVEL		4	/* u8 */
++
++/*
++ * CONTROL MODE:
++ * 0: Full speed
++ * 1: Manual fan speed control enabled
++ * 2: Automatic fan speed control enabled
++ */
++#define CONTROL_MODE_MASK		(BIT(1) | BIT(0))
++#define CONTROL_MODE_GET(mode)		((mode) & CONTROL_MODE_MASK)
++
++struct simatic_ipc_ec_temp {
++	u8 base;
++	u8 count;
++};
++
++struct simatic_ipc_ec_fan {
++	u8 base;
++	const char *label;
++	char chip_name[CHIP_NAME_MAX_LEN];
++};
++
++struct simatic_ipc_ec_sensor {
++	struct simatic_ipc_ec_temp *temp;	/* Optional */
++	struct simatic_ipc_ec_fan *fan;	/* Optional */
++};
++
++static inline u8 temp_reg(u8 base, u8 ch, u8 offset)
++{
++	return base + ch * SIZE_OF_TEMP_REG + offset;
++}
++
++static inline u8 fan_reg(u8 base, u8 offset)
++{
++	return base + offset;
++}
++
++static umode_t simatic_ipc_ec_temp_is_visible(const struct simatic_ipc_ec_temp *temp,
++					      u32 attr, int channel)
++{
++	switch (attr) {
++	case hwmon_temp_input:
++		return 0444;
++	case hwmon_temp_max_alarm:
++	case hwmon_temp_min_alarm:
++	case hwmon_temp_crit:
++		return 0644;
++	default:
++		break;
++	}
++
++	return 0;
++}
++
++static int simatic_ipc_ec_temp_read(const struct simatic_ipc_ec_temp *temp, u32 attr,
++				    int channel, long *val)
++{
++	s8 value;
++	int ret;
++	u8 reg;
++
++	switch (attr) {
++	case hwmon_temp_input:
++		reg = temp_reg(temp->base, channel, TEMP_REG_VALUE);
++		break;
++	case hwmon_temp_max_alarm:
++		reg = temp_reg(temp->base, channel, TEMP_REG_ALARM_HIGHLIMIT);
++		break;
++	case hwmon_temp_min_alarm:
++		reg = temp_reg(temp->base, channel, TEMP_REG_ALARM_LOWLIMIT);
++		break;
++	case hwmon_temp_crit:
++		reg = temp_reg(temp->base, channel, TEMP_REG_CRITICAL);
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	ret = ec_read(reg, &value);
++
++	/* Degree Celsius to millidegree Celsius */
++	*val = value * 1000;
++
++	return ret;
++}
++
++static int simatic_ipc_ec_temp_write(const struct simatic_ipc_ec_temp *temp, u32 attr,
++				     int channel, long val)
++{
++	/*
++	 * Millidegree Celsius to degree Celsius
++	 */
++	s8 value = (s8)clamp((s8)DIV_ROUND_CLOSEST(val, 1000), (s8)-128, (s8)127);
++	u8 reg;
++
++	switch (attr) {
++	case hwmon_temp_max_alarm:
++		reg = temp_reg(temp->base, channel, TEMP_REG_ALARM_HIGHLIMIT);
++		break;
++	case hwmon_temp_min_alarm:
++		reg = temp_reg(temp->base, channel, TEMP_REG_ALARM_LOWLIMIT);
++		break;
++	case hwmon_temp_crit:
++		reg = temp_reg(temp->base, channel, TEMP_REG_CRITICAL);
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return ec_write(reg, value);
++}
++
++static umode_t simatic_ipc_ec_fan_is_visible(const struct simatic_ipc_ec_fan *fan,
++					     enum hwmon_sensor_types type, u32 attr,
++					     int channel)
++{
++	switch (type) {
++	case hwmon_fan:
++		switch (attr) {
++		case hwmon_fan_input:
++		case hwmon_fan_label:
++			return 0444;
++		default:
++			break;
++		}
++		break;
++	case hwmon_pwm:
++		switch (attr) {
++		case hwmon_pwm_input:
++		case hwmon_pwm_enable:
++			return 0644;
++		default:
++			break;
++		}
++		break;
++	default:
++		break;
++	}
++
++	return 0;
++}
++
++static int simatic_ipc_ec_read_block(u8 addr, void *buf, u8 n)
++{
++	int ret;
++	u8 i;
++
++	for (i = 0; i < n; i++) {
++		ret = ec_read(addr + i, &((u8 *)buf)[i]);
++		if (ret < 0)
++			return ret;
++	}
++
++	return 0;
++}
++
++static int simatic_ipc_ec_fan_read(struct simatic_ipc_ec_fan *fan, enum hwmon_sensor_types type,
++				   u32 attr, int channel, long *val)
++{
++	u16 value_u16;
++	u8 value_u8;
++	int ret;
++	u8 reg;
++
++	switch (type) {
++	case hwmon_fan:
++		switch (attr) {
++		case hwmon_fan_input:
++			reg = fan_reg(fan->base, FAN_REG_SPEED);
++			ret = simatic_ipc_ec_read_block(reg, &value_u16, sizeof(value_u16));
++			*val = value_u16;
++			return ret;
++		default:
++			break;
++		}
++		break;
++	case hwmon_pwm:
++		switch (attr) {
++		case hwmon_pwm_input:
++			reg = fan_reg(fan->base, FAN_REG_DUTY_LEVEL);
++			ret = ec_read(reg, &value_u8);
++			*val = value_u8;
++			return ret;
++		case hwmon_pwm_enable:
++			reg = fan_reg(fan->base, FAN_REG_MODE);
++			ret = ec_read(reg, &value_u8);
++			*val = CONTROL_MODE_GET(value_u8);
++			return ret;
++		default:
++			break;
++		}
++		break;
++	default:
++		break;
++	}
++
++	return -EOPNOTSUPP;
++}
++
++static int simatic_ipc_ec_fan_read_string(struct simatic_ipc_ec_fan *fan, u32 attr,
++					 const char **str)
++{
++	switch (attr) {
++	case hwmon_fan_label:
++		*str = fan->label;
++		return 0;
++	default:
++		break;
++	}
++
++	return -EOPNOTSUPP;
++}
++
++static int simatic_ipc_ec_fan_set_control_mode(struct simatic_ipc_ec_fan *fan, u8 ctrl_mode)
++{
++	int ret;
++	u8 mode;
++
++	/* 0: full speed, 1: mannual control, 2: auto-control */
++	if (ctrl_mode > 2)
++		return -EINVAL;
++
++	ret = ec_read(fan_reg(fan->base, FAN_REG_MODE), &mode);
++	if (ret < 0)
++		return ret;
++
++	mode &= ~CONTROL_MODE_MASK;
++	mode |= ctrl_mode;
++
++	ret = ec_write(fan_reg(fan->base, FAN_REG_MODE), mode);
++	if (ret < 0)
++		return ret;
++
++	return 0;
++}
++
++static int simatic_ipc_ec_fan_write(struct simatic_ipc_ec_fan *fan, u32 attr, int channel,
++				    long val)
++{
++	switch (attr) {
++	case hwmon_pwm_input:
++		if (val < 0 || val > 0xFF)
++			return -EINVAL;
++		return ec_write(fan_reg(fan->base, FAN_REG_DUTY_LEVEL), (u8)val);
++	case hwmon_pwm_enable:
++		return simatic_ipc_ec_fan_set_control_mode(fan, (u8)val);
++	default:
++		break;
++	}
++
++	return -EOPNOTSUPP;
++}
++
++static umode_t simatic_ipc_ec_is_visible(const void *drvdata, enum hwmon_sensor_types type,
++					u32 attr, int channel)
++{
++	const struct simatic_ipc_ec_sensor *data = drvdata;
++	umode_t ret = 0;
++
++	switch (type) {
++	case hwmon_temp:
++		if (data->temp)
++			ret = simatic_ipc_ec_temp_is_visible(data->temp, attr, channel);
++		break;
++	case hwmon_fan:
++	case hwmon_pwm:
++		if (data->fan)
++			ret = simatic_ipc_ec_fan_is_visible(data->fan, type, attr, channel);
++		break;
++	default:
++		break;
++	}
++
++	return ret;
++}
++
++static int simatic_ipc_ec_read(struct device *dev, enum hwmon_sensor_types type,
++			       u32 attr, int channel, long *val)
++{
++	struct simatic_ipc_ec_sensor *data = dev_get_drvdata(dev);
++
++	switch (type) {
++	case hwmon_temp:
++		return simatic_ipc_ec_temp_read(data->temp, attr, channel, val);
++	case hwmon_fan:
++	case hwmon_pwm:
++		return simatic_ipc_ec_fan_read(data->fan, type, attr, channel, val);
++	default:
++		break;
++	}
++
++	return -EOPNOTSUPP;
++}
++
++static int simatic_ipc_ec_read_string(struct device *dev, enum hwmon_sensor_types type,
++				     u32 attr, int channel, const char **str)
++{
++	struct simatic_ipc_ec_sensor *data = dev_get_drvdata(dev);
++
++	switch (type) {
++	case hwmon_fan:
++	case hwmon_pwm:
++		return simatic_ipc_ec_fan_read_string(data->fan, attr, str);
++	default:
++		break;
++	}
++
++	return -EOPNOTSUPP;
++}
++
++static int simatic_ipc_ec_write(struct device *dev, enum hwmon_sensor_types type,
++			       u32 attr, int channel, long val)
++{
++	struct simatic_ipc_ec_sensor *data = dev_get_drvdata(dev);
++
++	switch (type) {
++	case hwmon_temp:
++		return simatic_ipc_ec_temp_write(data->temp, attr, channel, val);
++	case hwmon_fan:
++	case hwmon_pwm:
++		return simatic_ipc_ec_fan_write(data->fan, attr, channel, val);
++	default:
++		break;
++	}
++
++	return -EOPNOTSUPP;
++}
++
++static const struct hwmon_ops simatic_ipc_ec_ops = {
++	.is_visible = simatic_ipc_ec_is_visible,
++	.read = simatic_ipc_ec_read,
++	.read_string = simatic_ipc_ec_read_string,
++	.write = simatic_ipc_ec_write,
++};
++
++/*
++ * The number of temperature sensor's channels comes from ACPI as it may be different for
++ * different projects.
++ */
++static struct hwmon_channel_info simatic_ipc_ec_temp_ch_info = {
++	.type = hwmon_temp,
++	.config = NULL
++};
++
++static const struct hwmon_channel_info *simatic_ipc_ec_hwmon_ch_info[] = {
++	&simatic_ipc_ec_temp_ch_info,
++	NULL
++};
++
++static const struct hwmon_channel_info *simatic_ipc_ec_fan_ch_info[] = {
++	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_LABEL),
++	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_INPUT | HWMON_PWM_ENABLE),
++	NULL
++};
++
++static const struct hwmon_chip_info simatic_ipc_ec_hwmon_info = {
++	.ops = &simatic_ipc_ec_ops,
++	.info = simatic_ipc_ec_hwmon_ch_info,
++};
++
++static const struct hwmon_chip_info simatic_ipc_ec_fan_info = {
++	.ops = &simatic_ipc_ec_ops,
++	.info = simatic_ipc_ec_fan_ch_info,
++};
++
++static int simatic_ipc_ec_hwmon_probe(struct device *dev, struct simatic_ipc_ec_sensor *data)
++{
++	struct simatic_ipc_ec_temp *temp;
++	struct device *hwmon_dev;
++	u32 *temp_config;
++	u8 temp_count;
++	u8 temp_base;
++	u8 value;
++	int ret;
++	u8 ch;
++
++	ret = device_property_read_u8(dev, "TempRegOffset", &temp_base);
++	if (ret < 0)
++		return ret;
++
++	ret = device_property_read_u8(dev, "TempCount", &temp_count);
++	if (ret < 0)
++		return ret;
++
++	temp = devm_kzalloc(dev, sizeof(*temp), GFP_KERNEL);
++	if (!temp)
++		return -ENOMEM;
++
++	temp_config = devm_kzalloc(dev, (temp_count + 1) * sizeof(u32), GFP_KERNEL);
++	if (!temp_config)
++		return -ENOMEM;
++
++	simatic_ipc_ec_temp_ch_info.config = temp_config;
++
++	temp->base = temp_base;
++	temp->count = temp_count;
++
++	data->temp = temp;
++
++	/* Dynamically create temperature sensor channels */
++	for (ch = 0; ch < temp_count; ch++) {
++		ret = ec_read(temp_reg(temp_base, ch, TEMP_REG_CTR_STATUS), &value);
++		if (ret < 0)
++			return ret;
++
++		temp_config[ch] |= HWMON_T_INPUT;
++
++		if (value & ALARM_SUPPORT)
++			temp_config[ch] |= HWMON_T_MIN_ALARM | HWMON_T_MAX_ALARM;
++
++		if (value & CRITICAL_SUPPORT)
++			temp_config[ch] |= HWMON_T_CRIT;
++	}
++
++	hwmon_dev = devm_hwmon_device_register_with_info(dev, "simatic_ipc_ec_hwmon",
++							 data, &simatic_ipc_ec_hwmon_info,
++							 NULL);
++
++	return PTR_ERR_OR_ZERO(hwmon_dev);
++}
++
++static int simatic_ipc_ec_fan_probe(struct device *dev, struct simatic_ipc_ec_sensor *data)
++{
++	struct device *hwmon_dev;
++	struct simatic_ipc_ec_fan *fan;
++	const char *label, *fan_name = NULL;
++	u8 fan_base;
++	int ret;
++
++	ret = device_property_read_u8(dev, "RegOffset", &fan_base);
++	if (ret < 0)
++		return ret;
++
++	ret = device_property_read_string(dev, "Label", &label);
++	if (ret < 0)
++		return ret;
++
++	device_property_read_string(dev, "FanName", &fan_name);
++
++	fan = devm_kzalloc(dev, sizeof(*fan), GFP_KERNEL);
++	if (!fan)
++		return -ENOMEM;
++
++	fan->base = fan_base;
++	fan->label = fan_name ? fan_name : label;
++
++	if (fan_name) {
++		char *p;
++
++		snprintf(fan->chip_name, CHIP_NAME_MAX_LEN, "simatic_ipc_ec_%s", fan_name);
++		for (p = fan->chip_name; *p; p++)
++			*p = tolower(*p);
++	} else {
++		snprintf(fan->chip_name, CHIP_NAME_MAX_LEN, "simatic_ipc_ec_%s", label);
++	}
++
++	data->fan = fan;
++
++	hwmon_dev = devm_hwmon_device_register_with_info(dev, fan->chip_name, data,
++							 &simatic_ipc_ec_fan_info,
++							 NULL);
++
++	return PTR_ERR_OR_ZERO(hwmon_dev);
++}
++
++static int simatic_ipc_ec_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct simatic_ipc_ec_sensor *data;
++	const char *hid;
++	int ret;
++
++	/* The same HID sensor device may not be on the EC. */
++	ret = device_property_match_string(dev, "ChipType", "ec");
++	if (ret < 0)
++		return -ENODEV;
++
++	hid = acpi_device_hid(to_acpi_device_node(dev->fwnode));
++
++	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	if (!strcmp(hid, SIEMENS_HWMON_HID))
++		ret = simatic_ipc_ec_hwmon_probe(dev, data);
++	else if (!strcmp(hid, SIEMENS_FAN_HID))
++		ret = simatic_ipc_ec_fan_probe(dev, data);
++	else
++		ret = -EINVAL;
++
++	return ret;
++}
++
++static const struct acpi_device_id simatic_ipc_ec_sensors_ids[] = {
++	{SIEMENS_HWMON_HID},
++	{SIEMENS_FAN_HID},
++	{}
++};
++
++MODULE_DEVICE_TABLE(acpi, simatic_ipc_ec_sensors_ids);
++
++static struct platform_driver simatic_ipc_ec_sensors_driver = {
++	.probe = simatic_ipc_ec_probe,
++	.driver = {
++		.name = KBUILD_MODNAME,
++		.acpi_match_table = simatic_ipc_ec_sensors_ids
++	},
++};
++
++module_platform_driver(simatic_ipc_ec_sensors_driver);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Gao Nian <nian.gao@siemens.com>");
++MODULE_DESCRIPTION("Siemens SIMATIC IPC embedded controller sensors driver");
+-- 
 2.43.0
 
