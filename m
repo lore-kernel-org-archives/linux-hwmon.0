@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794939429;
-	b=TA052qFLPMH0DVGLxD032im0ifdwQfm80KLsRQlPJVEbHDnq+k88d54JcWMjrTmLhhge
-	 QberdJ8A/ujrihMj1JgdAtLCKJU+NvihCK5+d9FUzUhsLa+VJxHpc50PKcLFMDt0eQcul
-	 gZ5aRpcC2fsU6+6Jt5+gKWy45ih8bngOsqey4fEOXEDnplIhIZ3lwUHjs4cVup13qs+KP
-	 QsUY74lNk2VXgz06la+A1rhLM+CGt2M8pHrWpPN++rqp2ThNGpA53+elLeaMl0QN+NmNw
-	 BYl4dR/r4j2PWtrZgw2GRhA+rIFAgSe0HAt2iCG2w8uf+0nBsROvkydA9SkemthCKDA==
+	t=1794939490;
+	b=yf2K0mkzQp61jQWysoqGsD/OjdO1zDvVAMe7iDWC65nv4bD79olW6NnuCL6vs+GZvxi2
+	 xlI2ATdF1BDn+F2EbYZ6QP7qIyIQpPYQUrvk2RhTNmmdjmry3m9ph/TF0ZHwKEEMlS1IE
+	 edufH2wcxf4H013n4g+I7fAFbiJ8cCQxHTq2qGRxLlIqhp3Q7S9KKjbtCPnIaZam2OqSW
+	 2kUQ2EFrelGiqG94KPKgpKHEwUzA43bJlqLa9PsKhnzb/TlKlooJQXUkgzxZSo577nuPZ
+	 wF33eB2Ab4aojczyh2BbaWape3imOHE1TJLwb/b4B6PcM7E66+4DmDmSkoxpWprWqaQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794939429;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794939490;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=7j/OSinZOASBPcLYIBrVmxMnJl0K4ERRMwW+QzbwMSU=;
-	b=CkWT0B0R8uJlGPqEqqb3r43PCtUGyicJwYxzGvOtlUzJgT98EF17tV8BdxpkQhHZQ9xQ
-	 WK2FUXzFxon06P2ggGjlayPJutE0U2Cy4UYTfkdU9AklWav9zeEYbmSEvYusSi85EiVdh
-	 FFf98/gG1j+9BQtMEBsEHiZYXlpYR5eO6MXCsstnkwJi2BshakgPm8dQVVsPrW53vlEuj
-	 qKrN1/UfOqlnWd94iWHP1WloIKKvmfqozRNo4o8PhgoGimPLKyu+dCUFNYa8jkJAuX0kh
-	 4clzgYjNs5oPj+/D4JW/HtCVF/vQelRwsK9iiqWKdVAN4Lx05kLa3lf7fENWmBQMaBQ==
+	bh=gFqB+p8eU+ZLROM+OEBJ79FaMUsB4/xery1hgREUT1Q=;
+	b=RA9InEzqZtaIivGrHjXP1PFqgQWgRaI8u92597wZCco38BcOcLRs+X9xiW6Gz2lneWgp
+	 37ckltt9xk3kiR3W5JTDUbOJgJUhR4TRptpEcphzBp1QWz7h9iF3hc/oYBK1fdxgUBLAB
+	 DPpIrv5+V+iNDWH1n0u8SZFN0VwJPC3u8Fzxq4JTdevGOnvewaM2lrihwijB1+70t1e3A
+	 fg1NQmOc8kenq6SeSMeT1O0sdOyHtLAts5Kkvv3fYRPxtRP0tMF+ZNi6SOmZTmB+IHL4J
+	 H5Z540G1heAPY83U/qSVAiGgH2+j+Jb4NEsfaSdxbldiWtEoLJwrCAODeowjC89dHgg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LTifZ0BT;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eIAcQZ92;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1ED606A32A
-	for <linux-hwmon@vger.kernel.org>; Tue, 17 Nov 2026 18:17:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7637F606A31C
+	for <linux-hwmon@vger.kernel.org>; Tue, 17 Nov 2026 18:18:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LTifZ0BT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C16081F000C5;
-	Tue, 17 Nov 2026 18:17:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eIAcQZ92
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E96241F000C6;
+	Tue, 17 Nov 2026 18:18:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794939428;
-	bh=7j/OSinZOASBPcLYIBrVmxMnJl0K4ERRMwW+QzbwMSU=;
+	s=k20260515; t=1794939490;
+	bh=gFqB+p8eU+ZLROM+OEBJ79FaMUsB4/xery1hgREUT1Q=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=LTifZ0BTWGHP2gfnDJHfT0z1yG81eQuY2+e5L7o4OpzWGaHqdvUDQyGqmrKkkbxDo
-	 dg69Yi5zLX4tu8hBJxXFCirfqbQpjljE8CO+IoNvkr2PuqofwBFS7i+K1iEqlnL9iI
-	 jayzZoqQ0knDbb0GW6fQ9wSskhFLMvuC7oMHa/xhIhfBib7K3Sgbkdy+ZvG6/n5MVB
-	 Cfax/bDRTgVjSDUkNXlCT9OxxrxbSRBDH2/XWd12R8BODbGO3Sj5xbFnUs7vI9F0B1
-	 z6XDWKNACVQSA6Gks+mhTeqxa40GIkNkFLXdtgxdncllVw7MphnV32jbLcSSIoDjEz
-	 +aVMYPoJaaxMw==
-Message-ID: <sashiko-outbox-219324@kernel.org>
+	b=eIAcQZ925ojpUxHai7B1oG/K3Z2HiaePF+17cgHgokt0YRo1qHxf4/j5C0cm9i980
+	 baOJKjaS+HY2H6WDAKDK1cLmVdjulGESDNh2FFKzQUY97FCVbMUKojyjthiwrS+LW2
+	 bkFH8mou9dghCtolz68E2FnmUExzUjjJE3UYLBY44X26H82Mf1AWIuVkPaLlnk7fad
+	 XRooiy8rMa8I8IfREQX8qMhnk4559qNWM3M4y0oZW2px5xwiWEbL8otWGctG1n8Pm2
+	 V1/FZFb+4MPSx7FWYcA/7ygOboWPQBcTbqBCCbuy7Bv5cw9vLXh8CHRwXm0bJmm4L6
+	 DrJTNXPBpKeQQ==
+Message-ID: <sashiko-outbox-219326@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 1/7] alpha: marvel: fix the environmental subpacket
- layout
+Subject: Re: [PATCH v3 2/7] alpha: marvel: report environmental events
+ without VERBOSE_MCHECK
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Matt Turner" <mattst88@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261117-marvel-env-v3-1-0edc370fdca9@gmail.com>
+In-Reply-To: <20261117-marvel-env-v3-2-0edc370fdca9@gmail.com>
 References: <20261117-marvel-env-v3-0-0edc370fdca9@gmail.com>
- <20261117-marvel-env-v3-1-0edc370fdca9@gmail.com>
+ <20261117-marvel-env-v3-2-0edc370fdca9@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 17 Nov 2026 18:17:08 +0000
+Date: Tue, 17 Nov 2026 18:18:09 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -61,19 +61,11 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> struct ev7_pal_environmental_subpacket does not match what the MBM and
-> CMM firmware (V2.7) put in system event frames, which is:
->=20
->   +0   cabinet
->   +2   drawer
->   +8   PE (the power and environment node holding the sensor)
->   +10  sensor index
->   +14  state: 0 ok, 1 warning, 2 fault, 0xfffe unknown, 0xffff removed
->=20
-> So the byte printed as "Condition" was half of the sensor index, and the
-> state was never printed. Use the firmware's layout and print the state
-> along with the sensor's key. This matches the frames in the error log of
-> an ES47.
+> The service processors report temperature, fan, voltage and power supply
+> alarms as system event (0x680) logout frames. The frame is already
+> classified as reportable, but without CONFIG_VERBOSE_MCHECK only the
+> header line reaches the log, which does not say which sensor or what
+> happened. Print the subpackets unconditionally.
 >=20
 > Signed-off-by: Matt Turner <mattst88@gmail.com>
 
@@ -81,5 +73,5 @@ Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261117-marvel-env=
--v3-0-0edc370fdca9@gmail.com?part=3D1
+-v3-0-0edc370fdca9@gmail.com?part=3D2
 
