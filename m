@@ -1,90 +1,91 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794939220;
-	b=fnC9+A7jFfFeNe3yukrszbP8jS0DtpptwCFr/QXcghO4IYHExa5dTvmfywA589BrcG9y
-	 iZCuibjPIcj5hhH/UW93hHL2kFo1tXQVY16RmIYTwE0bUdaov66xyiu3Btn/IPl8r6eE/
-	 udIDfel80Q24P4haCJXDm2O9nuFTnQB3PB33EZowPUj9M6YOeM69HmIM+H/y+0EJSmwJU
-	 Cpw72ROaZwmhmw9ytY5NRXN5/cnTADelouXaYEavKDimS/RZmN69MlGhGaLQmEeoe6B9E
-	 MfFCimL9n9PtsQmK81cktjpilwBddmpOGM0BnmUlZd4B+8tEhRJTifv2slHLOwu927w==
+	t=1794939215;
+	b=NWPVaXYyb/lekeJTGmxYH4hbA9T8Al+IQLjC5lQVpnvM/8Ex9TqFAWoWVzuRCi1sw41K
+	 lwZLk5Ex91hcx2R0HJ2yWnF5xmQPSORRYUalAwiVbJxqJ5dlbb06Zqi1Jdjg1EsqNUqYo
+	 vzVz6aUVprQ/vviM7q7lQ8MnsGPY0nsyQGXIUmjvd0sNJw61kvStyeyflv9dV4gl+DluB
+	 oYrxc/2KXFPl9ASk301t5qMch9KglYQFO17G/8dwBfiprDeDMv8Qoqw3/MQjmrQ5MrQsT
+	 C+0BnSplzglampH3ijEJtnM3tRPK2ZakrOTrcUE/WmiirJNOzTsDGy/H5TSOfh05OFQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794939220;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794939215;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key;
-	bh=6fd7grfB3tzoFbfBTrAoxkisbPV2yJhpf6JFjYB4i4M=;
-	b=iPJDD0luuly2VR1RpXIj191YoSWbPAbVOXkj8hpO3NXzoFvwJ58tF881PSGvlBgYc9+O
-	 5NQduft47mrww87z5N2hQQGh9NfeeQ50vRBd7Etex8tWmOm39W74C0ZNdFlTibP6W7QD8
-	 Pu3ZJfcbH9i6j2Gxi0A1reKtbURgTU9oJThbIkyCPZ6BpeD9C7Ia9fzfGuereUh0DLEpN
-	 Vg4IAdWp9vX8fbSI/IOKyNoEOFEoF+Un+xsxT/9EkaWVGoVOfQ/TFOGFqH9uXaqvLau/N
-	 daJjGA2/UbA5CfUoq7FZNuYXszKJgl/5y8UGbf46p6ENkAl+f6LjL9GJATbSLQfIXFg==
+	bh=meL0+rTQnSRPz7Yn2GzsMx3xxjISuzA0apMMf/0RgbQ=;
+	b=GbjWHMTKrmA4WnA/FFvR7xdA2a7yBMG+4J69ISrWPSD//sWrpKT1NKZBc2plHNnIKgY3
+	 wBfqb4JWhlDlrJadPU0aNmJQUdeM/p4/h2NDkwsw3GJW2qc/voNYPxxRR461UfU3q+v+f
+	 AOjEAz1A+/nSzWput9zSLz5h1x8xJQpVgkX34syV6rD+ywrgQEmN1+oe8z84M+ZRRpsCB
+	 /Pj2kLIH+v0Ut2BnRVyZRNRXQGmDTfnuh5WuGenN9Gk/kiFcpOFW3HnrmR49PHcsY5KIS
+	 HpsOgNsgFVsZZxZSsNC9X4i2vcDbqsUTCL2EUZgQzBV6PEbeLraEXDOrVMuHR5vzvlQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MmxQwpGT;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="Rqr/hizJ";
 	arc=none smtp.remote-ip=74.125.224.41
 Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CB4606A8AD
-	for <linux-hwmon@vger.kernel.org>; Tue, 17 Nov 2026 18:13:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E7CB4606A8AD
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDFD606A89D
+	for <linux-hwmon@vger.kernel.org>; Tue, 17 Nov 2026 18:13:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3DDFD606A89D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MmxQwpGT
-Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-67583c777abso1694637d50.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 17 Nov 2026 10:13:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Rqr/hizJ
+Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-67be4f2f4d4so6196734d50.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 17 Nov 2026 10:13:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794939219; x=1795544019; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794939214; x=1795544014; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=6fd7grfB3tzoFbfBTrAoxkisbPV2yJhpf6JFjYB4i4M=;
-        b=MmxQwpGTj9NNy0RMrOJv3wL6yArdoKdNFg5vsACRwNLJ23zoNJoMRPCRiMrzrxbUKZ
-         u6kgPFEE170tnccn+ZPH2oI0O26G5G8au84zWGuTnC/rROEJ9NuK3fx4NQoAfjBAi4Lj
-         ayC+6jfzy3Ah1R9+tifrhIqiSNwFiMngsvKNOprhhhMlRjhCNFSqlW95JmVeVpphc88/
-         /BblIG2qFtA847q91ML6UQ0lVaXOascRfUrWl/8YKagZcvC8eEV1DvvNObYBEKj2yWq2
-         z2crBBJ1HVxCJT6L8u3MFHv+1j6DGjLIF6qtFpMIpVBZfSji33i5Oo3p1LJ5Xo3aajps
-         JJgA==
+        bh=meL0+rTQnSRPz7Yn2GzsMx3xxjISuzA0apMMf/0RgbQ=;
+        b=Rqr/hizJwM04N5r7rdBlI1SrpCZm1YU2VwykcRD4dToC01j8O0eiPOi8Zfdo+cSsEe
+         KepkZt+HzaSliry7cfleqlm+vsu4kjci8eNfqf8ZW3D7n2FU6NT5ga6OyRwovGfvl7u3
+         moafL7fNIaKLFfV5rLTysxDKefHgo2Ste3Vh64H4ghp2hsu/BLV6Pa4fKa+pUfA0nXT5
+         POTyodqTZK1gOQDkzhdPVkul/bv3zKZlZuhLJIo88VWu96PktIZfaiYanN37OPuObyx9
+         vgeQG5E4qagJYZGOTrtTjO4v+BZSFK2wUK8eHyxLKXvbbb1hzVoVMMYRSQdGAcRYgpct
+         78wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794939219; x=1795544019;
+        d=1e100.net; s=20260707; t=1794939214; x=1795544014;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6fd7grfB3tzoFbfBTrAoxkisbPV2yJhpf6JFjYB4i4M=;
-        b=bFgusvT8miVHxL+tHupu8Muks8AP7Nmcl1rrqAe2Wc8ofVnwwArC6gAo4+SnwS4PrD
-         gXa1lxscD3m5fzsIagA8YE/vQkLB8EQfNsNjKeA/tDnHrdwy8qCztS6zuSY5ny8wUL98
-         UUfKCW+OUYNc1X5FN9gwUOQNW5X7dMCVxDAzEoPVPvn5XCIkr+uFEi+dQtjJ+gEZK8zV
-         xLSpdci1oBzTYgj2HApM7yqv1t2HckyqWmr+zSv7M3ROZrL4kMcCzTbBN2c2aENqgt8b
-         uu9XEvxpBezqq/1HRqqOgm80gFmQ/WhS9oCPLVgFtmdKzrIaL2y1aj7tAp6vQz5FqEyY
-         GOug==
-X-Forwarded-Encrypted: i=1; AL+hErGYwWhQGBzYgX84dTrMErfUOx6i6HG4+G0a7jJ0gmq817sTVb29jd3pJgZZnM/g/DIAvg9IAmbZT/1GKw==@vger.kernel.org
-X-Gm-Message-State: APuU4Z/qW1d/WUaK1EGrVSIlJsPr/sJnsp3wTI0Y7xxBpww0s83K3CHq
-	gUXhQhi0NJvgh9d9NBX8xHCqV6ODCgmicsD9bKQstD9OuLHwxoHj8/wh
-X-Gm-Gg: AZFdTZc74oI7c0b61FqwCnee4TmJ/9AUpObB8Yl2scXoihMRYWireRp28yOAZZMIYml
-	BNOMBCD5rddKjcQOHadCrAm7YASpTkWK9fpQiOIOU6ZjlqTZNu+4NReTUAlbBM5DbLMsQN2KDsi
-	mOZ3PI95xeB2SSITzSHf9Sto0CSmhtSXxMzd2jFrCRd3aS2UceNjPoVoWBfpj9TdszA239EsVom
-	Ohvwfitg6vh3fgAcVvmXpEDP88bOK5sBpU+kWwzi2OiHripthOi8GVgtBnM7GFeYYpix6927Nk7
-	nX1scnTtAQILQNUhedbGTXNV495HUNLl7p6VujpV8WXzSB+JWux1pd9TMetAWplckzcQJGbYObW
-	ADrBlK5DiaOrW+80RdZqvF5ZndegxOHMDt9jWwakIKBtFEe6kNl38VUH2xErX542gzBb+IK3bbU
-	0M5Her7fjc+mYdUHGACiAUKH4fvvFXaygNQdP6qDsrWV/xl6AhyA5TA8ArTE449jFxYr52KaQeM
-	ys7/njbl3CG84kEs4CObXBkL7/zbqoAVZPVcOSmhGRkXjqj9Z6lfkPuhO1805Xqkh5WdKOxrCoC
-	61McxBTYwR82NSHGPUnFOU91GrIFQ1GXvJ2KlwIKwUPOrNwnk16ygrvvaGt4KLt670Y/ieTuthz
-	GPv7PTbvMSAIZRng83G6O8hpccOjMBKgpnD0eCp03KnyoHRsbzhArhiYdLduiAgUFirmyg3tEcp
-	umYq71KfAI75xQfm8sLA==
-X-Received: by 2002:a05:690e:12cb:b0:67d:a102:b8f4 with SMTP id 956f58d0204a3-67dc74c31c3mr2212909d50.0.1794939218891;
-        Tue, 17 Nov 2026 10:13:38 -0800 (PST)
+        bh=meL0+rTQnSRPz7Yn2GzsMx3xxjISuzA0apMMf/0RgbQ=;
+        b=eXkL2gGRagvYZVpb9orN4kM/EsIEg1gOigKmwVgpUFDFouAuk3xFBfvQ5dgK0R9Mzs
+         ipSuef3lqZeiXuvo4RoRXwbvTMUkunQ+C+CINS3hkcsqiyszitRuJfjVyCjq6+AWLRd3
+         lqZVon+Vdlv9/xLLZgmVYV9x2HFSJiOe7Qi++7qALUzXM7IE2rHQiKGzNOuVdzDy7Zdu
+         0gExSQJK8FEb1yAEuSzp5NMcYRn1sH79LpLJnTbAl4y+tUuic7CY0NFvXLAOii/TqxUi
+         gHDl2YVACh6DD4Khi1oDHG8qVgJrHB81ba5nveRp+aNf4UWBsY0YTN571nTgb9WyIrHa
+         XlMQ==
+X-Forwarded-Encrypted: i=1; AL+hErErpRuNhLe0irqkG7/9J6sGkCq8xRQPe7CWdUG8+QEos01/3oBdDInLaTXuW+b0XAa+DJSqfT0zAyrJ1g==@vger.kernel.org
+X-Gm-Message-State: APuU4Z+ekzF0tJAGl/aDv2+VQU/n9Z8GdZLArSOz7VHdstNXmx8GACid
+	oxm4C46Oy/UcPdAddtag+QhlHYZKHwYKFH+kqO+AlYAS5CMyLPYObc+f
+X-Gm-Gg: AZFdTZf5Akd3FhYvHXXSI1ogeRcVJZmtV3CaAy3jz8QZkR97IjYD934FJy5iHJ5HFqV
+	n8JEaa42bn89m0/XrjwF3+q8+sY31Zg2X3Z123Huvx3zS8yC8+8lExl2B/Dy0I//PfkxrctXBXX
+	u77KxALje2NTosuRCt1lPRE42twAxhln2n18mpFGSPyjiW1nQEz4vh3Ep2n2n8g4KTf+NQlz5eD
+	KU7MhsPzJQis0ZowaRYhNXqzpyaH9uvf2ztC9mHhfcAyx+ic6bzsgsyHenMej1WiBDE4oskaY3P
+	AAitxhcykczBR3ZDrTGQKp6Npa24lcEbOvpDXWKnocvQNZpgXT5iuols1mk4KYC8NjXbgCi8gwI
+	A0Nt3FHyJrAN5l9IOFXCRGg2DLLHAqKAehr+DttCicYaerb9tBvVsHpzeKkHveVSN7ILm8v9akL
+	o0t/4KYN47B+Ohp5CuJn0aBxnzgAuE44X7wytNjrezsVlmSxwovprnPYILoh9Uf6Xdj3urTQ48I
+	sXxwZebX4D/Nw+mKlq82rzfobmFXUqvPyfEySx/+INwHxJPiKY10n4xKIXVzBB2wSmr0MX/GEeu
+	4UXnU1qscli5EY6ZqOBGZe3nGrbqwIuNUxT/7mmz551TH3EFZAXhpDU2ptGTbZBD/gm6/oNDj08
+	DIntFxkUsFeTwRzQTkTuCStzopZpLL1hECxzHLSFvEUg8Bakxu5YuHifHhsKtwgzSV3YQXgeD/g
+	QfW3sfTHKme5FjjDZLGA==
+X-Received: by 2002:a05:690c:6884:b0:8b4:e4ec:ce6d with SMTP id 00721157ae682-8b4fed78f0amr379807b3.73.1794939214002;
+        Tue, 17 Nov 2026 10:13:34 -0800 (PST)
 Received: from localhost (107-220-129-194.lightspeed.chrlnc.sbcglobal.net. [107.220.129.194])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67dd3fed78dsm268757d50.4.2026.11.17.10.13.37
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67dd3fed5e0sm269767d50.5.2026.11.17.10.13.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2026 10:13:38 -0800 (PST)
+        Tue, 17 Nov 2026 10:13:33 -0800 (PST)
 From: Matt Turner <mattst88@gmail.com>
-Date: Tue, 17 Nov 2026 13:13:31 -0500
-Subject: [PATCH v3 4/7] alpha: marvel: notify environmental events
+Date: Tue, 17 Nov 2026 13:13:29 -0500
+Subject: [PATCH v3 2/7] alpha: marvel: report environmental events without
+ VERBOSE_MCHECK
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -96,7 +97,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261117-marvel-env-v3-4-0edc370fdca9@gmail.com>
+Message-Id: <20261117-marvel-env-v3-2-0edc370fdca9@gmail.com>
 References: <20261117-marvel-env-v3-0-0edc370fdca9@gmail.com>
 In-Reply-To: <20261117-marvel-env-v3-0-0edc370fdca9@gmail.com>
 To: Richard Henderson <richard.henderson@linaro.org>, 
@@ -105,81 +106,62 @@ Cc: linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
  Matt Turner <mattst88@gmail.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2137; i=mattst88@gmail.com;
- h=from:subject:message-id; bh=kTcqrZoPJJjAEKBBA1jTVVnkVIO/Zb02KSORE5Uuqtg=;
- b=owGbwMvMwCW25rVmCc8sv+mMp9WSGLL+zPSo1y/OD5lwet4Pl0UP9Q8KXFLOvCMk/um067T0i
- OTHXs0RHR9ZGMS4GGaKKbLErVdkmdW2Y6nPaelfMHNYmUCGSIs0MAABCwNfbmJeqZGOkZ6ptqGe
- IZChYxQPkdNj0MgsLi5NLdJNKyhyyMsvSSzJzM8r1ssvSM0rSC/QS8tMK8nIyC8qTgUaoZeXWmL
- q6uhmZGhgYuloYeZk4Whq4uzsZOjk5ujo7OpkZGluYuBs6WjiamnOwMUpAHNN+S2G/yH3tZzbXw
- hUz/gvV5CRc7ZayXvSmybOXTvf7l2huD6p6gLDf4e7dvWTfyX5f1PO+c54ZUttXtDEDRpJ3gclP
- dQcV1V+ZwIA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1534; i=mattst88@gmail.com;
+ h=from:subject:message-id; bh=oaDjaxtiZhTza/9Q+dIadPybMp9H7XVMHIR6nixhj7k=;
+ b=owGbwMvMwCW25rVmCc8sv+mMp9WSGLL+zPS4do6tJej8Qo3K4pUai1r64iQ/OB6bvq06wFnh9
+ enzUVa3Oj6yMIhxMcwUU2SJW6/IMqttx1Kf09K/YOawMoEMkRZpYAACFga+3MS8UiMdIz1TbUM9
+ QyBDxygeIqfHoJFZXFyaWqSbVlDkkJdfkliSmZ9XrJdfkJpXkF6gl5aZVpKRkV9UnAo0Qi8vtcT
+ U1dHNyNDAxNLRwszJwtHUxNnZydDJzdHR2dXJyNLcxMDZ0tHE1dKcgYtTAOaac5KMDEvyCxZoVf
+ DXn7AILdtx97zkt38x8yqdFjlJ/23XMjfpfcrIsP7flWshMtsm+FV29HNHPRM5XzcvbOWcLY5i+
+ nZVP89d4gMA
 X-Developer-Key: i=mattst88@gmail.com; a=openpgp;
  fpr=3BB639E56F861FA2E86505690FDD682D974CA72A
 
-A change in the state of a sensor arrives as a system event logout
-frame. Call an atomic notifier chain on each one, so that a sensor
-driver can reread its sensors and tell userspace without polling.
+The service processors report temperature, fan, voltage and power supply
+alarms as system event (0x680) logout frames. The frame is already
+classified as reportable, but without CONFIG_VERBOSE_MCHECK only the
+header line reaches the log, which does not say which sensor or what
+happened. Print the subpackets unconditionally.
 
-Reviewed-by: Magnus Lindholm <linmag7@gmail.com>
 Signed-off-by: Matt Turner <mattst88@gmail.com>
+Reviewed-by: Magnus Lindholm <linmag7@gmail.com>
 ---
- arch/alpha/include/asm/marvel_env.h | 5 +++++
- arch/alpha/kernel/err_marvel.c      | 9 ++++++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+ arch/alpha/kernel/err_marvel.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/arch/alpha/include/asm/marvel_env.h b/arch/alpha/include/asm/marvel_env.h
-index 16ccd2002a11..dbbf827a18ad 100644
---- a/arch/alpha/include/asm/marvel_env.h
-+++ b/arch/alpha/include/asm/marvel_env.h
-@@ -2,6 +2,8 @@
- #ifndef __ALPHA_MARVEL_ENV_H
- #define __ALPHA_MARVEL_ENV_H
- 
-+#include <linux/notifier.h>
-+
- /*
-  * Ask the console to refresh the environmental readings of the GCT node at
-  * @offset from the start of the GCT. Returns the console status, which is 1
-@@ -9,4 +11,7 @@
-  */
- long marvel_cfgtree_partial_update(unsigned long offset);
- 
-+/* Called from machine check context on each environmental system event. */
-+extern struct atomic_notifier_head marvel_env_notifier;
-+
- #endif /* __ALPHA_MARVEL_ENV_H */
 diff --git a/arch/alpha/kernel/err_marvel.c b/arch/alpha/kernel/err_marvel.c
-index 46c521cea9a0..6e0b0aabdaca 100644
+index 9304ae74877d..46c521cea9a0 100644
 --- a/arch/alpha/kernel/err_marvel.c
 +++ b/arch/alpha/kernel/err_marvel.c
-@@ -17,10 +17,14 @@
- #include <asm/smp.h>
- #include <asm/err_common.h>
- #include <asm/err_ev7.h>
-+#include <asm/marvel_env.h>
- 
+@@ -21,7 +21,6 @@
  #include "err_impl.h"
  #include "proto.h"
  
-+ATOMIC_NOTIFIER_HEAD(marvel_env_notifier);
-+EXPORT_SYMBOL_GPL(marvel_env_notifier);
-+
+-#ifdef CONFIG_VERBOSE_MCHECK
  static const char *
  marvel_env_state(u16 state)
  {
-@@ -82,8 +86,11 @@ marvel_process_680_frame(struct ev7_lf_subpackets *lf_subpackets, int print)
- 			status = MCHK_DISPOSITION_REPORT;
+@@ -34,12 +33,10 @@ marvel_env_state(u16 state)
+ 	default:			return "unrecognized";
  	}
- 
--	if (print)
-+	/* The frame is processed twice; notify on the printing pass only. */
-+	if (print) {
- 		marvel_print_680_frame(lf_subpackets);
-+		atomic_notifier_call_chain(&marvel_env_notifier, 0, NULL);
-+	}
- 
- 	return status;
  }
+-#endif /* CONFIG_VERBOSE_MCHECK */
+ 
+ static void
+ marvel_print_680_frame(struct ev7_lf_subpackets *lf_subpackets)
+ {
+-#ifdef CONFIG_VERBOSE_MCHECK
+ 	struct ev7_pal_environmental_subpacket *env;
+ 	struct { int type; char *name; } ev_packets[] = {
+ 		{ EL_TYPE__PAL__ENV__AMBIENT_TEMPERATURE,
+@@ -70,7 +67,6 @@ marvel_print_680_frame(struct ev7_lf_subpackets *lf_subpackets)
+ 		       marvel_env_state(env->state), env->cabinet,
+ 		       env->drawer, env->pe, env->sensor, env->state);
+ 	}
+-#endif /* CONFIG_VERBOSE_MCHECK */
+ }
+ 
+ static int
 
 -- 
 2.56.1
