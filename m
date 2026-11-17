@@ -1,60 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=130.239.18.156
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794922303;
-	b=K2LUgPL1aDiP82bA/JzRN0FADapjPVPo6mIgeI6sR4heL9MwV34VQXMPMI+48pNt3k63
-	 HdBztIm5g6y/wUwIK7XJY6l+ENwdfIflAxcmAPbtmhalnyNFGO3KwSJ2TVaq6oOfRgSXy
-	 871OVC7UnixqhONhqHaCVhKL3lrezw/sYgS4WGJ+OeYOOWv2U4ZbWAelugOy/cVoY9guS
-	 ft+d1M75m3jQH3QpFHzN857WFlBSJz0zCVWCXsjKMLslPQZOTalDgllZG2pgwDX7tddlh
-	 eDQO3PRWGWmkgIpU07sLRpWMC0a9ZfT8/b4UQmXtiIwDav6XcO9/k+eGP6FJRrHCJ6g==
+	t=1794922484;
+	b=BSmKL1CuNmMiQ4ZuRmdn3OyXq+m6iR/FxrT+97/XBCpXVdm4lX6C4OnAnQ+xlIV2SlgV
+	 tHaKmn+cIHdQQ3A22SXEmZqAyL/Ky0surTlo3oLSsigRrmtJsb3FOJkH934q9zJlAMouN
+	 xFmG59jdNIOfD1367RLDJ1U9TbG37hQdGLqoEka5tiE3qL1EkfntIj95bS/1+1O983eQi
+	 1za36qZOP4rHPwBUbeFZSUQT4bNN2hkp9LOrhB58RFvv4cUVvGYs7AGaydt63btPy2uKV
+	 R+4/KyA7FzzYTQy/xKbpUGqtN0cxmrSY7Z9fOiNIAszAJXFlCEa0OKVnfYDcqMGHBMw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794922303;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:Cc:
-	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=W+NquuX1JEi6z1cfXRakGcDZ9icaiFUqpJrNR09O4C8=;
-	b=X4YUfalq+G091dfLOaW2NQD2qnG8pHr9U2VQbU3TUAAfsQuUsCyIuwGTgFX/IoSY/QM5
-	 ffJGF8ke02Q3yPgoqHUxTFXYSCfn0rnRGhjbXd1dYQd458ceSNzUxlpghhnpw4ECpina8
-	 FhLZp6hhhQGW2vJC4nlgadw/Zk804OtDluYhyRegAMH+X9Xd96jC3KZrCMbx2Fs1ezhZq
-	 QBd3OVv3+piSbe2ew1CPiev1rR0r5KYw1UbINiVkJynEt1qK6IjytaNJ0C5WskDouJ8HP
-	 EGPIQSSbsaziz/ol5zbQN9GfvZNstkzZTLm1N8denZ3AtyYEq9Namr94YkaOAYuBFBA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794922484;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=frXNhtlgvoh3r1mPy9/4jM0MnyMpGp5jNI1qDaHlCVY=;
+	b=09mG9w8/dTnfsxz5GDqgRM/OqcEvfDIUMS3ytUUltzu2Sja69OmNwSzuh+2WjTYjhb7e
+	 y6jcYsKqAkp4V7AcO5SGw8lHCIjR0wvKvCrNt1j8ZpiUOHoZcXd0hNniVHwilOmHE0eDx
+	 4ZE+3hZcGj1i0F8ktllu6foV9tQlXX3/inO9ukYoFJL8z/Qz+hFCj6+L3z4ozRJivRsib
+	 kgUrRIM+4hD4DADDoq909PGlst0Bgv2VOS+wYB0gBxaojBGIeE+MCNQn6+kswjPK6E7yy
+	 GuzdNUpdUB5eGbWHJn7Ee3oEXQfbkARYl4vUyl/OlmmYNS/8qV0ho67fiyCvIdxEhhg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=ac2.se;
-	spf=pass smtp.mailfrom=accum.se;
-	dkim=pass header.d=ac2.se header.i=@ac2.se header.a=rsa-sha256 header.s=default header.b=sZ46RlQ5;
-	arc=none smtp.remote-ip=130.239.18.156
-Received: from mail.acc.umu.se (mail.acc.umu.se [130.239.18.156])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mUlOGUgx;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75E7D606A329
-	for <linux-hwmon@vger.kernel.org>; Tue, 17 Nov 2026 13:31:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 75E7D606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ac2.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=accum.se
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3907F606A323
+	for <linux-hwmon@vger.kernel.org>; Tue, 17 Nov 2026 13:34:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=ac2.se header.i=@ac2.se header.a=rsa-sha256 header.s=default header.b=sZ46RlQ5
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by amavisd-new (Postfix) with ESMTP id 82CBC44B91;
-	Tue, 17 Nov 2026 14:31:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ac2.se; s=default;
-	t=1794922292; bh=RyFrR8/SnYcO0HcuNOC9gS7xggleyP9K/7xKxWxAVtc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=sZ46RlQ5Li6EVzd6ud96NrAGK5+LAPyH6f6baZB3JaE+23dqDLyAwXKF2lQR2fZmq
-	 1WEglIMlgsh5wuiPXsxwuWUcm9jJvTN+bgw12KIJNhi8MXVS7zNaBfeij31O1z0V6Y
-	 /5OD4ve4EA9o1Yyqwb4acibfNORR33fApDNTU2Ok=
-Received: from suiko.ac2.se (suiko.ac2.se [IPv6:2001:6b0:e:2018::162])
-	by mail.acc.umu.se (Postfix) with ESMTP id EC9D944B90;
-	Tue, 17 Nov 2026 14:31:31 +0100 (CET)
-Received: by suiko.ac2.se (Postfix, from userid 24471)
-	id D367B42B4B; Tue, 17 Nov 2026 14:31:31 +0100 (CET)
-From: Anton Lundin <glance@ac2.se>
-To: linux-hwmon@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Zev Weiss <zev@bewilderbeest.net>,
-	Anton Lundin <glance@ac2.se>
-Subject: [PATCH] hwmon: (nct6775) Add support for NCT5525-S
-Date: Tue, 17 Nov 2026 14:30:39 +0100
-Message-ID: <20261117133038.40996-2-glance@ac2.se>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mUlOGUgx
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E7A01F000C4;
+	Tue, 17 Nov 2026 13:34:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794922483;
+	bh=frXNhtlgvoh3r1mPy9/4jM0MnyMpGp5jNI1qDaHlCVY=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=mUlOGUgxrvY8C0JaK+D1lBYq26P+Ercgk57ucVWcrjXyqdoyO8PufHBUgtWnWQYct
+	 cPGPhtbmuJd2cFG4bcZvmqmw3yDn3MSseK1VZQSZ3Qk4p5wa8u3ERHlBFigrDkfgIZ
+	 aGuSFkSWSESf0oWwip4IO/MyPgOwG5ooiVhVV9pWCe0wHBrj2NjIIrjsh6zwhdGd9Q
+	 AWoBLu8VoqiU81JSsHbWL9+v2ZdEmg8WDN/Z1ORKKOXyia1WDmCycACAh7ukgXYmIT
+	 mKuTjMKVNvuVUiQhf+97wwN+GoNs4EiYvveU2B/BOo0YJ752JshrhHAeVa0aIl+oXE
+	 23rztUuQepP0g==
+Message-ID: <sashiko-outbox-218884@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (nct6775) Add support for NCT5525-S
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Anton Lundin" <glance@ac2.se>, linux-hwmon@vger.kernel.org
+In-Reply-To: <20261117133038.40996-2-glance@ac2.se>
+References: <20261117133038.40996-2-glance@ac2.se>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 17 Nov 2026 13:34:43 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -63,51 +57,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-It's a newer revision of NCT5525 with new id.
+> It's a newer revision of NCT5525 with new id.
+>=20
+> Signed-off-by: Anton Lundin <glance@ac2.se>
 
-Signed-off-by: Anton Lundin <glance@ac2.se>
----
-This was tested on a ASRock 4X4 BOX-AI350 board.
+Sashiko has reviewed this patch and found no issues.
 
- drivers/hwmon/nct6775-core.c     | 1 +
- drivers/hwmon/nct6775-platform.c | 2 ++
- 2 files changed, 3 insertions(+)
-
-diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-index 6f7279fb8814..5d512cc21c54 100644
---- a/drivers/hwmon/nct6775-core.c
-+++ b/drivers/hwmon/nct6775-core.c
-@@ -20,6 +20,7 @@
-  *
-  * Chip        #vin    #fan    #pwm    #temp  chip IDs       man ID
-  * nct5525d     8      3       3       3+3    0xd2b3 0xc1    0x5ca3
-+ * nct5525d-s   8      3       3       3+3    0xd294 0xc1    0x5ca3
-  * nct6106d     9      3       3       6+3    0xc450 0xc1    0x5ca3
-  * nct6116d     9      5       5       3+3    0xd280 0xc1    0x5ca3
-  * nct6126d    10      5       5       3+3    0xd283 0xc1    0x5ca3
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index f443ae1dac67..7a6f9e8c0993 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -77,6 +77,7 @@ MODULE_PARM_DESC(fan_debounce, "Enable debouncing for fan RPM signal");
- #define SIO_REG_ADDR		0x60	/* Logical device address (2 bytes) */
- 
- #define SIO_NCT5525_ID		0xd2b0
-+#define SIO_NCT5525_S_ID	0xd290
- #define SIO_NCT6106_ID		0xc450
- #define SIO_NCT6116_ID		0xd280
- #define SIO_NCT6122_ID		0xd2a0
-@@ -1042,6 +1043,7 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
- 
- 	switch (val & SIO_ID_MASK) {
- 	case SIO_NCT5525_ID:
-+	case SIO_NCT5525_S_ID:
- 		sio_data->kind = nct5525;
- 		break;
- 	case SIO_NCT6106_ID:
--- 
-2.47.3
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261117133038.4099=
+6-2-glance@ac2.se?part=3D1
 
