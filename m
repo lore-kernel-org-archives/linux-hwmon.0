@@ -1,101 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.41
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794913869;
-	b=eV2C4eTLfShsfJalWW+0uELHcYcyDka5bTbIRhg76g2Biz+id4KdtNeG3G/GQzeQr2/q
-	 FJzVHXPlZ6MtHNykXxU/RFZNwr9JlUSSrpOgKo1H6C1jM6OhNWu4m81dIzNliICgbBlAO
-	 U+R4Zqa8HTYjlAOZiBSWNXqbfdkaPmBOFFuV2lBTy6EEY2sjxxkbASqSkDEY5vJ3VaXW1
-	 I1c6RMKSyvooDKVQMUGC5Y557INkzU84QOEdIh1c/he2+XSI7SCe6V6eLzCZyDtSLLesj
-	 BiJBy4+TfWP53irJeajqD4SYjBYVQR7wfwta0Ai2hbQus2sorgCNPILGP1pac7nB7rA==
+	t=1794913907;
+	b=DIlxcg2XblWkvph1VzwwwfQHwqHkPL3jK/hYd1Qagz5MMzthhOPKpK+Q5x5iUJrd1goC
+	 44IHqgLWz3i6wlgabSLQWBK8OOjiUJm6yo7l3Rv1a2z1xgQj1i0V1LfQAmsR1YNkwsJP9
+	 dPQf//byVL9UaSs9UatmrFt9u2F5x7DRMt5M9EOdIYIL5kO3mtd1xvqu9Y/D1NrcUslxO
+	 ic4qo3bK+ozOr1wskeIDM1r/Nd9yt7aeNXPSfMjLedLfJ0R9DuqPanXNqLy6SSX7IYMbi
+	 rDGPjOimQuZRiPbUocwZveRPuZnNRjJjIQZdxsQLTZuY4H3YG+S5m3Nvf2owbxk0ioQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794913869;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794913907;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=y3ENa1F0d9y28UWOmP0+YontQj5ZAWu0uOKB/L//CbQ=;
-	b=P7gXtQfhgzv4OhJP93Q6S3ZR0CCth9Tni0ujwwiA3TmaAFC4Z/wgSKo+LtIgbjduZX95
-	 USxrFEElIIfNFiLzHpCcaK22znXdFVstP0cRod7RVG2zJIrJ/liAePB0HmSGQneAxtmoI
-	 K5hZ3Q3HUNiJG745NKoV+vVCI193H7ul9pm3WVjh60i+8i4BpBZ0bRhnvy4G82J5FlO4E
-	 eX1BCLEfa8SItrxkxPB4LuiFXaTw5ZfKD+pLc8/Gm97u37bjrWbsu35/WgIKit3wuu2MW
-	 OhkrKPU+UlSDtxZ1Al9jKlGXVupeLE96CVFVwnsMqmY5YmB6tM0DsNl1mSvFCDu6ung==
+	bh=+10pY0INY9MpKdeaN2+bTZktiWeoGPp9KNRq4cSBn94=;
+	b=efIS50WntRSt+7/PoEvcElsdO+2kmapDeMMpKmPak7OZlUpd7xXKqYXshEkKCextC1Sx
+	 dpTXLt0t+7nmzqIL6tQ6y0/PHI/NtW/2ue5D5IHRofCzfZKXjqhqFx7lxh49J/1uFj/Md
+	 9O5dOJcWxp5y7FvuyFi+ulTPS2PccivPWQ/rAbp2MZWnTeC9zE5CXMCA6NnO6xaNO1+LP
+	 jkp5GsYHVRKi65UjlmvZJ5irV8PYNGAc+prK169UN5z3InNYb7penJwF/JNAxAdN+uWdw
+	 U31dbzPvI5y4ST27OOFL1s+MFrL3513t4JID0d+RijBeI9suEJDu1vPpqbw8Ya1pW5g==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=moIxETzH;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.52
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yyzwQXWU;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.41
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 140C6606A323
-	for <linux-hwmon@vger.kernel.org>; Tue, 17 Nov 2026 11:11:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 140C6606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16FE2606A31C
+	for <linux-hwmon@vger.kernel.org>; Tue, 17 Nov 2026 11:11:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 16FE2606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=moIxETzH
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6b7bffb5b8fso5631096a12.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 17 Nov 2026 03:11:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794913867; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yyzwQXWU
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-c4395d31228so719570066b.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 17 Nov 2026 03:11:45 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794913904; cv=none;
         d=google.com; s=arc-20260327;
-        b=HESj+YFZcIevEM9Nn5GJlNPMFo2YQE/9DWRfy2fyItz869MFGCY86VOGDYIYDFJAc8
-         RKZkd8s+9MAH64kWbynNgkQU6NHSYMhwZp7FJtiWRd/0hNcPqtUvHwUQE6pFgvMgZAuf
-         b0t/Bjo4hYnI7Au5e5X0/2vXAj5mFadhPwtbN5bmtEuX3uXIw5Gjafwme+sUPh1P1Lkg
-         3fSE+PKaEk+fAiMqbmlu0WBy0hHPBXP+Ujkh1ngUC2Ypp1pgLVanmlUkqiXIfyecZVho
-         wFdvLE239ZeOinPLPT479Yb+kWNnW+HUJE4xznebZ2kcKK6P9pOZF7OuHKA3THJdIFr0
-         SSrQ==
+        b=aUuXwmjh+0E578Yo9MU9IO24+coOFcCBdc5AZlhjri+yDmBSgS037E6TviBKTqXSCJ
+         rHE02zxrHJ4yrfbu+Zmke46CSHfgdOvzbrDrW7KVFyYl9fYty66D0gRt1+nUdt+6OWaf
+         qHzJTovznGpIhDuWiKvJRDPoTiFA/pbWvUS2ydinMWVPZGqgyMxMZqsgg4azfHYT4iR/
+         8WMShsFE5VFAz7Oc9+M9XXLbuOWhhGXytoMJKwexGcMsCTFwLLTkN69jtY6h9VI41abb
+         TChbvfniw4U3G79D1rLLmFBIwocj2NmmtoDgs6AVZF2Qt8xBx4YhaxnAq4+cXaSstwxe
+         gcKg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=y3ENa1F0d9y28UWOmP0+YontQj5ZAWu0uOKB/L//CbQ=;
-        fh=ywHzJMVQyjRY2/IGY6ijZzpxkHP4kJKGCre/iCYduT8=;
-        b=dP4NGcGznWptf9crkjpFGFrYBxYS9XTR6kffzd0O9LlSfIfGWeRZRgDCZ1RVWFRZJB
-         VAO/xE5U7tvl1xvu95j5wjNi96UL7+hbhKBop5WOwahj1lQm/ms4V97K7p2kjzmPdv6H
-         5pKzb7sDSB+GSX4odc6bheeyj3LwzaOp+Eb0sgoUAnzl2og1sSdlKSoVpaPaq1fugsaf
-         CeNRN8RZIAnmLsk2O3a2REb15HMKPqmlCvKqO6qvXUpNfjuVoPEOJJ9HImtERBLzJvPn
-         oz4/uM9nDUEDZfcwD5VIIVVCzIR6UH01xUc09dRQp9VXF1YrpqYEw2i1m980na2b8O/b
-         9UpA==;
+        bh=+10pY0INY9MpKdeaN2+bTZktiWeoGPp9KNRq4cSBn94=;
+        fh=WBtLqtlsxCBfznNXwp+0BfC0k6dAxo48dbiNV+oM0dQ=;
+        b=T1ihW1dMXasE+V/xJX4gWU4gRdbN4EuotL2FnrHoqAyHHYQKZLzdZiKaX6/zJMjbJq
+         jDnbO/qx/PTpk5cq6Pwy+atPLmhBeAx+BvQx+GiNjDNc12eIvrp+4gjDeGXWRwk6aNWQ
+         xwUlQTxcU8t5zQZEUkieOzslvR4kk6uzCwyxxJjCJhf/mQQOwAGfByiYdJ5SQWAGb0Qa
+         q5nYVYz4/iddgWik32rlVjHuWtTxHEkE1ufi8Nh6CltLEveRDBuYCZ56Kg+yk6f0E+/+
+         79qEAEUS/Jvcu+XZ4Sle2MHIiuYKpwF8X1GbloL3WmXM7ZmE15XwaX58PfgtwTyet/nB
+         FJ9Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794913867; x=1795518667; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794913904; x=1795518704; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=y3ENa1F0d9y28UWOmP0+YontQj5ZAWu0uOKB/L//CbQ=;
-        b=moIxETzHa0Oq01n7L4mzCWZwm33Qlqm57PUEdjACdCaFiZo0ueGyZTZaC/wKy5SOMK
-         oXI0FM9+gSkDnkpXkD6q1VLY/HTVf4Z4buQ9pQMLMXvVB7vUyLnBFQbzotk6yVCr4iC5
-         PfqYo4e11phlxLS+s6bPmjvyYm9H2cEjqvYUpvv60l+cCAz4oo31FFdQZuofiiHnUXk4
-         9ZwUdgDAc0puWw+LIme2GDkOcXdRnvM/sLPo6bULbEvwYYc0NSjyfWsLmydzKblH1JO7
-         hX9DD6A2nVioNZfFT60yg7Q397SzaWnpnFkWdV/ovcu7DMmLQhPK+iKjZG6jsXS5WS9s
-         vP1g==
+        bh=+10pY0INY9MpKdeaN2+bTZktiWeoGPp9KNRq4cSBn94=;
+        b=yyzwQXWUh3hlTm75j49756a3u40dxwVtzSwHSTRdU1++KQVLHeGLEY5oKwXhbCuaYH
+         6nWczAtsAkgzqx7tarkVTwqE/NcVSVZoNK6OuqrefHsu23luGO9vLTl0ReCdUF488lYn
+         Xctf0sJGtjqLQoPJcntw5NhbgQ1nt+25ZO5G9d6SB0G6QMIK+9CNoivLQNtlpfq8YlX2
+         bvCKhmaKDMno2IJ2CF+XBc6YetjTb5aYwyiC80kbZ0zb4Mtd9yiOq9GZfVJP1lOB2jXz
+         W2YR+wlO7NuhGWOJ237/w17lVlBl32uKbC1Xb7lNg+J4sMz5FU92rzdEDYH6v/ndnBFN
+         3FOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794913867; x=1795518667;
+        d=1e100.net; s=20260707; t=1794913904; x=1795518704;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=y3ENa1F0d9y28UWOmP0+YontQj5ZAWu0uOKB/L//CbQ=;
-        b=ZQWyggbm0iHS8t4YekN+RxfXVlawOHs9X6cAXf3jU2nu3OI7F/EeOBPlfwj1UOxLHs
-         2HqeK9MM1g+ladP0uiphUfwSO76oBcLB2rfmh0TcvwNs7DO8acfpuFTsSPDkj0EelSex
-         XN9KEOLIHSwHp3MK08ymv2lmuos7n1ojf7w325k/x4hyzq8eoNhN3mRXDgk+B7855OBG
-         o2j/YxjH4Lc7Cwf7HYDJnmyckWC1k6PnduNpkhaS4twOoRRUzvGCdJrFdZkCGvnXi9HB
-         VGC2uL4WrpZ1UPIYATAS/ZI2ZVeEP9FZHxGkCPX8X6x8GojHJMVBzzKkVqkmWMlwNXV9
-         YpKQ==
-X-Forwarded-Encrypted: i=1; AL+hErHWZoVtjyne0o4PsMBYsUwrOSVCpQ3mjVw6Ok+SDpQr6gM6NtLSnnVQFSXKnSFxEvqUGBrg9lK75+6OBQ==@vger.kernel.org
-X-Gm-Message-State: APuU4Z+PH+OT+AUQ6ycwyEuBvL9HD9LS4H9i5PQlSbHSmX00WEhvVih5
-	gSk0RFQycM4UHXIMGMjY4CM5oOmTT5DgP9Tts+K26Wfa30KbHQTad8O1fRzF4lF56oPBuTNGucc
-	P/1EcSf6NKrWgaF8zXN1kYXJ9ilQ5M2g=
-X-Gm-Gg: AYBFou0LMKCgxYQ+eKP/TtiBsEbcGRUy+P+x2idcm8eWvdZi9metGw/YIn9n/4KiT+F
-	X6Pp7++eg7rNGDjofi+PV/xDJkGGWp1iR/AEuftPGfxIJQ0SEgi8i3uvqJEko6+Raboseyu/nbZ
-	JBZAx8+uu4DOpZ9serTMBSKqoZ5pl37f0NEVmRCMcgEr1oavEBbmpsC8Ij3EUTfiOk3fGRmEBdB
-	6a9gFY5MBB9yTFX8VKLATyK6zyXzJa2rltAXGOI0XXjJVHCHUVEC72qSUl/CUrpebiiLgKOpHZG
-	bnol5/q2588SstcW+IHEeIyN7BI8NZcHHlsj5HzLZtSERFlGFBg92Qz5r4D7x4J9zmTcNh9ZSKW
-	5cVf6Ot5Fl4j1irES+mAO4c6xFMnBIA24LjV0VVbe7Xduj/5PtfEhoYirrCeDxqdCTCRmKDjJOM
-	5LZoaNvo3QQ4427gWz5L/dY04=
-X-Received: by 2002:a05:6402:c711:10b0:6b7:8b36:93f1 with SMTP id
- 4fb4d7f45d1cf-6b7c098803fmr6702619a12.10.1794913866951; Tue, 17 Nov 2026
- 03:11:06 -0800 (PST)
+        bh=+10pY0INY9MpKdeaN2+bTZktiWeoGPp9KNRq4cSBn94=;
+        b=BEVB42EdxibsdINMJjjXaFYHClCxSLQ/F+SYRvJkS87w1chB7HvCY8e0NwZiXCZPzv
+         i3decsm3UEW0eM+8czqNx2D0et8kmE/UP8penEAM9plK3VPmzeNNmdR09qN2lZ94NAuB
+         y9y6ySMn0Llgi36ODGjrWy7LXUtpTsL/jFFIASxJbq+fjppo+1VRgiBfy+37a/nhp3jI
+         8S2xN/kVG5zxr+JXtZ1IsZbeZh8q+vwCXlV7WQDBTwvGoFzlH6oED2+zAFFPIOpYLq5V
+         whQFl5lqpVQnSQsTu0dT5jNcP79enLqN2lX0/X2n8a8zbFr4pBN97S/xB+9BgMzabPoR
+         tm5g==
+X-Forwarded-Encrypted: i=1; AL+hErHCD+gdOwkfZ/cJeDmvwOJB722L7Mr2xuz8N1XV82QVQkzACNzjN7359e50v8qFCGIpJ1yYj1GYurpNlg==@vger.kernel.org
+X-Gm-Message-State: APuU4Z8d93CAqJxflIqtSZr6MoBLYezPbGe6vKPjHB98bxnohnX0KdaP
+	fY81TW82iCMo1CB75z+fAq1dFNJGUYwNsMfs4hkLBuavqFt/uqAneOtqVcQkblSv89Tjpj+Tbfe
+	M1XBQtasaBeE+OxNZOwHFLZvpy737rWM=
+X-Gm-Gg: AYBFou085lds4pz6WMwmwTK/GwB01Fforub8wWNP8haGk6SIB2ehWImnS//N9FVTWpT
+	P+296rf4xevZD3UOSJAng0pUGupTRMDLtFGITw8tzr46SsD6VGcnqNe3osB1FbaDuF16Wsk0+WQ
+	/ZF3To2sNzdhYmgjOaKnIIwifacvTLmRF14Lr1IHVKLQtX5qgFry+t+OA9Uxcybhfr6HCcI0zdl
+	WYhrPCBvpl8CE/jTqUm0ZplW4mPUeoJNY1VnYZcmorNT6IZBr9Z1Za9QxGrS8H0UQkDROf++zQL
+	5bYKyt6CgzCW2b8uHL9KeCPiua5w5njJfQ866oJ5jkYDpNknAEetaIAsjRM5RI0+aL/HxR1GWV2
+	uCcYvSdVn3MKPr0UzRjwc3v43k4arMYZ1dkY691W4w3/2bXBnS+X8G0o/dyF7ywd1vlz59CLqby
+	gJLRAac8kr/Q7Zi8N/jCkgkN4=
+X-Received: by 2002:a17:907:94c5:b0:c50:576f:b3a8 with SMTP id
+ a640c23a62f3a-c50963d9089mr1499165666b.48.1794913904361; Tue, 17 Nov 2026
+ 03:11:44 -0800 (PST)
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -105,13 +105,14 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261116-marvel-env-v2-0-ef614eb2e7f1@gmail.com> <20261116-marvel-env-v2-4-ef614eb2e7f1@gmail.com>
-In-Reply-To: <20261116-marvel-env-v2-4-ef614eb2e7f1@gmail.com>
+References: <20261116-marvel-env-v2-0-ef614eb2e7f1@gmail.com> <20261116-marvel-env-v2-5-ef614eb2e7f1@gmail.com>
+In-Reply-To: <20261116-marvel-env-v2-5-ef614eb2e7f1@gmail.com>
 From: Magnus Lindholm <linmag7@gmail.com>
-Date: Tue, 17 Nov 2026 12:10:54 +0100
-X-Gm-Features: AclHuK-uU12m5JYQTGHnnby9FLfe8TB5m1Dddww0eP2k7bEnEFbxsuNSOldafTc
-Message-ID: <CA+=Fv5S9+y3vuSpFd2MHFEAFOwa3Q_8gqPV=yei-ej0Zo-V-9A@mail.gmail.com>
-Subject: Re: [PATCH v2 4/7] alpha: marvel: notify environmental events
+Date: Tue, 17 Nov 2026 12:11:32 +0100
+X-Gm-Features: AclHuK_ySbd-btf70cw_u0VyMg7YEG-_OS2SndJeElSe33r8vAUxyZLJAiFwxJQ
+Message-ID: <CA+=Fv5R9GknyU62ZwcGPvH9u_ucK=qP3j0mE5s-YMJgVbkGs7A@mail.gmail.com>
+Subject: Re: [PATCH v2 5/7] alpha: marvel: register a platform device for the
+ environmental sensors
 To: Matt Turner <mattst88@gmail.com>
 Cc: Richard Henderson <richard.henderson@linaro.org>, Guenter Roeck <linux@roeck-us.net>, 
 	linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
@@ -124,81 +125,49 @@ Hi Matt,
 On Tue, Nov 17, 2026 at 3:59=E2=80=AFAM Matt Turner <mattst88@gmail.com> wr=
 ote:
 >
-> A change in the state of a sensor arrives as a system event logout
-> frame. Call an atomic notifier chain on each one, so that a sensor
-> driver can reread its sensors and tell userspace without polling.
+> Register a "marvel_env" platform device on Marvel systems booted from
+> SRM, for the hwmon driver to bind to.
 >
 > Signed-off-by: Matt Turner <mattst88@gmail.com>
 > ---
->  arch/alpha/include/asm/marvel_env.h | 5 +++++
->  arch/alpha/kernel/err_marvel.c      | 9 ++++++++-
->  2 files changed, 13 insertions(+), 1 deletion(-)
+>  arch/alpha/kernel/core_marvel.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 >
-> diff --git a/arch/alpha/include/asm/marvel_env.h b/arch/alpha/include/asm=
-/marvel_env.h
-> index 16ccd2002a11..dbbf827a18ad 100644
-> --- a/arch/alpha/include/asm/marvel_env.h
-> +++ b/arch/alpha/include/asm/marvel_env.h
-> @@ -2,6 +2,8 @@
->  #ifndef __ALPHA_MARVEL_ENV_H
->  #define __ALPHA_MARVEL_ENV_H
+> diff --git a/arch/alpha/kernel/core_marvel.c b/arch/alpha/kernel/core_mar=
+vel.c
+> index 7525f3ed6b62..169a1df6adb2 100644
+> --- a/arch/alpha/kernel/core_marvel.c
+> +++ b/arch/alpha/kernel/core_marvel.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/module.h>
+>  #include <linux/memblock.h>
+>  #include <linux/workqueue.h>
+> +#include <linux/platform_device.h>
 >
-> +#include <linux/notifier.h>
-> +
->  /*
->   * Ask the console to refresh the environmental readings of the GCT node=
- at
->   * @offset from the start of the GCT. Returns the console status, which =
-is 1
-> @@ -9,4 +11,7 @@
->   */
->  long marvel_cfgtree_partial_update(unsigned long offset);
->Reviewed-by: Magnus Lindholm <linmag7@gmail.com>Reviewed-by: Magnus Lindho=
-lm <linmag7@gmail.com>
-> +/* Called from machine check context on each environmental system event.=
- */
-> +extern struct atomic_notifier_head marvel_env_notifier;
-> +
->  #endif /* __ALPHA_MARVEL_ENV_H */
-> diff --git a/arch/alpha/kernel/err_marvel.c b/arch/alpha/kernel/err_marve=
-l.c
-> index 46c521cea9a0..6e0b0aabdaca 100644
-> --- a/arch/alpha/kernel/err_marvel.c
-> +++ b/arch/alpha/kernel/err_marvel.c
-> @@ -17,10 +17,14 @@
+>  #include <asm/ptrace.h>
 >  #include <asm/smp.h>
->  #include <asm/err_common.h>
->  #include <asm/err_ev7.h>
-> +#include <asm/marvel_env.h>
->
->  #include "err_impl.h"
->  #include "proto.h"
->
-> +ATOMIC_NOTIFIER_HEAD(marvel_env_notifier);
-> +EXPORT_SYMBOL_GPL(marvel_env_notifier);
-> +
->  static const char *
->  marvel_env_state(u16 state)
->  {
-> @@ -82,8 +86,11 @@ marvel_process_680_frame(struct ev7_lf_subpackets *lf_=
-subpackets, int print)
->                         status =3D MCHK_DISPOSITION_REPORT;
->         }
->
-> -       if (print)
-> +       /* The frame is processed twice; notify on the printing pass only=
-. */
-> +       if (print) {
->                 marvel_print_680_frame(lf_subpackets);
-> +               atomic_notifier_call_chain(&marvel_env_notifier, 0, NULL)=
-;
-> +       }
->
+> @@ -1139,3 +1140,13 @@ long marvel_cfgtree_partial_update(unsigned long o=
+ffset)
 >         return status;
 >  }
+>  EXPORT_SYMBOL_GPL(marvel_cfgtree_partial_update);
+> +
+> +static int __init marvel_env_init(void)
+> +{
+> +       if (alpha_mv.init_arch !=3D marvel_init_arch || !alpha_using_srm)
+> +               return 0;
+> +
+> +       return PTR_ERR_OR_ZERO(platform_device_register_simple("marvel_en=
+v",
+> +                                                              -1, NULL, =
+0));
+> +}
+> +device_initcall(marvel_env_init);
 >
 > --
 > 2.56.1
 >
+
+Looks good!
 
 Reviewed-by: Magnus Lindholm <linmag7@gmail.com>
