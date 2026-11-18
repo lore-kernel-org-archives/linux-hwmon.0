@@ -1,60 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795025006;
-	b=iC5FvHeP+Vu0GfrJN5seXNXcWke/hyhUYbiH7idFVA+K3qdTOz4lUo2Ah7lG6JNypsPO
-	 YpiAWeYUfLUwhsW4WuLTnEUihJoszSmfAGS2LBKJ6QeXvjha0NGminvoorckIpe++ASXE
-	 seK+bp59k5wNKhBCQbyo5XT643ZtVa6gCC4jLA5yaIk5MVk9WZE4k+v22p+yk4OMMXiZh
-	 NFnUBq82mUdxjWDEJflISwbSiO9b7n6tyJH4Nztjcb1cDkr5PPsUf55T2i0QMeHtoI0f1
-	 HUo95nfgZx/iSSKtHLC0OhZgBrGlh0m5jiwk4qhVfW4pdIOtmf3q4YnxeFgPa+9hpJg==
+	t=1795034847;
+	b=PdQKzar5M2LFgddHg150jmqf+serkBGi+6DlQtJp+9/HF+Cq1hAZ+Xq2HIyXw9giBc02
+	 ZbFm0II9LbjzPiPawqabgP2f/0HOXaxf+oYL0qGPMtFpw/vXudttfrdsK6x904bdUGYVQ
+	 LXURS3iQO0wqJuKwUOaZZd2YFEzgatJQoag4yGP41PZ6oOHvnC76E1gd58MHCESoyU0BB
+	 4YcISKDQESjvnzMH7fEwHDetyD53MuP52mZC7rwiHklpy1VsAHQIuMITs/UKzbJpNcXb+
+	 Nm+rmb+njXMoGqlTCiYn6KyaqX1t9hMeYK0aoB5fUE/JDPIpJp3Ro57+WxNpx7LAV2g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795025006;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=7wpaQzEaKoLzL3UBag8yDMk/SewVlnrxKqHpOfOClEs=;
-	b=iWb88SnqI0ZfXdog4pLK9icRzjLIfO+3SfjRWl6uXdUqAUys2TLMbgMYcTUiesDCHpzJ
-	 uZv+CEi970zCQA4ZE41X+iQcg9trAX3kG5vgo/+AubDQtrRn2TqryUEzGIymPK3SO5mYk
-	 Ny2c4JBEfK7PSkUZ8Nufk1dz/A7NpSi3jI1PPjIe2VGU6+EvDTUTTENhw34p+ZGawNv1N
-	 V1x2yVeoCfxvGhPeTtGewSP1io45vFVycBhnh/JM/MHwEtaVjKwpTJ3AycG7nqmlJmTeC
-	 hIfScHYJVMiuOll4Q06yxV2FGkZac1omWQDV5x2bu/h5BIe61k2ef6VP7rZQ5x2tFBA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795034847;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=/gUAXmz3MujJTDtK8q7SzJkjmM40vdO98nfZeg2M5Hg=;
+	b=wUaeFGiJZak0lUS2/H/h5iDeBmytPedJw68c8XSgNOtjgTUvZHufHnEB6qtWb+gFu8Qn
+	 ZdypNNRfC5+mzhbDZr85M4tLewVzs8sVUdZxjIxJYLeZO6Daw0hUXV+vym2YVqZCteCR4
+	 Acp7ABl8PgD/PcJeM2Xj/Xx4pLmtL355xFvUvQG+1571ML9dEhkqox09JlS38UI6hAuaa
+	 9++16567n9eBkF+HyGb84wpYOB2Sl9dkESmEitFPEhUXiBa3fBp7EAu3+OVyYatAIZN3C
+	 IVJvgRZxV6vBAhCzsEUdcpqDRINryHIxu09fi4r+MXB8x2grVWSMRzrm+gsQC14WNLw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QOxSe2ui;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--dbalint.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=pNYeGYUw;
+	arc=none smtp.remote-ip=209.85.208.199
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603FF60A2605;
-	Wed, 18 Nov 2026 18:03:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E97E606A332
+	for <linux-hwmon@vger.kernel.org>; Wed, 18 Nov 2026 20:47:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E97E606A332
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dbalint.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QOxSe2ui
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73AF31F000C4;
-	Wed, 18 Nov 2026 18:03:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795025006;
-	bh=7wpaQzEaKoLzL3UBag8yDMk/SewVlnrxKqHpOfOClEs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=QOxSe2uihnkcb5fk1DOs0sOet+rnRTkzHYN5tszK503F8vfwA/ZI2biH2aAlWjKTW
-	 DTgBKTUXVnaRcpU39Gj9moTbdkuenzLvNBPbKPCvn668bzWUWTV6I0vhPiSg9l3C9k
-	 I1D/7yHiWKxiPQikvGlt9UJOJcEr3XCRriFuJPtII9Sjk2/5rVMnPvE3uBXdEU23eq
-	 /quWjFOJLqBAoSfzbRmsu9uZReCRR7dTREkELtfzIRw3YlaAZe8jviY6K3kYmO7mco
-	 q+V7QBceiT35PlyDoTgtbiGNMVFlTwe04fuEBxrBMSKhVTkBbOPfs4LsiJ/UcTj2Mp
-	 IcE2FwIRrueuw==
-Date: Wed, 18 Nov 2026 18:03:21 +0000
-From: Conor Dooley <conor@kernel.org>
-To: lhart.opensource@witekio.com
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, Flaviu Nistor <flaviu.nistor@gmail.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add TI TPS389006/TPS389008
-Message-ID: <20261118-mystify-both-ec4feb95933a@spud>
-References: <20261117-lhart-dev-tps38900x-v2-0-e5730523d3ee@witekio.com>
- <20261117-lhart-dev-tps38900x-v2-1-e5730523d3ee@witekio.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=pNYeGYUw
+Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-3ad907ca4b3so7884271fa.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 18 Nov 2026 12:47:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795034845; x=1795639645; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/gUAXmz3MujJTDtK8q7SzJkjmM40vdO98nfZeg2M5Hg=;
+        b=pNYeGYUwF45U8smY895omjr0W6lquykgDJ+WRCL3po3SunuWckFuvYmxEnmjw5VQlG
+         YAVVOUSvinr/8RVf3w8W1OaDm3TXTrlFYNgWOOWFmA4cmTXrxDjf11PlXSY3N8HWiuhw
+         ArGm0escCvvBYP+qegRQdNqmriy+GxOdQ6P6UCH5o0Pa4sVeMcfkD0IbT+nOZObSuzVh
+         fBtOzOh7YdNquNUcUOJqKmczio+2LoZIf2t1bwMw5LOqGG7hxyctiHfKFjYu7abKhk/F
+         NRg0XxK2cMbbj8zqtq2GQWjaCixyeJdFARe8193hfzDNHRO456V1fJLfXQn3OzrOW540
+         PPYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795034845; x=1795639645;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=/gUAXmz3MujJTDtK8q7SzJkjmM40vdO98nfZeg2M5Hg=;
+        b=eVeCLYGlflX63a7BaHwZdfCnjZ6sDMm6JKR2ZYtR2FwT3At00/RrhuBWDu6NBWWOK4
+         RvQEF8srf8pcstMUv/SfnCNf+ICvSMrjx6YttmGmOxmhxzYY5mBPH9XCMem2gjxsCQQ0
+         t1TWzwwew6whdqDBE3uvXxdo9+iFivzBbhSFa2WquoC0wqb6p4HfiDMhWoHDGbI9NzBH
+         pGZLWlQApeD5jCb3rPPjZf010HObLuqkl+Ghj/1AvpJgSkz4EV/aSwJnrTqJzriTYOrf
+         lAtPQ7wQW367PiEs/idl2c4AoGXclYYaUKph5DS9Sw/bdsY//Oz8rCsHxJ0oX9CCi3xQ
+         LqLw==
+X-Forwarded-Encrypted: i=1; AL+hErGevm59+7nC9RIJwKG+e6fCa4N7cXyF7UgpccnFDTPpUa2nlmXCBVKtumOTLfQ/TOmINduvJN7Ekv5Ogg==@vger.kernel.org
+X-Gm-Message-State: APuU4Z92Myod7C9xU5P16kq1eBCx/OCi551RIL/YPi5CbpNuXpaD0XK3
+	Y8Tbao1RwytqdenlLxqVjKwDF/EhmbFNr/jZfWzDRGGMMjey7DNK6omxWYteKFEz5SK3tsCOVt5
+	OIzt48C8vKQ==
+X-Received: from ljvj19-n1.prod.google.com ([2002:a05:651c:43d3:10b0:3ab:3660:4afa])
+ (user=dbalint job=prod-delivery.src-stubby-dispatcher) by 2002:a05:651c:1a0f:b0:3ac:a2b0:ac56
+ with SMTP id 38308e7fff4ca-3ae6730a895mr13584131fa.29.1795034844920; Wed, 18
+ Nov 2026 12:47:24 -0800 (PST)
+Date: Wed, 18 Nov 2026 20:45:32 +0000
+In-Reply-To: <20261107010356.39d9eddf@jic23-hlaptop>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -63,196 +78,58 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="lFWzrv9N2quXIhcE"
-Content-Disposition: inline
-In-Reply-To: <20261117-lhart-dev-tps38900x-v2-1-e5730523d3ee@witekio.com>
+Mime-Version: 1.0
+References: <20261106193129.43493-1-dbalint@google.com> <20261107010356.39d9eddf@jic23-hlaptop>
+X-Mailer: git-send-email 2.56.1.708.g77570a6a1d-goog
+Message-ID: <20261118204532.257423-1-dbalint@google.com>
+Subject: Re: [PATCH v1 0/3] Introduce cros_ec power monitoring
+From: Daniel Balint <dbalint@google.com>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: Daniel Balint <dbalint@google.com>, Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, 
+	Benson Leung <bleung@chromium.org>, Lee Jones <lee@kernel.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
+	linux-iio@vger.kernel.org, chrome-platform@lists.linux.dev, 
+	mfd@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
---lFWzrv9N2quXIhcE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sat, 7 Nov 2026 01:03:56 +0000
+Jonathan Cameron <jic23@kernel.org> wrote:
 
-On Tue, Nov 17, 2026 at 03:45:35PM -0800, Luna Hart via B4 Relay wrote:
-> From: Luna Hart <lhart.opensource@witekio.com>
->=20
-> Add a binding for the TI TPS389006 and TPS389008 I2C voltage
-> supervisors and monitors, which provide 6 and 8 voltage inputs
-> respectively. Each input may be described by an optional child node,
-> containing additional properties including the label and voltage
-> monitoring range. Inputs that are not connected can be marked with
-> status set to "disabled".
->=20
-> Based on an earlier binding by Flaviu Nistor.
+> Hi Daniel
+> 
+> I'm not necessarily against this but when adding monitoring components
+> to IIO the usual question is why not hwmon?  What features are not
+> well supported by that framework?
+> 
+> Note historically I suspect we accepted one or two drives into IIO that
+> would have fitted better there so precedence isn't a strong argument.
+> 
+> Convention for these somewhat borderline case is +CC hmwon maintainer
+> and list as well as IIO with that explanation in the cover letter.
+> That avoids any last minute surprises!
 
-Perhaps a co-developed-by for that?
+Hi Jonathan,
 
->=20
-> Signed-off-by: Luna Hart <lhart.opensource@witekio.com>
-> ---
->  .../devicetree/bindings/hwmon/ti,tps389006.yaml    | 114 +++++++++++++++=
-++++++
->  1 file changed, 114 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tps389006.yaml b/=
-Documentation/devicetree/bindings/hwmon/ti,tps389006.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..2a26f6623adf06d1df38d5bc3=
-683b5d2e06f3c0f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,tps389006.yaml
-> @@ -0,0 +1,114 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/ti,tps389006.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: TI TPS389006/TPS389008 voltage supervisor and monitor
-> +
-> +maintainers:
-> +  - Luna Hart <lhart.opensource@witekio.com>
-> +
-> +description: |
-> +  Voltage supervisor and monitor from TI (TPS389006, TPS389008) on I2C b=
-us.
-> +
-> +  Datasheets:
-> +    https://www.ti.com/lit/ds/symlink/tps389006.pdf
-> +    https://www.ti.com/lit/ds/symlink/tps389006-q1.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,tps389006
-> +      - ti,tps389008
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    description: NIRQ fault interrupt output (active low).
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
+Thanks for taking a look!
+The main reason for choosing IIO over hwmon is that for On-Device Power
+Monitoring, userspace needs an atomic, untorn snapshot across all rails
+(up to 64) over the same integration window, triggered on demand from
+userspace and read out in a single buffer read rather than repeated
+per-channel sysfs reads.
 
-Missing a vdd-supply here I think?
-pw-bot: changes-requested
+Reflecting that requirement, EC_PWRMON_LATCH on the EC is a global,
+stateful command: a single latch simultaneously snapshots all onboard
+power accumulators and resets their accumulation window on the EC, so
+individual channels cannot be latched independently. As far as I know,
+hwmon only exposes independent per-channel sysfs attributes with no
+multi-channel buffer or on-demand trigger ABI, whereas IIO's triggered
+buffer interface is well suited for this kind of pattern.
 
-> +
-> +patternProperties:
-> +  "^channel@[0-7]$":
-> +    description:
-> +      A monitored input. Inputs that are not connected can be marked with
-> +      status set to "disabled".
-> +    type: object
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      reg:
-> +        description: Input index, 0 for MON1 up to 7 for MON8.
-> +        enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+CC'ing hwmon maintainer and list to keep me honest.
 
-Or else, min: 0 and max: 7.
+If there is no objection to adding the driver to IIO, I will clean up the
+custom energy_value attribute and replace it with the standard IIO
+triggered buffer interface in v2, along with addressing other review
+comments and including the above explanation in the v2 cover letter.
 
-> +
-> +      label:
-> +        description: Name of the input source.
-> +
-> +      ti,vrange-multiplier:
-> +        description:
-> +          Voltage monitoring range of the input. 1 selects 0.2V to 1.475=
-V in
-> +          5mV steps, 4 selects 0.8V to 5.5V in 20mV steps. If absent, the
-> +          range programmed in the device is used.
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [ 1, 4 ]
-
-Would this be more naturally expressed as "ti,vrange-steps-microvolt"
-and be "5000" and "20000"? microvolt because that's the standard
-voltage suffix we have, and in the actual range in case another device
-in the future wishes to use this binding but has different scaling.
-
-Cheers,
-Conor.
-
-> +
-> +    required:
-> +      - reg
-> +
-> +required:
-> +  - compatible
-> +  - reg
-
-Probably the supply is also required.
-
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          const: ti,tps389006
-> +    then:
-> +      patternProperties:
-> +        "^channel@[67]$": false
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    i2c {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        voltage-monitor@30 {
-> +            compatible =3D "ti,tps389008";
-> +            reg =3D <0x30>;
-> +            interrupt-parent =3D <&gpio1>;
-> +            interrupts =3D <12 IRQ_TYPE_LEVEL_LOW>;
-> +            #address-cells =3D <1>;
-> +            #size-cells =3D <0>;
-> +
-> +            channel@0 {
-> +                reg =3D <0x0>;
-> +                label =3D "input0";
-> +                ti,vrange-multiplier =3D <4>;
-> +            };
-> +
-> +            channel@1 {
-> +                reg =3D <0x1>;
-> +                label =3D "input1";
-> +                ti,vrange-multiplier =3D <1>;
-> +            };
-> +
-> +            channel@7 {
-> +                reg =3D <0x7>;
-> +
-> +                status =3D "disabled";
-> +            };
-> +        };
-> +    };
->=20
-> --=20
-> 2.47.3
->=20
->=20
-
---lFWzrv9N2quXIhcE
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCav3oaQAKCRB4tDGHoIJi
-0ts9AP92eXi1qsykVWIf39CYl4t7e7MdSoD0CWtfprP16aJAUAD+K2tQcKG5LEKc
-Rg6QULAe1kWwL9/edSQUg7jmclFgzwk=
-=oHfn
------END PGP SIGNATURE-----
-
---lFWzrv9N2quXIhcE--
+Thanks,
+Daniel
