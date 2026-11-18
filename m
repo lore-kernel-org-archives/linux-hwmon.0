@@ -1,78 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794975707;
-	b=xeCr1boSHGrgEA3mUjcjNUhyBXXqkQGOdLuPyGL/6vjx7f3ncXS1+VIxjbk3YtYAUo9W
-	 VRD+9fBvwCngm71+hAMozDRAHcWTwchSLt2cJMlpg89o+OVOaXQE5Z3u0XhHrMeYsTCW2
-	 uDvRSQg2YS2fMpbL9Jq711eLia5mtcUCr7YLMlQ5j1ODJNODXq1TDB9KjrB+EOFWXnbCB
-	 Gf75ltBcBZSpJCKe8MJCB83JEDx9ghf7UxF6RjkkMOcEtu23Rl+2idNrhqF5aCSg5/4su
-	 xloejlsj6+6yrnjiJxkQ6uv7SQIQu5XeKv1RYDqkjH72PYeoypvxa8Uq7A9WJdU/MUw==
+	t=1794989815;
+	b=o5pS068pf1uYRUOuKm/Nofcl4r2w230BP2x7vylDHF/+7zPMtSjTtnelMbIj6BiX1Lo6
+	 HoiV5YLv6NHOvF02dyD1G8v3MCQXuoTI9x6S0iVFvQ6S4nCN7a0d6u7yb2DL2D2u2xbPG
+	 l6bE2r0pPJRaM1IRR1Qnz+I+tT7iXCtZZ3lNVzVNGSAd7HAjBoBTOwZairvZ2hkJH3q4S
+	 yfvo0ayCI6SHrWAFV+2iy4dRnAqD+Qfo8aDp8HjI1vl7ur1+nOZZJMgZK60RkgxFLXA07
+	 6DirEz1dvgyhJospQcAzH1gEOvSquRjAhGMy+b10NlAdrJ+KycWJRjWup0/pQ43Mjig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794975707;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
-	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
-	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
-	 X-Local-Domain:X-CMAE-Envelope;
-	bh=bQddz//YMjfAi/F5HCCAYzhDePcar7U/d0RK96g+D68=;
-	b=lKTbFeaxlx7uhZxjINGwMehZSGKtn/1mkocWdMJ/ymliszo8EOB8vsb0cCLsPP6Zm4fL
-	 ZZEkJbLh3stsC+Vwv9FFvC9c9Q8qbftRYnblRZOvIvNDfTWzK46Xtd9kveilKmzcFEsF3
-	 5Ynh5XiMMK1H8X7TAvAUTjlTJNQvyMT7dbIJ9EWPN7Xe0DDkhO85FNCgZrJx1gJ4tXvZT
-	 Tu7gf5ClHfzTyEg5to/nnttQuYiIXKLA6BtyYBX31IPso/N8xPcNqMRMQT5aJn2wCA8Is
-	 R1fY5kXRO25/tRQr9d9VBEiTdZoG4rqC6lTk7kclP0WZp8UyUCdLGouY0zeF1dOAZFw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794989815;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=DruTwIEuL419lERQzYgeQDALQqSuvj3CoTd7MhEXhE0=;
+	b=B1Ae5jSUCr7pJs7UUBGibSORux5VL5m42qENRKfYs9QQVQ3zzi9kp9GJru509SnDt65e
+	 wMNwixKeiWqklXeNg0OtbrgsQKHIKPbzZ+Et/UJrFdhMiSJivq1PRNNkuZ57EuO2kvlBX
+	 EIIQFF4t8DsmhNyKidpPYcEGfLTV2r/xqsQmJDe/0B8M74lEHKz+bHsMjjvkCJrdEn16j
+	 WGXEcJkCOBKqIlJ7OnFkFPTRz+Axy8rOv30X/t9q0t98sEtVGuysoiDwsZ4krEaJB2btI
+	 sGts5/gA2XcJzGRgbXOHd0rW38vRqeDsN/k2ujoY2AEDNEfZKGMD3XT9mubIchAJxeg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=rMOkA+9V;
-	arc=none smtp.remote-ip=35.89.44.39
-Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=USPeiRF6;
+	arc=none smtp.remote-ip=209.85.210.178
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D015606A31C
-	for <linux-hwmon@vger.kernel.org>; Wed, 18 Nov 2026 04:21:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0D015606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A0CE60A3809
+	for <linux-hwmon@vger.kernel.org>; Wed, 18 Nov 2026 08:16:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A0CE60A3809
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=rMOkA+9V
-Received: from eig-obgw-6001b.ext.cloudfilter.net ([10.0.30.143])
-	by cmsmtp with ESMTPS
-	id TTzFxuJ5Jyb4YTXB4x8Vad; Wed, 18 Nov 2026 04:21:46 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id TXB3xzsb4dRrRTXB4xxG0p; Wed, 18 Nov 2026 04:21:46 +0000
-X-Authority-Analysis: v=2.4 cv=LOhmQIW9 c=1 sm=1 tr=0 ts=6afd27da
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8
- a=tTf-FdDYpqwTFT_ZJ6EA:9 a=CjuIK1q_8ugA:10 a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=bQddz//YMjfAi/F5HCCAYzhDePcar7U/d0RK96g+D68=; b=rMOkA+9VMvNBXoDDlBF0IIYZbY
-	go/Rt0OCWqPD4F4/WQGOfpzM/OMCjJkd2ZI0mQa6PozuHq1KgmPCvsKKJupQCTlETpAjtrl5Gr251
-	bWRi4gCR6itNwP8Tr8EXtkrYPqc+luVzLzCq4/nPJSXUhpRxWTlvYRGHFQSbOX+kPOEjmhGIGk2HW
-	50TxNuL2i3+yCX+aY1t9CyqHHpwArqPs69mo8OnZczL+bEPW1O/QEvmlsCIIKg7kfumxyc25nGz0d
-	/DCuzT3h4QJQ1eeGJ5Q/E1owIRlU/mA6QUfq4VyEyX1UhLdVNeYxgbu5DrlEkTs4s5rxVFU/IEeRK
-	jsPXLRSg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:50752 helo=server.roeck-us.net)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xTXB3-00000004BMG-2D9Z;
-	Wed, 18 Nov 2026 09:51:45 +0530
-Date: Tue, 17 Nov 2026 20:21:44 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (dell-smm) Reject out-of-range pwm values
-Message-ID: <d6a2831e-ca72-4dfa-bc4e-0470a67232f0@roeck-us.net>
-References: <20261118040417.19049-1-rosenp@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=USPeiRF6
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8b9c51097e2so300738b3a.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 18 Nov 2026 00:16:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794989814; x=1795594614; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=DruTwIEuL419lERQzYgeQDALQqSuvj3CoTd7MhEXhE0=;
+        b=USPeiRF6Io8kJCL6UTsJnDfsRDziB0l2u00jfPT4LTitHF1kc0qS0uCA0/sU0+A3nS
+         MSnbfb7Uo+xh9nIJaQrTTff3HzFw4Jwrswz53GxG19I1ZlMjHaeZui1UudS75cXxKUfr
+         T69s0m1YLE/7gSegRNvNFQiyMp/PwGjQyL/a80PcorVvtBEhwajvDFZJY1lSxPczHNM5
+         DUD2Z6yU3WMtPr15R95iS8LEmMfpRlQNKMFSVSCZq4yEx4Z8LuiYOd5w4GCwbp0WBAyP
+         R6Q75mnzaHNPWnXZGxu1LoTWomnwwugazAgdf16Akj9z/36ep1+J6458Cp4GH2T6vhLl
+         g1lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794989814; x=1795594614;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=DruTwIEuL419lERQzYgeQDALQqSuvj3CoTd7MhEXhE0=;
+        b=IgNupPp7YUcY1GqXOXl0AEpwUJH01TfVCINpzc4EXdXvmcYvZZ/Ej41MwMejNUrxch
+         4AG84Eg4b6yH+EsogEWYMPHIFXwZPB/Kww/jZGiXw7UBSnrmojQxP50fWIIMctmDFuwT
+         N/GGrgQmfrZFdHN+errBKSkPmXySPMdXjA0mEr5+EgWVp7B3JQNABDf7RP+be0g98yZS
+         yK9NGfyUeK2D9VzCcIbz/jY0+5W0KvqmRYdowtXHaAb2QZRFuw2lP/qhV6LB5lpsqVGD
+         MnnrtM74EtWvshDujDnEd9rBuPGlYu2kDUD/Ubg9F2H+C1CVdMQEKUT1AsDQjIE0dL9s
+         cQzQ==
+X-Forwarded-Encrypted: i=1; AL+hErEDIYQpEf6cgZnH6Cx1iRk/6gEZq4dizu6+rsJZo66KrW3n8mKr2ZXUqw8AMxgvYGuWookC6NOAfVOTdg==@vger.kernel.org
+X-Gm-Message-State: APuU4Z88Cu5I3SIokN/59rcjQvVjoqDyltFJgjpTejnv1xy5DSCiVVaO
+	FiJQsMWEu2gs4sFPIcaxbvvQVNiugm2BiZepDd4K0K1X6rAuqYRoxiUx
+X-Gm-Gg: AYBFou1Hj7wGbszzDUnxn+OJ4MFdBc2DBuJgAVPZUQ7ZpNpb7rD0nWWUHkpR/vbpGhG
+	kDswnMjO2Wkp4xkGckE8/N+Cedy0CxcQx8LtPPxDPI3gfH9z59vPtQjiLZoBrMHwtHl45wSOgvm
+	5i92a0oAswwmPQyTjacYSAzqb1n/sCndRRJxJ+AQ6j7pE8VWVaEEzt7F+jURdohBTqPU0NWXl+2
+	gSjEryZPLh3rMZeuXKFJ2qNMmhp/tjjZM12eRpsZ7bYknJD2F22fWPBiVl7ZabHnRfpHwrIEhRs
+	qC+nts6u+j+FC4jOAf+gnkz9/t50sTI5z+/Gj62ev0cUBOqnBUhD+YmMmqiZifI8Au+2F+suLil
+	2wWiVK4azHGLrHTBKY7Sp+YhP9c6u/733b7c+r+f8OuZKD6lNPhg2wKiWanYFcLXweaL4J1/D+L
+	s+eU55RxS7RVJNNjz1/F+daZADDFlyFtrJF+CIqeEvV7AqqHsjeXijW76V191Huc8I9o5v+yJ0z
+	XVVMfxg1o+XJLfmi1mt8A735f/w4/7BsouDwTEnUknHAafq6kuhCrVkBh120L4i3i279qHSlU0M
+	mJvEBQ4cyb3kwLdK5dGIa4b6ReSxANxHtaGlwB3dOnrw8CEZnfmXaDUiUlZZADGJUWIfwuw=
+X-Received: by 2002:a05:6a21:828c:b0:3f9:b55e:10bb with SMTP id adf61e73a8af0-3fe98af080bmr1592901637.87.1794989813764;
+        Wed, 18 Nov 2026 00:16:53 -0800 (PST)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c5cad8cefbsm764401b3a.31.2026.11.18.00.16.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2026 00:16:53 -0800 (PST)
+From: a0282524688@gmail.com
+To: lee@kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: linux-kernel@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>,
+	linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	mfd@lists.linux.dev
+Subject: [PATCH v10 06/13] mfd: nct6694: Move module type macros to shared header
+Date: Wed, 18 Nov 2026 16:16:17 +0800
+Message-Id: <20261118081625.2399247-7-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20261118081625.2399247-1-a0282524688@gmail.com>
+References: <20261118081625.2399247-1-a0282524688@gmail.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -82,49 +113,207 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261118040417.19049-1-rosenp@gmail.com>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xTXB3-00000004BMG-2D9Z
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:50752
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 3
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfKem7UgNDe/F+0wRc3kXb9/kLk2BucOJ1iqs6SynUHQf5sdaxWpQ4wUigbgkknKMIQ1sbkDmDKJbmUdA8rWplOD7XS4Kgv4/BUWsLeN+21qW4Ra5huKw
- e+4QsvZAVI0snGlwbW5KP3b0hRGBmc0ANJ6UjZYmpRiNt44l94K9GL3Q/z+dPzb9jiwGbzI6dn/ntwRymEqo6vjc5H4LwvI+M9Qjo0v+phVym9lF9iHGujaG
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 17, 2026 at 08:04:17PM -0800, Rosen Penev wrote:
-> dell_smm_write() scales the value written to pwmN with
-> 
-> 	DIV_ROUND_CLOSEST(val, data->i8k_pwm_mult)
-> 
-> before clamping the result to the valid fan states. The rounding adds
-> i8k_pwm_mult / 2 to val first, which overflows for values near
-> LONG_MAX and wraps to a large negative number. That is then clamped to
-> 0, so writing a huge value turns the fan off instead of running it at
-> the highest speed. With the default fan_max of 2, writing any value
-> from LONG_MAX - 63 up to LONG_MAX selects fan state 0.
-> 
-> The pwm range is well defined, so return -EINVAL for values outside
-> 0 to 255, as is the convention for pwm attributes.
-> 
-> Fixes: e7f5f275c62a ("i8k: Implement hwmon based fan speed control")
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+From: Ming Yu <a0282524688@gmail.com>
 
-Applied.
+Each sub-device driver defines the module type used by its own
+commands. The upcoming HIF transport also needs to recognise
+NCT6694_RPT_MOD, as report accesses are served from a separate
+register space rather than through the command mailbox.
 
-Thanks,
-Guenter
+Move all module types into the shared header so that the transports
+and the sub-device drivers use a single set of definitions.
+
+No functional change.
+
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+Signed-off-by: Ming Yu <a0282524688@gmail.com>
+---
+Changes in v10:
+- None.
+
+Changes in v9:
+- Added Andi's Reviewed-by.
+
+Changes in v8:
+- Reworded the commit message to explain why the transport needs the
+  module types.
+
+Changes in v7:
+- None.
+
+Changes in v6:
+- None.
+
+Changes in v5:
+- Split from the monolithic v4 patch to follow the single logical change
+  principle.
+
+ drivers/gpio/gpio-nct6694.c         |  7 -------
+ drivers/hwmon/nct6694-hwmon.c       | 21 ---------------------
+ drivers/i2c/busses/i2c-nct6694.c    |  7 -------
+ drivers/net/can/usb/nct6694_canfd.c |  6 ------
+ drivers/rtc/rtc-nct6694.c           |  7 -------
+ drivers/watchdog/nct6694_wdt.c      |  7 -------
+ include/linux/mfd/nct6694.h         |  9 +++++++++
+ 7 files changed, 9 insertions(+), 55 deletions(-)
+
+diff --git a/drivers/gpio/gpio-nct6694.c b/drivers/gpio/gpio-nct6694.c
+index 9d51bf52e99a..b3eba9f344ef 100644
+--- a/drivers/gpio/gpio-nct6694.c
++++ b/drivers/gpio/gpio-nct6694.c
+@@ -13,13 +13,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ 
+-/*
+- * USB command module type for NCT6694 GPIO controller.
+- * This defines the module type used for communication with the NCT6694
+- * GPIO controller over the USB interface.
+- */
+-#define NCT6694_GPIO_MOD	0xFF
+-
+ #define NCT6694_GPIO_VER	0x90
+ #define NCT6694_GPIO_VALID	0x110
+ #define NCT6694_GPI_DATA	0x120
+diff --git a/drivers/hwmon/nct6694-hwmon.c b/drivers/hwmon/nct6694-hwmon.c
+index 32f96867635f..fde32010a66c 100644
+--- a/drivers/hwmon/nct6694-hwmon.c
++++ b/drivers/hwmon/nct6694-hwmon.c
+@@ -15,13 +15,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ 
+-/*
+- * USB command module type for NCT6694 report channel
+- * This defines the module type used for communication with the NCT6694
+- * report channel over the USB interface.
+- */
+-#define NCT6694_RPT_MOD			0xFF
+-
+ /* Report channel */
+ /*
+  * The report channel is used to report the status of the hardware monitor
+@@ -38,13 +31,6 @@
+ #define NCT6694_TIN_STS(x)		(0x6A + (x))
+ #define NCT6694_FIN_STS(x)		(0x6E + (x))
+ 
+-/*
+- * USB command module type for NCT6694 HWMON controller.
+- * This defines the module type used for communication with the NCT6694
+- * HWMON controller over the USB interface.
+- */
+-#define NCT6694_HWMON_MOD		0x00
+-
+ /* Command 00h - Hardware Monitor Control */
+ #define NCT6694_HWMON_CONTROL		0x00
+ #define NCT6694_HWMON_CONTROL_SEL	0x00
+@@ -53,13 +39,6 @@
+ #define NCT6694_HWMON_ALARM		0x02
+ #define NCT6694_HWMON_ALARM_SEL		0x00
+ 
+-/*
+- * USB command module type for NCT6694 PWM controller.
+- * This defines the module type used for communication with the NCT6694
+- * PWM controller over the USB interface.
+- */
+-#define NCT6694_PWM_MOD			0x01
+-
+ /* PWM Command - Manual Control */
+ #define NCT6694_PWM_CONTROL		0x01
+ #define NCT6694_PWM_CONTROL_SEL		0x00
+diff --git a/drivers/i2c/busses/i2c-nct6694.c b/drivers/i2c/busses/i2c-nct6694.c
+index 158a533dfba7..d3e2316ff53c 100644
+--- a/drivers/i2c/busses/i2c-nct6694.c
++++ b/drivers/i2c/busses/i2c-nct6694.c
+@@ -12,13 +12,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ 
+-/*
+- * USB command module type for NCT6694 I2C controller.
+- * This defines the module type used for communication with the NCT6694
+- * I2C controller over the USB interface.
+- */
+-#define NCT6694_I2C_MOD			0x03
+-
+ /* Command 00h - I2C Deliver */
+ #define NCT6694_I2C_DELIVER		0x00
+ #define NCT6694_I2C_DELIVER_SEL		0x00
+diff --git a/drivers/net/can/usb/nct6694_canfd.c b/drivers/net/can/usb/nct6694_canfd.c
+index e5f7f8849a73..262b4c26c9d4 100644
+--- a/drivers/net/can/usb/nct6694_canfd.c
++++ b/drivers/net/can/usb/nct6694_canfd.c
+@@ -18,12 +18,6 @@
+ 
+ #define DEVICE_NAME "nct6694-canfd"
+ 
+-/* USB command module type for NCT6694 CANfd controller.
+- * This defines the module type used for communication with the NCT6694
+- * CANfd controller over the USB interface.
+- */
+-#define NCT6694_CANFD_MOD			0x05
+-
+ /* Command 00h - CAN Setting and Initialization */
+ #define NCT6694_CANFD_SETTING			0x00
+ #define NCT6694_CANFD_SETTING_ACTIVE_CTRL1	BIT(0)
+diff --git a/drivers/rtc/rtc-nct6694.c b/drivers/rtc/rtc-nct6694.c
+index 501c364277d8..86a03f02515c 100644
+--- a/drivers/rtc/rtc-nct6694.c
++++ b/drivers/rtc/rtc-nct6694.c
+@@ -14,13 +14,6 @@
+ #include <linux/rtc.h>
+ #include <linux/slab.h>
+ 
+-/*
+- * USB command module type for NCT6694 RTC controller.
+- * This defines the module type used for communication with the NCT6694
+- * RTC controller over the USB interface.
+- */
+-#define NCT6694_RTC_MOD		0x08
+-
+ /* Command 00h - RTC Time */
+ #define NCT6694_RTC_TIME	0x0000
+ #define NCT6694_RTC_TIME_SEL	0x00
+diff --git a/drivers/watchdog/nct6694_wdt.c b/drivers/watchdog/nct6694_wdt.c
+index 57bcc1299973..94c630a9ced6 100644
+--- a/drivers/watchdog/nct6694_wdt.c
++++ b/drivers/watchdog/nct6694_wdt.c
+@@ -21,13 +21,6 @@
+ 
+ #define NCT6694_WDT_MAX_DEVS		2
+ 
+-/*
+- * USB command module type for NCT6694 WDT controller.
+- * This defines the module type used for communication with the NCT6694
+- * WDT controller over the USB interface.
+- */
+-#define NCT6694_WDT_MOD			0x07
+-
+ /* Command 00h - WDT Setup */
+ #define NCT6694_WDT_SETUP		0x00
+ #define NCT6694_WDT_SETUP_SEL(idx)	(idx ? 0x01 : 0x00)
+diff --git a/include/linux/mfd/nct6694.h b/include/linux/mfd/nct6694.h
+index 2022b8fcc096..d752708c2a8d 100644
+--- a/include/linux/mfd/nct6694.h
++++ b/include/linux/mfd/nct6694.h
+@@ -8,6 +8,15 @@
+ #ifndef __MFD_NCT6694_H
+ #define __MFD_NCT6694_H
+ 
++#define NCT6694_HWMON_MOD	0x00
++#define NCT6694_PWM_MOD		0x01
++#define NCT6694_I2C_MOD		0x03
++#define NCT6694_CANFD_MOD	0x05
++#define NCT6694_WDT_MOD		0x07
++#define NCT6694_RTC_MOD		0x08
++#define NCT6694_RPT_MOD		0xFF
++#define NCT6694_GPIO_MOD	NCT6694_RPT_MOD
++
+ #define NCT6694_VENDOR_ID	0x0416
+ #define NCT6694_PRODUCT_ID	0x200B
+ #define NCT6694_INT_IN_EP	0x01
+-- 
+2.34.1
+
