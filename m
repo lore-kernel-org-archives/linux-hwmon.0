@@ -1,45 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.35
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795041770;
-	b=w0mZw0m5Q0rX3zIkGzb1xLbOL1+Z0cHjuwlMt5t1DBgyLpyiVozPbo3JvdZJTOy9k3M3
-	 YoAZTqDkY0isrQ8hoVoNutODe+eye6fq7loNIRFMPaSKLf9sp86wggW+wc1vPVSaSB9LK
-	 sdYCI9CH00ZSvHWr2Dl4ihHVHsfQrbj0F+27BVdMzXF22uK5YEjtwtLlNxtEBONu5wUzj
-	 /Lm0bmQGqLB7s+mO0vCvr0/GVbMQs7RfI+dBvVTCC4sVvTNBXg+/0Ao/cUbCcv+ngvaKB
-	 gIAhAc0ecA28D0Fr9I9WTdM34Uz7ULTYdN41vl/VgFTqrqaQkzGJSpgYLhvImKMKmBg==
+	t=1795042831;
+	b=zrivqGWRzk6WEazFgv8hoMc3kaHszLtMiTUcVBJj7jgxVz6NHfDoN8zyrgCKUzfZz5jv
+	 DtazkKEAhi+DvYK1/R0F4CiwR4hy8xHr+27eyiZpmX4fU52z3Ei4nCqYJfHzcnk5vP24U
+	 djjg3Y7e3u1+U8kQUJC98Qtn/u+PJQDga6ex7UKXrYycYq9w4b64LX1nI7zcHhHRrhdQZ
+	 0bSZ4dUhiBxNBt/ceIuQloSP8h60bIEM0lB93TYaGdqXrfkw4iXeLx9p2sHNhr5axgJZg
+	 kPrdS+LNNWGkOgiyJkXZQX9sYDHc0936tjg7V2KMHlvgvlVtcVy/9nK3ynJFUTXerEw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795041770;
-	h=Received:DKIM-Signature:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:References:
-	 Date:Message-Id:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=HHNRpndje2thNv/HbDv+4nYSQ9Z+lNEwA+f/03fVLQI=;
-	b=qYZbFYjK+bn8gjiwjwckEu77Uvz21/Bx2e8wtro0eWmZWV3OS0CpToBVS/JJJ89zijDW
-	 t6p2O0dPp26eNBgdQVXzqzWCGDkTeH/hZtr3dEywaNzl3iY8BM1XRda7EbsjtMwC1f2pk
-	 9GhRaqSK4uEbP3/2J8hMvpZf8pt5fjSgAKwESPYmR2JcuMWJ2TbKMUrKIVx9d3OWLa44s
-	 r6n/zmP3AeRieFt1jFoLq8dFs8DXGTiujL2boWuW0oMP/uWTyczQq4id0uVnkCDWUaDEU
-	 ++dwotPwYGncP7GISZJeG6BhvwbX8Gl5aGt23wG97YuzdYrc/hDDHiZBTPqbWUaz1Gw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795042831;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
+	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
+	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
+	bh=LcGUIxJ0hhWwJBANgRsmsDcWNEnQenUxD/N5yM1KEfM=;
+	b=FPbWvBXVrHKVXaN8PSmLCxRe/wta+gAF3Osn8B4mkdy4F/4WxrR/HdzmVIxiz645QLTX
+	 gTbomPy2cg/GzHPV0+zwzAq+pbR72tRDMrEVFcOqn4/Dy5Ea0eaBCpsY4hkVoW2Qm4n3e
+	 9Kq7p1+1J51X85/36zrDd0/YH7CzUTSMwhjAevmaDTCddx7DIoQOmF38Yy4/oYUMdjPRQ
+	 cWcuTcqBfdYXJyqTFdRxx7wcCO+RgADXYVPLgofxScyLMNOemPlDpJcSuhgthcEKbYB9h
+	 O8djQ8UbeALY/bNF4JDrJoLzfK/o7tBNa9Q2yQRs/sto/b6zYghsSAZvUDo7Ym6RAuw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mLkKfLHF;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=roeck-us.net;
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=l6IhFjxb;
+	arc=none smtp.remote-ip=44.202.169.35
+Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 966D9606A31C;
-	Wed, 18 Nov 2026 22:42:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2083606A336
+	for <linux-hwmon@vger.kernel.org>; Wed, 18 Nov 2026 23:00:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C2083606A336
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mLkKfLHF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 629A21F000C4;
-	Wed, 18 Nov 2026 22:42:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795041770;
-	bh=HHNRpndje2thNv/HbDv+4nYSQ9Z+lNEwA+f/03fVLQI=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=mLkKfLHFjgX7RvlKDdMp5RkmY7stdgmShBSnCMXR46ZiTWv9HAMdUgi6kt+Vn4ytt
-	 myNQ2hjx+4EVw6d064Upkt9KreOijWxKfjnYOeQ8qJQmMykEwqoAK0OJITv35y/HzY
-	 yF3i0SOIiSW78K8NumxG69h80av9mU7Al0U2ywZfYNS/Ga9w2amRdXTks4JiKjzOLZ
-	 z0x73At0G0p2qyO0064LxvsNYoI/oTyuMra5xAidgZa8/vkkj3zzFCsrzkNQaOVLB6
-	 xT7WAscNPDlz5OOR+ESKhLBCvXhEIz7glFJKvU9xZDEjuWlP1dcnW1gRaW7b9tbfPl
-	 xfO5kF4gLTX/w==
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=l6IhFjxb
+Received: from eig-obgw-6001b.ext.cloudfilter.net ([10.0.30.143])
+	by cmsmtp with ESMTPS
+	id TgCjxYNoN4vCDTodcxbzGT; Wed, 18 Nov 2026 23:00:24 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id TodaxbSF0dRrRTodaxVlzl; Wed, 18 Nov 2026 23:00:22 +0000
+X-Authority-Analysis: v=2.4 cv=LOhmQIW9 c=1 sm=1 tr=0 ts=6afe2e07
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=VwQbUJbxAAAA:8
+ a=xtVSApEC_Af63HCmTx8A:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
+	List-Archive; bh=LcGUIxJ0hhWwJBANgRsmsDcWNEnQenUxD/N5yM1KEfM=; b=l6IhFjxbqkEW
+	usFNckm0PuJnx6D3jE0/a1aY5IAo3PpzAvw7KShZLOUfkRVno4Lni0blwvnt2OO7ftyK3HXUlZyuc
+	FCidRVfOk7o6kjfOjwiYcotvDdE429VCmEL1oVAgikzmoyIzmCvclGTecIERMcjwl8hC9ysLfZRQj
+	sY9kTAWaL/FqMHkQ/O9rx2pb6NL9MKudoaN+0dXrVXbtPEg4xQI09v2QkzTbTRcmJ0udV1FIkgkWf
+	C28L7rPX28FTx2KsmB91ZxZC0R47/YXJ1M81axuYYM3Sl40ZAIf3e/vwztlRWiP9XqcO2+x15dQDM
+	othLraxL6uzql8OB3/hqEQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:36386)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xToda-000000049Xm-00es;
+	Thu, 19 Nov 2026 04:30:22 +0530
+Message-ID: <11a821f4-aef6-425a-8626-1d8641e9f83d@roeck-us.net>
+Date: Wed, 18 Nov 2026 15:00:20 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -49,55 +75,129 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 0/3] Introduce cros_ec power monitoring
+To: Daniel Balint <dbalint@google.com>, Jonathan Cameron <jic23@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, Benson Leung <bleung@chromium.org>,
+ Lee Jones <lee@kernel.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
+ linux-iio@vger.kernel.org, chrome-platform@lists.linux.dev,
+ mfd@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20261106193129.43493-1-dbalint@google.com>
+ <20261107010356.39d9eddf@jic23-hlaptop>
+ <20261118204532.257423-1-dbalint@google.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20261118204532.257423-1-dbalint@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v5 5/6] clk: bcm: Add BCMBCA PMB clocks
-From: Brian Masney <masneyb@kernel.org>
-To: Linus Walleij <linusw@kernel.org>
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- William Zhang <william.zhang@broadcom.com>, 
- Anand Gore <anand.gore@broadcom.com>, 
- Kursad Oney <kursad.oney@broadcom.com>, 
- Florian Fainelli <florian.fainelli@broadcom.com>, 
- =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>, 
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
- Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney+clk@redhat.com>, 
- Jerome Brunet <jbrunet+clk@baylibre.com>, 
- Guenter Roeck <linux@roeck-us.net>, Philipp Zabel <p.zabel@pengutronix.de>, 
- Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, 
- Ulf Hansson <ulfh@kernel.org>, 
- Benjamin Larsson <benjamin.larsson@genexis.eu>, mfd@lists.linux.dev, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-clk@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- linux-pm@vger.kernel.org, Brian Masney <masneyb@kernel.org>
-In-Reply-To: <20261117-xg6846b-bcmbca-xrdp-reset-v5-5-f584e8b8e696@kernel.org>
-References: <20261117-xg6846b-bcmbca-xrdp-reset-v5-0-f584e8b8e696@kernel.org>
- <20261117-xg6846b-bcmbca-xrdp-reset-v5-5-f584e8b8e696@kernel.org>
-Date: Wed, 18 Nov 2026 17:42:38 -0500
-Message-Id: <179504175827.128823.2420881202230183993.b4-review@b4>
-X-Mailer: b4 0.17-dev-8145e
-X-Developer-Signature: v=1; a=openpgp-sha256; l=446; i=masneyb@kernel.org;
- s=20250903; h=from:subject:message-id;
- bh=zNBYbYvLU/V+AXPtDXc5SdnQ/xtUGadAKe/E7COsQU8=;
- b=owGbwMvMwCW2/dJd9di6A+2Mp9WSGLL+aT48ldnfk6K24b30Louc8JDPW82Ml5bNYQh0s12eJ
- f+wzXFNRykLgxgXg6yYIsuSXKOCiNRVtvfuaLLAzGFlAhnCwMUpABM5e4Lhf506U5rZOb78XDOb
- CSLP3wRydSSvSPbNc4n35z/I41IlxMiw3mHnTdt7zXMWvVQudlwf98h0y5qVhz+JN9Ud3ziDTWM
- iOwA=
-X-Developer-Key: i=masneyb@kernel.org; a=openpgp;
- fpr=A46D32705865AA3DDEDC2904B7D2DD275D7EC087
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xToda-000000049Xm-00es
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:36386
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 8
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfHbRIJrRneT3zm1ZYLS6TMGFkt5LgG4Sg6yLG+r7TfRtgOxEy+XGrRwiu+piGOl/9J14OI7vSWE15ylcngtkpgPvd0PzHqnMRoYGXTI11xRLXgYjnThQ
+ oLc9h7G8BZAPmHAJ/uXUSYwWNwq3qYw/za51UkT7yViMatRl6RJUEhnXeL7lIKrrMCIdZ7hAuAGbKbhMUpXfV0kMxbWFrgdxVdj24FE/DvbWa2oS8e1CJky7
 
-> Add a BCM6846 clock provider for the Power Management Bus (PMB) MFD
-> cell. Expose six outputs from each of the RDP and BIU PLLs, the Runner
-> clock divided from RDP PLL channel 1, the crystal output, PVTMON and
-> block-zone clock gates.
+On 11/18/26 12:45, Daniel Balint wrote:
+> On Sat, 7 Nov 2026 01:03:56 +0000
+> Jonathan Cameron <jic23@kernel.org> wrote:
 > 
-> PVTMON and zone clocks provide gate control only.
+>> Hi Daniel
+>>
+>> I'm not necessarily against this but when adding monitoring components
+>> to IIO the usual question is why not hwmon?  What features are not
+>> well supported by that framework?
+>>
+>> Note historically I suspect we accepted one or two drives into IIO that
+>> would have fitted better there so precedence isn't a strong argument.
+>>
+>> Convention for these somewhat borderline case is +CC hmwon maintainer
+>> and list as well as IIO with that explanation in the cover letter.
+>> That avoids any last minute surprises!
 > 
-> Signed-off-by: Linus Walleij <linusw@kernel.org>
+> Hi Jonathan,
+> 
+> Thanks for taking a look!
+> The main reason for choosing IIO over hwmon is that for On-Device Power
+> Monitoring, userspace needs an atomic, untorn snapshot across all rails
+> (up to 64) over the same integration window, triggered on demand from
+> userspace and read out in a single buffer read rather than repeated
+> per-channel sysfs reads.
+> 
+> Reflecting that requirement, EC_PWRMON_LATCH on the EC is a global,
+> stateful command: a single latch simultaneously snapshots all onboard
+> power accumulators and resets their accumulation window on the EC, so
+> individual channels cannot be latched independently. As far as I know,
+> hwmon only exposes independent per-channel sysfs attributes with no
+> multi-channel buffer or on-demand trigger ABI, whereas IIO's triggered
+> buffer interface is well suited for this kind of pattern.
+> 
+> CC'ing hwmon maintainer and list to keep me honest.
+> 
 
-Acked-by: Brian Masney <masneyb@kernel.org>
+You could accomplish that the same way many hwmon drivers are doing it:
+Read all attributes in one go from the hardware, then cache it for a period
+of time.
 
--- 
-Brian Masney <masneyb@kernel.org>
+Having said that, my experience is that people wanting to implement IIO
+drivers instead of hardware monitoring drivers keep finding reasons,
+so I won't object to an IIO implementation.
+
+Guenter
+
