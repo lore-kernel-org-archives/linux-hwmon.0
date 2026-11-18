@@ -1,60 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795039239;
-	b=da3k9lCUUDKyCeuT3FcXT8gvw2eGrUoasUpB+NnsdJd81qCZp/qusl8g2NS0h8FLxHiw
-	 XAyRW5FMUibMcZsdNTIqO1SuIIIKMprmx5gUzMhAYe/ZfX4R3qreknFXRQRyb1VKDvv01
-	 0kOrqViEVw4y1MXODIJOTVa2ghosVXvhwc3+1CILauGcn0u6X9njiJ1BmEFt1IedjzLBa
-	 dYyaUGOuR/Qpone/dMkTWM4wVLECebFurV/SbXqDlAq508dRnOl624dx3Ti4W/kcH83AD
-	 /nguU2jePtg9aZZJmBBaw0SevY3W5XN08iPVth21zbJmfRo2FwZju1Wyzg2Heo336dQ==
+	t=1795041770;
+	b=w0mZw0m5Q0rX3zIkGzb1xLbOL1+Z0cHjuwlMt5t1DBgyLpyiVozPbo3JvdZJTOy9k3M3
+	 YoAZTqDkY0isrQ8hoVoNutODe+eye6fq7loNIRFMPaSKLf9sp86wggW+wc1vPVSaSB9LK
+	 sdYCI9CH00ZSvHWr2Dl4ihHVHsfQrbj0F+27BVdMzXF22uK5YEjtwtLlNxtEBONu5wUzj
+	 /Lm0bmQGqLB7s+mO0vCvr0/GVbMQs7RfI+dBvVTCC4sVvTNBXg+/0Ao/cUbCcv+ngvaKB
+	 gIAhAc0ecA28D0Fr9I9WTdM34Uz7ULTYdN41vl/VgFTqrqaQkzGJSpgYLhvImKMKmBg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795039239;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=EW/j4AHQToanR4iAnbKrwXf5ZMy3lNHSEzakLY3OOkE=;
-	b=0yMh6Z9Xm9YU9NRcnemlkQkcf6qlwUiLeR+oN9Fj5uaJ3pqCBhb2PMu+96Vu/NWsAb0U
-	 7CEYeR8tOUBw99MHDDi3gFhvKCdP5GHzucUS1D+aS9G4C0uM8ZjUickcM44fIj6FstgWo
-	 nofgS4R31reOBgTC0l7uf9ggvRB1x6j+h8eUYi7MHLdSbe3ndZJVMfHsgaRTFUBGZvYLe
-	 DTqL2oxw2rbzzb1/BDaGIzEPeDPmuWGluyJHW3NjXSE+kRIgQ1znJskz18LJwaoVKN4IC
-	 YV+51pq5gLHzz78/4MF5vlMQJa0YJTwww3DkfRhBsxz9EqyAJTLB8wbwQx6nnhpeSeQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795041770;
+	h=Received:DKIM-Signature:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:References:
+	 Date:Message-Id:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=HHNRpndje2thNv/HbDv+4nYSQ9Z+lNEwA+f/03fVLQI=;
+	b=qYZbFYjK+bn8gjiwjwckEu77Uvz21/Bx2e8wtro0eWmZWV3OS0CpToBVS/JJJ89zijDW
+	 t6p2O0dPp26eNBgdQVXzqzWCGDkTeH/hZtr3dEywaNzl3iY8BM1XRda7EbsjtMwC1f2pk
+	 9GhRaqSK4uEbP3/2J8hMvpZf8pt5fjSgAKwESPYmR2JcuMWJ2TbKMUrKIVx9d3OWLa44s
+	 r6n/zmP3AeRieFt1jFoLq8dFs8DXGTiujL2boWuW0oMP/uWTyczQq4id0uVnkCDWUaDEU
+	 ++dwotPwYGncP7GISZJeG6BhvwbX8Gl5aGt23wG97YuzdYrc/hDDHiZBTPqbWUaz1Gw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="EHUn/RC5";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mLkKfLHF;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F562606A330;
-	Wed, 18 Nov 2026 22:00:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 966D9606A31C;
+	Wed, 18 Nov 2026 22:42:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EHUn/RC5
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 045061F000C6;
-	Wed, 18 Nov 2026 22:00:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mLkKfLHF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 629A21F000C4;
+	Wed, 18 Nov 2026 22:42:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795039239;
-	bh=EW/j4AHQToanR4iAnbKrwXf5ZMy3lNHSEzakLY3OOkE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=EHUn/RC5tq2E/sDD9KuZBuc3WUNlBitDQRQ+XXA1pPaXDyVDr72v8dR3Brnq6I1xl
-	 mNBEKAeHSOwM0jXRISwmZOmN4sJ+XwdJBqkRvpknbqHFAuqmUqOygSxJ9uoPeIQuCC
-	 akBNA4P5pGfE3qK8Ifv3d5xCPfpqnRQaAo6AOAf6s/UVAYVxezDqOr5ikwifG7GoyP
-	 bMmpEatW+uw7d3bAdqC8cop/FIjYHIQ9sIda0QL8qnIdo6db/aDqvAbav1GMeMEGJt
-	 yY70g+ClHORIh8mv5OS8JLNxaMVGMu3JfkazYlhhwg9CcGGjCN3moPgI6WSXngWzql
-	 Nw+BAauBDDRUQ==
-Date: Wed, 18 Nov 2026 22:00:33 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Daniel Balint <dbalint@google.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, Benson
- Leung <bleung@chromium.org>, Lee Jones <lee@kernel.org>, Tzung-Bi Shih
- <tzungbi@kernel.org>, linux-iio@vger.kernel.org,
- chrome-platform@lists.linux.dev, mfd@lists.linux.dev,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/3] Introduce cros_ec power monitoring
-Message-ID: <20261118220033.70425495@jic23-hlaptop>
-In-Reply-To: <20261118204532.257423-1-dbalint@google.com>
-References: <20261106193129.43493-1-dbalint@google.com>
-	<20261107010356.39d9eddf@jic23-hlaptop>
-	<20261118204532.257423-1-dbalint@google.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
+	s=k20260515; t=1795041770;
+	bh=HHNRpndje2thNv/HbDv+4nYSQ9Z+lNEwA+f/03fVLQI=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=mLkKfLHFjgX7RvlKDdMp5RkmY7stdgmShBSnCMXR46ZiTWv9HAMdUgi6kt+Vn4ytt
+	 myNQ2hjx+4EVw6d064Upkt9KreOijWxKfjnYOeQ8qJQmMykEwqoAK0OJITv35y/HzY
+	 yF3i0SOIiSW78K8NumxG69h80av9mU7Al0U2ywZfYNS/Ga9w2amRdXTks4JiKjzOLZ
+	 z0x73At0G0p2qyO0064LxvsNYoI/oTyuMra5xAidgZa8/vkkj3zzFCsrzkNQaOVLB6
+	 xT7WAscNPDlz5OOR+ESKhLBCvXhEIz7glFJKvU9xZDEjuWlP1dcnW1gRaW7b9tbfPl
+	 xfO5kF4gLTX/w==
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -64,71 +49,55 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v5 5/6] clk: bcm: Add BCMBCA PMB clocks
+From: Brian Masney <masneyb@kernel.org>
+To: Linus Walleij <linusw@kernel.org>
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ William Zhang <william.zhang@broadcom.com>, 
+ Anand Gore <anand.gore@broadcom.com>, 
+ Kursad Oney <kursad.oney@broadcom.com>, 
+ Florian Fainelli <florian.fainelli@broadcom.com>, 
+ =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>, 
+ Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney+clk@redhat.com>, 
+ Jerome Brunet <jbrunet+clk@baylibre.com>, 
+ Guenter Roeck <linux@roeck-us.net>, Philipp Zabel <p.zabel@pengutronix.de>, 
+ Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, 
+ Ulf Hansson <ulfh@kernel.org>, 
+ Benjamin Larsson <benjamin.larsson@genexis.eu>, mfd@lists.linux.dev, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-clk@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-pm@vger.kernel.org, Brian Masney <masneyb@kernel.org>
+In-Reply-To: <20261117-xg6846b-bcmbca-xrdp-reset-v5-5-f584e8b8e696@kernel.org>
+References: <20261117-xg6846b-bcmbca-xrdp-reset-v5-0-f584e8b8e696@kernel.org>
+ <20261117-xg6846b-bcmbca-xrdp-reset-v5-5-f584e8b8e696@kernel.org>
+Date: Wed, 18 Nov 2026 17:42:38 -0500
+Message-Id: <179504175827.128823.2420881202230183993.b4-review@b4>
+X-Mailer: b4 0.17-dev-8145e
+X-Developer-Signature: v=1; a=openpgp-sha256; l=446; i=masneyb@kernel.org;
+ s=20250903; h=from:subject:message-id;
+ bh=zNBYbYvLU/V+AXPtDXc5SdnQ/xtUGadAKe/E7COsQU8=;
+ b=owGbwMvMwCW2/dJd9di6A+2Mp9WSGLL+aT48ldnfk6K24b30Louc8JDPW82Ml5bNYQh0s12eJ
+ f+wzXFNRykLgxgXg6yYIsuSXKOCiNRVtvfuaLLAzGFlAhnCwMUpABM5e4Lhf506U5rZOb78XDOb
+ CSLP3wRydSSvSPbNc4n35z/I41IlxMiw3mHnTdt7zXMWvVQudlwf98h0y5qVhz+JN9Ud3ziDTWM
+ iOwA=
+X-Developer-Key: i=masneyb@kernel.org; a=openpgp;
+ fpr=A46D32705865AA3DDEDC2904B7D2DD275D7EC087
 
-On Wed, 18 Nov 2026 20:45:32 +0000
-Daniel Balint <dbalint@google.com> wrote:
-
-> On Sat, 7 Nov 2026 01:03:56 +0000
-> Jonathan Cameron <jic23@kernel.org> wrote:
+> Add a BCM6846 clock provider for the Power Management Bus (PMB) MFD
+> cell. Expose six outputs from each of the RDP and BIU PLLs, the Runner
+> clock divided from RDP PLL channel 1, the crystal output, PVTMON and
+> block-zone clock gates.
 > 
-> > Hi Daniel
-> > 
-> > I'm not necessarily against this but when adding monitoring components
-> > to IIO the usual question is why not hwmon?  What features are not
-> > well supported by that framework?
-> > 
-> > Note historically I suspect we accepted one or two drives into IIO that
-> > would have fitted better there so precedence isn't a strong argument.
-> > 
-> > Convention for these somewhat borderline case is +CC hmwon maintainer
-> > and list as well as IIO with that explanation in the cover letter.
-> > That avoids any last minute surprises!  
+> PVTMON and zone clocks provide gate control only.
 > 
-> Hi Jonathan,
-> 
-> Thanks for taking a look!
-> The main reason for choosing IIO over hwmon is that for On-Device Power
-> Monitoring, userspace needs an atomic, untorn snapshot across all rails
-> (up to 64) over the same integration window, triggered on demand from
-> userspace and read out in a single buffer read rather than repeated
-> per-channel sysfs reads.
-> 
-> Reflecting that requirement, EC_PWRMON_LATCH on the EC is a global,
-> stateful command: a single latch simultaneously snapshots all onboard
-> power accumulators and resets their accumulation window on the EC, so
-> individual channels cannot be latched independently. As far as I know,
-> hwmon only exposes independent per-channel sysfs attributes with no
-> multi-channel buffer or on-demand trigger ABI, whereas IIO's triggered
-> buffer interface is well suited for this kind of pattern.
+> Signed-off-by: Linus Walleij <linusw@kernel.org>
 
-Ok, but that's not in the driver yet. I see you refer to that below
-as a v2 thing, so not a problem.
+Acked-by: Brian Masney <masneyb@kernel.org>
 
-Do you need that coherent snapshot to get to userspace in one go? 
-
-For accumulator channels the way they are normally done to sysfs
-style reads is to snapshot on each read, update an internal store
-of accumulation since enable then provide whichever one was requested.
-That way no data is lost - but you don't get an aligned snapshot.
-So it depends on what maths you are going to do with them, whether
-it can be done in kernel and if not how much interchannel skid
-matters.
-
-So tell us more on why you need that coherent snapshot to userspace.
-
-I agree that if you do, then hwmon wouldn't currently be a good fit
-(unless I'm also missing a way to do it).
-
-> 
-> CC'ing hwmon maintainer and list to keep me honest.
-> 
-> If there is no objection to adding the driver to IIO, I will clean up the
-> custom energy_value attribute and replace it with the standard IIO
-> triggered buffer interface in v2, along with addressing other review
-> comments and including the above explanation in the v2 cover letter.
-> 
-> Thanks,
-> Daniel
-
+-- 
+Brian Masney <masneyb@kernel.org>
