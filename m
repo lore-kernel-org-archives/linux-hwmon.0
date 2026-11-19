@@ -1,57 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795117877;
-	b=2d8GtmSs9XQQ4lzWNBM0rJtsOKlRE8YxkhvZNCpXGMx130OdyBX3theHcReM40UotDWB
-	 ok/21XRZVd3RToHkSJEscPVA77TGL6UfyNrz79vJcwHz4MMu4okbbD7PYT4jKjEs53F9n
-	 QyRKA8JxKkB+/CkObHof6E9fvdErlyPwb7kC7aMbfzbBGyPOcFu95QOSScb4XohwtFrM3
-	 FcOgKKv+g5X5akKbMA5vfX+WfrYd1GdUhMymmpqglDnnEDPmqtXAO9bIF5aRWxEw+0vz8
-	 9r/mkXY5fNblInEEPQRnxJQJW8yghHW5Fdim4TnAWsRd7v2xZOBtPCpmn8cl/xdSP2Q==
+	t=1795117888;
+	b=CnbME3eZPqT/aSd7cTvUxDjX5i94gi5uZ1Qu0XykdUz8fMVvgCrvlVPB3vsyZQx7FoJf
+	 4uHx0IC/EEfMdeYHj8/BnN4C3ZsdbsnEmfAug0uQ59rGQonxYagjpcuYQxAjlJeWVLyqq
+	 JkT4uTogfopg0b+HhhwVr+0lBLqeAmhzKFAg/Pq1H4ii5uXCbFXXhnsVLtZQJWeAZh75D
+	 v92x+X4jUQ4yOgo5HYCkFSB4lfR17N18iCATfBzqybyfQznWduG8wsIEbDR3ql3JmNCw+
+	 Y71vTOt3vL8+uEUYNbv4eBlVZhM0lLIaw9E7BFxt+AiePL/EFPWY9EQMlWJATC43/Ig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795117877;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795117888;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=6dmsazDFc1NIvUMFEYTn34UOC4h8dNmYBGBglDzgC/s=;
-	b=ChZRgR5XXGx3aQLMWeGAwCZTKQw2juru/mpxno02e08txWS34CnRQgRi9IdyqS0l4BSU
-	 cDKmvelDZ5f9XiaHVniogxPXs/iAOmgLhCMNcbR7xkCWdmceXZqb0trUiGtSkoET0wMAE
-	 DramH3hm+XKLBrA8mRMrh8imgqPZFi8QIVPXR95s1pBaaD73PfjI6UFN62l8RMqw+IvGJ
-	 WFbp1wcRVXzw0ZN5qcVrNBtPwCCE307VMcvM/YefjT+hM9qV1QhmOkE5viLP2q4xH4vbs
-	 Vqb49aLY46yGJUcLjtIvGSj+TO3v13KAYEhncI0PU/9PvabmIYvTZqkP1qfGGzxlYsQ==
+	bh=tcRVbx61XK/b59xmfrF8cePeyw/T1IY5MPMTnj1OsWs=;
+	b=yGPfO6d3/dwfItePnmYD5rL8uPReAm7ovFNSwS34okNgcN8Yq3M91x96d6czcJNtAqas
+	 pUcZNoB2JvvuZMlUJSzj/OhKZfmJ7KVqmfqcMzvNev+gzyPiLToeXFg54g5QQPDXNtByh
+	 nUEOIc4itSRZOiMhrwzvv71ciKyumCSnAojg5+Il3bVEkUsdhXZYf7u63RRsae/OAye/S
+	 49bYlrfsAkiw/PoNG6YRXPAf/BU+NFgwGHT3HH0o4SS25D+Is2hyhsj03OWOJIfemHnp4
+	 LakY90zqmPnMpI5IwvRlR8ZyPggMOIoU0vcjwQzR4FPG5umaUX0Nr/Fyf41yJU9fEmw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cqE+zWke;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gHPoduAX;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB39606A320
-	for <linux-hwmon@vger.kernel.org>; Thu, 19 Nov 2026 19:51:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FF5606A320
+	for <linux-hwmon@vger.kernel.org>; Thu, 19 Nov 2026 19:51:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cqE+zWke
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A7D91F000C4;
-	Thu, 19 Nov 2026 19:51:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gHPoduAX
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 064AC1F000C4;
+	Thu, 19 Nov 2026 19:51:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795117877;
-	bh=6dmsazDFc1NIvUMFEYTn34UOC4h8dNmYBGBglDzgC/s=;
+	s=k20260515; t=1795117888;
+	bh=tcRVbx61XK/b59xmfrF8cePeyw/T1IY5MPMTnj1OsWs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=cqE+zWkeIPD2BB9HMOoVpOCk+BMym/CS3gTp3EX1NCaD0vWwxkgMY95Rf+ZiRQMJq
-	 bq0RlYzrr+EdSfFeaYWWXnIPsgNKeRloD43nBpIENz2Rip3aNGfPmqAKL51r/9e86M
-	 2/lCPIn028KxGkEO1HJD6xcDX5pFJe3VeN4fJQ4i9AbM24IFDKjK/iOG+MgocM7dbB
-	 iOOjsZrxCoirAfM+vrEapJKnzLFrWKg1QyMQ2f6oatQrKbgcyUE2cuYvn8nVZHsvAf
-	 AQukdW0TwNdpcIRACgpjgsSTbo/p5y2UJudBZe4THmptn+pNhVx3ZrTyNKvMCJzYPk
-	 pj/qR0xYJ9hvw==
-Message-ID: <sashiko-outbox-223975@kernel.org>
+	b=gHPoduAXmTOJ2onIyT8VendxOYNouoTxq3pv2CiHS/ZtxrzhgKbgUSW7JVgcbB2wi
+	 6fo6w1Uo7Ag74yzbOLhby04F4qYNVj/LlW7Kn1Ywx7iges/IXi2RAProuSz6MEYZRZ
+	 fL8d//ydL9HmxtsYzMN8s0a/Ua/eYDIEN6UJAZcf228KYBp44MYRKBDpgbbpP+DI6V
+	 bvLRKLqjFwEw6np/JBNw90ldrzXv4y+LFltgiRhv5zT7NU9OMrnHBSY6syUzaZ7rap
+	 mRNj507Fh0evVQuBnUBBNXccDZP2GwfM2ajBWcNmjcLj1GtgoenLLBYYUQnyjdghJD
+	 jaBikBBDZB6yQ==
+Message-ID: <sashiko-outbox-223976@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 2/2] firmware: raspberrypi: Register PMIC hwmon
- driver on Pi 5
+Subject: Re: [PATCH v3 1/2] hwmon: add Raspberry Pi PMIC driver
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Sander Speetjens" <sander.speetjens@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261119-hwmon-da9091-v3-2-15956035d7b5@gmail.com>
+In-Reply-To: <20261119-hwmon-da9091-v3-1-15956035d7b5@gmail.com>
 References: <20261119-hwmon-da9091-v3-0-15956035d7b5@gmail.com>
- <20261119-hwmon-da9091-v3-2-15956035d7b5@gmail.com>
+ <20261119-hwmon-da9091-v3-1-15956035d7b5@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 19 Nov 2026 19:51:16 +0000
+Date: Thu, 19 Nov 2026 19:51:27 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -63,59 +62,63 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Medium] hwmon: raspberrypi-pmic: invalid hyphen in hwmon name in
+- [Medium] hwmon: raspberrypi-pmic-hwmon: invalid hyphenated name in
   rpi_pmic_probe()
 --
 
-commit 9f0a6e3ed58944e55b16d88389defd31010b2d46
+commit bf488e2ad9a7e713389ee9ed507b4faae9e4ba88
 Author: Sander Speetjens <sander.speetjens@gmail.com>
 
-firmware: raspberrypi: Register PMIC hwmon driver on Pi 5
+hwmon: add Raspberry Pi PMIC driver
 
-This commit registers and unregisters the raspberrypi-pmic-hwmon platform
-device on BCM2712-based Raspberry Pi 5 systems.
+This commit adds a hwmon driver for the Raspberry Pi 5 PMIC that reads
+voltages, currents and temperatures via the VideoCore firmware mailbox
+interface.
 
-> diff --git a/drivers/firmware/raspberrypi.c b/drivers/firmware/raspberryp=
-i.c
-> index d4f4753d39656..4184cc072a373 100644
-> --- a/drivers/firmware/raspberrypi.c
-> +++ b/drivers/firmware/raspberrypi.c
+> diff --git a/drivers/hwmon/raspberrypi-pmic-hwmon.c b/drivers/hwmon/raspb=
+errypi-pmic-hwmon.c
+> new file mode 100644
+> index 0000000000000..cb6ddb5b7d4fb
+> --- /dev/null
+> +++ b/drivers/hwmon/raspberrypi-pmic-hwmon.c
+
 [ ... ]
-> @@ -249,6 +250,23 @@ static void rpi_register_clk_driver(struct device *d=
-ev, struct rpi_firmware *fw)
->  	fw->clk_dev =3D pdev;
->  }
-> =20
-> +static void rpi_register_pmic_driver(struct device *dev, struct rpi_firm=
-ware *fw)
+
+> +static int rpi_pmic_probe(struct platform_device *pdev)
 > +{
-> +	struct platform_device *pdev;
+> +	struct device *dev =3D &pdev->dev;
+> +	struct rpi_pmic_data *data;
+> +	struct rpi_firmware *fw;
+> +	struct device *hwmon_dev;
+> +	int ret;
 > +
-> +	/* Only present on Pi 5 (bcm2712) */
-> +	if (!(of_machine_is_compatible("brcm,bcm2712") ||
-> +	      of_machine_is_compatible("brcm,bcm2712-d0")))
-> +		return;
+> +	fw =3D devm_rpi_firmware_get(dev, dev->parent->of_node);
+> +	if (!fw)
+> +		return -EPROBE_DEFER;
 > +
-> +	pdev =3D platform_device_register_data(dev, "raspberrypi-pmic-hwmon",
-> +					     -1, NULL, 0);
+> +	data =3D devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->fw =3D fw;
+> +
+> +	ret =3D rpi_pmic_update(data);
+> +	if (ret)
+> +		return -ENODEV;
+> +
+> +	hwmon_dev =3D
+> +		devm_hwmon_device_register_with_info(dev,
+> +						     "rpi-pmic", data, &rpi_pmic_chip_info, NULL);
 
 [Severity: Medium]
-Does registering the "raspberrypi-pmic-hwmon" device trigger a hwmon warning
-at boot because rpi_pmic_probe() registers a hwmon device with a hyphen in
-its name?
+Should the hwmon chip name use an underscore ("rpi_pmic") instead of a
+hyphen?
 
-drivers/hwmon/raspberrypi-pmic-hwmon.c:rpi_pmic_probe() {
-    ...
-	hwmon_dev =3D
-		devm_hwmon_device_register_with_info(dev,
-						     "rpi-pmic", data, &rpi_pmic_chip_info, NULL);
-    ...
-}
-
-__hwmon_device_register() rejects '-' in hwmon chip names with a dev_warn()
-("hwmon: 'rpi-pmic' is not a valid name attribute, please fix") because
-userspace tools such as libsensors use '-' as a chip-name delimiter.
+__hwmon_device_register() rejects '-' in the name attribute with a
+dev_warn() ("hwmon: 'rpi-pmic' is not a valid name attribute, please
+fix") because userspace tools such as libsensors use '-' as a delimiter
+when parsing chip names.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261119-hwmon-da90=
-91-v3-0-15956035d7b5@gmail.com?part=3D2
+91-v3-0-15956035d7b5@gmail.com?part=3D1
