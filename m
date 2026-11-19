@@ -1,56 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795119118;
-	b=WFu16jt8ca243ecgjYYCJDQxgHQso+7Lo0AdNyRkmzBz7iojNKrasoY9w6l499/E868x
-	 8awG9PBIoLn71KwIfSV9N7dBoaT4uycEWiXwku7ThlwBTR9xJqSd1kG+iWNnaeAuQqjsL
-	 Y05DisKlFExx99i6fa/I943IrG30EqXdvwkiclAagF6rFqhq4w/BgHlZEMV3KpTzdOx0J
-	 FpmI/JbjvbkH7v+djayHCgxRnIPe13WdSu8t6NEWVAoGxIGEk4IcwPKXEtlH1WXjA4UG4
-	 iFlcULExUO9NNXev9s+GPWO0S8PlmpG4a1x5eUfgl+HRTInuXL2oZ7W/5JuNoj7Rxzg==
+	t=1795125321;
+	b=FN8S+saqPIGVnNE49mS4XhK3qfhOiD3yb91g58UicwXQl6y1XrWbZmCcx3JDNpWZsW2I
+	 4uL9JfvpRpOAPJJPXBAlPASv1BNkt2kAxDbMTmp4FvzBzROLo4T1HyiP048TT87cE6IqK
+	 UPQ6YEQPMUr0MmIWxuHmgoJw3cEelI+QchT/4VXp8IZnNOIvOQKbr7uWtiWcyqppIb71V
+	 /RX2DqsFDRyZCNWaZP9hoJfcMS92phmC9Daoos2a8X4zTE37YWNQ8dmgxhgEnI2CjVizi
+	 6gkOb6hd1QKCuES6vw/7C8R8B008DeYsw5hQPCpTQv7qBHEJ1zx8BtmL2MZRko54P0g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795119118;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=qzGYurCs0bEp/Hmvgf/46DDScKQa2ArE0czTe0Grnuo=;
-	b=v/sXN+2rOLdHq7ye1x2LMd0m9aXFzYECOBmI0YHXsLKcJu0RAM/rClBEN8s0ac7RpTga
-	 9D3anxdJMkWM3KtMnxAq6WwyBuOEpY6zvnk/BhM4o7jv5OvOvvdpIgZ7xJZolo4oW54Ti
-	 1A0ZhQprB3kFnaiuEcV45hmLn0TdudrrpIpo2368f2hLhar8h5xTJGO0MNSD+OSeVC3RG
-	 wWsHmxGqDkeVq1Vr4nxDtbt9AQ0hj2C43c0sQSMu1aY8OqImSLeXgVxz9Q1c0fFXR5WMF
-	 DRPFwMSkqPuB/d/nL5PNUEt2g9/e6Ibjwzd9qMUU+vDWaa8ZnBWhSN8vj+iPEDHiGLQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795125321;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=U7XmuxZEKsKhKcPeD0Bm1mQbeva3m9bG2ujD+Ag4pwA=;
+	b=J9S2AZPiiWWM2cBW8sdfDzAqSdliGcNEGfdNoPsSIskdJVt9aoWh0uqtByUApt4m9t4E
+	 Msuh9A7rbctgUL3n5RRQSW2xdSR97mXNV7c9D3qmR9eYbkD821VBeoE4vCHGWaVeWGpFy
+	 /bMIt1P9cgSgVi4xdW+JeN9jWBNzIH3VnLIIUpLaJsicZlmd8l81dZcE4KwowqKJsRpFp
+	 esAy4bYww5jB6IM0zRX2O9f69GlhSZy+lIoO34Kmwqyax2xOrexmqYJk/ROEH1LnYpQc5
+	 TrtnoimKqw/M0uREIlfRnPFQIt7nzyYmBehZc2bcXZwTvRtiZfx+ZR193pcfUPS3uFw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AsXW7hZA;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hBtp9ZAZ;
+	arc=none smtp.remote-ip=209.85.222.181
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE95F606A33F
-	for <linux-hwmon@vger.kernel.org>; Thu, 19 Nov 2026 20:11:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CC9606A324
+	for <linux-hwmon@vger.kernel.org>; Thu, 19 Nov 2026 21:55:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69CC9606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AsXW7hZA
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52FAF1F000C6;
-	Thu, 19 Nov 2026 20:04:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795118643;
-	bh=qzGYurCs0bEp/Hmvgf/46DDScKQa2ArE0czTe0Grnuo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=AsXW7hZA2YV6r6RDpaEu9P6/GPN/wrQJEMC3skqtVYDqja9JB8OqECZvQVEDgYIvV
-	 tHfZ5QEBsaeWGrThGI6KK3Itm5ERr1qFkDNrm5Ii8a/eCxS1qbaDYGUVl+7aKtnu7q
-	 /Q589mhWYiQaM+Vlcg4dBjdX68r/OMMXLyFUHB+yxoVQycGAK2LfAI2jFFSsSCC1oW
-	 5zhpdD5sjq3YmGaKdh4rxJQUU0bl0mn5//hfpIl93odVlF9fTf58lIcXnp8fEeDnZW
-	 55bdYYuL9Vr2UlJPpWHeeW8fFbZ5urdgIqVxu+Dl+oWHIjkGcTJH4/gWoB/D1xtp98
-	 t3z7qh80MXy5w==
-Message-ID: <sashiko-outbox-224005@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 1/2] hwmon: add Raspberry Pi PMIC driver
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sander Speetjens" <sander.speetjens@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261119-hwmon-da9091-v4-1-0d6e345c3666@gmail.com>
-References: <20261119-hwmon-da9091-v4-0-0d6e345c3666@gmail.com>
- <20261119-hwmon-da9091-v4-1-0d6e345c3666@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 19 Nov 2026 20:04:02 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hBtp9ZAZ
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-9495f083657so36494085a.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 19 Nov 2026 13:55:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795125320; x=1795730120; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=U7XmuxZEKsKhKcPeD0Bm1mQbeva3m9bG2ujD+Ag4pwA=;
+        b=hBtp9ZAZubEyioZEjMRiNkXicclEhX4PAQOrX0HufTZNyhdbh+GclybvsOIWi5NsGf
+         vKnuxjUuP9E86w5Sf1tsOXeC9DON6PAY57sSCJ9UZcmbWgQhUewlKr3pjGht01uZbgfJ
+         Jj2QNAXBryUxkydrpdsicqpt0PrQON6jm6hFPPkSiFWGOL8/QphdNyJzktgCwiKvPCJS
+         fxGu+EmXlqyMTqrKOfO3gi+NN2tjoh9VG51sQUH46mialdnA1XixZzpqvi+G2KtUQwR6
+         tu+o+37bWr0iT1F+o+ih2UvgsDEjRPsQZZDuXwmR5sdUhJU4/4DBv0nMP2fnPHGq9Niv
+         G+eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795125320; x=1795730120;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=U7XmuxZEKsKhKcPeD0Bm1mQbeva3m9bG2ujD+Ag4pwA=;
+        b=nROrCyzsWJkl0BKglX/EkxZeQqGisyVE5kQPVurP+qMRrhYnbF/DcUxE/wIaarM2ss
+         1suGjWhCQQJt9sCQxZqKwnpZpjByUTt40gLUcVEbtwiSRPY+9GtyAgwmSX91X8w0RR5j
+         ZYkIzj4HqDcd4Q6jsNQtoRTR3B1wnndtQh+nqeZkDd/A7hK0HX9LV5A/oPFRQOQow1Uo
+         HCYOUnUOmEerKmN8ssqlyDZYiQwAb32bpsjfOrvuHhn+wIfRNP4ItfuMFJzzYVL7Pdyl
+         g28DfB/NWXiaI8Myyih6Xc1OeqbB4OMcr96fAJSXcD8X2sctb5EfufgU8rmPmOuYAtCa
+         QIKA==
+X-Forwarded-Encrypted: i=1; AL+hErFjXfVfUHFHg087ocnoTxr2v3UgflMIo56PPTegVWq8vomlx53c36RjjsL09b7KxN+A7KwTEsYUWKQJWQ==@vger.kernel.org
+X-Gm-Message-State: APuU4Z/K/SXyaFjR5WaYsLvwXzGF09MnB5oJpBzdThQQi4DRnlEKg7eO
+	8GLk9pDvDCG6GhbsY5CT4654i3eoshaYUuPGamGcliORpWTY9PpEksmxCt+HDGAXEj4=
+X-Gm-Gg: AYBFou28md0zSlg1rWgmTjbbV7jmASX/5zdpt+HQCRNI6TgfgL4RZ9xoTPUKJXrX29Z
+	ShzfqvYvmvEbwiG8UyqxNFYgiCW8p3A/3ooBstAOqTeeuMfOUssterKZry43cMwTtekq3quOiJv
+	e2UWB5g4dyYWjqfbXovWafJsDPyePiJebWg8eqKQ3nXXsgvMq5Mv3ARziPkYNZ05myxZjbkS2ck
+	NpcFiuvXwkizfQTbdvX25yobOgwCgO4LXMQwovf5fg/GyCthuFelHRONlrDhwohmunjfGw7WHF3
+	XmOB3R23wSRLgkLAYQlYgQvwaMLXuepMQSMLVzxFA2C5tUiH15+gca+F7ZqQWJlSjHgNUY8CNKQ
+	hB/HRBMgYIFIDUXAdYIwip8nzcfxjju45+J+zBF+qmRiuzjMZQVdboWmcDJXFDT3KyG06xSVg0I
+	TwMREJhgdBBLOq7L+ZdXWwc2EbNwKHUvsB9vc8vWJ50dI7NUfMOAuZTSVd2+saVSCkUzuwnWfG9
+	w8JELy+01dZh9KxLL1sorLaPy62gl3x0ugYBDjutDYgsbfNOlIFvgC1FYkwLCRNsxjls9XqZSI/
+	1uavzQNcweH/W3nr4qvmWfH8YpMKNxb6vSPxmyUFDg==
+X-Received: by 2002:a05:620a:4397:b0:93c:8e3f:3036 with SMTP id af79cd13be357-949ba827abemr169904285a.4.1795125320405;
+        Thu, 19 Nov 2026 13:55:20 -0800 (PST)
+Received: from debian ([185.57.100.179])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-949bb418241sm54011185a.38.2026.11.19.13.55.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Nov 2026 13:55:19 -0800 (PST)
+From: Pablo Mazzini <pmazzini@gmail.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Pablo Mazzini <pmazzini@gmail.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Alistair Francis <alistair@alistair23.me>,
+	Andreas Kemnade <andreas@kemnade.info>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v5] hwmon: sy7636a: read the temperature only while the rails are on
+Date: Thu, 19 Nov 2026 21:54:05 +0000
+Message-ID: <20261119215405.20596-1-pmazzini@gmail.com>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -59,27 +97,93 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-> Add a hwmon driver for the PMIC found on the Raspberry Pi 5.
-> The PMIC exposes voltages, currents and temperatures exclusively
-> through the VideoCore firmware mailbox interface (property
-> 0x0003009f).
->=20
-> Requires a sufficiently recent Raspberry Pi firmware that
-> implements the structured PMIC ADC property.
->=20
-> The driver:
-> - is instantiated at runtime by the raspberrypi-firmware driver
->   (same pattern as the Pi 5 RTC driver)
-> - reads all channels in a single batch mailbox call
-> - uses a short refresh-on-read cache
-> - exposes the sensors via the standard hwmon sysfs interface
->=20
-> Signed-off-by: Sander Speetjens <sander.speetjens@gmail.com>
+The driver enables VCOM at probe, which keeps the panel's high voltage
+rails on for good. Read the temperature only while the rails are on, when
+the chip samples it, and return -ENODATA otherwise. Read power good with
+it in one transfer, so the value can not be from before the first sample
+or after the rails went off.
 
-Sashiko has reviewed this patch and found no issues.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Pablo Mazzini <pmazzini@gmail.com>
+---
+v5: rebased on regulator for-7.5, which now has fc8519fab34e ("hwmon:
+(sy7636a) fix negative temperatures"). No code change. Added Guenter's
+ack. v4 2/2 (imx defconfig) is unchanged and stays for the i.MX tree.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261119-hwmon-da90=
-91-v4-0-0d6e345c3666@gmail.com?part=3D1
+ drivers/hwmon/sy7636a-hwmon.c | 35 ++++++++++++++++++++++++-----------
+ 1 file changed, 24 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
+index a6b47452e29e..a8bfbf1716a1 100644
+--- a/drivers/hwmon/sy7636a-hwmon.c
++++ b/drivers/hwmon/sy7636a-hwmon.c
+@@ -9,26 +9,43 @@
+  */
+ 
+ #include <linux/auxiliary_bus.h>
++#include <linux/bits.h>
+ #include <linux/err.h>
+ #include <linux/hwmon.h>
+ #include <linux/module.h>
+ #include <linux/regmap.h>
+-#include <linux/regulator/machine.h>
+ 
+-#define SY7636A_REG_TERMISTOR_READOUT	0x08
++#define SY7636A_REG_FAULT_FLAG		0x07
++#define SY7636A_FAULT_FLAG_PG		BIT(0)
+ 
+ static int sy7636a_read(struct device *dev, enum hwmon_sensor_types type,
+ 			u32 attr, int channel, long *temp)
+ {
+ 	struct regmap *regmap = dev_get_drvdata(dev);
+-	int ret, reg_val;
+-
+-	ret = regmap_read(regmap,
+-			  SY7636A_REG_TERMISTOR_READOUT, &reg_val);
++	u8 buf[2];
++	int ret;
++
++	/*
++	 * The thermistor is sampled while ON_OFF is set, but the first sample
++	 * is only ready after the ADC sampling and conversion time (ADC_SPL +
++	 * ADC_DEL in the datasheet); until then it holds its reset value, 0.
++	 * PG is only set once all rails are up, after the first sample, so
++	 * read it in the same transfer and report the temperature only while
++	 * it is set.
++	 *
++	 * With ON_OFF set but PG low (rails still ramping up, or a fault), no
++	 * temperature is reported even if one may be available. That is
++	 * accepted: the display driver reads the temperature only while it
++	 * holds the rails on, after power good.
++	 */
++	ret = regmap_bulk_read(regmap, SY7636A_REG_FAULT_FLAG, buf, sizeof(buf));
+ 	if (ret)
+ 		return ret;
+ 
+-	*temp = (s8)reg_val * 1000;
++	if (!(buf[0] & SY7636A_FAULT_FLAG_PG))
++		return -ENODATA;
++
++	*temp = (s8)buf[1] * 1000;
+ 
+ 	return 0;
+ }
+@@ -72,10 +89,6 @@ static int sy7636a_sensor_probe(struct auxiliary_device *adev,
+ 	if (!regmap)
+ 		return -ENODEV;
+ 
+-	err = devm_regulator_get_enable(&adev->dev, "vcom");
+-	if (err)
+-		return err;
+-
+ 	hwmon_dev = devm_hwmon_device_register_with_info(&adev->dev,
+ 							 "sy7636a_temperature", regmap,
+ 							 &sy7636a_chip_info, NULL);
+
+base-commit: d979b780718905dcbb55c10a5ecb26cc1ff1762f
+-- 
+2.52.1
 
