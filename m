@@ -1,99 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.52
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795108135;
-	b=DAfcAOw9FC8Dy9jOb5FpjbD6DiLnNqd68uc3MQA5H4w4c3yBiehv33EbVmcCufIiBNVI
-	 X2Lr0ePcC+g9mPTTAbTeYVhONL5G7rbpukK4d72Nw4Q+vs+CgDurgpvYX36lxDcS8bBrU
-	 Z2S4L1li/hBeb/U7RRBSWDP9EO8Ggi9I8XjtB9n+ugy1/+avbXLpgCDJNEEmll7a9bQPe
-	 EDdFmBeadrGkZsxHSeNKCqv5y+LcXv15eT6f0quQulsf1wVrCENo7LLD/wFmSW+7puQ9b
-	 UmKhWVk5U/dDIf+MmUveKlD5ytecfQF5abUjFMc2Q6fxgAptHGuLLR6M0QKHSD38bZQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795108135;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=jsip5LtACNKYn+7qoo5OLOP346pcqMnnFr1l7MoLujQ=;
-	b=dyobYLPgpKPOmNGF7S5x/1EheGMl8joxR+pDsul0hB14QXoQrISaFxW09LOg2gNygwXy
-	 vItcifg5Al8ocTLUW+gcbEti9/3NgDwZIQFCEguUMAEQL7LvuyOJWg0RA8vXElMAdKBy0
-	 VtWUC47LBQRCAh6zSH+CG7DqWlArsZXar4HKacECQs22ZmqOBB/yP4piZyyh9OG8tcrQu
-	 4FSI8d3opFpDrFslKhpHXqcUBTccUnH6DVtHwMWjXTHXFAwMDA1bCd7LmzXxqdurrXE1d
-	 Y6aafYi360zU4/TOwdOglsd3nUmFX2PoJfcDic1pyAgG6DcouuvQPV5dm2ocMbMnqIw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WU0kzWGn;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.52
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.35
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795108247;
+	b=W1G4tEw0NMmQ/62bhHbGibkuby8KJdCrCwAhgNUQIlljj+K6Pfx8bDr7z+jzDYHIUh1e
+	 Zey6woxV+norejOCIXEDgsszgIdCGHbSDdf/hnQuTO1ezLg5h4/MfnE5U34+8s67Xh5fn
+	 /Uiny0XtCDXHtM9tJtlKHb4/t3jK7OivNkabf71vPCgOyHNjGIxC3TaALcS0HRo+h14L1
+	 oWKxgBap27TKnv7cJVgPMWUJ3tT5dMOYTYyNaNR2KM4lqrT4V05nG95hCguRTFZmMMGoX
+	 +Ro0J8JQGRaOI3J8d0b/9swl6hnFy9ULdbl9imQiNhENMxi6c+Wqpy4pYNGPBnCubdw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795108247;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
+	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
+	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
+	bh=tvzxT/DZ7TWqROCD3eNBDqUllEqtd2meudnltmsTmuQ=;
+	b=vMqvK1mz7WwOR4Aq9C3COGgVPn9NMczHHU6XblnCFDb1V5qjvRd4clHi8676C+OrDVGZ
+	 WmhBqzQp44WKrLVYhzosVcOX0fzi1Ny1e+whQBFxRe4hgcFhcA/idN14pomdRTG+4MLMT
+	 7hT1u7NFsNbzwHrKFVI0hB/15VYgIgAt72S81GXGPvVzfnHr3pbXIsZ7tfPRh2268IqI7
+	 O+NY7DUMXvg4vIycZGNFGTaSr7VSmcIpr3pM1gzItTpcZnJSH2rlwdcgCfymcnpIhpVbR
+	 XsRMkE1KqzbDk682+IxhTEEYCze+PUDZRfkzc8j/GBxmf47sdTGtpjFIDYie7G0nPvQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=none header.from=roeck-us.net;
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=KeUOjmzd;
+	arc=none smtp.remote-ip=44.202.169.35
+Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54C9D606A33A
-	for <linux-hwmon@vger.kernel.org>; Thu, 19 Nov 2026 17:08:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 54C9D606A33A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8E760A6F48
+	for <linux-hwmon@vger.kernel.org>; Thu, 19 Nov 2026 17:10:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2A8E760A6F48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WU0kzWGn
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6b2237b596cso5871290a12.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 19 Nov 2026 09:08:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795108134; cv=none;
-        d=google.com; s=arc-20260327;
-        b=pmwZz1Efcu3j68PbzTDJgkhK/nn+30ps7cK34pbm4NJzJrS8wKx3RYJQxGEFUXNgWV
-         tcOd+arPQP/AKp+lorlcwm0bspX05xO5nJEOhNlmP1a+lg50aCToZc/K3nfYsgsptOYF
-         sIyZuMbHQgjlrj+pJLS1hZy6T6S16/ZY3obkH8ePjcTOmFKdaQSWe2vAGL2E9i2rBzGc
-         c1ARyPTNsTBEtjg8PI7kdwmO3yTBkz79Cp/TTPfXvNj2ttnPdVkIQlNfiCZHP06YmF0L
-         yH0pVgxmXNpQZUD9iwy8VMh61KkvhbnW6NC+p2NEEIUyjptF51Rs02dsAwFYlm67q6HF
-         PSjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=jsip5LtACNKYn+7qoo5OLOP346pcqMnnFr1l7MoLujQ=;
-        fh=mxBMF56Z/NY1jmM72F/q27Dz82sQ9/4J1IT2OEIMfhA=;
-        b=oKDAFC2JopD6YSPui1VYH2bl+0Cu1iV3Lw62lYLK5HX/Uujrs3uJ0bZahocyVZiqjq
-         i9Syb/ocYZPh1JPa+/W/xdHdas4g8+S7O0ENc/Z798ZHlw5jk3rdoJwRyQRhwROOs/xJ
-         d4TlIiEsv+pa8UUwguWAnXBh0UHysn6vb3jyz8G2taoLTPDv3qbdMWhA3CeDyBNq74Qr
-         jy6yw8eVP/aAfGN29M5wlAV6LLlaAz9JzMKC5grpmwzDhTBWH1GRnSYBTvNYKDKGp5uy
-         Oaiu7YMXldJAMuzH6WJ20qD2YLVWP9c7For4HsdHbIkOe1wp/udjA7h2Nh0PTj8oGd7i
-         YdaQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795108134; x=1795712934; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=jsip5LtACNKYn+7qoo5OLOP346pcqMnnFr1l7MoLujQ=;
-        b=WU0kzWGnQK28cjC4LK2NrlQJ+EjNsF3jHX4t8tRAUfWVliG02Q5lkA80nhgJHt57yd
-         siR8WrnL+50Bq2xRqvErsiKSiYllqkG5eLc68YAsULSpAj6dtAVywEugjF2iiIgMIFEo
-         HiccjeUoyfR3wpU9q/FvaFgccf3JgKoMEIrMCXTRR6dH50WFU/nzMMoKVUKjaz1uFVkF
-         vMwSS+mft8KA3BvytegcqqxWJscDAOb9zjuRM96vMzpqCBh4Vem41uwryZ2h6jYfEAxR
-         owoKN8fDDVFR7G7qBG7IfZS+8eBGHJPt6LCycbWY0BE0JAZDJrdlrPkrfZdab45oZT9l
-         jHxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795108134; x=1795712934;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jsip5LtACNKYn+7qoo5OLOP346pcqMnnFr1l7MoLujQ=;
-        b=x6ci7GXUkJTvaoNZDQaVbTn4QumS67BPsf7CdRrl2dnp+xgvzavAeaI5/w1Sz+ZBGO
-         Vmmdfgucllx1jCiOOp8D/cOlG6+M57yu7Q92/yYPFtFyWqi2zlEQbRmgsm+/tVqH7Wlr
-         4xcKRfhu0dRqoTnDXNAhlVbse/07cst68AJOIY5fN80Mq60eHpa+LnkWTZXugne/ihA0
-         9rMCBYGfqhiantPPJQbsaq8S4enyUaE458xqcUDwgYDriogwipdjiDReMZ7ibany8eRK
-         VbhanDGMuSJM+U4ixrXLcBUPkd3Ak1gsfsYAkvKciaYIXaZqnSS3Vtgw6WPZj5u1hFhO
-         68Ag==
-X-Gm-Message-State: APuU4Z/7q27gVGhZF+vN/Dvs3mSSzwtxkCo5c+B+YNNiNb44Kewntuik
-	bWTemEP8Uc8baNusFsRUwifeAk4fth4iH1bEHq6pjrqZZ0brhcpjse3itNQZS3McZ5lf6TVJvHG
-	w6tsJ8z0q0qTgN9bnKsjmDIyxBN5j522HzEOD
-X-Gm-Gg: AYBFou3rAFkGxh2vJ19aQgIolQ1/KMWqd35BK0oszHF0dq+3OaXp4spERv64dZLxoTo
-	k/fTS85hbXHJgoyDaQnLsxM2jyHaXW8EpYHARCakywp8Sr2CxC3SK8ZhBnq0uSVbUXBkXsFfqgB
-	BoQp0ejWvYHLc1t2uNm0l6852wdxbXNRBt4dkVwCBh/pKUcA5gsXIVeyNIJI0EKBXTaAGYA010O
-	8KGbb5dyOqbMZX4Zh4gD7+/t96/0WtUGOBgyhL6Rv1x3Kz0hq6qwFuLpLk8crvv3tS3TpjZTlDe
-	31qi4DewPM+Kx/ehT9iZ0qOKm2FMiulfVUn5IMEDA8H+p40jzjA71IuDiCDsNMbGcDCO5ZA8/5I
-	68XLGPEllcK6cpc4cwbUSVeJKAToovbaT9wjPFrpt7Dg3rrLubf7Oyisp7EjqKSZl
-X-Received: by 2002:a05:6402:4003:b0:6ba:1881:dfcb with SMTP id
- 4fb4d7f45d1cf-6ba1881e15emr2086412a12.11.1795108133606; Thu, 19 Nov 2026
- 09:08:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=KeUOjmzd
+Received: from eig-obgw-6004b.ext.cloudfilter.net ([10.0.30.210])
+	by cmsmtp with ESMTPS
+	id Tw7nxcdOx4vCDU5eoxj2Vh; Thu, 19 Nov 2026 17:10:46 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id U5enx7mTTlaNKU5enx44Ez; Thu, 19 Nov 2026 17:10:45 +0000
+X-Authority-Analysis: v=2.4 cv=UbpRSLSN c=1 sm=1 tr=0 ts=6aff2d95
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10
+ a=mgPTucAGsIUSSteNDeUA:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
+	List-Archive; bh=tvzxT/DZ7TWqROCD3eNBDqUllEqtd2meudnltmsTmuQ=; b=KeUOjmzdRM6p
+	wWOR2ptqjgYVXhEiVQTDTslpNlHO39aDjbw8UfLgzzKoCkuEv26Gq6zAPO+LPnvEfCW4UiteJM35A
+	BpbwJWM5CUBqfgDWUjjQMq5SphaVyQYj9fH5zlSDVvD8An2qKww6KSF0Hkr6u845UU8m4+2SzK9u3
+	fckGM77YU4Icu8/tYQunoz/8pCbmrYU8oiXvp1y4OilWVzO8TWUcVPOHTS4jkAH2lZ7i5WSkydnVS
+	A9myG8HPwKILoPF+0Z7Lh/kXdvOAtH1CgeK9Ch8gaFKu3uFulkcMbLYPZXwbqibSN9nihBRemhIiD
+	yTC4+YC0DTtG52+zzyUGqQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:52084)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xU5em-00000003T3F-3iLv;
+	Thu, 19 Nov 2026 22:40:44 +0530
+Message-ID: <3f758e2a-7b95-42fe-9b4a-407b3c1992c1@roeck-us.net>
+Date: Thu, 19 Nov 2026 09:10:44 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -103,62 +75,114 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261118092928.163553-1-vitorhg20080@gmail.com> <58a7d381-fb19-4d55-98d5-dfdf9b16e2b7@roeck-us.net>
-In-Reply-To: <58a7d381-fb19-4d55-98d5-dfdf9b16e2b7@roeck-us.net>
-From: =?UTF-8?B?VsOtdG9yIFNpbHZh?= <vitorhg20080@gmail.com>
-Date: Thu, 19 Nov 2026 17:08:41 +0000
-X-Gm-Features: AclHuK9xhN-ZQamSIlc7Z1rgFKFoYFRWnrSdpZ43JMP7Tnt5FAE7JvzbDMvBa8I
-Message-ID: <CAOhXrFeOS3nKWTBZS3TqT1BmOHkjKJumns7t9R5bjGwLc_sE0g@mail.gmail.com>
-Subject: Re: [PATCH v2] hwmon: (ads7871) Add error handle from spi_setup()
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/2] hwmon: simatic-ipc-ec-sensors: add BX-54A EC
+ driver
+To: Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
+Cc: linux-hwmon@vger.kernel.org
+References: <20261119164708.1280862-1-benedikt.niedermayr@siemens.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20261119164708.1280862-1-benedikt.niedermayr@siemens.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xU5em-00000003T3F-3iLv
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:52084
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 7
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfCrukV7/fHs9lM+PfjCV5lJ/pwXnCwWaJCJGEqAVH49CZjKX03LwQMrZFLnDmOHQlxUoxVMVrmNBy/I1s7io/L3L38FyTnf8Ccm9Zy7TWqnvso67B3cM
+ V1/s8AkmrRGsP5mNJyHad4fiXlEvUjkDed+5bQNv+40ElxvxlYEB1hnSJ8HgKkD4MzghDMM0zMR/iU0b4edA0uV/qjV39ddxBVX+LcZFIBX70M/gy85Wn4tX
 
-Thanks!
+On 11/19/26 08:47, Benedikt Niedermayr wrote:
+> Hi,
+> 
+> this patch adds a hardware monitoring driver for the embedded controller on
+> Siemens SIMATIC IPC BX-54A systems.
+> 
+> The driver loads directly via ACPI "_HID" which is reserved for Siemens.
+> See commit for more information.
+> 
+> I'm not the original author of this driver but I reviewed it as carefully as
+> possible and I would step in as maintainer for it.
+> 
+> This patch does not enable the hardware platform on which this controller is
+> present.
+> Instead I just routed the enablement through the i2c tree, which is currently
+> in review [1].
+> I wasn't expecting the review to take that long, so it's maybe better to route
+> the platform enablements through this tree instead... I dont know...
+> 
+> 
+> changes since v2:
+> 
+> - fix: shared mutable temp config array in simatic_ipc_ec_hwmon_probe()
+>    Switched to a dynamic allocation approach for the temperature channels
+> 
 
-V=C3=ADtor
+A static table and using is_visible() to report visibility would have been much
+simpler and preferred. After all, that is what the is_visible() function is for.
+I guess I have to document that somewhere as requirement, because for some
+reason people seem to prefer the more complicated approach.
 
-Guenter Roeck <linux@roeck-us.net> escreveu (quinta, 19/11/2026 =C3=A0(s) 1=
-6:49):
->
-> On Wed, Nov 18, 2026 at 09:29:28AM +0000, V=C3=ADtor Hugo Silva wrote:
-> > The ads7871 probe() ignores the spi_setup() error return value
-> > and it attempts to write to registers even if spi_setup() fails.
-> >
-> > Return the setup error before accessing any registers.
-> >
-> > AI was used for peer-review the patch.
-> >
-> > Fixes: e0c70b8078629 ("hwmon: add TI ads7871 a/d converter driver")
-> >
-> > Signed-off-by: V=C3=ADtor Hugo Silva <vitorhg20080@gmail.com>
->
-> Applied.
->
-> Thanks,
-> Guenter
->
-> > ---
-> > Changes in v2:
-> > - Clarify what happens when spi_setup() fails.
-> > - Describe the fix in imperative mood.
-> >
-> >  drivers/hwmon/ads7871.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/hwmon/ads7871.c b/drivers/hwmon/ads7871.c
-> > index 36297bc6d047..a1ffc35d9272 100644
-> > --- a/drivers/hwmon/ads7871.c
-> > +++ b/drivers/hwmon/ads7871.c
-> > @@ -187,7 +187,9 @@ static int ads7871_probe(struct spi_device *spi)
-> >       /* Configure the SPI bus */
-> >       spi->mode =3D (SPI_MODE_0);
-> >       spi->bits_per_word =3D 8;
-> > -     spi_setup(spi);
-> > +     ret =3D spi_setup(spi);
-> > +     if (ret)
-> > +             return ret;
-> >
-> >       pdata =3D devm_kzalloc_obj(dev, *pdata);
-> >       if (!pdata)
+Anyway, let's see what Sashiko reports. I'll let you get away with it since
+you are the one who will have to maintain the driver.
+
+Guenter
+
