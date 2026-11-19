@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795047262;
-	b=bJaY7PCw681thcftdDMGRBzVAL/ywYy7aeyawWAqK3kGexdggbzTBYKS4vwCwnNPly+m
-	 pyLJOJbWBJ2djmiU5bQWE6NeH/uYEyY/uNGdi0pXHxxzrZocyEs9RtK1iFRATgj+x0cqA
-	 clABwpie4qjdTRvS01e+Fz/I6gZp395/1KXh5slS8IWTTaL0i16RctPM81bNdcED7r4I+
-	 QrsPoHC2Gl+BgqYywSpYQGHiLCI3RsWpcOTmKYXIPL50eyetluJwLfkD8qIjMoP1WozsX
-	 hWJR2P1A/mDlVvXtWaI0ymeZ/C2/Ctx+o1w9cxCP5QyERAOr7SSscQrStF/Y7cPuW6A==
+	t=1795047333;
+	b=ccO0Xs6ttMi9rVGTLRD3gtuGPFCH5CudwQKnBJ00DWaZXmUgF5HvV5ETwE42Tu1UZbyh
+	 5Bz+3/5Q+/tZ9t3nkZa7RfjCVnKHrZvouRlT/Sp+n0cpYd3/oN8DyG+fiTxFI6xs9cFh/
+	 c4dX8KVdWqefXgrjwrllslVbp9Cisc+E7Ng30C10HMB3YvigMcHXVdJGvNWqEeQSmm/v4
+	 tOvyUyyjUckznkidLxao1ulk6f7g9JueyGA9UmrkDwWVuWpvgW3sSjNuQe56Fa8t9UAX3
+	 E5zTdGNAJO1Fuug1J0NmomQSzGuelT45i185vIWYraM9YnIJ0oQ8aEhYN5ROFVY6bnQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795047262;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795047333;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=aJ6RXnWvUlLjnvBnI/AiZTS+x5R+CJ3ka3Z1tghdPvs=;
-	b=t7Jh8umavvJdwy3Veunm81+0OL5g+QUR8tIgIwUCOb7z+8MLDvTeBwrA/cdH/+/DeeyO
-	 tARU3sBg36hpIdUoEk816VN8Upy61q+D7hJgdYNG6Dr7rQbg44oH3N/dBGGDD4lsKaEH6
-	 fBLwLh/baZjNUk3DzadxrRTpdQv7e4UsbcUxDeIWT6iOaFgZAGfRyvA4EyBDtUUw2qCKK
-	 vwyTyL+hCYaE3haZu4O1en6RH0i4bcZxGJzNMoYLvrT1WjPB7qykgEVb9kaAHI8TixQ9U
-	 jrp6mJJOHqMeDpy38RF8Q0dwF3VJfN5z8HLtmkqKBS4hwSTc1qpwCKYpLCX1DqJp5FA==
+	bh=D4JPfoM+hVzma5+RxLZfvNjHiVpd7KUOf5cxeeQcLjs=;
+	b=xWkYady3W6csVFFvFVDGiGLrfrw7i/VYZY1xb/Fz21Vq3sMX9wqemSx1ARxGsFy6ANrI
+	 9jXmu17H1vDFDQySWZmFiOW0SRMTHM3FxzlH/lS+JEkB6C2dCqWYzQntSakr9Xs5O/OrB
+	 D5AT6jap9tDNDuwGPg5L0p+5jq/FH5JjDVhTrB3HtfS3oL3Wycup32JmcHiqi4esGKdWS
+	 FrNB/B6ucaG777DoFzpf+3PUJXtvSEazlL9K92mSLfAIVHQrMslsMkc3WFdgcF5HNjZlR
+	 lqfB2hxBhPF5Q14HZOkVLe6Ih04ApXM6zusxeDV3+dHiKKaqIfq7ha1/iYCN1Mc2yqw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="fEK/iZJ3";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZXalPHsI;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B799C606A31C
-	for <linux-hwmon@vger.kernel.org>; Thu, 19 Nov 2026 00:14:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CD9A606A31C
+	for <linux-hwmon@vger.kernel.org>; Thu, 19 Nov 2026 00:15:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fEK/iZJ3
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D2CE1F000C4;
-	Thu, 19 Nov 2026 00:14:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZXalPHsI
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20F961F000C5;
+	Thu, 19 Nov 2026 00:15:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795047262;
-	bh=aJ6RXnWvUlLjnvBnI/AiZTS+x5R+CJ3ka3Z1tghdPvs=;
+	s=k20260515; t=1795047333;
+	bh=D4JPfoM+hVzma5+RxLZfvNjHiVpd7KUOf5cxeeQcLjs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fEK/iZJ3SJparGNTp8MZzC1hym9HK0TqukT18daWsn7FJrhA67jSNzJq49INQ3Rgh
-	 JuoMKouCgja+yPztNqMEMrGAfXKrWGKk6SnZxEASJo5cIbxlXffAhK3T4lmAfIwbkK
-	 SBvMgHcFnDJiMsoodmZT46XjHEFrAN5VPCGF2W955TBKs4rs0WAGc+EzIXltwErksR
-	 Trpg9QarVzn/BTob1fkcPmdGDRmspQs+rm/gTgGujSoaD47HRCjiV7vg73vEk5CHpo
-	 teUDaGOTvCeLREnS8g8ttqypD4jNetQrfYNMrPGZQ1+I31vmiprbrHH1XMZESNyt17
-	 awNFibDxb2zmQ==
-Message-ID: <sashiko-outbox-222238@kernel.org>
+	b=ZXalPHsIToKUDFZufMwhQZcecvQ+hxVU8K3xxex8dLRhN886Fpx1hLN6J+v5Yvhgf
+	 DoN1QOWjcfWF5exnaWzwYnyVvZKwJUTibAGeW/A6aZCrLPGQ4ygSuhpevlWzJ/FGf3
+	 /f1uaAEb8DDgqenwmHP00A/7IWEKdTEmZ0H+clxmh2ZQ5wdzrBDPHvY126kIvb5ps7
+	 JiGtvKqsEWTZTae/rICZfccBsKZlyW6wIa5KPMDkMTYbqK3wuImRX+agPg9nfR7nxm
+	 2X2AfVxqvhJs7xAzCWSsAbf6kTUOrlCP+ORIndgO6s1A1gd9y5wEcDMiWL1pt+AScw
+	 JQVWToNKHdSNA==
+Message-ID: <sashiko-outbox-222239@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 3/7] alpha: marvel: refresh environmental readings
- through the console
+Subject: Re: [PATCH v4 6/7] hwmon: Add driver for Marvel AlphaServer
+ environmental sensors
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Matt Turner" <mattst88@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261118-marvel-env-v4-3-200317e496c2@gmail.com>
+In-Reply-To: <20261118-marvel-env-v4-6-200317e496c2@gmail.com>
 References: <20261118-marvel-env-v4-0-200317e496c2@gmail.com>
- <20261118-marvel-env-v4-3-200317e496c2@gmail.com>
+ <20261118-marvel-env-v4-6-200317e496c2@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 19 Nov 2026 00:14:21 +0000
+Date: Thu, 19 Nov 2026 00:15:32 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -61,34 +61,31 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 
-> The SRM console keeps the readings of the temperature, fan, voltage and
-> power supply sensors in the power and environment (P&E) nodes of the
-> config tree (GCT), and refreshes those of one node when asked through
-> config tree callback 0x28, function 0x1f. The Alpha Architecture
-> Reference Manual reserves every callback code it does not list, so this
-> is a Marvel console extension; its code and function number come from
-> Tru64 UNIX. Define CCB_CFGTREE in asm/console.h, and add the callback
-> and marvel_cfgtree_partial_update() for a sensor driver to use,
-> retrying, as Tru64 UNIX does, while the console reports busy.
+> The management firmware of the Marvel (EV7) AlphaServers, the GS1280,
+> ES80 and ES47, monitors temperatures, fans, voltages and power supplies.
+> The SRM console describes each sensor as a packet in a power and
+> environment node of its config tree (GCT), and fills in the readings
+> when asked to refresh the node. The packet layout was taken from Tru64
+> UNIX.
 >=20
-> On an ES47 the callback takes 13 to 300 ms per node with interrupts
-> disabled. The console callbacks are not reentrant: a refresh on one CPU
-> while another printed to the SRM console killed the second CPU, and the
-> service processor reset the partition. So export the srmcons callback
-> lock and hold it around the call. The lock is declared even when SRM
-> support is not built; there alpha_using_srm is the constant 0, and the
-> call is compiled out.
+> The firmware gives each temperature, fan and voltage sensor a warning
+> limit and a failure limit, and reports the sensor in the warning or
+> failure state once its reading reaches one. Neither state means that the
+> sensor is broken: a temperature past its failure limit is too high, not
+> faulty. Power supplies are either working or failed, with the cause
+> (AC, POK, overtemperature, fan) logged by the firmware.
 >=20
-> Tru64 UNIX makes this and its other runtime config tree callbacks only on
-> the master CPU, and the Marvel PAL TOY calls are already known to work
-> only on the boot CPU, so make the call there as well.
+> Export the sensors through hwmon. A temperature's warning and failure
+> [ ... ]
 >=20
-> Reviewed-by: Magnus Lindholm <linmag7@gmail.com>
+> The console callback lives in core_marvel.o, which generic kernels
+> built with ALPHA_LEGACY_START_ADDRESS leave out.
+>=20
 > Signed-off-by: Matt Turner <mattst88@gmail.com>
 
 Sashiko has reviewed this patch and found no issues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261118-marvel-env=
--v4-0-200317e496c2@gmail.com?part=3D3
+-v4-0-200317e496c2@gmail.com?part=3D6
 
