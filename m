@@ -1,71 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.35
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795042831;
-	b=zrivqGWRzk6WEazFgv8hoMc3kaHszLtMiTUcVBJj7jgxVz6NHfDoN8zyrgCKUzfZz5jv
-	 DtazkKEAhi+DvYK1/R0F4CiwR4hy8xHr+27eyiZpmX4fU52z3Ei4nCqYJfHzcnk5vP24U
-	 djjg3Y7e3u1+U8kQUJC98Qtn/u+PJQDga6ex7UKXrYycYq9w4b64LX1nI7zcHhHRrhdQZ
-	 0bSZ4dUhiBxNBt/ceIuQloSP8h60bIEM0lB93TYaGdqXrfkw4iXeLx9p2sHNhr5axgJZg
-	 kPrdS+LNNWGkOgiyJkXZQX9sYDHc0936tjg7V2KMHlvgvlVtcVy/9nK3ynJFUTXerEw==
+	t=1795046990;
+	b=GpP++L7UNUprcTOe2yP6eykeQgr71Ku3cV8aZ4dFNLGzIwP/aiZCGXkVZTbAUe4GgJwO
+	 UgvWo2NmwgE7D8Qdlkum8f9J2oANBXWO6Eyli7tRZEiI0J84Fj9qJOoTC0uSJws2HEcsu
+	 o5VUrKa6V6IuYdgq29PCfKiye6yAUanODQsGvffAVnazLbkASeTzk9W6tlwA3O+xR47JV
+	 pwhtCFdsx3ZkVHztTmhUzK3bAkOj/MqqaZ44BKnQ8dnvb6E6KyzhCsoRWr9c8rRNo/JR7
+	 0CTx8qZzOtSeEimPEF58IUKlsbsCBj5R7q1ETs7P3FUC3Xp/EkNpVJyDKx5+yOq5jkQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795042831;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
-	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
-	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
-	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=LcGUIxJ0hhWwJBANgRsmsDcWNEnQenUxD/N5yM1KEfM=;
-	b=FPbWvBXVrHKVXaN8PSmLCxRe/wta+gAF3Osn8B4mkdy4F/4WxrR/HdzmVIxiz645QLTX
-	 gTbomPy2cg/GzHPV0+zwzAq+pbR72tRDMrEVFcOqn4/Dy5Ea0eaBCpsY4hkVoW2Qm4n3e
-	 9Kq7p1+1J51X85/36zrDd0/YH7CzUTSMwhjAevmaDTCddx7DIoQOmF38Yy4/oYUMdjPRQ
-	 cWcuTcqBfdYXJyqTFdRxx7wcCO+RgADXYVPLgofxScyLMNOemPlDpJcSuhgthcEKbYB9h
-	 O8djQ8UbeALY/bNF4JDrJoLzfK/o7tBNa9Q2yQRs/sto/b6zYghsSAZvUDo7Ym6RAuw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795046990;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key;
+	bh=TzWdGjxwpb+Zzyy/9NnH7/G4pXIjsT4r2OhXz+T4/Sk=;
+	b=qygiVqIf/HqciunoDPOetVPMae2R3iS0/+sG/jU3CVPLwYK/6/sKPHj6G752zcR0gKq0
+	 v1ka/39hXamgy81lkQ7r93uD8zJ89GOP2FbgPTQgRqV0xFknU3f5sN1vgm5a9wMnfMFnc
+	 NE/0vcathJE5i1aWIWHzmwuUdGzdy7h/AS61NnI4Yr3BsbTc/5UDwXtl7g4kzFK+dlgV3
+	 8wl+EtLo+kxTsvBb5srhevUOfPNygbNQBY+CcYZD2uFq6c6qSsj7xXa8hi9WiZDhXHGyF
+	 9trGP4c5yYCV9O8dXI9RmaugVOGrMVSuK/fOyI+Blaw4b3GA+IJv0Q0okzNhDPVYGvg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=l6IhFjxb;
-	arc=none smtp.remote-ip=44.202.169.35
-Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kNoqXfBo;
+	arc=none smtp.remote-ip=74.125.224.45
+Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2083606A336
-	for <linux-hwmon@vger.kernel.org>; Wed, 18 Nov 2026 23:00:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C2083606A336
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ABA4606A32F
+	for <linux-hwmon@vger.kernel.org>; Thu, 19 Nov 2026 00:09:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9ABA4606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=l6IhFjxb
-Received: from eig-obgw-6001b.ext.cloudfilter.net ([10.0.30.143])
-	by cmsmtp with ESMTPS
-	id TgCjxYNoN4vCDTodcxbzGT; Wed, 18 Nov 2026 23:00:24 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id TodaxbSF0dRrRTodaxVlzl; Wed, 18 Nov 2026 23:00:22 +0000
-X-Authority-Analysis: v=2.4 cv=LOhmQIW9 c=1 sm=1 tr=0 ts=6afe2e07
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=VwQbUJbxAAAA:8
- a=xtVSApEC_Af63HCmTx8A:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=LcGUIxJ0hhWwJBANgRsmsDcWNEnQenUxD/N5yM1KEfM=; b=l6IhFjxbqkEW
-	usFNckm0PuJnx6D3jE0/a1aY5IAo3PpzAvw7KShZLOUfkRVno4Lni0blwvnt2OO7ftyK3HXUlZyuc
-	FCidRVfOk7o6kjfOjwiYcotvDdE429VCmEL1oVAgikzmoyIzmCvclGTecIERMcjwl8hC9ysLfZRQj
-	sY9kTAWaL/FqMHkQ/O9rx2pb6NL9MKudoaN+0dXrVXbtPEg4xQI09v2QkzTbTRcmJ0udV1FIkgkWf
-	C28L7rPX28FTx2KsmB91ZxZC0R47/YXJ1M81axuYYM3Sl40ZAIf3e/vwztlRWiP9XqcO2+x15dQDM
-	othLraxL6uzql8OB3/hqEQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:36386)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xToda-000000049Xm-00es;
-	Thu, 19 Nov 2026 04:30:22 +0530
-Message-ID: <11a821f4-aef6-425a-8626-1d8641e9f83d@roeck-us.net>
-Date: Wed, 18 Nov 2026 15:00:20 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kNoqXfBo
+Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-67dabd38cdfso1920939d50.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 18 Nov 2026 16:09:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795046988; x=1795651788; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=TzWdGjxwpb+Zzyy/9NnH7/G4pXIjsT4r2OhXz+T4/Sk=;
+        b=kNoqXfBo65MpIrB/oFrvmc8BqqMPxNb6PSV5GG4Xr6thXWCDu+DvA3c4lcs85+0AbE
+         7kPJm5IzlXO428M2jnpPj4WasQIw0SZUM02gY2qHM+G6uB8KyP/dGhY+7+ASzHxKpe9R
+         AOdD6S9AjAyP7+ZZjCdxoQQQJQ+wzy4kgj/F4hobhyDXawvMzdKArlm5hNFXsFGE2QYa
+         Z8LfAybEVlkJP7Y03oE1jGmTgExBDO3Ji/KL/QC+bIN/gL2cKLL5Iu1JVRMDBlvnK/3y
+         9C589FEEgFoXfhZgt5Tpno881chfVnxMSU604X2WUKwokDV7gIKNKrk29ADQElqySRY3
+         Masw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795046988; x=1795651788;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=TzWdGjxwpb+Zzyy/9NnH7/G4pXIjsT4r2OhXz+T4/Sk=;
+        b=zNPJtb7qQPqRYoXKjQIdnxNfKjqGL+CQhKRcyBVa5b6n2lGOS78ASf5m6hQFZY9GnW
+         bOQ/rBnS0Td+y6YZXTz6mKriSf62uag6Su/Di2F2dPIT/P1KU8qoK12tWTFAs2IeUGLP
+         dBX9b0ha4vAIEZT9hbbwAfqYMSmev24o4HY7BTpAkqHNUTP5/og0zkAlbMrpjwodkWRC
+         HnJPAdJcmRHSXVk7TsNrQoWSLAL7lSxEgWEvmhBUgyQRZ5hYwk/2aeoCVGU6LIpdfalG
+         CIzwluOixTd1aX1zCGshCTqlDVZ/8FxgbjYqIJMEU1L5GAod9uHIq1K21Tp1OU1AX9b4
+         1+QA==
+X-Forwarded-Encrypted: i=1; AL+hErESV/z5HDLmHfoOIPQuNzVHXV3CPb5KzfmJt4ZyfzKVitXfJ+LFHuaAfSxx4eaHCQYx1R2obyJJj78Lkw==@vger.kernel.org
+X-Gm-Message-State: APuU4Z//gq3b4GddxccOK3y1UgztQu2CIdSoYiRhJadN3y2ceqLt4apP
+	0P7HRJGasXWv+DFeUJopjjMF3EP4DOwfnXc5Qzh9wHPwoZ2kgS/aWSemynzj3BRV
+X-Gm-Gg: AZFdTZf0Q918AyhlG0j9F1DvF8d4cuKCr1PpIUF0JR2jwIAcu88ZyfbrCBlCey7hmVR
+	NAUIakKgwQen9nHUA5QO2rcdbThgTXLiVgCOz56BOWzl1jPNbGXl/bfjml3fEzg+xVS2LeQeOhp
+	xQSLNOiXWtdESKv7w9yNQA6JCUiJ5M8pce1czEjIE9w5kckPzDv8Ls6S8tkGg4Bvfx6OS19yJRd
+	ZojhyDGXUCSxgCG/y6uz2uBLw3k+f46I2TW/0O73kcNjUIUCAlms826qhNiaYUXsOqwX+oJvucm
+	fU7ToifyMJ2ZzgZt/B3PoeTVRn9wpoagiu7nJocmWKKxdjuJ8ACrz2hZhWcOFTbMd5iGxK86VW9
+	SEX+MK4zeznk/A4oyvqjKYC/npetTxR9/qb97HuFhUeCCeWAg2AgTDA2DZz/eAgrlnaHQh0RkhP
+	EonhN9wxg95KudqRvzFvv0m9z+Gje3cH7xoce9rAZLfEilvmOtj272q9nOmGYpFjvuR1di4NO4y
+	8xklw6FuCQx4p1MGYrCp4mOJ4LSh+BTv7AG8hkw26xmVDzJhvjNHUdEd3hwtkUELby5ypUSfYJM
+	NTukzPHmIMV2dxsggaVLa9v4UmmjTawAtNM7iWDOeUCZWMmXSPowmxilOalq7awQummrZpARyi8
+	d4Hc69eS4/WpEuPHNi6Qkw6CyOQzjvOkHmF75M+TZ6H4VHsl0E372/Nmx6V37Nof4KRq/E6q6j4
+	dyKJE+45CwSxQRDPiQ0g==
+X-Received: by 2002:a05:690e:440e:b0:679:a252:70e7 with SMTP id 956f58d0204a3-67dd3fa4b1bmr1190009d50.22.1795046988479;
+        Wed, 18 Nov 2026 16:09:48 -0800 (PST)
+Received: from localhost (107-220-129-194.lightspeed.chrlnc.sbcglobal.net. [107.220.129.194])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67dd587fa60sm2479747d50.13.2026.11.18.16.09.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2026 16:09:47 -0800 (PST)
+From: Matt Turner <mattst88@gmail.com>
+Subject: [PATCH v4 0/7] alpha: marvel: environmental sensors
+Date: Wed, 18 Nov 2026 19:09:45 -0500
+Message-Id: <20261118-marvel-env-v4-0-200317e496c2@gmail.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -75,129 +94,137 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 0/3] Introduce cros_ec power monitoring
-To: Daniel Balint <dbalint@google.com>, Jonathan Cameron <jic23@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, Benson Leung <bleung@chromium.org>,
- Lee Jones <lee@kernel.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
- linux-iio@vger.kernel.org, chrome-platform@lists.linux.dev,
- mfd@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20261106193129.43493-1-dbalint@google.com>
- <20261107010356.39d9eddf@jic23-hlaptop>
- <20261118204532.257423-1-dbalint@google.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20261118204532.257423-1-dbalint@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xToda-000000049Xm-00es
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:36386
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 8
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfHbRIJrRneT3zm1ZYLS6TMGFkt5LgG4Sg6yLG+r7TfRtgOxEy+XGrRwiu+piGOl/9J14OI7vSWE15ylcngtkpgPvd0PzHqnMRoYGXTI11xRLXgYjnThQ
- oLc9h7G8BZAPmHAJ/uXUSYwWNwq3qYw/za51UkT7yViMatRl6RJUEhnXeL7lIKrrMCIdZ7hAuAGbKbhMUpXfV0kMxbWFrgdxVdj24FE/DvbWa2oS8e1CJky7
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/23NSw6CMBSF4a2Qjq3pA1tw5D6Mg7ZcoIaHabHRE
+ PZuixMwDk9yv//OyIOz4NE5m5GDYL0dhzjyQ4ZMq4YGsK3iRowwQSnNca9cgA7DEHBFWFEayYV
+ WHEXwcFDb1xq73r7bP/UdzJQK6aK1fhrde/0WaLr7Gw4UE1yUhLMCci3hdGl6ZbujGXuUwoFtq
+ dhRFinUguagGcia/lK+pXJHeaQEKsMlqSujyi1dluUDJpiCnCwBAAA=
+X-Change-ID: 20261114-marvel-env-d0289c736ba3
+To: Richard Henderson <richard.henderson@linaro.org>, 
+ Magnus Lindholm <linmag7@gmail.com>, Guenter Roeck <linux@roeck-us.net>
+Cc: linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Matt Turner <mattst88@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5576; i=mattst88@gmail.com;
+ h=from:subject:message-id; bh=1eg0SKmNL7HF3/ydPc7qgVPBNZmKTXoRn0Pn707Didc=;
+ b=owGbwMvMwCW25rVmCc8sv+mMp9WSGLL+2Xklhuz5ICIiFrt0wt7aR1kGpazXqydlHJ2tJ8eqZ
+ c4iXLG74yMLgxgXw0wxRZa49Yoss9p2LPU5Lf0LZg4rE8gQaZEGBiBgYeDLTcwrNdIx0jPVNtQz
+ BDJ0jOIhcnoMGpnFxaWpRbppBUUOefkliSWZ+XnFevkFqXkF6QV6aZlpJRkZ+UXFqUAj9PJSS0x
+ dHd2MDA1MLB0tzJwsHE1NnJ2dDJ3cHB2dXZ2MLM1NDJwtHU1cLc0ZuDgFYK6JmMvwT99Q+csji2
+ 8dkevyFB+sOHBy6g/BT193b5kef/J2dO2O5X8ZGXZ0Xlr78u+kJ49lPVtP6zF5ZVzjaJ1jF/5df
+ ONbzqPHWdkB
+X-Developer-Key: i=mattst88@gmail.com; a=openpgp;
+ fpr=3BB639E56F861FA2E86505690FDD682D974CA72A
 
-On 11/18/26 12:45, Daniel Balint wrote:
-> On Sat, 7 Nov 2026 01:03:56 +0000
-> Jonathan Cameron <jic23@kernel.org> wrote:
-> 
->> Hi Daniel
->>
->> I'm not necessarily against this but when adding monitoring components
->> to IIO the usual question is why not hwmon?  What features are not
->> well supported by that framework?
->>
->> Note historically I suspect we accepted one or two drives into IIO that
->> would have fitted better there so precedence isn't a strong argument.
->>
->> Convention for these somewhat borderline case is +CC hmwon maintainer
->> and list as well as IIO with that explanation in the cover letter.
->> That avoids any last minute surprises!
-> 
-> Hi Jonathan,
-> 
-> Thanks for taking a look!
-> The main reason for choosing IIO over hwmon is that for On-Device Power
-> Monitoring, userspace needs an atomic, untorn snapshot across all rails
-> (up to 64) over the same integration window, triggered on demand from
-> userspace and read out in a single buffer read rather than repeated
-> per-channel sysfs reads.
-> 
-> Reflecting that requirement, EC_PWRMON_LATCH on the EC is a global,
-> stateful command: a single latch simultaneously snapshots all onboard
-> power accumulators and resets their accumulation window on the EC, so
-> individual channels cannot be latched independently. As far as I know,
-> hwmon only exposes independent per-channel sysfs attributes with no
-> multi-channel buffer or on-demand trigger ABI, whereas IIO's triggered
-> buffer interface is well suited for this kind of pattern.
-> 
-> CC'ing hwmon maintainer and list to keep me honest.
-> 
+The service processors of the Marvel AlphaServers (GS1280, ES80, ES47)
+monitor temperatures, fans, voltages and power supplies. Linux can't read
+these sensors, and the events the firmware raises when one changes state
+are printed only with CONFIG_VERBOSE_MCHECK, and then decoded wrongly.
 
-You could accomplish that the same way many hwmon drivers are doing it:
-Read all attributes in one go from the hardware, then cache it for a period
-of time.
+Patches 1 and 2 fix the event reporting. Patch 3 adds the SRM callback
+that refreshes the readings of one config tree node, patch 4 passes the
+firmware's events to a notifier chain, and patch 5 registers a platform
+device. Patch 6 is the hwmon driver, which polls, and patch 7 makes it
+reread the sensors and notify userspace when the firmware reports an
+event.
 
-Having said that, my experience is that people wanting to implement IIO
-drivers instead of hardware monitoring drivers keep finding reasons,
-so I won't object to an IIO implementation.
+The hwmon patches depend on the alpha ones, so I'd suggest the whole
+series go through the alpha tree with an ack from Guenter.
 
-Guenter
+Tested on an ES47, where sensors(1) shows the temperatures, fans,
+voltages and power supply status. Disconnecting AC from one of its two
+power supplies raised a system event that set the supply's in_fault and
+woke poll() and udev, and reconnecting it cleared the fault the same
+way. No voltage is out of range, so the voltage alarms were checked by
+forcing the warning and failure states in the console's packets.
+
+I used Claude Code to help write this series: working out the packet
+layout, drafting the code and changelogs, and checking the firmware
+documentation. I reviewed and tested the result.
+
+Signed-off-by: Matt Turner <mattst88@gmail.com>
+---
+Changes in v4:
+- 6/7: fix the empty-sensor check in probe, which still assumed a chip
+  channel and rejected systems reporting one sensor type (Magnus, Sashiko).
+- Collect Magnus's Reviewed-by on 1/7 and 3/7.
+- Link to v3: https://patch.msgid.link/20261117-marvel-env-v3-0-0edc370fdca9@gmail.com
+
+Changes in v3:
+- alpha: put marvel_env_state() under CONFIG_VERBOSE_MCHECK in patch 1,
+  so that patch builds on its own without it (Magnus)
+- alpha: declare srmcons_callback_lock unconditionally and restore the
+  SRM check in marvel_cfgtree_partial_update(), as in v1, which fixes
+  the build of a Marvel kernel without SRM support (Magnus, Sashiko)
+- hwmon: check the second walk of the config tree against the counts
+  from the first (Magnus)
+- hwmon: prefix every label with the cabinet and drawer if any unit is
+  outside cabinet 0, drawer 0, as documented (Magnus)
+- hwmon: drop the update_interval attribute and refresh a unit at most
+  once every 10 seconds, since update_interval is for intervals
+  programmed into the hardware (Guenter)
+- Link to v2: https://patch.msgid.link/20261116-marvel-env-v2-0-ef614eb2e7f1@gmail.com
+
+Changes in v2:
+- hwmon: report the firmware's states by their documented meaning: a
+  sensor's warning and failure states are its reading reaching the
+  warning and failure limits, not a broken sensor (Guenter)
+- hwmon: report power supplies as in channels with only a fault
+  attribute instead of power alarms (Guenter)
+- hwmon: depend on !ALPHA_LEGACY_START_ADDRESS for generic kernels,
+  which leave out core_marvel.o (Sashiko)
+- hwmon: drop the private mutex, rely on the hwmon core lock and take
+  hwmon_lock() in the event work (Sashiko)
+- hwmon: notify each alarm attribute whose value changed, and only those
+  (Sashiko, Magnus)
+- hwmon: report a voltage outside its limits as in_min_alarm and
+  in_lcrit_alarm or in_max_alarm and in_crit_alarm, by comparing it with
+  the nominal voltage in the console's packet (Guenter, Magnus)
+- alpha: define CCB_CFGTREE in asm/console.h instead of the uapi header,
+  since it is a Marvel console extension, and say it comes from Tru64
+  (Magnus)
+- hwmon: return -ENODATA from every alarm of a sensor that became unknown
+- alpha: drop the unreachable SRM check from
+  marvel_cfgtree_partial_update(), and move the GCT node type and
+  subtype the driver uses to asm/gct.h
+- Reorder: fix the event layout before printing it unconditionally, and
+  put the alpha patches first
+- Drop the Assisted-by trailers, describe tool use here instead (Guenter)
+- Link to v1: https://patch.msgid.link/20261114-marvel-env-v1-0-890328e4b7e5@gmail.com
+
+---
+Matt Turner (7):
+      alpha: marvel: fix the environmental subpacket layout
+      alpha: marvel: report environmental events without VERBOSE_MCHECK
+      alpha: marvel: refresh environmental readings through the console
+      alpha: marvel: notify environmental events
+      alpha: marvel: register a platform device for the environmental sensors
+      hwmon: Add driver for Marvel AlphaServer environmental sensors
+      hwmon: (marvel-env) Notify userspace of environmental events
+
+ Documentation/hwmon/index.rst       |   1 +
+ Documentation/hwmon/marvel-env.rst  |  73 ++++
+ MAINTAINERS                         |   8 +
+ arch/alpha/include/asm/console.h    |   5 +
+ arch/alpha/include/asm/err_ev7.h    |  16 +-
+ arch/alpha/include/asm/gct.h        |   2 +
+ arch/alpha/include/asm/marvel_env.h |  17 +
+ arch/alpha/kernel/core_marvel.c     |  59 ++++
+ arch/alpha/kernel/err_marvel.c      |  39 ++-
+ arch/alpha/kernel/proto.h           |   1 +
+ arch/alpha/kernel/srmcons.c         |   3 +-
+ arch/alpha/lib/callback_srm.S       |   1 +
+ drivers/hwmon/Kconfig               |  12 +
+ drivers/hwmon/Makefile              |   1 +
+ drivers/hwmon/marvel-env.c          | 678 ++++++++++++++++++++++++++++++++++++
+ 15 files changed, 897 insertions(+), 19 deletions(-)
+---
+base-commit: 0b4cadbe7c39d830dec35c4a2655483de0dae568
+change-id: 20261114-marvel-env-d0289c736ba3
+
+Best regards,
+--  
+Matt Turner <mattst88@gmail.com>
 
