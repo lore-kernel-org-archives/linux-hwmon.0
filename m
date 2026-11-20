@@ -1,75 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.70
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795165906;
-	b=V5VoHLCTVb8t0agbaczafC3IE4KuD1jR4KhjqAK/kLTgHrJo8clLNX5p18Ysvk/jXtAL
-	 Z9HH+GKBfUCTyo7zH7+HcJL5Rack+2otc7uwzopWyg6LZinkxt+EU3DGjjprgfF7myGYB
-	 rFjaVni7WWbDJDz17JpVbAin8M9GdyQtKwEtrNwFICpP4LFczoh8qKMvSNrMR04j8mnSr
-	 YFvHbtUitWhXyFVolP155alS8XNUAlwgRQrmiqHrnmBZ1/IPCvZbt4+fY68vBzwELuXgv
-	 b+2osMBZ5izJLttwB5s9KalOKRZhiHQjjf7ZVDFz+oY+l975EAfTukg4yoB0J0OBNLQ==
+	t=1795193989;
+	b=AylaSdjmmthriL1YwlfGfIQMKGDVbmKPB3fpyQ49Gj6wyHDc3HlvVjRRzHvFa9v4ZezO
+	 XBVoLmxRtveKWMqVEXdILAVOzl/3F8fgFwPpTkWNLRYVnzTi8VI9MujMIcPL4qvZsT6Fu
+	 FdN+UY+0II2AKa+lAsSTsVCh6EKiO6Rn1WHbGNj7R/aWHbAzcV7qDdc6un8ekWVK+UWje
+	 0exLzDk1+zT01LqsTmf1Q3nkitHTVNK6w1Py70K4NCltQDJfme0T5J1K331PV6RTAr5hr
+	 ICQDbP62Jcdwi1WYGGE5t1sv5JB6YI6eFHjc7S0938klLjgpTPKEfGNhZ5nyLag+M/w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795165906;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795193989;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=gApvMPkXNFvtfKmjlnFC4/zpO78lpC90tfwmIXaql00=;
-	b=LyvHCY0x/9jwmg5JPWIIQpm/F5UfcQXcorOMgPFO7EicAk5axtOycTUJ6iYh13V+80N4
-	 SsV22NVoO8AWl7NBC0p21s3bUfPkoa949cUhsipxWgsRvILEesPj9dYZKQ8wtIKmgLsGJ
-	 QYiNhzg7RUynwj6/TYLBqpAC5wpq1RzLK/e3+x2Pg0E0GrtQr1hbD2t7UL8qJJxnALmhu
-	 1XDcFf+3D4wbMULF28EswN0+twF0EQuzDq2kqFoUD6/ePsAefVOusAuF/mjxnVpWZZMEG
-	 7Ihto/ujvmTWEj71BDaoRuY0m1Rbz8ErUH0mu0DmF+rZKV4fzlaf5s/QJudwh/KAC2Q==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=O8S+yRSGSfrlAkjD3dhQT0CDK6E3kYAaaeOgKnCRES0=;
+	b=hfvjQ6WEh29nEm2prTcyxeWXkwtTdpl9ZBvdnfs15jDg7MDoPSPcv9bFks87iTt2tozO
+	 iWSuyanHR0EiiOiNQNbBDwtMEo7gSVWXJFHswAypb6SPi8F4XGwzXVwaoCrJO1HHXMGQO
+	 lOsOQ8mTICIpVdXExcCmNaBl0J9U+EualmalVH/x+N4TixiLs0s3rUuUIbjY0+WjIH9yN
+	 yAX5Cv35cPrYb8mkFi2wxaB9ht59TlcnTvGDo6/8owZG1o6u2wyIajxwnnWpbtpWuYCEp
+	 UjI3x71adeaCW1E0/iDch/QHtTirhGJjfBKATXl83Ec7jzbi15M/qR4/7Pezso5jZLA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--dbalint.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XbvqJWDX;
-	arc=none smtp.remote-ip=209.85.167.70
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=m6BU0MGc;
+	arc=none smtp.remote-ip=209.85.128.43
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F95606A326
-	for <linux-hwmon@vger.kernel.org>; Fri, 20 Nov 2026 09:11:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 93F95606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dbalint.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF47F60A2605
+	for <linux-hwmon@vger.kernel.org>; Fri, 20 Nov 2026 16:59:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EF47F60A2605
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XbvqJWDX
-Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-5bfd95238e3so417258e87.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 20 Nov 2026 01:11:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=m6BU0MGc
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4ba013938d7so10320995e9.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 20 Nov 2026 08:59:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795165905; x=1795770705; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20260707; t=1795193985; x=1795798785; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=gApvMPkXNFvtfKmjlnFC4/zpO78lpC90tfwmIXaql00=;
-        b=XbvqJWDXK9IVahjf1KDlaqZGzgXwspltMjh9XxrwryB41luQzh70+rlpOK9t/cgmD5
-         7tWcuLS5LH/TfKAAJLyGJtYz74QyXd1t0AjUx2CuSBW2JyHFdGla62FlCQOh9gmclbXX
-         ASjJSywJTPMhzr0v5sK1T8gE5KgT7ESlbVVh9rXIUpQWn0TE1DgHpanC2vxWU0tp5An2
-         UUS+gSxqXM4PEwnsVP7Jzf8Opx3wkpGZjYUux+ZCPzY5k+FcWi9R3AnYIWcamjdSAPPk
-         44dw5ZM7/Fk9klOR2c135Xcmq97cBOC/OBZlOBwof/rbam2BnylBM833f+XQ5MwQe5CJ
-         D1sQ==
+        bh=O8S+yRSGSfrlAkjD3dhQT0CDK6E3kYAaaeOgKnCRES0=;
+        b=m6BU0MGcdDFsz3WbRA2gTKSk9CNBrAfxBTx6CmujE6OCmk70Ot99iutsrU4lwdQl1/
+         HgRPqyeuj4Oe5Pjbjnm0Xw3RAFjVpn5WmzvOu0pCNFRd65lQGiqFX8YFWWnP2ShfKJIj
+         kGnsN+tcJ7uJY+gCOZNA6BsjO3+LHYxDSfW6P0ZpAHqYnEIXiricwc4GPWhnrdnak/A0
+         DYep3ouTGZwh1csxcBkK9K9/3rfVWPw32oSnyyp3c/cxPy9yQFkL9i9tiF4oGPCtGZU9
+         gtq4vBx7u08eL1D/Kvwo/PKHe6uED74DOzoF9UBy9cNi0XXTfDAlPu7jfeid3HCNr6kf
+         rWqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795165905; x=1795770705;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=gApvMPkXNFvtfKmjlnFC4/zpO78lpC90tfwmIXaql00=;
-        b=BTns6YdAnIuNby+FfWbmiU44abrG6M9BUuag2G+InYDFVG++AKnDBRR3ebGrsAnqsC
-         V5/mnh+SI6oxJHzoaLQtVSxqJ6ktMIpJk9NBNoJeuFZ8Dx3p/knlfjvEy3rzTUrjPbwO
-         xySTc1SMvqpHwSrq8eyxhUs8/5bysXSGH1HpbKTDzsjDjttsJ9mJiCLQYU//6zL9eIog
-         ElWVxfSKGJ0eTVS1dtRxfosEikbNr1LUas8NwSAWOQzfnTdD3qghJrMhxJadIJrDa4v2
-         c50ctwHoLN5R9RA2LpFXGKBNoOKxhivPk8RaCwIIkytOmhJbJeWBaswxRO7ti6LkThyl
-         RHAA==
-X-Forwarded-Encrypted: i=1; AL+hErF5GjK3XmRfLR5gJdF8dfX1GyU3+dGJTpcQ58PPGxR28M9T+HrzyNNNw3zi84wToEejvgX0kbpqMuztsg==@vger.kernel.org
-X-Gm-Message-State: APuU4Z9JcG5Pa2KlN+DT37AS89anWk/NpJr9IfguOQ6bNYvGgR7qTnHO
-	JAXYH5AUcBab0nrG+XOBY07yWLjG4Mm8FXp+UvOftlVhsNLFnOzIh9JYuatPQ0ISeW8NrMpJlyR
-	Cgg6aaihTxQ==
-X-Received: from lfbo17.prod.google.com ([2002:a05:6512:511:b0:5c1:a87c:20b3])
- (user=dbalint job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6512:3052:b0:5c1:5b06:27c0
- with SMTP id 2adb3069b0e04-5c1bc6f69dcmr588593e87.3.1795165904574; Fri, 20
- Nov 2026 01:11:44 -0800 (PST)
-Date: Fri, 20 Nov 2026 09:10:22 +0000
-In-Reply-To: <20261118220033.70425495@jic23-hlaptop>
+        d=1e100.net; s=20260707; t=1795193985; x=1795798785;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=O8S+yRSGSfrlAkjD3dhQT0CDK6E3kYAaaeOgKnCRES0=;
+        b=YujeStVqH42jHNTpXuSEQxgHxp7jMJ76ZmGoeoyOvoGxNxfwFoX7qYXj1aygDAR8Pe
+         zOyS4nsVDouiJmpO08+VmNiNBsyPMOIzKA8Chhh/NeSOIV5fs6vzKdQRBzYEY0UB8mbo
+         fZXqFmDCwDX9T/oyVJ4Z/dJm6SLY8sHnM/8trIbJY7ZSnVvrO1LH2/oliCqyWbMhW5O0
+         eH+BBjz4GD21fcKXkamna4XI2TE2ZQG8EzSt8YVddv74++50YK7RlX3qhA4ra/Fsb7UX
+         MDhs2aAR0cPZKEn2c15JYLDs6OivQEVtaUXa2wqHYeWuUAFtBsb/K6mh8LVUdpByrsdd
+         nfaA==
+X-Gm-Message-State: APuU4Z+z3OMRcuGJd2m4lJr1GCkL6BN8WVqGMBraX5Q3gOFQEds+BxCn
+	YeT/GkRYC8kR+kuvaZ1LUO06z8UvcRI4qV3Dg8HVNXMfwyzBu+1sBWBA
+X-Gm-Gg: AYBFou0LMQ20+5FwNnGaqRB+9E2Sdxn+at0yeWEcG38KgshN+buU7KDs6yoV22OXaGO
+	FErOzhDDTv2Ge5FvzWp4Cw5TeV5THBnPH1DGz3DLcfMBjarFMDo0+rYfxIutXWUemCevfZQqL7a
+	qz9IDpEmbB8y3wlQyuxkAWkhx1haaieNUCe3EFu2MdK15rMBur44L9H8XTYyaSBcvn1S9WkqxdH
+	bwa7YGHl/PFm55ktBJESmeZaXbqmNWw/gEbeSCiA5cFH/RlQ21VV9Ns/SFKc2ITaYyRmf1F2uDU
+	VB+lfrOPwcrwlGrGH73AM+DEddtkhrlsQoI+qDQqandXwU3N7TQY8OO0Q5WpHxmKAOo3fhLi2qL
+	SMPwcAsvUV9ZczGTaKMppoLPZPJ/jq411JO4BO8PKxig2mDPI+zNgko2TjTzowfTwMk5xGRi0i7
+	x9LlqHmT6MS6iTZLYHY9PnU/QWwm9174eeEytH8dtU/7ezskzfZll6uCnEgZFkPFHeTiqGK4Vpm
+	v/++84AhqRB2oGav6SOIdsfTDVkYL9vFJnQ9xFH5nuuVTMZWOpVrBg3P1WYab3IEtpnFoBlhqZr
+	CkDeCsN2QViBHKzhfRjAVy7a050Di5Zdmw==
+X-Received: by 2002:a05:600c:6748:b0:4ba:761:97a1 with SMTP id 5b1f17b1804b1-4bb888251bfmr79940645e9.14.1795193985361;
+        Fri, 20 Nov 2026 08:59:45 -0800 (PST)
+Received: from CachyOS ([176.88.126.125])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb84e5f081sm103768165e9.4.2026.11.20.08.59.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Nov 2026 08:59:45 -0800 (PST)
+From: =?UTF-8?q?Asaf=20Nuri=20Bertizlio=C4=9Flu?= <asafbertizlioglu@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Asaf=20Nuri=20Bertizlio=C4=9Flu?= <asafbertizlioglu@gmail.com>
+Subject: [PATCH] hwmon: (coretemp) Remove unused for_each_sibling() and name_attr
+Date: Fri, 20 Nov 2026 19:59:26 +0300
+Message-ID: <20261120165926.579575-1-asafbertizlioglu@gmail.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -78,93 +94,59 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261106193129.43493-1-dbalint@google.com> <20261107010356.39d9eddf@jic23-hlaptop>
- <20261118204532.257423-1-dbalint@google.com> <11a821f4-aef6-425a-8626-1d8641e9f83d@roeck-us.net>
- <20261118220033.70425495@jic23-hlaptop>
-X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
-Message-ID: <20261120091022.1459658-1-dbalint@google.com>
-Subject: Re: [PATCH v1 0/3] Introduce cros_ec power monitoring
-From: Daniel Balint <dbalint@google.com>
-To: Jonathan Cameron <jic23@kernel.org>, Guenter Roeck <linux@roeck-us.net>
-Cc: Daniel Balint <dbalint@google.com>, linux-hwmon@vger.kernel.org, 
-	Benson Leung <bleung@chromium.org>, Lee Jones <lee@kernel.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	linux-iio@vger.kernel.org, chrome-platform@lists.linux.dev, 
-	mfd@lists.linux.dev, linux-kernel@vger.kernel.org, mwojtas@google.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, 18 Nov 2026 22:00:33 +0000
-Jonathan Cameron <jic23@kernel.org> wrote:
+The for_each_sibling() macro lost its only user in commit
+e1b370b64031 ("hwmon: (coretemp) Simplify sibling management").
 
-> Do you need that coherent snapshot to get to userspace in one go? 
-> 
-> For accumulator channels the way they are normally done to sysfs
-> style reads is to snapshot on each read, update an internal store
-> of accumulation since enable then provide whichever one was requested.
-> That way no data is lost - but you don't get an aligned snapshot.
-> So it depends on what maths you are going to do with them, whether
-> it can be done in kernel and if not how much interchannel skid
-> matters.
-> 
-> So tell us more on why you need that coherent snapshot to userspace.
+The name_attr member of struct platform_data has been unused since
+commit d72d19c26c41 ("hwmon: (coretemp) Convert to use
+devm_hwmon_device_register_with_groups"), which left the "name"
+attribute to the hwmon core.
 
-Sure, I can provide more context. Usecases are broad, but an example
-would be that we calculate per-rail drain contributions over short 
-time windows for comparative analysis between device states (device state 
-transitions like screen on/off trigger snapshot), or for debugging and
-power profiling purposes we correlate fine-grained ODPM data frames
-(~1s intervals) with other timestamped system diagnostics in our tracing
-tools (e.g. perform per-process-per-rail energy attribution), so math
-happens server side, and the relative energy deltas between channels
-within a frame are just as important to us as their absolute values.
-In general, data from a single channel makes sense in the context of
-other channels, there wouldn't be a client that requests only one
-channel.
+Remove both. No functional change.
 
-At higher userspace sampling frequencies, e.g. ~1s trigger intervals,
-which can happen in both abovementioned cases, interchannel skid becomes
-an issue if we read individually.
-Because the latching and data delivery (up to 64 MKBP events)
-roundtrip between EC and kernel takes non-trivial bus time that's in the
-~10 ms range, latching per sysfs read across 64 files spreads channels
-across a hundreds of ms long interval, which would compromise coherency
-and render the data minimally useful. It would also make the EC
-unnecessarily busy with redundant work, so latching per channel read
-isn't really an option.
-But to Guenter's point, this could be solved by driver-side caching.
+Built with CONFIG_SMP=y and CONFIG_SMP=n at W=1 with no new
+warnings. Apart from the struct platform_data allocation size,
+which shrinks from 88 to 56 bytes, the generated code is unchanged.
 
+The unused definitions were found with an LLM-based coding assistant,
+which also drafted this changelog. Both findings were confirmed with
+gcc -Wunused-macros, git grep and the git history.
 
-On Wed, 18 Nov 2026 15:00:20 -0800
-Guenter Roeck <linux@roeck-us.net> wrote:
+Signed-off-by: Asaf Nuri Bertizlioğlu <asafbertizlioglu@gmail.com>
+---
+ drivers/hwmon/coretemp.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-> You could accomplish that the same way many hwmon drivers are doing it:
-> Read all attributes in one go from the hardware, then cache it for a period
-> of time.
+diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+index 96d57fe12de6..75ba3484b1e1 100644
+--- a/drivers/hwmon/coretemp.c
++++ b/drivers/hwmon/coretemp.c
+@@ -51,13 +51,6 @@ enum coretemp_attr_index {
+ 	TOTAL_ATTRS = ATTR_TTARGET + 1		/* Maximum no of possible attrs */
+ };
+ 
+-#ifdef CONFIG_SMP
+-#define for_each_sibling(i, cpu) \
+-	for_each_cpu(i, topology_sibling_cpumask(cpu))
+-#else
+-#define for_each_sibling(i, cpu)	for (i = 0; false; )
+-#endif
+-
+ /*
+  * Per-Core Temperature Data
+  * @temp_valid: Whether the CPU reported @temp as valid. @temp is not
+@@ -98,7 +91,6 @@ struct platform_data {
+ 	struct cpumask		cpumask;
+ 	struct temp_data	*pkg_data;
+ 	struct temp_data	**core_data;
+-	struct device_attribute name_attr;
+ };
+ 
+ struct tjmax_pci {
+-- 
+2.56.0
 
-I should have mentioned the importance of timekeeping earlier. As we're
-correlating the snapshots with other diagnostic time-series data,
-userspace needs to know when accumulators were latched as accurately as
-possible.
-In contrast to IIO, in hwmon:
-(1) There is no timestamp ABI to propagate latch times, so userspace has
-    to rely on its own timestamp when initiating a read.
-(2) There is no trigger ABI to force a fresh latch on demand (e.g. on a
-    device state transition), so a userspace timestamp only marks the
-    start of a sysfs read sweep rather than the actual hardware latch.
-
-So, unless I missed something, with a timeout-based cache in hwmon, a
-reader has no visibility into whether it's hitting newly latched or
-cached data or when the cache was actually latched (skewing time-series
-alignment) or whether the cache has expired mid-sweep across 64 sysfs
-reads.
-
-We could probably tune a short enough cache timeout where time skew
-would be negligible and mid-sweep expiries would still be infrequent,
-then it's a trade-off between accuracy and more mid-sweep expirations
-(more EC roundtrips). It could work, although we still would do 64
-sysfs reads instead of 1 on each trigger.
-So I guess it's not a must to send the coherent snapshot in one go, and
-I cannot provide any data to claim that hwmon would be a suboptimal
-solution to IIO, but our technical judgement is that IIO's explicit
-trigger, latch timestamp and single buffer read is a cleaner fit for
-power monitoring via the ChromeOS EC.
