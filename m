@@ -1,91 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795193989;
-	b=AylaSdjmmthriL1YwlfGfIQMKGDVbmKPB3fpyQ49Gj6wyHDc3HlvVjRRzHvFa9v4ZezO
-	 XBVoLmxRtveKWMqVEXdILAVOzl/3F8fgFwPpTkWNLRYVnzTi8VI9MujMIcPL4qvZsT6Fu
-	 FdN+UY+0II2AKa+lAsSTsVCh6EKiO6Rn1WHbGNj7R/aWHbAzcV7qDdc6un8ekWVK+UWje
-	 0exLzDk1+zT01LqsTmf1Q3nkitHTVNK6w1Py70K4NCltQDJfme0T5J1K331PV6RTAr5hr
-	 ICQDbP62Jcdwi1WYGGE5t1sv5JB6YI6eFHjc7S0938klLjgpTPKEfGNhZ5nyLag+M/w==
+	t=1795194144;
+	b=vRj8KAgLTyVfCYFS7O8VMfjCn+35oPJDXvkaAyn6QIiy+fjdRObhLI6tOiGgKyRsJi9a
+	 0C4BJ639cVG5us5/MHUjvWAm+rWCwpjW6wqtLnI0/Chzsxm4x8wp+md9M1xxWsZTFOstV
+	 dwEFX8cuTyPjSFE8YRPlx58vgfbkLOmxDd+Mwc6LIAW1itKTP/sgPjNGvWLFsOAUNWphZ
+	 oO9nvpUISz6VfuFiOzEKlu4LESU+WkxBnSoDMpEv+CuuWCKVmkftyeGsaZg1R4QTkRCVw
+	 hZPlsOUmz3MMo/IbmcdI7MqUpxTvigsivyJBvcnRLG7m+tjP3XLmaCxsNioPiyr4TjA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795193989;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=O8S+yRSGSfrlAkjD3dhQT0CDK6E3kYAaaeOgKnCRES0=;
-	b=hfvjQ6WEh29nEm2prTcyxeWXkwtTdpl9ZBvdnfs15jDg7MDoPSPcv9bFks87iTt2tozO
-	 iWSuyanHR0EiiOiNQNbBDwtMEo7gSVWXJFHswAypb6SPi8F4XGwzXVwaoCrJO1HHXMGQO
-	 lOsOQ8mTICIpVdXExcCmNaBl0J9U+EualmalVH/x+N4TixiLs0s3rUuUIbjY0+WjIH9yN
-	 yAX5Cv35cPrYb8mkFi2wxaB9ht59TlcnTvGDo6/8owZG1o6u2wyIajxwnnWpbtpWuYCEp
-	 UjI3x71adeaCW1E0/iDch/QHtTirhGJjfBKATXl83Ec7jzbi15M/qR4/7Pezso5jZLA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795194144;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=UpX0WgIY/KLQzXeabdPrv0nerNm6LHx8Bs3DZLDOcsg=;
+	b=4WEdNkcmMGwdmBVLfdbkHReAtmOJucSd4EGbyqFwwROyn4KwNphQ93gx85TOpJCxrcuK
+	 S8dqi1l4bfkpBnfC74qQqeGFAbv4HBWlPiDAWRrQtzof7WYS/GUVAKcA4BAmAilyKIBSD
+	 ctiXTdm9KkE3mNa1GGyDpEEJLs/NinUsET9P6S7H/6OEyQFx/IQ8lQXikyy8tjtS2oNi0
+	 VXYzAc5gqJuSX1w9tDWAwXZ/IxLf68FW9vCl2g2JN0NhDBLOyoQHCb8U6Mvdl/isJYwW1
+	 2FYzs9ENdhP4jxn9CIOmLMDoDKqcos514cAW9jAs1bzKoJki/IEiB9KyckNcY+aR1ww==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=m6BU0MGc;
-	arc=none smtp.remote-ip=209.85.128.43
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AiLDetF6;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF47F60A2605
-	for <linux-hwmon@vger.kernel.org>; Fri, 20 Nov 2026 16:59:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EF47F60A2605
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9838060A2600
+	for <linux-hwmon@vger.kernel.org>; Fri, 20 Nov 2026 17:02:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=m6BU0MGc
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4ba013938d7so10320995e9.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 20 Nov 2026 08:59:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795193985; x=1795798785; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=O8S+yRSGSfrlAkjD3dhQT0CDK6E3kYAaaeOgKnCRES0=;
-        b=m6BU0MGcdDFsz3WbRA2gTKSk9CNBrAfxBTx6CmujE6OCmk70Ot99iutsrU4lwdQl1/
-         HgRPqyeuj4Oe5Pjbjnm0Xw3RAFjVpn5WmzvOu0pCNFRd65lQGiqFX8YFWWnP2ShfKJIj
-         kGnsN+tcJ7uJY+gCOZNA6BsjO3+LHYxDSfW6P0ZpAHqYnEIXiricwc4GPWhnrdnak/A0
-         DYep3ouTGZwh1csxcBkK9K9/3rfVWPw32oSnyyp3c/cxPy9yQFkL9i9tiF4oGPCtGZU9
-         gtq4vBx7u08eL1D/Kvwo/PKHe6uED74DOzoF9UBy9cNi0XXTfDAlPu7jfeid3HCNr6kf
-         rWqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795193985; x=1795798785;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=O8S+yRSGSfrlAkjD3dhQT0CDK6E3kYAaaeOgKnCRES0=;
-        b=YujeStVqH42jHNTpXuSEQxgHxp7jMJ76ZmGoeoyOvoGxNxfwFoX7qYXj1aygDAR8Pe
-         zOyS4nsVDouiJmpO08+VmNiNBsyPMOIzKA8Chhh/NeSOIV5fs6vzKdQRBzYEY0UB8mbo
-         fZXqFmDCwDX9T/oyVJ4Z/dJm6SLY8sHnM/8trIbJY7ZSnVvrO1LH2/oliCqyWbMhW5O0
-         eH+BBjz4GD21fcKXkamna4XI2TE2ZQG8EzSt8YVddv74++50YK7RlX3qhA4ra/Fsb7UX
-         MDhs2aAR0cPZKEn2c15JYLDs6OivQEVtaUXa2wqHYeWuUAFtBsb/K6mh8LVUdpByrsdd
-         nfaA==
-X-Gm-Message-State: APuU4Z+z3OMRcuGJd2m4lJr1GCkL6BN8WVqGMBraX5Q3gOFQEds+BxCn
-	YeT/GkRYC8kR+kuvaZ1LUO06z8UvcRI4qV3Dg8HVNXMfwyzBu+1sBWBA
-X-Gm-Gg: AYBFou0LMQ20+5FwNnGaqRB+9E2Sdxn+at0yeWEcG38KgshN+buU7KDs6yoV22OXaGO
-	FErOzhDDTv2Ge5FvzWp4Cw5TeV5THBnPH1DGz3DLcfMBjarFMDo0+rYfxIutXWUemCevfZQqL7a
-	qz9IDpEmbB8y3wlQyuxkAWkhx1haaieNUCe3EFu2MdK15rMBur44L9H8XTYyaSBcvn1S9WkqxdH
-	bwa7YGHl/PFm55ktBJESmeZaXbqmNWw/gEbeSCiA5cFH/RlQ21VV9Ns/SFKc2ITaYyRmf1F2uDU
-	VB+lfrOPwcrwlGrGH73AM+DEddtkhrlsQoI+qDQqandXwU3N7TQY8OO0Q5WpHxmKAOo3fhLi2qL
-	SMPwcAsvUV9ZczGTaKMppoLPZPJ/jq411JO4BO8PKxig2mDPI+zNgko2TjTzowfTwMk5xGRi0i7
-	x9LlqHmT6MS6iTZLYHY9PnU/QWwm9174eeEytH8dtU/7ezskzfZll6uCnEgZFkPFHeTiqGK4Vpm
-	v/++84AhqRB2oGav6SOIdsfTDVkYL9vFJnQ9xFH5nuuVTMZWOpVrBg3P1WYab3IEtpnFoBlhqZr
-	CkDeCsN2QViBHKzhfRjAVy7a050Di5Zdmw==
-X-Received: by 2002:a05:600c:6748:b0:4ba:761:97a1 with SMTP id 5b1f17b1804b1-4bb888251bfmr79940645e9.14.1795193985361;
-        Fri, 20 Nov 2026 08:59:45 -0800 (PST)
-Received: from CachyOS ([176.88.126.125])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb84e5f081sm103768165e9.4.2026.11.20.08.59.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 08:59:45 -0800 (PST)
-From: =?UTF-8?q?Asaf=20Nuri=20Bertizlio=C4=9Flu?= <asafbertizlioglu@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Asaf=20Nuri=20Bertizlio=C4=9Flu?= <asafbertizlioglu@gmail.com>
-Subject: [PATCH] hwmon: (coretemp) Remove unused for_each_sibling() and name_attr
-Date: Fri, 20 Nov 2026 19:59:26 +0300
-Message-ID: <20261120165926.579575-1-asafbertizlioglu@gmail.com>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AiLDetF6
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F1D1F000D2;
+	Fri, 20 Nov 2026 17:02:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795194144;
+	bh=UpX0WgIY/KLQzXeabdPrv0nerNm6LHx8Bs3DZLDOcsg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=AiLDetF69BOYHCYD2i43S+02a/Phrv39T6u0CQyA0TtXtcERZ4FwrIsJk5vyaTVMg
+	 nbc2iNh61P6vNPs8ClX28Ss+qrnNe0PL2D0y7sGSXibOepkeiT0XbvR3DHniac8koa
+	 66JUTESVyiqWOFI3WjVD0b6cvlUx9Lqw15JWGe7OU1E6QRxfZdxsF7IiwNrj4VlZOY
+	 RSz2GgN2kJYZ6xsgjKbKk5Z/qdtRGblNsQO/+c7pLp93x3biENAPdeHvBWvWHdq674
+	 bvRZmwl2aYucxsR+BHsnqc6b/XObWVq1XqWVH3Si9LSbjs6G/FzDkFw+3XDGvI+Tuu
+	 Au6YUYc9epxog==
+Message-ID: <sashiko-outbox-225616@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (coretemp) Remove unused for_each_sibling() and
+ name_attr
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?QXNhZiBOdXJpIEJlcnRpemxpb8SfbHU=?= <asafbertizlioglu@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20261120165926.579575-1-asafbertizlioglu@gmail.com>
+References: <20261120165926.579575-1-asafbertizlioglu@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 20 Nov 2026 17:02:23 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -94,59 +59,30 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-The for_each_sibling() macro lost its only user in commit
-e1b370b64031 ("hwmon: (coretemp) Simplify sibling management").
+> The for_each_sibling() macro lost its only user in commit
+> e1b370b64031 ("hwmon: (coretemp) Simplify sibling management").
+>=20
+> The name_attr member of struct platform_data has been unused since
+> commit d72d19c26c41 ("hwmon: (coretemp) Convert to use
+> devm_hwmon_device_register_with_groups"), which left the "name"
+> attribute to the hwmon core.
+>=20
+> Remove both. No functional change.
+>=20
+> Built with CONFIG_SMP=3Dy and CONFIG_SMP=3Dn at W=3D1 with no new
+> warnings. Apart from the struct platform_data allocation size,
+> which shrinks from 88 to 56 bytes, the generated code is unchanged.
+>=20
+> The unused definitions were found with an LLM-based coding assistant,
+> which also drafted this changelog. Both findings were confirmed with
+> gcc -Wunused-macros, git grep and the git history.
+>=20
+> Signed-off-by: Asaf Nuri Bertizlio=C4=9Flu <asafbertizlioglu@gmail.com>
 
-The name_attr member of struct platform_data has been unused since
-commit d72d19c26c41 ("hwmon: (coretemp) Convert to use
-devm_hwmon_device_register_with_groups"), which left the "name"
-attribute to the hwmon core.
+Sashiko has reviewed this patch and found no issues.
 
-Remove both. No functional change.
-
-Built with CONFIG_SMP=y and CONFIG_SMP=n at W=1 with no new
-warnings. Apart from the struct platform_data allocation size,
-which shrinks from 88 to 56 bytes, the generated code is unchanged.
-
-The unused definitions were found with an LLM-based coding assistant,
-which also drafted this changelog. Both findings were confirmed with
-gcc -Wunused-macros, git grep and the git history.
-
-Signed-off-by: Asaf Nuri Bertizlioğlu <asafbertizlioglu@gmail.com>
----
- drivers/hwmon/coretemp.c | 8 --------
- 1 file changed, 8 deletions(-)
-
-diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index 96d57fe12de6..75ba3484b1e1 100644
---- a/drivers/hwmon/coretemp.c
-+++ b/drivers/hwmon/coretemp.c
-@@ -51,13 +51,6 @@ enum coretemp_attr_index {
- 	TOTAL_ATTRS = ATTR_TTARGET + 1		/* Maximum no of possible attrs */
- };
- 
--#ifdef CONFIG_SMP
--#define for_each_sibling(i, cpu) \
--	for_each_cpu(i, topology_sibling_cpumask(cpu))
--#else
--#define for_each_sibling(i, cpu)	for (i = 0; false; )
--#endif
--
- /*
-  * Per-Core Temperature Data
-  * @temp_valid: Whether the CPU reported @temp as valid. @temp is not
-@@ -98,7 +91,6 @@ struct platform_data {
- 	struct cpumask		cpumask;
- 	struct temp_data	*pkg_data;
- 	struct temp_data	**core_data;
--	struct device_attribute name_attr;
- };
- 
- struct tjmax_pci {
--- 
-2.56.0
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261120165926.5795=
+75-1-asafbertizlioglu@gmail.com?part=3D1
 
