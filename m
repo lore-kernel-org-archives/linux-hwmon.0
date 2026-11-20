@@ -1,91 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.35
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795194208;
-	b=xuDU+mcQMFvh0SO+NUTQ+KUKQ0LnOXQSJKtqCjgL/Vl7RYFnYw0i91dqix76P+4MTCAB
-	 FgEoPqS47izveTYX7bC+Z4l36Irwl5b6F5Kl0UhHvcIICaTaIryN9FN5KZewSUk4wUDEk
-	 fFghXR2sWc63sQxc4n2iUeZL85hAY5fmlJKqCm6SrdS2osyTboQ75I9FkoFrFfIl4FxZo
-	 m/HlS+fSISxeZkGaRspfGy4+MdobJjKMKla9Ms75ZfUQwqqDIiilsjOiLaUr15VbU7ul0
-	 pBlJ7GY94f8iJYEFsh3oyymXzo3KxKwJ5z+rU34SPH2JvltU3jZx16QZEwUQJX42zJA==
+	t=1795202764;
+	b=CXdgS4SN2VtGn8h30+qLD/kyKgwcqJ6BU9H4SJj3n08CKp1I0yEMB9N765Vf9kLtbrqw
+	 hNXhP0wLQzNacBIpGKhgAGSRIeyds9Ruefruf9d4TNNjp3dhtdHZNjvxa1PGMqj8GYWPo
+	 I4H0Lm9if2F3WPJJEOr9/kVao0DL2z2jFVIah+Cr6NhDZkG2lmii223ngV7/DpOA0Wk+t
+	 YpbzGYLZSD1j/FJhEndqQmHo94AZc2x5bslLTv8aKWWtXhb2Pzu9Qb3pqgfdTqkenzXXM
+	 5jvTXq2A+C7QuOnWoX++xzYfhueSW14z+zcJ9lAuZVZNEqrMxJqhIJPL197iT6R005w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795194208;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=xE5e3lf/0eBW9QOeJCPKjitoelTsiff22jlhwj4Nvtc=;
-	b=CZEJF9aHlVtFCAWyAlFCH1F1UveQeVWRQOgWTpM4CKxp0V+DnhG4TJbPGh0ffI3nsqEI
-	 bwXgTU4hF0OL8kNBf+EyyAdWTWoyFTLP4MOtBcQ5D0UjsqIcYbK3p6xjHrCFLKsx6vy4t
-	 V8Mm5rnALoaaPSaZ8hDabsMrV9i0rg/SRgeuA9OFdw1yl0aP7ph3VwAms07vVKO04WlDF
-	 iWkyIVa2BEPHRohMueWqScndBGvnFwnVN9mtWJRbHwyvychtb8Z8EV540+JSIJQh80P4M
-	 c5Fmtv01T/UCTq8otCol6Qi4efJLHz4TDIPBD+dd0HskoZQq2UIegkrv2wwlsZPW2nA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795202764;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
+	 In-Reply-To:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:X-Source:
+	 X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
+	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
+	bh=tiJscClyvBCvVMuU6LO39KI1GZ1MeRbP07Q45lvU8jk=;
+	b=uH1Ik628RuvGQecr45wj+tFFZyfXo8FbqzljSHn2O7pIpwQxOMYT+OHX665vHprhncwG
+	 FdijE5uTQAwEL+p80LVz0rG+z41GMX/NTi1RoYlKijdSGaQbJpw0eJVvD2C/yx1FqfNVb
+	 ERJzNxy/HoaH9YZJy6Kw8+nOOSKWJmtTXi+lJrxsKO8xqksJqmjVGJ8lqaqow88lRBuBq
+	 6bcUp+v/d1T4V6Y1HtVfGK9PmBWLSvhpgSTRRyGmb92SzRXFf431090LW6Sjvf7bzYp4F
+	 Z5SXBqv9sc7s248Vm+CJ1I3AdOxentrhkoiONdW/hnQWFmx+SH9DU1DWVhNGZAQiBLg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GRPZAR6a;
-	arc=none smtp.remote-ip=209.85.218.42
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=none header.from=roeck-us.net;
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=3XOXyy62;
+	arc=none smtp.remote-ip=35.89.44.35
+Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43817606A339
-	for <linux-hwmon@vger.kernel.org>; Fri, 20 Nov 2026 17:03:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43817606A339
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9C1606A6E4
+	for <linux-hwmon@vger.kernel.org>; Fri, 20 Nov 2026 19:26:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF9C1606A6E4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GRPZAR6a
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c4d28f75d62so207823866b.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 20 Nov 2026 09:03:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795194207; x=1795799007; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=xE5e3lf/0eBW9QOeJCPKjitoelTsiff22jlhwj4Nvtc=;
-        b=GRPZAR6asKEgz2/4xYov7/GHO48tGLVANcFkzK6jgtJJ83GVVcBFCnwDzvg80TCtGb
-         /635jhA4wA5qCOzLGiua8TyUcwNvYESv4/f7KlS4RxhlXWJ9sTwxSjoSrgpl+0VthR/9
-         n0fiEeLfcrCiY1TXa5muJC9O88k059eiua8HyyA3ZZquw7J+d+urqhleRKzmui4QxVjd
-         0z4kD7+3ryKKuKTcs7iIj10nW0lL4RZDSSo4nB42d5TQx3Dw7ydeo29ucOa/MAlfZiW6
-         Fv/TTiG4TjRrR5Armvw591Krtlys45Ta0ubSXa0RambmR0E11L1rnUVHwSbzAuRTeXJw
-         IFEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795194207; x=1795799007;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=xE5e3lf/0eBW9QOeJCPKjitoelTsiff22jlhwj4Nvtc=;
-        b=EnQdk8GYyYA2T1wEPyVGb5Jklk6m2i2cHZCH0N/Tqx+EeqELEYasDTIanAJiLtxnfg
-         0TncZEETahzdbnom6ykJ09Hy5dyLP9tW2IiTID/dq6XAYXhrtnwg7CMg0vTevwkHCWn0
-         OLn4WFaofEXUO4fv3tir8XSCMjfnjDwqcdvxUl+G33JPP7N+KnnDXGUa5OChz6IP5VOd
-         xx63jK1YoDgBdOtUTlRruUaJnP9ukCook/H8Rwigt2DxrMcEbw3wsfYFql2sSBJnEVbR
-         H3Q5UjRhqEikXGfixaxJ1iWzuTFtygA79QB/vbtgXQKvP1ysUHonLdvZwnNrpH2HUHwD
-         kVYA==
-X-Gm-Message-State: APuU4Z8R1eLUYYvNz8opfu9RFbqcgV5ICqZEsmHsJSwA7XO/CZmnpHKD
-	lKeXcbpn/YO+kGHqQqOMEh9PiVNqT5DScARE0K4mgvbD7e7pYotZqJaS
-X-Gm-Gg: AZFdTZfwI4q+Lfk9ZHO2/PwikNzU6nxlEew+LXwcS6Vq8L9keJ2PccgUf1HAXXbe7SE
-	syR3ABhk9PAF+BumQgz3S2yWfV6UPbWNxN40nBmhtVsTpU5kC0lCCjXpgqibBD9RitpO2nZbTXU
-	iaRsd8SK6+bDc5hIq6H056t1p2Bvnk2MrjkaTvlC4OA2G562kVK6jl0ZCvgKsejqskr0jlOmhGv
-	P01Q5tzYv4z0r0Iwt5ID3KpqUhlI9sHyIuUSebq9mcGMDqzIh6Vv/m+ZKI6XmEVp618QAcDNYLS
-	Ik6Srbxju4qZ9svrpNAtttoyYcH8KUO2NyJ+QlUeri1ULJ2diS5EHWSRX8iPtWhz/HAcLuCO6KP
-	3OafiNQTyzydPNguyyo3Mp4F9+Jg0FZYajJPEKNEoMPpQCSgK5BOl95e2Q/ICdEIqc3G/uBUSKQ
-	9J4tNpQ5P3Rjy4uE4LLmv9CGPK6QwZlzIp4BYIzQQyHFNiQpKdlrveM0IQ8XhvpgOJHClGPiroL
-	z0W7pHXgHdbe6Q6JDFXNyI11g4I4b+CN8SKlu5sxkUY3A47EjG7ejdRBavV2d4/3NqMJxVGmbXL
-	fZwoXNgIYppbtKa6g5HFKLsChfQuXp++MdQ=
-X-Received: by 2002:a17:907:b02d:b0:c34:1ed:54d9 with SMTP id a640c23a62f3a-c513a52b544mr304697366b.4.1795194206635;
-        Fri, 20 Nov 2026 09:03:26 -0800 (PST)
-Received: from CachyOS ([176.88.126.125])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513afc73d3sm114753366b.64.2026.11.20.09.03.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 09:03:26 -0800 (PST)
-From: =?UTF-8?q?Asaf=20Nuri=20Bertizlio=C4=9Flu?= <asafbertizlioglu@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Asaf=20Nuri=20Bertizlio=C4=9Flu?= <asafbertizlioglu@gmail.com>
-Subject: [PATCH] =?UTF-8?q?mailmap:=20Add=20entry=20for=20Asaf=20Nuri=20Be?= =?UTF-8?q?rtizlio=C4=9Flu?=
-Date: Fri, 20 Nov 2026 20:02:55 +0300
-Message-ID: <20261120170257.589197-1-asafbertizlioglu@gmail.com>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=3XOXyy62
+Received: from eig-obgw-5006b.ext.cloudfilter.net ([10.0.29.217])
+	by cmsmtp with ESMTPS
+	id UFnAxgjLRRiNxUUFGx5JnY; Fri, 20 Nov 2026 19:26:02 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id UUFFxJlm5SeuLUUFFxuwnM; Fri, 20 Nov 2026 19:26:01 +0000
+X-Authority-Analysis: v=2.4 cv=NYvm13D4 c=1 sm=1 tr=0 ts=6b009eca
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8
+ a=U8fI0MGuNzyFiabFk2gA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=KPbNTLLc3YvdawN95zVk:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
+	List-Archive; bh=tiJscClyvBCvVMuU6LO39KI1GZ1MeRbP07Q45lvU8jk=; b=3XOXyy62BO35
+	kx5b8aLzzvYFbvuUv4thIZaCMEQGMu47SNNFzrQGREKEF2UiYFa5FKybVflvVEtL0fHKv/xFAC9de
+	InuY6q0NYWaWzbK4IxyAdgqL6+XuysZkNvMYq4I4SuAqXQdU9/7PwSr+edcJXUqIFpS+cgSiTja4v
+	giu5UBAmxHD/Q6qq0/J5q/QblE3eLIgPCC0/8SFj0MB59JEcxuccKlXuP73Ev/1Vc+WjzT4G9mkJE
+	Ebj6MJ/3fokUcg5jtlezUq+PklHIDaNIlCcDe6HxPoiiGDNve8MU9x2hYWkMqd3rVBO9uUxEebrcR
+	ZF6FUq1+GCRRsHgYyD9GyQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:33204 helo=server.roeck-us.net)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xUUFF-00000001WZb-0fkj;
+	Sat, 21 Nov 2026 00:56:01 +0530
+Date: Fri, 20 Nov 2026 11:26:00 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Asaf Nuri =?utf-8?Q?Bertizlio=C4=9Flu?= <asafbertizlioglu@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (coretemp) Remove unused for_each_sibling() and
+ name_attr
+Message-ID: <cbb8f3b5-e2f5-4bc0-97f1-c77f897fb698@roeck-us.net>
+References: <20261120165926.579575-1-asafbertizlioglu@gmail.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -95,32 +82,53 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261120165926.579575-1-asafbertizlioglu@gmail.com>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xUUFF-00000001WZb-0fkj
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:33204
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 9
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfGmr/bk+UPwgNdhUkL9K/oA3KS9BbzZidqQDJh9veBps09aDp7BQMB4m7nY/Wh95dqmr1UlrKz5EDmIu8Is0rSzWCfBGE9ATRW/EjjiVGDRGJcwmR6ZB
+ ItnIAgXhQ911fTKMYAJwvuVcpVP7d48aQfZwVaUiCg0CU5QLFDYmip2Y/Lio23A3nPUAdQGkW2pOP09oZP2sAqsQKbHTt9gac++4XnVPbuMT2nY0D8b0J/H3
 
-Map my old address to my new one. The old address appears in
-existing Tested-by and Signed-off-by tags; I will use the new
-address for all future contributions.
+On Fri, Nov 20, 2026 at 07:59:26PM +0300, Asaf Nuri Bertizlioğlu wrote:
+> The for_each_sibling() macro lost its only user in commit
+> e1b370b64031 ("hwmon: (coretemp) Simplify sibling management").
+> 
+> The name_attr member of struct platform_data has been unused since
+> commit d72d19c26c41 ("hwmon: (coretemp) Convert to use
+> devm_hwmon_device_register_with_groups"), which left the "name"
+> attribute to the hwmon core.
+> 
+> Remove both. No functional change.
+> 
+> Built with CONFIG_SMP=y and CONFIG_SMP=n at W=1 with no new
+> warnings. Apart from the struct platform_data allocation size,
+> which shrinks from 88 to 56 bytes, the generated code is unchanged.
+> 
+> The unused definitions were found with an LLM-based coding assistant,
+> which also drafted this changelog. Both findings were confirmed with
+> gcc -Wunused-macros, git grep and the git history.
+> 
+> Signed-off-by: Asaf Nuri Bertizlioğlu <asafbertizlioglu@gmail.com>
 
-Signed-off-by: Asaf Nuri Bertizlioğlu <asafbertizlioglu@gmail.com>
----
-Guenter, all my contributions go through hwmon, so feel free to take this one too.
+Applied.
 
- .mailmap | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/.mailmap b/.mailmap
-index 7fb33babc931..e1479571ece8 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -126,6 +126,7 @@ Ard Biesheuvel <ardb@kernel.org> <ard.biesheuvel@linaro.org>
- Arnaud Patard <arnaud.patard@rtp-net.org>
- Arnd Bergmann <arnd@arndb.de>
- Arun Kumar Neelakantam <quic_aneela@quicinc.com> <aneela@codeaurora.org>
-+Asaf Nuri Bertizlioğlu <asafbertizlioglu@gmail.com> <ycistak@gmail.com>
- Asahi Lina <lina+kernel@asahilina.net> <lina@asahilina.net>
- Ashok Raj Nagarajan <quic_arnagara@quicinc.com> <arnagara@codeaurora.org>
- Ashwin Chaugule <quic_ashwinc@quicinc.com> <ashwinc@codeaurora.org>
--- 
-2.56.0
-
+Thanks,
+Guenter
