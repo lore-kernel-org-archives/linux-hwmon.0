@@ -1,64 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.91
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795230679;
-	b=OvGlaUe7JazbbznICtMLaODbNWO8oUTPyQ/W5fsSP153lB6QoNiYO4u5gGm1W2cJdpQz
-	 J+xz4EKQi51awX25XHD5EEBL+mUwmAdRyjAAFBeYIn5mte71DVc21xx5R5tcTCKe7yPk8
-	 j5ebWiL6s4I2uy9KoOSpZ5TKAgtWLhWFdeD/67HW6tUzOHiCvQjeS47f5W4XZstJ737cy
-	 jmGfqtUrquRxatbMa1JhJyXsSmAeFIua8W6FjEGXmB6CymuuNF++R8SC8gSywf8aoHkN+
-	 07DmfGGPtd8M0/mdsPLDJHelertp3C3uPAdkcwJWiP3LsTahjB65KZOx8L9I7S9p1uw==
+	t=1795289567;
+	b=spVFS3Gh7Y+7jHW6qmxeuwNe7Igq6BCndUgY3NVoGBQctAk34M4xGrXTl3ZxhUgacJ7+
+	 qPNndregYc7YkZLQXvJnKh5BPeqcD70dRKRBncgn7Gu4XjO8z6a7QSCwGl3sryc0Ysv4+
+	 59TWqZQWY9r+2R3MihqtaKF2+AjBEAxjL+oUsK8xCIg523ODq2DET8SgoTKQOJZwjlMos
+	 lgyWYfFknOrfvruKYKSyUwRczHX0KVzcMgwA/8OSJ3LjHA9pPmgnt0XptPpxdcvEn5aE9
+	 oQjkTX6ITW0PmO5Pmx41K/MwEQzTdNu5z9ao1SV+atL12N1bTt+lfDalY0kTOsWqMuA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795230679;
-	h=Received:DKIM-Signature:Received:Subject:From:In-Reply-To:References:
-	 X-PR-Tracked-List-Id:X-PR-Tracked-Message-Id:X-PR-Tracked-Remote:
-	 X-PR-Tracked-Commit-Id:X-PR-Merge-Tree:X-PR-Merge-Refname:
-	 X-PR-Merge-Commit-Id:Message-Id:Date:To:Cc;
-	bh=FeTqLdiLIzDxQ9/o71sjkRXwJD9uCCzhdD57Bw6P+J8=;
-	b=HMH+6yPfQLpp9WrngtvJbkZiH8SJAOTEh6640CVXJCIooj2TLKSRsc3HoK6XNUOLT8XR
-	 +TUePbkmP2j9P3vfp7lU7yemsw7xfkBB6Tl5ujvtsKBPqyhUF3fkvE1w0qrQ2MCgJax9P
-	 PYN9pMvpaSR9dG4iO2tV3tJt2h6D0bLyCdcnOPm7K7nW6bofyYZrr1j7NpBudB+q7lOM4
-	 EUTq9wugO1FS5zHoX6VbaPmHrCpnbqu81MvW8mN6B4hAdIxHXjHRamkKKCv8liM9q8yXF
-	 EMmnFA4XAuZA+UhErYxe+ED4arRCrCe3GVV5A6yJq9Kq8Lo8fwyajVUjuhZ7FJ36fIA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795289567;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=cAnI0c9hFjCMwUmPlUPWn1Le7Jb1Y2BnchBdQ6mVz6Y=;
+	b=qvwsYXewV711XN44UCMNDekRfddWZTNHfnbjZuktYqhYYbPqIH4xC2NjJPWDn95MGJd/
+	 SR2elFDAjGTF0j7XuszfhuCaW33vGmLudUeZnF7UF+UFhR4Ad/87RMexbEzzKwZRXi3YX
+	 DZz5Z7YbSCf37XFbu8TrvKR6DS1fH6aJmApJR/ju/Nm95YclPS1WGgCMbSI2bJ+RjjqML
+	 0KjHhNG46vPoo+7niOF15qO3kODRtRQrX7RR2yFdbo6omZELcDBWJ5/q+LSm+wYN3HAcu
+	 BdOVMWF7s5VZuNEBGxZiNEWr2dlIsg8sWTEa1XmvI/I77l6xiaC7pfaZGkKhKnX6jLg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=owQfWt8K;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=ipvych.com;
+	spf=pass smtp.mailfrom=ipvych.com;
+	dkim=pass header.d=ipvych.com header.i=@ipvych.com header.a=rsa-sha256 header.s=key1 header.b=h9JzfjAc;
+	arc=none smtp.remote-ip=95.215.58.91
+Received: from mta1.migadu.com (out-91.mta1.migadu.com [95.215.58.91])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF13E606A6A0;
-	Sat, 21 Nov 2026 03:11:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2C7606A32A
+	for <linux-hwmon@vger.kernel.org>; Sat, 21 Nov 2026 19:32:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BC2C7606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ipvych.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ipvych.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=owQfWt8K
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD32B1F000C4;
-	Sat, 21 Nov 2026 03:11:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795230679;
-	bh=FeTqLdiLIzDxQ9/o71sjkRXwJD9uCCzhdD57Bw6P+J8=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc;
-	b=owQfWt8KoPVQ/lX44sj3cyhUCNuPgvn5cToYmInXhdW93rJ/KiBjvhB34VARgCf4l
-	 ErsRfGPbQ8rR2LMv+r1FEzxrYLwLB5fUjMIOZa2121VbobM1sa8ZvwBUBwx2NUfKPQ
-	 VkThpJmC3kxLXsmK0XUyrmN+Rzo5WIoYVw/d/aOZbQWTAxnOYFRkBSAvNXso2MPrTX
-	 472+vBBZpTm65WmX38e4UM1gs+Tz5qPkfhjYA9eoN4rLmnVN3Q68F2g/HYe/f1rgJa
-	 ijY0rzUv8mMLBiQYkqbLjPoyfFg6kuAFPie1pnR5VQsgoTLZbMCNsB/3fmOkH6cmSo
-	 bMm1P12KVwv3w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B4715380AAFE;
-	Sat, 21 Nov 2026 03:11:19 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon fixes for v7.4-rc4
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20261120205946.799247-1-linux@roeck-us.net>
-References: <20261120205946.799247-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20261120205946.799247-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.4-rc4
-X-PR-Tracked-Commit-Id: 449cdc5e29c63aa66b41ce8c2783f6b0d84c62b0
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 06ef54bf3ab7ab8531e8f9c197d189f44b8bd925
-Message-Id: <179523067833.902445.15765998578586576191.pr-tracker-bot@kernel.org>
-Date: Sat, 21 Nov 2026 03:11:18 +0000
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+	dkim=pass (2048-bit key, unprotected) header.d=ipvych.com header.i=@ipvych.com header.a=rsa-sha256 header.s=key1 header.b=h9JzfjAc
+X-Envelope-To: linux-hwmon@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=i2m/DFlMYzZ+rROkmhKoOHRI1qUFGH+RsFuOBgbVOsI=;
+ c=simple/simple; d=ipvych.com;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795289563; v=1; x=1795894363;
+ b=h9JzfjAcaxBpLxbeqHyOPBWgPvzufnokvfuQj7xWLnBhLHoMGBNjnoiWv4vRP0t+v9tmTWdM
+ vjNOFRis1fTo3SBqUV4XHqauptvM6K3GTkJQ/qM4Q1dU3ee2HDaFX0jUVhpedlizfrtU289V3BA
+ zNmmVUMFwHZ4D7TDLNw+CB6fY+htzrHPlYLf3oPyMxV1mgES9sUqGSJZPumRKbbaU/AbFRzF3YY
+ 54W7wILpewwWU8tSpiOww5QwtX+tsgzfcFItA190tSxo7EFNJSSFD08PjArF954aMcz5Ix4o2QL
+ NAJnp1MB0nzy94d60AZs75GurQtW9Y3C1+EYjhYkQ4JZQ==
+X-Envelope-To: linux-hwmon@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id ffd402e7f7cd30ea;
+	Sat, 21 Nov 2026 19:32:43 +0000
+X-Mizu-Trace-ID: ffd402e7f7cd30ea
+X-Migadu-Flow: FLOW_OUT
+From: Ivan Popovych <ivan@ipvych.com>
+To: linux-kernel@vger.kernel.org
+Cc: pali@kernel.org,
+	linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
+	Ivan Popovych <ivan@ipvych.com>
+Subject: [PATCH] hwmon: (dell-smm) Add Dell XPS 15 9550 to fan control whitelist
+Date: Sat, 21 Nov 2026 21:32:27 +0200
+Message-ID: <20261121193227.9408-1-ivan@ipvych.com>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -67,16 +66,37 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Fri, 20 Nov 2026 12:59:44 -0800:
+Confirmed on my own Dell XPS 15 9550 running BIOS version 1.14.0
+running "echo 1 > pwm1_enable" disables automatic fan control and
+"echo 2 > pwm1_enable" enables it back.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.4-rc4
+Signed-off-by: Ivan Popovych <ivan@ipvych.com>
+---
+ drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/06ef54bf3ab7ab8531e8f9c197d189f44b8bd925
-
-Thank you!
-
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+index 5963f908972f..ba189b086b22 100644
+--- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1640,6 +1640,14 @@ static const struct dmi_system_id i8k_whitelist_fan_control[] __initconst = {
+ 		},
+ 		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
+ 	},
++	{
++		.ident = "Dell XPS 15 9550",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "XPS 15 9550"),
++		},
++		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
++	},
+ 	{
+ 		.ident = "Dell Optiplex 7000",
+ 		.matches = {
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.56.1
+
