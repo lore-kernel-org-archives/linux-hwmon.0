@@ -1,80 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.35
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.35
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795380411;
-	b=IBb4UTuVhWSW4fuVCZIESmi953n/YEwQ/5pECSN28bVGBbPO4rFsHz/bOaiT/lbh0UNv
-	 jOF5Jv4AFu9E+qR5EZ8VdCplKpZxHLhbOOEy/HOHNQMg2Q5FiCcZYIz8+jR9cmOFEzHId
-	 gf3w9A/HNts+w6jDw9yrWzG5CFPMVzK/LGcCZSPCXG4uKLLiYSLj8TVU6T861JzaBqLth
-	 tSiA0JMoaqlbs0L/VUSLzEWRtYta+t2rD0EP5Sct7bhNZjkaRGY0XUgbVGkb3WaMLHeHt
-	 1BAQHi7uKeehO6gaKhpgp6sKtASsd+0gij4ARwT707/M4LIrIPQocWqKIPVAX2DKm2w==
+	t=1795380698;
+	b=RC+EA9AJ1Wrsf6z+1A7tJ1N6/Y2e9gJxsPKtTLyRN5t2IHf9BlDTzaodNF6uzYWxGpIy
+	 UDraqFbYHoLOydBcPiVn8wf/R7pt2Rzy7M3cDoiJia+4+x/whMQ71hewMU2WHmXV5ofrA
+	 NWQmT4rvXFxgRrjhGEvLYSZTyhc3/CBCU2scgVu24gBNm42DesBCd9W1lPWUZYG68QQUX
+	 90wvOpMrjUGd4DACjsrz4JkJ3bozqfwuqT6hS3F1racij/XTPlSTd//z0znX/tqAT9+3p
+	 jCCAP/BsEuxf0H6vl6NUDTupU8kw9umNiBR9Yg1u/R0b1MUxu63XYYZqpt7YWMQiw6w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795380411;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795380698;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
-	 In-Reply-To:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:X-Source:
-	 X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
+	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=LSD5gbGGgGHR9hhcem3MZ2q3tssD5SSjeWRvzutmFFI=;
-	b=WhIVpAl4wI73hAIak1gbj2iyeSt4LOxrhpleJml0ZBnP6UiA07pIhOF9WWpVsJDE15vy
-	 ycFCsRauFADRUx9E+K4HHvqdxrIJ2Vs7BexXEgquAeprVUqlfRgCZLCgTqMGmsXOzGRyN
-	 il2GydGkL7vjwvBZBr3C6xeRRrC4RKEsPjxbzSoswlq472Edocur5SONzdUk9DshCHl6m
-	 hofzZt2pYIP4ofbI2mbAMIY+OJqM14i/OPzGmgSMt/2xcqrZZ5gsFnd7McLZXmKVvfZ1L
-	 /a88lTLJNNFlsgmiGe2bq9xWeNG7Yaj3VmLjXm7i1t2BwjON+irXHCaJ2ri475uGqtA==
+	bh=ti6yGnOH5tg9+I9TFYkbc862Q5VopXd4FS+rL58VF5U=;
+	b=f/Im4lmQeUF0LMkNK+64LxIKYgFFtWJzC+ynHR2bo/5uBdGsUbamj2XdDqFawXg7frzk
+	 p+Fn2OkJ7sFs1kV55rdl2MwirDYY+VV41+OSdVSOjCjejBYJ7K7wXVpfKcE2khZdm0MmV
+	 LaGhjeBW6EXBHDGVqEyXuwkNc1MF7aw2gZxIPP2YkEDpBFeD0gXJm79h2ZQdKRGxDKSD0
+	 Z+ABR/YsVfCfpbFEmhmbSCnkGBQwbgOg6RKIuTtqPvhDTKXWLdpYXnzPbitSscFYWK1ED
+	 OMaNIx1fgeZXRZgdVnd+z4F7T40fBXmDdRvYSVTX1v6CScOYsSEVIbWd+x4np32yxjg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=mGUh6841;
-	arc=none smtp.remote-ip=35.89.44.35
-Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=rUO58+aB;
+	arc=none smtp.remote-ip=44.202.169.35
+Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D84606A31E
-	for <linux-hwmon@vger.kernel.org>; Sun, 22 Nov 2026 20:46:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46D84606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7975606A32E
+	for <linux-hwmon@vger.kernel.org>; Sun, 22 Nov 2026 20:51:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D7975606A32E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=mGUh6841
-Received: from eig-obgw-5005b.ext.cloudfilter.net ([10.0.29.189])
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=rUO58+aB
+Received: from eig-obgw-5001b.ext.cloudfilter.net ([10.0.29.181])
 	by cmsmtp with ESMTPS
-	id UykGxpGvNRiNxVESSxGgaD; Sun, 22 Nov 2026 20:46:45 +0000
+	id V8N4xrVEp4vCDVEXAx4q3L; Sun, 22 Nov 2026 20:51:36 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id VESRxbKJzYskhVESSxhZAo; Sun, 22 Nov 2026 20:46:44 +0000
-X-Authority-Analysis: v=2.4 cv=CKMqXQrD c=1 sm=1 tr=0 ts=6b0354b4
+	id VEX9xZv3fxmi7VEX9xHH7d; Sun, 22 Nov 2026 20:51:35 +0000
+X-Authority-Analysis: v=2.4 cv=KuFN2XWN c=1 sm=1 tr=0 ts=6b0355d7
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=8nJEP1OIZ-IA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=JtdX1pvmAAAA:8
- a=VwQbUJbxAAAA:8 a=tI0p-kfHP82b7JzrScQA:9 a=3ZKOabzyN94A:10 a=wPNLvfGTeEIA:10
- a=c0toiO28_D8leWPcdVQN:22 a=KPbNTLLc3YvdawN95zVk:22
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8
+ a=_jlGtV7tAAAA:8 a=Qibk6pR6aqbyheTQBO0A:9 a=QEXdDO2ut3YA:10
+ a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=LSD5gbGGgGHR9hhcem3MZ2q3tssD5SSjeWRvzutmFFI=; b=mGUh6841l/Rq
-	mHCjTP9lDhFZH1axHpr7h98VsAtQjmITqrd/kobcmpT1D7hYvxI189C9naTJKLgC3cwvR0rF2PYlH
-	WJXO4VHZz+OWvaEOMuT348mYxyuTgmaQydYYrdkD+bcZNezwqNbbS2I9i+zb57bwIDWR3atjMN9aU
-	eB7j7+sNTku11ljRiPSSyeuoqmN1jr1eGuPf4kvw23L07iw6pNwvFHk+GOSQymaARQv0gUrqP6gfv
-	NZs+rCMRr+abC9/jgucOUBSM6fiRylJgdfDobym1/Sd/ODNh2pKm96EPLsHCQSjHtkWYUUovdccfs
-	DsmBxMYQGIgIC6P2dong/w==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:33312 helo=server.roeck-us.net)
+	List-Archive; bh=ti6yGnOH5tg9+I9TFYkbc862Q5VopXd4FS+rL58VF5U=; b=rUO58+aB9+yJ
+	w5m1uxWeUUYYmmVKb/XOCXMeNd4py18ycVsNTKPxLWk4A4U44AuAF3lY0tuuP0ky+//DFpa8vhXzw
+	8mAAUDF80zKfp0K/Mbze9GoxK+stOjhgE5yhGK6L2Cx3fK2uNhr3MWi+EIT8SbH7+3mxbjgHGWoFN
+	912vtj/4VUbt/Jzwc0QL9F4Sz/GOZ4ZtdBIzxkkKZV4wbPdWvqT3c5BPkyOhhI8yHiLvm2j4x/VWt
+	ZNwsraJHJOgaiV6QE3OHlWUDy9bXXNxN/bnYVlldvw2Rxv/YbyZ4xLhb5ghorTpQ1PUXnHyQuwoKF
+	Y+ajo0LuBeQsuuC4lm9Khw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:32802)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xVESR-0000000007M-0aq4;
-	Mon, 23 Nov 2026 02:16:43 +0530
-Date: Sun, 22 Nov 2026 12:46:41 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Ivan Popovych <ivan@ipvych.com>
-Cc: linux-kernel@vger.kernel.org, pali@kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (dell-smm) Add Dell XPS 15 9550 to fan control
- whitelist
-Message-ID: <27ffe277-f1d1-4e85-8bd4-bea8f2962f05@roeck-us.net>
-References: <e4e133c6-db41-4776-a73e-e8e051eadec4@gmx.de>
- <20261121230738.4970-1-ivan@ipvych.com>
+	id 1xVEX6-000000001Za-0Q4Z;
+	Mon, 23 Nov 2026 02:21:32 +0530
+Message-ID: <93ffac09-f995-4ea7-8aa7-4fb7ed3ff4d6@roeck-us.net>
+Date: Sun, 22 Nov 2026 12:51:28 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -84,10 +76,67 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261121230738.4970-1-ivan@ipvych.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/2] hwmon: add Raspberry Pi PMIC driver
+To: Sander Speetjens <sander.speetjens@gmail.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Ray Jui <rjui@broadcom.com>,
+ Scott Branden <sbranden@broadcom.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org, Peter Robinson <pbrobinson@gmail.com>
+References: <20261119-hwmon-da9091-v4-0-0d6e345c3666@gmail.com>
+ <20261119-hwmon-da9091-v4-1-0d6e345c3666@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20261119-hwmon-da9091-v4-1-0d6e345c3666@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -96,32 +145,50 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xVESR-0000000007M-0aq4
+X-Exim-ID: 1xVEX6-000000001Za-0Q4Z
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:33312
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:32802
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 1
+X-Email-Count: 7
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfAG9poKzcpCqja2eBBBVMZmrpIvlWK2AXF7dof/TzJXaduKQ+1OSOD7yDBsYnabh51tpm/zggIcsDEXvMd23UTMYcOhUN95lNd5OuWbdgMjRx0HgKvz0
- sFUTol3T/YNbf5EsSFqvP4na7/vLRNtKl3T6ClXC4J6ZCL+ItdvNyxyZep/jSl7xCPSDj8R8jTCCkszdjii+9ixAA0QArUb7w5Lxqi84WENYA0fu73TrpxDb
+X-CMAE-Envelope: MS4xfC+2Ve31nMEPklZVdAF1v+Gjt6RSYmdrALIG7zhZEhtkSN7bGx6galbklZBYxykjN9OUjo8NoM8JCK6Kc4wlqDBut1zX/T4HoVF7P2UqpMyD+HGY6MyM
+ 6N/I+7UOIF2SLegMTcfsztgGFDxdBwtrXZDzltZ3ZmPBu7jYIThxIJ79yDXpiesG234ROqtk1GMtJSHJ6Q5toz49VbsKHZB8XvUxoENW4Pu7NUKGwLwL3S6H
 
-On Sun, Nov 22, 2026 at 01:07:38AM +0200, Ivan Popovych wrote:
-> Confirmed on my own Dell XPS 15 9550 running BIOS version 1.14.0
-> running "echo 1 > pwm1_enable" disables automatic fan control and
-> "echo 2 > pwm1_enable" enables it back.
+On 11/19/26 11:55, Sander Speetjens wrote:
+> Add a hwmon driver for the PMIC found on the Raspberry Pi 5.
+> The PMIC exposes voltages, currents and temperatures exclusively
+> through the VideoCore firmware mailbox interface (property
+> 0x0003009f).
 > 
-> Both 30a3/31a3 and 34a3/35a3 commands work on this laptop, using
-> 30a3/31a3 as these are the commands used by the official Dell
-> software.
+> Requires a sufficiently recent Raspberry Pi firmware that
+> implements the structured PMIC ADC property.
 > 
-> Signed-off-by: Ivan Popovych <ivan@ipvych.com>
-> Acked-by: Pali Rohár <pali@kernel.org>
+> The driver:
+> - is instantiated at runtime by the raspberrypi-firmware driver
+>    (same pattern as the Pi 5 RTC driver)
+> - reads all channels in a single batch mailbox call
+> - uses a short refresh-on-read cache
+> - exposes the sensors via the standard hwmon sysfs interface
+> 
+> Signed-off-by: Sander Speetjens <sander.speetjens@gmail.com>
+> ---
+>   Documentation/hwmon/index.rst                  |   1 +
+>   Documentation/hwmon/raspberrypi-pmic-hwmon.rst |  49 ++++
+>   drivers/hwmon/Kconfig                          |  11 +
+>   drivers/hwmon/Makefile                         |   1 +
+>   drivers/hwmon/raspberrypi-pmic-hwmon.c         | 296 +++++++++++++++++++++++++
+>   include/soc/bcm2835/raspberrypi-firmware.h     |   1 +
 
-Applied.
+This patch is making changes in a non-hwmon include file, so I can
+not apply it, or at least not without an Acked-by: from a maintainer.
 
-Thanks,
+Assuming it will be applied through some other tree,
+
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+
 Guenter
+
