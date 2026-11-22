@@ -1,55 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795367796;
-	b=Bp741aBG396DKHm9rqyDdAh9cPpqeqC1i2rokbRkZKB8yoFZj3eEeoYkHd353oMCDz3f
-	 w3puT8QAM6relKkkM0Vp7sJxwMOz6l/d5HPjMHZydnMwyVtgmXOjsfN/6ZJS16AaDm3aC
-	 qLhhmNsZGLwJH8SaoBVB0C0Wads27XZhE8+1Y9GPn3mp4KRzAR6lAsQJawU/9tsYqgmj6
-	 cEHTMVvG9fbpQffMEdk8Z4H6ldlna7gGNKt9D3nBqtbD2pelHZ/IDVXotHFgCc/16gnhA
-	 2+C7Tfs8AVjuFI+AHfHY5ZhkQNkDVbQH4aW9vMGDH7l+UL1IxfQao5HbS8zLEFSUuQQ==
+	t=1795373504;
+	b=sLpI+cJEZu7saBl1Xxv3XD9nhrieQ0WsDv+MpOF+0m+a1iWNAh4H+Ose4I4FpzLE8VdO
+	 VaKVLBCKXosfClq6VRYOADJFvC8uCcc+dRXBxSghjEsNqwfkwtyPZ003Hz85a3XAoRygj
+	 qGnx2OCZhbXG/VmrohCSEyJGASq5GxSN1aE2PMCie7Usv3k4kWfxWgIwJUU5k4VqOnh5t
+	 +dKbQALJvwR8UU3cNlBH50CYwoSJ/ZOCCSGeE/AnAxZoQdeSv3Lmo/dC2Lr2zjyUIqssx
+	 35XtZ5s26h9tY3yo2eyRANteqY1FCwkU7HJ541b86vKnkBbxRmmRzfo5fzMo2BB3+TA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795367796;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=oMD92u/C1bWsq9wh8D9YjBwKugbp5ZzvFsSNM887Sv0=;
-	b=4BosbUntE65JZx9p+/xVK0dek0pRs+X63RxnHYULt+972WGxqMAg84omPm/xm0RwrG9c
-	 yBajkT9JxlDb7Et2QAQTRAuC6CGuF3JzQ7rNCphKpErBIHBm54RIaWtHI1/4SEo8gDhp3
-	 NrCudE6TAWr2DEgDj7ZgfBEBHV7fo/oEFIq+740yONFIo7g6dJCgbbhsQG8YpTO2OGMKT
-	 W2TzoM6er6HZz0ZVeDk0CaQjD/5dmIveuqZqBpvDH0boE11/at5929/AkNdD6RHyUF9Hh
-	 ZNaC1QqMh6ZeREK+LXI77s3tLs9Y1oCawwOFZVVbp/NihN+OOcEqccVwqn5fe1F3DYg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795373504;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=IFxEKJMtZIkQGZKfSYRvowzKuK7BCrlRO/z3l0BUM3Q=;
+	b=yk+pWVTYr+1co8k4d/8Wy5vH9LXWRhXOAM6abVIWtx/d56yKPMam0SD8JvIDOJ7cKxXC
+	 2QpEX9cZWHB6f+dTvI2kPqyIacbD4XaUKuPw9HBilxBDN+iYL+0aGB3DQgDPqOIUTiXaN
+	 TKlIskusVoOaFbNXrTFWnpswEA15H+FJS/bpYQMTk4DDsiIDImqbOgVX0SSIz4HvXnWM2
+	 J9qZL77OC2v8MDIAuwdhAf8LmkRDvctOK+KcLNjbQ+pc2XzHur9C4JyiFBaT+kgyK3s/D
+	 GlmM009EkmAo1FWMzBZMkeXeFPJR6TFkc7eRemRiXwA7kZ6FGElDp27LauWfipxnhdA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UmuOSmX7;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P4Bh+w3u;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15E6A606A336
-	for <linux-hwmon@vger.kernel.org>; Sun, 22 Nov 2026 17:16:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76CC3606A320
+	for <linux-hwmon@vger.kernel.org>; Sun, 22 Nov 2026 18:51:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UmuOSmX7
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24FD41F000CA;
-	Sun, 22 Nov 2026 17:16:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P4Bh+w3u
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E2941F000F2
+	for <linux-hwmon@vger.kernel.org>; Sun, 22 Nov 2026 18:51:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795367795;
-	bh=oMD92u/C1bWsq9wh8D9YjBwKugbp5ZzvFsSNM887Sv0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=UmuOSmX7799OsFqNKhn0yzpZkGx7j4g//RQm3q8VTi3LvQq+rbuco1qPnJEf8RuDo
-	 PFPHAPeJ55uz6kAL1YLTkaNe15qRW7utiH+Q3k3EMCa5EAKItxF7IkW79heIoGQ/7i
-	 DMun3lStEwpvGkcO7yR8bN59wCJTKgD0hDR7DSCrKYSLhMxlyzDlCc35sctr6xD3/a
-	 ptwd4pAXD6KfKixrDSwR1gNG1EFGwQNhYDX+X0N87tyz+vbBUVdLjJfMdIJ7HclN5V
-	 YB19TKg1p83TYFvl7Dqqe/0oIG/FOl1maQUFtMdXZt5JPcwcVrRXugTDoSfFBksco2
-	 BoDMPGwrZAbog==
-Message-ID: <sashiko-outbox-228129@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 0/3] hwmon: (pmbus) Add PMBUS_FORCE_PAGE_CHANGE flag
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Felix Radensky" <fradensky@nvidia.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261122170949.3059743-1-fradensky@nvidia.com>
-References: <20261122170949.3059743-1-fradensky@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 22 Nov 2026 17:16:34 +0000
+	s=k20260515; t=1795373504;
+	bh=IFxEKJMtZIkQGZKfSYRvowzKuK7BCrlRO/z3l0BUM3Q=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=P4Bh+w3u3ol1/38SJqbi7YQPNIQLnKht8tYqK1cfs1csG8iQYxpq+W8AYSILWV6Oh
+	 ymhYWmDyxJ0t6cEKdMuYvQ01nncHAXKblQrtMpLlhuaWr2Z/aEK3GT+mB9IKo0g26q
+	 vi4X/D+9E7Eon/wbX3bz/TlZKLWmnOuxNQu5YzorVCj3XEuYI7jQVo0b4Fq8gknUuj
+	 +J4m+UTs0rFzS2m+KvN0mLgJr5t8Pd7pu0iWTRdsnUe1ox60LZAjFuzMh4JCQIesas
+	 NHsKm6mUgzcq7su3jZVBGHrPncMDJFCYqBY6IP20xP7aSuNzDF8cvmYSlAPGTgnUNm
+	 y859TQRKxitrw==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5c1479a959aso1785124e87.2
+        for <linux-hwmon@vger.kernel.org>; Sun, 22 Nov 2026 10:51:44 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AL+hErEgXh7hCRfD/R2LDFHabrOyVgKPnAJ7BGSxPrb9+Z7aFrOjyEPCClsEh19cu/rJYmxE7lrI4lTMqAZTnQ==@vger.kernel.org
+X-Gm-Message-State: APuU4Z/QGLiNviVjQpZSSFuLHsoYFrasHLAQmzJ4BUIB5q+CjigHxuvy
+	ccnP8uyxNHzJJRZC1GGC3svhDyl3VhCV1uxLwKWgaLf3G9piEkZ2kqUQ0hDbITk0eCHHE34RTHx
+	qjSRnz6qg2xYfdfPJQdJbEiTFJUsuTXc=
+X-Received: by 2002:a05:6512:b14:b0:5c1:c4b4:a3e5 with SMTP id
+ 2adb3069b0e04-5c1c4b4a448mr1963937e87.27.1795373502781; Sun, 22 Nov 2026
+ 10:51:42 -0800 (PST)
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -58,9 +58,60 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+References: <20261117-xg6846b-bcmbca-xrdp-reset-v5-0-f584e8b8e696@kernel.org>
+ <20261117-xg6846b-bcmbca-xrdp-reset-v5-2-f584e8b8e696@kernel.org> <179510274338.63755.13074299296013371295@kernel.org>
+In-Reply-To: <179510274338.63755.13074299296013371295@kernel.org>
+From: Linus Walleij <linusw@kernel.org>
+Date: Sun, 22 Nov 2026 19:51:29 +0100
+X-Gmail-Original-Message-ID: <CAD++jLkOUTrjAgnV=giaKx7JBnw2hKJt+-Fc1nyiucbZLLz5=A@mail.gmail.com>
+X-Gm-Features: Aa3M54oi40sU1I-FOZgHO1ergrn0hI-8Xi2jBLE3eOccsrb0FB_MO_lAfbrL4AE
+Message-ID: <CAD++jLkOUTrjAgnV=giaKx7JBnw2hKJt+-Fc1nyiucbZLLz5=A@mail.gmail.com>
+Subject: Re: [PATCH v5 2/6] mfd: bcmbca-pmb: Add a shared BCMBCA PMC3 PMB transport
+To: Lee Jones <lee@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, William Zhang <william.zhang@broadcom.com>, 
+	Anand Gore <anand.gore@broadcom.com>, Kursad Oney <kursad.oney@broadcom.com>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, Rafal Milecki <rafal@milecki.pl>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Brian Masney <bmasney+clk@redhat.com>, Jerome Brunet <jbrunet+clk@baylibre.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, Ulf Hansson <ulfh@kernel.org>, 
+	Benjamin Larsson <benjamin.larsson@genexis.eu>, mfd@lists.linux.dev, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-clk@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Sashiko has reviewed this 3-patch series and found no issues.
+On Thu, Nov 19, 2026 at 7:49=E2=80=AFPM Lee Jones <lee@kernel.org> wrote:
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261122170949.3059=
-743-1-fradensky@nvidia.com
+> Some inline review comments, but the chewy stuff is at the bottom.
+>
+> --- checkpatch.pl (2 issues) ---
+> Line 51: WARNING: please write a help paragraph that fully describes the =
+config symbol with at least 4 lines
+> Line 374: WARNING: DT compatible string "brcm,bcm6846-pmb" appears un-doc=
+umented -- check ./Documentation/devicetree/bindings/
+> ----------------------------------
+>
+> ?
+
+I don't get it either. The compatible is right there in the DT binding
+patch 1/6...
+
++    properties:
++      compatible:
++        const: brcm,bcm6846-pmb
+
+So ... was it checked on a branch withour patch 1/6?
+
+The rest of the comments are completely reasonable, especially I
+should know very well to use MFD_CELL and guarded mutexes.
+
+Iterating and fixing.
+
+Maybe the next version will look more appetizing!
+
+Yours,
+Linus Walleij
