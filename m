@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.46.30
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.85.56
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795367444;
-	b=rizapmIwFM4JEkYvGcHr4OpYnkXOVbeZn82MZjvjiXCgduV1+PBcFEeFrvkYsJQ1H95q
-	 VIaLv7lc9V0UgiS2khmxBOwvgM4qpvdUpjuFxYaVKI9jhcxij0bRbvfMYAVNY36C6I1WJ
-	 E+nh+gZ8MTjJrrMhedlc2AHxU1RvL9byOi95I6EtapAY4E62XwanJzB3sLrYlHyR2OtJL
-	 s3tKaJ7W9bc8L5czKip2m8uIPJz+FPYJGVO686ITjNRHVJXTcMRUgRmqLZEoebvSxbLe8
-	 YauUKxanV698YKK3OwlOYf4BbUP121wlA0l9+WpIl9dOyh/c/mHAGuO1GG4MzIw8S4A==
+	t=1795367448;
+	b=1b5pxQZsIMj5foaniMd3tJ4nnlBNAqyUB27U9WH/WPdK64zLvg+qui5oQjilHTO2hAwd
+	 2fEl8dAzNZipRxJiTuD+sM+za4BH4g/FpsRALsSmuL5YmQzC9jNVeBGIHB+GrVrTEwW6H
+	 G9+pe6K/IOUVBWdGCPMI8mXxKfAKl3Fdlh6E2jJpA8fQjsxWimzVdrfQH1goq/n9Jtd4h
+	 KYqnJ8oBCe78BtrkibrwZGCB/I3X9poUZPQ5FG94O7iwsJxIAaQKgovWtErlIPedAsfTN
+	 NZAb4eeZfsDu52tPxAwvIs95eGbwpaOdFfLT+0c/FA/ab30SDUqLuGgS8weV0eZbX+A==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795367444;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795367448;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:
 	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
 	 Received:From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
@@ -26,35 +26,35 @@ ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
 	 X-MS-Exchange-CrossTenant-FromEntityHeader:
 	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=JC4p1tY5eHVSbeyTA6AxaeGNdtZDfcJQ5ovxxHGaIdk=;
-	b=JrR5xDrBg2NF83MOLoHqYaF1gVsyCYzpzhTGP6sRsD8Bkfx1bU8n5qoPsjOwYfAB4d0c
-	 e8+cvyhIIxHINbcJg/3DZu7iNfpsTZrqn9o9xgAIiXB62CHW+RSGCroSb4bqTGSZnJLCU
-	 DzvOl6+MyjjE4j3osFHcM6EzdlBGRWo58HE5snIeaKCj+G3pju4WJfYhsSZgRUtN78teH
-	 VY6nSEv15+PQKNdIY1VvfufsYjwWPHbgTJCZfFHDNKBlCHY4JXTuVd8wJoM6oWpgUIJXi
-	 TrdDFyDAP8UYkXuYZ31dOc0IQvciHLJ5NS27ozysmYK0Jch/2VA5elCckLYdmvcE6zg==
+	bh=mRdcqy+xRBLc8iEYBsOyhRe7aiC/Vu8JkTX8ifLdAQI=;
+	b=J/RE8EJ/D7hua14N8qdT5Id5TO7ofdtS8SDCTzo8p1gHNN1tYJD7WsDhB2eGVJ94/hRs
+	 jYATwPbjc4FzKZBJi1jwfVNJ6v4CLE0lK+cZu+/oaqmyFWErG/8DIeYrQKjuaF/lrSZeC
+	 xXfA6wXAGJj9MT9DUrPWr8Dmsyp6Meyyoo+f7sC5GpSTeP1Lirx3s4Sl8Ipgi3ClWQ1lC
+	 M4XTANh7+8NgfcUQITB9GsEbVeGWaU7BLKN9vW8YgfyH590p1P6obM8yiH3FZBbEHeCNm
+	 gmImB5d1s2Ofr2K6rCHS9JyV4XdF8VyOYscG0pJ9gOwPLXfhkojUsB9cWpd2WUp338w==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=nvidia.com;
 	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b="UX/aCxae";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.46.30
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010030.outbound.protection.outlook.com [52.101.46.30])
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=ihkDWqzn;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.85.56
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010056.outbound.protection.outlook.com [52.101.85.56])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D1B606A32A;
-	Sun, 22 Nov 2026 17:10:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A9D1B606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9805B606A320;
+	Sun, 22 Nov 2026 17:10:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9805B606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=UX/aCxae
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=ihkDWqzn
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jNUFqhD/SfNqjTRCpGbpoIArW/nyFyoH/fRji38QxAv4F7om/r2nkoJoTsYPAXU3U4aa/65xFD/zCmvgIh907tTLdJ3H/1WRu/5Q2lgqvp1IWZMsGrDyCV/PZ2wwJdjp3ucN5Y2EqfHdBL6kRCDBc/eOfi7wHDWcSs5F+dZjZbVZz2BQcKuT39aOQMO2BuwG95RpzcA+fDayuY91ANsaTIJO3q5/hbQhHu7dzrH2In58CkeGVvgpLmgDS2Y87QXRwL7c8KPUIxC0Y5AxGYtdHINLjh+TLIMGsN+QpZ0FgRrVBpQx1Ox3fsnafJQmo15RCM2ftYk5iXg6+FlLmarT7Q==
+ b=FebfZ0imiI7WElGg/vKbjSKSclbC7ciaKFOwss5tfTsllO0pGBcLQLl8uDDg2FOdj0YkZEjAGtnl3HMjHmlZP2/M560Zr1dALe2GRrdxdnfsjdlNxz2HV4YC2RAxq+IvcDdJDnGrWGHYbbNt3CvmkwlIdEFYfDM6y/GhLzwVFzD2a81TVScWH61AAyyrBP4uQ/ceiLdG5udHYrzutLzpEscmV7J7lc50q51/Fq1kDmcatn4FV00yheMo4Z6u+cpWdgB1fysGP62W0m9O5NacBMhnxXjra0hcsz14UI3Xb1gyVTM1fxPLo7ug1Ssg/7R0feRekqFIZJpO5PwNV8MyJA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JC4p1tY5eHVSbeyTA6AxaeGNdtZDfcJQ5ovxxHGaIdk=;
- b=cCRyrl1SfYVnp0yTnUUlfc3pcE8Qylgb25WK3/xyI0ibJl8gkA5zsx4wpV18AAp534682e7BFboWtZkdXgR6p+RsOJFQNetF3IxlvO7gqkvyRZab6rjGVEdkm0r5MBtYpO9N9KxtzMPSzstVTNfJQmFoCCsd2iTSuqhEvjHgvpe6WxxK75DDuAQYzyAhNz8KHafFswMlEqLiHoHKQLF7hlG0PsPmAvNyZFRlXPHeC+u7GE4GafqnMSBAqPiDIFHMaO73//xEb8s7XC1h2sCV2VVjXSG62AVB8x1TLwXdYp/+0EaQPgAexwcAtXF3PYtkAZofNBBBL1msvF18QKRDjw==
+ bh=mRdcqy+xRBLc8iEYBsOyhRe7aiC/Vu8JkTX8ifLdAQI=;
+ b=NoQKkkhMkj3YdLFxh+GAk3HyT51Mog7LL6NfDkgBqTls7mZX5l9S9ncLyz5Bm/31iZcuaHjoFW/YTAH7VirjksZhtw/WqLUMue8X3B2MHSuTxSMpPCFU5fm5CQN1gRqiE7oDAlQPkyTmpein5oMG2cXp5VqqtHTvKT6GxPt8/Skc7rqKq/mOOl4JfvVKntHHZe7ee4G/trS9VBGH5v/h5XSlcMiGA9O0EXDNfjU19t5d1sVpyqH8c9mYknAVXBGRtH5/Hcrrm7pvUOB2XXimiB1rNFApmi3E0YUFgxi27gHxYWFqjd19BgFlODZX+igBd5y+0HHZValjK5XbDtMu7Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.161) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -62,18 +62,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JC4p1tY5eHVSbeyTA6AxaeGNdtZDfcJQ5ovxxHGaIdk=;
- b=UX/aCxaeSp+wefFqZlS/187BnrRTESlVFW5TNWCOD6JM8OizGHR1GdiTTbowwXyecfUp5KUlg0zOuzeMzJix2JRk8Rs1f4mTF1UWHHthxBTZZqsdJT2MlNy6bl+XW7wYbS1vhHLo5LidwtxFE9cr0UKlLbPMyV9Al7I6HMekBpMBFCxlFKGGnI0rWyt3FEQWf4jHxMIRNsNuGH/3kdUS4E8pev6tWE4ER5fhAD1vX/ieihLclzcd4oOC7LaYV+KVGd0HSspcUbr8k9KNHB7VTjECBiDguhtYquUtNqCbLNRj+46KVWAMKqzrJbwPgVT0nxS1qL+bWhqK39XrJmOn+g==
-Received: from CH0PR07CA0019.namprd07.prod.outlook.com (2603:10b6:610:32::24)
- by SAVPR12MB999122.namprd12.prod.outlook.com (2603:10b6:806:4e7::22) with
+ bh=mRdcqy+xRBLc8iEYBsOyhRe7aiC/Vu8JkTX8ifLdAQI=;
+ b=ihkDWqznWnWVYbbseuRsS0bf7pkSa09PJTh7gKjg8rMMa3CEoskOVYthXES4gUus123vEE5CYuXEmjZMyoSD62g5wxm2i10cV69ByccH147PgVIoQbLi2+WxpHWX6w1Wz+HqmJgDFHcg+ZV7FIy/+uK4SD9opGWHA2CfY/RKDeupSRWZnQmbFHQ+Sszx6vvu0n1EmbHr7PYEdAA7z3tFvMC6sXHd2pRWyNvHp+WZ8n3DY23hVnkqHD140RgKUyGctCb9xcfjW5/s96IcIp50Us0/K3lMujWFRXUHmabgPiI6DITK0VBmkHdqMN+6ZhzoWvSAsEtXMbrXIgD578Jk7Q==
+Received: from CH5PR02CA0015.namprd02.prod.outlook.com (2603:10b6:610:1ed::9)
+ by MN2PR12MB4240.namprd12.prod.outlook.com (2603:10b6:208:1d3::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.13; Sun, 22 Nov
- 2026 17:10:38 +0000
-Received: from MN1PEPF000793FD.namprd05.prod.outlook.com
- (2603:10b6:610:32:cafe::8d) by CH0PR07CA0019.outlook.office365.com
- (2603:10b6:610:32::24) with Microsoft SMTP Server (version=TLS1_3,
+ 2026 17:10:42 +0000
+Received: from BN2PEPF0000A7FF.namprd02.prod.outlook.com
+ (2603:10b6:610:1ed:cafe::93) by CH5PR02CA0015.outlook.office365.com
+ (2603:10b6:610:1ed::9) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.21.639.14 via Frontend Transport; Sun,
- 22 Nov 2026 17:10:38 +0000
+ 22 Nov 2026 17:10:42 +0000
 X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
  is 216.228.117.161) smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -81,25 +81,25 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.117.161 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.117.161) by
- MN1PEPF000793FD.mail.protection.outlook.com (10.167.249.200) with Microsoft
+ BN2PEPF0000A7FF.mail.protection.outlook.com (10.167.245.166) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.639.5 via Frontend Transport; Sun, 22 Nov 2026 17:10:38 +0000
+ 15.21.639.5 via Frontend Transport; Sun, 22 Nov 2026 17:10:42 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
  (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.57; Sun, 22 Nov
- 2026 09:10:21 -0800
+ 2026 09:10:25 -0800
 Received: from r-build-bsp-06.mtr.labs.mlnx (10.126.230.37) by
  rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.57; Sun, 22 Nov 2026 09:10:19 -0800
+ 15.2.2562.57; Sun, 22 Nov 2026 09:10:23 -0800
 From: Felix Radensky <fradensky@nvidia.com>
 To: Guenter Roeck <linux@roeck-us.net>
 CC: Vadim Pasternak <vadimp@nvidia.com>, Felix Radensky
 	<fradensky@nvidia.com>, <linux-hwmon@vger.kernel.org>,
 	<linux-doc@vger.kernel.org>
-Subject: [PATCH v2 2/3] hwmon: (pmbus/core) Add PMBUS_FORCE_PAGE_CHANGE flag
-Date: Sun, 22 Nov 2026 19:09:48 +0200
-Message-ID: <20261122170949.3059743-3-fradensky@nvidia.com>
+Subject: [PATCH v2 3/3] hwmon: (pmbus/mp2975) Use PMBUS_FORCE_PAGE_CHANGE
+Date: Sun, 22 Nov 2026 19:09:49 +0200
+Message-ID: <20261122170949.3059743-4-fradensky@nvidia.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261122170949.3059743-1-fradensky@nvidia.com>
 References: <20261122170949.3059743-1-fradensky@nvidia.com>
@@ -118,133 +118,123 @@ X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF000793FD:EE_|SAVPR12MB999122:EE_
-X-MS-Office365-Filtering-Correlation-Id: 21f64c21-7b20-4566-12e7-08df48bb87a5
+X-MS-TrafficTypeDiagnostic: BN2PEPF0000A7FF:EE_|MN2PR12MB4240:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6c39fcd9-d776-4438-4a65-08df48bb8a1d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|36860700016|376014|1800799024|82310400026|10067099003|11063799006|56012099006|261022105027099003|261021123027099003|261021121427099003|261022075727099003|261009223027099003|261026140227099003|261026121527099003|261028144727099003|261102123227099003|22082099003|18002099003|6133799003;
+	BCL:0;ARA:13230040|36860700016|23010399003|82310400026|1800799024|376014|261026121527099003|261026140227099003|261022105027099003|261022075727099003|261028144727099003|261021123027099003|261021121427099003|261102123227099003|11063799006|56012099006|10067099003|261009223027099003|18002099003|22082099003|6133799003|3023799007;
 X-Microsoft-Antispam-Message-Info:
-	wGWN35NPBZNmvpSf3uGxap7If/XfkhbTCdgQLKdFsI1uLViRNWVWypTIVw7ROmvn6Xp7CmZzMmUKUuovj5oakzXDsIKuG67EAN9s5p678bkDZFj/1fhulRcRaHl87uzIKEADrXaavGL+5oxIXrJ/fdmABq0GlcrFRLQTamlWYKurhyRNS240dOAuDRwq44f2M4d0Cg3GGiYi8wZ2a8p0DZhU1LpnlJoVun919WIAxXM7ZthN2H/pV0l7Plq/7S/tyeB8BLJ2GUbPsLnxmBnpc1j1myl1cIwx4kKPJsjFMBhJjc+nVbcojJRWurplJyKYjNXEyzyp00d61fZMvLAX/aFebQDnCmYaOWBzI6anwwwe3W22kf14WWQGJ7VpDjvCYzpgOebDt+hOKAFN6KqH1kJAaSZpADtNVLY9QKBrhq0ugc94sNePMircjuEnhoixubdUXNHDJkT8sJM68O023MeAxJXTo9DiGVlJ00egIBTiywANabpAl53meuioN0Mx/oeuWKWAQVoXF8QrFpyOBd3TrLU8YgcgKrCuS71GMauGEkiZp9EGAFw24xIO9d7RNGXpUpTZCrw3o1PuEYB6IG+Px9SSvSj2L7tNG+4eMskaGjNn6BfwgFXRmHRpe4TsJ6Xlsfkbx9gTQ63yzSI8yYUupHQVBcU+8UKEAWsIQyRdACpq4ZN9ZZ78wrRzSCy1L/CAel+ucz2ICVEOaqKLng==
+	oXs44o6qLhqhdJkPJvOXJs8D9V7bG9KBNUe8nF7N2B30xej193/d8VhlLS9kCDgwaQRlGXh/cme8Jfsocw4SJUklV2EsG6hd7Av0Al3t3Z9upp1SYKrzGtMD1N1KIEZWWkOzl5R8O2amZdUJZ2omptkzeydrEV7HMDaZaQIID3qNiHcy++XZc/BDI+72FLhVO8JAIyVhqo42NS+9AC05KDZqfrI7gR2uINJD3RCYllHA7EK7/9obNrNOsmmLdTk1tNmqb5wcIDpvZITRXxQa93AtnZDTifJbuZSuWReliZF1Cr+JreCYeE/1sqvWFPcFcFKqmGHUj0lO+Ekh1qTN1d5awuRjv5RiMVxx9h4i88wYlhamOK+Y7dTJbOzb9Tyl6aakBTiE8LZnNdzPTXC2+bQQ1cuYRTlBgZ6T3foAvWq9l2cXorl2qMTJPsP7+x78+yNqeo5rtT2SXNL3IAgbgY5zdg/KjCI9/cYppwfJSa/GFRzgghppKq4ePr53j4BTAslxe51pltW6IKjpxOFu8IBYPmarwlKy5H+5LmRsgEPlyWJrzDsyZhQBVKS5Td6qljNmjqbt7sy/J5OC23Ax7G9cW7qZtFvcYdQoK65NdObtQpf5GLkbHvy5lNr+Tn5XkA7rUBPrPDDeFHIigPX8JX/AepolLcb+nxcq5e5glZv8EXvh5At9V7HRJ5KDHWdacuHG2vYikO9/bW/0YFkv7g==
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(23010399003)(36860700016)(376014)(1800799024)(82310400026)(10067099003)(11063799006)(56012099006)(261022105027099003)(261021123027099003)(261021121427099003)(261022075727099003)(261009223027099003)(261026140227099003)(261026121527099003)(261028144727099003)(261102123227099003)(22082099003)(18002099003)(6133799003);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700016)(23010399003)(82310400026)(1800799024)(376014)(261026121527099003)(261026140227099003)(261022105027099003)(261022075727099003)(261028144727099003)(261021123027099003)(261021121427099003)(261102123227099003)(11063799006)(56012099006)(10067099003)(261009223027099003)(18002099003)(22082099003)(6133799003)(3023799007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	VKfKnQLkTol0TsKL/OLdNxJY5tcTC8K7PXHdayTmX192skAQKKAsMirvHyIW7kYkwvu8kRQ9ZQvi1uFj+KZz2/QVOEP45heBOMDWtoxSJe0LvGca9mkqSXNwaIenZJ+jiAtqdQdINdAg3D5g3rrYRPzFgDGdScfDO2KEz81inHkGhrMqWDms6FfyKsevLymT0djEg6XKtF6jv4udo4vG8xVSX+61LdBx85PKJQPFhgQ53XB89fU5jOAOVVjZJzRSc1feGkVg+YWrixql5GibbY5/AYCVHmOpdc3/s2RUwKDY/HeBGng6Z8KeUeJPMgq6JX0cwHDXA1PyiA4tcskqkXFD2cga8Q355siFaFFF2EkHzF5Byyysb/YdRtiHDccgyZgV96bQqiYyMTawr8J60qKVYoiru6Beii5EkmTEBtK5J4HmMAvPY0Hkmrwn6xyA
+	PMUDwwOeS/m51rjVs2OZsPPZHodstnd/PexXfciOFkXhnh83hDu6K1vqthim8SoeGSrk34roIfA5camW0RFo8+ciZ5rwBViHyDRyyx/cTYa/xcKvYCjiP/EI3iYk+l1oC++pdgcNTTcvOXCv7fpJB3wJqL4F7k3JXZvVeuIdmnVfDgZOZaQDEiB5ZhzrebFFL6ktFJPPdbBT4I9V1Hvigd7AQdR1jFIAA6z+6jc1TwTK2+kC1VZvqbdf5Pzr4ZdwD5R8gFvzDm89ZRcnzg5Ys1QyTMiygWeCDL2NHEh6HfbcAiLvLHfNhlRLvQ7zI2Bp2+Mz8wFsteuRogEFyrPv9s1akwU7EQUp3KAehC7BLzSrNSuGmmHPi0j/5BEIr1tTK8dEsoa0L4hWsRXPQomLXBisKn6CThvDSb9mpHN5+k83EwmBAwZxp6u8ip2T2UUc
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2026 17:10:38.0132
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2026 17:10:42.1445
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21f64c21-7b20-4566-12e7-08df48bb87a5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c39fcd9-d776-4438-4a65-08df48bb8a1d
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	MN1PEPF000793FD.namprd05.prod.outlook.com
+	BN2PEPF0000A7FF.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SAVPR12MB999122
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4240
 
-The PMBus core driver only changes the page of chips with more than one
-page, and neither writes nor verifies the page of a chip with a single
-page. Some chips with a single page provide manufacturer specific
-registers on additional pages. Their drivers write PAGE directly to
-access them, and have to change back to the page the core expects on
-their own. If changing back fails, the core accesses the chip on the
-wrong page.
+The voltage reference, from which the vout fault limits are derived, is
+read on page 3. In a single rail configuration the driver writes PAGE
+directly for it, since the PMBus core does not change the page of a chip
+with a single page. If changing back to the rail page fails, the core
+reads page 3 registers in place of the rail registers, until the next
+voltage reference read changes the page again.
 
-Add the PMBUS_FORCE_PAGE_CHANGE flag, which makes pmbus_set_page()
-change the page of a chip with a single page as well, so that its driver
-can access the additional pages with pmbus_set_page(). The page change
-is then read back, and a failed page change is repeated on the next
-access, as for chips with multiple pages.
+Set PMBUS_FORCE_PAGE_CHANGE, and change the page with pmbus_set_page()
+in both configurations. The page change is then read back, and a failed
+change is repeated on the next access, as for two rails.
 
-While at it, drop the outdated number of flags from the platform data
-description in the documentation.
-
-Suggested-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Felix Radensky <fradensky@nvidia.com>
 Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
 ---
 v2:
 - No changes
 
- Documentation/hwmon/pmbus-core.rst | 12 +++++++++++-
- drivers/hwmon/pmbus/pmbus_core.c   |  3 ++-
- include/linux/pmbus.h              | 11 +++++++++++
- 3 files changed, 24 insertions(+), 2 deletions(-)
+ drivers/hwmon/pmbus/mp2975.c | 29 +++++++++--------------------
+ 1 file changed, 9 insertions(+), 20 deletions(-)
 
-diff --git a/Documentation/hwmon/pmbus-core.rst b/Documentation/hwmon/pmbus-core.rst
-index fdfb23773148..bca387518b6a 100644
---- a/Documentation/hwmon/pmbus-core.rst
-+++ b/Documentation/hwmon/pmbus-core.rst
-@@ -298,7 +298,7 @@ PMBus driver platform data
- ==========================
+diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
+index 2ad6b7d831c8..4eba171ab87b 100644
+--- a/drivers/hwmon/pmbus/mp2975.c
++++ b/drivers/hwmon/pmbus/mp2975.c
+@@ -11,6 +11,7 @@
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/pmbus.h>
  
- PMBus platform data is defined in include/linux/pmbus.h. Platform data
--currently provides a flags field with four bits used::
-+currently provides a flags field with the following bits::
+ #include "pmbus.h"
  
- 	#define PMBUS_SKIP_STATUS_CHECK			BIT(0)
+@@ -105,6 +106,7 @@ struct mp2975_driver_info {
  
-@@ -316,6 +316,8 @@ currently provides a flags field with four bits used::
+ struct mp2975_data {
+ 	struct pmbus_driver_info info;
++	struct pmbus_platform_data pdata;
+ 	enum chips chip_id;
+ 	int vout_scale;
+ 	int max_phases[MP2975_PAGE_NUM];
+@@ -457,37 +459,20 @@ static int mp2973_write_word_data(struct i2c_client *client, int page,
+ 	return pmbus_write_word_data(client, 0, PMBUS_SMBALERT_MASK, ret);
+ }
  
- 	#define PMBUS_VOUT_PROTECTED			BIT(7)
+-/*
+- * Let the PMBus core change the page, so that the page it caches matches the
+- * device. The core does not issue PAGE commands for a single rail
+- * configuration, thus change the page directly then.
+- */
+-static int
+-mp2975_page_set(struct i2c_client *client, struct mp2975_data *data, int page)
+-{
+-	if (data->info.pages > 1)
+-		return pmbus_set_page(client, page, 0xff);
+-
+-	return i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
+-}
+-
+-/*
+- * Voltage reference is available on page 3 only. The callers read a register
+- * of the rail through the core first, thus the core caches the rail page.
+- */
++/* Voltage reference is available on page 3 only. */
+ static int
+ mp2975_vref_get(struct i2c_client *client, struct mp2975_data *data, int page)
+ {
+ 	int ret, vref;
  
-+	#define PMBUS_FORCE_PAGE_CHANGE			BIT(8)
+-	ret = mp2975_page_set(client, data, 3);
++	ret = pmbus_set_page(client, 3, 0xff);
+ 	if (ret < 0)
+ 		return ret;
+ 
+ 	vref = i2c_smbus_read_word_data(client, page ? MP2975_MFR_READ_VREF_R2 :
+ 						       MP2975_MFR_READ_VREF_R1);
+ 
+-	ret = mp2975_page_set(client, data, page);
++	ret = pmbus_set_page(client, page, 0xff);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -1072,6 +1057,10 @@ static int mp2975_probe(struct i2c_client *client)
+ 	if (ret)
+ 		return ret;
+ 
++	/* Page 3 is accessed in a single rail configuration as well. */
++	data->pdata.flags = PMBUS_FORCE_PAGE_CHANGE;
++	client->dev.platform_data = &data->pdata;
 +
- 	struct pmbus_platform_data {
- 		u32 flags;              /* Device specific flags */
- 
-@@ -388,6 +390,14 @@ PMBUS_VOUT_PROTECTED
- Set if the chip VOUT_COMMAND command is protected and protection is not
- determined by the standard WRITE_PROTECT command.
- 
-+PMBUS_FORCE_PAGE_CHANGE
-+
-+The PMBus core driver only changes the page of chips with more than one
-+page. Some chips with a single page provide manufacturer specific registers
-+on additional pages. Set this flag so that the PMBus core driver changes the
-+page of such chips as well, which lets the chip driver access the additional
-+pages with pmbus_set_page().
-+
- Module parameter
- ----------------
- 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 5138c802d8ab..aed1c4605952 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -226,7 +226,8 @@ int pmbus_set_page(struct i2c_client *client, int page, int phase)
- 		return 0;
- 
- 	if (!(data->info->func[page] & PMBUS_PAGE_VIRTUAL) &&
--	    data->info->pages > 1 && page != data->currpage) {
-+	    (data->info->pages > 1 || (data->flags & PMBUS_FORCE_PAGE_CHANGE)) &&
-+	    page != data->currpage) {
- 		/* A failed page change can leave the chip on any page */
- 		data->currpage = -1;
- 
-diff --git a/include/linux/pmbus.h b/include/linux/pmbus.h
-index 884040e1383b..b3bc4cced461 100644
---- a/include/linux/pmbus.h
-+++ b/include/linux/pmbus.h
-@@ -87,6 +87,17 @@
-  */
- #define PMBUS_VOUT_PROTECTED			BIT(7)
- 
-+/*
-+ * PMBUS_FORCE_PAGE_CHANGE
-+ *
-+ * The PMBus core driver only changes the page of chips with more than one
-+ * page. Some chips with a single page provide manufacturer specific registers
-+ * on additional pages. Set this flag so that the PMBus core driver changes the
-+ * page of such chips as well, which lets the chip driver access the additional
-+ * pages with pmbus_set_page().
-+ */
-+#define PMBUS_FORCE_PAGE_CHANGE			BIT(8)
-+
- struct pmbus_platform_data {
- 	u32 flags;		/* Device specific flags */
- 
+ 	ret = pmbus_do_probe(client, info);
+ 	if (ret)
+ 		return ret;
 -- 
 2.34.1
 
