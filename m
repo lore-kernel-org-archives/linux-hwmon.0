@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.35
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.39
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795380698;
-	b=RC+EA9AJ1Wrsf6z+1A7tJ1N6/Y2e9gJxsPKtTLyRN5t2IHf9BlDTzaodNF6uzYWxGpIy
-	 UDraqFbYHoLOydBcPiVn8wf/R7pt2Rzy7M3cDoiJia+4+x/whMQ71hewMU2WHmXV5ofrA
-	 NWQmT4rvXFxgRrjhGEvLYSZTyhc3/CBCU2scgVu24gBNm42DesBCd9W1lPWUZYG68QQUX
-	 90wvOpMrjUGd4DACjsrz4JkJ3bozqfwuqT6hS3F1racij/XTPlSTd//z0znX/tqAT9+3p
-	 jCCAP/BsEuxf0H6vl6NUDTupU8kw9umNiBR9Yg1u/R0b1MUxu63XYYZqpt7YWMQiw6w==
+	t=1795380855;
+	b=E31hksSJ4KCdiVLQxLEHRds2XrLeKXVeSC4MalWZX13XK6xLRxeD9Jry4aVSMjjl1r+j
+	 haT2rV7c8o/01b2pC1vzNiTyAqdI1TOxMqjhz/D005/Un3kSp+TCAO/Cf8CHh4vAjXGZW
+	 hzOfzQXzr4LXwxV5IA/cp0wzeop7mYpE7XCHRPO0ZGu1IdzEVx3DFQGsO2Yogb5W+J61M
+	 A7zBP70QD5s/MWvjPltRSYDetl+6OMKnt96V/SJn7Zweg6xY6xRSOuWzfBXF1QOpXarnL
+	 eT1ugCBtrK9Eh8fYYSvfCt1YC6DBBiWzcQh6FsWJDmuNnJxfeXSqqvsjD0JsEowxunw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795380698;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795380855;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
 	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
@@ -15,37 +15,37 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
 	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=ti6yGnOH5tg9+I9TFYkbc862Q5VopXd4FS+rL58VF5U=;
-	b=f/Im4lmQeUF0LMkNK+64LxIKYgFFtWJzC+ynHR2bo/5uBdGsUbamj2XdDqFawXg7frzk
-	 p+Fn2OkJ7sFs1kV55rdl2MwirDYY+VV41+OSdVSOjCjejBYJ7K7wXVpfKcE2khZdm0MmV
-	 LaGhjeBW6EXBHDGVqEyXuwkNc1MF7aw2gZxIPP2YkEDpBFeD0gXJm79h2ZQdKRGxDKSD0
-	 Z+ABR/YsVfCfpbFEmhmbSCnkGBQwbgOg6RKIuTtqPvhDTKXWLdpYXnzPbitSscFYWK1ED
-	 OMaNIx1fgeZXRZgdVnd+z4F7T40fBXmDdRvYSVTX1v6CScOYsSEVIbWd+x4np32yxjg==
+	bh=p7z+KmSzptEn38pg7PeFLGE32dCPLjcwqeC//Sa5oLc=;
+	b=1cVg8yLtNx71JDVJSrsKCUYm06P3p3StMgBbvl0XowY2I5DAxTn3KXC0rDZDLh9ZEud1
+	 gHTRVDGnidpm59liXNW6kOjNV+cRhUIvNj9BKBIYO/Kasw3DK044KXfVmejAttNudlVuM
+	 FXp6qbRfz5ylXE8D37dgjQXst58RXobDGS3jD5dBjIyBgXnrPwFbxxtzxVeUNq4jqoitA
+	 YArpt9y6i4H3Q15Wv3vj9mSXx42y65cxSfXf/idvXNxZv7IqV2jrh9kkkP0pu4ODl1ACa
+	 Rh8jqXdPWBVRfB6Vou38o5/7Bh55SNzUkrkFpRAlAUNOLmx+lmwBuapohygMafr5Ngw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=rUO58+aB;
-	arc=none smtp.remote-ip=44.202.169.35
-Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b="E9lP3FS/";
+	arc=none smtp.remote-ip=44.202.169.39
+Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7975606A32E
-	for <linux-hwmon@vger.kernel.org>; Sun, 22 Nov 2026 20:51:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D7975606A32E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52EF606A320
+	for <linux-hwmon@vger.kernel.org>; Sun, 22 Nov 2026 20:54:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D52EF606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=rUO58+aB
-Received: from eig-obgw-5001b.ext.cloudfilter.net ([10.0.29.181])
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=E9lP3FS/
+Received: from eig-obgw-6007b.ext.cloudfilter.net ([10.0.30.166])
 	by cmsmtp with ESMTPS
-	id V8N4xrVEp4vCDVEXAx4q3L; Sun, 22 Nov 2026 20:51:36 +0000
+	id UpNcxBugqOOJnVEZixza36; Sun, 22 Nov 2026 20:54:14 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id VEX9xZv3fxmi7VEX9xHH7d; Sun, 22 Nov 2026 20:51:35 +0000
-X-Authority-Analysis: v=2.4 cv=KuFN2XWN c=1 sm=1 tr=0 ts=6b0355d7
+	id VEZgxt20z3nNNVEZhxrs82; Sun, 22 Nov 2026 20:54:13 +0000
+X-Authority-Analysis: v=2.4 cv=TuLmhCXh c=1 sm=1 tr=0 ts=6b035675
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
  a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8
- a=_jlGtV7tAAAA:8 a=Qibk6pR6aqbyheTQBO0A:9 a=QEXdDO2ut3YA:10
+ a=_jlGtV7tAAAA:8 a=j_DNJw53LGFIdKuy69YA:9 a=QEXdDO2ut3YA:10
  a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
@@ -53,20 +53,20 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=ti6yGnOH5tg9+I9TFYkbc862Q5VopXd4FS+rL58VF5U=; b=rUO58+aB9+yJ
-	w5m1uxWeUUYYmmVKb/XOCXMeNd4py18ycVsNTKPxLWk4A4U44AuAF3lY0tuuP0ky+//DFpa8vhXzw
-	8mAAUDF80zKfp0K/Mbze9GoxK+stOjhgE5yhGK6L2Cx3fK2uNhr3MWi+EIT8SbH7+3mxbjgHGWoFN
-	912vtj/4VUbt/Jzwc0QL9F4Sz/GOZ4ZtdBIzxkkKZV4wbPdWvqT3c5BPkyOhhI8yHiLvm2j4x/VWt
-	ZNwsraJHJOgaiV6QE3OHlWUDy9bXXNxN/bnYVlldvw2Rxv/YbyZ4xLhb5ghorTpQ1PUXnHyQuwoKF
-	Y+ajo0LuBeQsuuC4lm9Khw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:32802)
+	List-Archive; bh=p7z+KmSzptEn38pg7PeFLGE32dCPLjcwqeC//Sa5oLc=; b=E9lP3FS/8nP0
+	ZYsEjiY63kyWAetoCJktBvA2RCRZej5QcRvSjtPeXhT0H9cC7mvNIISL5ggHhNrFW1qcpAFJEnRPV
+	oeFdbuwQbEolK8mRIMTZRGiN+WeNaJE4wv3njcQk55w7ZFhFazT3U4Fl5A5O99pkJXvcvXjNz3VDJ
+	fcOm0imtbC0FSZuZ6HKEq8x/3DJFkH5BaXEZKRgRHihbyiRBTfXq1Iyuua+hAODkilgGBcr7/at1n
+	7wSC1zhSqr55EdXH0X/Ceah81AIUgfUQX9KqEE04aO+ofnfHIqvNb02RlLRHyIUfuHdSN81TULGb9
+	qRXnIn7Brm9LDqxKltyLgQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:33860)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xVEX6-000000001Za-0Q4Z;
-	Mon, 23 Nov 2026 02:21:32 +0530
-Message-ID: <93ffac09-f995-4ea7-8aa7-4fb7ed3ff4d6@roeck-us.net>
-Date: Sun, 22 Nov 2026 12:51:28 -0800
+	id 1xVEZf-000000002Ue-39SN;
+	Mon, 23 Nov 2026 02:24:11 +0530
+Message-ID: <ccb44fa4-b570-488b-8797-b9d520a09539@roeck-us.net>
+Date: Sun, 22 Nov 2026 12:54:09 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -77,18 +77,13 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] hwmon: add Raspberry Pi PMIC driver
-To: Sander Speetjens <sander.speetjens@gmail.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Ray Jui <rjui@broadcom.com>,
- Scott Branden <sbranden@broadcom.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, Peter Robinson <pbrobinson@gmail.com>
-References: <20261119-hwmon-da9091-v4-0-0d6e345c3666@gmail.com>
- <20261119-hwmon-da9091-v4-1-0d6e345c3666@gmail.com>
+Subject: Re: [PATCH v2 2/2] hwmon: (tmp401) add channel label support
+To: Bruno Thomsen <bruno.thomsen@gmail.com>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+References: <20261118174334.18759-1-bruno.thomsen@gmail.com>
+ <20261118174334.18759-2-bruno.thomsen@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -134,7 +129,7 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20261119-hwmon-da9091-v4-1-0d6e345c3666@gmail.com>
+In-Reply-To: <20261118174334.18759-2-bruno.thomsen@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -145,50 +140,129 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xVEX6-000000001Za-0Q4Z
+X-Exim-ID: 1xVEZf-000000002Ue-39SN
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:32802
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:33860
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 7
+X-Email-Count: 23
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfC+2Ve31nMEPklZVdAF1v+Gjt6RSYmdrALIG7zhZEhtkSN7bGx6galbklZBYxykjN9OUjo8NoM8JCK6Kc4wlqDBut1zX/T4HoVF7P2UqpMyD+HGY6MyM
- 6N/I+7UOIF2SLegMTcfsztgGFDxdBwtrXZDzltZ3ZmPBu7jYIThxIJ79yDXpiesG234ROqtk1GMtJSHJ6Q5toz49VbsKHZB8XvUxoENW4Pu7NUKGwLwL3S6H
+X-CMAE-Envelope: MS4xfCbOayZdMy/l5xp/dz95hNzD19rKKn1WY60NPcrctb4l+ix+5ezngvs5lRRC1NPJA+rXr8Q3H/+zcZgMpnoC9XtkIGdZ5mb9eUUcvGOeaOZRwmJ+xm6C
+ DGR88/rgnW8cPArTzIL61x5pgSTKkB0uJsxlai7uiWMfKlcJZyopollZzlOo//kyFMdnW/F0cyENAvlDnAZvZFAC1R0hke6j8iKDyIWZ4XLLpv5MS74bWK+M
 
-On 11/19/26 11:55, Sander Speetjens wrote:
-> Add a hwmon driver for the PMIC found on the Raspberry Pi 5.
-> The PMIC exposes voltages, currents and temperatures exclusively
-> through the VideoCore firmware mailbox interface (property
-> 0x0003009f).
+On 11/18/26 09:43, Bruno Thomsen wrote:
+> Read the optional per-channel label from the device tree and expose it
+> through tempX_label, so user space can select a temperature sensor by
+> the name the board gives it instead of hardcoding a sysfs index.
 > 
-> Requires a sufficiently recent Raspberry Pi firmware that
-> implements the structured PMIC ADC property.
+> The channel index comes from the child node reg property. Reject a reg
+> value that the detected chip does not implement, since only TMP432 has
+> a second remote channel; accepting it would add a tempX_label with no
+> matching tempX_input.
 > 
-> The driver:
-> - is instantiated at runtime by the raspberrypi-firmware driver
->    (same pattern as the Pi 5 RTC driver)
-> - reads all channels in a single batch mailbox call
-> - uses a short refresh-on-read cache
-> - exposes the sensors via the standard hwmon sysfs interface
+> This mirrors what lm90 already does.
 > 
-> Signed-off-by: Sander Speetjens <sander.speetjens@gmail.com>
+> Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+
+For my reference:
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->   Documentation/hwmon/index.rst                  |   1 +
->   Documentation/hwmon/raspberrypi-pmic-hwmon.rst |  49 ++++
->   drivers/hwmon/Kconfig                          |  11 +
->   drivers/hwmon/Makefile                         |   1 +
->   drivers/hwmon/raspberrypi-pmic-hwmon.c         | 296 +++++++++++++++++++++++++
->   include/soc/bcm2835/raspberrypi-firmware.h     |   1 +
-
-This patch is making changes in a non-hwmon include file, so I can
-not apply it, or at least not without an Acked-by: from a maintainer.
-
-Assuming it will be applied through some other tree,
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+> Changes in v2:
+> - Fix continuation-line alignment in tmp401_read_string() reported by
+>    checkpatch --strict.
+> - Expand commit message: the channel index comes from the child node
+>    reg property, and a reg value the detected chip does not implement is
+>    rejected so no tempX_label is created without a tempX_input.
+> - Skip child nodes not named "channel", as lm90 and tmp421 do.
+> ---
+>   drivers/hwmon/tmp401.c | 36 ++++++++++++++++++++++++++++++++++++
+>   1 file changed, 36 insertions(+)
+> 
+> diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
+> index 2fceeacdc88c..7b645d982c9a 100644
+> --- a/drivers/hwmon/tmp401.c
+> +++ b/drivers/hwmon/tmp401.c
+> @@ -117,6 +117,7 @@ struct tmp401_data {
+>   	struct hwmon_channel_info temp_info;
+>   	const struct hwmon_channel_info *info[3];
+>   	struct hwmon_chip_info chip;
+> +	const char *channel_label[4];
+>   };
+>   
+>   /* regmap */
+> @@ -467,6 +468,16 @@ static int tmp401_read(struct device *dev, enum hwmon_sensor_types type,
+>   	}
+>   }
+>   
+> +static int tmp401_read_string(struct device *dev, enum hwmon_sensor_types type,
+> +			      u32 attr, int channel, const char **str)
+> +{
+> +	struct tmp401_data *data = dev_get_drvdata(dev);
+> +
+> +	*str = data->channel_label[channel];
+> +
+> +	return 0;
+> +}
+> +
+>   static int tmp401_write(struct device *dev, enum hwmon_sensor_types type,
+>   			u32 attr, int channel, long val)
+>   {
+> @@ -502,6 +513,7 @@ static umode_t tmp401_is_visible(const void *data, enum hwmon_sensor_types type,
+>   		case hwmon_temp_fault:
+>   		case hwmon_temp_lowest:
+>   		case hwmon_temp_highest:
+> +		case hwmon_temp_label:
+>   			return 0444;
+>   		case hwmon_temp_min:
+>   		case hwmon_temp_max:
+> @@ -521,6 +533,7 @@ static umode_t tmp401_is_visible(const void *data, enum hwmon_sensor_types type,
+>   static const struct hwmon_ops tmp401_ops = {
+>   	.is_visible = tmp401_is_visible,
+>   	.read = tmp401_read,
+> +	.read_string = tmp401_read_string,
+>   	.write = tmp401_write,
+>   };
+>   
+> @@ -531,6 +544,7 @@ static int tmp401_init_client(struct tmp401_data *data)
+>   	struct regmap *regmap = data->regmap;
+>   	u32 config, config_orig;
+>   	int ret;
+> +	u32 ch;
+>   	u32 val = 0;
+>   	s32 nfactor = 0;
+>   
+> @@ -590,6 +604,28 @@ static int tmp401_init_client(struct tmp401_data *data)
+>   			return ret;
+>   	}
+>   
+> +	for_each_child_of_node_scoped(data->client->dev.of_node, child) {
+> +		if (!of_node_name_eq(child, "channel"))
+> +			continue;
+> +		ret = of_property_read_u32(child, "reg", &ch);
+> +		if (ret) {
+> +			dev_err(&data->client->dev, "missing reg property of %pOFn\n", child);
+> +			return ret;
+> +		}
+> +		if (ch >= ARRAY_SIZE(data->temp_channel_config) ||
+> +		    !data->temp_channel_config[ch]) {
+> +			dev_err(&data->client->dev, "invalid reg %u of %pOFn\n", ch, child);
+> +			return -EINVAL;
+> +		}
+> +		ret = of_property_read_string(child, "label", &data->channel_label[ch]);
+> +		if (ret == -ENODATA || ret == -EILSEQ) {
+> +			dev_err(&data->client->dev, "invalid label property in %pOFn\n", child);
+> +			return ret;
+> +		}
+> +		if (data->channel_label[ch])
+> +			data->temp_channel_config[ch] |= HWMON_T_LABEL;
+> +	}
+> +
+>   	return 0;
+>   }
+>   
 
