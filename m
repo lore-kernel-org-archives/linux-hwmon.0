@@ -1,92 +1,126 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795345189;
-	b=JVPiadbF88deS2PLgGUcfw8Ew1Pr4adLQ+qnSDoIc02hTTEiYz3kD41zoWpS2R0vSUcN
-	 xfHLpkC5qHXmfgsEEKAkglIfUYlMRfW7ZKVFMnV9JxEZeswbHQn6EXwpBWJMbEwZKeR8u
-	 HtHPUvsRLx7fWi+XvZxMO6+p8T61HgV1vN4N7b/t6YS10/P08VZC7n6/rkCDhCkVUcfP2
-	 +7KBaWHik2uZHNVqtcOcZ1r+hcY7nOPPR2SdqTR9BEx3cEGtuoSJ1g7isEaatyi2CNUAL
-	 Bp4O0wNgIOnBvCE+mVP6qmgjJps+LNckmIeSI7K+DHJOUo1vw9h95HC1wLSBgdpPncg==
+	t=1795347938;
+	b=m3crKOkMRZDaCSG4SYDo5VxQNoSb0Nq+zGjFyeVLT2/Lt+oEdVt55o7TiIU3xtyEFQdt
+	 QGAPKjBInMUf3i+CXCVFxFp65rwS2a6/Wu/U8dm8BgYbgu118uV7qpZ9HzDdEJ1g0NHcp
+	 47X/NKXwAsR0JLppJX4meAgWKof6gplYxc1GBwKwh80GYpFZYKiznzFjZIgDxfADr9Khb
+	 V4vd6fIbXUyPl1JeIsXr4t+RCI+EAw0bpwfo21yVdhw58DyODEIv8EDSGKMaBNr8SzUBo
+	 yI5IB/UDdobgiit0Ghn2h3aeRC46349OswrhHqRkWnG57EIpw/VZLuHor99c19w2Rtw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795345189;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=TZAQFu3q7yIjuPZZZm/af8wwwRsKvLwu4IpEfG2N50Q=;
-	b=HJC81gG9KWBHcGrS68y24Fe8j1XLTmqi7FlldemivBWTtJytNW8e3V84t0FgsTGcWC6K
-	 t2XL0Oba4svkLdPGZoR4hQUx/7FGlLGUxxP1FrZP8uSnvY5VE10kzpfY65DN0OARqBky+
-	 jFHhQkrr++EzxDAIog9NNHhndl+iaUcNuMqMW5WJEWdjtpM1FG+nWKr3Y/AfTqli7yjqZ
-	 rlFk7MhUcCpaabFkUyCIPG2pu4OJLfF1V3YlxQ55b8A7vV8VZe6l7NxJv8nZv9MVmdr0D
-	 kq40W3gx09X6R0AMQMAzUDD/1549dBVRELq/lqBHGD9k99u6z0nPHKfEhl1PhwcjpOw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795347938;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=cLMcqM1+ID1GgGq+PerrzsvqYkDe3KsyjwqtE/Ytfio=;
+	b=KUnpO4+r9c5mZjgDZWSyQcnD9//TVtxyJvTg31aOdWKdo07+4BbgoUJhBS/5k0/Un+98
+	 vEwR2AdnZvz6PdeAYUucvK6SoChEkN9MMq7ooFz6PqECuxZZ/IQMbPMKr3Gz3sbrLW9/l
+	 o/2Tu+0GVYrl535iXuc3MXL9s+kplovnjA+VqYRZ4xK6EQ5OX4OD8LLkKt1yMO2Y6hNSt
+	 8Iii0S7e81ncxSm1uyaiA2Wu8fGzxd9hmxEDNN0VTUAyCVbCntVMCPLefPYi3+wrcm++t
+	 aB4DpaHVRiKpd5WK/zdJTL0OyWdAFVYdnD670my4JpDEbYSVaZxnHVAxbzcQR3XR1Ng==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=h7yw09+t;
-	arc=none smtp.remote-ip=209.85.128.43
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JBZbk8ZB;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0266D606A320
-	for <linux-hwmon@vger.kernel.org>; Sun, 22 Nov 2026 10:59:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0266D606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6462E606A33F;
+	Sun, 22 Nov 2026 11:45:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=h7yw09+t
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a207b02a2cso16109785e9.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 22 Nov 2026 02:59:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795345187; x=1795949987; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=TZAQFu3q7yIjuPZZZm/af8wwwRsKvLwu4IpEfG2N50Q=;
-        b=h7yw09+t2VsOdwupDDgRi1cIWrMTuI3xPDWn3nXdrcUPtb025VTEIFBv1A8GHFcMiT
-         q1pFhyCvMpEzxNY7ISMEzv5AnNI9IhiB1RbyK9RzZwSC/EvPy6NEkp8lI47645dHrIAC
-         V2VTFiQsONVUJDJGY35UsMtwA16pkjio0AvFwFUqnzZvO7XqVmKJ+KEjV1+Y0a5akw/v
-         /YVppLIoHZpbUBScXKKkx9JifYx7CYB95yM8iBHm3fuGQt32U8kaAwoZwUjL7CWrksPU
-         H1Els2S6HuuxGt/IHNs+v905bZZL28WOxkyY/vRLu+wZN9MnyoSbT3OKjG4tbNzS2dt6
-         VDeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795345187; x=1795949987;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=TZAQFu3q7yIjuPZZZm/af8wwwRsKvLwu4IpEfG2N50Q=;
-        b=PuWOfzv1MEcYaPNuNZnLAXfzaaG2ZUnplnACi/GuLqQRphey44r4Fb8eoMaWtsfJwz
-         Wq22v4YcNiQ9S24dHuBgbLVgEXlHV757J0EIuXd0b04npdI73OdjR09BX5Q/5SatwpXh
-         n7a7tW6HbdFoqscVtcjuYBB8u8++juuirrHVFhMj9lqap1BMxSTqgM1yAV5x4PK/DPUv
-         vCO13zVmp3MBDiQAmLuGk7hVBcsfdUPt+1zWl/AvMGX+gYrgMqrUKWR3U4t8Xv3J2/w/
-         0piddyCto0crKz3Wxhgni/SgFRKNecMeCSPwXOtnTOt586Akokcq7ysdG0OjeTq1USP+
-         4wSw==
-X-Gm-Message-State: APuU4Z8wH9fhsUkDWJsvjODb1UXZm9P59u/nn4yMwMaJnwmIIXecblBj
-	k8FVOBues8+Hno0DfxOFwqDI/qHNxytvBMedaSszaMwz8c/MgF7YPc9W
-X-Gm-Gg: AZFdTZdG8/1gTpNmkdOy6WnvVByWRPuFsiTHOCFFWwbbjxDYdHKjV1gaX+j+ZvzqYp0
-	oeQeXbScnAtYbVmg9ecE9g+lJ762eJ/v72u2Ff2yZa3IeruIMwaNp0cMeQypiizVQgq8BHGN/TU
-	IiOocHLBM8N+6nM84sECkfngZsBLj0GrtO+prrfTOcJc0RMkvrAiVPV+khY6MGt/V8sEGCa2HBw
-	3ouJ/zgOorpBLUgDTMYVp3+nSDnTEHSFlrpatEes3HAyqrHgDAAGTXY3krF5knKnlb/YfVHxycj
-	X7arbXO0rBg8R/UrqCtKC4ph93MijhGBujSix4aqlUqz1MZHNr+utMMGPMFEH+7VqA6aXLxCz4K
-	QU8JQV79O1roBdsq7ZEHtHJNgcfc2crEEAfFgnSAaCQyNbSQevpsivq14HZ1okFEBZOLhX0IYkI
-	/jkcA0IWHv3KkRj8LnPP9zm2vpofIh/VpIpGFTHNR2dFtHWTuISEPVodhPlJaHs4aNuzIBh+9HH
-	AFuMFvl5PgeEjILWH6/7YV+6KGWFw4+15Xv4QWVrLL8WMZeq4m8DsY+t45rfiKatDHnbs+ZpyYU
-	gfO8w8M60IR4tEEyhXr8uHgtwaqINwmPn5yXseI0D6JbLrNpij5xljsb38FnvJYwL4fI
-X-Received: by 2002:a05:600c:3113:b0:4bb:693e:4c8e with SMTP id 5b1f17b1804b1-4bb88816a53mr190665835e9.21.1795345187058;
-        Sun, 22 Nov 2026 02:59:47 -0800 (PST)
-Received: from fedora (cable-178-148-254-107.dynamic.sbb.rs. [178.148.254.107])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4bb8538b2c5sm261990675e9.5.2026.11.22.02.59.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Nov 2026 02:59:45 -0800 (PST)
-From: Aleksa Savic <savicaleksa83@gmail.com>
-To: linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
-	spoon3r73@googlemail.com
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Fix collection check for Aquaero devices
-Date: Sun, 22 Nov 2026 11:57:00 +0100
-Message-ID: <20261122105700.108378-1-savicaleksa83@gmail.com>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261122012528.881538-1-linux@roeck-us.net>
-References: <20261122012528.881538-1-linux@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JBZbk8ZB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3C711F000C0;
+	Sun, 22 Nov 2026 11:45:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795347938;
+	bh=cLMcqM1+ID1GgGq+PerrzsvqYkDe3KsyjwqtE/Ytfio=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=JBZbk8ZBopVc78PPFvWeVTIg2CMujdUlqemdavr/HCyWWlIQmFZkcrGxwSI3F8Lj7
+	 DNLer9OUFPLbOa4J4Swvhd/E17PbHJNYpl75QSvfOs502Qnq+SIVf6x8BaBZgxP/BT
+	 TLhC5kAcmMHclzMqgFcvdBPgsnO0el8R7pGYvxVYVMfFAdpjXa9S5pH5onsvDFitkW
+	 F7xoQFwGUBjexAU1BbMzjGktImA7HZrErJM176ZMcRKXKM7Cl6WdGzAwr72CinZqC4
+	 cUMiH2XukT43gci2XSUdvkVEDyb0hb22fl5gp/8fIaWZ7ym7dU5tWM0l+OzRL/g3Qu
+	 BJv0P33zLAReA==
+Date: Sun, 22 Nov 2026 12:45:16 +0100
+From: Ingo Molnar <mingo@kernel.org>
+To: Juergen Gross <jgross@suse.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+	virtualization@lists.linux.dev, linux-ide@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	kvm@vger.kernel.org, linux-edac@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-coco@lists.linux.dev, linux-acpi@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-mtd@lists.infradead.org,
+	platform-driver-x86@vger.kernel.org,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Ajay Kaher <ajay.kaher@broadcom.com>,
+	Alexey Makhalov <alexey.makhalov@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	David Airlie <airlied@redhat.com>, Helge Deller <deller@gmx.de>,
+	linux-geode@lists.infradead.org,
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Pu Wen <puwen@hygon.cn>, Tony Luck <tony.luck@intel.com>,
+	Reinette Chatre <reinette.chatre@intel.com>,
+	Ben Horgan <ben.horgan@arm.com>, Dave Martin <Dave.Martin@arm.com>,
+	James Morse <james.morse@arm.com>, Babu Moger <babu.moger@amd.com>,
+	Drew Fustini <fustini@kernel.org>,
+	Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, Kiryl Shutsemau <kas@kernel.org>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	Len Brown <lenb@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+	Huang Rui <ray.huang@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Yazen Ghannam <yazen.ghannam@amd.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+	Artem Bityutskiy <dedekind1@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Ashok Raj <ashok.raj.linux@gmail.com>,
+	Hans de Goede <hansg@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+	Xi Pardee <xi.pardee@linux.intel.com>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	xen-devel@lists.xenproject.org,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: treewide: Re: [PATCH v6 00/12] msr: Drop 32-bit MSR interfaces
+Message-ID: <awLVzKJWWfC3eJsH@gmail.com>
+References: <20261116150208.1572254-1-jgross@suse.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -96,10 +130,36 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261116150208.1572254-1-jgross@suse.com>
 
-Tested-by: Aleksa Savic <savicaleksa83@gmail.com> # Aquaero 6
-Reviewed-by: Aleksa Savic <savicaleksa83@gmail.com>
+
+* Juergen Gross <jgross@suse.com> wrote:
+
+> For accessing the MSR registers on the local CPU, there are 2 types of
+> interfaces: the "modern" 64-bit ones (rdmsrq() etc.) and the 32-bit
+> ones (rdmsr() etc.) which are using the upper and lower 32-bit halves
+> of the 64-bit wide MSR register values.
+
+>  140 files changed, 572 insertions(+), 690 deletions(-)
+
+So I've applied this to a separate branch/tree under tip:core/msr,
+because I think this series is mature enough and after about a year
+worth of (very patient) iterations by you we've reached the limit of
+what will be picked up by maintainers.
+
+The commit with the widest impact is automatically generated
+via a semantic patch:
+
+  treewide: Convert rdmsrq() from a macro to an inline function
+
+  139 files changed, 493 insertions(+), 495 deletions(-)
+
+and I'm reasonably certain that whatever merge impact this may have
+on -next can be addressed quickly and in a simple fashion. Let's see
+how this goes.
 
 Thanks,
-Aleksa
+
+	Ingo
