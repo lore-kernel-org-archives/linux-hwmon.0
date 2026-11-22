@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.52.19
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.46.30
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795367439;
-	b=EZFZWfr0O6CfBGNun8p6DCWhk+hIlfgyHwHTx6ISAMQaNNxSQn7YXd7vkg1NfjNtud/D
-	 aVE/bbQBDISUUumtkkHYsBbHYIG5CwzwVvpc0OTgkPzi1Q/MoXnzRqN1O029Ua+F6ex7f
-	 svX+PLM/bdxu8wXCGCSG5WEjcPVsQiveeiVqhZgFjNTmUgprUnD8O6p1rdSAVJuEZPJ4y
-	 k72KY671T6nihollwO+inH3yzQc/kfCH7GjTdRkegGAQet1MdmRoSNAWJ7DC7HA8ECYKA
-	 VeEX/uW3XquvloBTdJSELg8DBzl6UmXENUoLjXT1gX4BHjFKpiCDZt0nd3ks9zTEWvA==
+	t=1795367444;
+	b=rizapmIwFM4JEkYvGcHr4OpYnkXOVbeZn82MZjvjiXCgduV1+PBcFEeFrvkYsJQ1H95q
+	 VIaLv7lc9V0UgiS2khmxBOwvgM4qpvdUpjuFxYaVKI9jhcxij0bRbvfMYAVNY36C6I1WJ
+	 E+nh+gZ8MTjJrrMhedlc2AHxU1RvL9byOi95I6EtapAY4E62XwanJzB3sLrYlHyR2OtJL
+	 s3tKaJ7W9bc8L5czKip2m8uIPJz+FPYJGVO686ITjNRHVJXTcMRUgRmqLZEoebvSxbLe8
+	 YauUKxanV698YKK3OwlOYf4BbUP121wlA0l9+WpIl9dOyh/c/mHAGuO1GG4MzIw8S4A==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795367439;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795367444;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:
 	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
 	 Received:From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
@@ -26,80 +26,80 @@ ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
 	 X-MS-Exchange-CrossTenant-FromEntityHeader:
 	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=D75pCHxSDUtCF5Tyby16qHmNEza7JJBkIo6c/wnNvTI=;
-	b=re8Ph3t+4T1FpQMz6SQPddr8muqXgctY3r417nUNL1w2qF2JfHI/Q+FMiraAWb/aBt8I
-	 b5JABPKalGrPRBH4wwmNN8kN4SLx5g28PVKZha5GQcivJdqHp6WxKsJJoPcVVzbvIjwyy
-	 zEzwoAhtK9zJf2CmHpJvu3ZVVacT3mneXCbWRQlkOHKX+oBG8ogaPxRGhO1V+2B2FSB4l
-	 RUEEYyh6tqRrP5dqVfFfJTT87IkAbGbmDiVkd+ysrko+KVrP4ByjhYE+Vl62CHOXgusBV
-	 mmSoanCUZgzltF0ptnnv2qP6kzqWAN4mk5SFVSJj3feAo5Q0Uvdnqw/nM0T0k6+JOLA==
+	bh=JC4p1tY5eHVSbeyTA6AxaeGNdtZDfcJQ5ovxxHGaIdk=;
+	b=JrR5xDrBg2NF83MOLoHqYaF1gVsyCYzpzhTGP6sRsD8Bkfx1bU8n5qoPsjOwYfAB4d0c
+	 e8+cvyhIIxHINbcJg/3DZu7iNfpsTZrqn9o9xgAIiXB62CHW+RSGCroSb4bqTGSZnJLCU
+	 DzvOl6+MyjjE4j3osFHcM6EzdlBGRWo58HE5snIeaKCj+G3pju4WJfYhsSZgRUtN78teH
+	 VY6nSEv15+PQKNdIY1VvfufsYjwWPHbgTJCZfFHDNKBlCHY4JXTuVd8wJoM6oWpgUIJXi
+	 TrdDFyDAP8UYkXuYZ31dOc0IQvciHLJ5NS27ozysmYK0Jch/2VA5elCckLYdmvcE6zg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=nvidia.com;
 	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b="AjlFK0o/";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.52.19
-Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011019.outbound.protection.outlook.com [52.101.52.19])
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b="UX/aCxae";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.46.30
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010030.outbound.protection.outlook.com [52.101.46.30])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3516606A688;
-	Sun, 22 Nov 2026 17:10:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A3516606A688
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D1B606A32A;
+	Sun, 22 Nov 2026 17:10:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A9D1B606A32A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=AjlFK0o/
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=UX/aCxae
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oLahjL9SH6VcIxahZPPzbkD8KadYof2+lPz/iDYz8abseP+Em6JS9r3oopu3VF88pxcvP/2ZVTUEILaKfWlRCXpohpfh4NwpK+E5GqrlF0QvUYIhWXNwDa0PwjWKKDXvowuZWjM34wubMm3ff2gtyYYKnErCkg3XHUMlxAgJ1YZa0UGpIGpxKrDXgVjFcGK0TWdE1GL2XB07kqStaPjfxXuuv6mAPjfvALdp9Mv/jQbEt2KjOrSzI4/Zq/s/59nPGNDbacp6wUaive8vmFD9lhU1cLxvmR6cxHZCu8gU4afn1MGSUf0wt0TC63Q9uNpiqU9XqHZZ4zYydlGOfIC/Ow==
+ b=jNUFqhD/SfNqjTRCpGbpoIArW/nyFyoH/fRji38QxAv4F7om/r2nkoJoTsYPAXU3U4aa/65xFD/zCmvgIh907tTLdJ3H/1WRu/5Q2lgqvp1IWZMsGrDyCV/PZ2wwJdjp3ucN5Y2EqfHdBL6kRCDBc/eOfi7wHDWcSs5F+dZjZbVZz2BQcKuT39aOQMO2BuwG95RpzcA+fDayuY91ANsaTIJO3q5/hbQhHu7dzrH2In58CkeGVvgpLmgDS2Y87QXRwL7c8KPUIxC0Y5AxGYtdHINLjh+TLIMGsN+QpZ0FgRrVBpQx1Ox3fsnafJQmo15RCM2ftYk5iXg6+FlLmarT7Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D75pCHxSDUtCF5Tyby16qHmNEza7JJBkIo6c/wnNvTI=;
- b=FvjJh9KIe+ci1bK/obRQlzC+t8yPmxWhkXNtzCbDRbtrzhOkpM91yIufE75UEUtnOs85Qwfie3iWAS92i6RDWuK93d9NrcFFRDHo0IL9ao+aE01lTYy7hA8KgLT9ukQmGEiYHU2iC0Nh2zpsINWjbtR2lJtL4Nh98BRxHPT/zSlEiGzOIs5Iz8KXIraIiRQWz1BueBzzpgamb+SBwPK27XSZWJhd0829LpRxpmgfwPU6Yu3kKpdB8RBOu++3jkHdBBISjLufY14aDQ84wEqn4cgqdoEoY2dw3vUgzR8w0rKmyctUTLXCUf3yAdpzXLkXQwKYe8u7+wfed86Tpao+tw==
+ bh=JC4p1tY5eHVSbeyTA6AxaeGNdtZDfcJQ5ovxxHGaIdk=;
+ b=cCRyrl1SfYVnp0yTnUUlfc3pcE8Qylgb25WK3/xyI0ibJl8gkA5zsx4wpV18AAp534682e7BFboWtZkdXgR6p+RsOJFQNetF3IxlvO7gqkvyRZab6rjGVEdkm0r5MBtYpO9N9KxtzMPSzstVTNfJQmFoCCsd2iTSuqhEvjHgvpe6WxxK75DDuAQYzyAhNz8KHafFswMlEqLiHoHKQLF7hlG0PsPmAvNyZFRlXPHeC+u7GE4GafqnMSBAqPiDIFHMaO73//xEb8s7XC1h2sCV2VVjXSG62AVB8x1TLwXdYp/+0EaQPgAexwcAtXF3PYtkAZofNBBBL1msvF18QKRDjw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
+ 216.228.117.161) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D75pCHxSDUtCF5Tyby16qHmNEza7JJBkIo6c/wnNvTI=;
- b=AjlFK0o/oxheHncvVBVfWCHbVWcI44PXq/r8NNNEyFQxOw5vWF7F8uGl4Y2wQFO+HNXeYBkKZz0B+BhuF9UYURO+iDGfLmePskanKJciyYXhVFBzDAptRmLjAkXarFl1Hjnq5oNHpXdsJPKUmNtI3ZGH4HLKUA6BbXPN2/viQ9R5yrnSeVxaD/Fmou257RoeuRRoKt6U/7//jMLYdP4SUHztpGFeoVbffZV1gldckvk+h6WBVHRDgMYzy+Xr9sGiz1DuqADlkj9Ag+TLX1SHxwA4FZfa15aYIeFke1khkZlR/Jry3NHd0llip7HsHBhJ/f2SCBnCtlJDIFovUpg/og==
-Received: from CY5PR04CA0023.namprd04.prod.outlook.com (2603:10b6:930:1e::30)
- by BY5PR12MB4067.namprd12.prod.outlook.com (2603:10b6:a03:212::17) with
+ bh=JC4p1tY5eHVSbeyTA6AxaeGNdtZDfcJQ5ovxxHGaIdk=;
+ b=UX/aCxaeSp+wefFqZlS/187BnrRTESlVFW5TNWCOD6JM8OizGHR1GdiTTbowwXyecfUp5KUlg0zOuzeMzJix2JRk8Rs1f4mTF1UWHHthxBTZZqsdJT2MlNy6bl+XW7wYbS1vhHLo5LidwtxFE9cr0UKlLbPMyV9Al7I6HMekBpMBFCxlFKGGnI0rWyt3FEQWf4jHxMIRNsNuGH/3kdUS4E8pev6tWE4ER5fhAD1vX/ieihLclzcd4oOC7LaYV+KVGd0HSspcUbr8k9KNHB7VTjECBiDguhtYquUtNqCbLNRj+46KVWAMKqzrJbwPgVT0nxS1qL+bWhqK39XrJmOn+g==
+Received: from CH0PR07CA0019.namprd07.prod.outlook.com (2603:10b6:610:32::24)
+ by SAVPR12MB999122.namprd12.prod.outlook.com (2603:10b6:806:4e7::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.14; Sun, 22 Nov
- 2026 17:10:31 +0000
-Received: from MWH0EPF000DD30F.namprd05.prod.outlook.com
- (2603:10b6:930:1e:cafe::5e) by CY5PR04CA0023.outlook.office365.com
- (2603:10b6:930:1e::30) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.13; Sun, 22 Nov
+ 2026 17:10:38 +0000
+Received: from MN1PEPF000793FD.namprd05.prod.outlook.com
+ (2603:10b6:610:32:cafe::8d) by CH0PR07CA0019.outlook.office365.com
+ (2603:10b6:610:32::24) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.21.639.14 via Frontend Transport; Sun,
- 22 Nov 2026 17:10:31 +0000
+ 22 Nov 2026 17:10:38 +0000
 X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
- is 216.228.117.160) smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ is 216.228.117.161) smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- MWH0EPF000DD30F.mail.protection.outlook.com (10.167.249.7) with Microsoft
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ MN1PEPF000793FD.mail.protection.outlook.com (10.167.249.200) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.639.5 via Frontend Transport; Sun, 22 Nov 2026 17:10:31 +0000
+ 15.21.639.5 via Frontend Transport; Sun, 22 Nov 2026 17:10:38 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.57; Sun, 22 Nov
- 2026 09:10:17 -0800
+ 2026 09:10:21 -0800
 Received: from r-build-bsp-06.mtr.labs.mlnx (10.126.230.37) by
  rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.57; Sun, 22 Nov 2026 09:10:15 -0800
+ 15.2.2562.57; Sun, 22 Nov 2026 09:10:19 -0800
 From: Felix Radensky <fradensky@nvidia.com>
 To: Guenter Roeck <linux@roeck-us.net>
 CC: Vadim Pasternak <vadimp@nvidia.com>, Felix Radensky
 	<fradensky@nvidia.com>, <linux-hwmon@vger.kernel.org>,
 	<linux-doc@vger.kernel.org>
-Subject: [PATCH v2 1/3] hwmon: (pmbus/core) Keep cached page and phase in sync with the chip
-Date: Sun, 22 Nov 2026 19:09:47 +0200
-Message-ID: <20261122170949.3059743-2-fradensky@nvidia.com>
+Subject: [PATCH v2 2/3] hwmon: (pmbus/core) Add PMBUS_FORCE_PAGE_CHANGE flag
+Date: Sun, 22 Nov 2026 19:09:48 +0200
+Message-ID: <20261122170949.3059743-3-fradensky@nvidia.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261122170949.3059743-1-fradensky@nvidia.com>
 References: <20261122170949.3059743-1-fradensky@nvidia.com>
@@ -118,108 +118,133 @@ X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000DD30F:EE_|BY5PR12MB4067:EE_
-X-MS-Office365-Filtering-Correlation-Id: 47007b16-ebd6-4273-8966-08df48bb837b
+X-MS-TrafficTypeDiagnostic: MN1PEPF000793FD:EE_|SAVPR12MB999122:EE_
+X-MS-Office365-Filtering-Correlation-Id: 21f64c21-7b20-4566-12e7-08df48bb87a5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|23010399003|82310400026|36860700016|10067099003|11063799006|56012099006|261021123027099003|261021121427099003|261009223027099003|261102123227099003|261022075727099003|261022105027099003|261026140227099003|261028144727099003|18002099003|22082099003|3023799007;
+	BCL:0;ARA:13230040|23010399003|36860700016|376014|1800799024|82310400026|10067099003|11063799006|56012099006|261022105027099003|261021123027099003|261021121427099003|261022075727099003|261009223027099003|261026140227099003|261026121527099003|261028144727099003|261102123227099003|22082099003|18002099003|6133799003;
 X-Microsoft-Antispam-Message-Info:
-	jlQ4sqVCLwangj7WMw1h6QFnuVGTM5XB5/Xk95dDWTWVZeR8hup38vg5T+Qp+BcNRe9p48N0/OCNYCZOVaDVcCCVOgAUakkoGohHXgYwNdqOX3c00p+VIg8WWSlJSbsnOS3ityOUSiwHl6X4yuk/8DVdbN5mVfad3D6nCaB53ccYt7Umnlku4wUzbdn6kU2A8UBWbOh95V7AiTBFHqPQ6+aivCSeq8sHvu8AWbw8zCJJh4eWIzHQqJAvYIhodX95J86euUk4al/i6mYH19k4lf5vI7DTUWim3+iGBNDjmawGLgDOaaWbLNbWIoD7cJi+JiolFMeNZsY2LEiBxA9mXWAMOZaS/wqmjf69dAirtw9tfkesvHAV7MPf/PPvDRqwL9EeFnyZhARyhsRCJyaTB4mHWErrRLH3FN6UHrLKTCDnLmt8duWgByEtTaFhd4x7+Osg/erqaOhB/b4aULWxt6Ue0nUSKPa0K/uJV2LQ8aFCB3ad4P+0F9oLIMkAZsZp5hPYOk6qL1mf/66vgh+2Gu2dr4sCjukl+ee0/Q82zB3yHjh4AAo9yYvx7l7kP/q3oZ2NGhvTAt1SiiW6+bNBy49DjSSMUtrb67R6rMFaeW1nQ38MdnBjbS9e5hcutpI/VgPvdEofdaEAZTQvmg3CLyul3GPTpH31Uzg8bHq6GVrqZxKRyRi/bF2j+Hthg3OTtCnXOVyFiJUDJtScC6hYJw==
+	wGWN35NPBZNmvpSf3uGxap7If/XfkhbTCdgQLKdFsI1uLViRNWVWypTIVw7ROmvn6Xp7CmZzMmUKUuovj5oakzXDsIKuG67EAN9s5p678bkDZFj/1fhulRcRaHl87uzIKEADrXaavGL+5oxIXrJ/fdmABq0GlcrFRLQTamlWYKurhyRNS240dOAuDRwq44f2M4d0Cg3GGiYi8wZ2a8p0DZhU1LpnlJoVun919WIAxXM7ZthN2H/pV0l7Plq/7S/tyeB8BLJ2GUbPsLnxmBnpc1j1myl1cIwx4kKPJsjFMBhJjc+nVbcojJRWurplJyKYjNXEyzyp00d61fZMvLAX/aFebQDnCmYaOWBzI6anwwwe3W22kf14WWQGJ7VpDjvCYzpgOebDt+hOKAFN6KqH1kJAaSZpADtNVLY9QKBrhq0ugc94sNePMircjuEnhoixubdUXNHDJkT8sJM68O023MeAxJXTo9DiGVlJ00egIBTiywANabpAl53meuioN0Mx/oeuWKWAQVoXF8QrFpyOBd3TrLU8YgcgKrCuS71GMauGEkiZp9EGAFw24xIO9d7RNGXpUpTZCrw3o1PuEYB6IG+Px9SSvSj2L7tNG+4eMskaGjNn6BfwgFXRmHRpe4TsJ6Xlsfkbx9gTQ63yzSI8yYUupHQVBcU+8UKEAWsIQyRdACpq4ZN9ZZ78wrRzSCy1L/CAel+ucz2ICVEOaqKLng==
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(23010399003)(82310400026)(36860700016)(10067099003)(11063799006)(56012099006)(261021123027099003)(261021121427099003)(261009223027099003)(261102123227099003)(261022075727099003)(261022105027099003)(261026140227099003)(261028144727099003)(18002099003)(22082099003)(3023799007);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(23010399003)(36860700016)(376014)(1800799024)(82310400026)(10067099003)(11063799006)(56012099006)(261022105027099003)(261021123027099003)(261021121427099003)(261022075727099003)(261009223027099003)(261026140227099003)(261026121527099003)(261028144727099003)(261102123227099003)(22082099003)(18002099003)(6133799003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	rTdb64EHGoQk6uXobqR7Vo3NA7kdqElYVX9YjpjEp5z4sUgO4hd/CTh0qW011z4b3Cjwp6giyOtZ6bTzbr4y8CAM5y43+gxtAoMVEE3TVIykjCtKahsPrspKi5QTzEAhjRuVaw9dQIBAUUpvSXhq0crPAEEVHWlAgybWPeuj/a5BC+geQhzFL/jKhowKqYQJJsYFxKbDII2PBnGtAqtR1tDHWzPwwfuJfJbYAdUZL9+dwcbewLRAywqCcGuyZDKsVyL9XCZSVnSr2qiK1K1x70iJ9WrX+HaC9OqFRsi0gegUVcIJ8dBP+4i0LRhJSLVscfpFKIDpuRB2KqHx5z/dL67RAoY4/J6pjH9xiDPsevkpa6tcJJzZixRojmXnSDpNYUKCwTnwvMF1xLwI4WoILVmngV9NLSN9xjfdScGCGIs7DhLlCtg8YM8Z7wKeC/p0
+	VKfKnQLkTol0TsKL/OLdNxJY5tcTC8K7PXHdayTmX192skAQKKAsMirvHyIW7kYkwvu8kRQ9ZQvi1uFj+KZz2/QVOEP45heBOMDWtoxSJe0LvGca9mkqSXNwaIenZJ+jiAtqdQdINdAg3D5g3rrYRPzFgDGdScfDO2KEz81inHkGhrMqWDms6FfyKsevLymT0djEg6XKtF6jv4udo4vG8xVSX+61LdBx85PKJQPFhgQ53XB89fU5jOAOVVjZJzRSc1feGkVg+YWrixql5GibbY5/AYCVHmOpdc3/s2RUwKDY/HeBGng6Z8KeUeJPMgq6JX0cwHDXA1PyiA4tcskqkXFD2cga8Q355siFaFFF2EkHzF5Byyysb/YdRtiHDccgyZgV96bQqiYyMTawr8J60qKVYoiru6Beii5EkmTEBtK5J4HmMAvPY0Hkmrwn6xyA
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2026 17:10:31.1373
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2026 17:10:38.0132
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 47007b16-ebd6-4273-8966-08df48bb837b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 21f64c21-7b20-4566-12e7-08df48bb87a5
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000DD30F.namprd05.prod.outlook.com
+	MN1PEPF000793FD.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4067
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SAVPR12MB999122
 
-pmbus_set_page() caches the page and phase it sets, and skips the PAGE
-and PHASE commands when the requested value matches the cached one. The
-cache can get out of sync with the chip though.
+The PMBus core driver only changes the page of chips with more than one
+page, and neither writes nor verifies the page of a chip with a single
+page. Some chips with a single page provide manufacturer specific
+registers on additional pages. Their drivers write PAGE directly to
+access them, and have to change back to the page the core expects on
+their own. If changing back fails, the core accesses the chip on the
+wrong page.
 
-If a PAGE write succeeds, while the read-back fails or returns a
-different page, pmbus_set_page() returns an error without updating the
-cached page. The chip can then be on the requested page, while the core
-still caches the previous one, and the next access to the previous page
-skips the PAGE command. The same applies to a PAGE or PHASE write which
-returns an error after the chip has accepted it, such as on a late NAK,
-a PEC error or an adapter timeout.
+Add the PMBUS_FORCE_PAGE_CHANGE flag, which makes pmbus_set_page()
+change the page of a chip with a single page as well, so that its driver
+can access the additional pages with pmbus_set_page(). The page change
+is then read back, and a failed page change is repeated on the next
+access, as for chips with multiple pages.
 
-In addition, the cached page and phase are updated even if no command
-is sent, that is for a virtual page, and for a page without phases or
-with virtual phases. The cached phase then no longer reflects the phase
-of the chip, and can suppress a PHASE command required for another page,
-even if a failed phase change had invalidated it. For the page, this
-only causes a redundant PAGE command, since a virtual page never matches
-a page of the chip.
+While at it, drop the outdated number of flags from the platform data
+description in the documentation.
 
-Invalidate the cached page and phase before changing them, and update
-them only once the respective command succeeded, so that the cache only
-holds values the chip has accepted.
-
+Suggested-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Felix Radensky <fradensky@nvidia.com>
 Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
 ---
 v2:
-- Update the cached page and phase only once the PAGE or PHASE command
-  succeeded, not also when no command is sent, that is for a virtual
-  page, and for a page without phases or with virtual phases (Sashiko)
-- Reword the subject and commit message accordingly
+- No changes
 
- drivers/hwmon/pmbus/pmbus_core.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ Documentation/hwmon/pmbus-core.rst | 12 +++++++++++-
+ drivers/hwmon/pmbus/pmbus_core.c   |  3 ++-
+ include/linux/pmbus.h              | 11 +++++++++++
+ 3 files changed, 24 insertions(+), 2 deletions(-)
 
+diff --git a/Documentation/hwmon/pmbus-core.rst b/Documentation/hwmon/pmbus-core.rst
+index fdfb23773148..bca387518b6a 100644
+--- a/Documentation/hwmon/pmbus-core.rst
++++ b/Documentation/hwmon/pmbus-core.rst
+@@ -298,7 +298,7 @@ PMBus driver platform data
+ ==========================
+ 
+ PMBus platform data is defined in include/linux/pmbus.h. Platform data
+-currently provides a flags field with four bits used::
++currently provides a flags field with the following bits::
+ 
+ 	#define PMBUS_SKIP_STATUS_CHECK			BIT(0)
+ 
+@@ -316,6 +316,8 @@ currently provides a flags field with four bits used::
+ 
+ 	#define PMBUS_VOUT_PROTECTED			BIT(7)
+ 
++	#define PMBUS_FORCE_PAGE_CHANGE			BIT(8)
++
+ 	struct pmbus_platform_data {
+ 		u32 flags;              /* Device specific flags */
+ 
+@@ -388,6 +390,14 @@ PMBUS_VOUT_PROTECTED
+ Set if the chip VOUT_COMMAND command is protected and protection is not
+ determined by the standard WRITE_PROTECT command.
+ 
++PMBUS_FORCE_PAGE_CHANGE
++
++The PMBus core driver only changes the page of chips with more than one
++page. Some chips with a single page provide manufacturer specific registers
++on additional pages. Set this flag so that the PMBus core driver changes the
++page of such chips as well, which lets the chip driver access the additional
++pages with pmbus_set_page().
++
+ Module parameter
+ ----------------
+ 
 diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 82dac2c6c579..5138c802d8ab 100644
+index 5138c802d8ab..aed1c4605952 100644
 --- a/drivers/hwmon/pmbus/pmbus_core.c
 +++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -227,6 +227,9 @@ int pmbus_set_page(struct i2c_client *client, int page, int phase)
+@@ -226,7 +226,8 @@ int pmbus_set_page(struct i2c_client *client, int page, int phase)
+ 		return 0;
  
  	if (!(data->info->func[page] & PMBUS_PAGE_VIRTUAL) &&
- 	    data->info->pages > 1 && page != data->currpage) {
-+		/* A failed page change can leave the chip on any page */
-+		data->currpage = -1;
-+
- 		pmbus_wait(client);
- 		rv = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
- 		pmbus_update_ts(client, PMBUS_OP_WRITE | PMBUS_OP_PAGE_CHANGE);
-@@ -241,19 +244,24 @@ int pmbus_set_page(struct i2c_client *client, int page, int phase)
+-	    data->info->pages > 1 && page != data->currpage) {
++	    (data->info->pages > 1 || (data->flags & PMBUS_FORCE_PAGE_CHANGE)) &&
++	    page != data->currpage) {
+ 		/* A failed page change can leave the chip on any page */
+ 		data->currpage = -1;
  
- 		if (rv != page)
- 			return -EIO;
-+
-+		data->currpage = page;
- 	}
--	data->currpage = page;
+diff --git a/include/linux/pmbus.h b/include/linux/pmbus.h
+index 884040e1383b..b3bc4cced461 100644
+--- a/include/linux/pmbus.h
++++ b/include/linux/pmbus.h
+@@ -87,6 +87,17 @@
+  */
+ #define PMBUS_VOUT_PROTECTED			BIT(7)
  
- 	if (data->info->phases[page] && data->currphase != phase &&
- 	    !(data->info->func[page] & PMBUS_PHASE_VIRTUAL)) {
-+		/* A failed phase change can leave the chip on any phase */
-+		data->currphase = -1;
++/*
++ * PMBUS_FORCE_PAGE_CHANGE
++ *
++ * The PMBus core driver only changes the page of chips with more than one
++ * page. Some chips with a single page provide manufacturer specific registers
++ * on additional pages. Set this flag so that the PMBus core driver changes the
++ * page of such chips as well, which lets the chip driver access the additional
++ * pages with pmbus_set_page().
++ */
++#define PMBUS_FORCE_PAGE_CHANGE			BIT(8)
 +
- 		pmbus_wait(client);
- 		rv = i2c_smbus_write_byte_data(client, PMBUS_PHASE,
- 					       phase);
- 		pmbus_update_ts(client, PMBUS_OP_WRITE);
- 		if (rv)
- 			return rv;
-+
-+		data->currphase = phase;
- 	}
--	data->currphase = phase;
+ struct pmbus_platform_data {
+ 	u32 flags;		/* Device specific flags */
  
- 	return 0;
- }
 -- 
 2.34.1
 
