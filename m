@@ -1,78 +1,106 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.39
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795366026;
-	b=XU/qXM7f9oRRlPhxBX8UKOxfsvNeQ52Y9DGGJ2k6pJ0Sttr+BuaY0zTe8K3kPJqwKsWD
-	 70GmNm9W6fxLsExz0Cd4GYaqU/a9jRynKJdlyv+H3VU1gMQsWBlnFPFGy/IRWG8AWOZg3
-	 wRkjG1RV1OMr1NTwsBRp1WqWzWsjLnX64Ygw64JsZyFVXEvlryIBCTowTXzyJ7JXgJJXw
-	 kUAEavisOVG9E9Tg0lpLL1ZahCdoaJSzSB7RxWLNEnPXSBvArrSzKGL5qj+toylrEFpfe
-	 hhWi1y7pewgRqaUrbad7d6xQMrdoPvDTYyAriuSYXbH2CDiccpyKLCbG52w6qVXf8pQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795366026;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
-	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
-	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
-	 X-Local-Domain:X-CMAE-Envelope;
-	bh=CcgUOigE4hpRX+rHA0yhwTQDEsteqQkBf6OiVwFSbwU=;
-	b=maOhcrq+dWiiBlKCATvLXhOSOZF3Tt2TEq2xQMOP+0oRaxcuY/SMUKYZEPjLdhWTuBNu
-	 AYLCxvF4v7oKx8/hL01SDqw4vK2/9iF5IyATsLnVYCjqHAxhq3pYOPCjJuoU3ylUeWkz8
-	 kxMbAnat44apx3/r10Bw609dpfanLNEl5W11xHj8GNVgPWT35Nl0tgCWfH+3Jwo0bh0tr
-	 7Ht8yOnS/6rQyOsGyp7P7zzRmexh9YQU1LC6s4uzrseVunhg5FvrrrHz2yc80EcUB9aRR
-	 UDoyGuHC1ymrZHBJKY/+SWZMs0S1cqGyMWf0O4R9Z3RcMk7rnzjWeiEEAs0Fk6pAMuw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b="e1sqG/4L";
-	arc=none smtp.remote-ip=44.202.169.39
-Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.56.61
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795367434;
+	b=5Sfgdm61CqDED9T2dDXJ9XFK5NxtlSa9tYkmH5W62984riPWEa0TTYdq6BsjO0MZcnf7
+	 ZoRIeobHLtfFmqTn2oXCKOCwTJcsKHvcXtQUWK7O9sTB6puVYKHePT5OxVHIEOrfk8qNm
+	 fXu4jA2oZcMJhojbtmGlnovEMnzwY9R31iGVE5eLWCXas9pzgpp3M3niCaetm49iDvXw2
+	 /9jYb/lhs9Uy4L86l36jdkSc0GKkihcNOC4lwtUZ3dtA1wiVPSfOgJSm99WGYOonyJPSq
+	 ntZMn4lE3O8NC5VKEDQOtynhF2m7QkZ1bMfkbqvSH8408AkT9HviUzxD2fR3MkmN7+w==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795367434;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:
+	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
+	 Received:From:To:CC:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
+	 X-ClientProxiedBy:X-EOPAttributedMessage:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-Id:
+	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=nIH6kD1r6V+Did0lvvxAvP5QyQYE510t5ghqDcli37Q=;
+	b=xMc5hgLT81j49nUZjNnkyoq7YdRljOl7ZyGpPcrPUYMmiDH6nGz+ABZQKJsu/fjnIKj1
+	 cM7JwL8MKAOlzxNkzA7WuLDu2e2YIyWNVxQ+FumQ5rOlLRlCKgzUqr87DZLzy8j9G/g/c
+	 00pyCTiwnCjk2Ah8Plr45AiJas5aVM1T9nqisEorpgM2lXAOSmqvF7bqpB28wlRSbccE0
+	 yD51K5SLg38EDyWmeD/LnWNahUCd3eg6RBu5rKVI1iPI1nxZYTTsNPO1jS6E/kgGRSucM
+	 BXJqfLhepJUPHL9VrhdbmCKqBtqxl0w19sZ7qmbnh7ZVzXjZxmnWbyicjNluGqoucSQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=nvidia.com;
+	spf=fail smtp.mailfrom=nvidia.com;
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=UEvgkqI5;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.56.61
+Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010061.outbound.protection.outlook.com [52.101.56.61])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A896D606A32A
-	for <linux-hwmon@vger.kernel.org>; Sun, 22 Nov 2026 16:47:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A896D606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32FF3606A320;
+	Sun, 22 Nov 2026 17:10:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 32FF3606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=e1sqG/4L
-Received: from eig-obgw-5002b.ext.cloudfilter.net ([10.0.29.226])
-	by cmsmtp with ESMTPS
-	id UzvfxDanTOOJnVAiWxygUE; Sun, 22 Nov 2026 16:47:04 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id VAiWxQGS7b2qJVAiWxpyqN; Sun, 22 Nov 2026 16:47:04 +0000
-X-Authority-Analysis: v=2.4 cv=A7tsP7WG c=1 sm=1 tr=0 ts=6b031c88
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8
- a=dZ8iJ22SkCJ4RyOMX0oA:9 a=CjuIK1q_8ugA:10 a=Cz_zCYZHDdu2HsMO07vL:22
- a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=CcgUOigE4hpRX+rHA0yhwTQDEsteqQkBf6OiVwFSbwU=; b=e1sqG/4LlQZn8szLeqSqRIxL5A
-	DnqJ+kcIJV4mwG/ILFifJuhNeqRtPKNJ+WbsT9wIp4sOL2L5qp2KwEkbKlr47+pVC6mkmVNygHECO
-	WBNKGnRPoMr/JM0TVsJwb/vFhN4n5YgOXun8HvkF8bCU748/u6BqLO45+dWD6P4ladQh4smgz1mKO
-	vSY5rLR2tcTlusMAoBywB8U6nCTsRAcwtCxNYD9BwcrsWQivaKkjClASWZaLBtGQ4CQgNtHyGDzgH
-	Ec2ShhkskMW3WgoK772vjMy96YpzAj8e6GECBTsIPwrtHVc9E134GCIcB95I4O/7JnzjRa1GAYtXb
-	be/eTxyQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:55994 helo=server.roeck-us.net)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xVAiW-00000002mLu-0NUO;
-	Sun, 22 Nov 2026 22:17:04 +0530
-Date: Sun, 22 Nov 2026 08:47:03 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Navon John Lukose <navonjohnlukose@gmail.com>
-Cc: sergiomelas@gmail.com, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (yogafan) Fix fan paths for Yoga Pro 7 14IAH10
-Message-ID: <b672573a-f0ac-4ad8-9be8-6f3a554ddd98@roeck-us.net>
-References: <20260913214713.205208-1-navonjohnlukose@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=UEvgkqI5
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=s7N2GoPmGFSPabIgMCnIjszVXiqszAJ7HqubtyyBRGSHFjn3wVa4Z0d0NE8JUBgF0fYCcsg4RyjP6LEQAhbaeDhUJzajiauGQTkqwtk8wCd3mgUeM6gz65kjWrJWCBoQYRwMS45DlznPza6hnRb0AKOTkd90EqGsCe8UIhUpQVFsTndlLbiW8Y4d7mUHRHgHkdaOHnsajyHkHsLIZ6YOMX3GhYiQple/KANZpCmkKB8GBI3R+87iPay3yP4GlBrr+Kshz+caJOhohNj+P9oNrmqoKHIC3ZwxjlS5yT2CKPlEDAHEmGWJccBk+mkcphKflA4nl5+hU+59z4aAdeXS5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nIH6kD1r6V+Did0lvvxAvP5QyQYE510t5ghqDcli37Q=;
+ b=DPXaNcXODSRfnf51n/QrCM8pvmk/l4XPUAx3YQbMccwuAVr5/+vvQ6MbuuninBYg4Fffilaz3nlvaUqpyuJUoFRdtL/4DJOImvofgx6TM7ij7cLa76JX0dzLa1F8AEBzD8L7HgejRc8bXlLSHr6trt3XBVRVPYNnJ/37xpAljqrMW55QmLV7+lqty/SPTTPj/EE7RmkbQCePPPYmiFRUbaMnv3K5XHaSiQr4dqc4ACNIs0CBF24w4v+s+4rNhMN4kp8NmV3FqWK+4Ay0a+MEi5MdsvoKSpjrZOJYbZ0pSsJ9Wovv6BrLGh2ZfJRxm21bhB+fW0lIthVGHiP/IjuvaA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nIH6kD1r6V+Did0lvvxAvP5QyQYE510t5ghqDcli37Q=;
+ b=UEvgkqI52KoumqZf7RxAUVlpSz70EfnaNX0jpuIGX1VXjN4+YTxH4rjYAQzu4apI9jxk9hlmuT4+1fo70JyOWlQcjlDB8+ghm47iA/kW2+S+JyMfsz03Kq780XaxNtvwvsPmFlcDqoNlgyAdWhCB8LUVSP97nint9yrxEM4M38iV/YPtwOR++/8hU/pjH75aBcP9DHU/HZD5pFtWKAzWc/f43I3BxG+sj6/NklMrIYqhKi/TQnWZOg/tONMl5KpUQapnbY96havuQW01KOGZ/bBMgpNwc5Bh7i49ZvfoYekbpkkDb0YUIJpg6MwWQQZkkYthmq8XxRAdCsD0ZX2NSw==
+Received: from CH0PR07CA0025.namprd07.prod.outlook.com (2603:10b6:610:32::30)
+ by SA1PR12MB7295.namprd12.prod.outlook.com (2603:10b6:806:2b6::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.13; Sun, 22 Nov
+ 2026 17:10:27 +0000
+Received: from MN1PEPF000793FD.namprd05.prod.outlook.com
+ (2603:10b6:610:32:cafe::29) by CH0PR07CA0025.outlook.office365.com
+ (2603:10b6:610:32::30) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.639.14 via Frontend Transport; Sun,
+ 22 Nov 2026 17:10:26 +0000
+X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
+ is 216.228.117.161) smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ MN1PEPF000793FD.mail.protection.outlook.com (10.167.249.200) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.639.5 via Frontend Transport; Sun, 22 Nov 2026 17:10:26 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.57; Sun, 22 Nov
+ 2026 09:10:06 -0800
+Received: from r-build-bsp-06.mtr.labs.mlnx (10.126.230.37) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.57; Sun, 22 Nov 2026 09:10:04 -0800
+From: Felix Radensky <fradensky@nvidia.com>
+To: Guenter Roeck <linux@roeck-us.net>
+CC: Vadim Pasternak <vadimp@nvidia.com>, Felix Radensky
+	<fradensky@nvidia.com>, <linux-hwmon@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>
+Subject: [PATCH v2 0/3] hwmon: (pmbus) Add PMBUS_FORCE_PAGE_CHANGE flag
+Date: Sun, 22 Nov 2026 19:09:46 +0200
+Message-ID: <20261122170949.3059743-1-fradensky@nvidia.com>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -82,110 +110,92 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260913214713.205208-1-navonjohnlukose@gmail.com>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xVAiW-00000002mLu-0NUO
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:55994
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 14
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfEkZoRHoKBhHC5KetlScF42UFw6ny1dp9o3uHydyZj1YYXiItoqdLRNrOFBVN6/G1QercT8tWtT88fW+HEQfjFMh3kdC9AdzkMjwtkk0iqChJ9uV2Jd4
- ex4u1E5mt3KzczHZh8QJ5IvK4VjwZMyAJXclPE+nTIl2m0LKWh3aHmegpUAvauHNP4N9S83WlURMBFaS/PxBfNwqi4zVvR4haC6+IpvmaV4npLjG0nXc78N0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN1PEPF000793FD:EE_|SA1PR12MB7295:EE_
+X-MS-Office365-Filtering-Correlation-Id: 37354e1d-efb1-4806-be72-08df48bb809f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700016|1800799024|376014|23010399003|82310400026|261021121427099003|10067099003|56012099006|11063799006|261026121527099003|261026140227099003|261022075727099003|261022105027099003|261028144727099003|261021123027099003|261102123227099003|261009223027099003|18002099003|6133799003|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	tRz0KSnx1HEah3R1DxGQ5A1x+FXiujs759PH9sk2qBcBtvRN/QkxhUo6TF4BUFh7lO47YSxPSH8ZjzRQ2eLNQYCYlhNSZL/uY6Cl4xqyJExPXSlrCMTrXqZjovJhS4wnAFdCQ1InZIsSR/B/oUKUngIxv/nVDmePEyj9JmS9SFhDinq08kY01c2hFT1U5IttLTNk/tMwRFkxzcT/dKKBk3TluZsbJZn/TGVWqL97A0OvvjbNcmddOmgav5AyClhHLNsCG5hEDD+t3BneuobeKb0msXIWAyWNGZLqSdv9E3XrrIpunfjdMmA+grpHWl/uijsQNTGXEqMaiDV35Pa9GGeih3KVgfyIeCcpZLKzCoBxiYNw2/hvpzpTUe1FKTdnGklhBJblst76Iju5VJDQtDrYRtouHTLOvSqy/IgI2X+JNFhvFbuIWPbMPfbl9so/zpLFEp0hsKPOVBwOL8S28tYBIRlmUZ9SQCV2KgIjAeQaBTa6izD1AFUKvaJmNzl8PBJETpDVPxSmj5T4z6AnXyWu7DeqygJdN8olEMOyc6rQs7wPYpQsT0VXUSPvbciemOQ1hv3qC66Y0GyPQhn0XFPZYfATPIpxEX9QMTme8ogtxS9yRqEhwTlI/i07bfYYp/1ZzV/Zp65Tg7BBeaFSVf6jr3H1mURPBrCzEQG/E2h97PaeORd0UEKFoeHoI1lAT8/vvthfy9qn5Uo/4+NmNw==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700016)(1800799024)(376014)(23010399003)(82310400026)(261021121427099003)(10067099003)(56012099006)(11063799006)(261026121527099003)(261026140227099003)(261022075727099003)(261022105027099003)(261028144727099003)(261021123027099003)(261102123227099003)(261009223027099003)(18002099003)(6133799003)(13003099007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	Hxfr4+R2SYWOm96Okc1YdpsriPqgJJa50RumpoyKRNFzUXKwf2wNPTXaunlmjlWpl1Yl08UlMWqAkJj+G+ih0Ypc1lPiS16KOkEmDdMjImJOF8IiVFsgy9Fl/Ipajb6+IILUthOHI7lApMbovaf7lN7iRLvZ8PivwNVOXkNwZ/ftbE/dR2uu2nshjkpTFECY42ms3rA11gVelPGk1qoiC6V0Uby/RrCpUqUagSIoe6a2JZ8+IlKqCbk36a9KSHJyF5/NFJxpNP9WzLvsitmCRmqAYbQ87Lj73hopcGUM1SZOjMya9ul2uNSpFWIMK4isTVs94hObU8wvNpPPRJzNs+RaOaND9HWGXmjfIVGC2mcp48Wfe9i4whXY2mCLqXZ3MICpLaGqPbUz/Sk2vktKg3ItM7mgVEbLmefijQV9+c8mza2vVvJyGj0Fp+9cvY8A
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2026 17:10:26.2256
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37354e1d-efb1-4806-be72-08df48bb809f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MN1PEPF000793FD.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7295
 
-On Mon, Sep 14, 2026 at 03:17:13AM +0530, Navon John Lukose wrote:
-> The Yoga Pro 7 14IAH10 entry names \_SB.PC00.LPCB.EC0.FANS, which this
-> machine's DSDT does not have, so probe matches on DMI, fails to resolve the
-> path and returns -ENODEV. The EC exposes its two fan tachometers as FA1S
-> and FA2S, and loq_15iax9_8bit_dual_cfg already describes that layout. Point
-> the entry at it, and update the reference table row to match.
-> 
-> Fixes: 9c110a467686 ("hwmon: (yogafan) Add support for new Lenovo models")
-> Signed-off-by: Navon John Lukose <navonjohnlukose@gmail.com>
-> ---
-> Tested on a Lenovo Yoga Pro 7 14IAH10 (83KF), BIOS QGCN35WW. The EC field
-> block declares FA1S at offset 0x104 and FA2S at 0x137, both 8 bits, and
-> FANS does not appear anywhere in the table.
-> 
-> Both fans report after the patch, 0 when stopped and 5600 RPM with the fans
-> driven to maximum through the vendor WMI method. The multiplier stays at
-> 100, and the AML agrees, reading the fields as (FA1S * 0x64) and
-> (FA2S * 0x64).
-> 
-> The table also lists the XiaoXinPro 13ARE as machine type 83KF, which is
-> this machine's DMI product name. I left that row alone.
+As discussed in [1], this series adds the PMBUS_FORCE_PAGE_CHANGE device
+flag, which makes pmbus_set_page() change the page of a chip with a
+single page as well, and converts mp2975 to it. The mp2975 driver then
+accesses the page 3 voltage reference with pmbus_set_page() also in a
+single rail configuration, instead of writing PAGE directly.
 
-I don't have a means to determine if the old entry was wrong, if there are
-different machines with the same DMI entry and different configurations,
-or if this patch is wrong. I have not heard back from Sergio. The patch has
-been pending for more then two months.
+Patch 1 keeps the page and phase cached by pmbus_set_page() in sync
+with the chip. It invalidates them when changing them fails, so that the
+next access sends PAGE and PHASE again, and updates them only when the
+respective command is sent. Without it, a PAGE or PHASE write accepted
+by the chip, but reported as failed, or a failed or mismatched PAGE
+read-back, leaves the chip on a value other than the cached one, and an
+access to a page without phases updates the cached phase without
+sending PHASE. This already applies to chips with multiple pages or
+phases, and would apply to chips using the new flag as well.
 
-I am going to apply this patch, to be released with my next pull request
-and thus with the 7.4 upstream kernel.
+Patch 3 depends on commit 00944852275e ("hwmon: (pmbus/mp2975) Get vout
+fault limits dynamically"), which is in v7.4-rc3, but not in hwmon-next
+yet. The series is based on v7.4-rc3, and applies to hwmon-next with
+that commit on top.
 
-If anyone has objections, please speak up now.
+Tested on a switch platform carrying twelve MP2975 devices, twenty one
+rails in total. On a single rail device, the change to page 3 is now
+issued by the core and read back, while reading a sensor of the rail
+issues no PAGE command. 400 page 3 excursions on a single rail device,
+and 800 on a dual rail device, each followed by a read of the other
+rail, showed no page 3 or other rail register value in place of a sensor
+value. The limits of all rails matched those reported before the series,
+and in2_crit of the rail supplying the CPU core voltage followed the CPU
+between 1145mV and 1725mV. On this platform, patch 1 changes the bus
+traffic only after a failed transfer, which was not exercised.
 
-Thanks,
-Guenter
+Changes in v2:
+- Patch 1: update the cached page and phase only once the PAGE or PHASE
+  command succeeded, not also when no command is sent, that is for a
+  virtual page, and for a page without phases or with virtual phases
+  (Sashiko)
 
-> 
->  Documentation/hwmon/yogafan.rst | 3 ++-
->  drivers/hwmon/yogafan.c         | 8 +-------
->  2 files changed, 3 insertions(+), 8 deletions(-)
-> 
-> 
-> base-commit: 22098763a10d9c13
-> 
-> diff --git a/Documentation/hwmon/yogafan.rst b/Documentation/hwmon/yogafan.rst
-> index 6395c94..84c5d2a 100644
-> --- a/Documentation/hwmon/yogafan.rst
-> +++ b/Documentation/hwmon/yogafan.rst
-> @@ -102,7 +102,8 @@ immediately to ensure the user knows the fan has stopped.
->   83KF           | XiaoXinPro 13ARE | 0x06/0xFE | \_SB.PCI0.LPC0.EC0.FANS/FA2S   |  8-bit | 100
->   82KU           | IdeaPad 3 15ALC6 | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0        |  8-bit | 100
->   83RU           | Legion Pro 7 16  | 0x03/0x06 | \_SB.PCI0.LPC0.EC0.FANS/FA2S   |  8-bit | 100
-> - 83KF           | Yoga Pro 7 14IAH | 0x06      | \_SB.PC00.LPCB.EC0.FANS        |  8-bit | 100
-> + 83KF           | Yoga Pro 7 14IAH | 0x104     | \_SB.PC00.LPCB.EC0.FA1S (Fan1) |  8-bit | 100
-> + 83KF           | Yoga Pro 7 14IAH | 0x137     | \_SB.PC00.LPCB.EC0.FA2S (Fan2) |  8-bit | 100
->   83BS           | Yoga 7 16ARP8    | 0x03/0x06 | \_SB.PCI0.LPC0.EC0.FANS/FA2S   |  8-bit | 100
->   *Legacy*       | Pre-2020 Models  | 0x06      | \_SB.PCI0.LPC.EC.FAN0          |  8-bit | 100
->   ----------------------------------------------------------------------------------------------------
-> diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
-> index 278cb08..3fcad00 100644
-> --- a/drivers/hwmon/yogafan.c
-> +++ b/drivers/hwmon/yogafan.c
-> @@ -84,12 +84,6 @@ static const struct yogafan_config xiaoxin_8bit_dual_cfg = {
->  	.paths = { "\\_SB.PCI0.LPC0.EC0.FANS", "\\_SB.PCI0.LPC0.EC0.FA2S" }
->  };
->  
-> -static const struct yogafan_config yoga_pro_7_14iah10_cfg = {
-> -	.multiplier = 100,
-> -	.fan_count = 1,
-> -	.paths = { "\\_SB.PC00.LPCB.EC0.FANS", NULL }
-> -};
-> -
->  static void apply_rllag_filter(struct yoga_fan_data *data, int idx, long raw_rpm)
->  {
->  	ktime_t now = ktime_get_boottime();
-> @@ -227,7 +221,7 @@ static const struct dmi_system_id yogafan_quirks[] = {
->  			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
->  			DMI_MATCH(DMI_PRODUCT_FAMILY, "Yoga Pro 7 14IAH10"),
->  		},
-> -		.driver_data = (void *)&yoga_pro_7_14iah10_cfg,
-> +		.driver_data = (void *)&loq_15iax9_8bit_dual_cfg,
->  	},
->  	{
->  		.ident = "Lenovo Yoga 7 16ARP8",
+v1: https://lore.kernel.org/linux-hwmon/20261122073322.1712843-1-fradensky@nvidia.com/
+
+[1] https://lore.kernel.org/linux-hwmon/8e4410db-66df-44b8-9617-1013545d7b43@roeck-us.net/
+
+Felix Radensky (3):
+  hwmon: (pmbus/core) Keep cached page and phase in sync with the chip
+  hwmon: (pmbus/core) Add PMBUS_FORCE_PAGE_CHANGE flag
+  hwmon: (pmbus/mp2975) Use PMBUS_FORCE_PAGE_CHANGE
+
+ Documentation/hwmon/pmbus-core.rst | 12 +++++++++++-
+ drivers/hwmon/pmbus/mp2975.c       | 29 +++++++++--------------------
+ drivers/hwmon/pmbus/pmbus_core.c   | 15 ++++++++++++---
+ include/linux/pmbus.h              | 11 +++++++++++
+ 4 files changed, 43 insertions(+), 24 deletions(-)
+
+
+base-commit: aebb7274476403040d582c61478df8f4a7bf9cd3
+-- 
+2.34.1
+
