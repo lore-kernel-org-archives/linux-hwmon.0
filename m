@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.208.42
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.26
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795332844;
-	b=MZVkf3uG5e6k15lRqbpkl6mYkuknZP3xmFKid65qZkzeuf8aiC5XN6uBrKNbUo3d5TJK
-	 qkq9HEtXRCV4w6iqBOyqrsbYmzGwPiUoQplULxiyovOpiVxqfV6tfxYrM5vsgK/AmBPfq
-	 guNv7ERsVGIb6xjrKpWLlkcDh3zW9eojuSHRxVYjbjmI8ov9OiV9nJ5eXo6OstL9CnEtK
-	 ifQuHyPoARS9Sa9sBunY9auLvUpMdFr1X5SqDOnKs/HvMkJo2mLXZ15vdpg3iwBRWZ2FR
-	 iTkKBkZaHR9/gJvhthXLRxKvNLa5M2ucI7RJARY3IYLAN+vjnSyeRyy9Xq2b62I8HIA==
+	t=1795332855;
+	b=UC+Fq2WYXQbwOi4KRZEl6UFYa2Y/blIO96oh/o9R7SduPF/dyWUE8VTu7AO2W5AkJZJB
+	 EQWm5UqPqr4STGxWyUl85U4zgluhk/bMoVO65m9Chs/EQcme1Ve48EpECfFnNsDAcNKta
+	 exOI2cVKArNXHjVKKFgVlYP1agUaN7Wi5VcRrUqPSrO22aY1ZEhOPAQJsz7Q5Z3trYEbg
+	 XQLnNn/tWt1vuSg2pYvTvojQu0GBA3jSKCyY3xz15h8TIcROZ6XR6499DcKYXfDqQaQ1S
+	 Jsp+dQ9zBCQTfFesAtqQEjDNBC0EWrsZWt9LZYYs2/kJoEltLounv+r80QaD0w6llxA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795332844;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795332855;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:
 	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
 	 Received:From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
@@ -26,35 +26,35 @@ ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
 	 X-MS-Exchange-CrossTenant-FromEntityHeader:
 	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=NVQ6lZo0kYUi56uYQ/rNk5LiC5mQHORc0YCZ1fufdek=;
-	b=AWXOncoY4/bu/zCLdCy122Fg5z1vvrekEYlEdUYW7pPTEOmdczW+MO+RuyBjXNhShJWZ
-	 MHcog/yrCsvwQMph1tllXaGSHFcE6tz1bM9/Ep2WSg12SQZzddfi6F+fi84VGyRRP7Xtr
-	 x2eedQPtkn19u2CrcYlRnqg7D6PyGrkX00kaOMowpvo9n/abcCJNHek7o8Tjfmck4+blN
-	 pYoNpMCbJM8anN21+kdNxBmpRykAoQT2xjk6ZSnY4PlzIwPAqvhbEZ0DsletnuH/FPthF
-	 a9I9q8FMdH4urWZs1ynWK7qy9DfyoV6XHx9rYO86RNEGxYbPz4oogYtK5SS0O//WfTg==
+	bh=6ippnZIfxt1vmZhspLJuRWkXlbVkIIf4ZaaxVue+11I=;
+	b=AXsBc3igGzqWpPLXV8BP98V4QLpgPOqqR5oaCJksgvzOk9ZFSrGrHfTJ+smJ+Lf9aGly
+	 +KD0sNd4QgwG5eoItoCXVyMTqHZ3LixyCN9Bda2+dhFkgmJHvUl0baBceOkDrwfMNAHjM
+	 USVLeu4QYUJC33TDOsJhMhFCQEhPn+X9Mt+hpTeE48axNfdCGE5OjfnYfudEiqL/lYe5J
+	 TwLf8ZDK2RCZ1SXLpxPJiQClMtkobzLBnR9ryxDbaxaOxKFsbhxicxwpn2IeWw7RQg69n
+	 GbdQvEGm+2SsFCOrhTJJhHj2j0RhOqs/ZGoywJDAuYKowd97kGqD42Js7t5GQ3WID/g==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=nvidia.com;
 	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=PX9dEIaQ;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.208.42
-Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011042.outbound.protection.outlook.com [40.107.208.42])
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=d9n2C6PV;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.26
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010026.outbound.protection.outlook.com [52.101.193.26])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4F0606A320;
-	Sun, 22 Nov 2026 07:34:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0A4F0606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FF3606A32C;
+	Sun, 22 Nov 2026 07:34:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 23FF3606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=PX9dEIaQ
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=d9n2C6PV
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oDyUUC4I9D9KhgqFL9WB8Bu6lkeIvTCRYSx7s1BnZLE+hNVQeDpwiN2UQJJNxGOHkRF668Qvkgu4GPzPF8htmWNazv1u6w+QzzfuGkwWXWhLQJoEJU+gMVyps93cptuV/ZyCarBKRmW8/Kcd+B6QgGPp0P6kIbk6IgGhW2Z1XCBi+FBHvybKHDf6Pqfuf/MiGZrV1PKkQju2gJ9vt+2bUQ/yYQIO/NFqRQv0Sf3XfTqTHJ1ZTiPnDzkc+ecxNYcV3TkufAmuNEGz4u3L7/9BvleL9qggBFN+1JupD3XPgf1Rcg5jFScoboxr4dPd/IZLlk0T65tOXAaCo3ryQM9YXA==
+ b=vwLU45zLIM3eUuXOgqKnRFHVRTHe145XJnvvHAp7r/pBBXB+/5ev8lbHIuW7IUPPjH/Ex5PJ/2PLXrIfT/yepOLiTMXk6AgxdoXUnokBstH6YI1Yh959CiPXlXsWg6ZXCBvYQ9Cz6GdeA5Ylyc08z2Gt4Nnqrjuvzxogx07IOhY6+KWTGqL/GlXcR/nr9fJrvwdDICufD0KU1bnwlmwfpN731kp4w78aXJrvwToGy5AILDbWSoxEB3gnySmvEbjNDnCiB0TNjjjuKGsmHLd88djba6o73pD7Z+pcsmuWgFZCzJSamCetuGN5GooH2f6x6+Hq2prOC86Gr055hGkeOA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NVQ6lZo0kYUi56uYQ/rNk5LiC5mQHORc0YCZ1fufdek=;
- b=mHrtJQcFRUVEZBO/r5t+Tfb/i3+KqwQyRhsOL1C4lAQQsssSbkbPZI1SQM9FugpaTYE5qHklfmU1F0FRcFpvDWsbsvz45knGw66qZ99oMCAyoRFFTIjY3Yt8zisMCnmXq+FcGM2YyQ1bmdnJxbaYf0EMxgQyRPXkH0I5uvDZ90arrckZ/cnqyebxCp/SPTm9PGwLFU0Pi2QxuNfknCALDAUgcVaWeUjoI5TAkuKQ4g8Azc3Wa1lj9mkKZBlb3c21q6UrFPU+TEaF9GGIQuohrUo4f5vdqoux+kB02X6+fRE+Ag4NjD3qaJrca+YanewID8Kip3icKZBIK9HCIms3Vw==
+ bh=6ippnZIfxt1vmZhspLJuRWkXlbVkIIf4ZaaxVue+11I=;
+ b=FWjkkfq8Ux95yh69sB889zXXuvYBDBCf9htgreaW1/CRWahcCXU4xA1JRP8rke5TnZPFqBqlpLgl/Pgh9wReW0OWLAgRMj4WciWemvYC63d9c4rNIOedyyAn8IdEYNXHOvr7qbQPz3tA254QaS5ZOtBxw6JZqFpJCXwH6vLTFT5gtog+AOtTelXiEUWVq/gVmCjbCktxXSm/meupHqbhUnKHJJ06piWrljhFzvN/Yiy2kop3lyg4Y/Z32wABzZxBIeyyaD2kNkXBJzq1pvhDtLDyG1DbPeaIlMhnbNiLxVWEOLdEANQrfmWafct7ZY3eieonHaxJp9tsCAskihi2Kg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.161) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -62,18 +62,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NVQ6lZo0kYUi56uYQ/rNk5LiC5mQHORc0YCZ1fufdek=;
- b=PX9dEIaQ2VBoZ4PIeGytHJGTy7OYfZj7rYCMKKeLcN3OYwxJgQJMXbNBmOX81axQBZMf0hgxhvo3yHvd3Y4QZwIXMqIRyZV4/qRStawt6HrDz7IXvPfkYKzK1BU0Qk36rf+Nf4suXrqQJs+uP4S2LUHLszILvPyLscpuKibA+ddQTOpCPhy/J55culhIBlsdrVHxPipY4aXISocJxPSgsxmKqDycBLuJOdWOqRWLA10YkOdKC4vPbD904pYMQWZjL421K2wzPwxJbT9WdhiWzhMAW1qBR0pGn+nyoDNvOs7Hq1v5F+BJSLyFm4+Tm9C051L4m/dqnyxyMJHA5ilHQQ==
-Received: from PH3PEPF000040A7.namprd05.prod.outlook.com (2603:10b6:518:1::49)
- by PH7PR12MB8054.namprd12.prod.outlook.com (2603:10b6:510:27f::15) with
+ bh=6ippnZIfxt1vmZhspLJuRWkXlbVkIIf4ZaaxVue+11I=;
+ b=d9n2C6PVMLoAipnhJH2GWl5T8y1b/73QTHU3MM8m+oAjP+lJtvr6HOHibfwFeiRHgatKGxb14ctBzzkfYf5nhf+JZK8ahv5gMwI9JGMQlG2VEeVMhUnh9Xjs8EQe0aRCRafqAhVFz5llgYWLc9K+ky50q+dLwyeGgwi911OYGUcLKXmfYF8ikoi2B6j7eKdHnB7c2vlM3/QaBg7O2/pVenpY4MmBgXRXnM1914dKEfl+vebBccaxjA5PnwYw5tpAuzy9nX4dFZt7FtqfCIx21mwWfPuBv24m8bPQzZVyv/MUlcRD1Mw4nd7h6//p76sgGwUPIt0dGU3zsLzjfTSzgg==
+Received: from SJ0PR03CA0049.namprd03.prod.outlook.com (2603:10b6:a03:33e::24)
+ by SACPR12MB048696.namprd12.prod.outlook.com (2603:10b6:806:542::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Sun, 22 Nov
- 2026 07:33:59 +0000
-Received: from SJ5PEPF00000209.namprd05.prod.outlook.com
- (2a01:111:f403:c902::8) by PH3PEPF000040A7.outlook.office365.com
- (2603:1036:903:49::3) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.662.4 via Frontend Transport; Sun, 22
- Nov 2026 07:33:59 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.12; Sun, 22 Nov
+ 2026 07:34:11 +0000
+Received: from SJ5PEPF00000204.namprd05.prod.outlook.com
+ (2603:10b6:a03:33e:cafe::a) by SJ0PR03CA0049.outlook.office365.com
+ (2603:10b6:a03:33e::24) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.592.11 via Frontend Transport; Sun,
+ 22 Nov 2026 07:34:11 +0000
 X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
  is 216.228.117.161) smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -81,25 +81,25 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.117.161 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.117.161) by
- SJ5PEPF00000209.mail.protection.outlook.com (10.167.244.42) with Microsoft
+ SJ5PEPF00000204.mail.protection.outlook.com (10.167.244.37) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.639.5 via Frontend Transport; Sun, 22 Nov 2026 07:33:58 +0000
+ 15.21.639.5 via Frontend Transport; Sun, 22 Nov 2026 07:34:10 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
  (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.57; Sat, 21 Nov
- 2026 23:33:48 -0800
+ 2026 23:33:55 -0800
 Received: from r-build-bsp-06.mtr.labs.mlnx (10.126.231.37) by
  rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.57; Sat, 21 Nov 2026 23:33:45 -0800
+ 15.2.2562.57; Sat, 21 Nov 2026 23:33:53 -0800
 From: Felix Radensky <fradensky@nvidia.com>
 To: Guenter Roeck <linux@roeck-us.net>
 CC: Vadim Pasternak <vadimp@nvidia.com>, Felix Radensky
 	<fradensky@nvidia.com>, <linux-hwmon@vger.kernel.org>,
 	<linux-doc@vger.kernel.org>
-Subject: [PATCH 1/3] hwmon: (pmbus/core) Invalidate cached page and phase on failed change
-Date: Sun, 22 Nov 2026 09:33:20 +0200
-Message-ID: <20261122073322.1712843-2-fradensky@nvidia.com>
+Subject: [PATCH 3/3] hwmon: (pmbus/mp2975) Use PMBUS_FORCE_PAGE_CHANGE
+Date: Sun, 22 Nov 2026 09:33:22 +0200
+Message-ID: <20261122073322.1712843-4-fradensky@nvidia.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261122073322.1712843-1-fradensky@nvidia.com>
 References: <20261122073322.1712843-1-fradensky@nvidia.com>
@@ -118,77 +118,120 @@ X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF00000209:EE_|PH7PR12MB8054:EE_
-X-MS-Office365-Filtering-Correlation-Id: d4f0129c-097c-46af-c3e4-08df486af8d7
+X-MS-TrafficTypeDiagnostic: SJ5PEPF00000204:EE_|SACPR12MB048696:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1b2af846-2dd1-4bfb-7cdb-08df486b0001
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|36860700016|82310400026|23010399003|261022105027099003|10067099003|261026140227099003|11063799006|56012099006|261102123227099003|261028144727099003|261021121427099003|18002099003|22082099003|261009223027099003;
+	BCL:0;ARA:13230040|23010399003|36860700016|376014|1800799024|82310400026|261022105027099003|261022075727099003|11063799006|56012099006|261009223027099003|261021123027099003|10067099003|261102123227099003|261021121427099003|261026121527099003|261026140227099003|261028144727099003|18002099003|22082099003|6133799003|3023799007;
 X-Microsoft-Antispam-Message-Info:
-	RCPZXDfY6cQ3nP8l6Ymy5K4mHPqcVudOu+GsU9B3yW8Jpnp/Y4p8IypW1U7qs82Qe8irmwNT323zuTMM/KXNxOhT1e4Sftf5xLoDPNn0ZBRy1/6zWJtsE8JB48Pz+mSt+4zK/l249g6+szs8p40f5BO/YyPatHvFQ54BKQOO7kWKj+gPAtNVpQV6M9gjqV+Fr2tNI355WEBFUV6x9b3/K8PWHCrgtkM1CzH4cHFYe1gHmekS6GyvBsYdnatdbRdUSq4U/RkhCKRLuEMTKyAZVM9Qvu5mO5VxrGJEdWWjNmztjk7DV3qV1JNg6agSeOwLbOp7VGpol3XSGwEjpMaYPhXi6BEnL2AidwYNl6PRsWfQEOf+e+b4raEOFpWty3ZilAfgPbPbHmkH9v5/jmUYGtUabd23fyw9F8vnOuvpFfSzVnztcZ4OmXUWJPHXXoGl+hyEfKyu9C1+F4di9cRs8SWqKX4rr/KMgwEaMfNkH9jLJkexIOBaDGihStjnxJuLCcdTiuPKnaabsmdnHzqaDu6pirNImEAJ9N1BO2VyRXCcJiyMCWYNJNzNYUOYVkZ3/drrrpWdDk8EBnfXgirK/cB+yC1YiubdmAntkEX3AiVhopvuGBl62FLs1xhHX+Z0MzMtiMFTjB7LVN3PeaZclGR8NruTlQp6FcihzY1PYeMujy204f8S0Aq03IjGtt3Fjr7Dp9h16LHZWMuSJtSsVQ==
+	D1kXEFU/0br1MT5gsktsc67UT/+4SIi7q/hk7OYx6ctg4F+MaN3zz+YZRP+mpGarm8II7+LD/hdugqKljo2NAFBgmVQT+sQZ6pJas+ANd40LTOFECw+zuAbyIMWEzeBGZFTR92nfpRf9hUeqlKgi4hFGMVSsbTbXDRDLdQO2rcfCNHHpV1NA3vLEXsN3COa/Bnb7W41BBTry89n307IYA5n1Ivn+Zvm1W2UtyUJfWOjhnxs3bLjA9/YUkpqN8USaoH+3aVHXV8yenQ5mOXXPDw4rr9vA5zU/73rL49/K7Ul5l8m+10KuZ99KVzpG3OL5hIYwOMOiYokL/LKThWi85dfTIBVw97q3HoV16DVdmGKEb82UaAof6w9fzltOI2c/12ldopdi/6rnOkTr8cXGXR3lKpb1KZo0sTwVjiVw/O2NXwlYxtKlxh8Ygwvdr3cmdry2OsORRZgyatCVP3avE+VccOAAbL1eWqo+ACHn5ulaP3ZdwBsCspgdCn+3K2laLYbKacGYLqOeTP/CXjBBUzZlQl7qRy08yhcPH9fNROrIN0PVBqEZc/rrTQXqrDEhA0zK1viBE8Wrpu3k33mO7gzFgnfqYu5+hAGfz3XPCU2qcQ3IV/5MYI9LQF1M3lthtVgc3bLoSAFJTDa4DUviuwKHrqaJGvdShTkC2M9K1JV68gJdR9YYawDKJyeh5ool405zgWhuEBfQkfCRjpP4Mw==
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(1800799024)(36860700016)(82310400026)(23010399003)(261022105027099003)(10067099003)(261026140227099003)(11063799006)(56012099006)(261102123227099003)(261028144727099003)(261021121427099003)(18002099003)(22082099003)(261009223027099003);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(23010399003)(36860700016)(376014)(1800799024)(82310400026)(261022105027099003)(261022075727099003)(11063799006)(56012099006)(261009223027099003)(261021123027099003)(10067099003)(261102123227099003)(261021121427099003)(261026121527099003)(261026140227099003)(261028144727099003)(18002099003)(22082099003)(6133799003)(3023799007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	hFGnMy5QtU8RHES8HIaQzPujyCTDmXVkUAO9iEelvz4kYG9EGvpvFmN+opJPlNuCX/q8WaKR9IHCwfvb2q7++iXe8ZCB5zlsoIDqBdep+ojIYnZl9kaamoyUi+nCsShffmJR3BO5S6H0mMKkVVidqqZldV8WhE5iV5SHL36M9lO0D+pJwAN5a2adIDdywM1WMtWEMmeGiJ6enU5VomccVvSb/lQ1yAtTqwphkfuzjaU7soLjZFQcnLYfJw6R35ZmM0C2PZ5ZqMgIAQAZSpY1Ept88nYb1zgw/RBe/QEJVQ9BGRIkgeabUcgGQj2hQ5O9+y5UGZbNzH+LRozY0VGJgzmJ9DuOJ4aMBMQJRtRwWTr7NaoyUn2ZBs9c7fpMudALcL/enDZBm9024oZ/RDrMFR4Rfj8Rr8kw8SiMew/jv7bWoTwBn7GIIa8qWmIl+pxy
+	gdKQ5AYN4nxw5tYueSAQ7OCs2TtUkImAN+x/HdBQwv8mnKPNvGuH86ebrY5wbMpmf2RpUvjHlw+5ynL3FQWhJJMsAQXJyCprEOpO4ZzOXNODguV+wtPsKUUfR/PG8mvbSxY642Hi/zchxWa1LDBClzZzmr/qdA4DAcVcLpVY/HpOEzGFwb/GoJ/6wvnXeWIBixAnCSMB8opQG/kaUrMjU314ZurFan4oLz5vk2iqQdjzqj1+4wr6MaUiZZnwl/FSQyYc4TXWtqygyt5YjEUMz7UgCLyltVAHctEB0wWIZHANTnaXYW4KaFb4ZHre/0nUKl6hrK8RghiwoK67I0cp2vO0Du7HjSfixCdzZ/GlJ0wm4PYbUlSncOqo0hxTB2lP62jvvVrld+N7yD7oxDT6uQdDo3giGEzT90l9cT8nEa8VsmLKMJ7eHCSL4/yHHZLZ
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2026 07:33:58.8244
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2026 07:34:10.8303
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4f0129c-097c-46af-c3e4-08df486af8d7
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b2af846-2dd1-4bfb-7cdb-08df486b0001
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF00000209.namprd05.prod.outlook.com
+	SJ5PEPF00000204.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8054
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SACPR12MB048696
 
-pmbus_set_page() writes PAGE, and reads it back to verify the change. If
-the write succeeds, while the read-back fails or returns a different
-page, it returns an error without updating the cached page. The chip can
-then be on the requested page, while the core still caches the previous
-one. The next access to the previous page skips the PAGE command, and
-accesses the chip on the wrong page, until a different page is
-requested.
+The voltage reference, from which the vout fault limits are derived, is
+read on page 3. In a single rail configuration the driver writes PAGE
+directly for it, since the PMBus core does not change the page of a chip
+with a single page. If changing back to the rail page fails, the core
+reads page 3 registers in place of the rail registers, until the next
+voltage reference read changes the page again.
 
-The same applies to a PAGE or PHASE write which returns an error after
-the chip has accepted it, such as on a late NAK, a PEC error or an
-adapter timeout.
-
-Invalidate the cached page and phase before changing them, and set them
-only once the change succeeded, so that PAGE and PHASE are sent again on
-the next access after a failed change.
+Set PMBUS_FORCE_PAGE_CHANGE, and change the page with pmbus_set_page()
+in both configurations. The page change is then read back, and a failed
+change is repeated on the next access, as for two rails.
 
 Signed-off-by: Felix Radensky <fradensky@nvidia.com>
 Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
 ---
- drivers/hwmon/pmbus/pmbus_core.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/hwmon/pmbus/mp2975.c | 29 +++++++++--------------------
+ 1 file changed, 9 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 82dac2c6c579..dae56e2e6f21 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -227,6 +227,9 @@ int pmbus_set_page(struct i2c_client *client, int page, int phase)
+diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
+index 2ad6b7d831c8..4eba171ab87b 100644
+--- a/drivers/hwmon/pmbus/mp2975.c
++++ b/drivers/hwmon/pmbus/mp2975.c
+@@ -11,6 +11,7 @@
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/pmbus.h>
  
- 	if (!(data->info->func[page] & PMBUS_PAGE_VIRTUAL) &&
- 	    data->info->pages > 1 && page != data->currpage) {
-+		/* A failed page change can leave the chip on any page */
-+		data->currpage = -1;
-+
- 		pmbus_wait(client);
- 		rv = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
- 		pmbus_update_ts(client, PMBUS_OP_WRITE | PMBUS_OP_PAGE_CHANGE);
-@@ -246,6 +249,9 @@ int pmbus_set_page(struct i2c_client *client, int page, int phase)
+ #include "pmbus.h"
  
- 	if (data->info->phases[page] && data->currphase != phase &&
- 	    !(data->info->func[page] & PMBUS_PHASE_VIRTUAL)) {
-+		/* A failed phase change can leave the chip on any phase */
-+		data->currphase = -1;
+@@ -105,6 +106,7 @@ struct mp2975_driver_info {
+ 
+ struct mp2975_data {
+ 	struct pmbus_driver_info info;
++	struct pmbus_platform_data pdata;
+ 	enum chips chip_id;
+ 	int vout_scale;
+ 	int max_phases[MP2975_PAGE_NUM];
+@@ -457,37 +459,20 @@ static int mp2973_write_word_data(struct i2c_client *client, int page,
+ 	return pmbus_write_word_data(client, 0, PMBUS_SMBALERT_MASK, ret);
+ }
+ 
+-/*
+- * Let the PMBus core change the page, so that the page it caches matches the
+- * device. The core does not issue PAGE commands for a single rail
+- * configuration, thus change the page directly then.
+- */
+-static int
+-mp2975_page_set(struct i2c_client *client, struct mp2975_data *data, int page)
+-{
+-	if (data->info.pages > 1)
+-		return pmbus_set_page(client, page, 0xff);
+-
+-	return i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
+-}
+-
+-/*
+- * Voltage reference is available on page 3 only. The callers read a register
+- * of the rail through the core first, thus the core caches the rail page.
+- */
++/* Voltage reference is available on page 3 only. */
+ static int
+ mp2975_vref_get(struct i2c_client *client, struct mp2975_data *data, int page)
+ {
+ 	int ret, vref;
+ 
+-	ret = mp2975_page_set(client, data, 3);
++	ret = pmbus_set_page(client, 3, 0xff);
+ 	if (ret < 0)
+ 		return ret;
+ 
+ 	vref = i2c_smbus_read_word_data(client, page ? MP2975_MFR_READ_VREF_R2 :
+ 						       MP2975_MFR_READ_VREF_R1);
+ 
+-	ret = mp2975_page_set(client, data, page);
++	ret = pmbus_set_page(client, page, 0xff);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -1072,6 +1057,10 @@ static int mp2975_probe(struct i2c_client *client)
+ 	if (ret)
+ 		return ret;
+ 
++	/* Page 3 is accessed in a single rail configuration as well. */
++	data->pdata.flags = PMBUS_FORCE_PAGE_CHANGE;
++	client->dev.platform_data = &data->pdata;
 +
- 		pmbus_wait(client);
- 		rv = i2c_smbus_write_byte_data(client, PMBUS_PHASE,
- 					       phase);
+ 	ret = pmbus_do_probe(client, info);
+ 	if (ret)
+ 		return ret;
 -- 
 2.34.1
 
