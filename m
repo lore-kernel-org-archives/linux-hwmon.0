@@ -1,72 +1,72 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.33
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795304442;
-	b=vxoF7ILGB2EVN7aYiZVSLNB4mK/LnXznUGe9z68807mq3JP1BrY+m+d2ZlmwEsXkBgRE
-	 gumomwjRMlitug1X9zqOT2Qx9uLrkHy4W3Flv2zxEWMlZeZNdKSL8DqjQnksIxZB3zPvX
-	 Xpj3jUAXfh/vtc2SmQNgvRWdQ6TkZHBGZDGY/8zJAHB2GW3V2EXV4kXGiwnMCKta5wAIL
-	 HXnbZkUN46N6My5VHr1sbfWOQcsVTlNv35RMZwJgkHv3lKg+tCSRyTyzMvuDj6BpSc+kP
-	 OtsIkfpbgEN7Cb260MsAk8jUbunN2R+3wrzB/r274vrdH9QzJJq/Xjr9bhvGmfyqPew==
+	t=1795310114;
+	b=5VKEgm1qlHV4F5GSY6yZ095tNGx6d8BySD0gIrOiZ4bYk3eUDkYIP/QnNhho5Kopg4BD
+	 YkxQ2P607Fbk5D/QwEGui2PaZj/SgpPEcIY5VUpeYJTOLl2tTRxFw9g8BYiknNUnAwNEs
+	 HT/SCEcUZCfx5SuVwdVYV/tuHLTZVtdJsmBhzz/rvIL4L2IkT63I+gRcGNBJxmEWJDmfS
+	 3oZGHvcWMj3TgjrdrYa0l0TI3sISaA3Cf5/pT/RA5ZsNdGxa1wh1TprkgEdw/cobrlKgt
+	 Z6vavhpRyqCVGXnFqm3RnEMcfg+NSzrW1zUyUFsD61kSHk9rYashI16XBIKjw6nDaPA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795304442;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795310114;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
-	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:From:To:Cc:
+	 References:Content-Language:Autocrypt:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
 	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
 	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=cmAcnj8F9Bghf3hqeM9Fh6dgrZyX4LA9zavp8RoFWns=;
-	b=rdDwsNNznKkKKpfVEXpVWEVuMWL+Dx6hP87jK6xmJfIuY6P2eXaM6rwNsM+2VpDXGpIB
-	 sWLnxAYx6hltx19lLgzDTqaObpw9BM+Al0aunrBykcTlYc15RLwbk3qVkgmpG3ocGImYP
-	 1cpZCD8qGFGNVtYyST9jSrWtt/xzdgRdEsdnb3F73D3/yIVToLTVCL1Ab8OlXHaqV5Zw6
-	 hvyD/3hL9wemwo9vIhjrKYTr6w/+x6PkOPWVJSEPAyHPZXHqtIgT0wPid0cdw3j8WnNaC
-	 g6ogg440i4dxdWnrKHw8RY6u6cBckKAJcQ1JKnhbK2eD8iu+sOq344MfloWNEfIxI+Q==
+	bh=v7lEg495LrCIbxZuP8ufMwGsxVJReYwI/MOkO14mWSk=;
+	b=g1Fk/EEbImYd9my5KUaA85nfgclQWyYEsU+1if9zrzJu3o973sWlxLD25XaiIuaUrEGo
+	 vHCSE8mp4AI9YQg0K98Gx+nP4HsIy5gspuGJ4sGKvjqMMak1VKpkGb6yCze3cS3WfvCDq
+	 xOf6cyzaB6JVOVsWJjDexOlUcehDnn3oFLOjJpvxKTiYl/pnia0R0MWyiqZzovtzE9Ti6
+	 4i7l7BBqzb7ALJ5rZmS6iRC7IaBoDHgB2qJuulkJCbW5nfhnSvUlieyBd/tObB7R/SEa0
+	 OIfunv70uw205ZC2dpSuEnOD+2dpLeHD7Mlch115iVUjofXLrj0kEmM2nS087OsjYRQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=G+xkq8aw;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=u2eycPX7;
 	arc=none smtp.remote-ip=35.89.44.33
 Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C77FE606A32C
-	for <linux-hwmon@vger.kernel.org>; Sat, 21 Nov 2026 23:40:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C77FE606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC80606A332
+	for <linux-hwmon@vger.kernel.org>; Sun, 22 Nov 2026 01:15:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CEC80606A332
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=G+xkq8aw
-Received: from eig-obgw-5001b.ext.cloudfilter.net ([10.0.29.181])
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=u2eycPX7
+Received: from eig-obgw-5007b.ext.cloudfilter.net ([10.0.29.167])
 	by cmsmtp with ESMTPS
-	id UpNcxNSAXAR1iUuhFxOXJR; Sat, 21 Nov 2026 23:40:41 +0000
+	id UViGxJzowAR1iUwAjxOs3V; Sun, 22 Nov 2026 01:15:13 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id UuhEx0ktpxmi7UuhExlSEd; Sat, 21 Nov 2026 23:40:41 +0000
-X-Authority-Analysis: v=2.4 cv=KuFN2XWN c=1 sm=1 tr=0 ts=6b022bf9
+	id UwAixHNg3xqjjUwAixkMg8; Sun, 22 Nov 2026 01:15:13 +0000
+X-Authority-Analysis: v=2.4 cv=bZxrUPPB c=1 sm=1 tr=0 ts=6b024221
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
  a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10
- a=o6PxsY6Drvn_WXwR0DgA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=bZ9ZFHcraDQnooAIPG0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
  a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=cmAcnj8F9Bghf3hqeM9Fh6dgrZyX4LA9zavp8RoFWns=; b=G+xkq8aww67o
-	iIV3rZZQaaoWUaMlAa4PmiHplwF4DV7Z+scwgPNuTqzg0f+aRNaGz5Jk4h+u/faz+m6yUFWHeb9MJ
-	Z6Rg/YJnGr986PZ+V0/WSVBm1UBsh/9REj1bDEdulygj4tCNxsvdsQFV4TqUggljXqp4eRccbMDi7
-	gM06aWgSbV0aStdvS6c4f0afp0m9l+unLD6zPKVwTxY53rNefEJ+/2l5zing1jOuUBrnOWBpUX9zM
-	ppzQpaVCjowB15hGa6TzHKPCMcZ3QryVOTpEF15PlYoUeWUIapzzygjALN3Lg1FX4iJJsw0PvcQFx
-	x17fo2ZfcslhqVoq1xH+TQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:52180)
+	List-Archive; bh=v7lEg495LrCIbxZuP8ufMwGsxVJReYwI/MOkO14mWSk=; b=u2eycPX7zn6A
+	/CUDf57E57hxXV3mdnD53watV3Zp3TtChPOdD5E+EbMi5clifMjupkhsCzUxMKFf8fJfs+RKdHwQD
+	nlYQ9/I9b9PK70YMkbYQpOtX6fexMguUNMRRkvOOJLd/XgKqHg+ODt37FOwyR0vBRC1217IbBdvFO
+	oChTo9KR6IyO2M9SKO0L47TWzYLu8D9rvOYqcnN761M+Ooh5pwxrEyyQ1g07Xz3u+ZG+iPZxfgh/+
+	MS4uMPyod12nhF4Ih7dwS/AbtX1taLWUxyBw1quRIZGSqHte84E/3pVV2oYbYX8egwIHhv0lhQ9On
+	FRmM2MAVqS34TCTO5X0ryA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:49696)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xUuhE-00000004KQU-1kce;
-	Sun, 22 Nov 2026 05:10:40 +0530
-Message-ID: <ac6df30d-f893-4eb8-984a-ecd072167c0c@roeck-us.net>
-Date: Sat, 21 Nov 2026 15:40:39 -0800
+	id 1xUwAi-00000000h5z-1bs3;
+	Sun, 22 Nov 2026 06:45:12 +0530
+Message-ID: <418b6aaa-e7ba-4e26-9d64-309ff27ac478@roeck-us.net>
+Date: Sat, 21 Nov 2026 17:15:11 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -79,11 +79,12 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: hwmon: (aquacomputer_d5next) Aquaero 5 no longer probes after
  b7743c6dbe3a
+From: Guenter Roeck <linux@roeck-us.net>
 To: Spoon3er <spoon3r73@googlemail.com>, linux-hwmon@vger.kernel.org
 Cc: Aleksa Savic <savicaleksa83@gmail.com>
 References: <3b6ce200-ae89-4629-a05b-bcdc503871d3@gmail.com>
+ <ac6df30d-f893-4eb8-984a-ecd072167c0c@roeck-us.net>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
  RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
@@ -127,7 +128,7 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <3b6ce200-ae89-4629-a05b-bcdc503871d3@gmail.com>
+In-Reply-To: <ac6df30d-f893-4eb8-984a-ecd072167c0c@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -138,67 +139,70 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xUuhE-00000004KQU-1kce
+X-Exim-ID: 1xUwAi-00000000h5z-1bs3
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:52180
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:49696
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 2
+X-Email-Count: 3
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfOGPDBvvTveAypFmrgZIYNAWGYGcqyUrgYAByNeikSJRDoBPs0UMrMk6gflKEHNVx2RK+kojGuY5UgD8Y9HnQyY9IKukbjXK08sLxWU7g/s6EZw8oDLm
- /rhNm8lsIAo7LMQGDvj/HYnH9QqlaWFYk4DPmqeAvwp5nyQTQYRIS2SoJ4yZXSQ/yPHwmPmeNyCMBuB2vuZOSTlCxnMEJXnupJ8eE/JmyyHgsRll5ggy2TVt
+X-CMAE-Envelope: MS4xfA+h7bzsRHoN4OEk5ga7rEm8tRag7XNVKnik0oOrVQogkF6PfeDjGFSnPiVl8LcGI7mmbVMp58wI1GsxhReHkxLpxXBaqLgilo8c5voKiE1/70ZN9HYG
+ 55PhOCQUEXmEXm1+YcV0euWq+Ab3JJU7CfBQctfepy+FH6nS8lQ144Sam7xZBUtyojmyv/axTh5SA30abhA+wRHftSh4ohZkIaqscIS/ogafCC453GvmHp3Z
 
-On 11/21/26 14:35, Spoon3er wrote:
-> commit b7743c6dbe3a ("hwmon: (aquacomputer_d5next) Check maxcollection when
-> probing AQUAERO devices") breaks Aquaero support here: aqc_probe() returns
-> -ENODEV, no hwmon device is registered, and the HID interface is left without
-> a driver.
+On 11/21/26 15:40, Guenter Roeck wrote:
+> On 11/21/26 14:35, Spoon3er wrote:
+>> commit b7743c6dbe3a ("hwmon: (aquacomputer_d5next) Check maxcollection when
+>> probing AQUAERO devices") breaks Aquaero support here: aqc_probe() returns
+>> -ENODEV, no hwmon device is registered, and the HID interface is left without
+>> a driver.
+>>
+>> Hardware: Aquacomputer Aquaero 5, USB 0c70:f001, bcdDevice 0.02.
+>> Kernels: 7.3.5-2-cachyos (carries the patch).
+>>
+>> Aquaero exposes three HID interfaces under the same VID/PID. Values observed
+>> in aqc_probe() after hid_parse():
+>>
+>>    keyboard/mouse        3             0x00010006               1
+>>    System Control           2             0x000c0001 1
+>>    aquaero Device           1             0xff000001          (not parsed)
+>>
+>> The "aquaero Device" interface - the one the driver has to bind to - only
+>> presents a single vendor-defined top-level collection. The new
+>> "hdev->maxcollection < 2" test therefore rejects it before the
+>> collection[1].type check is reached. kretprobe on aqc_probe() confirms the
+>> return value is -ENODEV.
+>>
+>> Before the commit the check was only "hdev->collection[1].type != 0", which
+>> happened to work: the collection array is allocated with collection_size ==
+>> 16 and zero-filled, so collection[1].type reads as 0 for the device.
+>>
+>> Proposed fix - bounds-guard the read instead of requiring a second collection:
+>>
+>> --- a/drivers/hwmon/aquacomputer_d5next.c
+>> +++ b/drivers/hwmon/aquacomputer_d5next.c
+>> @@ -2983,7 +2983,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>>            * their respective collections set to 1, while the real device has it set to 0.
+>>            */
+>> -        if (hdev->maxcollection < 2 || hdev->collection[1].type != 0) {
+>> +        if (hdev->maxcollection > 1 && hdev->collection[1].type != 0) {
+>>               ret = -ENODEV;
+>>               goto fail_and_close;
+>>           }
+>>
 > 
-> Hardware: Aquacomputer Aquaero 5, USB 0c70:f001, bcdDevice 0.02.
-> Kernels: 7.3.5-2-cachyos (carries the patch).
+> Makes sense.
 > 
-> Aquaero exposes three HID interfaces under the same VID/PID. Values observed
-> in aqc_probe() after hid_parse():
-> 
->    keyboard/mouse        3             0x00010006               1
->    System Control           2             0x000c0001 1
->    aquaero Device           1             0xff000001          (not parsed)
-> 
-> The "aquaero Device" interface - the one the driver has to bind to - only
-> presents a single vendor-defined top-level collection. The new
-> "hdev->maxcollection < 2" test therefore rejects it before the
-> collection[1].type check is reached. kretprobe on aqc_probe() confirms the
-> return value is -ENODEV.
-> 
-> Before the commit the check was only "hdev->collection[1].type != 0", which
-> happened to work: the collection array is allocated with collection_size ==
-> 16 and zero-filled, so collection[1].type reads as 0 for the device.
-> 
-> Proposed fix - bounds-guard the read instead of requiring a second collection:
-> 
-> --- a/drivers/hwmon/aquacomputer_d5next.c
-> +++ b/drivers/hwmon/aquacomputer_d5next.c
-> @@ -2983,7 +2983,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
->            * their respective collections set to 1, while the real device has it set to 0.
->            */
-> -        if (hdev->maxcollection < 2 || hdev->collection[1].type != 0) {
-> +        if (hdev->maxcollection > 1 && hdev->collection[1].type != 0) {
->               ret = -ENODEV;
->               goto fail_and_close;
->           }
-> 
-
-Makes sense.
-
-> I verified it on 7.3.5 and 6.18.64: the driver binds, hwmon "aquaero"
-> appears and flow/fan/temperature readings are correct.
-> 
-> Happy to test a formal patch if you prefer.
-> 
-If anything, I'd prefer if you would send a formal patch.
+>> I verified it on 7.3.5 and 6.18.64: the driver binds, hwmon "aquaero"
+>> appears and flow/fan/temperature readings are correct.
+>>
+>> Happy to test a formal patch if you prefer.
+>>
+> If anything, I'd prefer if you would send a formal patch.
+> Oh, never mind, I guess if you wanted to do that you would already have done
+it. I'll send a patch shortly.
 
 Guenter
 
