@@ -1,54 +1,59 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795421546;
-	b=NbXIWwsu0BoNoHIR+X535REUCzPKAODkTg63aUwqeUYFAMwsfE60d5d3Qom1AlsXrFYK
-	 RSMWJNFMGmoZ7kEvFD3T+AQfcr3+8G9GzuBF6tbbta6gvqRqGzLYJ3CWjpsTAGcweyThH
-	 I6vL2oYry20FiGcWZu6BMRpvJv67sTEPOFZG3uITJDumpuEwxPRpeo4pBJXXW3BekvzpB
-	 lzLq3xJdtN7gQR6YpQvf/DTJaILDpinMocyAZdFlgeijidxvr7jEMfQ8bXoRacRYZNsPN
-	 prU61/Okg8WG7uYtw6GiFMaghP7PBwsd7cbsQ086vvqOhZ1IBnljWSiy4Km+WUvbTVg==
+	t=1795424937;
+	b=nOkXSBaKpnlpLGGL5pCWEajBLPDNtkP7SUnAQ9rrMplJACSWpzMg2kxWrfivtWJGffFe
+	 /SaWUjdngMKT4cvvaUAywJ0O49ar88SnrDS4kCQA2ocQyxv2l6UYhdLKnCohhZLMgui5U
+	 aQOjMeXemHR4qnsFuk3oaMOmo+dmn73t/wFdeakcLO4wYhtldS92A9uFC5U7exKZEUw1g
+	 glGYIF8tImRzKi3L51PhVp35vOfABk0Q2X73hTQEw/sUZ0mCCnGySJ0NLdOu5pIRkmP+S
+	 Kh9PVWPUhZXhyPuyi9gIbXZp0YJNG1V7uuctzayrQ48S6o9VEazRpoYZSJAOGYxaplg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795421546;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=SG6UG9Tn05dTLUPGOQ6HwaG2qpN4C+RLcs8OK2mHh5E=;
-	b=faY8ausGXYVcUXz3Sy5Oi0TqM2aIYkRP4oAm42ZDWliIqwtuuPFvYvsSU87CddYLU7PU
-	 /PQOS7NnfMJd0Bli1a6Na9QxK3awHvNliHfWHjCjX5Kr1AXPTeiUXCyPtKNrGL6PdRNvz
-	 6LyS4nVeW5oRUJR/zjKYSHJUAM64ZRbNtlj+q26HfxqbJRaKJqsTXq5pKSxKSJGPdYHtM
-	 hoGKFN4DuPNQArjlFwt8HY0q1rwXZyQxU6sFN77c4Eoe0WcN3y+lmqLktGTIogHOmHbf+
-	 WIfCcXVjtW3qv5Ax9shwLKasp7mQc+kSn6PBKIV+9U/Fmpi6hl/HhoM6Wdk7P1JL1mQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795424937;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=HCIl0ZnJ2Bwec3GAhVJ2XAZj1hRoXxBmMeJmz7Rzc5M=;
+	b=MDrrKXyDD3Bbjc7b5P4J2uW1Hf1vaqrXovcDJinNYOLi6KxMOJgAidRIaXwofjug5Iu4
+	 mIzox5KQECXz/044w6XlR4nXWrN6FdSkdHsOw24qGYAf1KFmwZ63/tIpNFHOoel5NDtKl
+	 hCgPPv/3ArlMMhgYFQs1npztAcJvcRgggt5ohUal1iiU1HH8yT3zshgPOayt04RZHrNkA
+	 j3EE2hDDJn50+n6tfb87GaOt7KOswo1AU5gTsZztGn+NrjSJMVDQYl7ewyt9wcM1KI3NP
+	 UqLowfDZQ4/wajh8PxDUv9oviXIRpojM13Rfe4SVGWar23G/cyYWHUSX8IKiNFpvwHA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hVowZEgk;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nwvZSsHg;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC837606A31A;
-	Mon, 23 Nov 2026 08:12:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF0EB606A31A;
+	Mon, 23 Nov 2026 09:08:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hVowZEgk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D33571F000CA;
-	Mon, 23 Nov 2026 08:12:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nwvZSsHg
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 256721F000C0;
+	Mon, 23 Nov 2026 09:08:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795421546;
-	bh=SG6UG9Tn05dTLUPGOQ6HwaG2qpN4C+RLcs8OK2mHh5E=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=hVowZEgkdhgq+bG4dvIo+BgMqnK5mXDAxMnapIxNISHNDuPW+TwM4z3PATSX0KBCK
-	 vsu9bHAmXR5b1DPbYkVuFNd11JN06OhbUQPevr28K0j3NVQr9eU2A7CtHnbxHDocCB
-	 L7LJnEIhAP4/BYOmpQKhQtjCGrhWLm6fyfre5qRoBv2dYLKUrGf9QZ6xjdubcev2uJ
-	 7VBTmUNQGZFSnbrhDbgMWzSYFtdkpCsQnZZTHXayX2oBCf94CibuItheDMRqMxAGT1
-	 H0LGyyZKvHt6M/Y8b9DJqVp18ffwwarOPZJrYXNCqM0wfafzDjdG/eq9as134/Wu8h
-	 7tAXOdGCpmb0A==
-Message-ID: <sashiko-outbox-228887@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] msr: replace rdmsr()/wrmsr() in comments
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Juergen Gross" <jgross@suse.com>, linux-perf-users@vger.kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20261123080822.3426355-1-jgross@suse.com>
-References: <20261123080822.3426355-1-jgross@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 23 Nov 2026 08:12:25 +0000
+	s=k20260515; t=1795424937;
+	bh=HCIl0ZnJ2Bwec3GAhVJ2XAZj1hRoXxBmMeJmz7Rzc5M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=nwvZSsHgYx1vv8X6s6NsF6Oyvu9b9ARL0/7lhP0t5iTFD/TzZbAmihNBDWryR5I+c
+	 wMRUbGejIrGo/ROTPB1lbA33y6gKlv1hgIEPJtJBFnpTQMZz5zFVpP6z3c3H4Ishck
+	 FrGs9OFc9oss3DAlpMzOp/6DVojFb3JxgafkzK0oxy606G9flJlvDuaYOOWGEpyWPP
+	 0FgUuUkW2Od01O3IK3PPZ70X7suDmQCHVeZ2jjQeZz+zBBKaSAurIEs/+HDXlKklbL
+	 nYc8zSEx3gVMJoCs5BxKCSuN9jQ5LCXz3Q8FfeYo9o72oJA7VF36PXIcbzPuKbsZKn
+	 xcQsNqzVKSWKA==
+Date: Mon, 23 Nov 2026 10:08:53 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: =?utf-8?B?RGF2w63DsA==?= Steinn Geirsson <david@dsg.is>
+Cc: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>, 
+	linux-hwmon@vger.kernel.org, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org, 
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, linux-pwm@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: hwmon: adt7475: Add
+ #thermal-sensor-cells
+Message-ID: <20261123-analytic-papaya-jackdaw-aeb5db@quoll>
+References: <20261114004110.328050-1-david@dsg.is>
+ <20261114004110.328050-2-david@dsg.is>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -57,15 +62,32 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20261114004110.328050-2-david@dsg.is>
 
-> Replace all mentioning of rdmsr() and wrmsr() in comments with
-> rdmsrq() and wrmsrq(), as the former functions are no longer
-> existing.
+On Sat, Nov 14, 2026 at 12:41:07AM +0000, Dav=C3=AD=C3=B0 Steinn Geirsson w=
+rote:
+> The ADT7473, ADT7475, ADT7476 and ADT7490 measure two remote
+> temperatures and their own. Add the "#thermal-sensor-cells" property so
+> that thermal zones can use these as sensors. Its single cell selects the
+> temperature channel: 0 for Remote 1, 1 for Local and 2 for Remote 2.
 >=20
-> Signed-off-by: Juergen Gross <jgross@suse.com>
+> Signed-off-by: Dav=C3=AD=C3=B0 Steinn Geirsson <david@dsg.is>
+> ---
+> This patch was written with Claude Code, using the models Claude
+> Opus 5.5 and Claude Fable 5.2. They wrote the code and the initial
+> commit message draft, which I cleaned up. I directed the design,
+> reviewed the result, compared against the datasheet as far as I
+> could, and ran tests including on actual hardware.
+>=20
+>  .../devicetree/bindings/hwmon/adt7475.yaml       | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
 
-Sashiko has reviewed this patch and found no issues.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261123080822.3426=
-355-1-jgross@suse.com?part=3D1
+Best regards,
+Krzysztof
+
