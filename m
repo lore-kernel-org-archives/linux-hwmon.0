@@ -1,110 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.168.131
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795467385;
-	b=QkIDrzfAT+P/HnnS6fmXklwf3ltwPhMEcTjdu0QF0HoZRFaHcns1aMG+924dgStEmR5u
-	 zi6y2h7icFeAvIRTgsTJ56FVfTWyVJZ9+/dBQbl7YrlPiCxTbV43x9+ZAVDvydJrLYhlh
-	 hE+uhCdsPaatX02MP7tW4QG0I8qfwUK6Qk2e0BxTduw6CvNfNjIW05WdjSKv3Y6CYd3ib
-	 +dMVWBUeZKSmwxy4llCDh1Pr1UdnoOnVdyAndFGgNXwpzxq+FcDm6Vz8Hb5g4jDQjf+v+
-	 bqJpHeXkkQBIhc/CQGMw5eBAWKBfd9/FKThiuhfPljXEms82D0nsHjtKuYOeNeWAf5w==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795467385;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:X-Received:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
-	 In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-GUID:X-Authority-Analysis:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=HVZcSjFH4FJeUfEsBwsOf+lXeSQFSzxGuq+r24Kf3NI=;
-	b=bzLWrw7WwOu+JqOl2YXYII7XlJFW4JVNjz/PFayzX0ZikHSt6xCaZT005BXxoGRvNrcG
-	 wlwn4MKGhExm9s8q8KHJvtGGGsvJ9l9oNOpbLopNB4+qTA3ncqDr7jYjxD+TXNuxMXfps
-	 hfzCqBiPwYDFohGms/Ip4BZGd4FNhyxSXUvRIAEWzG+0KgWImel/+o2v0oIIj0zEchdzu
-	 TlPRVDLm/YV/pGLb/PhuOqN2dkRhvZedNu5swI1cONIWx9EOwgmTYZ7hWTCvAnKhENsek
-	 XUq52IixvY9TaYh7fXxltSHjQHeIDa5kLEfS5koYPF7jT4eTFxx42wDvsGrSNqA3TAg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=oss.qualcomm.com;
-	spf=pass smtp.mailfrom=oss.qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=H2z0940B;
-	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=Olu07rpe;
-	arc=none smtp.remote-ip=205.220.168.131
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.41
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795467932;
+	b=HCdc+Ra2N3yCELtCfj6egssO2HOfV7g5JpYt+dnqj6yOR1gpQSMi3SoC21FmWppKXQiz
+	 sj1CVwbQUk5Wp1X/afgunHk6ONNafAqngh4j5ZlW7CoWYCZuM3hK9YrUaiCrbryiMUQnA
+	 8zOIcBgKBEHlwaFiHVTromwC4+pHm7NTa8zYb3M3eQ5VaiQ3o5GJZNTTNsLtiVx+M1ZI9
+	 LtqJIWuaoAjSnKNTF2QkGyjc0xJrTzYPRK/a3lPJVU0pqgVo8Y7JiN0SUIeFiEJU+mzuy
+	 eF5YlRqywq6vls0PQr3Sb65lxR25Hy5qqGx0g1kW/yOgnxraOOYxjbPLT2Xn0LXfy9w==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795467932;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=VtSta76K0DhmEm+a+Fx+3wCOoe6ARhPuKaUdQkwi8Y8=;
+	b=R1NVstQ4mJDZ1pD3Z1KLDxLxpSaoqR4XfSmXconZvQYLernPJux2BxP2NpwmpDMdAC43
+	 z2zbETdd6+qQshdVUakByzYr7qCiXnJH5Gp0ZbFksVVpVYgZMDockcmIoZxiSICgocKn2
+	 OST8H822cPHo+ha/8n2V+tzzrzkqst5JxdZ16SkGf5hRmajS2njPwXfYr96TDcs183KWT
+	 dHSmbGgKqI8bfCcxWeXX4ovzMDPWdQLrZWWfLXd0rp2dPYai7NZm558uT2RU21MnDslfF
+	 hDRdTsc8Hw9lGWcWchT9GaXqRiC+Mm8q5aSXzlSScR9Ri3Jb55mtwu5zBp7N/3U0pJA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zGGalddF;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.41
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39816606A326
-	for <linux-hwmon@vger.kernel.org>; Mon, 23 Nov 2026 20:56:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 39816606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66268606A32A
+	for <linux-hwmon@vger.kernel.org>; Mon, 23 Nov 2026 21:05:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 66268606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=H2z0940B;
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=Olu07rpe
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6ANJufcr026215
-	for <linux-hwmon@vger.kernel.org>; Mon, 23 Nov 2026 20:56:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	HVZcSjFH4FJeUfEsBwsOf+lXeSQFSzxGuq+r24Kf3NI=; b=H2z0940Br/B6IYM5
-	v050grSbNasErG8gRzb/FuLQCmYqwrHcY7TL6CmETJ3DOvBxKlip3EH3Qqqd4Xmi
-	waVlwJpkhabehJ00n0ZtXV+qS5WtOjhWhF/MaR6ySBkRI3aLCmvHo6pKJNtsieqL
-	e/2it7vqG5XlXdyboJ8N9rmvxMxFoFkKMRgR7bk73Z36d0TpHMALUCD7syoZZO96
-	L69IQ6SpldT5XSP0828uLmaNCwpsp4bQODJcCAc7vm0ZZ9wKvJES7qbp/8fTQmY8
-	tew7zVMnodslqlb+AFcCaWEKATXT3yDcWf0CUA3ChfhBD8wHuscNSM8Gk8ZkFnpL
-	HIEk4g==
-Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4j4fyd3fhn-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-hwmon@vger.kernel.org>; Mon, 23 Nov 2026 20:56:24 +0000 (GMT)
-Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-3869865a304so2098317eec.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 23 Nov 2026 12:56:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zGGalddF
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3ada4c06b7bso1991537a91.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 23 Nov 2026 13:05:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795467931; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Y/P/xb0XtQEnUAjsbQYTWQTzaUeB86iEZY8Gzkdba2Ez81V+63pQlG7XAGTfE2/FLm
+         rUwmj6O6COd+TGfv4IT+q97gzgRGHGJFmEK3l140hjFgquS3TkCsDWk/Yzc5r4v+2iJE
+         pkbZKOK/r/k8D1PMUuLCJF/MV80MU0zbYtgJuQ9VoenGtPynKjrYKUkpu2i+dJ2b4PeJ
+         P939AClgFngLa7wUumVIrO4I7/lpqxyCt4MS7O8jxraLhVY7mgqCP3JOa3FJa1Y5MlIV
+         UeyR9vHRA2xja50tq1a9zBNVCjaLeKTr1h3cWVrcbbbV/uTib72WO8cASTdNEUVKk3Of
+         Epjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=VtSta76K0DhmEm+a+Fx+3wCOoe6ARhPuKaUdQkwi8Y8=;
+        fh=87FSxxMM38dH4zwPaRcV/2g6JPqYY7DlKHGO28EQOGw=;
+        b=EfZorL4K3bYh7BlyzXeBcRFjq9pjJUDFDeRPbKK+bn8oF+s2eFmYUa1o7qj+Gx6QdM
+         54d5fdWeDyiHRysWQ/A0v7aAsCF+TYQ6LtFObOXX1ote+1FhonFpsZCxIsul3htEcyNA
+         igBmi0/tJrS8XVJeIDuhNDhHw6DWt7w4zNxXGEmtteAfROavrQylAkN0RTX7ReKhY/Mq
+         4ODvE/ynAAdKdMF3sFNzM/B8dS4HVoCENK33p5y9MzYgM91el+NQhaGdaqyAUisNy/qf
+         QpjkiO3jExERDo++E9Rf2tktuWB8yYIY0MZsPYkg6V6CqTR6VtuMaUqW/phDJWVjXDyF
+         Neiw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1795467383; x=1796072183; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=HVZcSjFH4FJeUfEsBwsOf+lXeSQFSzxGuq+r24Kf3NI=;
-        b=Olu07rpeqo3Hu1bcDlZO9+luO8T2OwFWlh2HzFjcEkHEloz3QFb34g8OUJVvKzR1tN
-         3bG1b2qsESxtHGiKS0wVjiO5La1l0TYrtgZyIHkRwagSipoRGI9Mmtcz2ngfdKO2Gg3U
-         85yhqeR4JN557Ueq8vX1wgCNmxeNbrFP0/RJNr2g+YTHZxFu+IxKoWVX/6SUAn4W0DaD
-         CYXskwS95nTLLPdHZjLfSWK2wxUEK11pGdzzgCbXBA9ozEMwMpvVPbotJkrl/x6kB+Nl
-         J/o1+T/Uy79oU9pL0h/vQ4vkxd0TMMoxoNc6VwRQ/blo97/YCxfs890mJB3cLQLieeJR
-         UvRw==
+        d=gmail.com; s=20260707; t=1795467931; x=1796072731; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=VtSta76K0DhmEm+a+Fx+3wCOoe6ARhPuKaUdQkwi8Y8=;
+        b=zGGalddFvYP7BCevKmOSQIJR0BADVJZWfKfoCqHYdUCKUn7eO7sv/DcYTsqsAHNFt9
+         oIM7jtIFQ4TutDk8AvY87WO5fMbo8nsnkNJZmnrxJrVPulsxru1XJ4h11yLAS4V1/SI7
+         93YYrOiYE1uENsPTMYacIYdTeCQjy8hM5ntNhFjroGihGWvSDLoeVnJTaPligx8LxQam
+         tkBL6PMk3tpnh9pRnIrAN78diJDZybSsCdlyCLoqcz9cukcJm3c4S8A5uBrceMe3nO6S
+         RGZI4kvCf+ZHMxzE0azXEQOPZ1Ys7uri6rAtPHlM4GQb0+P8BhhK6cNLwYS5qvwlvqEi
+         k2Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795467383; x=1796072183;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
+        d=1e100.net; s=20260707; t=1795467931; x=1796072731;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=HVZcSjFH4FJeUfEsBwsOf+lXeSQFSzxGuq+r24Kf3NI=;
-        b=JhLqbWaunuKNXDfrBzX8LkRDBcKxZulJMrPfQAvQCFuHfGevfMFBHXSTmGew++r6In
-         Y325NqcQTA+NYJH6RQN2WDHUZXHa0YqKrSP5+RH92JCAUKnRcjXOZ/CNub8F81cLuYot
-         qwKfQSSHSx9FcGI41dPhb5v3F4t+x+2ussSpvA0p7Gk3BYNw9lkrYK1gJrbq29yYFpRx
-         KZRiUvR/Gi08elEG8c8WI3ijeUb6MIxS74AtXV5A1mThsvxU/HWtg/CNaMhBYeKWCEoi
-         acyYKeVr7ZpKSZz/hZgKXTjwZAX7qkWONCeG5mqks1ytuTZVnOduCZ3vRoS8wP+JH4v8
-         swyQ==
-X-Gm-Message-State: APuU4Z85HWYsmJkWGJ53ENoCNYfhfJmTeh7q3pt4v0v9zKLgvE0pc+xV
-	+xJYoNdIpA8Fb/QMg70abo8T3S3E9FFmgUjisXvBZFNoqnIh9Fd8FmodGmOpXJ5gShktm+MmP3W
-	+J5Otu5JXvIUce5YT4Rr56fUgPB6iganbDzIhyyNZr2fDqaYlfFQfLKQU0oIclLvIYw==
-X-Gm-Gg: AZFdTZc3RQoVHeGEGkSCZkbxDxy316Yf2CV+CD7oTrSYYG1s5jI+AUgJx83skRs9TDQ
-	dwWcprrVk0wU4JlzpjwFftm7JGTHDscljitVg9gglGfWvMYRWugXvGGYGpmu+Ed5apM/VgTAjom
-	J2CabCxEDdeM0egMHx+9ix54Wfwct0uyViYTX+pSLayWtDpMGIokAFS8rdyhRp09sSVOPFXw1lP
-	OsMWEk9uyYUg4b9J8ss49dIHVGV7h6FasGq1uw/gTylcHkY9ZdRlfVTb1fqEq+TAhskGwhH1ikh
-	VbyLS8ppIhzSIg+34ci4dxfTlMV9FNbkvZhlHyQkA9TYshi0/YZVxiuG+2MRKyU+Jw9+p2Hlg9W
-	XGdd0SpEn/SHz9NLkyX43XTyJ2n6zfZHpCriju8ZBdn4URbq2LdufA59rE4gv6MHfMZ9qsrkV9B
-	zY/vU3EAN+
-X-Received: by 2002:a05:693c:41d1:10b0:386:9d4b:9403 with SMTP id 5a478bee46e88-3869d4b9723mr8818067eec.19.1795467383402;
-        Mon, 23 Nov 2026 12:56:23 -0800 (PST)
-X-Received: by 2002:a05:693c:41d1:10b0:386:9d4b:9403 with SMTP id 5a478bee46e88-3869d4b9723mr8818038eec.19.1795467382818;
-        Mon, 23 Nov 2026 12:56:22 -0800 (PST)
-Received: from hu-manafm-hyd.qualcomm.com ([202.46.23.25])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-38567cafec4sm44209077eec.26.2026.11.23.12.56.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2026 12:56:22 -0800 (PST)
-From: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
-Date: Tue, 24 Nov 2026 02:24:52 +0530
-Subject: [PATCH v5 12/12] arm64: dts: qcom: smb2370: Enable BCL sensor node
+        bh=VtSta76K0DhmEm+a+Fx+3wCOoe6ARhPuKaUdQkwi8Y8=;
+        b=Bq9NYNDoW40FzaExS9Rx6LkzKjlTOT6WsRKW537PYm+kHH+MpVvO7bRRjoeT4+NT/X
+         uF6/x0Rixh62ho7O/hzWI6KwOi+XahHxLjxaAJlb7b4jjnSjddTs/0WA9EgXSDd06zZo
+         hRFlazlW38Fx0ULMpYbA6wRPm8eTaqTmZ9RTQQuAsKE5HU9ddcgOeRVHul7CrSqsNAqG
+         vcYgjr6Oy+/+7uXqFnM7Hn7GaI6ctlJcoY4vd7PPJ8HWjdzG7a6MKNQ9EAC9gzWipqid
+         xo0uHuTi7rMjJ3HvTRcqbkjlnkh4g28iax90n4IM+eDrLZq3wdVfeyV4KB5qWT1Tvo6+
+         9ANQ==
+X-Forwarded-Encrypted: i=1; AL+hErF2QkjRp5IkT/8PZ8Y/SuayTrC3XrFf2OW8Q1KlUWMxPElq0c9P9l+sfSzLW0IF5KxbsTOZwWYiPesHAg==@vger.kernel.org
+X-Gm-Message-State: APuU4Z/iaNXkbdgs8gIrLt2DfnQvWMk/soAwARG61Rf53Bo1ybz4sfjE
+	9MZHDh/yTbp19G5pHkULRV5N+smfZ37rH25jNbVPpa3W8p3NYOGGJcxYtDrLuig4+77CvMN2VuR
+	DM+1uM4A0KUy3WOojmO4nz55iB4qjG7w=
+X-Gm-Gg: AZFdTZc0GJcs1ERPn8tpUlqc6u5FhC57oAjipqvPSR9Sr/7rmyLdItOygQtPrvh4H5c
+	t20CanlZXocCifUEim0PzCG8rFQz1fiTtyvvtoTvPxlgFGf54PwlqRPzRPihyJCqC9e4e5EwHO1
+	dLj5OrFc0BNNU+TfOxX3pcmefchCWRCMieM+cZ8+TUls1TD8OSQ3shVfGp3FOZQ48NIUSwc7mby
+	SAUo8dQL2Zs9PnWnJMrq6VJ7ryf5zUPnKP/mvH5Mjlx8vz0fvwXbn1Q97bSePunHA8XaUtUQBy8
+	3bsiZRN+vC+qls8SCvFRJDLuuuMC4BL9nZmiW5VocfrKdWfkJNEiedSY35buQgqCwbrvmjWlxN3
+	Y/kIZEh2qeOTZnSw2UMWXtkXXQuE9Rvz3LiHusKIrx+iQuINsuMom
+X-Received: by 2002:a17:90b:2b50:b0:3b0:9a1b:b708 with SMTP id
+ 98e67ed59e1d1-3b41c98245cmr11402649a91.62.1795467930592; Mon, 23 Nov 2026
+ 13:05:30 -0800 (PST)
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -114,95 +104,149 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261124-qcom-bcl-hwmon-v5-12-747d5383d538@oss.qualcomm.com>
-References: <20261124-qcom-bcl-hwmon-v5-0-747d5383d538@oss.qualcomm.com>
-In-Reply-To: <20261124-qcom-bcl-hwmon-v5-0-747d5383d538@oss.qualcomm.com>
-To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>,
-        Abel Vesa <abelvesa@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mfd@lists.linux.dev, linux-doc@vger.kernel.org,
-        Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>,
-        Abel Vesa <abel.vesa@oss.qualcomm.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795467299; l=1198;
- i=manaf.pallikunhi@oss.qualcomm.com; s=20260206; h=from:subject:message-id;
- bh=vJQuhX/oBX172FGrYO7vTJtYeipTicxxvpxXEYh0ojs=;
- b=c1lfg4TaQF9XXCtiV+bWHYb+IQQy3xyZxsYuABAYVnTRz7kwnthdKHQVzbWpLFWVTQ0yUfG/o
- wCE+6d7SD4uDvya0APz5YCTuTN4NDHptzSZdB82hrfdPR3sFiuqSBT7
-X-Developer-Key: i=manaf.pallikunhi@oss.qualcomm.com; a=ed25519;
- pk=oZ3x9jh+FDyPwxHmCbyzEMQHMzKqrH6hUbbL7dEBe2g=
-X-Proofpoint-ORIG-GUID: zPoKKLT0Hf4QQDCX_vHkabSrVoTqT3Oq
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTIzMDA4MyBTYWx0ZWRfX5frLeVj/lC63
- 30oJ+X0Xz6u79yJ/OhBQ/sjLkTxtMrvjg/kveDG2q/1rNM/m+KLlge9Ac8A6/FYjkTlhiVelC9Z
- 8q+LrMY5/ZSS1eftX+vZ0+DURp8I3Habb3kik35IqMU0hgBetBDp1zmd8FshuidBxSIjLGTKaSs
- FqMVCIGtJzH8fGszvyUL0luUJXlY0GV85rh9a2j0Ox8MQGyTmmn/uekmpJh8/2ieGX4iapirNkT
- O+/sTjtxzK9P9OkoZG4UUQwT9tZ5OZdapxWef08hxdH4AZz9tIIETTGPs3O5QWEIDIDSKVH7N+z
- 9jKAB6lRClz5HFAGpRueHZhguAGAt7rdcizJrb3UORa2FzP24tfIZZMFMIHrwJrhVhrgCjngKHB
- GlPqhUJEfdXERN2Z1wNRcCCPk3j88rnl4E1NH3jX1U8Aqxg86dd2sHd608UhbqPgdN4L7HGnr67
- HxM/3rzWjQ2hhxOMdQg==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTIzMDA4MyBTYWx0ZWRfX/OqLA9hrlnlp
- Pzny3UQC0184934pfQzObYMTZRIaaP12ZBX+dTYV29+lcC5IgyUXycEwbITuB5C9EDHWzpVC6o3
- SAIaZdcyfoT6YW/nyBv6xVL7X+wwdlk=
-X-Proofpoint-GUID: zPoKKLT0Hf4QQDCX_vHkabSrVoTqT3Oq
-X-Authority-Analysis: v=2.4 cv=Aol7T+9P c=1 sm=1 tr=0 ts=6b04a878 cx=c_pps
- a=PfFC4Oe2JQzmKTvty2cRDw==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22
- a=EUspDBNiAAAA:8 a=Mdvtvp0LKpy3kcB40AAA:9 a=QEXdDO2ut3YA:10
- a=6Ab_bkdmUrQuMsNx7PHu:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-23_05,2026-11-23_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 suspectscore=0 phishscore=0 adultscore=0 lowpriorityscore=0
- spamscore=0 bulkscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611230083
+References: <20261112205228.42630-1-pmazzini@gmail.com> <20261112205228.42630-2-pmazzini@gmail.com>
+ <9bd10826-7684-462a-808b-91b72c9d5689@roeck-us.net> <awSmYnfbVnjnSwNB@lizhi-Precision-Tower-5810>
+In-Reply-To: <awSmYnfbVnjnSwNB@lizhi-Precision-Tower-5810>
+From: Pablo Mazzini <pmazzini@gmail.com>
+Date: Mon, 23 Nov 2026 21:04:47 +0000
+X-Gm-Features: Aa3M54rQKL8p1RMTDp94rq8cRMTWaP5id1ZTML445APcrBI-bARIJu24uS0qbcg
+Message-ID: <CAAxh=juHWgAnDTBiu0oM7TEpGxMV7LoK9wnHqbfXPGPpJx0VKg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] hwmon: sy7636a: read the temperature only while
+ the rails are on
+To: Frank Li <Frank.li@oss.nxp.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Alistair Francis <alistair@alistair23.me>, 
+	Andreas Kemnade <andreas@kemnade.info>, Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add Battery Current Limiting (BCL) hardware monitor node for smb2370
-PMIC. The BCL monitors battery voltage and current, providing hardware
-interrupts when configurable thresholds are violated.
+On Mon, Nov 23, 2026 at 03:47:30PM -0500, Frank Li wrote:
+> Do you meand depend on CONFIG_MFD_SY7636A=3Dy
 
-Reviewed-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
-Signed-off-by: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
----
- arch/arm64/boot/dts/qcom/smb2370.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Hi Frank,
 
-diff --git a/arch/arm64/boot/dts/qcom/smb2370.dtsi b/arch/arm64/boot/dts/qcom/smb2370.dtsi
-index 1e02578e4ee3..4809b3d8cfe2 100644
---- a/arch/arm64/boot/dts/qcom/smb2370.dtsi
-+++ b/arch/arm64/boot/dts/qcom/smb2370.dtsi
-@@ -10,6 +10,17 @@ smb2370_j_e2: pmic@9 {
- 		#address-cells = <1>;
- 		#size-cells = <0>;
- 
-+		sensor@4700 {
-+			compatible = "qcom,smb2370-bcl";
-+			reg = <0x4700>;
-+			interrupts = <0x9 0x47 0x0 IRQ_TYPE_EDGE_RISING>,
-+				     <0x9 0x47 0x1 IRQ_TYPE_EDGE_RISING>,
-+				     <0x9 0x47 0x2 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "max-min",
-+					  "critical",
-+					  "emergency";
-+		};
-+
- 		smb2370_j_e2_eusb2_repeater: phy@fd00 {
- 			compatible = "qcom,smb2370-eusb2-repeater";
- 			reg = <0xfd00>;
+2/2 depends on 5f828ac25ef9 ("regulator: sy7636a: bind to the I2C
+device directly") in Mark's regulator for-7.5, which removes
+MFD_SY7636A.
 
--- 
-2.43.0
+Thanks,
+Pablo
 
+On Mon, Nov 23, 2026 at 8:47=E2=80=AFPM Frank Li <Frank.li@oss.nxp.com> wro=
+te:
+>
+> On Sat, Nov 14, 2026 at 08:33:47AM -0800, Guenter Roeck wrote:
+> > On Thu, Nov 12, 2026 at 08:52:27PM +0000, Pablo Mazzini wrote:
+> > > The driver enables VCOM at probe, which keeps the panel's high voltag=
+e
+> > > rails on for good. Read the temperature only while the rails are on, =
+when
+> > > the chip samples it, and return -ENODATA otherwise. Read power good w=
+ith
+> > > it in one transfer, so the value can not be from before the first sam=
+ple
+> > > or after the rails went off.
+> > >
+> > > Signed-off-by: Pablo Mazzini <pmazzini@gmail.com>
+> >
+> > This patch depends on the rest of the patch series, so I can not apply =
+it
+> > to a hwmon branch. Assuming it will be applied to some other branch,
+>
+> Guenter:
+>
+> Do you meand depend on CONFIG_MFD_SY7636A=3Dy
+> https://lore.kernel.org/all/20261112205228.42630-3-pmazzini@gmail.com/
+>
+> Frank
+>
+> >
+> > Acked-by: Guenter Roeck <linux@roeck-us.net>
+> >
+> > Thanks,
+> > Guenter
+> >
+> > > ---
+> > >  drivers/hwmon/sy7636a-hwmon.c | 35 ++++++++++++++++++++++++---------=
+--
+> > >  1 file changed, 24 insertions(+), 11 deletions(-)
+> > >
+> > > diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hw=
+mon.c
+> > > index a0d0b4119bb3..a8bfbf1716a1 100644
+> > > --- a/drivers/hwmon/sy7636a-hwmon.c
+> > > +++ b/drivers/hwmon/sy7636a-hwmon.c
+> > > @@ -9,26 +9,43 @@
+> > >   */
+> > >
+> > >  #include <linux/auxiliary_bus.h>
+> > > +#include <linux/bits.h>
+> > >  #include <linux/err.h>
+> > >  #include <linux/hwmon.h>
+> > >  #include <linux/module.h>
+> > >  #include <linux/regmap.h>
+> > > -#include <linux/regulator/machine.h>
+> > >
+> > > -#define SY7636A_REG_TERMISTOR_READOUT      0x08
+> > > +#define SY7636A_REG_FAULT_FLAG             0x07
+> > > +#define SY7636A_FAULT_FLAG_PG              BIT(0)
+> > >
+> > >  static int sy7636a_read(struct device *dev, enum hwmon_sensor_types =
+type,
+> > >                     u32 attr, int channel, long *temp)
+> > >  {
+> > >     struct regmap *regmap =3D dev_get_drvdata(dev);
+> > > -   int ret, reg_val;
+> > > -
+> > > -   ret =3D regmap_read(regmap,
+> > > -                     SY7636A_REG_TERMISTOR_READOUT, &reg_val);
+> > > +   u8 buf[2];
+> > > +   int ret;
+> > > +
+> > > +   /*
+> > > +    * The thermistor is sampled while ON_OFF is set, but the first s=
+ample
+> > > +    * is only ready after the ADC sampling and conversion time (ADC_=
+SPL +
+> > > +    * ADC_DEL in the datasheet); until then it holds its reset value=
+, 0.
+> > > +    * PG is only set once all rails are up, after the first sample, =
+so
+> > > +    * read it in the same transfer and report the temperature only w=
+hile
+> > > +    * it is set.
+> > > +    *
+> > > +    * With ON_OFF set but PG low (rails still ramping up, or a fault=
+), no
+> > > +    * temperature is reported even if one may be available. That is
+> > > +    * accepted: the display driver reads the temperature only while =
+it
+> > > +    * holds the rails on, after power good.
+> > > +    */
+> > > +   ret =3D regmap_bulk_read(regmap, SY7636A_REG_FAULT_FLAG, buf, siz=
+eof(buf));
+> > >     if (ret)
+> > >             return ret;
+> > >
+> > > -   *temp =3D reg_val * 1000;
+> > > +   if (!(buf[0] & SY7636A_FAULT_FLAG_PG))
+> > > +           return -ENODATA;
+> > > +
+> > > +   *temp =3D (s8)buf[1] * 1000;
+> > >
+> > >     return 0;
+> > >  }
+> > > @@ -72,10 +89,6 @@ static int sy7636a_sensor_probe(struct auxiliary_d=
+evice *adev,
+> > >     if (!regmap)
+> > >             return -ENODEV;
+> > >
+> > > -   err =3D devm_regulator_get_enable(&adev->dev, "vcom");
+> > > -   if (err)
+> > > -           return err;
+> > > -
+> > >     hwmon_dev =3D devm_hwmon_device_register_with_info(&adev->dev,
+> > >                                                      "sy7636a_tempera=
+ture", regmap,
+> > >                                                      &sy7636a_chip_in=
+fo, NULL);
