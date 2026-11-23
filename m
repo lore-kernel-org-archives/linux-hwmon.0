@@ -1,50 +1,50 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=188.165.52.203
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=178.32.98.231
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1795431528;
-	b=hTHnNNTxnvz5ePeyEpzhSXI7MHutO+qaCQej6JyuXa+brrby+GW9mv4IfHTUw0ao2szO
-	 HE1QHc7/z7FXdtz1NpmvWpKu1CGh2jv0fQnDyJn9TYkMkbJcFWh+U+84GWj/1WmB4Knjk
-	 IwXbdKZx+X1OSaOVKp1931pDFlm8DKUnY6ABbMYdeys5jTX5OBamXAiUSlXy44H96KKpS
-	 mlF2ISylahFRAF1gfJq3EyfQQXmS0EGSbTYlXo+1U83UbBThu8FKGwDfsrEURg0sP69Z1
-	 G3hd4hyvoj7BMzihczlfvlCvnpDUboWTibswtQ6c+JcxeWMZlhoHxjmQ5XDgsdzFNDg==
+	b=T3cAn5ZmWoL3MRkGU/CcVUPSWyMF25XSXgng8TPMVJ9R02BaY4WaImKiPTssQFPbOwIA
+	 z97MMnkqHEcl8aN0PcOezxr8zlkPWfbzHsVkX2h82wPsYEPDyVwdn3ANc90qKULoOGEWn
+	 1x43OoDgLNARBtSfwjaEKetcC7iPWXPVV1N+sKMNEHwLgZ1TWHBXF8R3Udv2d4ctGN2ZX
+	 4PJcz8ZC3HR8JQRTWWMi37LMp8wyHQDVd7dJX0BTN8aSFkW4wPP9DUzCOuB88SRmSJilS
+	 Ue7rE3ftjRzHYRqSt78c3HGg0zDfpkffO3SubIJo80lp6oKJ1lL7TlquTv6cDs5R4HQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1795431528;
 	h=DMARC-Filter:Received:Received:Received:X-OVh-ClientIp:From:To:Cc:
 	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Type:Content-Transfer-Encoding:x-ovh-tracer-id:X-VR-SPAMSTATE:
 	 X-VR-SPAMSCORE:X-VR-SPAMCAUSE:DKIM-Signature;
-	bh=r89bRA8yzwUIEW3HEm2+uSrVCpmeaUYdaQjH7diumMY=;
-	b=tOjbVYjxBTgFx5zG7xRMyQ4IpyRgYZmCSrrk0CJ6waftJ6xF8BYsted49JQlI7GQofar
-	 nC7s1nAvmX1i4nROCFtevRiG9gz+7qC/jeCoUvdEVxfci9onutYxmQBdRGL0Mt/ob2Gzq
-	 ZcIWWmL4iDAF1pPw5BUThzvpGmBug5gQtPqbn9cq1rXb/Q9682FhAxIXVKSla3lGVYWOh
-	 O+217EP3j/MHnquvJMy+oObR4hi3jBectkWaV8Y3auer+vDQdM/sd4ekMKLT0qwkRB/zl
-	 fUvQU5EwE9uneZmN1qlQ/mAPhyH4ZWThtOc6VzAvAU7uLYh25ozcuSYC2bqYc+1AOXg==
+	bh=KaTTHc3w8R6rF7gqqWlw2mFxpaUpNPS0l+rvQI9X3UA=;
+	b=RsJWh3WZNPrV5CI6+iHhC54mfPSH6HFLIK75pCWl9a8FziFKbL36JqUWgZHqs6tI4TPV
+	 hGZ0jEWrvvC1eRxT/yjy/vrAUgM3SoOcLq9f+7aGMsvgFNdHd2b5F1a3WDuOmuppaEPoE
+	 2hVoate7we0hHpwQ7hFUvP01ZVD07bQs+hbaLotmtU9FIA4323HGLdU0EtiWr6/H7pbwC
+	 50IFm0D+SdXeRj88ydsdgEsNV+5iz+x+lo3pNelFLAlhF8pKVuRUXKwu27lSFMbYomjAN
+	 OinTz1YmLs76jmsquUiuTaUsg/gDwqMEN6JkXhWdQYVMn6dxPF24r5+jynXF7XrNgbQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=3mdeb.com;
 	spf=pass smtp.mailfrom=3mdeb.com;
-	dkim=pass header.d=3mdeb.com header.i=@3mdeb.com header.a=rsa-sha256 header.s=ovhmo3617313-selector1 header.b=iV5+FCS0;
-	arc=none smtp.remote-ip=188.165.52.203
-Received: from 3.mo576.mail-out.ovh.net (3.mo576.mail-out.ovh.net [188.165.52.203])
+	dkim=pass header.d=3mdeb.com header.i=@3mdeb.com header.a=rsa-sha256 header.s=ovhmo3617313-selector1 header.b="O/H1LJ0j";
+	arc=none smtp.remote-ip=178.32.98.231
+Received: from 19.mo561.mail-out.ovh.net (19.mo561.mail-out.ovh.net [178.32.98.231])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02C42606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C3C606A321
 	for <linux-hwmon@vger.kernel.org>; Mon, 23 Nov 2026 10:58:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 02C42606A32A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D5C3C606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3mdeb.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=3mdeb.com header.i=@3mdeb.com header.a=rsa-sha256 header.s=ovhmo3617313-selector1 header.b=iV5+FCS0
-Received: from director3.ghost.mail-out.ovh.net (unknown [10.110.0.202])
-	by mo576.mail-out.ovh.net (Postfix) with ESMTP id 4jY2xD41WTz5xZq
+	dkim=pass (2048-bit key, unprotected) header.d=3mdeb.com header.i=@3mdeb.com header.a=rsa-sha256 header.s=ovhmo3617313-selector1 header.b=O/H1LJ0j
+Received: from director3.ghost.mail-out.ovh.net (unknown [10.110.37.246])
+	by mo561.mail-out.ovh.net (Postfix) with ESMTP id 4jY2xD0Smrz5yYr
 	for <linux-hwmon@vger.kernel.org>; Mon, 23 Nov 2026 10:58:40 +0000 (UTC)
 Received: from ghost-submission-7ccd8bbbb6-n2gw4 (unknown [10.110.168.167])
-	by director3.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 21D2CC0121;
-	Mon, 23 Nov 2026 10:58:40 +0000 (UTC)
+	by director3.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 88CE7C0144;
+	Mon, 23 Nov 2026 10:58:39 +0000 (UTC)
 Received: from 3mdeb.com ([37.59.142.97])
 	by ghost-submission-7ccd8bbbb6-n2gw4 with ESMTPSA
-	id ObWlFF4cBGvNugsAptLdCg:T3
-	(envelope-from <filip.golas@3mdeb.com>); Mon, 23 Nov 2026 10:58:40 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-97G002608931e3-f8f6-4b97-a48c-e908ac0eeee2,
+	id ObWlFF4cBGvNugsAptLdCg:T2
+	(envelope-from <filip.golas@3mdeb.com>); Mon, 23 Nov 2026 10:58:39 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-97G002f90511b7-fe43-4655-9d7e-26a1e09181b2,
                     0A512C1CF0928FB71961449F2A077E304137B0E5) smtp.auth=filip.golas@3mdeb.com
 X-OVh-ClientIp:213.192.77.249
 From: =?UTF-8?q?Filip=20Go=C5=82a=C5=9B?= <filip.golas@3mdeb.com>
@@ -56,9 +56,9 @@ Cc: platform-driver-x86@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Guenter Roeck <linux@roeck-us.net>,
 	=?UTF-8?q?Filip=20Go=C5=82a=C5=9B?= <filip.golas@3mdeb.com>
-Subject: [PATCH v2 2/3] platform/x86: dasharo-acpi: Add fan mode and PWM write support
-Date: Mon, 23 Nov 2026 11:58:20 +0100
-Message-ID: <20261123105821.305527-3-filip.golas@3mdeb.com>
+Subject: [PATCH v2 1/3] platform/x86: dasharo-acpi: Extract dasharo_call() from dasharo_read_channel()
+Date: Mon, 23 Nov 2026 11:58:19 +0100
+Message-ID: <20261123105821.305527-2-filip.golas@3mdeb.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261123105821.305527-1-filip.golas@3mdeb.com>
 References: <20261123105821.305527-1-filip.golas@3mdeb.com>
@@ -73,255 +73,100 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-x-ovh-tracer-id: 2044634232477118447
+x-ovh-tracer-id: 2044634231904923631
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: dmFkZTErAGWDIhDAmmUw5Dcw5mhi5B/4PFjYzh+FFWuHb4zQf5HTh4PWkjVfNbXyuhtFva7PORpTwu40kxu+I5Lb0yQmC6vrYcK7aq2p4pzn8s7P9wOSITwql5MSfAfKz8G46Q0kR9K4JlN+9f693ty0G4JU5FGasqyl0V0RwNLsfFK03KYDaH9PKxIlO+Lpd6NBwIiJx10ej/JdcRw9PexAyk7Vi1UC061pBqW6s/ZfL1m+MnI94eZR7QDzB1e2vYbUBHy1KMIswZ4Qny7ixpPQIcMY8QSKl0MtCfAUwNUmiNnwSIsoNo7zjGqtWT7HXSpsI88QrhrqL9Xke/1gKfHREY4aMDFRG9uCPAIXc5ETu0z3WMOkmL7LklOXwBDSmBpUqnfdgNou3b/C1gYf8a4un1/s6RnFbxWT2blIFB/okZD9puK7rTYBXXxJmD7EgpeY66wI3QUPwqVg/FCyfUUVFyjFjx0LqbVb6ZdwBd9JjeW0EuKLF14eCMem3iX26vl6ZcJS/Uz91dM6eGaI+AceXiAmPZp0JTb4dtHfyXqUbFKzbR4IpgVjakZJ8C7b2H+y4nu99ByVwx8eyQie833nWsurDX9wTdqfHAvWCvXm6/Bd44hyQAxBNDjf3BGG49MmHjrSV07UByuGHPpikuaRhrlJ5Z+srQXk1y6p5nXw9PEmRg
-DKIM-Signature: a=rsa-sha256; bh=r89bRA8yzwUIEW3HEm2+uSrVCpmeaUYdaQjH7diumMY=;
+X-VR-SPAMCAUSE: dmFkZTFDblFX0lx0QRW1JKa5GExgvRc8EfAmGpZCa+mczr64uGFbhOUDNDRjGumNpw1ewf38CiuDwcWBe2ksOTz2vgBG/OiQfIRySeImPlGnBaN/NhaVBJcI0R0wiJZ05v/JgVIK6iF8FdDs4paOTnHT0UKtcfyQnnoEHkbJplb8AAmbCQ9anws2PovtC1vetouu4esjSK9/7AKz4dEqFuZzYfu9hDntJhu7xuegqj+tPpuZ1RhtmyCUSIcP8LBva1zYL6sFArph+EvMDv9DjODHblGBXMhTfQmi0aTZNEufLRK0995CYUMgwFWztvqoKHu9U1DZt+zFLszdo6g6L37VIcSPiUuBZa5itYExG5S8NXkYI/Le43/1dK4Wq3SQifTrEK6WpL7zVJWhHSDHF5IhJSVPTqPgLHosu5QOvXe282qGTg6/BpVn5yWqqgDMDcwL0xWFeV5HyM7Bg58E6ns4zr5DTiV9IEuQAbSa/ICeoyx36GhKPjlI7Cw8CFTH4yvggho7Rs26TSLJo/0CZRxDefn/+UX38oTyUkf4jLG8qMEylCFGj+cEESg17ft8Qx40/p3t+qj81kOEuGiYUw0gGaxpmY3c8mA9JUFvi5IxqWP0d+GfBt8/cEABPeB2Ee6ltLF0O+xcG69aBO6ibLdVYBG+1IBIB8yuoit35twq7XyxcQ
+DKIM-Signature: a=rsa-sha256; bh=KaTTHc3w8R6rF7gqqWlw2mFxpaUpNPS0l+rvQI9X3UA=;
  c=relaxed/relaxed; d=3mdeb.com; h=From; s=ovhmo3617313-selector1;
  t=1795431520; v=1;
- b=iV5+FCS0KaaUJoMsauSlW2VXeDfk47BjeE9JzccuugOJ2KhpJNMZBzjipMC7+kS2nzO+RCZp
- rKEiCyrStiAvnULkWvJLZFFfjvqpzHv/x7NgcIPqVOOVHy8MqgisAZF/p9KUTDllCJuu70eQeFW
- Bld66SvuHox8uF0RtNAW1g94KRfb7SBC0z1M66EIT5NkPlmkCpMt5PcCgE3KAeHIxQEUWHNt/ql
- jJMKwEB8vsCVF/5I+UAX5BADPod4L44vTIw0bx5jD4TLmBbFyf8NPtRbSEN3sPZLVxusXZuxXjL
- eDFpqPm0ZPyuIVmdJXjnaNIY2LWcxAl/YHhvnhKcMdvUQ==
+ b=O/H1LJ0jQ6smI/gQrsm4BZBFXJ3XJN0uCG7KhphGFBW008mGXIYoOHmKFXcQH9/H0Z8VDqm8
+ thG++IX3PbCLWyYAnF1sOFMKBGUJ6VIrBa105uw5kxnBfntSHaKCcJswIXYU04kI5nGQzTFtzez
+ MSi467cc4I0IJrb8EV5MVSVE/HPCD5fsktRv+i/7k5xTIjmJEwREKHsiCYsOuUbe9HdqaQgpUVe
+ sNuUWokfHVwaSq+H0LEe2J/EISh8N3krSi8QQZskM61EEIDTTZ1zXJbSGFExn7R7nyEMMhLbDk5
+ 3+APdR7gkt+SZgalAEeLG5/qEqUHo8Og+pvhWWe+JB4lg==
 
-Allow switching fans between automatic control by the EC and manual
-control via pwmN_enable (1=manual, 2=automatic), and setting the duty
-cycle via pwmN. The EC refuses duty cycle writes in automatic mode.
+Move the ACPI method evaluation out of dasharo_read_channel() into a new
+dasharo_call() helper, which additionally accepts up to two extra integer
+arguments after the channel's group and index. This allows the upcoming
+write and fan curve support to reuse the same code path.
 
-Fan mode control is only exposed for fans on which the firmware reports
-support for it.
+No functional change intended.
 
 Signed-off-by: Filip Gołaś <filip.golas@3mdeb.com>
 ---
-Changes in v2:
-- The capabilities of each feature are packed independently, so channel N
-  of DASHARO_FEATURE_FAN_MODE will not necessarily be the fan of PWM channel N
-  if the two fans have different capabilities.
-  Use dasharo_fan_channel for looking up the fan mode capabilities by
-  comparing the group and index.
----
- drivers/platform/x86/dasharo-acpi.c | 146 +++++++++++++++++++++++-----
- 1 file changed, 119 insertions(+), 27 deletions(-)
+ drivers/platform/x86/dasharo-acpi.c | 40 +++++++++++++++++++++--------
+ 1 file changed, 30 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/platform/x86/dasharo-acpi.c b/drivers/platform/x86/dasharo-acpi.c
-index 13d97eb43511..85f88b11fcf9 100644
+index dfea00cdde18..13d97eb43511 100644
 --- a/drivers/platform/x86/dasharo-acpi.c
 +++ b/drivers/platform/x86/dasharo-acpi.c
-@@ -15,6 +15,8 @@ enum dasharo_feature {
- 	DASHARO_FEATURE_TEMPERATURE = 0,
- 	DASHARO_FEATURE_FAN_PWM,
- 	DASHARO_FEATURE_FAN_TACH,
-+	DASHARO_FEATURE_FAN_POINTS,
-+	DASHARO_FEATURE_FAN_MODE,
- 	DASHARO_FEATURE_MAX
- };
- 
-@@ -54,6 +56,16 @@ static const char * const dasharo_group_names[DASHARO_FEATURE_MAX][MAX_GROUPS_PE
- 		[DASHARO_FAN_GPU] = "GPU",
- 		[DASHARO_FAN_CHASSIS] = "Chassis",
- 	},
-+	[DASHARO_FEATURE_FAN_MODE] = {
-+		[DASHARO_FAN_CPU] = "CPU",
-+		[DASHARO_FAN_GPU] = "GPU",
-+		[DASHARO_FAN_CHASSIS] = "Chassis",
-+	},
-+	[DASHARO_FEATURE_FAN_POINTS] = {
-+		[DASHARO_FAN_CPU] = "CPU",
-+		[DASHARO_FAN_GPU] = "GPU",
-+		[DASHARO_FAN_CHASSIS] = "Chassis",
-+	},
- };
- 
- struct dasharo_capability {
-@@ -143,10 +155,45 @@ static int dasharo_read_channel(struct dasharo_data *data, const char *method,
- 	return ret;
+@@ -93,13 +93,18 @@ static int dasharo_get_feature_cap_count(struct dasharo_data *data, enum dasharo
+ 	return count;
  }
  
-+static int dasharo_write_channel(struct dasharo_data *data, const char *method,
-+				 enum dasharo_feature feat, int channel, long value)
-+{
-+	u64 arg = value;
-+	u64 ret;
-+	int err;
-+
-+	err = dasharo_call(data, method, feat, channel, &arg, 1, &ret);
-+	if (err)
-+		return err;
-+
-+	/* Non-zero status from the method means the EC refused the write */
-+	return ret ? -EPERM : 0;
-+}
-+
-+static int dasharo_fan_channel(const struct dasharo_data *data, enum dasharo_feature feat,
-+			       int pwm_channel)
-+{
-+	const struct dasharo_capability *fan;
-+	int i;
-+
-+	if (pwm_channel >= data->caps_found[DASHARO_FEATURE_FAN_PWM])
+-static int dasharo_read_channel(struct dasharo_data *data, char *method, enum dasharo_feature feat, int channel, long *value)
++/*
++ * Evaluate a DASH method taking the group and index of a channel, followed by
++ * up to two more integer arguments, and returning an integer.
++ */
++static int dasharo_call(struct dasharo_data *data, const char *method, enum dasharo_feature feat,
++			int channel, const u64 *args, unsigned int n_args, u64 *ret)
+ {
+ 	struct acpi_object_list obj_list;
+-	union acpi_object obj[2];
++	union acpi_object obj[4];
+ 	acpi_handle handle;
+ 	acpi_status status;
+-	u64 val;
++	unsigned int i;
+ 
+ 	if (feat >= ARRAY_SIZE(data->capabilities))
+ 		return -EINVAL;
+@@ -107,20 +112,35 @@ static int dasharo_read_channel(struct dasharo_data *data, char *method, enum da
+ 	if (channel >= data->caps_found[feat])
+ 		return -EINVAL;
+ 
++	if (n_args > ARRAY_SIZE(obj) - 2) // 2 fixed args always at obj[0] and obj[1]
 +		return -EINVAL;
 +
-+	fan = &data->capabilities[DASHARO_FEATURE_FAN_PWM][pwm_channel];
-+	for (i = 0; i < data->caps_found[feat]; i++) {
-+		if (data->capabilities[feat][i].group == fan->group &&
-+		    data->capabilities[feat][i].index == fan->index)
-+			return i;
+ 	obj[0].type = ACPI_TYPE_INTEGER;
+ 	obj[0].integer.value = data->capabilities[feat][channel].group;
+ 	obj[1].type = ACPI_TYPE_INTEGER;
+ 	obj[1].integer.value = data->capabilities[feat][channel].index;
+-	obj_list.count = 2;
+-	obj_list.pointer = &obj[0];
++	for (i = 0; i < n_args; ++i) {
++		obj[2 + i].type = ACPI_TYPE_INTEGER;
++		obj[2 + i].integer.value = args[i];
 +	}
-+
-+	return -ENODEV;
++	obj_list.count = 2 + n_args;
++	obj_list.pointer = obj;
+ 
+ 	handle = ACPI_HANDLE(&data->pdev->dev);
+-	status = acpi_evaluate_integer(handle, method, &obj_list, &val);
+-	if (ACPI_FAILURE(status))
+-		return -ENODEV;
++	status = acpi_evaluate_integer(handle, (acpi_string)method, &obj_list, ret);
++	return ACPI_FAILURE(status) ? -ENODEV : 0;
 +}
+ 
+-	*value = val;
+-	return 0;
++static int dasharo_read_channel(struct dasharo_data *data, const char *method,
++				enum dasharo_feature feat, int channel, long *value)
++{
++	u64 val;
++	int ret;
 +
++	ret = dasharo_call(data, method, feat, channel, NULL, 0, &val);
++	if (!ret)
++		*value = val;
++	return ret;
+ }
+ 
  static int dasharo_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
- 			      u32 attr, int channel, long *val)
- {
- 	struct dasharo_data *data = dev_get_drvdata(dev);
-+	int mode_ch;
- 	long value;
- 	int ret;
- 
-@@ -162,6 +209,17 @@ static int dasharo_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
- 			*val = value;
- 		break;
- 	case hwmon_pwm:
-+		if (attr == hwmon_pwm_enable) {
-+			/* hwmon: 1 = manual, 2 = automatic */
-+			mode_ch = dasharo_fan_channel(data, DASHARO_FEATURE_FAN_MODE, channel);
-+			if (mode_ch < 0)
-+				return mode_ch;
-+			ret = dasharo_read_channel(data, "GFMD", DASHARO_FEATURE_FAN_MODE,
-+						   mode_ch, &value);
-+			if (!ret)
-+				*val = value ? 1 : 2;
-+			break;
-+		}
- 		ret = dasharo_read_channel(data, "GFDC", DASHARO_FEATURE_FAN_PWM, channel, &value);
- 		if (!ret)
- 			*val = value;
-@@ -174,6 +232,35 @@ static int dasharo_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
- 	return ret;
- }
- 
-+static int dasharo_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
-+			       u32 attr, int channel, long val)
-+{
-+	struct dasharo_data *data = dev_get_drvdata(dev);
-+	int mode_ch;
-+
-+	if (type != hwmon_pwm)
-+		return -EINVAL;
-+
-+	switch (attr) {
-+	case hwmon_pwm_enable:
-+		if (val != 1 && val != 2)
-+			return -EINVAL;
-+		mode_ch = dasharo_fan_channel(data, DASHARO_FEATURE_FAN_MODE, channel);
-+		if (mode_ch < 0)
-+			return mode_ch;
-+		return dasharo_write_channel(data, "SFMD", DASHARO_FEATURE_FAN_MODE,
-+					     mode_ch, val == 1);
-+	case hwmon_pwm_input:
-+		if (val < 0 || val > 255)
-+			return -EINVAL;
-+		/* Refused by the EC unless in manual mode */
-+		return dasharo_write_channel(data, "SFDC", DASHARO_FEATURE_FAN_PWM,
-+					     channel, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
- static int dasharo_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
- 				     u32 attr, int channel, const char **str)
- {
-@@ -203,6 +290,7 @@ static umode_t dasharo_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_t
- 					u32 attr, int channel)
- {
- 	const struct dasharo_data *data = drvdata;
-+	bool has_mode;
- 
- 	switch (type) {
- 	case hwmon_temp:
-@@ -210,9 +298,12 @@ static umode_t dasharo_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_t
- 			return 0444;
- 		break;
- 	case hwmon_pwm:
--		if (channel < data->caps_found[DASHARO_FEATURE_FAN_PWM])
--			return 0444;
--		break;
-+		if (channel >= data->caps_found[DASHARO_FEATURE_FAN_PWM])
-+			break;
-+		has_mode = dasharo_fan_channel(data, DASHARO_FEATURE_FAN_MODE, channel) >= 0;
-+		if (attr == hwmon_pwm_enable)
-+			return has_mode ? 0644 : 0;
-+		return has_mode ? 0644 : 0444;
- 	case hwmon_fan:
- 		if (channel < data->caps_found[DASHARO_FEATURE_FAN_TACH])
- 			return 0444;
-@@ -228,6 +319,7 @@ static const struct hwmon_ops dasharo_hwmon_ops = {
- 	.is_visible = dasharo_hwmon_is_visible,
- 	.read_string = dasharo_hwmon_read_string,
- 	.read = dasharo_hwmon_read,
-+	.write = dasharo_hwmon_write,
- };
- 
- // Max 24 capabilities per feature
-@@ -283,30 +375,30 @@ static const struct hwmon_channel_info * const dasharo_hwmon_info[] = {
- 		HWMON_T_INPUT | HWMON_T_LABEL,
- 		HWMON_T_INPUT | HWMON_T_LABEL),
- 	HWMON_CHANNEL_INFO(pwm,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT,
--		HWMON_PWM_INPUT),
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+		HWMON_PWM_INPUT | HWMON_PWM_ENABLE),
- 	NULL
- };
- 
 -- 
 2.56.0
 
