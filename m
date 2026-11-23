@@ -1,56 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795417294;
-	b=14jRN7djnL1zJk0EQdVgHiZLH7R4fFvY2vkSwC0Y2NZnMtomNqc1DUEq0hSPb4WlAlNO
-	 liH74ef9dP+gKQvt3Yu98Mb4sop8VIjUufhg01KTLnUjhKBvLJ1OMoqvIFIXAvD6rCJtv
-	 E7koimiIKLNWv1fJ0O+GGhWwGkoJlS0y5Qpdu0nbcV7lKINlWrCKx+KG+FlsvYgCXxXrt
-	 bxi01zIjozhvCRPlN7shK+0n1SA4ZyNc2WF1W//nhHXQydyDLEWB72+mTF63rrTIsXlsJ
-	 MsY9rmpSgGosnWgEBJNsW7h7y7WKT70ZpIZRVSEVD04fFui5jEPJI3ZczXByGHDxQ0Q==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795417294;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=AwvX8i/oXxHRWLEI0asGYCcy6jyy79Q3YMV7kYDdnEg=;
-	b=afTGwuVyHdg4Qvk1RcZCxMiJKDH9SWzt0tCrbedtdms0HSk8cJDR4g4WpxVcGtskAMzF
-	 eQxxSa/PWNP9aiLfBVD4B8SAqySOSGBvLr8iZ0979kpj7UdfJXpZ2YQzpwx1kpEnzl5Kn
-	 dOjrXNvlILyp9LrTXaZbREs05dpTtnd8nFXOG1G1aZ9/oFFGl7gl8qLLIWbBRR5j1zIUH
-	 0XXdCJY3P97d6RaAbeIKO56yqOZ9fReRyIhuTXrI7Y0z0ByAR+Lyujhfvi60dFJKactbr
-	 6iE4aV8qM+JzHMsAPMVcnGV7ULtWMVY4hbDfLw7ZKeQpo8TzRXHIcdYcOLuG6P7PK+A==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gEh24umi;
-	arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795418828;
+	b=BW72pcfGJnWukQjH0LwJXHCr1mv6rJ/AywBSyTkJz0EcpZMfm4K7N5645WTd8R38ERKI
+	 v/lkl3TMDF8H8xzJd+45rcLm2AZATH+xC2yCkm+Fp1TGk2upmAdH6+bYNlDAH9vVBnvLO
+	 +q+6QU8kvdBZ84SfeQYaEPx6zKTqqwgbjETVc1CCKYWC4JXROi8BocPDfF/CJKm1zJE/o
+	 wPXUCLqK+QGvNYOwXobxW1jzW8+wcHxNlnNZWo9TEDEiHyzaoHhvIPnZ1SdD7hf+fYy72
+	 Nu1N/2iDPkL3qSdgYJgwxjWSnrTMch0Ka/87UCPKS6bxlVtgQRPDspOCH9ozztGupfw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795418828;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=U6wzabnLt/RWDyXyIjQiK5gCOoeM22ljx/BRBNPG0BU=;
+	b=VN4fY9FbqvoZOKPWB2jP2vnliyxd4aH7R0J3CsWNWAH/vTE6PGUo2tLBTNq8YRSwFjl7
+	 Ag6F3ACO0CGgq8VEbcQNXzXGdmkBUqkjohyVM5KFY67po3NdlH64vlZ9JbmD9DQbyHDl0
+	 bcaMWbeIquJn6OKEGqcbnN/IljXrF44p2vd9aA0N+fCciaJDUgyB63VkYMwNObPdZTocz
+	 x1nrQntAz252cr9N+KIlnOg/28m3gyWpL093UGbYvBw+AhCsR4hKgN0PtSveou/DPRtxa
+	 e8LaS67Wo1l4Czqdt5SsAxVwDEmN60dzuzE7HYoXiCyMPUdEAWJPtawg5aESjYUiR3A==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Mccxhhj4;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8AF4606A32A
-	for <linux-hwmon@vger.kernel.org>; Mon, 23 Nov 2026 07:01:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C6D606A31A;
+	Mon, 23 Nov 2026 07:27:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gEh24umi
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D486C1F000EE;
-	Mon, 23 Nov 2026 07:01:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Mccxhhj4
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1795418827;
+	b=zuLSfWD3PmDDZJeiouEWrIIN/pNYWkxAj+NWYwllEo97X5wjrZf7AEdPo9cPH01rB6Eu
+	 MImRyLKUcSZbSMI8t7WSn9Y49N0bC+Td2tFyZ6DfSr52RtwEvg3yKoJIceOYsRuqe7Sql
+	 Jn5nG2yuA7L32m5gSZjJKqgM3L5siwvdi+cGmRLdRxAT3OYnfyVgq8RqUXiOyoUjLKdKi
+	 K5J/YrZh1/DKewovWsSd4TdV/JlgynifEKHwS4sU9J+02NniKWj0hoPQL4pp2c0WiJ8gA
+	 qx1oDTWsVDFEqubl2ZQSRvBM9evO47gqfN6TnH4BBXKqIl/RCuZ5z12kKVOl24lnCFg==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795418827;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=U6wzabnLt/RWDyXyIjQiK5gCOoeM22ljx/BRBNPG0BU=;
+	b=Ybrgxc/n95J49gRhmL0f39qOATiB1HosXNn7/0tkW2TX8Ix0+gSnGKkulOxMuBD0U3Dy
+	 30r2DLDEO7tqKJGXcMfea2Iw1sLcoyqj36U2Hy20FzFD3VcNVhphkEPJofTtPGacUccHl
+	 zGFw9iynCsIK9D8irKdbgshu2lZgLdeVsNtTpYqCyyKjoRPmXtgP8Qj8YAp3U/Jm8vuOk
+	 U20r/b6EOypcg2WyuxQY+NQVdqdydYACChupBwsqsIMZunTLDFagRldLV3/PxVEzjqcwb
+	 C/TjPYVt2qBW8ypU29mdT++TiGAyd66AA/2ewLPrwVIL5daoxazONSpnXfPVNth3Tvg==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 578EC1F000C4;
+	Mon, 23 Nov 2026 07:27:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795417294;
-	bh=AwvX8i/oXxHRWLEI0asGYCcy6jyy79Q3YMV7kYDdnEg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gEh24umidR83Lc+6V3i9diD8Mx08c8fzCryeUHziUHIbqxKya11dVZ9aDsJuZoX6t
-	 qi1z4+E5ejtVF5t1aGlBNoUuZ9zL5gY7apI+f9hTejeJhOqyb7NkakJZODU/4s8TCd
-	 tcA466loV0Tdv9LvJk7JguzvdWd4nvFkIKBLaBv8/Sw7c4eI/gqU/DC+gTndJUAbqR
-	 9EYevXaZnugb2FOciMxXz5HnYln+dzau1vmTIOSZgroF3pasoIBO2C57pK73iK91B9
-	 E6PdIFKbzhBPRPrNGQK7lxauPhTfJzUF7zGceNI2fUHJ7Rw2bwYTOcctqR+yPIWDzK
-	 nCCZ2UvyJtKmg==
-Message-ID: <sashiko-outbox-228790@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (pmbus/ltc2978) Fix peak comparison for IEEE-754
- chips
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Christopher de Guzman" <christopher.deguzman@analog.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261123-ltc2978-ieee754-peak-fix-v1-1-96cbe686ab67@analog.com>
-References: <20261123-ltc2978-ieee754-peak-fix-v1-1-96cbe686ab67@analog.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 23 Nov 2026 07:01:33 +0000
+	s=k20260515; t=1795418827;
+	bh=U6wzabnLt/RWDyXyIjQiK5gCOoeM22ljx/BRBNPG0BU=;
+	h=From:Date:Subject:To:Cc:Reply-To;
+	b=Mccxhhj4llERRyqRFaSx+9ezzKC78+yO+LdmfuvA3qUSctlffBBwFGdTCIFB/jtVl
+	 m8xrCSSBo9yqFChto97u32yd7fEIMjwY2aY5umqqYhJn69qHO9LH+VIm74zIwT4rBR
+	 1KTX3M4nqyc0O3J3OPWzjPvC/KWvWCIU3uB3KypHxiriQj0EF96FQPUbzb1dDDu87p
+	 9waNDZXMMdLIv09L8jraK4+5cheHWWOR1zISiSlwqZ8pYAgTWlKtq4mS7cVBdnIEof
+	 qXAeJFLaMt3LcAlbqcspuCoL1JF7PW/Yda4Uij/N1vSttkPqvcBna1bS0B4DwjzM2H
+	 02jwrUTU+0Emg==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id AF4CB4C3A1;
+	Mon, 23 Nov 2026 07:27:03 +0000 (UTC)
+From: Markus Haberlander via B4 Relay <devnull+markus.haberlander.rosenberger.com@kernel.org>
+Date: Mon, 23 Nov 2026 08:27:01 +0100
+Subject: [PATCH] hwmon: (cgbc-hwmon) Add module alias
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -59,35 +81,68 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261123-cgbc-hwmon-alias-v1-1-3054681f984a@rosenberger.com>
+X-B4-Tracking: v=1; b=H4sIAMTqA2sC/yXMTQqDMBBA4avIrB0waSviVcRFMhl1pI2S6R+Id
+ 2+sy2/x3gbKSVihLTZI/BaVJWaYsgCaXBwZJWSDrWxtjL0gjZ5w+jyWiO4uTrEeODSer+RvFnK
+ 2Jh7k+192/Wl9+ZnpeXxg338lcVuKdAAAAA==
+X-Change-ID: 20261123-cgbc-hwmon-alias-6fed8be4cb52
+To: Thomas Richard <thomas.richard@bootlin.com>, 
+ Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, stable@vger.kernel.org, 
+ Markus Haberlander <markus.haberlander@rosenberger.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795418823; l=1376;
+ i=markus.haberlander@rosenberger.com; s=20261123;
+ h=from:subject:message-id;
+ bh=I1G2jkZQpMOQFY8S2qM+BAuBa5MQsimUYIi/nZNT3CA=;
+ b=OPb4kGeErThGeH31e2Fvv0Y1ezpEFO3smdYlSDWT5OvuRRONVNquQBPgXYmnV3OBpGIJ2PD+p
+ DFaxfT6oeeOBHFOkoVSsQR8d9mxOURiycJfjK6EZDumLkBGfkH+m5KH
+X-Developer-Key: i=markus.haberlander@rosenberger.com; a=ed25519;
+ pk=baNIWlZCf58g17gE2FS6ir0ymNwyBXguoQENSJkXdeQ=
+X-Endpoint-Received: by B4 Relay for
+ markus.haberlander@rosenberger.com/20261123 with auth_id=1612
+X-Original-From: Markus Haberlander <markus.haberlander@rosenberger.com>
+Reply-To: markus.haberlander@rosenberger.com
+Content-Transfer-Encoding: 7bit
 
-> The LT7170, LT7171, LT7175 and LT7176P report their sensor values in
-> IEEE-754 half-precision format, but ltc_get_max() and ltc_get_min()
-> compare peak values with lin11_to_val(), which decodes LINEAR11. Bit 10
-> is the lowest exponent bit in binary16, while LINEAR11 treats it as the
-> mantissa sign bit. Positive values with an odd biased exponent, such as
-> temperatures from 16 to 31 C or input voltages from 4 to 8 V, are
-> therefore decoded as negative, and the reported peak stops following
-> the real one.
->=20
-> The peak start values have the same problem: 0x7c00 is the lowest
-> LINEAR11 value, but it is +infinity in binary16.
->=20
-> Add a FEAT_IEEE754 flag for these chips. Compare binary16 values as
-> sign-magnitude integers, and start peak maximums at -infinity (0xfc00)
-> and peak minimums at +infinity (0x7c00). The min attributes are not
-> exposed for these chips, but the min path is fixed as well for
-> consistency.
->=20
-> Tested on an LT7171-1: after stepping VIN from 3.3 V to 5 V and back,
-> in1_highest now reports 4992 mV instead of staying at 3294 mV.
->=20
-> Fixes: c1d6afdbb8ed ("hwmon: (pmbus/ltc2978) add support for lt717x")
-> Reported-by: sashiko-bot <sashiko-bot@kernel.org>
-> Closes: https://lore.kernel.org/all/sashiko-outbox-206843@kernel.org/
-> Signed-off-by: Christopher de Guzman <christopher.deguzman@analog.com>
+From: Markus Haberlander <markus.haberlander@rosenberger.com>
 
-Sashiko has reviewed this patch and found no issues.
+The board controller's core driver adds the hwmon cell as platform
+device "cgbc-hwmon", but the driver declares no matching module alias.
+Built as a module, it is therefore not loaded automatically, unlike the
+GPIO, I2C and backlight drivers, and the sensors stay missing until it
+is loaded by hand.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261123-ltc2978-ie=
-ee754-peak-fix-v1-1-96cbe686ab67@analog.com?part=3D1
+Tested on a conga-PA7: with the alias, the driver loads at boot.
+
+The patch and this changelog were drafted with the help of Claude
+Opus 5.5 and reviewed and tested by me.
+
+Fixes: 08ebc9def79f ("hwmon: Add Congatec Board Controller monitoring driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Markus Haberlander <markus.haberlander@rosenberger.com>
+---
+ drivers/hwmon/cgbc-hwmon.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/hwmon/cgbc-hwmon.c b/drivers/hwmon/cgbc-hwmon.c
+index ba21ed8f0..d1f20db4b 100644
+--- a/drivers/hwmon/cgbc-hwmon.c
++++ b/drivers/hwmon/cgbc-hwmon.c
+@@ -336,3 +336,4 @@ module_platform_driver(cgbc_hwmon_driver);
+ MODULE_AUTHOR("Thomas Richard <thomas.richard@bootlin.com>");
+ MODULE_DESCRIPTION("Congatec Board Controller Hardware Monitoring Driver");
+ MODULE_LICENSE("GPL");
++MODULE_ALIAS("platform:cgbc-hwmon");
+
+---
+base-commit: 7940d60c4b165cd7c265bf17f86b8299b7f204b1
+change-id: 20261123-cgbc-hwmon-alias-6fed8be4cb52
+
+Best regards,
+--  
+Markus Haberlander <markus.haberlander@rosenberger.com>
+
+
