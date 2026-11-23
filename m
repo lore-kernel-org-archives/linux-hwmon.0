@@ -1,100 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.41
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795467932;
-	b=HCdc+Ra2N3yCELtCfj6egssO2HOfV7g5JpYt+dnqj6yOR1gpQSMi3SoC21FmWppKXQiz
-	 sj1CVwbQUk5Wp1X/afgunHk6ONNafAqngh4j5ZlW7CoWYCZuM3hK9YrUaiCrbryiMUQnA
-	 8zOIcBgKBEHlwaFiHVTromwC4+pHm7NTa8zYb3M3eQ5VaiQ3o5GJZNTTNsLtiVx+M1ZI9
-	 LtqJIWuaoAjSnKNTF2QkGyjc0xJrTzYPRK/a3lPJVU0pqgVo8Y7JiN0SUIeFiEJU+mzuy
-	 eF5YlRqywq6vls0PQr3Sb65lxR25Hy5qqGx0g1kW/yOgnxraOOYxjbPLT2Xn0LXfy9w==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795467932;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=VtSta76K0DhmEm+a+Fx+3wCOoe6ARhPuKaUdQkwi8Y8=;
-	b=R1NVstQ4mJDZ1pD3Z1KLDxLxpSaoqR4XfSmXconZvQYLernPJux2BxP2NpwmpDMdAC43
-	 z2zbETdd6+qQshdVUakByzYr7qCiXnJH5Gp0ZbFksVVpVYgZMDockcmIoZxiSICgocKn2
-	 OST8H822cPHo+ha/8n2V+tzzrzkqst5JxdZ16SkGf5hRmajS2njPwXfYr96TDcs183KWT
-	 dHSmbGgKqI8bfCcxWeXX4ovzMDPWdQLrZWWfLXd0rp2dPYai7NZm558uT2RU21MnDslfF
-	 hDRdTsc8Hw9lGWcWchT9GaXqRiC+Mm8q5aSXzlSScR9Ri3Jb55mtwu5zBp7N/3U0pJA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zGGalddF;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.41
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795468274;
+	b=5FAwyWVT9YVGrX78RPKrNJKW69/7+qI+/LOMRRHICDG1O/KAbRvZG4jxthUekICpUcFL
+	 0jnkiJkh/GIq1cHVkQMz6tTCFDj/9GeMA473O19gEc3JxKWi1uN2r3EiPnaZ9wVHDldyf
+	 4OYWnEIMTdtJr8PQHWztGVR9YMLriviiswRFQhc4/nlsUtD4boX9cExXynWIdgcQeT5L6
+	 TIrRVbf7Lz+4OKlJN/cT93FUTRXus7+/xQYKJg2bhvk7R7SMIgOwfEOqMsedVYVyt4Zdf
+	 v3L5ZIyRjgGi9H/t6qnCfoHIOuXRmygnfqKDWQEGGWkV3B38Ig7R5aNloc2RRmuv8Gg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795468274;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=mSKk9/8YwoyuItcF4erJygL0vpyQpn5UlZ4I6HOLWxE=;
+	b=k88tojHaGAGqSYjBNRwCo8csUNkXMqmZ0foukw/AfdxgEo9O6G+bB3VvjEYo6/CS8brL
+	 R1Tg7SiK+YdOk1cojBcHe9+hZmq/lzbIACU/hgQWpqCvZiwuonMxkemvdoK6DzDhp5ys0
+	 OhmTsJW5CKj7gyLDLJjIlPyl0jlFivUDZ3v/bT/G3+l8kUowt1Da0NehHmEcCzfpJJAfs
+	 tqPO0GBPs8eoA26AhP00srLvnb8iSnYdVQ2sjqWaXyKxM+cYdyMlhpw3riVoUB/xSwmH+
+	 KgvdC+uWVly8OL0sr2ecfhf9pWz3X5vN3O40FV4Pk6P7ar9xHoVIkNjsNDfSxyH53qQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n04ssT8g;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66268606A32A
-	for <linux-hwmon@vger.kernel.org>; Mon, 23 Nov 2026 21:05:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 66268606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AFCC606A31E;
+	Mon, 23 Nov 2026 21:11:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zGGalddF
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3ada4c06b7bso1991537a91.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 23 Nov 2026 13:05:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795467931; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Y/P/xb0XtQEnUAjsbQYTWQTzaUeB86iEZY8Gzkdba2Ez81V+63pQlG7XAGTfE2/FLm
-         rUwmj6O6COd+TGfv4IT+q97gzgRGHGJFmEK3l140hjFgquS3TkCsDWk/Yzc5r4v+2iJE
-         pkbZKOK/r/k8D1PMUuLCJF/MV80MU0zbYtgJuQ9VoenGtPynKjrYKUkpu2i+dJ2b4PeJ
-         P939AClgFngLa7wUumVIrO4I7/lpqxyCt4MS7O8jxraLhVY7mgqCP3JOa3FJa1Y5MlIV
-         UeyR9vHRA2xja50tq1a9zBNVCjaLeKTr1h3cWVrcbbbV/uTib72WO8cASTdNEUVKk3Of
-         Epjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=VtSta76K0DhmEm+a+Fx+3wCOoe6ARhPuKaUdQkwi8Y8=;
-        fh=87FSxxMM38dH4zwPaRcV/2g6JPqYY7DlKHGO28EQOGw=;
-        b=EfZorL4K3bYh7BlyzXeBcRFjq9pjJUDFDeRPbKK+bn8oF+s2eFmYUa1o7qj+Gx6QdM
-         54d5fdWeDyiHRysWQ/A0v7aAsCF+TYQ6LtFObOXX1ote+1FhonFpsZCxIsul3htEcyNA
-         igBmi0/tJrS8XVJeIDuhNDhHw6DWt7w4zNxXGEmtteAfROavrQylAkN0RTX7ReKhY/Mq
-         4ODvE/ynAAdKdMF3sFNzM/B8dS4HVoCENK33p5y9MzYgM91el+NQhaGdaqyAUisNy/qf
-         QpjkiO3jExERDo++E9Rf2tktuWB8yYIY0MZsPYkg6V6CqTR6VtuMaUqW/phDJWVjXDyF
-         Neiw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795467931; x=1796072731; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=VtSta76K0DhmEm+a+Fx+3wCOoe6ARhPuKaUdQkwi8Y8=;
-        b=zGGalddFvYP7BCevKmOSQIJR0BADVJZWfKfoCqHYdUCKUn7eO7sv/DcYTsqsAHNFt9
-         oIM7jtIFQ4TutDk8AvY87WO5fMbo8nsnkNJZmnrxJrVPulsxru1XJ4h11yLAS4V1/SI7
-         93YYrOiYE1uENsPTMYacIYdTeCQjy8hM5ntNhFjroGihGWvSDLoeVnJTaPligx8LxQam
-         tkBL6PMk3tpnh9pRnIrAN78diJDZybSsCdlyCLoqcz9cukcJm3c4S8A5uBrceMe3nO6S
-         RGZI4kvCf+ZHMxzE0azXEQOPZ1Ys7uri6rAtPHlM4GQb0+P8BhhK6cNLwYS5qvwlvqEi
-         k2Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795467931; x=1796072731;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=VtSta76K0DhmEm+a+Fx+3wCOoe6ARhPuKaUdQkwi8Y8=;
-        b=Bq9NYNDoW40FzaExS9Rx6LkzKjlTOT6WsRKW537PYm+kHH+MpVvO7bRRjoeT4+NT/X
-         uF6/x0Rixh62ho7O/hzWI6KwOi+XahHxLjxaAJlb7b4jjnSjddTs/0WA9EgXSDd06zZo
-         hRFlazlW38Fx0ULMpYbA6wRPm8eTaqTmZ9RTQQuAsKE5HU9ddcgOeRVHul7CrSqsNAqG
-         vcYgjr6Oy+/+7uXqFnM7Hn7GaI6ctlJcoY4vd7PPJ8HWjdzG7a6MKNQ9EAC9gzWipqid
-         xo0uHuTi7rMjJ3HvTRcqbkjlnkh4g28iax90n4IM+eDrLZq3wdVfeyV4KB5qWT1Tvo6+
-         9ANQ==
-X-Forwarded-Encrypted: i=1; AL+hErF2QkjRp5IkT/8PZ8Y/SuayTrC3XrFf2OW8Q1KlUWMxPElq0c9P9l+sfSzLW0IF5KxbsTOZwWYiPesHAg==@vger.kernel.org
-X-Gm-Message-State: APuU4Z/iaNXkbdgs8gIrLt2DfnQvWMk/soAwARG61Rf53Bo1ybz4sfjE
-	9MZHDh/yTbp19G5pHkULRV5N+smfZ37rH25jNbVPpa3W8p3NYOGGJcxYtDrLuig4+77CvMN2VuR
-	DM+1uM4A0KUy3WOojmO4nz55iB4qjG7w=
-X-Gm-Gg: AZFdTZc0GJcs1ERPn8tpUlqc6u5FhC57oAjipqvPSR9Sr/7rmyLdItOygQtPrvh4H5c
-	t20CanlZXocCifUEim0PzCG8rFQz1fiTtyvvtoTvPxlgFGf54PwlqRPzRPihyJCqC9e4e5EwHO1
-	dLj5OrFc0BNNU+TfOxX3pcmefchCWRCMieM+cZ8+TUls1TD8OSQ3shVfGp3FOZQ48NIUSwc7mby
-	SAUo8dQL2Zs9PnWnJMrq6VJ7ryf5zUPnKP/mvH5Mjlx8vz0fvwXbn1Q97bSePunHA8XaUtUQBy8
-	3bsiZRN+vC+qls8SCvFRJDLuuuMC4BL9nZmiW5VocfrKdWfkJNEiedSY35buQgqCwbrvmjWlxN3
-	Y/kIZEh2qeOTZnSw2UMWXtkXXQuE9Rvz3LiHusKIrx+iQuINsuMom
-X-Received: by 2002:a17:90b:2b50:b0:3b0:9a1b:b708 with SMTP id
- 98e67ed59e1d1-3b41c98245cmr11402649a91.62.1795467930592; Mon, 23 Nov 2026
- 13:05:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n04ssT8g
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 861C91F000CA;
+	Mon, 23 Nov 2026 21:11:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795468273;
+	bh=mSKk9/8YwoyuItcF4erJygL0vpyQpn5UlZ4I6HOLWxE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=n04ssT8gwdDgNYAmgXjtGk0AkqadLUG0+0U7dBHSruG9OHzM6oWiwTJw1rQdp0f1Q
+	 pC1hplFhR+0hO/OWq+Kp2n6Ap9gH9uYTj6hU99c4hx4Wv3vrNQVgI6b8k5p2pCIVyg
+	 PZrqsmcrf46nAzgvFNJM0gfHrXlHIPDDZFnN/iC38zGi4BYE0uC8W+p8V9ZNlwjr1n
+	 sH3bje/eFE1Cl7qQMZUtMKS/ry2CV9PNXGvRrAeaf6y923OrPgpdYEXuoS+UeGBzeP
+	 Bl+/kGlPx+dAwOb7S+JpsfsaITXki89L6EVOfigKaYt9+bDZcjVuVnez1gSB3iybxh
+	 8/4/haakMr7EA==
+Message-ID: <sashiko-outbox-230063@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v5 02/12] hwmon: Add Qualcomm PMIC BCL driver
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Manaf Meethalavalappu Pallikunhi" <manaf.pallikunhi@oss.qualcomm.com>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, mfd@lists.linux.dev, robh@kernel.org, conor+dt@kernel.org, lee@kernel.org
+In-Reply-To: <20261124-qcom-bcl-hwmon-v5-2-747d5383d538@oss.qualcomm.com>
+References: <20261124-qcom-bcl-hwmon-v5-0-747d5383d538@oss.qualcomm.com>
+ <20261124-qcom-bcl-hwmon-v5-2-747d5383d538@oss.qualcomm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 23 Nov 2026 21:11:13 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -103,150 +59,351 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261112205228.42630-1-pmazzini@gmail.com> <20261112205228.42630-2-pmazzini@gmail.com>
- <9bd10826-7684-462a-808b-91b72c9d5689@roeck-us.net> <awSmYnfbVnjnSwNB@lizhi-Precision-Tower-5810>
-In-Reply-To: <awSmYnfbVnjnSwNB@lizhi-Precision-Tower-5810>
-From: Pablo Mazzini <pmazzini@gmail.com>
-Date: Mon, 23 Nov 2026 21:04:47 +0000
-X-Gm-Features: Aa3M54rQKL8p1RMTDp94rq8cRMTWaP5id1ZTML445APcrBI-bARIJu24uS0qbcg
-Message-ID: <CAAxh=juHWgAnDTBiu0oM7TEpGxMV7LoK9wnHqbfXPGPpJx0VKg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] hwmon: sy7636a: read the temperature only while
- the rails are on
-To: Frank Li <Frank.li@oss.nxp.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Alistair Francis <alistair@alistair23.me>, 
-	Andreas Kemnade <andreas@kemnade.info>, Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 23, 2026 at 03:47:30PM -0500, Frank Li wrote:
-> Do you meand depend on CONFIG_MFD_SY7636A=3Dy
-
-Hi Frank,
-
-2/2 depends on 5f828ac25ef9 ("regulator: sy7636a: bind to the I2C
-device directly") in Mark's regulator for-7.5, which removes
-MFD_SY7636A.
-
-Thanks,
-Pablo
-
-On Mon, Nov 23, 2026 at 8:47=E2=80=AFPM Frank Li <Frank.li@oss.nxp.com> wro=
-te:
->
-> On Sat, Nov 14, 2026 at 08:33:47AM -0800, Guenter Roeck wrote:
-> > On Thu, Nov 12, 2026 at 08:52:27PM +0000, Pablo Mazzini wrote:
-> > > The driver enables VCOM at probe, which keeps the panel's high voltag=
-e
-> > > rails on for good. Read the temperature only while the rails are on, =
-when
-> > > the chip samples it, and return -ENODATA otherwise. Read power good w=
-ith
-> > > it in one transfer, so the value can not be from before the first sam=
-ple
-> > > or after the rails went off.
-> > >
-> > > Signed-off-by: Pablo Mazzini <pmazzini@gmail.com>
-> >
-> > This patch depends on the rest of the patch series, so I can not apply =
-it
-> > to a hwmon branch. Assuming it will be applied to some other branch,
->
-> Guenter:
->
-> Do you meand depend on CONFIG_MFD_SY7636A=3Dy
-> https://lore.kernel.org/all/20261112205228.42630-3-pmazzini@gmail.com/
->
-> Frank
->
-> >
-> > Acked-by: Guenter Roeck <linux@roeck-us.net>
-> >
-> > Thanks,
-> > Guenter
-> >
-> > > ---
-> > >  drivers/hwmon/sy7636a-hwmon.c | 35 ++++++++++++++++++++++++---------=
+Thank you for your contribution! Sashiko AI review found 5 potential
+issues to consider:
+- [Medium] hwmon: qcom-bcl: infinite poll loop in
+  bcl_alarm_enable_poll() on reassertion
+- [Medium] hwmon: qcom-bcl: max_mu exceeds 6-bit L1/L2 field in
+  bcl_thresh_write()
+- [Medium] hwmon: qcom-bcl: unlocked enable_irq_wake() race in
+  bcl_alarm_irq_init()
+- [Low] hwmon: qcom-bcl: 32-bit jiffies wraparound in
+  bcl_curr_input_read() cache
+- [Low] hwmon: qcom-bcl: redundant private mutex bcl->lock duplicating
+  hwmon_lock()
 --
-> > >  1 file changed, 24 insertions(+), 11 deletions(-)
-> > >
-> > > diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hw=
-mon.c
-> > > index a0d0b4119bb3..a8bfbf1716a1 100644
-> > > --- a/drivers/hwmon/sy7636a-hwmon.c
-> > > +++ b/drivers/hwmon/sy7636a-hwmon.c
-> > > @@ -9,26 +9,43 @@
-> > >   */
-> > >
-> > >  #include <linux/auxiliary_bus.h>
-> > > +#include <linux/bits.h>
-> > >  #include <linux/err.h>
-> > >  #include <linux/hwmon.h>
-> > >  #include <linux/module.h>
-> > >  #include <linux/regmap.h>
-> > > -#include <linux/regulator/machine.h>
-> > >
-> > > -#define SY7636A_REG_TERMISTOR_READOUT      0x08
-> > > +#define SY7636A_REG_FAULT_FLAG             0x07
-> > > +#define SY7636A_FAULT_FLAG_PG              BIT(0)
-> > >
-> > >  static int sy7636a_read(struct device *dev, enum hwmon_sensor_types =
-type,
-> > >                     u32 attr, int channel, long *temp)
-> > >  {
-> > >     struct regmap *regmap =3D dev_get_drvdata(dev);
-> > > -   int ret, reg_val;
-> > > -
-> > > -   ret =3D regmap_read(regmap,
-> > > -                     SY7636A_REG_TERMISTOR_READOUT, &reg_val);
-> > > +   u8 buf[2];
-> > > +   int ret;
-> > > +
-> > > +   /*
-> > > +    * The thermistor is sampled while ON_OFF is set, but the first s=
-ample
-> > > +    * is only ready after the ADC sampling and conversion time (ADC_=
-SPL +
-> > > +    * ADC_DEL in the datasheet); until then it holds its reset value=
-, 0.
-> > > +    * PG is only set once all rails are up, after the first sample, =
-so
-> > > +    * read it in the same transfer and report the temperature only w=
-hile
-> > > +    * it is set.
-> > > +    *
-> > > +    * With ON_OFF set but PG low (rails still ramping up, or a fault=
-), no
-> > > +    * temperature is reported even if one may be available. That is
-> > > +    * accepted: the display driver reads the temperature only while =
-it
-> > > +    * holds the rails on, after power good.
-> > > +    */
-> > > +   ret =3D regmap_bulk_read(regmap, SY7636A_REG_FAULT_FLAG, buf, siz=
-eof(buf));
-> > >     if (ret)
-> > >             return ret;
-> > >
-> > > -   *temp =3D reg_val * 1000;
-> > > +   if (!(buf[0] & SY7636A_FAULT_FLAG_PG))
-> > > +           return -ENODATA;
-> > > +
-> > > +   *temp =3D (s8)buf[1] * 1000;
-> > >
-> > >     return 0;
-> > >  }
-> > > @@ -72,10 +89,6 @@ static int sy7636a_sensor_probe(struct auxiliary_d=
-evice *adev,
-> > >     if (!regmap)
-> > >             return -ENODEV;
-> > >
-> > > -   err =3D devm_regulator_get_enable(&adev->dev, "vcom");
-> > > -   if (err)
-> > > -           return err;
-> > > -
-> > >     hwmon_dev =3D devm_hwmon_device_register_with_info(&adev->dev,
-> > >                                                      "sy7636a_tempera=
-ture", regmap,
-> > >                                                      &sy7636a_chip_in=
-fo, NULL);
+
+commit ad4e95352ce7aa5ad76440eaf33e8bd9c53a0538
+Author: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+
+hwmon: Add Qualcomm PMIC BCL driver
+
+This commit adds a hwmon driver for the Qualcomm SPMI PMIC Battery Current
+Limiting (BCL) peripheral to monitor battery voltage and current and report
+threshold alarms.
+
+> diff --git a/drivers/hwmon/qcom-bcl-hwmon.c b/drivers/hwmon/qcom-bcl-hwmo=
+n.c
+> new file mode 100644
+> index 0000000000000..a5a3a59484571
+> --- /dev/null
+> +++ b/drivers/hwmon/qcom-bcl-hwmon.c
+
+[ ... ]
+
+> +struct bcl_device {
+> +	struct device		*dev;
+> +	struct regmap		*regmap;
+> +	u32			base;
+> +	struct regmap_field	*fields[F_MAX_FIELDS];
+> +	struct bcl_alarm_data	bcl_alarms[BCL_LIMIT_ALARM_MAX];
+> +	/* Protects hardware register access and device state */
+> +	struct mutex		lock;
+
+[Severity: Low]
+This isn't a bug, but the hwmon core already serializes .read and .write
+callbacks under the hwmon device lock, and regmap serializes individual
+register accesses.  Could this use hwmon_lock() and hwmon_unlock() instead
+of a driver-private mutex?
+
+> +	u32			last_in_input;
+> +	s32			last_curr_input;
+> +	unsigned long		last_in_updated;
+> +	unsigned long		last_curr_updated;
+
+[ ... ]
+
+> +static const struct reg_field bcl_smb2360_reg_fields[] =3D {
+> +	[F_V_MAJOR]	=3D REG_FIELD(REVISION2, 0, 7),
+> +	[F_V_MINOR]	=3D REG_FIELD(REVISION1, 0, 7),
+> +	[F_CTL_EN]	=3D REG_FIELD(EN_CTL1, 7, 7),
+> +	[F_LVL0_ALARM]	=3D REG_FIELD(STATUS, 0, 0),
+> +	[F_LVL1_ALARM]	=3D REG_FIELD(STATUS, 1, 1),
+> +	[F_LVL2_ALARM]	=3D REG_FIELD(STATUS, 2, 2),
+> +	[F_IN_L0_THR]	=3D REG_FIELD(VADC_L0_THR, 0, 7),
+> +	[F_IN_L1_THR]	=3D REG_FIELD(VCMP_L1_THR, 0, 5),
+> +	[F_IN_L2_THR]	=3D REG_FIELD(VCMP_L2_THR, 0, 5),
+> +	[F_IN_INPUT]	=3D REG_FIELD(VADC_DATA1, 0, 7),
+> +	[F_CURR_H0_THR]	=3D REG_FIELD(IADC_H0_THR, 0, 7),
+> +	[F_CURR_H1_THR]	=3D REG_FIELD(IADC_H1_THR_GEN3, 0, 7),
+> +	[F_CURR_INPUT]	=3D REG_FIELD(IADC_DATA1, 0, 7),
+> +};
+> +
+> +static const struct reg_field bcl_smb2370_reg_fields[] =3D {
+> +	[F_V_MAJOR]	=3D REG_FIELD(REVISION2, 0, 7),
+> +	[F_V_MINOR]	=3D REG_FIELD(REVISION1, 0, 7),
+> +	[F_CTL_EN]	=3D REG_FIELD(EN_CTL1, 7, 7),
+> +	[F_LVL0_ALARM]	=3D REG_FIELD(STATUS, 0, 0),
+> +	[F_LVL1_ALARM]	=3D REG_FIELD(STATUS, 1, 1),
+> +	[F_LVL2_ALARM]	=3D REG_FIELD(STATUS, 2, 2),
+> +	[F_IN_L0_THR]	=3D REG_FIELD(VADC_L0_THR, 0, 7),
+> +	[F_IN_L1_THR]	=3D REG_FIELD(VCMP_L1_THR, 0, 5),
+> +	[F_IN_L2_THR]	=3D REG_FIELD(VCMP_L2_THR, 0, 5),
+
+[ ... ]
+
+> +/* Register 0x2a50 mapping: 0 -> 2S, 1 -> 3S */
+> +static const struct bcl_desc smb2360_data =3D {
+> +	.reg_fields =3D bcl_smb2360_reg_fields,
+> +	.num_reg_fields =3D F_CURR_INPUT + 1,
+> +	.data_field_bits_size =3D 8,
+> +	.thresh_field_bits_size =3D 8,
+> +	.battery_config_field =3D REG_FIELD(0x2a50, 0, 1),
+> +	.features =3D BCL_IN_MON | BCL_IN_INPUT | BCL_CURR_MON,
+> +	.channel_cfg[BCL_BATT_2S][CHANNEL_IN] =3D {
+> +		.base_mu =3D 4500,
+> +		.max_mu =3D 8400,
+> +		.step_mu =3D 50,
+> +		.default_scale_nu =3D 432918,
+> +		.thresh_type =3D {THRESH_TYPE_ADC, THRESH_TYPE_INDEX, THRESH_TYPE_INDE=
+X},
+> +	},
+> +	.channel_cfg[BCL_BATT_2S][CHANNEL_CURR] =3D {
+> +		.max_mu =3D 17575,
+> +		.default_scale_nu =3D 540679,
+> +		.thresh_type =3D {THRESH_TYPE_ADC, THRESH_TYPE_ADC},
+> +	},
+> +	.channel_cfg[BCL_BATT_3S][CHANNEL_IN] =3D {
+> +		.base_mu =3D 6750,
+> +		.max_mu =3D 12600,
+> +		.step_mu =3D 75,
+> +		.default_scale_nu =3D 648790,
+> +		.thresh_type =3D {THRESH_TYPE_ADC, THRESH_TYPE_INDEX, THRESH_TYPE_INDE=
+X},
+> +	},
+
+[ ... ]
+
+> +static int bcl_thresh_write(struct bcl_device *bcl, long value, enum bcl=
+_limit_alarm lvl,
+> +			    enum bcl_channel channel)
+> +{
+> +	const struct bcl_desc *desc =3D bcl->desc;
+> +	const struct bcl_channel_cfg *cfg =3D &desc->channel_cfg[bcl->batt_conf=
+ig][channel];
+> +	enum bcl_fields base_field =3D channel =3D=3D CHANNEL_IN ? F_IN_L0_THR =
+: F_CURR_H0_THR;
+> +	struct regmap_field *field;
+> +	long thresh =3D clamp_val(value, cfg->base_mu, cfg->max_mu);
+> +	u32 raw_val;
+> +	int ret;
+> +
+> +	if (WARN_ON(channel =3D=3D CHANNEL_CURR && lvl >=3D BCL_LIMIT_ALARM_LVL=
+2))
+> +		return -EINVAL;
+> +
+> +	field =3D bcl->fields[base_field + lvl];
+> +
+> +	if (cfg->thresh_type[lvl] =3D=3D THRESH_TYPE_ADC)
+> +		raw_val =3D bcl_convert_milliunit_to_raw(bcl, thresh, channel,
+> +						       desc->thresh_field_bits_size);
+> +	else
+> +		raw_val =3D bcl_convert_milliunit_to_index(bcl, thresh, channel);
+> +
+> +	ret =3D bcl_validate_threshold_fits(bcl, &desc->reg_fields[base_field +=
+ lvl],
+> +					  raw_val, thresh, channel =3D=3D CHANNEL_IN ? "mV" : "mA");
+> +	if (ret)
+> +		return ret;
+
+[Severity: Medium]
+As reported by Daniel Lezcano on v4 [1], can bcl_thresh_write() reject
+valid clamped thresholds on SMB2360 and SMB2370?
+
+For both chips, F_IN_L1_THR and F_IN_L2_THR are 6-bit fields (max index
+63, which corresponds to 7650 mV on 2S and 11475 mV on 3S), whereas
+channel_cfg sets max_mu to 8400 mV on 2S and 12600 mV on 3S (index 78).
+Writing a value >=3D 7675 mV on 2S or >=3D 11513 mV on 3S to in0_lcrit or
+in0_lemergency clamps to at most index 78, causing
+bcl_validate_threshold_fits() to log a dev_err() and fail with -EINVAL
+instead of clamping to the hardware limit.
+
+[ ... ]
+
+> +static int bcl_curr_input_read(struct bcl_device *bcl, long *out)
+> +{
+> +	int ret;
+> +	u32 raw_val =3D 0;
+> +	s32 signed_val;
+> +	const struct bcl_desc *desc =3D bcl->desc;
+> +
+> +	/* Return cached value if read too soon after last update */
+> +	if (bcl->last_curr_updated &&
+> +	    time_before(jiffies, bcl->last_curr_updated + HZ)) {
+> +		*out =3D bcl->last_curr_input;
+> +		return 0;
+> +	}
+
+[Severity: Low]
+On 32-bit platforms, can time_before(jiffies, bcl->last_curr_updated + HZ)
+wrap around if curr1_input (or in0_input in bcl_in_input_read()) is not
+read for more than LONG_MAX jiffies (~24.8 days at HZ=3D1000)?  During the
+following ~24.8 days, time_before() evaluates to true and returns the
+stale cached reading without updating last_curr_updated.  Using u64
+timestamps with get_jiffies_64() and time_before64() would avoid the wrap.
+
+[ ... ]
+
+> +static void bcl_alarm_enable_poll(struct work_struct *work)
+> +{
+> +	struct bcl_alarm_data *alarm =3D container_of(work, struct bcl_alarm_da=
+ta,
+> +							 alarm_poll_work.work);
+> +	struct bcl_device *bcl =3D (struct bcl_device *)alarm->device;
+> +	long status;
+> +	int ret;
+> +	bool notify =3D false;
+> +
+> +	scoped_guard(mutex, &bcl->lock)
+> +		ret =3D bcl_read_alarm_status(bcl, alarm->type, &status);
+> +
+> +	/* If read failed or shutting down, reschedule */
+> +	if (ret || READ_ONCE(alarm->shutting_down)) {
+> +		if (!READ_ONCE(alarm->shutting_down)) {
+> +			dev_err_ratelimited(bcl->dev,
+> +					    "Failed to read alarm %d status: %d\n",
+> +					    alarm->type, ret);
+> +			schedule_delayed_work(&alarm->alarm_poll_work,
+> +					      msecs_to_jiffies(BCL_ALARM_POLLING_MS));
+> +		}
+> +		return;
+> +	}
+> +
+> +	/* Check if alarm cleared and IRQ needs re-enabling */
+> +	scoped_guard(mutex, &alarm->a_lock) {
+> +		if (alarm->shutting_down)
+> +			return;
+> +
+> +		if (!status && !alarm->irq_enabled) {
+> +			alarm->irq_enabled =3D true;
+> +			enable_irq(alarm->irq);
+> +
+> +			if (!alarm->irq_wake_enabled && !enable_irq_wake(alarm->irq))
+> +				alarm->irq_wake_enabled =3D true;
+> +
+> +			notify =3D true;
+> +		}
+> +	}
+> +
+> +	if (notify) {
+> +		/* Reassertion racing enable_irq() is dropped by the PMIC on unmask; r=
+e-check. */
+> +		scoped_guard(mutex, &bcl->lock)
+> +			ret =3D bcl_read_alarm_status(bcl, alarm->type, &status);
+> +
+> +		if (ret || status) {
+> +			if (!READ_ONCE(alarm->shutting_down))
+> +				schedule_delayed_work(&alarm->alarm_poll_work,
+> +						      msecs_to_jiffies(BCL_ALARM_POLLING_MS));
+> +			return;
+> +		}
+> +
+> +		/* Notify outside a_lock: sysfs_notify()/kobject_uevent_env() may slee=
+p */
+> +		bcl_hwmon_notify_event(bcl, alarm->type);
+> +		return;
+> +	}
+> +
+> +	/* Alarm still active, reschedule polling */
+> +	if (!READ_ONCE(alarm->shutting_down))
+> +		schedule_delayed_work(&alarm->alarm_poll_work,
+> +				      msecs_to_jiffies(BCL_ALARM_POLLING_MS));
+> +}
+
+[Severity: Medium]
+Does bcl_alarm_enable_poll() enter an infinite 50 ms polling loop if the
+post-unmask re-check sees ret !=3D 0 or status !=3D 0?
+
+When the first read observes status =3D=3D 0, bcl_alarm_enable_poll() sets
+alarm->irq_enabled =3D true, enables the IRQ, and sets notify =3D true.  If
+the alarm reasserted before enable_irq() unmasked the line, the PMIC drops
+that edge (so bcl_handle_alarm() will not run to clear
+alarm->irq_enabled), and the re-check under if (notify) reschedules
+alarm_poll_work and returns with alarm->irq_enabled still true.
+
+On all later runs once status clears back to 0, (!status &&
+!alarm->irq_enabled) is false, so notify stays false: the clear
+notification is never sent and the function falls through to reschedule
+alarm_poll_work every 50 ms forever.
+
+[ ... ]
+
+> +static int bcl_alarm_irq_init(struct platform_device *pdev,
+> +			      struct bcl_device *bcl)
+> +{
+> +	int ret, irq_num, i;
+> +	struct bcl_alarm_data *alarm;
+> +
+> +	for (i =3D 0; i < ARRAY_SIZE(bcl->bcl_alarms); i++) {
+> +		alarm =3D &bcl->bcl_alarms[i];
+> +		alarm->type =3D i;
+> +		alarm->device =3D bcl;
+> +		ret =3D devm_mutex_init(bcl->dev, &alarm->a_lock);
+> +		if (ret)
+> +			return ret;
+> +
+> +		/* Initialize work before IRQ request */
+> +		INIT_DELAYED_WORK(&alarm->alarm_poll_work, bcl_alarm_enable_poll);
+> +
+> +		irq_num =3D platform_get_irq_byname(pdev, bcl_lvl_info[i].irq_name);
+> +		if (irq_num < 0)
+> +			return irq_num;
+> +
+> +		alarm->irq =3D irq_num;
+> +		alarm->irq_enabled =3D true;
+> +
+> +		ret =3D devm_request_threaded_irq(&pdev->dev, irq_num, NULL,
+> +						bcl_handle_alarm, IRQF_ONESHOT,
+> +						bcl_lvl_info[i].irq_name, alarm);
+> +		if (ret) {
+> +			alarm->irq_enabled =3D false;
+> +			return ret;
+> +		}
+> +
+> +		/*
+> +		 * Register the cleanup action right after the IRQ is
+> +		 * requested, before any other fallible step in this loop, so
+> +		 * a delayed work scheduled by the IRQ handler is guaranteed
+> +		 * to be canceled on teardown. Keeping it after the IRQ
+> +		 * request also preserves safe devm LIFO teardown order.
+> +		 */
+> +		ret =3D devm_add_action_or_reset(&pdev->dev, bcl_alarm_cleanup_action,
+> +					       alarm);
+> +		if (ret)
+> +			return ret;
+> +
+> +		if (!enable_irq_wake(irq_num))
+> +			alarm->irq_wake_enabled =3D true;
+> +	}
+
+[Severity: Medium]
+Can enable_irq_wake() in bcl_alarm_irq_init() race with bcl_handle_alarm()
+once devm_request_threaded_irq() activates the interrupt?
+
+CPU0                              CPU1
+bcl_alarm_irq_init()
+  devm_request_threaded_irq()
+                                  bcl_handle_alarm()
+                                    mutex_lock(&alarm->a_lock)
+                                    alarm->irq_enabled =3D false
+                                    disable_irq_nosync(alarm->irq)
+                                    /* irq_wake_enabled is still false */
+                                    mutex_unlock(&alarm->a_lock)
+  enable_irq_wake(irq_num)
+  alarm->irq_wake_enabled =3D true  <-- wake enabled while IRQ is disabled
+
+If bcl_handle_alarm() also runs between enable_irq_wake() and
+alarm->irq_wake_enabled =3D true (or after bcl_alarm_enable_poll() has
+already enabled wake), enable_irq_wake() can be called twice while
+irq_wake_enabled only tracks a single boolean, leaving wake_depth
+unbalanced on teardown.  Acquiring alarm->a_lock and checking
+alarm->irq_enabled && !alarm->irq_wake_enabled before calling
+enable_irq_wake() would prevent this.
+
+[1] https://lore.kernel.org/r/5598422c-8830-4fcf-be2b-e4486ea64539@oss.qual=
+comm.com
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261124-qcom-bcl-h=
+wmon-v5-0-747d5383d538@oss.qualcomm.com?part=3D2
