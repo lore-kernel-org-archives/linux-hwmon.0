@@ -1,90 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.227.15.19
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795529007;
-	b=mT46dYPsPA6X4fDCljmBqVTnkv5uSz2cJV0fRiybKLQRQUAw6W60fEm9d5JhmK7UopY6
-	 vQ3PYyIKYm5DJayO7Be6o9wU1RZygY5sHDl+ARYFTSuJuwm4lKVO3FWNVIIDPJ4gTi5yi
-	 7RAtMwuBAwsgTwtgUA7Eh97/D+DVYwpCVQDVY383yXxm08hRF2WNE9K8v8q1XqSUdT0MD
-	 NFdEtZ0t+3OmQci7o8fEEGT5efOvCpmd7KvvnDzve0xKbJZS0vDkqSdkct+zFn1uoPDfz
-	 +uDmYn+3F1/3goF0ILw1raQlelfJSYFV6IDdHG9yK3aL87GVLqWpHXXDHPlgE+BkiBw==
+	t=1795529508;
+	b=elgn3KbrM6tLYXlRpu2X2bdb31BLJuSPe3rkXrUYtvyqrX+V0csis++38j7t6BXgGbRN
+	 xG/6EtJ0VcLZit4xEwhPvYnPBuzEOxd4rtw2X141c0DoNmInOXsskjOcwckFT7VT1vUrh
+	 1A+rYH2pThWR4NKH7Z3MKL/J4zKkvWQKmhoVrImdrXjQZvvp3vPOD6EFJDBfsNKM9RKaK
+	 8tj32kVESb7FJLvHgM7VB8vbWZM4Jjl8ulfSn4P60JPFcaVVZ45kxq4eNnkAt5m9ODGnp
+	 2xsJrwUyjJVy/SSqyt0gOFRQh6n9lqQlr9sDkUV8TnE4Y0ouM/ITQWba5VC7/+g+zsQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795529007;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:From:Reply-To:Subject:To:Cc:
-	 References:Content-Language:Autocrypt:Organization:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=BmiCN77Aw/h7BiprF2ntlBFbL25ugi22XICBugdNRMQ=;
-	b=JbCnx7YgKVG0TOiPRZVkByrSaoKDiyLS0EGPPhCW/7Hy2s8kUK0W1TeX8Slttz/DYAHf
-	 3ghJQEuQBhDNqyTsAkfvWmeFHCEYcyr15ND/nu6VgvrRVtL28t7pwap3GgeDwjrQOx3mv
-	 65bBPZecFvxH0hbrJ3JLTA+iie4xovgit6tGaBs7QvvJOj6IknGQNi8SOOk2E5Uh3FaGm
-	 Uy+i08slZIPiGdakwSz4JyaokS4JF3lRNe3/uVMbNP35TPzXu2kZHSuumMTG7fz7GOnzy
-	 hFSYxXKhm80Cx4i9suai0KVbSQvXT6YqdFMRHtDkTaWhKD/Gb36jGDVLQqlLrWxNZlg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795529508;
+	h=DMARC-Filter:DKIM2-Signature:Message-Instance:DKIM-Signature:
+	 X-UI-Sender-Class:Received:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:References:Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
+	bh=yD1md+X5BGNCLnvBTE6z411ySGDanA16QrjaFM3gVP4=;
+	b=hOLQ1+t76Yn1Y9wPLRNiA3cQcfAXSKjdjbL8cLhYR+7JNmPuRC6C2KpzqywJ29dMfofh
+	 +UQSbchSr5KIXhQcODks5Z9AI6PmOpI2OyBAcU0XPBd00Cu8NoxFx1n7iVZ/DnrYZj8HW
+	 mxpZPkBNsenW83OzfY5B1WzA4RXLUDDbAxT1ocs1f7Fz2osMQ/oLHIYJ3/W1tMAz/9DRF
+	 HW/RSPrPuUHZcMnAspDM8yTeEGqtHN1L5qqiSNTGWxUNM950Dj2DFh6iKcoYrtpVHTXci
+	 PjMao0mbUGzgXXp6cQt4fLhDbA+rHQA5WWrbQxyfurSIfDUQJ3k8HUig8u1V3aTIafA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linaro.org;
-	spf=pass smtp.mailfrom=linaro.org;
-	dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=ukiSOZUO;
-	arc=none smtp.remote-ip=209.85.218.44
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=gmx.de;
+	spf=pass smtp.mailfrom=gmx.de;
+	dkim=pass header.d=gmx.de header.i=w_armin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=COR9SmMa;
+	arc=none smtp.remote-ip=212.227.15.19
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C847B606A33A
-	for <linux-hwmon@vger.kernel.org>; Tue, 24 Nov 2026 14:03:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C847B606A33A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820B8606A31E
+	for <linux-hwmon@vger.kernel.org>; Tue, 24 Nov 2026 14:11:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 820B8606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=ukiSOZUO
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c5198302d38so78666666b.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Nov 2026 06:03:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1795529005; x=1796133805; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:content-language:references:cc:to:subject:reply-to:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=BmiCN77Aw/h7BiprF2ntlBFbL25ugi22XICBugdNRMQ=;
-        b=ukiSOZUO2GyI9WW2Hp77iKkVNMkOHuY7o4g5f3aW3EXCGVsK0nQ/L6RfBKWO2T9Jlc
-         jnU3tq3aEGNDAJHgNAstZoLxDMtkTDW+/mJbxPNcZ+6UMNO8QIwgLnxHyhTBLNOsWTrV
-         B7nOg4FqmMgEz/Upfyv6SZD9S10nfOYcY/CaRaRAILpA/TXkxR6nGap86rwGpGIXiStQ
-         a6dBGiUc5Y6BxzxJpaMHbVc+mnvNflPbla3j7wCHsl5k217FZqoMSJKRlyAbzUQw6+QK
-         /kEu0pUQ1/BN8LWvrd4lBFy5xizt6Ae1S2eNGe9sPUfBOTqjtGl5apop3VpRgDP4y+1b
-         HdgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795529005; x=1796133805;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:content-language:references:cc:to:subject:reply-to:from
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BmiCN77Aw/h7BiprF2ntlBFbL25ugi22XICBugdNRMQ=;
-        b=mscuHk5dk1AQYZusFvxswAvJ//Pc0f9BKvPBCyzkH4G5nRutuR0hdYFjQFELMAeyMT
-         D/C7zRI8cz5Z+3nmZHMpsgUCWPwcGGHrN/5s5amgIM66J7awYiQPZOB/0H1ZTB6F+4Ut
-         29EpkUpIYk3NUqha8tP0QUeqEZcRACwMCZbhyjhCjOQbY7ES3R0gfCphcEJd8WXUT1zT
-         pHsSwUv+6uecJCgJu/md1l08nGGyygnzK0x2vmnXWfhYNySFhkWl0pzTvHDHr7aFfoCZ
-         UZunSDBApkUC7E6XLg4YfqAfxBgg2W/pXeX5I198ggPuy9wwzrk32mBUQ/XJ2yS8CSpf
-         ETsw==
-X-Forwarded-Encrypted: i=1; AL+hErE5BXnfgt+Vi5O+bkAMOQUSPGj5xD1A9wcTvvLIwii+yTPpF573/0/JwRzXAUMyKqPYH0bEhh/Q5/LRvQ==@vger.kernel.org
-X-Gm-Message-State: APuU4Z/XDyp6cjIsBltJYQdmeVKZl93SflUvX7MEZ1tDVjLJ5C8ezwCw
-	ZqzdwQwWUi4wL43QvwcQbJllPH6PhNprXlQKa2O8/S1B6BcU5mOHz3q/kQofXP2UvC+STWqB/sh
-	xmp7Qwc8=
-X-Gm-Gg: AZFdTZeM5mr3k44ogpd3KiSa6nlS7oHVImo/e+AGRghRyIX017mI+VmaceY7e+NPZCX
-	QdriLQ1/wYAShikuZ/41yY/kpC21QVX+VDCSBHe5QdweQc5cu67JDJYAacloN52pUrGnsFSWQI0
-	zK6a53r9eQdQ/UINJH1xRar3xndz0q39BV4+LT0aUVr4IHPBc5eO2kvy6D2lm+CFxghkoGcu1IZ
-	vtoJwHr3fzgNnaif+0oFKC7HxZmz7gjk9YV7JnmecD3jYaRlU8QxreBQ1vP7/Mnr/c4c6thMS96
-	D6NNeU/mBAYt7uzhI+sgyd7NIg9ICxxlt9Flt/p/Y7Z8Jf3l6wjmzcVfAK6kC69wnApXwl24YSy
-	Hf4B0aPtG7xQGyaUtdjmZdkEJTLOv0mh2s7fn8c13zo8ugMp4xvvTuRL6i9qJjXykGGAO1HfH7Q
-	x8Df20WsRGBcD/YJXVyBCZ+ujtpSe21YAyofhQ0bP/LinG8czT4TWHR0ahHt0izrEH5GMWs/HeR
-	9rraSWPLn5UvipCecPebs7V0noA2Uctf5k9avYZLXObu7sNO+rR4vpAVcOutDCyIoO8w/MJ3OgU
-	GcjyTqBdWGjno5Kca2Q23SACFfA9t9X1U5ha0KuJP43vQNxBbvgyspklnuvkY16ylR0kcaB1YHS
-	ePPGumMV6bFCXx2lQ7oVK7XJyd5ivwg==
-X-Received: by 2002:a17:906:2db1:b0:c51:691:c76e with SMTP id a640c23a62f3a-c513a9abeffmr853349866b.36.1795529003374;
-        Tue, 24 Nov 2026 06:03:23 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:106d:1080:ac27:24a0:7b1a:dd94? ([2a01:e0a:106d:1080:ac27:24a0:7b1a:dd94])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513ad010a6sm528420066b.7.2026.11.24.06.03.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Nov 2026 06:03:23 -0800 (PST)
-Message-ID: <729e2ab7-ebf2-4dd5-8c73-3e9ac1764663@linaro.org>
-Date: Tue, 24 Nov 2026 15:03:21 +0100
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=COR9SmMa
+DKIM2-Signature:  i=1; m=1; t=1795529505;
+ mf=PFdfQXJtaW5AZ214LmRlPg==;
+ rt=PGxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZz4=;
+ d=gmx.de;
+ s=s31663417:rsa-sha256:O3IToJPMOhljIFDMqY/KKlO4ViHl
+   +ytiUaiTe2JdX/8jJhqeFdv58zweKL25j5vaCDuzDFBNxS33xsxj2BIMkB3sI9G70Ij/r9Ip9p4
+   cvGWdJmZZT8e4lhr+cD1zdlHL8IKhH799gyNj82GUQRbp64edrg8aH3LqsVgPUZULx5yBiAKLZn
+   8Xb5V5f+jY9vaLXAeBVLWrDopGbvRupFF8/9Nz1cNiepGTOgp25CRFi6GkDShfQRS54bMCeSu5o
+   pmy/IPrJmycVTAN2NrFa4CVhK0qBlDdIkzRgTqvEr7WB4DfbiM+GS9rIGWMA0nJ0gPC5T/hs+JS
+   G7046ubqtP9tAg==;
+Message-Instance:  m=1;
+ h=sha256:
+   h5Dwr9zkTqL5neghdTsZYKi3KrPMKEu2tMlmDGqjmJA=:
+   yD1md+X5BGNCLnvBTE6z411ySGDanA16QrjaFM3gVP4=,
+  sha512:
+   /i93rFh938amEeP9NHrWSAMYyXpCuuaGzM7ueNeql/+46e0zENxZb1txL+Z+puwq1qap2xPaegE/WbiF9jtHmQ==:
+   2Ba5RpMiRF+EQsBXcroZVykVtq+zycfcBeEyE6tnhAMo0yFWPKWXZr4faPbvbmeRV9kTtpn+hr8JWP2E0EwFhQ==;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1795529493; x=1796134293; i=w_armin@gmx.de;
+	bh=yD1md+X5BGNCLnvBTE6z411ySGDanA16QrjaFM3gVP4=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=COR9SmMaHez11ai/EswFbSnc7X5TvOAiP8+xPa6En/E2kc7vln7A1v4Cuyurz91B
+	 za7eAV3BYTkaWoTLrQjy+lz00aieZf2agMaGX4UqdyI75G4UAP30NMAD4sdGSSFDR
+	 FSuQaKQCx5hnbo/6BuT8JfW+sCaSX3q3byfqm2r28m5LfBuOiB4TrO23h9JhDltwd
+	 oCZV/8HxEpJiUgN6K5xd1jRivZ0lnZpj10xO9Kc24nhbYcl/jc6yq4RNTrSsOOk3Q
+	 STUnDXCwA9koA6ZZ/xw2SxnHb0HI+9CkG03pYBgKd3joeXJ/boHkenXzax1UTo9sn
+	 huBrGUlE3hCGrami7A==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MgNh7-1yAfVK0dX5-00kCUc; Tue, 24
+ Nov 2026 15:11:33 +0100
+Message-ID: <183bffc9-901c-4a9e-bfcc-1f63a125a32c@gmx.de>
+Date: Tue, 24 Nov 2026 15:11:32 +0100
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -95,254 +81,175 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v7 3/3] iio: adc: add driver for the MAX34417 Four-Channel
- High Dynamic Range Power Accumulator
-To: sashiko-reviews@lists.linux.dev
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org,
- conor+dt@kernel.org
-References: <20261123-topic-sm8x50-iio-max34417-adc-v7-0-d8f87edc5086@linaro.org>
- <20261123-topic-sm8x50-iio-max34417-adc-v7-3-d8f87edc5086@linaro.org>
- <sashiko-outbox-229791@kernel.org>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <sashiko-outbox-229791@kernel.org>
+Subject: Re: Unknown values check in acpi_power_meter
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.de>,
+ linux-hwmon@vger.kernel.org
+References: <20261123110616.1a3b8290@endymion>
+ <f248e88c-e328-4118-9282-09f6829ebcc7@roeck-us.net>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <f248e88c-e328-4118-9282-09f6829ebcc7@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:iB5DgwKuEjm8KO7HTeE0jszRKDu9CED/VTMgB+AqnI7Ex727Zrl
+ SMWdKK+J5joIIMWl4SoTunhiQOmUWN+ZfIv0acwm4YaZWzQtdELRnAHy7Xhv/0LhgwzvspY
+ TyLVWUraxmWBqhVzWEK8w9XIvJEa3Xusdg50KxUnd00E7Z48gzLERBksGI0U1OMwgQNXwcr
+ Y6tDH4jzj3HL1m/YOCMsA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:w7wjdUpyzbc=;hj8QtRe9hLNmif/9u8PnLGKNeVC
+ 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
 
-On 11/23/26 19:02, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential
-> issues to consider:
-> - [Medium] iio: adc: max34417: voltage read fails on power overflow in
->    CAM mode
-> - [Medium] iio: adc: max34417: stale OVF and state desync in
->    max34417_setup_cam_mode()
-> --
-> 
-> commit bc8a43ebc9b20a80f36676c2f0db12f5485b7c1d
-> Author: Neil Armstrong <neil.armstrong@linaro.org>
-> 
-> iio: adc: add driver for the MAX34417 Four-Channel High Dynamic Range Power Accumulator
-> 
-> This commit adds an IIO ADC driver for the MAX34417 four-channel voltage and
-> power accumulator over I2C/SMBus, supporting single-shot voltage and power
-> measurements as well as continuous energy and average power accumulation.
-> 
->> diff --git a/drivers/iio/adc/max34417.c b/drivers/iio/adc/max34417.c
->> new file mode 100644
->> index 0000000000000..241cc9c3c2546
->> --- /dev/null
->> +++ b/drivers/iio/adc/max34417.c
-> [ ... ]
->> +static int max34417_check_ovf(struct max34417_data *max34417)
->> +{
->> +	struct regmap *map = max34417->regmap;
->> +	u32 control;
->> +	int rc;
->> +
->> +	rc = regmap_read(map, MAX34417_CONTROL_REG, &control);
->> +	if (rc)
->> +		return rc;
->> +
->> +	if (!(control & MAX34417_CONTROL_OVF))
->> +		return 0;
->> +
->> +	rc = regmap_clear_bits(map, MAX34417_CONTROL_REG, MAX34417_CONTROL_OVF);
->> +	if (rc)
->> +		return rc;
->> +
->> +	rc = regmap_write(map, MAX34417_UPDATE_REG, 1);
->> +	if (rc)
->> +		return rc;
->> +
->> +	/* Save the timestamp for the next read */
->> +	max34417->last_update = ktime_get();
->> +
->> +	return 0;
->> +}
-> [ ... ]
->> +static int max34417_save_accumulators(struct max34417_data *max34417)
->> +{
->> +	s64 acc_power;
->> +	s32 acc_count;
->> +	int rc;
->> +
->> +	rc = max34417_read_acc_count(max34417, &acc_count);
->> +	if (rc)
->> +		return rc;
->> +
->> +	if (check_add_overflow(max34417->acc_count, acc_count, &max34417->acc_count)) {
->> +		max34417->overflow = true;
->> +		goto check_ovf;
->> +	}
->> +
->> +	for (int i = 0; i < MAX34417_CHANNEL_COUNT; i++) {
->> +		rc = max34417_read_acc_power(max34417, MAX34417_PWR_ACC_1_REG + i,
->> +					     &acc_power);
->> +		if (rc)
->> +			return rc;
->> +
->> +		/* Check for overflow on local accumulators */
->> +		if (check_add_overflow(max34417->acc_power[i], acc_power,
->> +				       &max34417->acc_power[i])) {
->> +			max34417->overflow = true;
->> +			goto check_ovf;
->> +		}
->> +	}
->> +
->> +check_ovf:
->> +	rc = max34417_check_ovf(max34417);
->> +	if (rc)
->> +		return rc;
->> +
->> +	return max34417->overflow ? -EOVERFLOW : 0;
->> +}
->> +
->> +static int max34417_read_voltage(struct max34417_data *max34417,
->> +				 const struct iio_chan_spec *chan, int *val)
->> +{
-> [ ... ]
->> +	rc = regmap_write(map, MAX34417_UPDATE_REG, 1);
->> +	if (rc)
->> +		return rc;
->> +
->> +	/* Save the timestamp for the next read */
->> +	max34417->last_update = ktime_get();
->> +
->> +	if (max34417->cam_mode) {
->> +		/* Retrieve all channels to avoid missing data for other channels */
->> +		rc = max34417_save_accumulators(max34417);
->> +		if (rc)
->> +			return rc;
->> +	}
->> +
->> +	rc = regmap_noinc_read(map, chan->address, &buf, sizeof(buf));
->> +	if (rc)
->> +		return rc;
->> +
->> +	/* Ignore first byte which contains the Byte Count & data starts at Bit 2 */
->> +	*val = get_unaligned_be16(&buf[MAX34417_VOLTAGE_READ_OFFSET]) >> 2;
->> +
->> +	return IIO_VAL_INT;
->> +}
-> 
-> [Severity: Medium]
-> Should max34417_read_voltage() fail with -EOVERFLOW when a software power
-> accumulator overflows in CAM mode?
-> 
-> Voltage readings from MAX34417_V_CHx_REG are instantaneous 14-bit samples
-> that do not depend on max34417->acc_power[] or max34417->acc_count, yet once
-> max34417->overflow is set, max34417_save_accumulators() returns -EOVERFLOW
-> and aborts every voltage read.
-> 
-> In addition, because neither max34417_read_voltage() nor
-> max34417_save_accumulators() checks max34417->overflow before running
-> check_add_overflow(), subsequent voltage reads continue adding into the
-> wrapped max34417->acc_count and max34417->acc_power[] values.  And if
-> MAX34417_CONTROL_OVF is set in hardware, max34417_check_ovf() clears it and
-> writes MAX34417_UPDATE_REG before max34417_read_voltage() has read
-> chan->address.
+Am 23.11.26 um 17:23 schrieb Guenter Roeck:
+> Hi Jean,
+>=20
+> On 11/23/26 02:06, Jean Delvare wrote:
+>> Hi all,
+>>
+>> I have a concern about the following construct found in the
+>> acpi_power_meter driver:
+>>
+>>> /*
+>>> =C2=A0 * ACPI integers can either be 32-bit or 64-bit wide, so
+>>> =C2=A0 * we have to check for both values.
+>>> =C2=A0 */
+>>> static bool acpi_power_meter_is_unknown(u64 val)
+>>> {
+>>> =C2=A0=C2=A0=C2=A0=C2=A0return val =3D=3D U32_MAX || val =3D=3D U64_MA=
+X;
+>>> }
+>>
+>> If the implementation is returning 64-bit values on a given system,
+>> then only U64_MAX means that a value is unknown; U32_MAX is a regular
+>> number as any other and should not be handled as an error case.
+>>
+>> Don't we have a way to figure out whether a given ACPI integer object
+>> is a 32-bit or 64-bit value, and only compare the result with the one
+>> appropriate special value which means unknown for that integer size?
+>>
+>=20
+> I didn't like it either, but I asked Google search. There is
+> acpi_gbl_integer_byte_width, but it is not exported. It recommends
+> to use the above code for modules. I don't know of a different
+> mechanism.
+>=20
+> In practice, the value is checked for properties which should never
+> be even close to U32_MAX, except for the power value. For power it
+> returns -ENODATA only if the power is exactly 4,294,967,295 mW,
+> which I found to be an acceptable trade-off.
+>=20
+> If you or anyone else has a better idea, please let me know.
+>=20
+> Thanks,
+> Guenter
+>=20
+>=20
 
-Will address that, and not fail on accumulation overflow.
+Hi,
 
-> 
-> [ ... ]
->> +static int max34417_setup_cam_mode(struct max34417_data *max34417, int val)
->> +{
->> +	struct regmap *map = max34417->regmap;
->> +	int rc;
->> +
->> +	if (max34417->cam_mode && !val) {
->> +		/* Reset counters and accumulators */
->> +		for (int i = 0; i < MAX34417_CHANNEL_COUNT; i++)
->> +			max34417->acc_power[i] = 0;
->> +		max34417->acc_count = 0;
->> +		max34417->overflow = false;
->> +
->> +		rc = regmap_clear_bits(map, MAX34417_CONTROL_REG,
->> +				       MAX34417_CONTROL_CAM);
->> +		if (rc)
->> +			return rc;
->> +
->> +		rc = regmap_write(map, MAX34417_UPDATE_REG, 1);
->> +		if (rc)
->> +			return rc;
->> +	} else if (!max34417->cam_mode && val) {
->> +		/*
->> +		 * If CAM mode must be set, the Control byte must be set to desired
->> +		 * values with CAM = 0, then followed by an UPDATE.
->> +		 */
->> +		rc = regmap_clear_bits(map, MAX34417_CONTROL_REG,
->> +				       MAX34417_CONTROL_CAM);
->> +		if (rc)
->> +			return rc;
->> +
->> +		rc = regmap_write(map, MAX34417_UPDATE_REG, 1);
->> +		if (rc)
->> +			return rc;
->> +
->> +		rc = regmap_set_bits(map, MAX34417_CONTROL_REG, MAX34417_CONTROL_CAM);
->> +		if (rc)
->> +			return rc;
->> +
->> +		rc = regmap_write(map, MAX34417_UPDATE_REG, 1);
->> +		if (rc)
->> +			return rc;
->> +	}
->> +
->> +	/* Save the timestamp for the next read */
->> +	max34417->last_update = ktime_get();
->> +
->> +	max34417->cam_mode = val;
->> +
->> +	return 0;
->> +}
-> 
-> [Severity: Medium]
-> Does max34417_setup_cam_mode() leave MAX34417_CONTROL_OVF set in
-> MAX34417_CONTROL_REG when toggling CAM mode after an accumulator saturation?
-> 
-> When a hardware accumulator saturates, the chip sets MAX34417_CONTROL_OVF
-> and stops measuring until MAX34417_CONTROL_OVF is cleared followed by an
-> UPDATE command.  And once max34417->overflow is set, max34417_read_power()
-> and max34417_read_energy() return -EOVERFLOW before reaching
-> max34417_check_ovf(), so disabling and re-enabling CAM mode is the way to
-> reset accumulation.  Because both branches here only modify
-> MAX34417_CONTROL_CAM via regmap_clear_bits() and regmap_set_bits(),
-> MAX34417_CONTROL_OVF stays set in hardware across the reset and keeps
-> accumulation halted when CAM mode is re-enabled.
-> 
-> Also, in the disable branch, max34417->acc_power[], max34417->acc_count and
-> max34417->overflow are cleared before the I2C writes, so a failed write
-> discards the accumulated data while leaving max34417->cam_mode true; in the
-> enable branch, if the final regmap_write(map, MAX34417_UPDATE_REG, 1) fails,
-> MAX34417_CONTROL_CAM remains set in hardware while max34417->cam_mode stays
-> false.
-> 
+if i remember correctly then the ACPI spec says that the results are=20
+32-bit integers, so they should newer exceed U32_MAX. We only check for=20
+U64_MAX because some 64-bit ACPI firmware is using the 64-bit Ones=20
+contant (0xFFFFFFFFFFFFFFFF) without masking the upper 32 bits.
 
-Will clear OVF on disabling and clear the accumulator after the i2c writes.
+Thanks,
+Armin Wolf
