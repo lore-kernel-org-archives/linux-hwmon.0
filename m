@@ -1,54 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795502648;
-	b=5tsgd/7zC/vM4q0fNP8U7xSpJGjvWUpTIdXPtR194vRU5l7NbWNhTr3NHWfLgeUgu/jw
-	 i9FJvnC0Vi4hMzu2FbksvbXNTtbNmmOIfOjBRIC1RyoU08xDatoVnf26yD3bFGQf9df6L
-	 Bzg/FCwhHVdS18/9dEY7PTCcCU4NbGRisGbYxUrYs/DEVfbnKtjhhEoYIBkVJOsak6ZV8
-	 BUngHhk+iDMLLMd4kXKLrOj/DjcMK6rZeWLnh9On8/9gaB7klZDvUAantaCNEXgAcEFZB
-	 GvZvMGqLV+X5ZU5t0j9SONIRn7A7YIFeorBXx22G/RI2xMPQISa/dWAyT321nhjHu9g==
+	t=1795512656;
+	b=y0XtyixvGWkMINvmQ1M6LzQ9YhSsEEFhQ8gBpOMOzHTJe2PhwJj/Krpf90zlns5XTENB
+	 QMXf5EFOeCUJt5oWTCItWy8Q3MbsOLwFOqFQ+GE2K1+1qB13zCj1eEB8C9DuxI7fVKMVn
+	 Iw8wp7FvLmm2v8+KNwMiS/NsKA4sJFqZwQS7jTi0sLYw1JKU2TZFlD6irw3OrNcuF0Zgr
+	 hW7kdarZHjt/IeD7bkS0tmfkuVJmu/rAunlfE/EtB3rOVfxWQVBicomdhL6juCJ/5QDrM
+	 j3h2B60DhLjmEQx3Bfg0i/qIk9wpO3po3GAT37194PFQhh8CMvM+wQqo1iPuHb1daoA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795502648;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=bKlLxg6MKx5+i/RoEKIHMj+VItJ/aIyDsl8nP0mZGEw=;
-	b=D4WCygW+ruz8ZUyK0/C4GBxxe2WW2QAEX+L5jGcaxEM69AEnv8E80dWBQ29u/oOLG4vY
-	 Jmef0zvgpiWq2o8d8BIwaXxPYTavmWWUl6FIZc+VeY+WZKdnriMfyMtutq5UoU+UCDHqX
-	 dAMYQopK66GjN7F5jgTi3Xe7Q9FRD1SzKZISj+2SPud3nou17ioHkUJRoLKuKRjMo316/
-	 Mds/qRnYJR5nAd2wDXQqRaywMdX9jOloIOXfuLGoXSn5O89rRe6751kbXM1sxiYzKgseU
-	 nNfTWrJPJo9ucCq/Px92eant5T7QcIL85AoFBNKXOjxZkP3HSb/UizjupD+2HP9ErYQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795512656;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:From:Reply-To:Subject:To:Cc:
+	 References:Content-Language:Autocrypt:Organization:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=Vwz3YwCC2M/KtkN+RUWPhfgiv9vTkISGv0jzJlD7WZU=;
+	b=1FEIWFFZVW4TE7JUhVQELuPIJ9T/mggxpX691pRf0p9cvQxdGJi0SCInTlxGfwplS698
+	 4xOK4OXUleNaj8anGlxm7WetFE1ri09ET8QzyL5jxrb3zweXRqQkQHDqRBTh5yR7HhjDr
+	 zqfWnaLJsMsNg6RHmCTcPaqWOt4QK75Opc5xdXG4nTHrFD+rE81K6/nw6ihGW2S4pcfgW
+	 j/HDySBtpGBCRyLoF5JsMlcxwEyAwn9mak6ZjqVN5H9myzPxoko9BGPlSrmJndOHQggbg
+	 d4idagMhLsVsj3rMBb+Hbpd2f05HRQHgrbGLECNRlustoCPf8ZOoNso/+TX2nEUho3Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a3zkwzQA;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linaro.org;
+	spf=pass smtp.mailfrom=linaro.org;
+	dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=G20n2scp;
+	arc=none smtp.remote-ip=209.85.128.51
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 371B8606A332;
-	Tue, 24 Nov 2026 06:44:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B1CB606A680
+	for <linux-hwmon@vger.kernel.org>; Tue, 24 Nov 2026 09:30:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8B1CB606A680
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a3zkwzQA
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5187A1F000C6;
-	Tue, 24 Nov 2026 06:44:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795502647;
-	bh=bKlLxg6MKx5+i/RoEKIHMj+VItJ/aIyDsl8nP0mZGEw=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=a3zkwzQA+OHORgKTP3TPPG+gu8SRRfBYOt4eb4Vg7g1T6acDAdE7XL03D8BpMoAgO
-	 24rmy3GMULMSYSKR6cqGUU9/18vVbkaJQaUWifJJdmcGnpKshn0RHyXY17c72v9tdl
-	 BdqxT59wWB8BmqPXq2JeXCvZRii2Q/xwrF+dXX72hoWLMYwzRM0D2Wmwvy9OH/KWyf
-	 V+iNM/OIME9gzZK0IdNtX1bsZ475E0R75pbxP0sCjYetsm/7yicFCEcHP0nYzNIZu0
-	 BSleG9p1zj3wMSa7LBXkSJZLYVq+rLEEPFjliXKGUqPgDa+FWASH1Ya3mnOTncUzvs
-	 0WD6MlXPmhKnw==
-Message-ID: <sashiko-outbox-230607@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] msr: replace rdmsr()/wrmsr() in comments
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Juergen Gross" <jgross@suse.com>, linux-perf-users@vger.kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20261124064108.2440277-1-jgross@suse.com>
-References: <20261124064108.2440277-1-jgross@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 24 Nov 2026 06:44:06 +0000
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=G20n2scp
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4b79502c27aso41361545e9.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 Nov 2026 01:30:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1795512654; x=1796117454; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :autocrypt:content-language:references:cc:to:subject:reply-to:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Vwz3YwCC2M/KtkN+RUWPhfgiv9vTkISGv0jzJlD7WZU=;
+        b=G20n2scpUNu46rHVlne7Nj0tqQWBFvFDqtFk9ztR+JfaYIfHbJlWD0PecHhGsl9hDh
+         V7l64o7tUEeP9Fr0dl6utmBsMkdpxn/xAoqH5lu5GSD8eqMs3NV2wnv3FTwMp2vy26IU
+         y8Fm0iVyV7oo4faPUhgk2e3vAmTnT1G/l0mAj5vrllQZzXHblRxZPyvf3hbqoxnG13gL
+         6+HgxPaxvb5eBdmijrE+kGGaKzRf6SsE5QVfXNgJRzsD5IgMlCrtHA5CWCyt2ucfesnC
+         yW/HdpwOYEU6CeQMCKFXNBfYkUimRkqJOrjWaLcjUfDe/X+QD/r79wutMpH+Zz2V8Zq2
+         OaJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795512654; x=1796117454;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :autocrypt:content-language:references:cc:to:subject:reply-to:from
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Vwz3YwCC2M/KtkN+RUWPhfgiv9vTkISGv0jzJlD7WZU=;
+        b=QTBevvl5gur2pzTUeWMVUmfEI6bhl7EBih/l2oHog4GiitKIF/s4pz/OS/++ZNp2fd
+         M6H/SB6OkFbQUg6tyVh60jwSILwAUVkhs1XuJ1D/hd3xCqTcOSjpIamFsviQWqEF+lhC
+         xz+2ek0Vs0ViQzu5t2cWKmxjDmFmRyNRBoKd/zwuLnYpU/m0MR1+r4ij0cASA60MJafk
+         Mtm8XdzwPcCHu7bqTfn2xf2vRvJ/nxYuxHiAiRYqEy8mIRJIsEQK5qVCRQA79q0GEEnp
+         4OpEHZg1HT/TB7D9kb6n9bwmFlDXCKkIOSYJ+u6x3ZMaPAClpe+qwDHjFfDdyyIZvVVi
+         DTow==
+X-Forwarded-Encrypted: i=1; AL+hErGgQ8Z1Ccg4JURPFVgNvVWvj25in/V1wb/MX4L0E+7J6qPitfGbGMfU2uUinuqbVax/ItPII+LCt5q00Q==@vger.kernel.org
+X-Gm-Message-State: APuU4Z9pu1v23z45hMLop0hC+h5xjinTfCPUq5IRelEZ5EdtLZHX6pnm
+	jTrqx0Aa87LlrFVSSGmZ/BuWzVyZsP+4mxud1ljQg7ImhUXoNO4ObrGV3m1XUGi0MW4=
+X-Gm-Gg: AZFdTZfM1MMLkgTeVw4op1xOY61Jz32x7psF0k0QonhdxMmCvdbhoVuczEY4GTqLMCA
+	KPWjlcA6je5EvHzqwW6nosPVG3iaUiTH3updczVB4R6MnV4ZgtYtOWoTIgZQbU5O3UcZbG0mtdF
+	euWIHAv4/EhajnoqdOuNi0iY+RFYKNbdMvyE2HSjG4OK5NIZSAawrRovqfsQ5hxLEWn8wdVGs9g
+	Fv7AJRhkyRRuw+nLNlVVfKtd7l6A2qSQeXwjbUccq8hYpLQtAq6zSJ6nmh+rUQo3dxkMaICR7Kd
+	Cm/NrKwVNQFPljcwFU4Ooxa0kTsvXEj5JTcGi6taLN69TZ13jIKvu1JYxTLhbamkud5Zuyt8umb
+	081SvSYQV2G6wPGGoIqAVMJ+V2Ye8zXYt0KRF4CS05uNj6QW3E5yfokJhJ2k/lRCaTyV5CeYlia
+	54zaM7paYuUM9+nBCUmdaF9UQMIoQbYHEWMV1rIclpTNO9x7XE4of3r7C9upsBQIM3rwCSb/Dbn
+	z9p8iuyDqmEhtMkJB3iONol8X14tlGksQNAQE/Pd3nfSJMGHcVvQbiRFeDPPtg9TiiRoc9t7xLZ
+	QMfl+ArUWuzPp5EcIJ79mZuMzr9018Ts9kXJ/3kN6C1WpujTKTdAhWsc7MeT/O26IPpBpxAulSx
+	uhYp9wkB8HA==
+X-Received: by 2002:a05:600c:3b1d:b0:4bb:6991:2330 with SMTP id 5b1f17b1804b1-4bb8881a890mr286914585e9.22.1795512653721;
+        Tue, 24 Nov 2026 01:30:53 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:106d:1080:6b5b:c2cd:5d18:e93b? ([2a01:e0a:106d:1080:6b5b:c2cd:5d18:e93b])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb853a9846sm496080215e9.11.2026.11.24.01.30.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Nov 2026 01:30:53 -0800 (PST)
+Message-ID: <3f0bf2dc-02c4-45e8-ae06-feb669b6b234@linaro.org>
+Date: Tue, 24 Nov 2026 10:30:52 +0100
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -57,18 +92,173 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v7 3/3] iio: adc: add driver for the MAX34417 Four-Channel
+ High Dynamic Range Power Accumulator
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Jonathan Cameron <jic23@kernel.org>, David Lechner
+ <dlechner@baylibre.com>, =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+ Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Michael Hennerich <Michael.Hennerich@analog.com>,
+ linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, linux@analog.com
+References: <20261123-topic-sm8x50-iio-max34417-adc-v7-0-d8f87edc5086@linaro.org>
+ <20261123-topic-sm8x50-iio-max34417-adc-v7-3-d8f87edc5086@linaro.org>
+ <awSWVMMYN2xsDH7u@ashevche-desk.local>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <awSWVMMYN2xsDH7u@ashevche-desk.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> Replace all mentioning of rdmsr() and wrmsr() in comments with
-> rdmsrq() and wrmsrq(), as the former functions are no longer
-> existing.
->=20
-> In drivers/hwmon/coretemp.c drop mentioning rdmsr/wrmsr, as the
-> comment was incorrect in this regard.
->=20
-> Signed-off-by: Juergen Gross <jgross@suse.com>
+On 11/23/26 20:39, Andy Shevchenko wrote:
+> On Mon, Nov 23, 2026 at 06:47:46PM +0100, Neil Armstrong wrote:
+>> The MAX34417 is a specialized current and voltage monitor used to
+>> determine power consumption of portable systems. The driver support
+>> getting the channels voltage, average power, accumulated average
+>> power and energy over an I2C/SMBUS serial interface.
+>>
+>> The MAX34417 datasheet only specified on how to calculate the
+>> accumulated average power, but with the Sample Per Second rate
+>> we can easily get accumulated Energy in Joules.
+>>
+>> By default the IIO driver only supports single-shot Voltage
+>> and Power sensing, but the accumulation can be enabled by
+>> enabling the Energy IIO channel which then enables the
+>> Continuous Accumulation Mode.
+>>
+>> The counter is common to all channels, so when reading a single
+>> channel we will copy all accumulators to registers, so in order
+>> to permit reading individual channels we must accumulate the
+>> other channels in the driver when Continuous Accumulation Mode
+>> is enabled.
+> 
+> ...
+> 
+>> +#define MAX34417_MIN_RSENSE_UOHM		(1 * MILLI)
+>> +#define MAX34417_MAX_RSENSE_UOHM		(100 * MILLI)
+>> +#define MAX34417_DEFAULT_RSENSE_UOHM		(1 * MILLI)
+> 
+> Oh, it's micro, but you use MILLI. Also even in macros we nowadays want to see
+> the unit as defined in SI.
+> 
+> #define MAX34417_MIN_RSENSE_uOhm		(1 * (MICRO / MILLI))
+> #define MAX34417_MAX_RSENSE_uOhm		(100 * (MICRO / MILLI))
+> #define MAX34417_DEFAULT_RSENSE_uOhm		(1 * (MICRO / MILLI))
+> 
+> Alternatively add another patch to start Ohm multipliers in units.h
+> 
+> #define MICROOHM_PER_MILLIOHM		1000
+> 
+> I will Ack it.
+> 
 
-Sashiko has reviewed this patch and found no issues.
+Hmm, I want to express the min/max/default rsense in uOhm, minimum is 1000 uOhm,
+max is 100000 uOhm, so initially they were:
+#define MAX34417_MIN_RSENSE	(1000)
+#define MAX34417_MAX_RSENSE	(100000)
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261124064108.2440=
-277-1-jgross@suse.com?part=3D1
+and the unit is uOhm, so how should I define them ?
+
+with #define MICROOHM_PER_MILLIOHM		1000
+
+#define MAX34417_MIN_RSENSE_uOhm	(1 * MICROOHM_PER_MILLIOHM)
+#define MAX34417_MAX_RSENSE_uOhm	(100 * MICROOHM_PER_MILLIOHM)
+
+?
+
+> ...
+> 
+>> +struct max34417_data {
+>> +	struct iio_dev *indio_dev;
+> 
+> Useless. You have it already available when calling the function that uses it.
+> 
+>> +	struct regmap *regmap;
+>> +	struct mutex lock;
+>> +	u32 input_correction[MAX34417_CHANNEL_COUNT];
+>> +	const char *input_label[MAX34417_CHANNEL_COUNT];
+>> +	s64 acc_power[MAX34417_CHANNEL_COUNT];
+>> +	s64 acc_count;
+>> +	bool overflow;
+>> +	ktime_t last_update;
+>> +	bool cam_mode;
+> 
+> Are the booleans protected by the same lock? If not, just group them, it closes
+> the gap, if yes, group and possibly make a bitfield, then they will occupy only
+> a single byte.
+> 
+>> +};
+> 
+> ...
+> 
+>> +static int max34417_read_energy(struct max34417_data *max34417,
+>> +			       const struct iio_chan_spec *chan,
+>> +			       int *val, int *val2)
+>> +{
+>> +	struct regmap *map = max34417->regmap;
+>> +	s64 acc_power;
+>> +	s64 delta_us;
+>> +	int rc;
+>> +
+>> +	if (max34417->cam_mode && max34417->overflow)
+>> +		return -EOVERFLOW;
+>> +
+>> +	/* Sleep up to 1msec to make sure we have a measurement cycle done */
+> 
+> ms or millisecond
+> 
+>> +	delta_us = ktime_us_delta(ktime_get(), max34417->last_update);
+>> +	if (delta_us >= 0 && delta_us < (1 * USEC_PER_MSEC))
+>> +		fsleep((1 * USEC_PER_MSEC) - delta_us);
+>> +
+>> +	/* Move the data to the SMBus registers */
+>> +	rc = regmap_write(map, MAX34417_UPDATE_REG, 1);
+>> +	if (rc)
+>> +		return rc;
+>> +
+>> +	/* Save the timestamp for the next read */
+>> +	max34417->last_update = ktime_get();
+>> +
+>> +	/* Retrieve all channels to avoid missing data for other channels */
+>> +	rc = max34417_save_accumulators(max34417);
+>> +	if (rc)
+>> +		return rc;
+>> +
+>> +	/* Get current channel power */
+>> +	acc_power = max34417->acc_power[chan->channel];
+>> +
+>> +	iio_val_s64_decompose(acc_power, val, val2);
+>> +
+>> +	return IIO_VAL_INT_64;
+>> +}
+> 
+
