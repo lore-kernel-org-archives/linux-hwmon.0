@@ -1,56 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795542417;
-	b=1ZixKIfejVjhUfHMUx3tNIn7F7AOZhw+1HBme7BVfO2qSDbBIaAtEoKKTH4RYGlyeKcv
-	 y30gc46g8qazhRG2BCYHHQwUDvxHfYpSh7Wb+Z1URSNoCh/vIbBCQppqXhTT068eEVDO4
-	 rZ5UY9KgqXFuy0sR1KCV5f2K1fE6mh8uqFQYBXvWHLlg9eDQaFt+fWF+zUzK+ZbkmBRd1
-	 srPyns7NxzTKklspLwQsEvlolQTm112dwcTH38WZWsFth7ksT6bjtK26eKsd7qWn04kJx
-	 F6mjHyy6NkHU53Xyk7GfWKce9nrYfJ9Q1PhRjrsGqtIX8EsRi3VPhxqxWT7N1tBpA1A==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795542417;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=v53isDqlCdiEQplpqwXp/f4hSlKlea9B9CFYgoECS5U=;
-	b=SUuXRrMWg6HpIvHBnMdtDImlVzBtj/LZpec/t6pCc5vQchT4DwS/jnmEzcZ7C7XBRKHc
-	 z5JMtA0hoAwURGWbE43rD9W0KdB4aR6620ksy0lRmXi/KL8dmHoJ8Io8LfHOZ8aGfc/3d
-	 JvTM57fddvFpScO4X2NFjXqnQFqVJKgaokV5nxmbL2U6ayl7qyv5USxZgMotKupfPO5oo
-	 sZcV9p9GqZ+nqpAUgJGAheH+2++7WsLH0aWCrbI8JXl6Udv43Ooa/VhmY7xO0Xa9nNZeL
-	 sS7SHDQPROAL5W+Ct9itgG9JlOxpGnYotrzF1PfnjT6eXJ/Unln8ueUM+T1giFFBgbw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WlrfVsTc;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.222.46
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795544732;
+	b=T6T6a7PVSgnSVrqKxaeVHab4T3Emk8ztmjJGhF1H9eknrJ7TLw2BT7bu0Gq+6EGvj6fM
+	 DsrmIGQjUq/ZMUUgAlQltTNGnua/AynhrbgnUJwe1jvWKxqfWZbTQvCr++vJJTTFx676P
+	 /6aR7KIgeLm3tXhCMLcJtuG+cM+bEmjWHmc9S38ryl9N32MhL5+0UsAAiauNf3TuXhOmx
+	 wCCKi4FrbgKWQElmLM8EJcXsi9il4uS0JWh84yrvpr/3KG0OFqnyBL9OIFgi11EPrvvei
+	 WN8nLOC+MhrPpURk2+Z5RcrrVlkNrB6TYOhFM0JxiajHKroeYjCtDMl1ZJzhxPOkVaA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795544732;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:From:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Content-Type;
+	bh=RO17y2qHyRkWnZIJADxmnMrdvV11weGwu5opETToOIA=;
+	b=Jf/z7l5bdfTUzu+2eySBySmJsRhyY8JaV91i/csHUMiWxmh+yBCe65hXC1UJa6DBDjuD
+	 Yd0UgwpocKiwueTWfUtdxmjNXDWf3lXYcybU/DxKr177NWHqh2/e8WqRqrhBiEINjRuQl
+	 XNEB3bsWdO1NxVvs1rXKpfj5/HVu9knLx0sWuGZ69luymT+hSLshsDIfyWiAwQQL+7J4y
+	 AuAX+grIQgZv+0QDv2ZHuvSfIy+5jMV/N6qprBqgbGwOhz3pu/1l3zLd3HIifPYS1ePb3
+	 WwnH20zyaQemfz4IO34Eey4QiUtQo9HQ23rMFoP7xkUwVGMPlOXyEcb+Sf095x2FYtw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=x6njyScM;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.222.46
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6E4606A329;
-	Tue, 24 Nov 2026 17:46:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 781B4606A338
+	for <linux-hwmon@vger.kernel.org>; Tue, 24 Nov 2026 18:25:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 781B4606A338
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WlrfVsTc
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B59B21F000C6;
-	Tue, 24 Nov 2026 17:46:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795542417;
-	bh=v53isDqlCdiEQplpqwXp/f4hSlKlea9B9CFYgoECS5U=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=WlrfVsTc6RKbR7qdw3y4mGBxKsPgOcyZ5CWSw5vL0jB/vK5M9YB1F9W+Xaqx4ozfc
-	 LmN8FU5FG6OgtkiMOVvoMdsddkB+Z/j1fvDKqrsJGoDexZ1tRFcXE43FOJvwwuu9JX
-	 6uMEH2dxgxlDWfEzua+76h2AFZl9tOuWH0kUebcqxOckst0LQVLHaldWtqyNE/jj1F
-	 tdDxkgTkUfDPq0qKQvtz4pJMVcc3FZ5SgseRFpl8rOGUsyHw62sFWBJLoNszLNo9iw
-	 1WxlW552u1O64wnv/cBs3W3XnnqGJ0LixMK9T3Ctz47UJH97nDV7cVWvv5i1uqcD36
-	 ykYyDKAhclGEA==
-Message-ID: <sashiko-outbox-231741@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v13 2/3] pwm: rp1: Add RP1 PWM controller driver
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Andrea della Porta" <andrea.porta@suse.com>, devicetree@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org
-In-Reply-To: <20261124173658.31030-3-andrea.porta@suse.com>
-References: <20261124173658.31030-1-andrea.porta@suse.com>
- <20261124173658.31030-3-andrea.porta@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 24 Nov 2026 17:46:56 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=x6njyScM
+Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-99e740a7131so2102550241.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 Nov 2026 10:25:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795544731; cv=none;
+        d=google.com; s=arc-20260327;
+        b=VkLfQdIyEIc9yT4mTgeCwyhm62+uMfWHMDuc2qvHToeAk1cgTY192ptG6bEY/j+cH2
+         n0e5RAmdk2ZlCVQ+TYEt+nIGnRJNnhcxnNnaPtB+tAvly9gEdnjOrt7nnf2nDAsHoxVQ
+         J5IYSrnA+AY9rOfi4m8h22PAXh5LuK0bLUvlIKv0imh6pYcDJIIiuk9DjEDgOt/sEzR7
+         XP6LPyMFF0o8sYdat9s/KrpE8pGf6uBsvxxVdUyz+KhwxfsGLkw2Zp1QY52iOiLZqldZ
+         Rn7CjkXDbcnUpPkIO/p7g745Pcij6jH4WbLSsK+Z3fZzM2yQUtjDuqIOCc6hU0RTjOxC
+         Cf/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=RO17y2qHyRkWnZIJADxmnMrdvV11weGwu5opETToOIA=;
+        fh=3QcORtEoFFDw6mFaH+gHOywSOgD0tXkVtKf6iHQp+5s=;
+        b=X+BhPHSI8Ez9e89YpUM+lMRyrrCYcZr1IjMkPo5BZ77vfLNsTHcNQyVWa1EYxwL00J
+         wcg2QhhqOVkfFKxuFnNRAmQdku6/Ks09XvLAsM97+GhRtQ5AygIaovy1PhZxBc+m3dqX
+         n2lCpERlYfCcIY7mMnV/Xiqm5bR2FWDd9Ef8UwOdSw0l5Zobl+wUJfYpkbSdT+bVEBpX
+         kRVl04T9qWBxGWMBWb2bLI+ItFs61G7ABm/dYQRPvXH19nUvmfM9k3kdWqiTLuY9XZoc
+         Cysdsc4X3Rdma7emg2cRb3dcCPVgjt9Wuo61Edicd4ZeZDw/YvYXbhhzuhE8kMiLhy5n
+         mkWQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795544731; x=1796149531; darn=vger.kernel.org;
+        h=content-type:to:subject:message-id:date:from:mime-version:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=RO17y2qHyRkWnZIJADxmnMrdvV11weGwu5opETToOIA=;
+        b=x6njyScMNQrdCaUpa4tiXjAZ3ezL8UdUtKFR+KeuF/PfqomUj3D5WHx/qhEQnnyiAo
+         1CvxDrTKj7qcX/MKJqR8jcRuJcjw4PyHAVEfMO6OZ8xXQYja5d3D7poGUHwmLx1Vt6iz
+         4ebWZ0mqpJVPvp/HXECLAu9tyb2rJD28ze/JWiEzJ41MuvtSPY/3fOF+czSc1QvJcUuN
+         la8oloBqWQVwDyOS3zx5W9gU6orlOvU18y3bHrUE3rIC/MZNAaleNkRmLhJ0crzxT9GP
+         xADMxWOGgYdEL8pthQxSifrVgmsHaiGv2iizFSKtG51RvzxaU8bVC8xfbCVRj6gcd3AW
+         94lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795544731; x=1796149531;
+        h=content-type:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=RO17y2qHyRkWnZIJADxmnMrdvV11weGwu5opETToOIA=;
+        b=jrcKXWmwpvb/suJgJQEnouLvT2HDNYPFw1FFGHUjcyEA//qfW8bWKJal60yr8ebTrm
+         6pVJ/j1wThYxF2I6gGygY7K4wLI2NvoHSOcA2fIk3lWx4D15TPmx57uv//s9W4HdalFs
+         TTHmxlReHZycLc5XzJpNgXXYLGXIbZW1p+XNCAcbKkY2v7GmcWZkP1afm9z7ZZUCgNNW
+         h3UsTe6+DbS21QkT/8HS9FtvWgNHn+YMqjahErjKjMskakxgwzu6vG6lbc8PcO4WRCH/
+         hASN0i6Ez5b5GntKhRcKGmAsmVTUJKwJOFss3zq7HT2+vV+BkLlZqGaSJOgDRD+NZ3WB
+         XjXQ==
+X-Gm-Message-State: APuU4Z8T2QhwGq0YEX0shNvOniJkYOAGoZO+QN2ixBantYSmGsoTGjqi
+	zh2VWF69TUva/ZBOuWI9PA2hSDsAuPGxu75pv6PY6NSQWzM7uV5Uy6m0TVER0nfN2JMXYBN1D1V
+	pBySY2cBiulsLgdKsb9tUi1EeBe4Xep4mK9x1
+X-Gm-Gg: AZFdTZdEtNpBm1at1xh+2galEvNrMpwV+DAYM4xXHQSzmGTUYNPDA0PHvjYlSRAEQce
+	cKQ/sqL7u6XEEhOOL+TgGsNWE3pPPE8gv0O/4ReSDZfuLLpKn2n5HBnRaM5Nz4YjmKYDyWd1gKD
+	S4+EcknekhfwNg43c2+3By2Otqw06jb08WFoGhmivqHgpUDHHs2lTRN8Zg0Vx//nOngzc+MBkxp
+	zuzKZS8SceOaDZDZ9p+5PhODX6x61/Dy7gWzbiu7owGkmR0gmaS66QD47L27U0CuisO0p96Esss
+	QvtoL4VpVFf9AqX/JT/m9Ll2WX1dfLT1IQJ+Xd0+HIyaSizU1LWPPw04BZ6r2rjdZzhaFGHeh8W
+	23d2YkgJUZrgB7HPFju9ukpgUVF1t94A2bt0VtQj/rkxwqFfQLF6XUdXZhlWBwcX19HH/W96GWQ
+	==
+X-Received: by 2002:a05:6102:512a:b0:7d6:bae0:e431 with SMTP id
+ ada2fe7eead31-7d73945d06amr8915934137.17.1795544731138; Tue, 24 Nov 2026
+ 10:25:31 -0800 (PST)
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -59,78 +99,63 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+From: Craft Objects <craftofobjects@gmail.com>
+Date: Tue, 24 Nov 2026 19:25:20 +0100
+X-Gm-Features: Aa3M54p3lKbqQYAP9git4b1yqhGpMFWroPmBTkRKWJ_roW6_vb_GDR4Eg9OF95c
+Message-ID: <CAJb2vRAgvepJPCJPvqicRCojhzNmcAHbDu0bosO_WTmMHEa7Bg@mail.gmail.com>
+Subject: Lenovo P4 fan speed
+To: linux-hwmon@vger.kernel.org, dober@lenovo.com
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] pwm: rp1: u32 overflow and invalid offset in
-  rp1_pwm_round_waveform_fromhw()
---
+hi,
+I have a new Lenovo ThinkStation P4 (machine type 30KN) running Ubuntu
+with kernel 7.0.0-28-generic. No fan speeds are exposed under Linux,
+and lenovo-ec-sensors does not bind to this machine. I would like to
+ask whether the P4 can be added to the driver, and I am happy to test
+patches.
 
-commit 44a8d1ea8978f906a50c0662a30ab9153df78f82
-Author: Naushir Patuck <naush@raspberrypi.com>
+What I see:
 
-pwm: rp1: Add RP1 PWM controller driver
+- lenovo_ec_sensors is built (CONFIG_SENSORS_LENOVO_EC=m), but
+'modprobe lenovo_ec_sensors' fails with 'No such device'.
+- modinfo lists only these DMI aliases: pn*30HJ*, 30HH*, 30GA*, 30G9*,
+30F3*, 30F2*, 30EV*, 30EU*. 30KN is not among them.
+- 'sensors' shows temperatures only (k10temp, 2x nvme, 2x spd5118,
+amdgpu, r8169, mt7925) and no fan*_input anywhere in /sys/class/hwmon.
+- sensors-detect finds nothing. modprobe nct6775 and modprobe it87
+both fail with 'No such device', so there is no Super I/O of those
+families. The fans are visible in the BIOS hardware monitor (5 fans).
+- The platform is AMD (k10temp, AMD FCH LPC bridge). The loaded WMI
+modules are only wmi, wmi_bmof and think_lmi. None of the
+lenovo-wmi-other GUIDs (B642801B..., 362A3AFE..., DC2A8805...) exist
+under /sys/bus/wmi/devices, so that driver does not apply.
 
-This commit adds a PWM driver for the 4-channel PWM controller in the
-Raspberry Pi RP1 southbridge.
+dmidecode -t 1 -t 2 (serial number and UUID removed):
 
-> diff --git a/drivers/pwm/pwm-rp1.c b/drivers/pwm/pwm-rp1.c
-> new file mode 100644
-> index 0000000000000..69ce0db4e9aa0
-> --- /dev/null
-> +++ b/drivers/pwm/pwm-rp1.c
-[ ... ]
-> +static int rp1_pwm_round_waveform_fromhw(struct pwm_chip *chip,
-> +					 struct pwm_device *pwm,
-> +					 const void *_wfhw,
-> +					 struct pwm_waveform *wf)
-> +{
-> +	struct rp1_pwm *rp1 =3D pwmchip_get_drvdata(chip);
-> +	const struct rp1_pwm_waveform *wfhw =3D _wfhw;
-> +	u64 clk_rate =3D rp1->clk_rate;
-> +	u64 ticks;
-> +
-> +	*wf =3D (struct pwm_waveform){ };
-> +
-> +	if (!wfhw->enabled)
-> +		return 0;
-> +
-> +	wf->period_length_ns =3D DIV_ROUND_UP_ULL(((u64)wfhw->period_ticks + 1)=
- * NSEC_PER_SEC,
-> +						(u32)clk_rate);
-> +
-> +	if (!wfhw->inverted_polarity) {
-> +		ticks =3D min_t(u64, wfhw->duty_ticks, (u64)wfhw->period_ticks + 1);
-> +		wf->duty_length_ns =3D DIV_ROUND_UP_ULL(ticks * NSEC_PER_SEC,
-> +						      (u32)clk_rate);
-> +	} else {
-> +		if (wfhw->duty_ticks > (u64)wfhw->period_ticks + 1) {
-> +			/* 100% duty cycle case */
-> +			ticks =3D 0;
-> +		} else {
-> +			ticks =3D (u64)wfhw->period_ticks + 1 - wfhw->duty_ticks;
-> +		}
-> +		wf->duty_length_ns =3D DIV_ROUND_UP_ULL(ticks * NSEC_PER_SEC, (u32)clk=
-_rate);
-> +		wf->duty_offset_ns =3D DIV_ROUND_UP_ULL((u64)(wfhw->period_ticks + 1 -=
- ticks) *
-> +						      NSEC_PER_SEC, (u32)clk_rate);
-> +	}
+System Information
+  Manufacturer: LENOVO
+  Product Name: 30KNCTO1WW
+  Version: ThinkStation P4
+  SKU Number: LENOVO_MT_30KN_BU_Think_FM_ThinkStation P4
+  Family: ThinkStation P4
+Base Board Information
+  Manufacturer: LENOVO
+  Product Name: 1071
+  Version: NOK
+  Type: Motherboard
 
-[Severity: Medium]
-Can the wf->duty_offset_ns calculation overflow u32 or produce an invalid
-waveform when inverted_polarity is set?
+DMI: LENOVO 30KNCTO1WW/1071, BIOS S0PKT0EA 08/12/2026
+SMBIOS 3.7.0
 
-In (u64)(wfhw->period_ticks + 1 - ticks), wfhw->period_ticks + 1 is
-evaluated in 32-bit unsigned arithmetic before subtracting the u64 ticks,
-so when wfhw->period_ticks is U32_MAX it wraps to 0 and underflows u64
-for any ticks > 0.
+Questions:
+1. Does the P4 use the same EC interface as the machines already
+supported, so that adding a 30KN match to the DMI table is enough?
+2. If the EC layout differs on this AMD platform, could you point me
+to the documentation or a patch I can test?
 
-Also, when wfhw->duty_ticks >=3D (u64)wfhw->period_ticks + 1, ticks is 0
-(wf->duty_length_ns =3D=3D 0) and wf->duty_offset_ns becomes equal to
-wf->period_length_ns, which pwm_wf_valid() rejects because a non-zero
-duty_offset_ns must be strictly less than period_length_ns.
+I can run any test module or patch you send and report back with the
+sensors output.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261124173658.3103=
-0-1-andrea.porta@suse.com?part=3D2
+Thank you,
+Johannes
