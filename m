@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.35
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795631566;
-	b=QLELysF7ZItOKb9Wvf8KIpcu6oa4A9ncos3FVpn9vYlg9NhIl3ut+DTx5SZNaLj8/wEA
-	 42aLLZgrqwMTkxeSUPTuI9KA7iM4V+Et9mtfpEcxbxxrLR4hhY6Nei79h6qDEC0av5abo
-	 U+aW7BrhaNkwwuRJRXKGUcufKyNraib3QhP1c/wPJ688oyHZ3DJULACo72tStm7RPrv1W
-	 xPpTxEOSOKY5/6aDK/4VHr0dpLpKQSQVaEwEjfkZ6VSo4yHiNFnL1UpsPMrv8OT+vE9B7
-	 L766AZNkeUy3duUpR8Lr2IA8Jv77GYbpUYOXZeERmvlJfY79i0DSnUTz2zyTOVnWPgw==
+	t=1795638524;
+	b=21Th5exqBEWUNs3DD1Y8MmHC5lbtPRP4p2KAL7tuyg/A+OToF43zwROBhrPiuKtV0AkI
+	 kTatwzo582j2bDUzFPGZ+dD3895S6ihPf5XiJjfHi75HHNb9Aqj952qz8sh7+kSaUptNW
+	 SNKxi+s3gyb436Z0uI4ebdswIH9DMEANWBk3wLX8Hx3mMmbmWifwtkDewJqOIndZIDiBg
+	 Bs8v9jhYVnnUTzWj23+C07uoh7mEiNLL8MhXiLLorW4tEATFBcmL2+xBtqlYeY5p/71Wa
+	 v5m0wwHoUqI3/PaS8s7ssC9gTPxK+NqTbFv++IpfvhWFXChazKTOnn+smwlBTmr0W1A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795631566;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795638524;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
 	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
@@ -15,58 +15,57 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
 	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=5mHk7bA7fJZcRuMh0Ntdn1XHRhPyZLdUBBZi//Lv1IE=;
-	b=N8rvf8t1y73P8kSiewn3MEeSayHDO3kHzVcWI3pg32tG+L245c834zniGc2Hk60iOFPe
-	 fyH64LjvdipxkEeTaOa4I4PbLDJFeRmBAzMCpU20ygAwq86NwOhTX0XzY4AtgGYiXgY4R
-	 aNP23LHoCIUuIw791OwH09RhYwHDOLgq39M+DJHk0zAjRTO2GrWuMmUM9am/jrrFA6gH0
-	 QRODkk878QB5pPlyryb3QVzBapL+m3aWzE9R/ljGJq8vPkbIUmkL/Rj7QxqoSP3uEVjBR
-	 QFRlLlxodJW1DfreMsKp21VHg4LapbYo1AhP2vPnDsKkZskERvfQIZhzkEf+GSlTczQ==
+	bh=o/4Kw0hVdKhHsWDnKlzuS79CL309pvCOCNbsvIIHjL0=;
+	b=HQtYt3cMaxIisjy+OllrNfnkOlF/BvqQjXksaVD5aiggGr9Toc2BIck5darabL70TUD6
+	 ycaeVDn4gCf4cOvTLaY/1+w63Dm+nMr/iJOW0HOo/fnu6MHJdfQSZNG3bUzalinYlG0To
+	 BR147QE2oQN+lzOnlxpy1xc7CfqFdSa3TeF5dwD5E5nPog8o79txpsPTz+9wLONhCrXQP
+	 MnfXQfWH3VYh5P+CiiQig3wYR5hrBPYWJCADZfEkGwPA38hOGgcU9k1B2cdB6RWJCyIZ+
+	 F310ST4gSvmRkaep1kaeymAuAJ2Crl4NxRVNVE3MwciDRbZcq+C7+gqQazK6zNhxIGg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=fUyG2xZk;
-	arc=none smtp.remote-ip=35.89.44.39
-Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=kLtQrhgY;
+	arc=none smtp.remote-ip=44.202.169.35
+Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700C7606A31E
-	for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2026 18:32:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 700C7606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92F79606A323
+	for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2026 20:28:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92F79606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=fUyG2xZk
-Received: from eig-obgw-6002b.ext.cloudfilter.net ([10.0.30.203])
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=kLtQrhgY
+Received: from eig-obgw-5005b.ext.cloudfilter.net ([10.0.29.189])
 	by cmsmtp with ESMTPS
-	id WHJnxWLOzyb4YWHnSxDIA8; Wed, 25 Nov 2026 18:32:46 +0000
+	id WHxFx70424vCDWJbfxYUZZ; Wed, 25 Nov 2026 20:28:43 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id WHnQxuvCp8cn4WHnQxnVr6; Wed, 25 Nov 2026 18:32:44 +0000
-X-Authority-Analysis: v=2.4 cv=Qrde3Uyd c=1 sm=1 tr=0 ts=6b0729cd
+	id WJbdx0cAPYskhWJbexZT7X; Wed, 25 Nov 2026 20:28:42 +0000
+X-Authority-Analysis: v=2.4 cv=CKMqXQrD c=1 sm=1 tr=0 ts=6b0744fa
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10
- a=8qKcZclOD3o5y2XDi9oA:9 a=QEXdDO2ut3YA:10 a=zZCYzV9kfG8A:10
- a=KPbNTLLc3YvdawN95zVk:22
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=VwQbUJbxAAAA:8
+ a=P3qOQgCt6vrQHFSYsfwA:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=5mHk7bA7fJZcRuMh0Ntdn1XHRhPyZLdUBBZi//Lv1IE=; b=fUyG2xZkvnSz
-	5N/jAMpsBIOdZKWOCIYIal6mck7d3fi4wNnBzEIiW7hIha+hN9AVpEeuW/8DkLLLa6fudEIlH7+10
-	qvwR9tHuOsdJi4HZoOQ71Hf42NF8tv71o0/pxKXiS57rU89h8gKpRhuMESTc/tsfzbVhD04jMEBXO
-	gDYvFRpJUb2eOlbRcU4QB7mpTXLT5uOypYcQ7MWgVZmzE8eWLlG1S9F2FxeJe5VA4ZzavHViybL57
-	ISjiQKqGJKfQRGuGPOdYa/+yONW0NnGy1GC5lSEhnOFnJV3MVdNZjRFASo/zQUT7Y+FoLlk4iEG7P
-	+kNZLYhPX5np8zPhHkbj2A==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:47950)
+	List-Archive; bh=o/4Kw0hVdKhHsWDnKlzuS79CL309pvCOCNbsvIIHjL0=; b=kLtQrhgYcTIv
+	uZMzpnu0rYGzzGa8NDNlZT55qp+gtf3HfKp0jbd8q2aAadq/LyShIuAgpozbSv3QbKqBp3Y22JDKg
+	52tUfLjNQjvJfG527eLLWwMZca0G+P8g1Ic7eXW4nMJDntH64oD1t6eF6pHahWAJpeVPKzDxnw4qS
+	E0R0NxHP+PnBRtC6j66rQ70n5EfqNjq5ev/hD2QKMaVZW0S9txjTcIWwkzBYgOr00oPm/2ltfjLSs
+	maCDXm+0W5P+s4vdCa+rrDh9Ye/02UkXuolleTXrVRjCBGHiVPuaBt4lLpsRLVMusI7wCNZQ0FFNK
+	86UN9qjnUyRrH7aVtENPxA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:41250)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xWHnQ-00000000g0O-15fG;
-	Thu, 26 Nov 2026 00:02:44 +0530
-Message-ID: <ff368c3c-e4b5-4151-a084-c40f26063fc5@roeck-us.net>
-Date: Wed, 25 Nov 2026 10:32:43 -0800
+	id 1xWJbd-00000001T2u-2P6l;
+	Thu, 26 Nov 2026 01:58:41 +0530
+Message-ID: <0bfd1c00-0fc3-472d-9c98-976838f8906d@roeck-us.net>
+Date: Wed, 25 Nov 2026 12:28:40 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -84,7 +83,7 @@ Cc: sashiko-reviews@lists.linux.dev, linux-hwmon@vger.kernel.org
 References: <20261125053711.3098007-1-akorn@google.com>
  <sashiko-outbox-232631@kernel.org>
  <b5910c74-7e29-4138-9dd4-030c95c78ec3@roeck-us.net>
- <CAJ5cSJE1_zxkS861BT-8-+pxMnp3ONiJkGYjk1jnLQG57EZxmQ@mail.gmail.com>
+ <20261125181605.3299785-1-akorn@google.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -130,7 +129,7 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <CAJ5cSJE1_zxkS861BT-8-+pxMnp3ONiJkGYjk1jnLQG57EZxmQ@mail.gmail.com>
+In-Reply-To: <20261125181605.3299785-1-akorn@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -141,27 +140,64 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xWHnQ-00000000g0O-15fG
+X-Exim-ID: 1xWJbd-00000001T2u-2P6l
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:47950
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:41250
 X-Source-Auth: guenter@roeck-us.net
 X-Email-Count: 1
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfOULpEEexOKC8FmGIeoaJwhwaKMtsnhf9VHnGIpDcFOBdPzQ+r4I1sLm4NEAsLznaolpNZDOkhGf387LHsvWe/gc2dKLJoVkvSZNeDhRi0dWjYiXnwf3
- jnRaRgSmdb0b3BtgRwaHn44+ob3+fkLXupH/jTzTsk4i8369iP2VcxK22naIINSqDOnlbkdbWkCqLca9RJ8iVthHbasDhPEM4GRcoyNFpfbg9pbt3QtzPur4
+X-CMAE-Envelope: MS4xfEWkNCMdPRwU4i6+QHpdBMjKsD7fw/derp98LXG5i3uEoaY9WVI4dB+OJKDZuKbg54bnpEAD75I8sK73uO3SWb/rRRIA5ovq6hjUeY9WBsKUexOlXoNU
+ sE7yBJbuMaI0yyNh8SC8GyVkUsx60JWmJejnKWLq0K7LT5MbMS8vdZG8+K254g28BDbpH0MHtM9XFVsqKmhPuhzcV1INB20y7a1iww0yLPt9H5BeevQqpk1w
 
-On 11/25/26 08:53, Arthur Korn wrote:
-> What are virtual pages even? PMBus spec 1.3.1 part II doesn't mention them.
+On 11/25/26 10:15, Arthur Korn wrote:
+> On 11/25/26 07:53, Guenter Roeck wrote:
+>> On 11/24/26 21:49, sashiko-bot@kernel.org wrote:
+>>> [Severity: Medium]
+>>> Does clearing data->has_status_cml on any negative return value from
+>>> _pmbus_write_byte_data() disable STATUS_CML write-1-to-clear across the
+>>> whole device when a driver exposes a read-only virtual page?
+> ...
+>> Seems real. Arthur, what do you think ?
+>>
+>> [ PMBus is really annoying :-( ]
 > 
+> Confirmed -- Sashiko's finding is real.
+> 
+> I tested on a system with 30x MAX16600B.04 VRs driven by max16601 (which
+> sets PMBUS_PAGE_VIRTUAL on all 3 pages because the chip NACKs PMBUS_PAGE
+> 0x00 and latches INVALID_COMMAND):
+> 
+>    - Page 0 (VCORE at addr) and Page 2 (VSA dummy client at addr + 1)
+>      both implement writable STATUS_CML (0x7e): writing 0xc0 clears
+>      latched INVALID_COMMAND | INVALID_DATA cleanly to 0x00 on both I2C
+>      addresses while preserving other STATUS_CML bits.
+>    - Page 1 is a software-only virtual page exposing vendor registers
+>      0xf1/0xf2 (IIN_SENSOR / TOTAL_INPUT_POWER); max16601_write_byte_data()
+>      and max16601_write_byte() both return -EOPNOTSUPP for page == 1.
+> 
+> With v1, pmbus_clear_cml_faults() hit -EOPNOTSUPP on page 1 and set
+> data->has_status_cml = false for the whole device, causing page 2 and
+> subsequent register checks on page 0 to fall back to CLEAR_FAULTS.
+> 
+> In v2, I moved data->has_status_cml = false inside the readback check so
+> it is only cleared when _pmbus_write_byte_data() succeeds and the readback
+> still shows PB_CML_FAULT_CLEAR_MASK set (the read-only STATUS_CML case).
+> When _pmbus_write_byte_data() returns an error (such as -EOPNOTSUPP on a
+> virtual page), only that call falls back to pmbus_clear_fault_page(),
+> preserving the existing behavior from d9d30e1cb9ca.
+> 
+> (Side note noticed on the live MAX16600B.04 system: untouched devices boot
+> with status2 = 0x0002 / status2_cml = 0x80 latched on VSA because
+> pmbus_check_register() and pmbus_check_status_register() pass page = -1 to
+> pmbus_clear_cml_fault() / pmbus_check_status_cml(), which targets the
+> primary client 0x69 instead of data->vsa 0x6a when probing page 2. Happy
+> to look at that separately if useful.)
+> Sure, that would be great.
 
-Implementation specific, mapping of device internals into PMBus functions.
-For example, the max16601 driver uses a virtual page to access the
-vsa client (which is at another i2C address and requires a dummy I2C
-device).
-
+Thanks,
 Guenter
 
