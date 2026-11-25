@@ -1,101 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.44
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795616401;
-	b=j+vi+EJuTpAWqOXOVIinh/maYGsS0lbn3OgcgzuvFnDHC8+O4TU3q4TVyQxeArTNzLKJ
-	 Tp4t3+B6PVH13nEm+Bufo8LWexSSJFmg1N5+tqnvzGRnaxKDrtNCEA1KWOqSnzimtWq3J
-	 SU5HNySAdzHg6zAH3MUV0KXagMs+XjoPerZr6hcuWX8KmkFTZggStbOeZvfW5Gu27/X6W
-	 WBSSDgGpl604obLpmWwSGNGltGlk39rQSptGWLXQLC9xtY9GfKLlv14191YsM3I4IhjK5
-	 LCv4X5JZ7qZBYSrNe2nspU+xTG3tz+Q/pe/XH/tMoLkAaBWJ+zgxzShx082NfY1FcHA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795616401;
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.219.43
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1795616608;
+	b=MgA8lHONwzxAkplcF+iO+swuDFaTaJRGdP+CINL/Zhf1F07e6pvykB2Ltc8OXSTKg2yj
+	 vRbjmiJZrnlyl3GGMSG2px9KUklH1TI7Rvo4DCRx5WrPoS/X3vKO7ql+suLGmCrEkHMfl
+	 6P1mX4giHuPSqFyDY+ETT+VYNp8DfapiDjazxK3GKkpUl7sAK0Xmx9LVB4qRrdlfnd73B
+	 6TzWvHQPDSBpVz8vNRDZhD55xC3Eq4nDbq1NhdO2c7v0HiyJx/Q2a9zD8zKlbwFlT5I8g
+	 bv3a5N73XKnPAaXd+ey8BmaVLj8v7ZbH+KYnSnV26SEgSAaPjdx8Vh3LdDA3hO2L5dA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795616608;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=OXw3aEY7EdNjDs9Hr7OeVs9fvmVPov8tyqpiU1M9Iew=;
-	b=Gqtf8M79bRMgKjxSzAMT6kqLYMFtXAbI3w2R4ATThrbHvVbozSb/48l1EufWTV0n/GLI
-	 C4IJbvacggfOqlWAXjYir3YC7SqhwtkMyL8IbMsL8grWQooQBfopXqvjoJbJ1WBUGG39F
-	 oZ8k6CWeZgfZylQ0bCXlSUK5K+Z/fPZOZY2URNj+wpxvLD6EBKzelQ7Jan7w8evEGoAx7
-	 zy2gwVIe84xZfuUjvdCZO5CX24gMU9cnN3jqjO6z2bQk8Rr8GhCBMUrza6iErl7wbDJvj
-	 Pk7sJ1e+E17s+NV4b5ef3cIX8TFDk4ugTg+smz/qZPCV4PXoHDgYXJc6jUHUMneEbMg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Eg2zd9Gl;
-	arc=none smtp.remote-ip=209.85.218.44
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=vyzSN8YoEpZHNUT3pPheTzKO6EtKkzWYqov5UdjXwWY=;
+	b=pygG60bOl+4DUcLTOZ5NsoMh+00kga9QTsdkiPG7MJV/7DoeLsS/jHPKl60Xjmop/Tnt
+	 pe9dzX1ifNb1xo/LxPHWNB6O7Pffup9+Mn84Cggmuz579HI03z5L6GZ3os9AISDhNTJyz
+	 XrhbW6JQK28k4jQzaL6x/tzTzSEmc83cjUw6szcm55m/0NRNMOXyo4Sdkh/O7/BmeBeU0
+	 VuACYBFMqJDpisk1mN0h5SlBlj7PDy31FfxzSdMV7ARGkHasjyaLQTnsELDRNsptxJ9p+
+	 RE9S8l47RELEKul5t4bA6HR134tmvPLl2NgY0IPkcsW5VGCnKNGBhFb9bdeFa+IagzA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=none header.from=thegoodpenguin.co.uk;
+	spf=pass smtp.mailfrom=thegoodpenguin.co.uk;
+	dkim=pass header.d=thegoodpenguin-co-uk.20260707.gappssmtp.com header.i=@thegoodpenguin-co-uk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=VBU80bct;
+	arc=fail smtp.remote-ip=209.85.219.43
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31836606A32D
-	for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2026 14:20:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 31836606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8448A606A31E
+	for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2026 14:23:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8448A606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=thegoodpenguin.co.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thegoodpenguin.co.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Eg2zd9Gl
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c516a192844so539315966b.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2026 06:20:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=thegoodpenguin-co-uk.20260707.gappssmtp.com header.i=@thegoodpenguin-co-uk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=VBU80bct
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-921365696d9so41288846d6.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2026 06:23:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795616607; cv=none;
+        d=google.com; s=arc-20260327;
+        b=B9yyrXCvg1pO/tjo9XIPpEWnE6ieWigI09JbB/eGMyDh9zkKRv5Xq/bM9t9BNFOP0L
+         zmo0blnpNtzMDHxc5S2cpUrXkMcP7PxU91YTrgoIja83FrR0mlkYplleOVuVUz45vKg3
+         eQIjU7TyR9GcSEYTRZjd6wyaukhgrsHv/9MHl4o809HmZ2YcGzPCAOwr+sFQx+PLwhlJ
+         um2mMM44lBisYVC0ocxiw1XxgPDzmr5DINuOGaKnW1L1i3fIJt3lnd3XieFf/6NPMIxw
+         NHUGMJXNaRyUY/KdZelST8atw2+HjGUcRBzzZtSVrelP2F+SHC6ImUB/PqdI8ktV1fZs
+         NNDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=vyzSN8YoEpZHNUT3pPheTzKO6EtKkzWYqov5UdjXwWY=;
+        fh=B9rH5TMW2ZcOi+vEaWOIdtW03Sl/hWXyN6rd2A9DEYg=;
+        b=Bl4FH4oZXh2KXBP/YxQmPG0EbWrrZ/rYro2SWiC5SC2pwWggooWFgQ5Z4Z6vz3qm3K
+         4SLEPjNgLjTU4VfyH7VgfmfpN9VGObE8z/dqdd5TYVxTCSQ3RwoSUgBaZDQyXoIheHUZ
+         DQ2u4RtP2b5IRot+EPSnhJExT+u+9UvVOzC6r96VbOGu+QrwtxgUlP8K4Cmz6AOyoKjW
+         efxZybXUe/RUfrw+V0cC5yXzdjCDssGZYfCo5bkOE2D2yK09+1FJrZXmShjZk+3vOUmX
+         TO2akFN96LD1oj3g1wNbGKTAKU0IsJfGDMZseCi/OeH5k42p4ts1ugKmIYTyPZ12A+XJ
+         bfWg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795616399; x=1796221199; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=OXw3aEY7EdNjDs9Hr7OeVs9fvmVPov8tyqpiU1M9Iew=;
-        b=Eg2zd9GlqLRBwDzyg/AOkaSPlGMQ+z8bkz6FeiX45oCMLFDuiEKc+1iCjq3aiw5kix
-         sHM8aKNfvS1jKrcIomXL6e/ofWmvjHNXO6tcUkvGNyls+jBX5nhgrxdY5DN351ZudV8o
-         EZ1qUgYf1qbYvAJ8PxRD8+DcsMipVnEvZWm+1UKa4X+YqN5KmIerIU1/oGfkm/BIUtOq
-         FvlcZXt9RF3+4sKN7o5W8kpNd6a89gQoN5R1ggHcSH8iMMrndVREE2FJdI2AJGJ/+SIm
-         EJEUn9irDIaln/kxrVmKIvt+BKskA0yPeLjogLUJ/aypZK+cwdxu5pH5ZCWhJldwRu5s
-         W1yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795616399; x=1796221199;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=thegoodpenguin-co-uk.20260707.gappssmtp.com; s=20260707; t=1795616607; x=1796221407; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=OXw3aEY7EdNjDs9Hr7OeVs9fvmVPov8tyqpiU1M9Iew=;
-        b=Unqd1Z1rHJkdu/j3durC8vYI0gtIVcl+QxT/iEmkk4XBtUn2+kJ9rgE42Nb3PSz2cU
-         uYBZGSt5Jjrd1eOOExVA418RV1nabCHRbQQWIwZ5TBmPelELxqO4/7/Y3mfHug4/yTxg
-         Tnxhk6HV7Olx54TKHx5gGUH8j7FJsSqisDMYDKC4RpmoVq4zxX4vk+bGF/Ot482etUwy
-         COKTFQdBPJSwXiQCb43PTeoar8f8ODgU2G8TdZ6v040Zi4H1Hf5qWqu6jZmnPCIJKzCl
-         74K1yZrSZlxO/VW3aDhF7lXSi8mxaVxEFEdpcG+6uLQ4MXGZoiUQrcfwVOhMIENl5P3I
-         5eRg==
-X-Forwarded-Encrypted: i=1; AL+hErFk4RbHlUZBXd7BaAhQvtrbdzHCT/VWsoEQzU3Jx8YsrlJGiBIyhQ5IFEdOo1SpdVOLT41ESY9SbkarKw==@vger.kernel.org
-X-Gm-Message-State: APuU4Z9OXcLYXTgqgHewqfJSBZZw1yAiLCf0J9XIAQhEGUeitWq6SNf+
-	Bh3tc3SdT0PQb0jyoGdHdbi0poPGXdNVLMyn9DhJ/7I9DSeYwvCnUK7jHO/0UBzaVYY=
-X-Gm-Gg: AZFdTZcLcskhwwYil6FIyHIByzHC8m1nv5tOGrxWFbHN21F+O6tXT0+dntPG6jOSwGO
-	9XNolC3l+O2FSuJ34hkAX3gDARMER30PsEafnW4aOOUXBJdG7BeqJp/WEkxcXhzuKnpk6Gs/PPE
-	8dhd/9G+cgB5O28JDn75CrfwN1HRvYzGZt4F9de3wsXdNF6qXkd0yB6rRH4Q8paq8sjggb0WUmh
-	21D9ToNPXn8PwlKZYa6DUf+n7cLsiHRWkZDbHwcq+XSPtym9eE2NnCJi15a9vildMSmat1eS22q
-	QmW65m011w2TlqUTaCipW+jTrFMrRoSiiB+c/5sqnQ/F5K8TagVL7SU4mNtWfri2TZYvUMq3Vgl
-	XMzXjGDA5jYWsKFEFhI+xqHFgmQYOGmHxQrUqvUZvPlgCIaKu+u8UmNalv3hEjoElCQa8FZjmNS
-	u3VpKGHk5qlgRnuYOkCWbCzZhTPT4xZz+hXiAbSxO4uxfqZVsD2eYjKD6mECIRcYSOZEPCXeqXW
-	Xihu5cp/kg/gF22UuwWGCQQlLJtPCyXyg/W38hbrOEtbTzn2ya8pkye5cG/HrcwMHTWLisOv2Js
-	0V0sVmbfBq8G6rEgNoWJdcOZt+lcWANTepU=
-X-Received: by 2002:a17:907:da0c:b0:c50:5545:b66f with SMTP id a640c23a62f3a-c513a803353mr1371674066b.23.1795616399382;
-        Wed, 25 Nov 2026 06:19:59 -0800 (PST)
-Received: from CachyOS ([176.88.126.125])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c51a161e387sm123379666b.47.2026.11.25.06.19.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 06:19:59 -0800 (PST)
-From: =?UTF-8?q?Asaf=20Nuri=20Bertizlio=C4=9Flu?= <asafbertizlioglu@gmail.com>
-To: jgross@suse.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	x86@kernel.org,
-	tglx@kernel.org,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	hpa@zytor.com,
-	linux@roeck-us.net
-Subject: Re: [PATCH] drivers/hwmon: Remove wrong comment
-Date: Wed, 25 Nov 2026 17:19:10 +0300
-Message-ID: <20261125141912.120978-1-asafbertizlioglu@gmail.com>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261125121643.25427-1-jgross@suse.com>
-References: <20261125121643.25427-1-jgross@suse.com>
+        bh=vyzSN8YoEpZHNUT3pPheTzKO6EtKkzWYqov5UdjXwWY=;
+        b=VBU80bctXVpMU3NOlcb1DlRe4QrHv2umoc7orUqstYTkfK2oNJPvqhDfEXc+OmlQLp
+         tj82uCESe7NUS695UcOtdEsBTuLM69Sq7WELmpiKH1jjZx8z1m646NGhXQZZAK/zm07A
+         DF1Jz3tj8gtbadlLyO3TmyT2sVvszop32rWYQ0IHt5QGB6QMsowPhYWjB3gGt3b39J07
+         zm014mweRk2RbJ1MBQzI7TzC9FPXW/jKNQEBmt2yxinv3gDPYS3h1DRkaS8HC82qVFWc
+         Gb5MTF8l+GxlT5OWm7aiSSNtf9WhEz+vupQiw2ncykdpRLj34UKumuxKxjuZFS8iApnA
+         B12w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795616607; x=1796221407;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=vyzSN8YoEpZHNUT3pPheTzKO6EtKkzWYqov5UdjXwWY=;
+        b=YurV6uAEldukvvy/cPdbfh/btJGLCI2/Tv2kX2abbwzBoMa+ZAAa1K3whlySL6dW6B
+         n/wKRTkpwzDu+YmZfTTBTddQOk5vMiJjMgrwVdPuWZL8VHt/9QpGyM4fTuI3MBEiF68g
+         vCrOH6ddijRkDEoQqDVcK2on78u1/RJjSDT4gHRM1+vV0fcXu811uvPiWbRJ0utAgnXg
+         AR2NXhW1wEULAvePZZaUm4LFUxzAGC7dnUkVTWBQa6sV75eH8Tq5pnqSRAXOceen2Q8S
+         qHnrSZcx66vtggyE7jNOM59MVK8XJxFiHR1td0mfpJpcN7SkLEPGsgjZuFn4q2DU+q46
+         cy2w==
+X-Forwarded-Encrypted: i=1; AL+hErG1NKxXeosoCse6CWbEah9UDCF03qryAPLgcjfIiVQOP3f8uGM8nBFevEPuFGBUgulCpE0+U2XY/3G2zQ==@vger.kernel.org
+X-Gm-Message-State: APuU4Z+dbNaA2FrIqZxzFaE43O3Cu5djKXYpNFr8C4vojRoeUffEnRu5
+	S2zRjeX03g+sbZKbiG3qJLr6dnBPiCT1tw7GunCDaI/k7zVQ8yQxEePq0iZmqE8F9qm/xCDsriX
+	E76uOQjHNoCPTqS/lRBmsXFDmwIz4KhKXLXYDyxYJpwIbmv4kzKywUxr3tqrx
+X-Gm-Gg: AZFdTZdhwQN468OW4W7WI3GmNkPgP88B9sjrgcu648ukWA7VyhVUJxH0PsH0RKxpha8
+	6Uhs5ZBuJsG9McFe7qjN+xfoZNQeZOpazzw+/F3h14guUe0jIW4uj9xHWxVhA3wPwLDMyPzhsIC
+	NP4NhqIJ0jVxXZXpxsECf2dSf9BtEdFIhMDW+f4zp2HmWSYhlwjCpPttT85u2PI2oi7jWZAkdkU
+	2EENwe339A9lbWog9PRu25cVM7yaR0eRFt1dLVivtD8uh5BOcpTKJH+1lsTGKMHdXol7ScC/Gxj
+	R4ZYV5YWRneVs0MKQ+wZCqADZHHW3eeHm2tCeBFgM78WuTCan4mZ3cXuGfYgOmbet7+pZu3nPUs
+	79RiqnMdStjDnb2p/cI8lnhcZjanroGxudknZz3+25vLA/XHzs90mx2u3AlxYyXkBXAIh0xY=
+X-Received: by 2002:a05:6214:2125:b0:921:1955:6578 with SMTP id
+ 6a1803df08f44-92134984b15mr344701626d6.7.1795616607488; Wed, 25 Nov 2026
+ 06:23:27 -0800 (PST)
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -105,17 +103,32 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <cover.1795589119.git.u.kleine-koenig@baylibre.com>
+In-Reply-To: <cover.1795589119.git.u.kleine-koenig@baylibre.com>
+From: Pawel Zalewski <pzalewski@thegoodpenguin.co.uk>
+Date: Wed, 25 Nov 2026 14:23:16 +0000
+X-Gm-Features: Aa3M54rkSOQ0cxLe0SdeL4aNs3UZrcE3Vu7kmO5mBRqygoNs-GqHDcpUGoDVWIo
+Message-ID: <CAA6zWZLp998F363tRSwJ1VuS6djfnGqPDDWjXC3o=JvYkCuOAQ@mail.gmail.com>
+Subject: Re: [PATCH v1 0/9] HID: Make driver_data in hid_device_id a union
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
+	Guenter Roeck <linux@roeck-us.net>, linux-input@vger.kernel.org, 
+	Danilo Krummrich <dakr@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Takashi Sakamoto <o-takashi@sakamocchi.jp>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Aleksa Savic <savicaleksa83@gmail.com>, linux-kernel@vger.kernel.org, 
+	Ping Cheng <ping.cheng@wacom.com>, Jason Gerecke <jason.gerecke@wacom.com>, 
+	linux-hwmon@vger.kernel.org, "Christian A. Ehrhardt" <lk@c--e.de>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Nov 25, 2026 at 01:16:43PM +0100, Juergen Gross wrote:
-> In drivers/hwmon/coretemp.c drop mentioning rdmsr/wrmsr in a comment,
-> as it was incorrect in this regard.
-> 
-> Suggested-by: Asaf Nuri Bertizlioglu <asafbertizlioglu@gmail.com>
-> Signed-off-by: Juergen Gross <jgross@suse.com>
+For the record I did attempt this in the past [1], this approach was
+rejected and a series which changes driver_data to be always an
+integer was created instead [2]. However, I personally much prefer the
+anonymous union approach, given that it will already be the case in
+other subsystems. The HID subsystem doesn't need to go its own way and
+the alternative is slightly uglier in practice (as you end up looking
+up from tables via an index).
 
-Reviewed-by: Asaf Nuri Bertizlioğlu <asafbertizlioglu@gmail.com>
+[1] https://lore.kernel.org/linux-input/20260518-mod-devicetable-hid_device_id-v1-0-a08e3989c283@thegoodpenguin.co.uk/
+[2] https://lore.kernel.org/linux-input/20260727-mod-devicetable-hid_device_id-v3-0-980896ca283e@thegoodpenguin.co.uk/
 
-Thanks,
-Asaf
+Reviewed-by: Pawel Zalewski <pzalewski@thegoodpenguin.co.uk>
