@@ -1,89 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795609010;
-	b=nXJclpR9zCZvUN+zfObhleQ/ybLOdQDHcQr4q4Q9/irEPToDz79uthTUGCqOZ7jAP+NA
-	 EGes6q3gWuIApnj7CVNe4SOpfrxCXCV7Ia32G2USdwusvChpOrNL5slz353kZmTzM3hlh
-	 7l7xOVOfeGo5DiSBcpMKb6zZVA/UTTCmgqgSrBhr7wA2+lpGoo1+gaWdes9mATwVmAFAW
-	 TGnLmzL2YsMfuhf5XCyU0D2mYPdXZgJgg01N9dvIVE/YVJlOu5cUWSCP3k6DwfwBqEeVC
-	 2/5WJqhHlCs68xcVZHaQd+LP2cIj/wgvAYEAHerNNwcT1BJmVvE2ixrP7RhS+0E8xQg==
+	t=1795609146;
+	b=ynFa6Ycqvvjlywojj2a15A5GmUCo9D59W4BBa1pacYIjEM4jDvoRaGCfsmyad3xH4P55
+	 UND1RNX7B97Y/KkLLY7M0lMJcyU7CPTW1UwYMS4Oax8Lpx0HGFNu3GrYX0FSIhTgk7GNr
+	 R0u77dQBVlOy7P581Bsu1rl0d4rwgpLC0n1ngJx9DQyyGYkgXo5WyKrm/Mnv19Kw+k62K
+	 hhInKb29xxKgL9dW3mwxYROinnSlgff3wpSkJGPK534KvUsxTwcDWgsM93OQHUmcy4SNe
+	 zSBMBMg8EGQf09OL14CZbpzE69MOR/liIifIJCAlzUFqBWJhY61a6cJhlmNdsLvx2Jg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795609010;
-	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:Received:
-	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding:X-Spam-Flag:X-Spam-Level:X-Spamd-Result:
-	 X-Spam-Score;
-	bh=TgLmG1OM/Uj0A4/q2U5JZv4Ccoqc8HxLVYG2JiF1hMA=;
-	b=Wqa+vCsSTZ0TZFw8YOqY1RrU6k4CpPc4LzzjOvK+IfXKx7lu/JCl0ULsvcPD8gqpVaJo
-	 lURC1/lv0GTBEDCaItuG8AAZPHrLJPmGa1VUlCwaVtcIrGgzSGFzSyn6oMvlGaJV9OJxT
-	 MJrOx49KU+e1NDbJNGgYBSK8ii1sfiYVsAhmTmoFAUSRkRm7ZgsGPXk3tQV26WK9+wrwm
-	 EUKl/TECkCdvs9AZ3zYoYcXg9uBPDQ2AypHE8qSqk6RWbp+It+1PpxSR2wxuMTSh+Rrw3
-	 aXcpVErFNQHgajA6JJ6YEGCJz+Db7MknrBCqGSRBD44RsoiB5UQwO1iPyZuwgkGkakg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795609146;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=03P5WqdoxN73wyHcm4a56sj2Oupy9QmDKczBXmZfefc=;
+	b=YdlfKDlSmE3gK/hAtiOdWQvD4ndBmeZpkHWRT8m++0/2ve3zJHcKuWlzu0xpid5mqZvv
+	 nmqgt2cy6CHpnwW9m0rcpjwwfm5LD7MvzY9glIXw7+2OVsYOs0HCUF5i3Q8HFCYRKyLbS
+	 wsSA6YO/gRCD+BgWtQ3h5oJlKa5hPwSlkHNmK3vz5kfgYorpq15dqmJW/YUUwDH5gNXb7
+	 27VgXx/+dAedtzlKE+Im4iegZGnTbNNY3kAukc+nDlN9pQqqBP7CxqiwZVZY6nK8XYXqs
+	 2eFfteiCpWYsRQrXD8s4OVk4rI0Kj51GxwV0kAtmMbAUYCWa50gMq5i2P2F1r/XnviQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=susede1 header.b=gmS2Zc8w;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=susede1 header.b=gmS2Zc8w;
-	arc=none smtp.remote-ip=195.135.223.131
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JRDV7BQ5;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFF5A606A31E;
-	Wed, 25 Nov 2026 12:16:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AFF5A606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3ED606A321
+	for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2026 12:19:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=susede1 header.b=gmS2Zc8w;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=susede1 header.b=gmS2Zc8w
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id B50691F7E1;
-	Wed, 25 Nov 2026 12:16:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1795609007; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=TgLmG1OM/Uj0A4/q2U5JZv4Ccoqc8HxLVYG2JiF1hMA=;
-	b=gmS2Zc8wGpGeqTHypn0ASBd85woa3TX2y3CgHE92l+SdkjxdJD0EPREztBa3GWiX87sY0n
-	vN4y2UvmWF99m6Q44aAPwXW0m78t/u9nxXXpbZvOgBTXkgi3BU6NVJxcNiQgXMKhcFWz2b
-	f/QEIaare1AtzfHglwRoAG6AxehZuv8=
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1795609007; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=TgLmG1OM/Uj0A4/q2U5JZv4Ccoqc8HxLVYG2JiF1hMA=;
-	b=gmS2Zc8wGpGeqTHypn0ASBd85woa3TX2y3CgHE92l+SdkjxdJD0EPREztBa3GWiX87sY0n
-	vN4y2UvmWF99m6Q44aAPwXW0m78t/u9nxXXpbZvOgBTXkgi3BU6NVJxcNiQgXMKhcFWz2b
-	f/QEIaare1AtzfHglwRoAG6AxehZuv8=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 46840134CA;
-	Wed, 25 Nov 2026 12:16:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id B86mB6/RBmsaWgAAD6G6ig
-	(envelope-from <jgross@suse.com>); Wed, 25 Nov 2026 12:16:47 +0000
-From: Juergen Gross <jgross@suse.com>
-To: linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	x86@kernel.org
-Cc: Juergen Gross <jgross@suse.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Asaf Nuri Bertizlioglu <asafbertizlioglu@gmail.com>
-Subject: [PATCH] drivers/hwmon: Remove wrong comment
-Date: Wed, 25 Nov 2026 13:16:43 +0100
-Message-ID: <20261125121643.25427-1-jgross@suse.com>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JRDV7BQ5
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94BE11F000D1;
+	Wed, 25 Nov 2026 12:19:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795609146;
+	bh=03P5WqdoxN73wyHcm4a56sj2Oupy9QmDKczBXmZfefc=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=JRDV7BQ5yBg2ZyqwlkkCtmX4CYgJc5NWL+DPDdpac+e8glBO6OV6uVx1LwUwz2XTi
+	 zFwZ4NzCkeRhYMjqoP2evEyzH6BRo3LKwFpr6SphjEfE8mesxVBWIWmbOBSTIkM352
+	 mNJeChX8Yo19d7Y8tZYzkOBahuYz0NWyZjMOSUAirD9J6g49ARZ8iX9M3J+sfdeJAR
+	 CU7yiM1kuFXk/PK4esjLu9UwYI+yUc85jRsm2OAFvqbjUnJ+JZVV7hpOWL6foDYORr
+	 yjR+SgXAFGXS7q6gHjF+WaXDmQMDCjrdsp4e4zVLvI4nxHKw6mww0m/bZCd/gcFZwn
+	 f4ZjfGrl+akTw==
+Message-ID: <sashiko-outbox-233350@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] drivers/hwmon: Remove wrong comment
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Juergen Gross" <jgross@suse.com>, linux-hwmon@vger.kernel.org
+In-Reply-To: <20261125121643.25427-1-jgross@suse.com>
+References: <20261125121643.25427-1-jgross@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 25 Nov 2026 12:19:06 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -92,59 +57,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Spamd-Result: default: False [-11.80 / 50.00];
-	SUSE_INTERNAL_BYPASS(-9.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[suse.com,kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,roeck-us.net,gmail.com];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.com:email];
-	RCVD_COUNT_TWO(0.00)[2];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com]
-X-Spam-Score: -11.80
 
-In drivers/hwmon/coretemp.c drop mentioning rdmsr/wrmsr in a comment,
-as it was incorrect in this regard.
+> In drivers/hwmon/coretemp.c drop mentioning rdmsr/wrmsr in a comment,
+> as it was incorrect in this regard.
+>=20
+> Suggested-by: Asaf Nuri Bertizlioglu <asafbertizlioglu@gmail.com>
+> Signed-off-by: Juergen Gross <jgross@suse.com>
 
-Suggested-by: Asaf Nuri Bertizlioglu <asafbertizlioglu@gmail.com>
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
-To be applied on top of current core/msr branch of the tip tree.
----
- drivers/hwmon/coretemp.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Sashiko has reviewed this patch and found no issues.
 
-diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index 96d57fe12de6..ad5e8f40ad0c 100644
---- a/drivers/hwmon/coretemp.c
-+++ b/drivers/hwmon/coretemp.c
-@@ -66,8 +66,7 @@ enum coretemp_attr_index {
-  *		IA32_TEMPERATURE_TARGET MSR.
-  * @last_updated: The time when the current temperature value was updated
-  *		earlier (in jiffies).
-- * @cpu_core_id: The CPU Core from which temperature values should be read
-- *		This value is passed as "id" field to rdmsr/wrmsr functions.
-+ * @cpu_core_id: The CPU Core from which temperature values should be read.
-  * @status_reg: One of IA32_THERM_STATUS or IA32_PACKAGE_THERM_STATUS,
-  *		from where the temperature values should be read.
-  * @attr_size:  Number of sysfs attributes in this temperature data group.
--- 
-2.56.0
-
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261125121643.2542=
+7-1-jgross@suse.com?part=3D1
