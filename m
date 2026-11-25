@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795621045;
-	b=GsHEKZJM9yJqJvdfnzG8KI/KBunUqGaqWV6S97b0lKNJfZnpuVsdX0I0gH/JsXi4ae2E
-	 JkhjBSPG7xQmQCL3XebThBrQfc3QrG2fPk1IrdcRQSPo+tsyxKvCXe+CSO26OGAu18IgI
-	 46GZ5hzOE4D6oVsCt+xX94SI+Rcrlhlaf5Z8PFhf+IEI7SzRcDoPnzDMClgMDDTcwhN/U
-	 fCI9JcwBk029egGVKJOSifKHt1/WMPSaW9LQEpBhzXDS4iryuvm/0K+zNFqtrxSa/KfXr
-	 ShGa5UfMxnl1Wq3rthdVBrin6hnuo6R4bPk8FKgsAv61L39OnSie3wyHDBi+FXTPRTA==
+	t=1795622019;
+	b=kf9l8RdDutUTOpOFnp+abGqHtU3eMavs2qXSxMhoxBQfXQDufoagGNFK+Q5AfTn9TUch
+	 X/rvYD9pZx904cHxbBECgQSeB4L+YuyiU2A5AsKm0+RYXeeVmY0vEV47HtQ+LP0cUN8zj
+	 J60wNo0STkDUd2Gok03NaHhrGREXOHpZpL+BHaanmAIm9IbvKbSXZ+szizqFn+dgFWqJZ
+	 aYHDVduHOF6sZL/GBT7Nr6bTwfUlE894qBP9klmDsMMEUHbMpLIt1rwZcjS3FsyqpXIv6
+	 bKcKtyH2NQVhcVV6xvKJM7LN52TvuYfvKo0kdeWzhaHdTl+ZE+NpKaEqytCKmIoTZVA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795621045;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795622019;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
 	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
 	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
@@ -15,58 +15,58 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
 	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
 	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=x0BYKr6FWth/y99PUFdyAmMeU/6yLLum2DcjrcnjK2c=;
-	b=UGDJ+srisjNLUvVOtYlj8Bz6H/Qn/Pcf+phAHEkZ14tKnWxynsrYcmjQaFLbKuQqorpy
-	 hy14SGzNH500HZFTe3QF8WXOFdmSihHfuKoPmHF6OF59qlCrbmoRu6FpxriUm+zaywSsm
-	 dKMO0Q2PIsAdx2EEXaeDGN5AetcjpPvHPHnK1JKFDOVWRM+EWkvCcrid8FHmaVQfH7g0Z
-	 UHGtI1pma/5w8tof0UBkKoyUY/rYYZQfF0SjcIv9Q78XApqfeWc6kZ89pAgtZFrl9Y1Zr
-	 Gp3+XsLbLs4FZnO4H739jPZY9nw3+/MOf+DBQC9LADHunK6dxM86w/5bKIbsX0GiIgg==
+	bh=ofjZuNiDg7ilWnJJWScuyrFmHX53hQiX68aQ47o3Xlo=;
+	b=dGusUaBaGL5EwFCPPOSFQXAb47H6ZbX2F173qrGUom6eGagaPVGkW9QAgGwr+Dj7JJk/
+	 lvBdOEuSGqoTmg4HhByKtZlK3rQ/POhdT7a10fApg1xc0gdqrp9YxeL+N1x+oAp3HdpvS
+	 cbL0L7BeAmUDV0z5tULHvwtsHwj7e/El6lK/vzuW7lWn7Ok4hswNLlsUP5PxBEDs+jEPa
+	 9dPBivIxoefPizVdxj54rsQ7WFwAn3D1ZbWAl77VbZWOUgk+5a/K8o8XsAyn0MLsbphGa
+	 8vuSjWJ7L0n6R9//TUq6JXhccZCsv+z0d1ucfdnlaXeecUzf4bEmzrIcqp0icnLDnsg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=HphL34JE;
-	arc=none smtp.remote-ip=35.89.44.39
-Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=smlvMA8J;
+	arc=none smtp.remote-ip=35.89.44.37
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7EA606A683
-	for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2026 15:37:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5D7EA606A683
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66983606A327
+	for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2026 15:53:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 66983606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=HphL34JE
-Received: from eig-obgw-6006b.ext.cloudfilter.net ([10.0.30.211])
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=smlvMA8J
+Received: from eig-obgw-6007b.ext.cloudfilter.net ([10.0.30.166])
 	by cmsmtp with ESMTPS
-	id WEphxVbaTyb4YWF3dxBVZy; Wed, 25 Nov 2026 15:37:17 +0000
+	id WDcYx8I84VK9UWFJNxHgN6; Wed, 25 Nov 2026 15:53:33 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id WF3cxy8hFFhzrWF3cx6D76; Wed, 25 Nov 2026 15:37:16 +0000
-X-Authority-Analysis: v=2.4 cv=JY+8rVKV c=1 sm=1 tr=0 ts=6b0700ad
+	id WFJNxmZgj3nNNWFJNxZzzk; Wed, 25 Nov 2026 15:53:33 +0000
+X-Authority-Analysis: v=2.4 cv=TuLmhCXh c=1 sm=1 tr=0 ts=6b07047d
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8
- a=iox4zFpeAAAA:8 a=_jlGtV7tAAAA:8 a=o15gWAMvB_Vrntha6m8A:9 a=QEXdDO2ut3YA:10
- a=WzC6qhA0u3u7Ye7llzcV:22 a=nlm17XC03S6CtCLSeiRr:22 a=KPbNTLLc3YvdawN95zVk:22
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=VwQbUJbxAAAA:8
+ a=1XWaLZrsAAAA:8 a=JOhP0RYFjyS_x4KktD4A:9 a=QEXdDO2ut3YA:10
+ a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=x0BYKr6FWth/y99PUFdyAmMeU/6yLLum2DcjrcnjK2c=; b=HphL34JEEFdY
-	E5QTI03rhNLpEpA7MORJT0V5PXUqe6qvaRR/lh2V8nOJRfSthfDTERq1Mcr9mIvie8UqLHHgHj9eE
-	BvsxzY5jDKhWSYbl4hIeZNSBZg7g5fbp87QQKPfWx88k3onT1FY4Ff75SlSzDxvsPkn+2u6/6tury
-	ztlJfFvAYmT3B7AhbuFHsypGfONoe8kYTuIQ55ssEVqBPlINUboYOVhBHnSfgLXfUxb7D74UQvrKa
-	Re98s8MBoIjQBGKvoN7+qAYv22dGLHV0PKnTIbbOe2BAQko56Reh5hFYLup8VY8iMnjXuUrXHm7+X
-	IpjASoSrOAJS8F01dkjLjg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:56872)
+	List-Archive; bh=ofjZuNiDg7ilWnJJWScuyrFmHX53hQiX68aQ47o3Xlo=; b=smlvMA8JkyqX
+	tNKKmQH00I1aKOjVLxS4XURyfaSeecngyr3fhnL6mrsy8mAe0aBp/BEr9Z/tWB29h8bWquTsQbkFo
+	BU7dk81TbKyUM2RmXVSGJiWfdzubfrujVR6Xh2VFQ3oqoWKjCmD0BxBehEYwRN1u0/a3D3lmxlgtw
+	rnWtglbLPhEuesznnL98Tkm9LK/IzVPjUG5r35YPhAR6PrB8+l4VOIOs0lBPK9ddY8b5jSL5SouSz
+	MKFwxI9rCTAbu7sKHnHLUs6iR82tDc2oF564/gD8tJyg9sfgVBYe9ubwoxeq9CcnCISCdGvShTJda
+	C5CvQfbzdst3NDX0n9vOBw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:45574)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xWF3b-00000003fMX-3iMS;
-	Wed, 25 Nov 2026 21:07:15 +0530
-Message-ID: <84699bfe-574b-4745-927d-8f2b9b5a715c@roeck-us.net>
-Date: Wed, 25 Nov 2026 07:37:14 -0800
+	id 1xWFJM-00000003nVg-42wd;
+	Wed, 25 Nov 2026 21:23:33 +0530
+Message-ID: <b5910c74-7e29-4138-9dd4-030c95c78ec3@roeck-us.net>
+Date: Wed, 25 Nov 2026 07:53:32 -0800
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -77,14 +77,12 @@ List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] drivers/hwmon: Remove wrong comment
-To: Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, x86@kernel.org
-Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>,
- Asaf Nuri Bertizlioglu <asafbertizlioglu@gmail.com>
-References: <20261125121643.25427-1-jgross@suse.com>
+Subject: Re: [PATCH] hwmon: (pmbus) Fall back to CLEAR_FAULTS when STATUS_CML
+ is read-only
+To: sashiko-reviews@lists.linux.dev, Arthur Korn <akorn@google.com>
+Cc: linux-hwmon@vger.kernel.org
+References: <20261125053711.3098007-1-akorn@google.com>
+ <sashiko-outbox-232631@kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -130,7 +128,7 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20261125121643.25427-1-jgross@suse.com>
+In-Reply-To: <sashiko-outbox-232631@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -141,46 +139,106 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xWF3b-00000003fMX-3iMS
+X-Exim-ID: 1xWFJM-00000003nVg-42wd
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:56872
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:45574
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 8
+X-Email-Count: 11
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfLKq2gjVsIu9n5fq/5tiMr8TOjzHtOnq5AvvHCI5l5CZVldBad/Iyh2Cuk6mokkZMEv0H5B1Vi+jnEzI5Ey4lExhnsHcvZGVWg4SBnd0PNH9YoZJWX+x
- nil4+LuOJ6nVko1EfVK2RcWesOBXBX7zxqxc6YjGxhxHxyCS7r3jrwASuzwyVUqhdmjxyDJW0/QoH6KINyyoJpB3Ia9iB8OSx9QvMvTG9vBtAYOXhq9P3nh/
+X-CMAE-Envelope: MS4xfMZXSq0GE2IFpFq5xmqIGhDiae8uJD66eRVRfaeJyf2cyi49i/vXO6ub6iSdcrizE8Dh6TNL3Ao3DVhFV8aPaUURIPA2bdAAqGJ3LVxRaRKYiToRlLwl
+ ZyKFypFOZWGNwvb4kco7DZOi/4wEnl/v/Ku+f7F4NZQ5LAwLZHu0Izk9O4Ikt/Aa56hq4XT8flbvfvS1DtE3YP0DptnbdgUBdqOZHjDgqnytOhxZ3ZkQ8UKZ
 
-On 11/25/26 04:16, Juergen Gross wrote:
-> In drivers/hwmon/coretemp.c drop mentioning rdmsr/wrmsr in a comment,
-> as it was incorrect in this regard.
+On 11/24/26 21:49, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue to consider:
+> - [Medium] hwmon: (pmbus) pmbus_clear_cml_fault() disables W1C on
+>    virtual pages
+> --
 > 
-> Suggested-by: Asaf Nuri Bertizlioglu <asafbertizlioglu@gmail.com>
-> Signed-off-by: Juergen Gross <jgross@suse.com>
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
-> To be applied on top of current core/msr branch of the tip tree.
-> ---
->   drivers/hwmon/coretemp.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
+> commit 55aa274a3350ffb5857e7b698b066e9435f264ba
+> Author: Arthur Korn <akorn@google.com>
 > 
-> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-> index 96d57fe12de6..ad5e8f40ad0c 100644
-> --- a/drivers/hwmon/coretemp.c
-> +++ b/drivers/hwmon/coretemp.c
-> @@ -66,8 +66,7 @@ enum coretemp_attr_index {
->    *		IA32_TEMPERATURE_TARGET MSR.
->    * @last_updated: The time when the current temperature value was updated
->    *		earlier (in jiffies).
-> - * @cpu_core_id: The CPU Core from which temperature values should be read
-> - *		This value is passed as "id" field to rdmsr/wrmsr functions.
-> + * @cpu_core_id: The CPU Core from which temperature values should be read.
->    * @status_reg: One of IA32_THERM_STATUS or IA32_PACKAGE_THERM_STATUS,
->    *		from where the temperature values should be read.
->    * @attr_size:  Number of sysfs attributes in this temperature data group.
+> hwmon: (pmbus) Fall back to CLEAR_FAULTS when STATUS_CML is read-only
+> 
+> This commit reads back PMBUS_STATUS_CML after attempting to clear CML
+> faults on non-write-protected devices, disabling STATUS_CML write-1-to-clear
+> and falling back to CLEAR_FAULTS if the fault bits remain set.
+> 
+>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+>> index db5c5f533eb97..af8f589b328df 100644
+>> --- a/drivers/hwmon/pmbus/pmbus_core.c
+>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+>> @@ -728,15 +728,31 @@ void pmbus_clear_faults(struct i2c_client *client)
+>>   }
+>>   EXPORT_SYMBOL_NS_GPL(pmbus_clear_faults, "PMBUS");
+>>   
+>> -static void pmbus_clear_cml_fault(struct i2c_client *client, int page)
+>> +#define PB_CML_FAULT_CLEAR_MASK	(PB_CML_FAULT_INVALID_COMMAND | \
+>> +				 PB_CML_FAULT_INVALID_DATA)
+>> +
+>> +static void pmbus_clear_cml_fault(struct i2c_client *client, int page,
+>> +				  bool verify)
+>>   {
+>>   	struct pmbus_data *data = i2c_get_clientdata(client);
+>> +	int ret;
+>> +
+>> +	if (data->has_status_cml) {
+>> +		ret = _pmbus_write_byte_data(client, page, PMBUS_STATUS_CML,
+>> +					     PB_CML_FAULT_CLEAR_MASK);
+>> +		if (ret >= 0 && verify &&
+>> +		    !(data->flags & PMBUS_WRITE_PROTECTED)) {
+>> +			ret = _pmbus_read_byte_data(client, page,
+>> +						    PMBUS_STATUS_CML);
+>> +			if (ret >= 0 && (ret & PB_CML_FAULT_CLEAR_MASK))
+>> +				ret = -EIO;
+>> +		}
+>> +		if (ret >= 0)
+>> +			return;
+>> +		data->has_status_cml = false;
+>> +	}
+>>   
+>> -	if (!data->has_status_cml ||
+>> -	    _pmbus_write_byte_data(client, page, PMBUS_STATUS_CML,
+>> -				   PB_CML_FAULT_INVALID_COMMAND |
+>> -				   PB_CML_FAULT_INVALID_DATA) < 0)
+>> -		pmbus_clear_fault_page(client, page);
+>> +	pmbus_clear_fault_page(client, page);
+>>   }
+> 
+> [Severity: Medium]
+> Does clearing data->has_status_cml on any negative return value from
+> _pmbus_write_byte_data() disable STATUS_CML write-1-to-clear across the
+> whole device when a driver exposes a read-only virtual page?
+> 
+> During pmbus_init_common(), pmbus_clear_cml_faults() iterates over all
+> pages.  On multi-page devices such as max16601, virtual page 1 is
+> read-only while pages 0 (VCORE) and 2 (VSA) support byte writes:
+> 
+> drivers/hwmon/pmbus/max16601.c:max16601_write_byte_data() {
+> 	...
+> 	if (page > 0) {
+> 		if (page == 2)	/* VSA */
+> 			return i2c_smbus_write_byte_data(data->vsa, reg, value);
+> 		return -EOPNOTSUPP;
+> 	}
+> 	return -ENODATA;
+> }
+> 
+> When pmbus_clear_cml_faults() reaches page 1, _pmbus_write_byte_data()
+> returns -EOPNOTSUPP and sets data->has_status_cml = false.  Unlike before,
+> where only page 1 fell back to pmbus_clear_fault_page(), this regression
+> disables STATUS_CML write-1-to-clear for page 2 and for all subsequent
+> register probes on page 0, sending PMBUS_CLEAR_FAULTS and wiping latched
+> faults on both rails.
+> 
+
+Seems real. Arthur, what do you think ?
+
+[ PMBus is really annoying :-( ]
+
+Guenter
 
