@@ -1,99 +1,123 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.219.43
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1795616608;
-	b=MgA8lHONwzxAkplcF+iO+swuDFaTaJRGdP+CINL/Zhf1F07e6pvykB2Ltc8OXSTKg2yj
-	 vRbjmiJZrnlyl3GGMSG2px9KUklH1TI7Rvo4DCRx5WrPoS/X3vKO7ql+suLGmCrEkHMfl
-	 6P1mX4giHuPSqFyDY+ETT+VYNp8DfapiDjazxK3GKkpUl7sAK0Xmx9LVB4qRrdlfnd73B
-	 6TzWvHQPDSBpVz8vNRDZhD55xC3Eq4nDbq1NhdO2c7v0HiyJx/Q2a9zD8zKlbwFlT5I8g
-	 bv3a5N73XKnPAaXd+ey8BmaVLj8v7ZbH+KYnSnV26SEgSAaPjdx8Vh3LdDA3hO2L5dA==
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=205.220.180.131
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795619194;
+	b=Pm0xOzrFShKypd1jMMr3PtZu9shwDv/W4HjiQtBmVKy+xzs8Qc9DCkvUSf/WVPC9Gidg
+	 rJH0c9usB5t/59hKLUCVodiIkzbIS8V9JKnloD1/OWHWjkV9m9FIXAn/p70gahr5JFegi
+	 5w8YhtiKvJo8V8i4j3Ac56UUzdWt5H4ZNSURKnhXb4MwY42F/HCVci7+CrG2Sq6Z3obSj
+	 GKCBYWrF0XFrYCMz/Fyh8Hp5cClycw9YIpYltxgGozwrH2I3mk8EHdxzZivasKEy2DYHH
+	 Xffhj+fM9+X6Z/rj25ISIW2bjUeW3C/jy1fot3WciElsAJFLHl9ecWws/B2/n1icmcQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795616608;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=vyzSN8YoEpZHNUT3pPheTzKO6EtKkzWYqov5UdjXwWY=;
-	b=pygG60bOl+4DUcLTOZ5NsoMh+00kga9QTsdkiPG7MJV/7DoeLsS/jHPKl60Xjmop/Tnt
-	 pe9dzX1ifNb1xo/LxPHWNB6O7Pffup9+Mn84Cggmuz579HI03z5L6GZ3os9AISDhNTJyz
-	 XrhbW6JQK28k4jQzaL6x/tzTzSEmc83cjUw6szcm55m/0NRNMOXyo4Sdkh/O7/BmeBeU0
-	 VuACYBFMqJDpisk1mN0h5SlBlj7PDy31FfxzSdMV7ARGkHasjyaLQTnsELDRNsptxJ9p+
-	 RE9S8l47RELEKul5t4bA6HR134tmvPLl2NgY0IPkcsW5VGCnKNGBhFb9bdeFa+IagzA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795619194;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:MIME-Version:
+	 References:In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:
+	 Cc:Content-Type:Content-Transfer-Encoding:X-Proofpoint-GUID:
+	 X-Authority-Analysis:X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
+	 X-Proofpoint-Spam-Details;
+	bh=F8Fmq8LWA4bhtyNOLWl2S9LNOHs1l6eqA9F+R8NUX+A=;
+	b=WGc2d66kFXBisnviXb5NCP49ZFivkl9vvdIm/Vg/8MToOEWUgtm9SKR2H+Ed4W6odrw/
+	 d5d1mpoUbgVjMj9CLU3uyzJu2JkEeYGiLW3tuK2KuuuSrkjXZ5sZ8aXnZvmA0Jcaan0QL
+	 EsgvSZasRBRwka7B/P69jbU2uIL7BBof+s2GC+AmJQpylRe+ELjWGK+fQHGM3bPf8taWn
+	 Q5n2gbBcl5xhU6fQlns6U+RmZjd3RvaS6r97tbQhDkx7Im64Vt88+WCAg5qZebwsTOuv/
+	 x2sV8u2K6deSNlGefB+VMJ+5GeII85CJOfU7ocE1wYMGeBzCFZma1S4QPccGXFceWww==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=thegoodpenguin.co.uk;
-	spf=pass smtp.mailfrom=thegoodpenguin.co.uk;
-	dkim=pass header.d=thegoodpenguin-co-uk.20260707.gappssmtp.com header.i=@thegoodpenguin-co-uk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=VBU80bct;
-	arc=fail smtp.remote-ip=209.85.219.43
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=oss.qualcomm.com;
+	spf=pass smtp.mailfrom=oss.qualcomm.com;
+	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=Nzjcr1Jv;
+	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=aQvvRIbb;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=205.220.180.131
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8448A606A31E
-	for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2026 14:23:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8448A606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=thegoodpenguin.co.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thegoodpenguin.co.uk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A6C606A334
+	for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2026 15:06:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D1A6C606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=thegoodpenguin-co-uk.20260707.gappssmtp.com header.i=@thegoodpenguin-co-uk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=VBU80bct
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-921365696d9so41288846d6.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2026 06:23:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795616607; cv=none;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=Nzjcr1Jv;
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=aQvvRIbb
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6APEMDet2099756
+	for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2026 15:06:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	F8Fmq8LWA4bhtyNOLWl2S9LNOHs1l6eqA9F+R8NUX+A=; b=Nzjcr1JvAe8O3y2M
+	nRk02gsmzckXBcRxfri+XHtkdUIEszeIzfFyQQgR/BocgtLFL+n+eCBxHRzQ6Yfq
+	qFzg8RINXEMwOvBf0/oUkncHMiBTksHiHC9BqK7fPOJQt+fer1msKMHomuVFo02M
+	HWlOZeJFWN/NORls8UyWol1U9y/9hHAW4fZgccoU7/Sbqi2bbTFG+4vjo+f4z3En
+	x0PMMHwz77Py3aOkFJX8N0yFo4LC9oqXKJIiDzifeX/5Vv+KdoJ8lIpcubq7K9D4
+	SMLEBhZdEr0PMudXVoqY9KyOzziQXsPFG/RnejlYfRIxAoE94rHnRlkzkztqvvLf
+	0Vovvw==
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4j61arg75a-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2026 15:06:32 +0000 (GMT)
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cdb91e288d7so4574251a12.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2026 07:06:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795619192; cv=none;
         d=google.com; s=arc-20260327;
-        b=B9yyrXCvg1pO/tjo9XIPpEWnE6ieWigI09JbB/eGMyDh9zkKRv5Xq/bM9t9BNFOP0L
-         zmo0blnpNtzMDHxc5S2cpUrXkMcP7PxU91YTrgoIja83FrR0mlkYplleOVuVUz45vKg3
-         eQIjU7TyR9GcSEYTRZjd6wyaukhgrsHv/9MHl4o809HmZ2YcGzPCAOwr+sFQx+PLwhlJ
-         um2mMM44lBisYVC0ocxiw1XxgPDzmr5DINuOGaKnW1L1i3fIJt3lnd3XieFf/6NPMIxw
-         NHUGMJXNaRyUY/KdZelST8atw2+HjGUcRBzzZtSVrelP2F+SHC6ImUB/PqdI8ktV1fZs
-         NNDA==
+        b=hMlBMDgQ0olx+4FwcljR81JaWzWLldICZ4Lc96qMP2qacNPRg2EgLbA3ZuSD47BeNL
+         zSneaFJEG9AIOay2gVOx3vd+ZTjfLjpa+7Zj+ZyWtzbq+KPJXMkqTB3fa+DGBJ8fQLoh
+         hMRV6uEvVGxJkRMFGID/M564Q63fngv+BnTa9es4hDOr9CdVi0nXrN6y7EOc15CDWw1t
+         +zJmKNC4FIROx7Gk8FtZqJCAH6TkMsR2ScbchnYdwHUNGOT7MSTbQxUV1g/QzvhnAao8
+         eMg2/VR5da/SV0+30rJFJinfU8BRRvO3lrw/FUOqMfQus2UCpj9uNpWiXg/wgQarq8od
+         3xhQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=vyzSN8YoEpZHNUT3pPheTzKO6EtKkzWYqov5UdjXwWY=;
-        fh=B9rH5TMW2ZcOi+vEaWOIdtW03Sl/hWXyN6rd2A9DEYg=;
-        b=Bl4FH4oZXh2KXBP/YxQmPG0EbWrrZ/rYro2SWiC5SC2pwWggooWFgQ5Z4Z6vz3qm3K
-         4SLEPjNgLjTU4VfyH7VgfmfpN9VGObE8z/dqdd5TYVxTCSQ3RwoSUgBaZDQyXoIheHUZ
-         DQ2u4RtP2b5IRot+EPSnhJExT+u+9UvVOzC6r96VbOGu+QrwtxgUlP8K4Cmz6AOyoKjW
-         efxZybXUe/RUfrw+V0cC5yXzdjCDssGZYfCo5bkOE2D2yK09+1FJrZXmShjZk+3vOUmX
-         TO2akFN96LD1oj3g1wNbGKTAKU0IsJfGDMZseCi/OeH5k42p4ts1ugKmIYTyPZ12A+XJ
-         bfWg==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=F8Fmq8LWA4bhtyNOLWl2S9LNOHs1l6eqA9F+R8NUX+A=;
+        fh=h6RfZ97Ca9DFkkW8dXDvRaE1fm7pCIBYLSafXFLjPcU=;
+        b=H3U4+hFlsqHEhDoeJQfZD5tLFhfMgYcoJTpCq51p8bBOrQveYBrofjwnCh7bnatqjs
+         29sliBwRZg+xA5INJEEZ77ztLTRNHNCs5A+gDwI1hDCPeZNWZtqVLwCKa98jMCgixpVq
+         pnrPmmgoXlcZjpfy9iks7jmgEOba5SJgOsFhd3dSRP3FV5UIHSFxxymgIEVDbOY4Evsy
+         m9TfR4VzpHR4jAM5RrELpGS6Q5oRIW3SNV7b8c87NyR4m3LySpKTLaG28btrLiHF/YGZ
+         +2IvwL3YFBX2awAYprzwOHcuqbbwAktso1Yo1dzW4yEEsLhZmvuiPlGJhdTsvue5A0fn
+         p9gA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=thegoodpenguin-co-uk.20260707.gappssmtp.com; s=20260707; t=1795616607; x=1796221407; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=vyzSN8YoEpZHNUT3pPheTzKO6EtKkzWYqov5UdjXwWY=;
-        b=VBU80bctXVpMU3NOlcb1DlRe4QrHv2umoc7orUqstYTkfK2oNJPvqhDfEXc+OmlQLp
-         tj82uCESe7NUS695UcOtdEsBTuLM69Sq7WELmpiKH1jjZx8z1m646NGhXQZZAK/zm07A
-         DF1Jz3tj8gtbadlLyO3TmyT2sVvszop32rWYQ0IHt5QGB6QMsowPhYWjB3gGt3b39J07
-         zm014mweRk2RbJ1MBQzI7TzC9FPXW/jKNQEBmt2yxinv3gDPYS3h1DRkaS8HC82qVFWc
-         Gb5MTF8l+GxlT5OWm7aiSSNtf9WhEz+vupQiw2ncykdpRLj34UKumuxKxjuZFS8iApnA
-         B12w==
+        d=oss.qualcomm.com; s=google; t=1795619192; x=1796223992; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=F8Fmq8LWA4bhtyNOLWl2S9LNOHs1l6eqA9F+R8NUX+A=;
+        b=aQvvRIbbnBKl/n3q348iLLptU/+mygDN2Jl9XNTq+yEXfKzPNT23kyDGpbK9KMnKPg
+         bz20aMuewXIYV/NAMlEMxChYwNPFHWbHbNRh4aLwVbMzuhuhuy/lqxNJBg7dNY8Iisuw
+         oglPzP/4OUfEnHpRSaLt3nLt9c1OxNoEZFe7C+I8ReFj8TECkR/tQ9hW4XQFJpA1mHy9
+         V6Gmqk36hoBhbLqefIQ352VRNEo0Fbjz8UiybUoneDN11ZnCfH096uRMrLP/UHsO20RA
+         BmwFDCpewCuSmS5WReO+7Eod7CWq88DbnMTAomes4fcfSEmuJJlg++15KzxFaHbEO9Xa
+         3XJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795616607; x=1796221407;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=vyzSN8YoEpZHNUT3pPheTzKO6EtKkzWYqov5UdjXwWY=;
-        b=YurV6uAEldukvvy/cPdbfh/btJGLCI2/Tv2kX2abbwzBoMa+ZAAa1K3whlySL6dW6B
-         n/wKRTkpwzDu+YmZfTTBTddQOk5vMiJjMgrwVdPuWZL8VHt/9QpGyM4fTuI3MBEiF68g
-         vCrOH6ddijRkDEoQqDVcK2on78u1/RJjSDT4gHRM1+vV0fcXu811uvPiWbRJ0utAgnXg
-         AR2NXhW1wEULAvePZZaUm4LFUxzAGC7dnUkVTWBQa6sV75eH8Tq5pnqSRAXOceen2Q8S
-         qHnrSZcx66vtggyE7jNOM59MVK8XJxFiHR1td0mfpJpcN7SkLEPGsgjZuFn4q2DU+q46
-         cy2w==
-X-Forwarded-Encrypted: i=1; AL+hErG1NKxXeosoCse6CWbEah9UDCF03qryAPLgcjfIiVQOP3f8uGM8nBFevEPuFGBUgulCpE0+U2XY/3G2zQ==@vger.kernel.org
-X-Gm-Message-State: APuU4Z+dbNaA2FrIqZxzFaE43O3Cu5djKXYpNFr8C4vojRoeUffEnRu5
-	S2zRjeX03g+sbZKbiG3qJLr6dnBPiCT1tw7GunCDaI/k7zVQ8yQxEePq0iZmqE8F9qm/xCDsriX
-	E76uOQjHNoCPTqS/lRBmsXFDmwIz4KhKXLXYDyxYJpwIbmv4kzKywUxr3tqrx
-X-Gm-Gg: AZFdTZdhwQN468OW4W7WI3GmNkPgP88B9sjrgcu648ukWA7VyhVUJxH0PsH0RKxpha8
-	6Uhs5ZBuJsG9McFe7qjN+xfoZNQeZOpazzw+/F3h14guUe0jIW4uj9xHWxVhA3wPwLDMyPzhsIC
-	NP4NhqIJ0jVxXZXpxsECf2dSf9BtEdFIhMDW+f4zp2HmWSYhlwjCpPttT85u2PI2oi7jWZAkdkU
-	2EENwe339A9lbWog9PRu25cVM7yaR0eRFt1dLVivtD8uh5BOcpTKJH+1lsTGKMHdXol7ScC/Gxj
-	R4ZYV5YWRneVs0MKQ+wZCqADZHHW3eeHm2tCeBFgM78WuTCan4mZ3cXuGfYgOmbet7+pZu3nPUs
-	79RiqnMdStjDnb2p/cI8lnhcZjanroGxudknZz3+25vLA/XHzs90mx2u3AlxYyXkBXAIh0xY=
-X-Received: by 2002:a05:6214:2125:b0:921:1955:6578 with SMTP id
- 6a1803df08f44-92134984b15mr344701626d6.7.1795616607488; Wed, 25 Nov 2026
- 06:23:27 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795619192; x=1796223992;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=F8Fmq8LWA4bhtyNOLWl2S9LNOHs1l6eqA9F+R8NUX+A=;
+        b=QbwxR0uJP5q+oO3VY3l+jPRA33GRYuGI0cg37qlzijxRLT6THLNx2FfQp3bkKwFoXr
+         ktfAnZaf0IScL91tJb/L8d36EwdyCXNtPlsb8q1jL6pqkzHKeMO3rAhHBNWQAR+B5XaA
+         I7WXAFIFPTFq2MdtUN59ZAIqoeRBn6+i3C5YE3DXquDK77SL/isi1Mxhm+NtFc4woF3W
+         l74oPDGajDP/2hRio2i01WC4kN4hOj6oEjcwwajWVFsMRO5B2pMoo5PnSr+XOvZxcY0H
+         oMlHxVXe/pFYex/3wJnAWNtjiNFiCLVFdUhu6TaMo+EDdfcThVqAq+Hn+kj2RIeXzCHL
+         xqUw==
+X-Forwarded-Encrypted: i=1; AL+hErEwcJ6CZ+VsHu+5zFXavhM+AgEvtP+5Y2hZY4YW/wxW64cEdCelYB+VeDU2O184LLVvMQLSezzeXIw14Q==@vger.kernel.org
+X-Gm-Message-State: APuU4Z/Ym3+hRvjsEu7f7IvWoJ/qLaFkttrnYzuDvc+Ipua1/2KSuPOp
+	sfR8e//PmTTs/y91sDKy2Ataw5X6yPWjkWmY/aNnND7J4i2pdwZNBibqBIAhxeAak+RMljQLDuD
+	O/IcdDFyfe27bFAnGv6hfXzP8CYGeP6uhTO3h1ldf9BBrHQW0IlphoLI+nAlpCaEBKdCDRHvy6W
+	5vRPjZaikLA+s56QD6Cz89y+c27Gv+TMTMmVQJI4u2
+X-Gm-Gg: AZFdTZc4GTOrc1/FbQqVrngYG4togXLjnUCwU8bWxk5psmm/6BLRky/rYNulodVeOeH
+	2x6r3JOCMscsj1Xi16c+nkDEvvUfb9gmsTUBVYzfPjytZk04RJPXs3S05haBKaBOH6FcagSuJjD
+	qh3L+ZWkNMzJVe7rmsyXQqsJknBrvmwNKIjyoYX/BQ2zFhGvzDks4QtgS7SA==
+X-Received: by 2002:a05:6300:8095:b0:3dd:a196:69e4 with SMTP id adf61e73a8af0-4014d14d2d3mr16907613637.63.1795619191497;
+        Wed, 25 Nov 2026 07:06:31 -0800 (PST)
+X-Received: by 2002:a05:6300:8095:b0:3dd:a196:69e4 with SMTP id
+ adf61e73a8af0-4014d14d2d3mr16907537637.63.1795619190966; Wed, 25 Nov 2026
+ 07:06:30 -0800 (PST)
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -103,32 +127,236 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <cover.1795589119.git.u.kleine-koenig@baylibre.com>
-In-Reply-To: <cover.1795589119.git.u.kleine-koenig@baylibre.com>
-From: Pawel Zalewski <pzalewski@thegoodpenguin.co.uk>
-Date: Wed, 25 Nov 2026 14:23:16 +0000
-X-Gm-Features: Aa3M54rkSOQ0cxLe0SdeL4aNs3UZrcE3Vu7kmO5mBRqygoNs-GqHDcpUGoDVWIo
-Message-ID: <CAA6zWZLp998F363tRSwJ1VuS6djfnGqPDDWjXC3o=JvYkCuOAQ@mail.gmail.com>
-Subject: Re: [PATCH v1 0/9] HID: Make driver_data in hid_device_id a union
-To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-Cc: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
-	Guenter Roeck <linux@roeck-us.net>, linux-input@vger.kernel.org, 
-	Danilo Krummrich <dakr@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Takashi Sakamoto <o-takashi@sakamocchi.jp>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Aleksa Savic <savicaleksa83@gmail.com>, linux-kernel@vger.kernel.org, 
-	Ping Cheng <ping.cheng@wacom.com>, Jason Gerecke <jason.gerecke@wacom.com>, 
-	linux-hwmon@vger.kernel.org, "Christian A. Ehrhardt" <lk@c--e.de>
+References: <20261117173738.1073856-1-Frank.Li@oss.nxp.com>
+In-Reply-To: <20261117173738.1073856-1-Frank.Li@oss.nxp.com>
+From: Ulf Hansson <ulf.hansson@oss.qualcomm.com>
+Date: Wed, 25 Nov 2026 16:06:19 +0100
+X-Gm-Features: Aa3M54qxdRmYOsZoBrTl4IfLXTc7pY51UNG7OdOGBQV2sjgdmvbFz8dtj3UY-KM
+Message-ID: <CAPx+jO8oqBcGCSUReJJVMjsnQg+xCv_X8LhFVaGk0NDuOqmEiw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] PM: runtime: fix stub pm_runtime_get_if_active()
+ for !CONFIG_PM
+To: Frank.Li@oss.nxp.com
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Alex Elder <elder@kernel.org>, Guan-Yu Lin <guanyulin@google.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrzej Kacprowski <Andrzej.Kacprowski@intel.com>,
+        Maciej Falkowski <maciej.falkowski@linux.intel.com>,
+        =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>, Will Deacon <will@kernel.org>,
+        Rob Clark <robin.clark@oss.qualcomm.com>,
+        Connor Abbott <cwabbott0@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil+cisco@kernel.org>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        "open list:POWER MANAGEMENT CORE" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev,
+        Frank Li <Frank.Li@nxp.com>, Alex Elder <elder@riscstar.com>,
+        Andrzej Kacprowski <andrzej.kacprowski@linux.intel.com>,
+        Karol Wachowski <karol.wachowski@linux.intel.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tvrtko Ursulin <tursulin@ursulin.net>,
+        Matthew Brost <matthew.brost@intel.com>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-xe@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-GUID: L69ro6AdCx8MVc62Z2oArwx2ZLhbFnsq
+X-Authority-Analysis: v=2.4 cv=OIOyTiaB c=1 sm=1 tr=0 ts=6b06f978 cx=c_pps
+ a=Oh5Dbbf/trHjhBongsHeRQ==:117 a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10
+ a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
+ a=3WHJM1ZQz_JShphwDgj5:22 a=8AirrxEcAAAA:8 a=ee_2aqc6AAAA:8 a=VwQbUJbxAAAA:8
+ a=ag1SF4gXAAAA:8 a=QyXUC8HyAAAA:8 a=GFqr32JmAAAA:8 a=pGLkceISAAAA:8
+ a=7CQSdrXTAAAA:8 a=tA7aZXjiAAAA:8 a=EUspDBNiAAAA:8 a=_jlGtV7tAAAA:8
+ a=1XWaLZrsAAAA:8 a=e5mUnYsNAAAA:8 a=JfrnYn6hAAAA:8 a=f3U7k-wd2kzf4Rf19YkA:9
+ a=QEXdDO2ut3YA:10 a=_Vgx9l1VpLgwpw_dHYaR:22 a=ST-jHhOKWsTCqRlWije3:22
+ a=VOpmJXOdbJOWo2YY3GeN:22 a=Yupwre4RP9_Eg_Bd0iYG:22 a=f02Ha7HRcztGgdyUxOxW:22
+ a=a-qgeE7W1pNrGK8U0ZQC:22 a=kIIFJ0VLUOy1gFZzwZHL:22 a=nlm17XC03S6CtCLSeiRr:22
+ a=Vxmtnl_E_bksehYqCbjh:22 a=1CNFftbPRP8L7MoqJWF3:22
+X-Proofpoint-ORIG-GUID: L69ro6AdCx8MVc62Z2oArwx2ZLhbFnsq
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI1MDA2MCBTYWx0ZWRfX/DXX1/a/NHH7
+ oe9MDIuFEgw04frk6WrBJ/94zRcHM2wVTTns9l529cqUF7H+YxMvh9EFfIIS/6tp/bkuFl7SXVg
+ fOuBSazF6RWuQAXOHr0NdO/uFXUnQtM=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI1MDA2MCBTYWx0ZWRfX4rxmjLuzZafU
+ gezhqymkJMcU8OThhEF3u/1Xe4aRiR6lLwLSRlU7Kbf91BKWs2rfwX7Brlu6hA5uJvtH3AMh+sB
+ 6sSFrlw5pHKVQaFA5/q9r3iEVicDXpv8+eJMCTR9gko6DJdepNsGrpDUe4yAvfdhGMgqIwiPt2V
+ eeTZqvZ8wnFrWLKAfsf5PjLMCCDLYrGOczWIoOH8ajgCgnBwZEwDLP5xrg+u4K4gHOtSKq+dVxQ
+ 09JcOyXbjPU50MmXM1FWFJJZoWcCGG/q4lY59AvxAyCPNCEoStcUzaEfool8L38oDz/5IaD3PPp
+ eMB/DXUZif+IsuMFqX24JTUQS2EfWnDokTBtNZcoxVSFvaq2SofnK3B9g8XpJEE88l6eNKOoDia
+ vWoZvMhwkg7Ua/q0dMSWC7l8s8fZILs1/qOw7/JONILiVfdza4VfSFkD3NOysVBjHgQtQDKEnTa
+ bG0mQ86urPB/Rz6Gz6A==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-25_04,2026-11-23_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 malwarescore=0 bulkscore=0 clxscore=1015 phishscore=0
+ adultscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611250060
 
-For the record I did attempt this in the past [1], this approach was
-rejected and a series which changes driver_data to be always an
-integer was created instead [2]. However, I personally much prefer the
-anonymous union approach, given that it will already be the case in
-other subsystems. The HID subsystem doesn't need to go its own way and
-the alternative is slightly uglier in practice (as you end up looking
-up from tables via an index).
+On Tue, Nov 17, 2026 at 6:37=E2=80=AFPM <Frank.Li@oss.nxp.com> wrote:
+>
+> From: Frank Li <Frank.Li@nxp.com>
+>
+> When CONFIG_PM is not enabled, should be treated as if runtime PM were
+> enabled for the device and the runtime status is active.
+>
+> It's a subtle distinction but the previous behavior returned -EINVAL, whi=
+ch
+> means "runtime PM is disabled for the device"
+>
+> __pm_runtime_resume() returns 1 (called by pm_runtime_get()).
+> pm_runtime_get_if_active() is the try-and-get version of pm_runtime_get()=
+.
+> stub pm_runtime_active() also returns true. So pm_runtime_get_if_active()
+> should return the same value as the stub pm_runtime_get(), which is 1.
+>
+> Analysis of all callers and their behavior with old (-EINVAL) vs new (1):
+>
+> Pattern A: if (!pm_runtime_get_if_active(dev)) -- no impact
+>   Both -EINVAL and 1 are non-zero, so !ret is false in both cases.
+>   Callers: drivers/accel/ethosu/ethosu_perfmon.c,
+>            drivers/gpu/drm/msm/adreno/a6xx_gmu.c,
+>            drivers/gpu/drm/msm/msm_perfcntr.c,
+>            drivers/gpu/drm/v3d/v3d_mmu.c,
+>            drivers/gpu/drm/v3d/v3d_perfmon.c (x4),
+>            drivers/media/i2c/gc08a3.c gc05a2.c og0ve1b.c ov6211.c,
+>            drivers/media/i2c/ccs/ccs-core.c s5kjn1.c lm3560.c (x2),
+>            drivers/media/i2c/s5k3m5.c thp7312.c imx283.c ov64a40.c,
+>            drivers/media/pci/intel/ipu6/ipu6-buttress.c,
+>            sound/hda/core/device.c
+>
+> Pattern B: if (!ret) after get -- no impact
+>   Both -EINVAL and 1 are non-zero, !ret is false in both cases.
+>   drivers/gpu/drm/amd/pm/amdgpu_pm.c (comment says "allow access"
+>     in kernels without CONFIG_PM), drivers/pci/pci.c
+>
+> Pattern C: ret > 0 / ret <=3D 0 / ret !=3D 1 checks -- FIXED
+>   drivers/usb/core/offload.c: checks (!=3D 1), old -EINVAL caused
+>     -EBUSY even with !CONFIG_PM. Fixed: now returns 1, proceeds.
+>   drivers/accel/ivpu/ivpu_job.c: drm_WARN_ON(<=3D 0), old -EINVAL
+>     spuriously triggered WARN. Fixed: 1 > 0, no warn.
+>   drivers/gpu/drm/i915/intel_runtime_pm.c: checks (<=3D 0), old
+>     -EINVAL triggered error path. Fixed: 1 > 0, correct path.
+>   drivers/accel/ivpu/ivpu_sysfs.c: (> 0), old skipped freq read.
+>     Fixed: proceeds correctly without CONFIG_PM.
+>   drivers/gpu/drm/xe/xe_pm.c: wraps (> 0), all xe callers
+>     (xe_bo.c, xe_shrinker.c, xe_vsec.c, xe_ggtt.c, xe_guc_ct.c,
+>     xe_pxp.c) now correctly treat !CONFIG_PM as active.
+>   drivers/net/ipa/ipa_smp2p.c: power_on =3D (> 0), now correctly true.
+>   drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c: (> 0), now correctly
+>     executes stall register update.
+>   drivers/staging/media/ipu7/ipu7-buttress.c: active (<=3D 0) early
+>     return now skipped, correctly proceeds.
+>
+> Pattern D: explicit -EINVAL check
+>   drivers/hwmon/prom21-xhci.c: checks (> 0) then (=3D=3D -EINVAL).
+>     Old: took -EINVAL fallback. New: takes (> 0) fast path.
+>     Both succeed when CONFIG_PM is disabled; functionally equivalent.
+>   drivers/hwmon/eic7700-pvt.c: call is guarded by IS_ENABLED(CONFIG_PM),
+>     stub is never reached. No impact.
+>
+> Fixes: c0ef3df8dbaef ("PM: runtime: Simplify pm_runtime_get_if_active() u=
+sage")
+> Fixes: bd3d245b0fef5 ("usb: core: use dedicated spinlock for offload stat=
+e")
+> Fixes: 7806bad76ac39 ("accel/ivpu: Prevent runtime suspend during context=
+ abort work")
+> Fixes: 1524c28b99527 ("accel/ivpu: Show NPU frequency in sysfs")
+> Fixes: 46edb0a3eb16c ("drm/xe: Fix xe_pm_runtime_get_if_active return")
+> Fixes: a71aeff3dd0a7 ("net: ipa: kill IPA clock reference count")
+> Fixes: 70892277ca2db ("iommu/arm-smmu-qcom: Make set_stall work when the =
+device is on")
+> Fixes: 9ad65684b9285 ("media: staging/ipu7: Ignore interrupts when device=
+ is suspended")
+> Acked-by: Alex Elder <elder@riscstar.com>
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
 
-[1] https://lore.kernel.org/linux-input/20260518-mod-devicetable-hid_device_id-v1-0-a08e3989c283@thegoodpenguin.co.uk/
-[2] https://lore.kernel.org/linux-input/20260727-mod-devicetable-hid_device_id-v3-0-980896ca283e@thegoodpenguin.co.uk/
+Reviewed-by: Ulf Hansson <ulfh@kernel.org
 
-Reviewed-by: Pawel Zalewski <pzalewski@thegoodpenguin.co.uk>
+Kind regards
+Uffe
+
+> ---
+> Change in v3
+> - fix drm/xe fixes tag hash (sashiko)
+> - drop i915 fix tag because guard by CONFIG_PM (sashiko)
+> - fix net ipa fixes tag hash (sashiko)
+> - Add c0ef3df8dbae ("PM: runtime: Simplify pm_runtime_get_if_active() usa=
+ge" (sashiko)
+>
+> Change in v2
+> - add fixes tag for patten C.
+> - add Alex Elder ack tags
+> - change subject to fix stub pm_runtime_get_if_active()
+>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Andrzej Kacprowski <andrzej.kacprowski@linux.intel.com>
+> Cc: Karol Wachowski <karol.wachowski@linux.intel.com>
+> Cc: Oded Gabbay <ogabbay@kernel.org>
+> Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> Cc: Tvrtko Ursulin <tursulin@ursulin.net>
+> Cc: Matthew Brost <matthew.brost@intel.com>
+> Cc: "Thomas Hellstrom" <thomas.hellstrom@linux.intel.com>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Simona Vetter <simona@ffwll.ch>
+> Cc: Alex Elder <elder@kernel.org>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Robin Murphy <robin.murphy@arm.com>
+> Cc: "Joerg Roedel" <joro@8bytes.org>
+> Cc: Rob Clark <robin.clark@oss.qualcomm.com>
+> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Guan-Yu Lin <guanyulin@google.com>
+> Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: intel-gfx@lists.freedesktop.org
+> Cc: intel-xe@lists.freedesktop.org
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: iommu@lists.linux.dev
+> Cc: linux-arm-msm@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: linux-staging@lists.linux.dev
+> Cc: netdev@vger.kernel.org
+> Cc: imx@lists.linux.dev
+> ---
+>  include/linux/pm_runtime.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+> index 64921b10ac74f..de9e7518ecef2 100644
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -280,7 +280,7 @@ static inline int pm_runtime_get_if_in_use(struct dev=
+ice *dev)
+>  }
+>  static inline int pm_runtime_get_if_active(struct device *dev)
+>  {
+> -       return -EINVAL;
+> +       return 1;
+>  }
+>  static inline int __pm_runtime_set_status(struct device *dev,
+>                                             unsigned int status) { return=
+ 0; }
+> --
+> 2.43.0
