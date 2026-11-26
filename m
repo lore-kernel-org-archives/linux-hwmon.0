@@ -1,97 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.177
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795693040;
-	b=NobAw/1SVV8c+Z4gBO/bpIqfBGIMd6q3pqDxC2dqi8OzmcYgbkPD8HVsUAxuej3X4RoQ
-	 2FOPl+iCVeNszQHgCYGdTyVhXuoQucuexY22vGJSecMDlhIFkHzkyHWXKQveJKnKj9DO3
-	 0DZ0ZJPGYeUp65rAFyzWtdxEVHGclCarT5svT+nVPFl75pzyHqC31PZquw7Q4KU2vk4Nw
-	 UWeD6AsMC9QQEPE69fNkxTWN3btFAC5wCSR9kGAQ3edaR+oj4MYPJ8/0uTrcSZfVkvfx4
-	 DAq7zjv3jufr+TbqMTC6RX/JDwa/AECQY35C7uI7InWeESk4Qdn2TdTo7RsXqf1bafA==
+	t=1795693069;
+	b=LCb6AJoboW6pMfzBFamgLHRqjhRkwLj7RLP/UE9PzcC5tw2IVyqyZMVFjWKUW0zeJll0
+	 2z7QdQ5AZoigyEqpXTcmKj9XDNa4OOq0mN0AjHVVfq1DJ8RKL3/VxwtA8lOdEJxg+6Io0
+	 JeaOeuUwrwcG454Dh+baYe3AcDhGQ4kkQYehKgCxG784Z/7ZBqQkDFcCSKEwmxQAllIkm
+	 NBXZiRSV16BOSCIjickDoqqR7d7xm0UYxBRss8OvDEwSxt9YPqAm7hgvs/gEGOSNKc1QD
+	 TBjRCKzg6P7CdTpJMbJGL+EmyGigWgRLj4lIcpnzU7aQ6ic00/JyjLLAU7DboJXjkgw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795693040;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795693069;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:MIME-Version:From:Date:
-	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type;
-	bh=/xyLrXS2X/qTHo5Uhw3eO/ZqcX+RwxYgIHco5H6oqBk=;
-	b=llDD8eYbnFGOOuAaB02bW1jx9U6GtZsbd02MZhC+uk/qh5lr6uabTUSEmjiozyd0vAEB
-	 HL/e8wHhZ374pNTTxja2rosywmrI2L+RigcR3v09QUQmv/9U7CCER2DFe8miKHopz76B6
-	 NSGzsuUn8elF+l2Fd+X3E4IQ2XGAXIYi0C0mrSciR4WAdcC92QP2wTYhJqF1CABajKIjt
-	 TZ+Lc7+VCkKWeVhEDXqUi3WSXORf5xto0F8B8pWTZ7OG0EFi8BZUI7UL3/+hd8IYHCtve
-	 Z4yl3s+Zq+0P0WeKkv5K7m7e7Q4HJBnPq3Cxd1khHT/VzrSDcRcn722OjigOKpnb0dg==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Received:MIME-Version:
+	 Received:From:In-Reply-To:References:Date:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type;
+	bh=heiZPI1UAatLSvjFPBofn4pTclTvh7wh2PK3/qOorq0=;
+	b=RSKvsvwbsKjWCKesAccUccZK8Fpk2qQKZQXxDL4iVFb31mac9qmXWeKrbg+8gzflwfpI
+	 5ydep3VAHSVnfT+rlkIre7ykfRacprrpugWAwXuQFbZFbRJdex6WnJqg/yyWa762IXTB5
+	 Cv5t7Hr9lHQh92kMFtLY9qZ6bBlCh8lXdZ7G9eel5zZywqx18qYIgfAOUTgvZ6R6o53hZ
+	 7u+h9qGXzSxpNLpl3UcBGiZiGUvRUXq97FpzAdQ4dunO81bAO528mdDKOggtvw2Yu9ekz
+	 hgEMiCZEniSSDC52sRykm6DEJvZZXxZcGqrr4o1kRNKir7DT0jTWgY+vS4Tn2JG4JNg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gzaaxDwW;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.176
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XHJ5JJHS;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.177
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE383606A333
-	for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 11:37:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DE383606A333
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78DD4606A33D
+	for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 11:37:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 78DD4606A33D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gzaaxDwW
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-55c35262674so52055381cf.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 03:37:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795693039; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XHJ5JJHS
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-55ade1de0b4so79081851cf.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 03:37:49 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795693068; cv=none;
         d=google.com; s=arc-20260327;
-        b=EUyBcbOY9ireXR8c3LtJKZfun0dgzanWNE6kvt+D5x9QqfEdFrhciKU2YHuXc8tOuc
-         xxoW0zsEf64R/bQYiywE+Qd4WPpQ03jSKIe4lLBSmRnrSyR7g15jdME1dqiKeKH6SRME
-         ituI/+2UB1lMeWbGpuC3pC38kocJwINCCgn8xpxxKwBtA2MeqSeO+jRNIIaIupUTe9co
-         ZSsCXtUBKxfM+lGmiCGxcBYjprflm7LcYhuNP1eM03V0ZR4WGtZpFTkdW09W57hPFKyC
-         AwlrctttaEk5xKZb/7JfRr66OzU6lFl22Nq2IpMHsmXsXG6b5CFpCV3z3OtbGkDol/bQ
-         xteg==
+        b=CAe6P3sTkxia4+kmz+WcAFqziBPX0vwxFfJiL5Swm3wGR7xsOSxE+KrBcfIy0Cf/5T
+         zs04D4/gqq2z9YJGNtNkgZTzyciSJ58Lt5v6i5fJjcv33G+Omj/ipHj11ZWogEW6eFEv
+         +qePJphSzJvBgqylre0eTfM0XbYnMYUIFLQ0VqEfJjI9r2upVjo45/mMyJh6ttxq2ZfS
+         +PsVOQGyJKU1fo4771iiCyufZIgaoMQ8inJ2eB/4HWKPHBaAStlfxsZ7QtopxIOzEfUb
+         T7DeClY2SabhE532Svbz1pxskRptBM38kwm8NNwYScnA2CJDnK7Mcl0TX5ldSd64MOJO
+         X1mQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=/xyLrXS2X/qTHo5Uhw3eO/ZqcX+RwxYgIHco5H6oqBk=;
+        h=cc:to:subject:message-id:date:references:in-reply-to:from
+         :mime-version:dkim-signature;
+        bh=heiZPI1UAatLSvjFPBofn4pTclTvh7wh2PK3/qOorq0=;
         fh=0C/NacxPb8rIaU32p77Pdl7otf8ET0q++Gp87p+c9qI=;
-        b=qU5zDwLCyhnQyoGXXFKsvXYa8Diyto921IsF+puVhsDtSvWbz58sSqWvIGGTBkSueF
-         MUtKp9TSvz4WxGmWzS9P1jGUWGyahjHGl9btRXnOvaYhBJPkAdqCvsC5oMlQ6QxX9s7i
-         HrOmCbbU8SoqfBmtkDRUsXzTEB7dyXV5/aV0pEZvcntjY+TL5ctFYTW4zznjqZZ4b6xy
-         FI+Znic6dTYsIcNRkrr67LaPFJIqUeYPjNIcCv2jbJXFtsIjD1dYsTf0mau+iGvCC3gS
-         Eyyel7akcSDRxsNMopfyFdWOCNuuDYWohwFu3Wfpcnq4HuWMdey37MGZkGboCktFFsYo
-         19tg==;
+        b=ZIrcXc1E76cEXMhE0OASxzzUjeBqGuLLlRh7FMt6vY95/4jVUX9YPF7L9sU/dhCPi1
+         3nBAT/j3DS14Wuk+1ojjsmWcuYoKRCKtvIdUqPBYgbfRlXUU+7avCofCqE1UV+UIV8Ag
+         J6zaH+CUPq2WP3pj4QuaqYKoHDU3f8+D/HrjFKzq6oyK3gsPcc/abTlSQJqSJryN2051
+         O7OkxZV7fgmtaRpGDpA9EgMWqxTDG6nUMzLQLgs2JU6bfV1BCmxwxnSPUStbjNuZRUUk
+         pBhjH2yUzGbVDpwbT0uRE4ZlAlLkij6WpE/HaHpfDazXNjKvQYv69AiNYGRQYi86jy3s
+         0rSg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795693039; x=1796297839; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=/xyLrXS2X/qTHo5Uhw3eO/ZqcX+RwxYgIHco5H6oqBk=;
-        b=gzaaxDwW0DYZolHA178uM5pCvkaGKauz9fPD7c9YSPE6R/gAucBSvLOleEd+lTOBiI
-         6zqR1W+bIGe5aO77mBGXoZQ9X+QUUzlbtCm2VjN3UkTZgioXlyFsUa1dCqKbplqUG+Ft
-         sE776u8jA8gxe+WDI0DlUF/DykHvkKTZQVqFVKTZoo7N03+SDT2b8WzLnYbqFPoTa9eS
-         XdBUUO/rY7RD/Rc4kKilhTKxv5HaDH0cwuWz1MVXmeBdGgXFmNckF9fLaCglqLkkpZNv
-         DdfeXlmUTwceCQ10Ach96w2Xwf4vcC0UHarttFfoLpCc8UDrJBxOV+54kVWIMQClt1w4
-         +/4w==
+        d=gmail.com; s=20260707; t=1795693068; x=1796297868; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:references:in-reply-to
+         :from:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=heiZPI1UAatLSvjFPBofn4pTclTvh7wh2PK3/qOorq0=;
+        b=XHJ5JJHSiWWkmKiO1zp+oo5IfXTeVn4o6Yd4AMvLgIY9Gv9GsLn/xXnlAr07eQ10qk
+         9fSSZpY8DO2R1y7XHGW9nsJGjEMVVBj0ed13rU+7++t3wvH5oOP0llnEOCQSD+DOjzkX
+         RTZTRaGskGzpkuM/TcdcjafTGFiyX4kh9ksmahM1nPlbjEtcryZmZSkU8Ejb0jsw6/Sz
+         dMJbWem+t+4/9nMYCeEI4zQkg7sECBM9T2dtww3qLqVnra/TFotr5aRGJ98Mz3ing3/b
+         qvB8axD+U6L8PbBRuFJKDLeQGqMPYRRmeEB08e1TmM8Yi2M6l9BoG/5OJSck8nWDoRmU
+         zazQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795693039; x=1796297839;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=/xyLrXS2X/qTHo5Uhw3eO/ZqcX+RwxYgIHco5H6oqBk=;
-        b=xqJkbNnH4pTR+ZfAgE/0bEvHpVN/dnyQoTwGfMOD1WpAg+fjejGfXeewG8LLM5krMt
-         ELbo5ODHuXwhsmzHZFuqWphO/DUKvtLrJad4xQWh6XknAqSRU2QvPgPxN8a7AJVvT0ir
-         078r3VCQqBqmHhEPY2/y3EfRpLaWC0iZyyTQMghQBSv+rLgRRUf1j6kF3qaZ1aMTh9R8
-         TeD1HMJJ4dqWiBAZXvZvrafPttNp7QwNI/rSUa+8Ei2GWc2DQFrQFyvQmwRjTAMNSZvk
-         Afw6nkhtWkrBO/Svi5ODm17gLOTI9B7tsBATlP7w/lYQp1Vubst/HbSWDiGouWShw1EF
-         qs/Q==
-X-Gm-Message-State: APuU4Z/Nyog4I45cenPmr/n7ybztaqqXFaKe8JO8A/JZT9cA/T6fUmXw
-	ZEZ6zLzNnrtbKXUNJl0bQGK/yvQBtmWAonuMTez7gpDCFRbwQ0eh/4BCQ9HpZpcnBGN3UxQoPon
-	/SmjuIpucVhQPD2gKAKYcx2zY4WoXZUnzpw==
-X-Gm-Gg: AZFdTZfZdcCJgnjjXM1jyWx7mTn5jQnbVsZGxoieWRMYXO296rPOvk3sdIab5LNNKaH
-	jTwxDNxaVKY3M6M7NEUu123QzSY0Muk6yyQJoaGFB3zDWn92LrZKNbDnLpTx21/NINkub4aMDT0
-	CndjLZZyhsv21HF74ZaGSpo3d8PnGVAWgpc+jeCFhdBlQ3w+HiLSXpC3WibI9v4hbTPExku03l9
-	4bIf4VCU9kZK/obslmXUGABrhTqgVJOWPa0Zfhpm6rRcwlSrpc0vdw7jvslDIDzBiAZIIgXCQeD
-	GbC4hvpG8zgryLSI/B0tGUv4f7acNcnJx24Xj9jMjXNQcIW5qoVxSDI9cFqxzLK5Vd48x8an7tE
-	nTMohVab6vB5VcZIED3L8QGp7+eodCpb7yjSTBa7hTy2mUo647fAumN5AVCc=
-X-Received: by 2002:a05:622a:4c8c:b0:55c:c52a:d08d with SMTP id
- d75a77b69052e-55d769f85b9mr367247321cf.42.1795693038688; Thu, 26 Nov 2026
- 03:37:18 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795693068; x=1796297868;
+        h=content-type:cc:to:subject:message-id:date:references:in-reply-to
+         :from:mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=heiZPI1UAatLSvjFPBofn4pTclTvh7wh2PK3/qOorq0=;
+        b=Whv4u7q5dncSEDvdNCfMeLR9c2DqxU8DlKw/KWLKVerw4BorgD0fUfSgd9N3/nkYNX
+         Y9savno+LYdYAAdEzTWUamI5I/i6Pfnz4lSGiZJEfsBobn2yYzyV6y/UbEoj8miXftqF
+         WHKSmycdOEllbywhhE5I0RAmnKTxp6s4uNWPZH6LRSpbCadr3oJDRqCYvCKhamCAOBJD
+         mk/anCb+IQXT8469GGGmYHOwozoM2O52lU8gWXiPgEtfa01UfvC8/o5sc015f2h8FAkC
+         90cgm1kU05ns+cUEgC3kppy9U/eC9pl4UIQwCnh/vymUCLok7fx0H3x4Vdv1s/lJz8b8
+         WtcA==
+X-Gm-Message-State: APuU4Z88kWLMIFGGcga0bvQfgKWYFxB697FjbucNhALjOfWPZVW8kf9s
+	gGpUwyAg50vAIraZakFV6DaiuJGyYRVCbCPtJlAQCZx4UYIMQ38ZNfXi2BoX7HazP2GB2KsuZ/1
+	XvzqwVpVjF9v10ZS/Tm52AnvlKoXI1Cb1gw==
+X-Gm-Gg: AZFdTZctHpbiUxMre5FRBjSmMheyA5L5rNx6h7WJ1ELq8yyJDARqlA312fRRY/XET49
+	wUQy528K4A1EHzq0zrJ46hgd3W9f/qekgoF2kM5CpUz9rHfg6gYUq8MuxoqhpTgGEABC2jfXCwY
+	gT4RXPI7VRdgys6DKj4fzLpz6MOzTPwRT0iBBuV1RZUTq9zROEj7PyUAiAlsOdpReVl+XVc/O9O
+	l1RBTfj00gwJai0yUkxPGZu5sxlxr5OqTn86OxETdo/YGEn4FCXCzIU+mGtHBq6DXzuVBQuPHgA
+	oQYnZmnJ3dQR1WoPCeKViVLLYxeVrVlrZ7tM88cTNS/eUo95dQ8ue7Gsn/ave19uv6MVvpUns8V
+	ozM2d6TgeRTYQEU+05Ek6q0KHEnOG/A/vHCCiew==
+X-Received: by 2002:a05:622a:4d96:b0:535:232f:ca25 with SMTP id
+ d75a77b69052e-55d7698efbemr381422711cf.7.1795693068459; Thu, 26 Nov 2026
+ 03:37:48 -0800 (PST)
 Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Thu, 26 Nov 2026 11:37:18 +0000
+ Thu, 26 Nov 2026 11:37:47 +0000
+Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
+ Thu, 26 Nov 2026 05:37:44 -0600
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -101,103 +106,103 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Received: from 77377267392	named unknown	by gmailapi.google.com	with HTTPREST;
+ Thu, 26 Nov 2026 11:37:39 +0000
 From: jdenheijer74@gmail.com
-Date: Thu, 26 Nov 2026 11:37:18 +0000
-X-Gm-Features: Aa3M54qrBv8_Gv88yVY54Jy8mOwylortfuOEBZkfx-3hky8IxIGMKSK1B9fkRU8
-Message-ID: <CAP-m2G6VwPqTOZ_uQEAsWnb=j4yFj+_N0V33gOTL5kRYwwYbvg@mail.gmail.com>
-Subject: [RFC PATCH 0/3] hwmon: asus-ec-sensors: MAXIMUS XI HERO Fan Extension Card
+In-Reply-To: <CAP-m2G6VwPqTOZ_uQEAsWnb=j4yFj+_N0V33gOTL5kRYwwYbvg@mail.gmail.com>
+References: <CAP-m2G6VwPqTOZ_uQEAsWnb=j4yFj+_N0V33gOTL5kRYwwYbvg@mail.gmail.com>
+Date: Thu, 26 Nov 2026 11:37:47 +0000
+X-Gm-Features: Aa3M54p9iHEMQ4ezOdEXPWbNZGxXoW0GXh1-5KfhN4juI9Y_NtnoIXXcHGY_STI
+Message-ID: <CAP-m2G7Q2jCJdqqkb_qFR4_-M2kJwE-2CSuT-5OhEGHhE-ujOw@mail.gmail.com>
+Subject: [RFC PATCH 1/3] hwmon: (asus-ec-sensors) propagate EC read and
+ selector errors
 To: linux-hwmon@vger.kernel.org
 Cc: eugene.shalygin@gmail.com, linux@roeck-us.net
 Content-Type: text/plain; charset="UTF-8"
 
-This is a request for design and safety feedback, not a request to merge
-the series as-is. It adds opt-in monitoring of the three fan tachometers
-and three thermistors on an ASUS Fan Extension Card attached to a ROG
-MAXIMUS XI HERO (non-WiFi), BIOS 2004.
+On an EC or selector failure, asus_ec_block_read() can continue with a
+partial buffer. A successful final bank restore then reports success,
+so update_ec_sensors() publishes stale bytes.
 
-The pinned base is Guenter Roeck's hwmon-next at
-12c53b6b6e5ac3723b49de3e4ea0742200d06d05. It already contains the
-MAXIMUS IX EXTREME selector-based extension fan path and EC 00:60..62
-temperature descriptors, but does not select these sensors on XI HERO.
+Propagate the first error. Attempt selector restoration in its bank,
+then restore the original bank. A failed restore also rejects the
+update. This changes the failure path for all supported boards.
 
-The BIOS 2004 image (SHA-256
-034e6c688ca41cf448745398ce3ccfa184dfae217287ee7b72039498ff5aa812)
-provides the following property and transaction evidence:
+Signed-off-by: John den Heijer <jdenheijer74@gmail.com>
+---
+ drivers/hwmon/asus-ec-sensors.c | 39 ++++++++++++++++++++++-----------
+ 1 file changed, 26 insertions(+), 13 deletions(-)
 
-  EXT_FAN1/2/3: properties 0x060400e2/e3/e4; write EC 00:43 with
-  selector 0x0a/0x0b/0x0c, then read high/low RPM bytes at 00:57/58.
-  The getter checks EC 00:d4 on every call and performs first-use or
-  lost-latch read-modify-writes d4 |= 0x80 and 89 |= 0x07.
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index d0c01b825..6e06256a5 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -1309,7 +1309,7 @@ static int asus_ec_bank_switch(u8 bank, u8 *old)
+ static int asus_ec_block_read(const struct device *dev,
+ 			      struct ec_sensors_data *ec)
+ {
+-	int ireg, ibank, status;
++	int ireg, ibank, status, restore_status;
+ 	u8 bank, reg_bank, prev_bank, select, prev_select;
+ 	bool select_saved;
 
-  EXT_Sensor1/2/3: properties 0x06030032/34/36; after a firmware card
-  property check, write EC 00:68 = 0x07 immediately before each read
-  of 00:60/61/62. The exact meaning of 0x68 is not established.
+@@ -1330,7 +1330,8 @@ static int asus_ec_block_read(const struct device *dev,
+ 	for (ibank = 0; ibank < ec->nr_banks; ibank++) {
+ 		if (bank != ec->banks[ibank]) {
+ 			bank = ec->banks[ibank];
+-			if (asus_ec_bank_switch(bank, NULL)) {
++			status = asus_ec_bank_switch(bank, NULL);
++			if (status) {
+ 				dev_warn(dev, "EC bank switch to %d failed",
+ 					 bank);
+ 				break;
+@@ -1345,24 +1346,36 @@ static int asus_ec_block_read(const struct device *dev,
+ 			select = register_select(ec->registers[ireg]);
+ 			if (select) {
+ 				if (!select_saved) {
+-					if (ec_read(ASUS_EC_SELECT_REGISTER,
+-						    &prev_select))
+-						continue;
++					status = ec_read(ASUS_EC_SELECT_REGISTER,
++							 &prev_select);
++					if (status)
++						goto restore_select;
+ 					select_saved = true;
+ 				}
+-				if (ec_write(ASUS_EC_SELECT_REGISTER, select))
+-					continue;
++				status = ec_write(ASUS_EC_SELECT_REGISTER, select);
++				if (status)
++					goto restore_select;
+ 			}
+-			ec_read(register_index(ec->registers[ireg]),
+-				ec->read_buffer + ireg);
++			status = ec_read(register_index(ec->registers[ireg]),
++					 ec->read_buffer + ireg);
++			if (status)
++				goto restore_select;
+ 		}
++restore_select:
+ 		/* restore the selector while still in its bank */
+-		if (select_saved &&
+-		    ec_write(ASUS_EC_SELECT_REGISTER, prev_select))
+-			dev_warn(dev, "EC selector restore failed");
++		if (select_saved) {
++			restore_status = ec_write(ASUS_EC_SELECT_REGISTER,
++						  prev_select);
++			if (!status)
++				status = restore_status;
++		}
++		if (status)
++			break;
+ 	}
 
-BIOS 2203 has the same relevant fan mapping and getter control flow.
-The BIOS presence property, IsEXTFanCardExist (0x06060050), reads the
-EXTFanCard UEFI/Setup variable; we have not established a reliable live
-electrical card-presence signal. Accordingly, the XI HERO extension
-sensors remain disabled by default and are enabled only by an explicit
-module parameter on the exact non-WiFi DMI name. The WiFi entry is not
-changed. With the option enabled, the first read of any hwmon input may
-trigger a full refresh and the extension setup writes, even if the user
-did not request an EXT_* attribute.
+-	status = asus_ec_bank_switch(prev_bank, NULL);
++	restore_status = asus_ec_bank_switch(prev_bank, NULL);
++	if (!status)
++		status = restore_status;
+ 	return status;
+ }
 
-Patch 1 changes generic EC/selector error propagation so a failed block
-read cannot publish a partial sensor cache. This affects failure paths
-on all supported boards, not only XI HERO. Patches 2 and 3 add the board
-opt-in, RPM path and thermistor path. Patch 2 currently relies on the
-restore/error path introduced by patch 1; we would rebase or reshape the
-series if the generic change should be reviewed separately.
-
-The new transactions use the driver's configured ACPI EC mutex, normally
-\AMW0.ASMX on XI HERO. They do not add PWM, fan-control, NCT, direct
-EC-port or WMI accesses. They do write the EC bank selector, the BIOS
-observed d4/89 setup registers, the fan selector and 0x68. We do not
-claim that these writes are harmless when the optional card is absent.
-
-A different, locally maintained asus-ec-sensors module for Unraid 7.4.1
-/ 6.18.64-Unraid has returned all six channels on a physical XI HERO
-with the card installed, including after one reboot. The binaries and
-some error/selector handling differ; that test is not a runtime test of
-this upstream RFC. For this RFC, x86_64 and i386 objects compile with
-W=1, an x86_64 module links with modpost without diagnostics, and a
-static comparison of 66 DMI names finds no default sensor-mask, family,
-mutex or existing-descriptor change. We have not tested this RFC on
-other boards or with the card absent.
-
-Questions for maintainers:
-
-1. Is a default-off, exact-DMI opt-in acceptable when firmware exposes
-   only a Setup-variable-backed card property, or is another presence
-   mechanism required before these EC writes can be accepted?
-2. Should the driver preserve the BIOS first-use d4/89 writes even when
-   d4 bit 7 is already set? We have not isolated their necessity and do
-   not want to replace a working BIOS sequence with an untested shortcut.
-3. Is reproducing the BIOS's 68=07 write before every thermistor read an
-   acceptable basis while its bit semantics remain unknown? A separate
-   BIOS Extension control initialization path also writes 68=07.
-4. Would you prefer patch 1 as a separate bugfix before the board support,
-   and what fault-path regression evidence would be useful?
-5. Is the separate non-WiFi board profile and module parameter an
-   appropriate interface, or should the board/card policy be expressed
-   differently?
-
-The series is intentionally an RFC. The three patches carry the
-submitter-confirmed DCO sign-off. We welcome review of the card-presence
-policy, register transactions and generic error handling before any
-attempt to merge.
-
-
-John den Heijer (3):
-  hwmon: (asus-ec-sensors) propagate EC read and selector errors
-  hwmon: (asus-ec-sensors) add opt-in MAXIMUS XI HERO EXT fan RPM
-  hwmon: (asus-ec-sensors) add MAXIMUS XI HERO EXT thermistors
-
- drivers/hwmon/asus-ec-sensors.c | 140 ++++++++++++++++++++++++++++----
- 1 file changed, 122 insertions(+), 18 deletions(-)
-
-
-base-commit: 12c53b6b6e5ac3723b49de3e4ea0742200d06d05
 -- 
 2.53.0
