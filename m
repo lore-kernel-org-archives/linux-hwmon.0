@@ -1,89 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795698228;
-	b=0qNsvZY8QpJyOD1di3AHDpXQmidL7Fqf7Z34QiwXXioTmMmghbdNc0tgWShuqAn6YWfU
-	 Ey7hK6fbqBt2EdQ7xMFy/g7HEHnpy9UhjXRd46XobJm3VY3lapP7vItGGcVnetMpliEHD
-	 In+FyOAc1JPN8ScE392r6RYWjG9631VFc7UUG9VyAvpjj4nV133dyfScK2neIAu8hssH0
-	 jZP5pKdWMJGuER5+edQMoX4G7jR4LzSHu3hbaQyxRacomQiTjEoOzA9IFT4LYJzsqMt9w
-	 Y1mllqk0Rjs+2mUFlwJPToxrJlCu0dlj69CTzuR7zZZaYMvlLZ5eI/gBQfuJZT1ocxg==
+	t=1795698229;
+	b=W8L3lrfX4p8qtrtP803kUU9X8A0ESO0aCGflqCasy1v0Tj1kndf6ZnN7OIHTWKwEtFBD
+	 +yxJKQRAHQ7A3myaYVdxSlGlepGxTBWBB6CQHKsO+F+rPh6RwTL84i6EhH48zwsoloIO/
+	 bBr3iyzRQgWa9XbwCaXalXUVcpDuL7K7SURQNCGP4oOaKEvMxEQnE2FC3Fy0+doi+dnzp
+	 1otr/Qoxu0ruxKOPym8ifWtw4WW/XVNSIaedpr+TUQi2spmr4m6bzo53phzHYRv/LobxV
+	 NwbArJ/KK19hO69/O7vuaILO+01qD7f6F+ftkVPmuK1jFJ7dVmWVfBS+u6I7/pOnxvg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795698228;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795698229;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:Subject:Date:Message-Id:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key;
-	bh=OeRjPPZqNacTwo8Qqr0CJwW7bzppscpQmV9mkBf/Brc=;
-	b=4GNaBtcylwlENcscDX23eTuHBGRaN2gl2d9E+kNQT0y60eLC2L8rus+hl13xC0fnChug
-	 K/uij03vhkdxumJB/zLO0/kwHkqV9iF8OWIr41+MEUxM1+TFE9+gAqsoaO2WgQAGHAi2v
-	 GgRe4sC0C28DUiofOEZCt21sagOXrAYFV+gpRZmVF3AO9rD+WgXKP57H7Kui7iieW1NOn
-	 Te/s/Az1n/ZRUOO1agYtwQfDxzWhRgDXB9fFmkE14QwgybRu4OygH8kvH10NO56YhQG8C
-	 y6nosgVNemg2MjGGMnCsoKCS+2LZLd7tm1jW6wsBMDlyUA31jDVeG+LdW9/YgF6oHCw==
+	bh=Pgy/LqViivjz+vBeamFRAxJjrlPLa2NnrUA8TY0Ipuo=;
+	b=b31IQNM2iTig999eCnIbVSOEJgi/s0JInrz+aDHMHwrer+Enzm1s6FXAxe/nVjVQYaiR
+	 I2JLSvwPF8cArwhnH9m+oqRW8D3U1O39Ej354NkYibKb9qwzc7HWgyqcBJiOZl9TRPYAo
+	 G6SWTvoIGjKnUqgTuqZN+nL4AowUBUJ9ezGfwrs94AbPl07EgRlJmBwQjqomE/gJgd+xC
+	 7mEzeAobYQ5Mf17osVX8NGNRmEw4vKIqq6vEr1F8kGdKZyfGYO80HPU7JgRb2tf1TnNDi
+	 h0uf8nC3Kmunurhat+/C1kl+3c8kkDIc+vGa8nhNnQSkAQEPGe9BgbtkiJyYoyKWn4A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tCSI7GjG;
-	arc=none smtp.remote-ip=209.85.128.49
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="x/peqbeB";
+	arc=none smtp.remote-ip=209.85.221.43
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2EEB606A31C
-	for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 13:03:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F2EEB606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98206606A327
+	for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 13:03:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 98206606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tCSI7GjG
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4bb6886d30aso66706835e9.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 05:03:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=x/peqbeB
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-498f5fa4f70so5720914f8f.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 05:03:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795698226; x=1796303026; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=OeRjPPZqNacTwo8Qqr0CJwW7bzppscpQmV9mkBf/Brc=;
-        b=tCSI7GjGk0P3UCYE/Z2zC3FFcRRFNPQVRswKNCpXjvaV5wXDaLpeinnEhPNbANWZsN
-         A1vLB6eJFQfLGxqlq7STxYaMU3l+F6RJOnE9ccVE74gug/pxkiuHmHF/NxAkdquR2LOR
-         kCSmqA28ZxgRArJRu4YLsA96w2gyoQVVBzQBnoRrvOHahHWNeIhGGNoj+vYqafvgpzTY
-         AhhIF5pWq9EMLt0IrkDWToPoKbRnvuqYV+CJBNt7t+X9Nozzmvygirc7qX8+q1SEOE24
-         VGFP06eEjW+AosS+GgG/aIJWGJdc/9hKJ4OTB3zzvREs2CDaxM1/55zvCQJmU8D+Ew4L
-         QfHw==
+        d=gmail.com; s=20260707; t=1795698227; x=1796303027; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Pgy/LqViivjz+vBeamFRAxJjrlPLa2NnrUA8TY0Ipuo=;
+        b=x/peqbeB55gWorimKoGuMgAbuxLB1FWa7z+7d4eQogwmahuKJakcftf5bsdqvOo57W
+         Wif8V+dxneKbL5i4KouqalEX27nZgNu89OYqK+98mECwaBB46a36REDDDfYjRJ7z6WPj
+         TkcvJv8EjfXJmlvxD5iMIKZeDHwEDEIXdk0b+JAUDoYglwKmXwcYTGzPB+xtA/m5lKx0
+         jDV+cgDOO9g/pCSzZHYvdw4Eo9toRZajnHXObw3eCrfV5jfJvAAmsVO+yNpd4Bgc2yUT
+         HY6wIfaIhK1N3K6DRvSXWa2fK9IWJ9PmAN2G7lWLDF28Jh9IizYVKEABwbziyzvokTVA
+         vn3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795698226; x=1796303026;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=OeRjPPZqNacTwo8Qqr0CJwW7bzppscpQmV9mkBf/Brc=;
-        b=S0UcLQMEakrkMT86kvmInH/T67MT4n8UCVKi++yJjE05W7jx4C6/jfyR/lTiF3qV3S
-         KuqKxyjmabm+t3akBFBee0aurpQW1bACr6Lb9y1TbSEyBBP/Y0d9lY/zZCxoFJvpIAFu
-         sLrm1tG1ytIA9U1D3U9zJFvxMMG/Bjl4kPTIzCdBCkcypxKwXF4jtCPqShoZObLFIkCR
-         EWYJKlAu3R422BWSRPEkWHoeinuFtTuh802SxkPOyBpSW+Pj4j16tyuEesz9Jwt6Wt+X
-         Uh00CYwW3BtGCz66IHaU9FsSUijh6E2fP8D0awcMwLYresTSlGzU7lwF8GOgSNCTz4kx
-         nhqA==
-X-Forwarded-Encrypted: i=1; AL+hErEQ7XBzoQ9w2XwxXGDhNUNcEEtQgUIi3pEC+lLJsDgK7jpgCwxQQCMMOp00KlJDmD+LM+80oT3uNNNiQw==@vger.kernel.org
-X-Gm-Message-State: APuU4Z9FrjfZBWLS7cdaIr6+YOS23Y53GmbdTwOBjzWBAFoXEa0Om4Ty
-	8oOEhnI7OWSbPQCLriwd75eQ8dUi7JvnBQ8ndShc6KajrjLjzQb1pYqc
-X-Gm-Gg: AZFdTZe+VCXFpiWlUnvyuq6R3tPMQE6Q8KwEqpM6h4vVHQu07C3fCnc7HoTE5PjpYFq
-	/pTnBcounrg7l/k/I16On9G6KiA2gk0/0EdZsUseiDCKAHJMb6uVHLaz5OPXEHWSOv2DCIflZEL
-	+JGVqQLlQtjGVehfZBwM8F4Nx7jZgm+gwqXy8NQCB/jFaLjbGbCZqA7vzfpmFNcxSUZUW5mSZ1s
-	ftcAQRx4IhUbs+y+SxPi5kmzcuXVQ05bly8FJlt4cY2LPqdiVAadFIMyfYnmG7vet76K/rSFzVo
-	OSKlj1F71QFvFmhj5rBL5/WHlu9OzbDTj5izJm5Dxa1E56xLEfABSWn4AzNhV0x2IGunTGP4nY+
-	PCM/vWcYNdQu+BV+uHrrjS2q/wkkytspkz5l29Czw6JHiLu1BX8KigdDr6akW9KuTkoQivyBx1B
-	lMseQkUprOIQTe//Gn2nOD09sfG0O85OksViOCOeoaAiUGs7EPNmlSGLE8b1FUXjsfuDYkCQaWI
-	HYPL/ZQKlibdWhBBOMI/ST0sgd7RHEfx19DtCw29YqeZdcfkS6E3LXfg3f+MDpZJkxycVeKbeJg
-	MUtymtiLgC2bMEYn20jlJ6cAGTaxFLXTuRV4KKDQ9CVteH2xcbM+sDVX5vi/HgxQaI0WqVIBSWp
-	vqoL+sGIvleW+q/0=
-X-Received: by 2002:a05:600c:8486:b0:4a6:4d6b:a840 with SMTP id 5b1f17b1804b1-4bb88819468mr432182315e9.31.1795698226066;
+        d=1e100.net; s=20260707; t=1795698227; x=1796303027;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Pgy/LqViivjz+vBeamFRAxJjrlPLa2NnrUA8TY0Ipuo=;
+        b=zO1zNz9OMkUNUmR4j4dfGFFJlPAG2rYa9U30YrdJXaniowHTNIwvmbMZaBInGtkzNX
+         Zb62yf5BcBNgS0h+YODclNt2oZ9+BCqDN5fYjknhiW9tp3KeQbdF95V27nWXrIbdg7N/
+         CcTcNbZcfMNG6z5VanjJP4s11Zyn33nS+yrBfh9WFvn8SnoLBltLviDdENmwlXr6vnyD
+         2hrA0FBTgY/lzjV39ZiTWlzT/TyFASnG9QeKosB3nT1J0QhARfAh0z0PWJfSsJ31tvq3
+         Z0yry7xG99HkrnJMwwOrKGdfD6MNfdH93jEpVLTzx/0xtfW5PWI6lYV39tEC7+Sv4bEB
+         wQdQ==
+X-Forwarded-Encrypted: i=1; AL+hErFEQzZZlVF35YHy6VVaF8N8IjdF69iYsOJVg8TXfE3S3x0eN4BRL5uZmd0h0oheyYeP7pKW6j4ilCOt/g==@vger.kernel.org
+X-Gm-Message-State: APuU4Z+In2owvXTHspRoDOPqgrKQ8tA9nZVv6OUuCyNOllLsN2St9dAV
+	08p0EmhJC7bvRRKaxD8Tqg396PODFKZNjOzLTIOHju+d9u0xhV4SnAbj
+X-Gm-Gg: AZFdTZeUjW4OjDB9JmMneUNBng5Ol5VefDgnL7yfrTLylK4EwvB5ptcU1tRYhwCOSKJ
+	zv+OhWhoHkMlviZjfbQiPkwFHALfSF9xqvXZeDyyx105dJYfIYS+uYTSGwA6XzxGAATCsy08HwF
+	p0zexrwccx1DXCYb231ami15Wc51Y0KhjhRgMlWm7CWT7LbCM0VeT+3jORCmIJyCZRVjPZwJveV
+	VwzhcXHuJ9JVQ9Xr8tL3cuRWSqT+PzwQbXs30BS/AjGas8Z5mktUWsJrUj5WHSiYMIhwDKtVq/1
+	teyZHa2F0rAEk15nIAsk1aFKhIclQdgPyn+A+NkOE/n7ukcbDizqtIH49SjJQdGdYy16fbcKVJe
+	8dBhDT7L68g50qaddwfaZjA48+ApHU4zu+m6+Pvq30gHl+z3Z2J4W9aMr05/iJXMd7Uw/zSOC6D
+	TnPOPTLh7G6AWptYZ50ZwqVI9oGSNoodLiYHTf8J0b6nW7Py4NbcdKdTtNXQHEXjTdHB6gtG1Ec
+	puHM48AnRKR9eRv0C1+gvS3eqreryXp4qzfbViLgRJrk+4vhu5WP5MF3UNAYK/YVvWMLmF8Oujs
+	27u7YTem6u6C1Xtped/rJ4FOClyacp5JOEgK1zqn49DGXd4KFqZ7iQmnJUlOUXN3fMu9Mu10Lhf
+	joz0dfzQUP7DdtCY=
+X-Received: by 2002:a05:6000:990:b0:493:ec0:861c with SMTP id ffacd0b85a97d-4abb0c5d53fmr39049675f8f.16.1795698226719;
         Thu, 26 Nov 2026 05:03:46 -0800 (PST)
 Received: from zeus.unificl3slsbnxe8mz.com (212.71.14.70.adsl.dyn.edpnet.net. [212.71.14.70])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6ae2dd55sm39331425f8f.30.2026.11.26.05.03.45
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6ae2dd55sm39331425f8f.30.2026.11.26.05.03.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2026 05:03:45 -0800 (PST)
+        Thu, 26 Nov 2026 05:03:46 -0800 (PST)
 From: Sander Speetjens <sander.speetjens@gmail.com>
-Subject: [PATCH v5 0/3] hwmon: add Raspberry Pi 5 PMIC driver
-Date: Thu, 26 Nov 2026 14:03:28 +0100
-Message-Id: <20261126-hwmon-da9091-v5-0-0c3570ba9133@gmail.com>
+Date: Thu, 26 Nov 2026 14:03:29 +0100
+Subject: [PATCH v5 1/3] soc: bcm2835: raspberrypi-firmware: Add PMIC ADC
+ property tag
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -95,13 +96,9 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAA/32Qy27DIBBFfwWxDjYYA8Gr/kfVBY+xjRrsBIibK
- sq/V7Y3UVRlN69z587ccYYUIOMO3XGCJeQwT7hD4oCwG800AAkedwg3tJGMMUXGnzhPxBtNNSP
- KABgn/RH6Iz4gfE7Qh9sm9/m15wku15BD2YvYmgykJIAOjaWcc1fXQyjVN6QJTtWchvp8tXV2s
- T6F6Xqr98Y6U09wK3uVrGE1hIKiyQXSunoTdnOMoXRIecHAGu17ozynxhpLrRJCUdC9klRwKaE
- VFq8mx5DLnH63Fyxsc/n/tQsjjPRC9NT02knDP4Zowqlyc9yEluYZ1i9wQyjx0smmbVRjNLzC/
- B3MCSVMaCEpF15Z8Qq37+CWUEK9BN4Kx6WUz/Dj8fgDiWJDVwQCAAA=
-X-Change-ID: 20261117-hwmon-da9091-7aeeac6d8ef8
+Message-Id: <20261126-hwmon-da9091-v5-1-0c3570ba9133@gmail.com>
+References: <20261126-hwmon-da9091-v5-0-0c3570ba9133@gmail.com>
+In-Reply-To: <20261126-hwmon-da9091-v5-0-0c3570ba9133@gmail.com>
 To: Florian Fainelli <florian.fainelli@broadcom.com>, 
  Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
  Stefan Wahren <wahrenst@gmx.net>, Guenter Roeck <linux@roeck-us.net>, 
@@ -113,94 +110,51 @@ Cc: linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
  linux-doc@vger.kernel.org, Peter Robinson <pbrobinson@gmail.com>, 
  Sander Speetjens <sander.speetjens@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2788;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1334;
  i=sander.speetjens@gmail.com; h=from:subject:message-id;
- bh=U0sVFyBC3QFd3x50V6URzXzlIDLOye/rcYLW6iCW/8g=;
- b=owEBbQKS/ZANAwAKAXjNeEUMBchnAcsmYgBrCC4x8u86m74sL2YYNiUcSPAW5L+l6TUbqXZ5E
- mNZvw2J2eGJAjMEAAEKAB0WIQRWUkqLABoRw+7JUQF4zXhFDAXIZwUCawguMQAKCRB4zXhFDAXI
- ZwUGEACO5KfOjKPSb0GGpDmYGtb4Jqi8x00+CRsbRIv2B/iCwnIbqgV8H0AKiBHygp2yGx8Pm9b
- yBTaH2fwAezjZeows5pbvv3daCCXNBsRl2PJUBRSWogpsbeesifseRm4tY25agNO7cBb390Z9A0
- juLfBKsJRTkTmC8yD3Y0UjIrQX2UuAVZlk/K6tQCruhbW5cm4dOQIIqi36YnvdQ1qbOQpTR//4P
- OKBGXbVp7ocFGMA3kUgOAjlSbSutnlKpukbo9dhDMxiBMpSJnS2MZTFsdOK+KMifQufI/0k2Rwh
- huIMmkAvdB0seIVI4sNEcLecLSWaZrangpzbxBT0eaE1rJMDfrCWPQU0eugp5i3r34FpqD8LK6P
- YBWjpPPLzI3DVq+8HFjU9ZuE0GR93OXIHC69W0t+yuGJHmcOx1jDEhb1yriuEEIeNNgau9EcLsz
- Cv0ZJv0PW5JigRl4rRqcoKZ/uf3mHRw0mIOcluoPl/evUGSryDfYN6uhtfaaL/gg37kfC3XMcnU
- KQxsaYDf0cdSqctKiZifa4IyqjS6X14xYUYhUXYiodtnkiSCCMc/uJ7nol7BtdodRigJuy0pEJA
- HvFNQ7W0obmOREl452Xr+4yMJOwP3rx24HoGvN9fV2YcqQo6BiItyhc9LYQdB3zza+Ea8h8dE3Y
- n95KUz3kU+wV4Nw==
+ bh=/iUxca9FTu0bgiQQeq8SBVCAGFP6lu621MvCErbuE0Y=;
+ b=owEBbQKS/ZANAwAKAXjNeEUMBchnAcsmYgBrCC4xNEx4B4+w47Y6KIxfaxL7O51qs8bnihmov
+ 1fup0sxu1eJAjMEAAEKAB0WIQRWUkqLABoRw+7JUQF4zXhFDAXIZwUCawguMQAKCRB4zXhFDAXI
+ Z+MiD/46w5hTMfyhn4m39PvQETjkM33y7fxz8RsI96szfIvy31g1+2HfYzpr/qavjjnOw75LoKd
+ XlkZVtPWoZ2D0h6fQKjCxfAc4faI2Jcaw76XaZuJCT95fLzAFeXPHZHp/KawJaoNQcQj/av+zoE
+ h7gQfnhRTLPYQIXFz6oazBY+MzPmBoUZ/MW/XPl9o8nIpveCXi5//Qu/iG7PE3B8KqDpGjBRrxT
+ ulKKDu7ga5hj3gR+GFwGd4z9oJhVXsfXVM9TOjMrrx3LwHhZviUe5H+uIf6H6tcedKHbXGo9udo
+ EI3dP3yFy0NFJjUy2zONdxKU01sec/XYelCLf8W+auYJZvSatkpnawQbYiF+wpQ40Av/tKZacVC
+ te9+fmlU0kKwLq/6ASwljDjKomGFulcwaS/5CimW8G5jY8N0vVVMB41N9l2TrVkD+g+s0sOc2lo
+ xqeb29TF7WbUZiaB77bWifC6k5NoT6MMnpTDPjyktDaKd4bK9fhOB59Mos7wVKSogOsdTx6+IVz
+ cIn1KmqP1qtRmLueWZ+LmSSsnyguANaEaOjc71jOaur1sr+xZdtqxO6/+4gFEvuY9DSwPQelNaG
+ oZuPQpRKiUAABqOS0Cbi8MtYXOWAYLnNqTJGPYRlg+CcynVEAU5dsjAryEun5MdFMdwnpmzsfJv
+ DsbZ8j75xwgtE5g==
 X-Developer-Key: i=sander.speetjens@gmail.com; a=openpgp;
  fpr=56524A8B001A11C3EEC9510178CD78450C05C867
 
-This patch adds an hwmon driver for the PMIC used on the
-Raspberry Pi 5.
+Add RPI_FIRMWARE_GET_PMIC_ADC (0x0003009f) to the firmware property
+tag enum.
 
-The PMIC exposes a set of voltage, current and temperature sensors.
-Access is only available through the VideoCore firmware mailbox
-interface; there is no direct register access from the ARM side.
+Recent Raspberry Pi firmware exposes a structured mailbox property
+that returns PMIC ADC readings (voltages, currents and temperatures)
+in binary form[1]. This is required by the upcoming hwmon driver for the
+DA9091 PMIC on Raspberry Pi 5.
 
-A structured property tag (0x0003009f) was recently added to the
-firmware. It returns the ADC values in binary form (index + length +
-array of values), which is much cleaner for a kernel driver than
-parsing the text output of the existing gencmd interface.
-
-The driver follows the same instantiation pattern as the Raspberry Pi 5
-RTC driver: the raspberrypi-firmware driver creates a platform device
-at runtime, and this driver binds to it. All channels are read in a
-single mailbox call and a short refresh-on-read cache is used.
-
-The sensors are exposed through the standard hwmon sysfs interface so
-tools such as `sensors`, collectd and node-exporter work without
-modification.
-
-Dependencies:
-- Raspberry Pi firmware that implements property 0x0003009f
-- CONFIG_RASPBERRYPI_FIRMWARE
-
-Tested on a Raspberry Pi 5 with recent firmware.
-
+[1] https://forums.raspberrypi.com/viewtopic.php?p=2391319
 Signed-off-by: Sander Speetjens <sander.speetjens@gmail.com>
 ---
-Changes in v5:
-- Split include into a separate patch 
-- Move the firmware registration before the driver
-- Link to v4: https://lore.kernel.org/r/20261119-hwmon-da9091-v4-0-0d6e345c3666@gmail.com
+ include/soc/bcm2835/raspberrypi-firmware.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-Changes in v4:
-- Fix sashiko reported bug 
-- Link to v3: https://lore.kernel.org/r/20261119-hwmon-da9091-v3-0-15956035d7b5@gmail.com
+diff --git a/include/soc/bcm2835/raspberrypi-firmware.h b/include/soc/bcm2835/raspberrypi-firmware.h
+index 20141eb2cb67..90d7b66b96e3 100644
+--- a/include/soc/bcm2835/raspberrypi-firmware.h
++++ b/include/soc/bcm2835/raspberrypi-firmware.h
+@@ -84,6 +84,7 @@ enum rpi_firmware_property_tag {
+ 	RPI_FIRMWARE_GET_REBOOT_FLAGS =                       0x00030064,
+ 	RPI_FIRMWARE_NOTIFY_DISPLAY_DONE =                    0x00030066,
+ 	RPI_FIRMWARE_GET_RTC_REG =                            0x00030087,
++	RPI_FIRMWARE_GET_PMIC_ADC =                           0x0003009f,
+ 	RPI_FIRMWARE_SET_CLOCK_STATE =                        0x00038001,
+ 	RPI_FIRMWARE_SET_CLOCK_RATE =                         0x00038002,
+ 	RPI_FIRMWARE_SET_VOLTAGE =                            0x00038003,
 
-Changes in v3:
-- Fix sashiko reported bugs
-- Link to v2: https://lore.kernel.org/r/20261119-hwmon-da9091-v2-0-d6c624272a9e@gmail.com
-
-Changes in v2:
-- Add documenation
-- Split firmware in a separate patch
-- Remove DA9091 mention
-- Remove extra lock
-- Use 64-bit jiffies
-- Remove lookup function
-- Link to v1: https://lore.kernel.org/r/20261117-hwmon-da9091-v1-1-f55f0af9c6a3@gmail.com
-
----
-Sander Speetjens (3):
-      soc: bcm2835: raspberrypi-firmware: Add PMIC ADC property tag
-      firmware: raspberrypi: Register PMIC hwmon driver on Pi 5
-      hwmon: add Raspberry Pi PMIC driver
-
- Documentation/hwmon/index.rst                  |   1 +
- Documentation/hwmon/raspberrypi-pmic-hwmon.rst |  49 ++++
- drivers/firmware/raspberrypi.c                 |  21 ++
- drivers/hwmon/Kconfig                          |  11 +
- drivers/hwmon/Makefile                         |   1 +
- drivers/hwmon/raspberrypi-pmic-hwmon.c         | 296 +++++++++++++++++++++++++
- include/soc/bcm2835/raspberrypi-firmware.h     |   1 +
- 7 files changed, 380 insertions(+)
----
-base-commit: 7d51eba9dfa7d30abab0b75570e9f7605366e45b
-change-id: 20261117-hwmon-da9091-7aeeac6d8ef8
-
-Best regards,
 -- 
-Sander Speetjens <sander.speetjens@gmail.com>
+2.56.1
 
