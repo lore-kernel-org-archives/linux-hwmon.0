@@ -1,56 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795682081;
-	b=y/28eEAPFR87QfYswWzeBmXD5fPEQjNZSFD2vqdfcbZJO8P7yJ3ZIINkUgVFBFx6jRbw
-	 QdALfg48/8z/5pI3PbronrE40wubvcpAxZsC7Ne3Dg/jxhK/mA1mx/yOk2d/iHrd5InOq
-	 4fl+g625JQo05NqyEuSfxkDpjsEcoY/oDC4tpJDolzUMnqcaVqXjpCjGyHYsRey3u993u
-	 ixvsQgtp3Kgpm23SGDHdXGJbqwpxK+4PZHlX+Ziqh5+rpF0NVN/pkhMxH1/03CJThkA81
-	 nCD+VRi3v9x6IP9VaRr82CFtZ9wUNgXwdZloDBfSpIJ9SV6rg9qk6deV+T0jLdpsnkQ==
+	t=1795690120;
+	b=BKY00Buwt3pZXJouVgBQJVy8FwdmejFX4E7qDZhYl/j6W73ZhWDVMYw/UIPE/u64Cgc+
+	 GH61Kn3RmVAnZYTCKXTuH7uhnbJXADLsn2T0yPuqCMnUYKsm2dOmbgduyOm+VBUYyksHR
+	 QL8f8fU/DJB0DQ4c8CniTrEhyErQGZDlyVsniP9CC/kHIIt4gRRnQ0vtk38cdRWYyIQra
+	 oG/KjD5V+XBJQfSJmGsRXuiSl+BVoORSd3ekqhv0gCnPkaQUY13TvBsa0WxxSROOXkRkl
+	 xwfoJCdTbBXbZv8hKFxpXExxKgtuVk3516ajlFQftGaoQuCFZoA/Oo+96sSXDxqS6fQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795682081;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=PxyhkZ9fejYcHcXVFlqMrCEUU+mmyQeJ9c/FlvUgMN4=;
-	b=H7vE0nLAkwuAtY57Jh09wflYSPKgFheC8dqsRTcYDHMbA6e/hsw9xdrZGv1gwThZnpX0
-	 L8GiKKS7L2jMgfpK5CBxmAh/RUWjZyjK5QC4bigsy36I0YUjq261UHkKdUwZsDwC+Y4op
-	 pDhIZrjlvePOc6XGZI31ng1p5XaQiVq+4+In3vlsqUlIsegMjuxrX7CU+WUttcguleZoB
-	 qZbgsssPGK3T5IgRlfN9BEoco7IG1UKVLrTo0sHA67+H8vIsjEgcI9j8XYCeYiBvl3+vG
-	 PzFUKvenjPRu1Wfi96Q4+jmfzOLmvoNjzmOV5SXV389G64pNPKVa6CDXr0+GBvM/YdQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795690120;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=q0JMax0vQd34r8Jzb5i5IRxK+8bWWNqoR9qhYGl1CV0=;
+	b=CNXdaqC/0HRZQS33H19EVg+Ur8Rxa1vADD08HjJbdZVO+qQTOStphupLQVVgH7XIjETr
+	 YD1LNMQ0pNjuyDCUXX2YfoOgSJIPyuTZKhyD590Mu00KcPNAP218x4bBhlv+A/tieqbth
+	 /ZnwQyxcfkcQLLG4WaVS/7SJYegfrqhPSiX/BbJsJrzP58q+OfB8VHev5Z++ImkGla8oj
+	 2FFt5baqUONm45UsYhT6ro5rq+STcEFydWrnNB07wpz5MTuRrGh6U+DATMrdc7NTQZbSq
+	 XBx/9JMc7LCxMr+pdgqbjwVYgiEbBxt1iZiIz18pXzMsU/kFPxlDXvvHqpIa0pTfFOA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BcVB6QVA;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--dbalint.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WtWIng6q;
+	arc=none smtp.remote-ip=209.85.208.197
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F218606A321
-	for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 08:34:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F65606A330
+	for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 10:48:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A3F65606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dbalint.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BcVB6QVA
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56DFC1F000CF;
-	Thu, 26 Nov 2026 08:34:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795682081;
-	bh=PxyhkZ9fejYcHcXVFlqMrCEUU+mmyQeJ9c/FlvUgMN4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=BcVB6QVAO+Ox9CzZw2Ql89Dj5z3YNZIrzNjb1T8PMnI0ZqaKPuSy3mRmIAXXhMN86
-	 GJfOKpQQ3YLNGB5LGnGqtOWC7CnybMN0AiHCG1L1s5RSrrdxmX0COWAn3UThg/teRc
-	 15MZD/v8z8ZvI62DclXjumFeSws/uEOc0QAmAI8V+RCzqzE51ScdW5ZLs34MRmOti8
-	 S+t/RbfozygNLeA/rnWhTsjsfaNFu3gN1D/pwr1GLDq2XVZY6H9BELbsOAKQLv41MU
-	 7YK+ikBpJ9b1C3KJOTCaVirudFoR2x7h1FQ3idM2JgFxiJU8oUrztlCDj11Ip29AfW
-	 vqxiMGOVdk0eQ==
-Message-ID: <sashiko-outbox-235032@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 0/2] platform/x86: Add Emdoor Intel EWMI platform
- driver
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ziqiang Xia" <xiazq123666@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261126-emdoor-intel-wmi-rfc-v3-0-7dfbb70f04a9@gmail.com>
-References: <20261126-emdoor-intel-wmi-rfc-v3-0-7dfbb70f04a9@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 26 Nov 2026 08:34:40 +0000
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WtWIng6q
+Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-3adf01f3e23so41885811fa.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 02:48:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795690117; x=1796294917; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=q0JMax0vQd34r8Jzb5i5IRxK+8bWWNqoR9qhYGl1CV0=;
+        b=WtWIng6qiA1bZhsEZv9EXNHqO8u216P83uzKrgyZ2VbAqGmboo1P+tVo9XyBaWi58H
+         Dc3SgjZ5iLWhYqyd6i1dJtvi/LG5nqhjBXV/hsJZwWSm6mfFfrp3WLg8gkuBQfa938pK
+         T+t3+mUVXo/JwfSZ8ogKRix/YTe17ItIwzKJ77EfbG/GW86PVLCfYdTl7Am3WUO9MlLh
+         ToG1Jw/raINQur7OsRzW29cNMg81DFpRWxzejYarM6AVV1wbuObZIhMpzvkHD/C4cPsJ
+         X0Waun97kjp7/H06Vw+yiuTTBcXa3sGI6jeFFjBH/QjDBGbGyyrPJRL6SDm0g6KZtr+J
+         H4sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795690117; x=1796294917;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=q0JMax0vQd34r8Jzb5i5IRxK+8bWWNqoR9qhYGl1CV0=;
+        b=yp1etAENQzvxrN1fBelraJ81XaZnVF9o1FIOCemUrCB9iu1QNDe1+jazhHVkBEVt+J
+         N+wZxuQivqm9q/3aFwhMtXid7kbOeGyUVjNlvmHOBASizvc2BCL2tBbe1Hyb9Eph02dN
+         LXbXTf2BbbNJNaV7yPDBZO7ZNzths2qcJ7GYrsAR1TOlx46grH2FBNl1+BVjMkqFm+Xe
+         J3GVTi9A4kVYNQmi7ItTDaGxB3aAuLXckx2MNlVVMY50IkFq872bTjTso4sxEg1Kbzyd
+         u2Je78P4cYtxcc7i41F9YUxR//6RBdMxSatzetlU8qlYTTuDXby8IyLPKN2US7RYQzMW
+         9Xjg==
+X-Forwarded-Encrypted: i=1; AL+hErEXse+0AvImebrHe8gPfCkET4I8yR47IuQX6ejV2pl2J0l2yB+YBMSfJH/arFbqjJ/6jew8erDM7RSvZg==@vger.kernel.org
+X-Gm-Message-State: APuU4Z8onhys6cWEvTrEOVv+qbRv7WQc519VEzdFSYw8zNNO8z3kaeWu
+	/oiEPW1lpaNKJ7Oh/j08PLuANJ3ugavGP6VqM5N4lTNbBnuVz6m+8JhxleayFupLV4Jq5iZlold
+	BjR7u0ymHfA==
+X-Received: from lflu22.prod.google.com ([2002:ac2:43d6:0:b0:5c1:a392:10d])
+ (user=dbalint job=prod-delivery.src-stubby-dispatcher) by 2002:ac2:4f09:0:b0:5c1:57d9:270c
+ with SMTP id 2adb3069b0e04-5c1bc8743dcmr5885193e87.46.1795690117479; Thu, 26
+ Nov 2026 02:48:37 -0800 (PST)
+Date: Thu, 26 Nov 2026 10:47:55 +0000
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -59,15 +75,88 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
+Message-ID: <20261126104757.2860272-1-dbalint@google.com>
+Subject: [PATCH v2 0/2] Introduce cros_ec power monitoring
+From: Daniel Balint <dbalint@google.com>
+To: Jonathan Cameron <jic23@kernel.org>, Lee Jones <lee@kernel.org>
+Cc: linux-iio@vger.kernel.org, mfd@lists.linux.dev, 
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, mwojtas@google.com, 
+	Daniel Balint <dbalint@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Sashiko has finished reviewing this 2-patch series:
+This series adds the ChromeOS EC On-Device Power Monitoring
+(cros_ec_pwrmon) driver to read onboard power-monitoring ADCs, such as
+PAC194x, wired through the embedded controller (EC).
 
-- Patch 1: no issues found.
-- Patch 2 ("platform/x86: Add Emdoor Intel EWMI platform driver"): 1
-  potential issue (1 Medium)
+Several ChromeOS platforms are equipped with onboard ADCs connected to
+the EC via I2C. The driver interfaces with the EC via the existing
+EC_CMD_PWRMON host command API and EC_MKBP_EVENT_PWRMON events to manage
+ADC accumulation and expose per-rail accumulated energy through IIO
+energy channels and a triggered buffer. The driver is only loaded when
+EC_FEATURE_PWRMON is advertised by the EC.
 
-A detailed review has been sent as a separate reply to patch 2.
+This is a borderline case between IIO and hwmon. IIO is used rather than
+hwmon [1] because userspace queries all rails (up to 64) together as a
+coherent frame -- for example, to compare per-rail drain contributions
+across device-state transitions (such as screen on/off triggering a
+snapshot) and to correlate fine-grained ODPM frames with other
+timestamped system diagnostics for off-device per-process, per-rail
+energy attribution, where relative deltas across channels are as
+important as absolute values. Since a single EC latch and MKBP delivery
+takes non-trivial bus time, latching per sysfs read across 64 files
+would introduce significant inter-channel skid and redundant EC work.
+While driver-side caching in hwmon could avoid per-read latching, hwmon
+has neither an on-demand trigger ABI to force a fresh latch nor a
+timestamp ABI to report the actual latch time (or expose whether a read
+hit cached data or crossed a mid-sweep cache expiry), making IIO's
+explicit trigger, latch timestamp, and single buffer read a cleaner fit.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261126-emdoor-int=
-el-wmi-rfc-v3-0-7dfbb70f04a9@gmail.com
+Reference to detailed v1 discussion:
+[1] https://lore.kernel.org/linux-iio/20261120091022.1459658-1-dbalint@google.com/
+
+Changes in v2:
+- Dropped v1 patch 1/3 ("platform/chrome: cros_ec: fix alignment of
+  ec_params_pwrmon"), already applied to chrome-platform/for-next
+  (346739bcdf65).
+- Replaced custom multi-value energy_value sysfs attribute and its ABI
+  doc with standard buffer-only IIO_ENERGY channels (.read_label, scale)
+  and an IIO triggered buffer with IIO_CHAN_SOFT_TIMESTAMP
+  (CLOCK_BOOTTIME); selected IIO_BUFFER and IIO_TRIGGERED_BUFFER in
+  Kconfig.
+- Replaced wait_queue_head_t with struct completion.
+- Grouped per-channel state into struct cros_ec_pwrmon_chan, and used
+  aligned_u64 scan buffer.
+- Switched EC host commands from legacy cros_ec_cmd_xref_status() to
+  cros_ec_cmd(), which manages msg buffers and cleanup automatically.
+- Dropped redundant st->ec and st->msg fields, used local params/resp
+  variables instead of casts.
+- Added an event_size check in the MKBP notifier.
+- Fixed signed/unsigned energy integration and channel counting for
+  duplicate/out-of-range MKBP events; returned -EINVAL for missing
+  channel labels.
+- Switched probe error paths to dev_err_probe(), clamped channel count
+  with min(), hardcoded indio_dev->name to "cros-ec-pwrmon", switched to
+  devm_blocking_notifier_chain_register(), dropped direct
+  <linux/mod_devicetable.h> include, and used named initializer with
+  "{ }" sentinel in cros_ec_pwrmon_id[].
+- Capitalized "Load" in the mfd patch subject.
+
+Daniel Balint (2):
+  iio: adc: add cros_ec_pwrmon driver
+  mfd: cros_ec: Load cros_ec_pwrmon on supported ECs
+
+ MAINTAINERS                      |   7 +
+ drivers/iio/adc/Kconfig          |  13 ++
+ drivers/iio/adc/Makefile         |   1 +
+ drivers/iio/adc/cros_ec_pwrmon.c | 370 +++++++++++++++++++++++++++++++
+ drivers/mfd/cros_ec_dev.c        |   9 +
+ 5 files changed, 400 insertions(+)
+ create mode 100644 drivers/iio/adc/cros_ec_pwrmon.c
+
+
+base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
+-- 
+2.56.1.839.g22a8290db9-goog
+
