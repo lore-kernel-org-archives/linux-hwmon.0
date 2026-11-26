@@ -1,77 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=92.121.34.21
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795657665;
-	b=WPRyjU2AZu7sMBtJvPA5yR5TDRyfr+SCw4bt1hXlCvkp2/OhvOUOKAmpd61MjND7/5F6
-	 t5rrO+thU7gM7kTYUkkRf87CiXbrP6VsfQxzZ/tTePPM8uj67VGK1aV0GUyEA3NE+zDEr
-	 Bs1au8ktcAmrFVWjNgP+gJbG5vweE7rwsy0+vrjRu+77rJdhGbIiTMObpWxUlxRq9lJFg
-	 gaUSP9IE+6nYLl3ZF2qRVF12+dwZF/kjUnF3IDK3llE3tDlZVuA5LcIfdKFSxH9UObDg1
-	 nsnh/zsMsh4GWFYUc9GIY4tiHQsUN+Rn8ppB6z0v+4j6USzctUWdNq7OWoAYBn/SwnA==
+	t=1795677109;
+	b=hb5issivbj189oYJtFCkgmQvrzUBxnGnZ+8qm5Baifb3lh11VzBQnHmLameJKb+td2OY
+	 5J1yDeElEIg6BPl1f3y9uUN3dCvD+WYQtjrFW1nj6UUQSDcS+U0eJ+b32GqyC4broH6JS
+	 LiR5RHj0rreZW6Xa1I0zw1EafX5mwQ4GI5KtBwurvJG3n8FZkZQxvaMVxFXPlaU7yiDoF
+	 OzPihL/728NxL7F/WEmFF3GkHji2/NZ2WCxFR+b2DgqX6aRKvXKSO/HKjQnKFTk8q50/f
+	 va4DXXHI6Vthuquq0a7pCVppO480lOS/MNTOQzwqrLvX0Gh5aFXq0s/2ywnVLHT7pdQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795657665;
-	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
-	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
-	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
-	 X-Local-Domain:X-CMAE-Envelope;
-	bh=FMs61J1VzIsH89hHJ/Ixi+nxqnxJ6HYCzSaQ5lTSfMo=;
-	b=pvX+dfIqTlVNaElNKllGRNGarrnWXdcjPL4Dcm9lIaSZQ/s6WmgwBzlVM7H5cfCp9PZm
-	 uc/rwJMfK9g74SJPsqeG/TpkbFhj6Z/oz4xIUkHHj6jH5c3SbjFNKzod+FET7JIBRJzJE
-	 0KTsixEZIvekk5WqwM/57XCjTMLIssCiYPmaF9bvWjMogI/dqYlq/aJP0noqCg6+7Cwon
-	 h7oTg8fugkFFHxknBhAUoJ2l45IM664vybPV7qiAoJ/KtZVfk9XqHI2nws6TJi3WpCWxs
-	 V9Og7y0e4XNzmEeLAU7zt4Go6DRLTAz98gpeMyPR/oA2XswQJT4ZzgpoYDy8X0xo4mg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795677109;
+	h=DMARC-Filter:Received:Received:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-Virus-Scanned;
+	bh=veEpLpa04jFUmQZYhUWlBxOH+vahXzO8oIEUnRnJ6eg=;
+	b=bDTKibi5/HxUwHWF24bRHKj4j739ondPa9flvUzFK+sp2uM2SWLuBNQJc/GZSfQc2Xi0
+	 DOk0u/x9GyU4/0KKOyJRc39nh5xud4J0ljFjfsFiDa5k5z1az1h+mEOtSvNeH0xOl0lxm
+	 OSfkbHswfMwC3wEAyt9IGCmT/YST96k9BSxaW96us7vLQ+0TYK/CMpWS4ijxF4K+dAh09
+	 ZBnPN2v2ttrWizw92Zzn0dRLisBNXjygRqgwTZ/Vjld7VH0U29TR3GoBfjUAuHPVGTbUY
+	 RIFgByM0qo32DWmeOpR38XydXEoYxRs247VMJS9E56hODpuuWC62Ws8dE8ggDxHghqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=roeck-us.net;
-	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=UGAgwoHW;
-	arc=none smtp.remote-ip=44.202.169.37
-Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
+	dmarc=pass header.from=nxp.com;
+	spf=pass smtp.mailfrom=nxp.com;
+	arc=none smtp.remote-ip=92.121.34.21
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07A75606A321
-	for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 01:47:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 07A75606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=UGAgwoHW
-Received: from eig-obgw-5002b.ext.cloudfilter.net ([10.0.29.226])
-	by cmsmtp with ESMTPS
-	id WKVzx6J8BV16IWOaIxEx9t; Thu, 26 Nov 2026 01:47:38 +0000
-Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with ESMTPS
-	id WOaHxkbA5b2qJWOaIxw7aH; Thu, 26 Nov 2026 01:47:38 +0000
-X-Authority-Analysis: v=2.4 cv=A7tsP7WG c=1 sm=1 tr=0 ts=6b078fba
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=1XWaLZrsAAAA:8
- a=qb-T7JNNOAWFUjPqn7MA:9 a=CjuIK1q_8ugA:10 a=KPbNTLLc3YvdawN95zVk:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=FMs61J1VzIsH89hHJ/Ixi+nxqnxJ6HYCzSaQ5lTSfMo=; b=UGAgwoHWliEYxDH/xSqgfzGik9
-	eHRUY2coW1qeu8nRUXcq5dnZspnYxqTFoPSs7THmxA8ATHHTCBD7wT4w0j2Iwc0i/g7WXO2HOB8Yj
-	VRltLeVNy12yItVRumLimoUYuJ+VnXN/0TUEq2doAfVXdHe47Z4Jx5khJHJz55u1SPvfY/LPTXuF/
-	f+vDAfZPQoj7VPcFAtYO2LsTYAfGGVHAwH9rznAwFmuSbAa3YaaOisQd8qLCyyFKfTOXUE+nk9kTB
-	gB3Og4JAboClCj0EVXVHDobdihHjOr0Z5RhDV5jMgQLJ9s6xeG7Ms3c1W0HWAyLpSQ8gC2vSairxU
-	H5gYP4PQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:44110 helo=server.roeck-us.net)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <linux@roeck-us.net>)
-	id 1xWOaH-00000003a5m-2HKc;
-	Thu, 26 Nov 2026 07:17:37 +0530
-Date: Wed, 25 Nov 2026 17:47:36 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Arthur Korn <akorn@google.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (pmbus) Fall back to CLEAR_FAULTS when
- STATUS_CML is read-only
-Message-ID: <19295c12-1f09-4686-96c9-d1c076e538c7@roeck-us.net>
-References: <20261125181336.3298961-1-akorn@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC58606A31E;
+	Thu, 26 Nov 2026 07:11:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6CC58606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id CCA82200026;
+	Thu, 26 Nov 2026 08:11:40 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 97FF320001F;
+	Thu, 26 Nov 2026 08:11:40 +0100 (CET)
+Received: from lsv031125.swis.in-blr01.nxp.com (lsv031125.swis.in-blr01.nxp.com [10.12.177.172])
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 7208D1800088;
+	Thu, 26 Nov 2026 15:11:37 +0800 (+08)
+From: Shiv Prakash Gupta <shivprakash.gupta@nxp.com>
+To: linux-kernel@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	alexandre.belloni@bootlin.com,
+	krzk+dt@kernel.org,
+	robh@kernel.org,
+	conor+dt@kernel.org,
+	linux@roeck-us.net,
+	wim@linux-watchdog.org
+Cc: vikash.bansal@nxp.com,
+	priyanka.jain@nxp.com,
+	lakshay.piplani@nxp.com,
+	Shiv Prakash Gupta <shivprakash.gupta@nxp.com>
+Subject: [PATCH v5 0/4] rtc: Add NXP PCF8525 RTC support
+Date: Thu, 26 Nov 2026 12:41:20 +0530
+Message-Id: <20261126071124.2383368-1-shivprakash.gupta@nxp.com>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -81,64 +67,138 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261125181336.3298961-1-akorn@google.com>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1xWOaH-00000003a5m-2HKc
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:44110
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 2
-X-Org: HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfBjrKTIeqnIsVv33EC7eVaEFjpIvgubE/+S2mC4UYUx5pZm3d0kbzztIzrDgJLJMZuNYTPa6ajXFyvPZkBE1Re1UVUVQvOZSeRdsvyXk5epsGQ4MCA5+
- g2HL6j6yPX9TBurFVQcogMQCUlgANccY7NftjGKWQF6y6gdK+bIxn/QIS5RPNgA1LirfwRbBqVk1mwS70S/kUfnKXjawaEPaiiT1o3cCw17AA94bhNBft9lz
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
 
-On Wed, Nov 25, 2026 at 06:13:35PM +0000, Arthur Korn wrote:
-> Some PMBus 1.2 devices (such as ADI ADM1273 and ADM1281) report
-> PMBUS_REVISION = 0x22 and implement STATUS_CML (0x7e) as read-only:
-> they ACK SMBus byte writes to PMBUS_STATUS_CML without clearing latched
-> fault bits, and only clear STATUS_CML via CLEAR_FAULTS (0x03).
-> 
-> During pmbus_init_common(), probing an unsupported register such as
-> PMBUS_WRITE_PROTECT (0x10) latches PB_CML_FAULT_INVALID_COMMAND in
-> STATUS_CML. When pmbus_clear_cml_fault() writes to PMBUS_STATUS_CML and
-> sees ret == 0, PB_CML_FAULT_INVALID_COMMAND remains latched, causing
-> subsequent pmbus_check_status_cml() calls during attribute discovery to
-> fail with -EIO.
-> 
-> Verify on non-write-protected devices that PB_CML_FAULT_INVALID_COMMAND
-> and PB_CML_FAULT_INVALID_DATA actually cleared when a CML fault is
-> expected or cleared unconditionally. If the write succeeds and either
-> bit remains set on readback, disable STATUS_CML write-1-to-clear for the
-> device and fall back to pmbus_clear_fault_page(). Do not clear
-> has_status_cml when _pmbus_write_byte_data() returns an error, so
-> per-page write failures (such as -EOPNOTSUPP on read-only virtual pages
-> like max16601 page 1) fall back for that page without disabling
-> STATUS_CML write-1-to-clear on other pages. Skipping the readback on
-> supported register probes (rv >= 0) avoids extra SMBus traffic in the
-> common path.
-> 
-> Tested on BMC hardware across ADI ADM1273-1A (adm1275), Maxim
-> MAX16600B.04 (max16601, 3 virtual pages across VCORE, sensor IIN/PIN,
-> and VSA), Renesas RAA228234 (isl68137), Infineon XDPE1A2G5B (tda38740),
-> ADI ADM1266, and factory write-protected converters.
-> 
-> Fixes: d9d30e1cb9ca ("hwmon: (pmbus) Clear only CML command and data faults during probe")
-> Signed-off-by: Arthur Korn <akorn@google.com>
+The PCF8525 is an NXP I2C real-time clock using an external
+32.768-kHz crystal. It provides alarms, external timestamp capture,
+recording of the last calendar write, backup battery switch-over,
+a hardware watchdog timer, and an on-chip temperature sensor.
 
-Applied.
+This series introduces DT bindings, the core RTC driver, watchdog
+support, and optional hardware-monitoring (temperature readout) via
+the hwmon subsystem.
 
-Thanks,
-Guenter
+Changes in v5:
+- Remove the reset-source property and its example entry from the
+  binding; watchdog expiry is reported through INTB as an alarm-only
+  watchdog.
+- Remove the quartz-load-femtofarads property, as the crystal load
+  capacitance is fixed and Control_5 bit 1 is reserved. Allow a single
+  named inta or intb interrupt, or both in the order inta, intb, and
+  use level-low interrupts in the example.
+- Reject wakeup-source in the binding when only the intb interrupt is
+  described, as the wakeup line is INTA.
+- Program and read back the month and year alarm fields using the
+  Rev. 3.0 alarm enable bit positions, and keep the alarm interrupt
+  disabled while the alarm is rewritten.
+- Use one helper for the CTRL2 write-0-to-clear flags.
+- Mask the unused INTA sources and drain stale TSF/AF/MSF flags before
+  unmasking INTA, failing probe if the drain fails. The runtime
+  handler uses the same bounded drain and no longer claims an event
+  whose acknowledge failed.
+- Propagate I2C errors from the Timestamp1 read; only an invalid or
+  empty timestamp is acknowledged so INTA cannot stay stuck low.
+- Refresh the OTP after setting the time clears the oscillator-stop
+  flag, even if clearing STOP fails.
+- When interrupt-names is present, do not take INTA from the first
+  interrupt if only INTB is named.
+- Use RTC_FEATURE_ALARM_WAKEUP_ONLY when only wakeup is wired, and do
+  not repeat the wakeup setup the I2C core already did.
+- Set up wakeup before registering the RTC so that wakealarm is exposed
+  without a wakeup-source property.
+- Apply the start-year offset to the sysfs timestamps, make timestamp1
+  read-only, and clear just TSF on a timestamp0 write instead of
+  issuing the CTS command.
+- Rate-limit the VLF and interrupt warnings, and use devm_mutex_init(),
+  guard(mutex) and the regmap bit helpers.
+- Register the watchdog only when the INTB interrupt is described,
+  advertise WDIOF_ALARMONLY and clear WDTF in the handler.
+- Mask all INTB sources before touching watchdog state, start from a
+  stopped counter with the 1/4 Hz source, clear a stale WDTF and
+  switch the nINTB pin last; on start, load the counter before
+  enabling WD_CD and unmasking INTB, undoing it on error.
+- Keep the watchdog counter and WD_CD across suspend and only mask the
+  INTB route, re-arming on resume. On teardown leave the INTB route
+  intact if the watchdog is still running (nowayout).
+- Clear TEMP_RD_EN to enable the digital temperature readout, and drop
+  the cleanup action since the bit only gates the readout register.
+- Select the closest supported update_interval instead of failing with
+  -EINVAL.
+
+Changes in v4:
+- Rework timestamp handling to serialize sysfs clear and IRQ
+  processing, read Timestamp1 before clearing TSF, and restore TSM
+  after the CTS command.
+- Correct Timestamp2 handling to report the last calendar write
+  instead of treating it as a second external timestamp capture.
+- Rework the INTA threaded IRQ handler to drain pending AF/MSF/TSF
+  events and re-read status registers, avoiding missed events on an
+  edge-triggered IRQ.
+- Preserve all CTRL2 Write-0-to-Clear status flags, including WDTF,
+  across register read-modify-write operations.
+- Rework watchdog support to use nINTB as the watchdog output without
+  a Linux watchdog IRQ or pretimeout notification; remove unsupported
+  pretimeout handling and write-only watchdog-value read.
+- Establish a known watchdog state at probe, clear stale WDTF before
+  enabling the watchdog output, and report the hardware-achieved
+  timeout.
+- Fix RTC feature and time-setting handling, including
+  update-interrupt capability reporting and writing the
+  hundredths-of-a-second register when setting the calendar.
+- Improve interrupt/wakeup and device-managed cleanup ordering so
+  hardware interrupt sources are safely masked on probe failure and
+  driver removal.
+- Rework hwmon registration and power-management handling so the
+  temperature readout is enabled before exposure to userspace and
+  cleanly disabled on failure, suspend, and removal.
+
+Changes in v3:
+- patch 2: protect the Write-0-to-Clear (W0C) status flags in the
+  CTRL2/CTRL3 read-modify-write cycles so concurrently asserted
+  interrupt events are not silently cleared
+- patch 2: replace the timestamp spinlock with a mutex and re-read
+  CTRL4 under it, closing the TOCTOU race between the threaded IRQ
+  handler and the sysfs timestamp store
+- patch 3: configure the nINTB/CLKOUT pin (CLKOE=0) before requesting
+  the watchdog IRQ to avoid a spurious interrupt storm
+- patch 3: add suspend/resume PM ops to stop and re-ping the watchdog
+  across system sleep
+- patch 3: add WDIOF_PRETIMEOUT so the watchdog core attaches a
+  pretimeout governor
+- patch 3: re-mask INTA/INTB interrupts on driver unbind via devm
+  cleanup actions
+- patch 4: enable TEMP_RD_EN before registering the hwmon device and
+  add a devm cleanup to disable it on unbind
+
+Changes in v2:
+- Fix include: use <linux/pm_wakeirq.h> instead of <pm_wakeup.h>
+- Add spinlock_t ts_lock to protect ts[]/ts_valid[] from IRQ/sysfs race
+- Fix W0C ordering: clear AF/TSF flags before acting on alarm/timestamp
+  events
+- Use dev_pm_set_wake_irq() for suspend wakeup wiring
+- Clear stale WDTF before unmasking watchdog interrupt on INTB to prevent
+  boot loop when battery-backed flag persists across resets
+- Add watchdog_notify_pretimeout() call in INTB IRQ handler
+- Set WDOG_HW_RUNNING if bootloader left watchdog running at probe time
+- Register hwmon device first, then enable PCF8525_CTRL5_TEMP_RD_EN only
+  after successful registration
+
+Shiv Prakash Gupta (4):
+  dt-bindings: rtc: Add NXP PCF8525 RTC
+  rtc: pcf8525: Add NXP PCF8525 RTC driver
+  rtc: pcf8525: Add watchdog support
+  rtc: pcf8525: Add temperature sensor support via hwmon
+
+ .../devicetree/bindings/rtc/nxp,pcf8525.yaml  |   88 ++
+ MAINTAINERS                                   |    8 +
+ drivers/rtc/Kconfig                           |   24 +
+ drivers/rtc/Makefile                          |    1 +
+ drivers/rtc/rtc-pcf8525.c                     | 1404 +++++++++++++++++
+ 5 files changed, 1525 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf8525.yaml
+ create mode 100644 drivers/rtc/rtc-pcf8525.c
+
+-- 
+2.34.1
+
