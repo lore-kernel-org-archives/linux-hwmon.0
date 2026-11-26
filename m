@@ -1,76 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.202.169.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795643840;
-	b=UTNMai39wZzMqWgQ3w4LAB5vk7tBV2Zll++A1XCnowx3bLq92ntk430y7z6NMrJJdbfw
-	 IfrARE3OH60mf09fOwKmeIbHy9TZTJDJKOqXqOjZveVZRmEagXoXwJ0eAXvv4TNLtN5gO
-	 6NYYdf+QrIs+9ntYBXHez4zAU422H1h7h4poqZa40OD4L4f6cYNFEa5WWV7PGqZ803bMb
-	 piARD9LS2nJyLG4AZ5jUFoBhtZgu6zaxU6ItEKbmwoEYFKLh3p0dCBRRrAZY/o4/ahbpS
-	 gzZPT5kYtbaK9NqFhVEL8USgug2VDOuxvfZYvOS3+bdsOSu1l81Kjs+yvZ2zJaBi8Vg==
+	t=1795657665;
+	b=WPRyjU2AZu7sMBtJvPA5yR5TDRyfr+SCw4bt1hXlCvkp2/OhvOUOKAmpd61MjND7/5F6
+	 t5rrO+thU7gM7kTYUkkRf87CiXbrP6VsfQxzZ/tTePPM8uj67VGK1aV0GUyEA3NE+zDEr
+	 Bs1au8ktcAmrFVWjNgP+gJbG5vweE7rwsy0+vrjRu+77rJdhGbIiTMObpWxUlxRq9lJFg
+	 gaUSP9IE+6nYLl3ZF2qRVF12+dwZF/kjUnF3IDK3llE3tDlZVuA5LcIfdKFSxH9UObDg1
+	 nsnh/zsMsh4GWFYUc9GIY4tiHQsUN+Rn8ppB6z0v+4j6USzctUWdNq7OWoAYBn/SwnA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795643840;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:From:Date:To:cc:
-	 Subject:In-Reply-To:Message-ID:References:MIME-Version:Content-Type;
-	bh=2K3Db8LNwo4qWMxRImmBccaaTsxsdI5hMj+xr2B1FZ0=;
-	b=ZOvquoLlKrsDdu0bRN08E2od6AfZlUB4T2bgTQ/4YSPYA5A0bn1hIVoetohGPjBcjdxg
-	 IIgkHfMpwJN4kAZk7bsqW2UgP5V/ZiQXqkKHyWN7nNa98C+tJ+JXDmiM3Gec5IGTCI2/R
-	 cH2f2bt1gRZVI5nFxkWOLBg3f6jJgInN7muf//DnVTpwjYiw2wzWa0Vu5UtC5omUh21jc
-	 PZ+AxNx1rvHcvArxDX2kOFjU1/K2IDRua1n3layXeYk9bPXEiKvbpcsZor202wCgrR0Dq
-	 q66xreXCHiBjRJW9e8k4sVW7Cw4N/RIajs96yoQIw1n1r/+Ld5vsx/OgQjukYOigVOg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795657665;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
+	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
+	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
+	 X-Local-Domain:X-CMAE-Envelope;
+	bh=FMs61J1VzIsH89hHJ/Ixi+nxqnxJ6HYCzSaQ5lTSfMo=;
+	b=pvX+dfIqTlVNaElNKllGRNGarrnWXdcjPL4Dcm9lIaSZQ/s6WmgwBzlVM7H5cfCp9PZm
+	 uc/rwJMfK9g74SJPsqeG/TpkbFhj6Z/oz4xIUkHHj6jH5c3SbjFNKzod+FET7JIBRJzJE
+	 0KTsixEZIvekk5WqwM/57XCjTMLIssCiYPmaF9bvWjMogI/dqYlq/aJP0noqCg6+7Cwon
+	 h7oTg8fugkFFHxknBhAUoJ2l45IM664vybPV7qiAoJ/KtZVfk9XqHI2nws6TJi3WpCWxs
+	 V9Og7y0e4XNzmEeLAU7zt4Go6DRLTAz98gpeMyPR/oA2XswQJT4ZzgpoYDy8X0xo4mg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.intel.com;
-	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=XBzLmfQP;
-	arc=none smtp.remote-ip=198.175.65.15
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	dmarc=none header.from=roeck-us.net;
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=UGAgwoHW;
+	arc=none smtp.remote-ip=44.202.169.37
+Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B39A6606A31E;
-	Wed, 25 Nov 2026 21:57:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B39A6606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07A75606A321
+	for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 01:47:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 07A75606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=XBzLmfQP
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795643840; x=1827179840;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=DI+/KXJxI3NkcVpi2dKOEaihNHueHSF6UIpyMuXHXFM=;
-  b=XBzLmfQPqTB5muMt/+V0Jx8MCrmZeNiLc6Wyq0ROvDVwC9eOFzL3v0RX
-   AXBnYu6F5BYPvS1N1zJvH8seNLIMKkWImHPjLcW6k9kIpcLZ54UE1z7gT
-   jxv/5CK0/mzH8SFnIHGZXWevWHCk7uen5Xis1MLATu6WdklesEpgerFy1
-   +P6eRpRVr6X858qvjd2VnL9zFQRnx5m07dNGu94yGqIX6m/d0tjud+Zra
-   pij9jL7HSMNT/yPzboiICdpBoFv2Ieaj1QV/sD6SnQnHC66v2a5R8dlSP
-   kQCQaj34/DP+Lc1ZcuLSAkinwRUvv584tCVuEcvqYRVOoB6fcFllS7608
-   Q==;
-X-CSE-ConnectionGUID: tgXKwFsDR1mMhgBd6j+SPg==
-X-CSE-MsgGUID: AGmbWj1wRr27Gv1LTwGt6Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11977"; a="4528273"
-X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
-   d="scan'208";a="4528273"
-Received: from fmviesa013.fm.intel.com ([10.60.135.153])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 13:57:19 -0800
-X-CSE-ConnectionGUID: EWCvkhejRz2crE4uaINclw==
-X-CSE-MsgGUID: 88viNq/0Rp+VAVTby/bghQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
-   d="scan'208";a="14023381"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.96])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 13:57:16 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 25 Nov 2026 23:57:13 +0200 (EET)
-To: Ziqiang Xia <xiazq123666@gmail.com>
-cc: Armin Wolf <W_Armin@gmx.de>, Hans de Goede <hansg@kernel.org>, 
-    Guenter Roeck <linux@roeck-us.net>, platform-driver-x86@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] Documentation: ABI: testing: Add emdoor-intel-wmi
- sysfs ABI
-In-Reply-To: <20261123-emdoor-intel-wmi-rfc-v2-1-3f4a03095f2e@gmail.com>
-Message-ID: <13db1531-58e4-1db9-4f1e-5911aec82f8c@linux.intel.com>
-References: <20261123-emdoor-intel-wmi-rfc-v2-0-3f4a03095f2e@gmail.com> <20261123-emdoor-intel-wmi-rfc-v2-1-3f4a03095f2e@gmail.com>
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=UGAgwoHW
+Received: from eig-obgw-5002b.ext.cloudfilter.net ([10.0.29.226])
+	by cmsmtp with ESMTPS
+	id WKVzx6J8BV16IWOaIxEx9t; Thu, 26 Nov 2026 01:47:38 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id WOaHxkbA5b2qJWOaIxw7aH; Thu, 26 Nov 2026 01:47:38 +0000
+X-Authority-Analysis: v=2.4 cv=A7tsP7WG c=1 sm=1 tr=0 ts=6b078fba
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=1XWaLZrsAAAA:8
+ a=qb-T7JNNOAWFUjPqn7MA:9 a=CjuIK1q_8ugA:10 a=KPbNTLLc3YvdawN95zVk:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=FMs61J1VzIsH89hHJ/Ixi+nxqnxJ6HYCzSaQ5lTSfMo=; b=UGAgwoHWliEYxDH/xSqgfzGik9
+	eHRUY2coW1qeu8nRUXcq5dnZspnYxqTFoPSs7THmxA8ATHHTCBD7wT4w0j2Iwc0i/g7WXO2HOB8Yj
+	VRltLeVNy12yItVRumLimoUYuJ+VnXN/0TUEq2doAfVXdHe47Z4Jx5khJHJz55u1SPvfY/LPTXuF/
+	f+vDAfZPQoj7VPcFAtYO2LsTYAfGGVHAwH9rznAwFmuSbAa3YaaOisQd8qLCyyFKfTOXUE+nk9kTB
+	gB3Og4JAboClCj0EVXVHDobdihHjOr0Z5RhDV5jMgQLJ9s6xeG7Ms3c1W0HWAyLpSQ8gC2vSairxU
+	H5gYP4PQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:44110 helo=server.roeck-us.net)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xWOaH-00000003a5m-2HKc;
+	Thu, 26 Nov 2026 07:17:37 +0530
+Date: Wed, 25 Nov 2026 17:47:36 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Arthur Korn <akorn@google.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (pmbus) Fall back to CLEAR_FAULTS when
+ STATUS_CML is read-only
+Message-ID: <19295c12-1f09-4686-96c9-d1c076e538c7@roeck-us.net>
+References: <20261125181336.3298961-1-akorn@google.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -80,57 +81,64 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261125181336.3298961-1-akorn@google.com>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xWOaH-00000003a5m-2HKc
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:44110
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 2
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfBjrKTIeqnIsVv33EC7eVaEFjpIvgubE/+S2mC4UYUx5pZm3d0kbzztIzrDgJLJMZuNYTPa6ajXFyvPZkBE1Re1UVUVQvOZSeRdsvyXk5epsGQ4MCA5+
+ g2HL6j6yPX9TBurFVQcogMQCUlgANccY7NftjGKWQF6y6gdK+bIxn/QIS5RPNgA1LirfwRbBqVk1mwS70S/kUfnKXjawaEPaiiT1o3cCw17AA94bhNBft9lz
 
-On Mon, 23 Nov 2026, Ziqiang Xia via B4 Relay wrote:
-
-> From: Ziqiang Xia <xiazq123666@gmail.com>
+On Wed, Nov 25, 2026 at 06:13:35PM +0000, Arthur Korn wrote:
+> Some PMBus 1.2 devices (such as ADI ADM1273 and ADM1281) report
+> PMBUS_REVISION = 0x22 and implement STATUS_CML (0x7e) as read-only:
+> they ACK SMBus byte writes to PMBUS_STATUS_CML without clearing latched
+> fault bits, and only clear STATUS_CML via CLEAR_FAULTS (0x03).
 > 
-> Document the read-only touchpad_enabled sysfs attribute exposed by
-> the Emdoor Intel EWMI platform driver.
+> During pmbus_init_common(), probing an unsupported register such as
+> PMBUS_WRITE_PROTECT (0x10) latches PB_CML_FAULT_INVALID_COMMAND in
+> STATUS_CML. When pmbus_clear_cml_fault() writes to PMBUS_STATUS_CML and
+> sees ret == 0, PB_CML_FAULT_INVALID_COMMAND remains latched, causing
+> subsequent pmbus_check_status_cml() calls during attribute discovery to
+> fail with -EIO.
 > 
-> Signed-off-by: Ziqiang Xia <xiazq123666@gmail.com>
-> ---
->  Documentation/ABI/testing/sysfs-bus-wmi-devices-emdoor-ewmi | 7 +++++++
->  MAINTAINERS                                                 | 6 ++++++
->  2 files changed, 13 insertions(+)
+> Verify on non-write-protected devices that PB_CML_FAULT_INVALID_COMMAND
+> and PB_CML_FAULT_INVALID_DATA actually cleared when a CML fault is
+> expected or cleared unconditionally. If the write succeeds and either
+> bit remains set on readback, disable STATUS_CML write-1-to-clear for the
+> device and fall back to pmbus_clear_fault_page(). Do not clear
+> has_status_cml when _pmbus_write_byte_data() returns an error, so
+> per-page write failures (such as -EOPNOTSUPP on read-only virtual pages
+> like max16601 page 1) fall back for that page without disabling
+> STATUS_CML write-1-to-clear on other pages. Skipping the readback on
+> supported register probes (rv >= 0) avoids extra SMBus traffic in the
+> common path.
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-wmi-devices-emdoor-ewmi b/Documentation/ABI/testing/sysfs-bus-wmi-devices-emdoor-ewmi
-> new file mode 100644
-> index 000000000..6cf85db62
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-bus-wmi-devices-emdoor-ewmi
-> @@ -0,0 +1,7 @@
-> +What:		/sys/bus/wmi/devices/0B30FD67-1B62-4FCA-B10B-50DC7ADE6A39-*/touchpad_enabled
-> +Date:		November 2026
-> +KernelVersion:	7.4
-
-This ship has sailed already.
-
-> +Contact:	platform-driver-x86@vger.kernel.org
-> +Description:
-> +		(RO) Firmware touchpad enable state ("0" or "1") queried via
-> +		WMCD GTPS (0x03/0x07).
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 981eb3fdb..70c976ffe 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -9848,6 +9848,12 @@ T:	git git://linuxtv.org/media.git
->  F:	Documentation/admin-guide/media/em28xx*
->  F:	drivers/media/usb/em28xx/
->  
-> +EMDOOR INTEL EWMI DRIVER
-> +M:	Ziqiang Xia <xiazq123666@gmail.com>
-> +L:	platform-driver-x86@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/ABI/testing/sysfs-bus-wmi-devices-emdoor-ewmi
-> +
->  EMMC CMDQ HOST CONTROLLER INTERFACE (CQHCI) DRIVER
->  M:	Adrian Hunter <adrian.hunter@intel.com>
->  M:	Asutosh Das <quic_asutoshd@quicinc.com>
+> Tested on BMC hardware across ADI ADM1273-1A (adm1275), Maxim
+> MAX16600B.04 (max16601, 3 virtual pages across VCORE, sensor IIN/PIN,
+> and VSA), Renesas RAA228234 (isl68137), Infineon XDPE1A2G5B (tda38740),
+> ADI ADM1266, and factory write-protected converters.
 > 
-> 
+> Fixes: d9d30e1cb9ca ("hwmon: (pmbus) Clear only CML command and data faults during probe")
+> Signed-off-by: Arthur Korn <akorn@google.com>
 
--- 
- i.
+Applied.
 
+Thanks,
+Guenter
