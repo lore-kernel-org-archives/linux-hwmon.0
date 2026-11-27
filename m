@@ -1,67 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=46.105.41.146
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795769363;
-	b=u+EN2zVXq7H18LQDD9+RAGOrBJa0tqSZazWG8wjsAxy2MKVODcMXL7M7pbsr+PscDDSR
-	 kooUf/yAzngxBDeC6hhkpTyjaaZVpDF2qfBHGXiJNpo3QYtuLBvdIqaOdb/l+S8KG+DBw
-	 bFsz0z1p84BlzVJ+1d0wpzoEdFbuxpAiDWvY6YnqQsucUpFBWCvyq7/Kx/t1WqYmfWYe8
-	 Jat4piVSxGznYXXPKxG4o/jKEDsd6yHYeso6pwR3/avumeUVQNbLch3tUB0P4cVjOWgF/
-	 rts/cdiG6QJDXldPu8OPuGHVVBYUCXfdNMtIAh5W6ObscPA6yEArb5emrYGi7hgqIpA==
+	t=1795769384;
+	b=e58fg/4X6keDaVIAD/vdFZdG2NmVEXTNSGIfuf11rYtTDFNasDARGi3y2PbEJg1O5rdD
+	 OZk/gkDiH0y4n+aMve8l0UhZlsw2unkuOpiECqOTEshohOArGZF1u+F7CTjCVpd6zu7B+
+	 hbkMMBnIc4KHdMz8P7jH1Rh+r2NW4PszWalbqmmtphEuzzK2E8FX0Zk2GSpIZWAjlFtGx
+	 0ee4xoORnsv/dNO1JoOtsI/uZG0yV2M94NKCssyH+t9bi4fSyI+fbXa6zblCq49Nrz5b3
+	 goQVcN04MYwmpHDD2s/bGpduDvvsB+jZe26Dy8anezlfYoV13Ieyvk+YAGQAhH9Mbew==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795769363;
-	h=DMARC-Filter:Received:Received:Received:X-OVh-ClientIp:From:To:Cc:
-	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:x-ovh-tracer-id:X-VR-SPAMSTATE:
-	 X-VR-SPAMSCORE:X-VR-SPAMCAUSE:DKIM-Signature;
-	bh=2iTOgauixE1SrVQjE6H48KVFcuPrvMgZ33dnmWCt6iU=;
-	b=SHGeDMZgRtNbwBduytH7+BdddbPbHZk6fQ8gzrmuGk5B8si5pZq4eDVYBc1GF2ISLNzW
-	 Hcsw02aVOL5A4BULmJNz6skalUQC3AMtsrlRLw/lRkFCHsbfQhj5ytO8mf4p9NogQpgja
-	 tUe14zsluhuLJrZ3nHYRCqxPtj+Vy98cUKUxKmVOp5P42pgDGQb9eKRyLSvY7wGY3wMjL
-	 NQy99O3aCqQOZKcwf5gXqAktEurw7RmNXKdIp9EXHIApE5fyHYtV8nKPyRLXjaS4M3ULJ
-	 l8GphXlHEH4sqtPagznAdUyOi4Ve4WR7OklfX/cC1m0ykzYkJ7ibHXEv7pHWcEEsnjA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795769384;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=l5H/fPkMrIgjbqbAa16bsfhUN41gPrGnMmr6FVXi4LA=;
+	b=QAKtudMKD3+niVT2tMLkTfkZtR5LbsfXEGFfH88Bmvg7/sb+yzk5AC0AsAWo75+l1mmy
+	 p4h7ClLrATU6GxjW5NeGSvr4lAP4iNku2Y56nlaIDj82RlTZQ+53F1jqs7CBMktTndOUI
+	 csgbyy0j4+R3qzE1neXXlJZGyLwCBjiUiqWlHxhCi0SJxe7oHexGT99z1M4eQyiJ6BXkR
+	 UWdp7rULEKRAJY9FYQoo0OuPwii64YD5u+HjtQGPyJ1vIC824H7V/yrkX/4t1m5hZS9Sv
+	 E2Ri80eOKck1iRBsFVEJUVILTFn9EG3xo4ehHCO4zVpUIPNGtqv2qW7fvRjXpWqi6YA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=3mdeb.com;
-	spf=pass smtp.mailfrom=3mdeb.com;
-	dkim=pass header.d=3mdeb.com header.i=@3mdeb.com header.a=rsa-sha256 header.s=ovhmo3617313-selector1 header.b="EW2/4cEn";
-	arc=none smtp.remote-ip=46.105.41.146
-Received: from 1.mo575.mail-out.ovh.net (1.mo575.mail-out.ovh.net [46.105.41.146])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=baylibre.com;
+	spf=pass smtp.mailfrom=baylibre.com;
+	dkim=pass header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256 header.s=google header.b=lMtduL23;
+	arc=none smtp.remote-ip=209.85.128.54
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A0560A2601
-	for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 08:49:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 60A0560A2601
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3mdeb.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D555606A6A2
+	for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 08:49:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D555606A6A2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=3mdeb.com header.i=@3mdeb.com header.a=rsa-sha256 header.s=ovhmo3617313-selector1 header.b=EW2/4cEn
-Received: from director11.ghost.mail-out.ovh.net (unknown [10.110.58.102])
-	by mo575.mail-out.ovh.net (Postfix) with ESMTP id 4jbRt25SXsz5xQc
-	for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 08:49:14 +0000 (UTC)
-Received: from ghost-submission-7ccd8bbbb6-bntqx (unknown [10.110.113.124])
-	by director11.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 54A50C2A93;
-	Fri, 27 Nov 2026 08:49:14 +0000 (UTC)
-Received: from 3mdeb.com ([37.59.142.110])
-	by ghost-submission-7ccd8bbbb6-bntqx with ESMTPSA
-	id 3zMOCghECWtv1hQAXudyjw:T4
-	(envelope-from <filip.golas@3mdeb.com>); Fri, 27 Nov 2026 08:49:14 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-110S0043fa16766-6412-4683-93c0-cbf2752877c3,
-                    2D78F170DE5B25267C595F1CD7CE4558A7ADEF44) smtp.auth=filip.golas@3mdeb.com
-X-OVh-ClientIp:213.192.77.249
-From: =?UTF-8?q?Filip=20Go=C5=82a=C5=9B?= <filip.golas@3mdeb.com>
-To: =?UTF-8?q?Micha=C5=82=20Kope=C4=87?= <michal.kopec@3mdeb.com>,
-	Hans de Goede <hansg@kernel.org>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: platform-driver-x86@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>,
-	=?UTF-8?q?Filip=20Go=C5=82a=C5=9B?= <filip.golas@3mdeb.com>
-Subject: [PATCH v4 3/3] platform/x86: dasharo-acpi: Add EC fan curve support
-Date: Fri, 27 Nov 2026 09:49:10 +0100
-Message-ID: <20261127084910.3355833-4-filip.golas@3mdeb.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261127084910.3355833-1-filip.golas@3mdeb.com>
-References: <20261127084910.3355833-1-filip.golas@3mdeb.com>
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256 header.s=google header.b=lMtduL23
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a5b2be99a8so64205705e9.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 00:49:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1795769383; x=1796374183; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=l5H/fPkMrIgjbqbAa16bsfhUN41gPrGnMmr6FVXi4LA=;
+        b=lMtduL23oty35ecI++RAvCDDqiwnc4Ak+6dpQwXYAlrNx/WsKXzEzr5BaFbdfWGv0o
+         MIdxQNlD99ZB3a8pdZlPzsq/4KUpCXSeNscu1C8qklmN3X0MyZyu4smG76KD/bG+zgKN
+         a5t5Os6EnPqekAKT3BU784FH51GJONaBlPWvdb5hG5vVq62a5HRLgpmnLGMi6YcnoS7y
+         qvGHwnA/+1VBekixkj+vGN89hIxMcptLrPhwi9kCSzPZ5+eJkd3ljI+vBaZ2ii5tpxFc
+         LEwVTIzesRkK1aagdCm3Sz9dhOlgaNyOYbdqFMjJ/Rv5/L3luL0uNMhbxT/KTNBR5HLm
+         K2pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795769383; x=1796374183;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=l5H/fPkMrIgjbqbAa16bsfhUN41gPrGnMmr6FVXi4LA=;
+        b=b2fI6p9AeJjbUfzriMrhlU5D2on7habcYxwKnSWQ7xyA9fPl7mhoYjvfLQ2KtBN+sv
+         kpHQaBn14w8lCpQJ0weVJShpKMeH2L9VqQBjgTnG0US7khgMQ9ubh8+tluPAbrRaHhy6
+         RcOQz7OP1y10SR+K6jRb3/kbydNnuG+/CY3s2dzrQYpZfOb1I1dUIDBwseixSXVLbGRY
+         VzUoDVC14nemNk2FKcR4cGu32cDc0iL1KeHb/Vnp/5CUsIu7xYGKww5CVqXxJCgJvcGr
+         tbhNyY1e3RxPQvuTVb9LPltxX39by4+mr3sdrSYqy9SZm4KJvkFGifyAgggkkPKc4Fh9
+         Uz1g==
+X-Forwarded-Encrypted: i=1; AL+hErHRcmyJl/RcbkLX6E1eJV7+DALkrq5VZHVUCCpl01XyeH09DSYALySFT2SFWjYe5+5dyAHHnif/1mkHHA==@vger.kernel.org
+X-Gm-Message-State: APuU4Z8Jkuaeya1c4uTJCnyfwqkRm1ZKChtuV6OrcaajQEeKONdJCIUY
+	J86R1dUufest3z+E42f1iEfB5SgaCs9YPTG/Ei/dxdL+9c6A56Q5jcub0H6J8s45ah4=
+X-Gm-Gg: AZFdTZc13fWEnbrCPPIw46cI5qa08M52B7qgdJvPre/VJ+tjGKQ5gHH821AZB/qRmUX
+	DFJujypBjJmz3ewnyRSwUIgHGgZ9o4WlFzdHFOuzvoXm4/ZJBPAZlSmcvFYWPHvS3thVM9LZ1jm
+	4JFRNPODgdsREtlHc7DbTZKvADBeSrWZEv9owFzjuKBkWcpOYptC1WDKj5r7MdBEjiM3WMKkWO9
+	dszKbGG52syLvmr2I0Qie67TqENjYLWuHIwq+W8Z7JXk/83AckWJA5c1LKhyky7TcZ47tHOT9bG
+	XtqAVbRth/AqfbIpOGt4RDLGyNRYOIMXCw2+OmX1WYzdCwBnrmyVtsWlBu0a7vGLzXYggCZiDoj
+	qvOh+PLJ+lPdcYVwiNEHvg1D+4O2GrACYTeBRjLBDURr9d3w8Z4d8dijebM9hbJFnt984jHN7Rj
+	6dZ/IAwX4xtMdsiAAmPtSgkHLCpK6CRrvDqbGYYgHd9hIRKr07jHT74iNknHsrzVvSr00f/3G/G
+	YFYjr1cpdu7hgnl3+gFwsG2Iwce8K2fC2AekEwg+RUPLcFE1zlzeENHirNk1tdnzXgc2vd+MIWz
+	0rc44/g/1YqsGKqM/WQstx9mo+5YnzFIk8QJf+TDeq5WFA1tOVHYNgWHKgNEORUf9euuRona10M
+	AuA/PZ4LyawLW1fBx
+X-Received: by 2002:a05:600d:18:b0:4bb:abe2:bbce with SMTP id 5b1f17b1804b1-4bbabe2bcc5mr70018825e9.29.1795769382993;
+        Fri, 27 Nov 2026 00:49:42 -0800 (PST)
+Received: from localhost (p200300f65f19a90496f529fbcf0b312d.dip0.t-ipconnect.de. [2003:f6:5f19:a904:96f5:29fb:cf0b:312d])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4bb884b7515sm923694825e9.13.2026.11.27.00.49.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Nov 2026 00:49:42 -0800 (PST)
+Date: Fri, 27 Nov 2026 09:49:40 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Shiv Prakash Gupta <shivprakash.gupta@nxp.com>
+Cc: linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org, 
+	alexandre.belloni@bootlin.com, krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org, 
+	linux@roeck-us.net, wim@linux-watchdog.org, vikash.bansal@nxp.com, 
+	priyanka.jain@nxp.com, lakshay.piplani@nxp.com
+Subject: Re: [PATCH v5 2/4] rtc: pcf8525: Add NXP PCF8525 RTC driver
+Message-ID: <awlDvq6KT4HxGNDA@monoceros>
+References: <20261126071124.2383368-1-shivprakash.gupta@nxp.com>
+ <20261126071124.2383368-3-shivprakash.gupta@nxp.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -71,330 +101,46 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-x-ovh-tracer-id: 4902731147050545135
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: dmFkZTFsEQAQBFd+fSrKPc87W4qyxtDOX4Ia7v5mH48z8xifNPMuEGM+Xvja5iSRksk35MoI1WxBXYrHghfjLWE4V53sUu2yeeiVOfPQ19gxPIRBqwfc/1pZFW1Yx6Y7mjOcJDJOytOIcsZHHQrB/EzF/dEp6CjhpNy2hGpFQPy9WcNlfWG0Woim4PtT7jNEglYSBz4gFXnhNTVEVcXn3fLl7SiqYl+pPGX0wof28JNoltiFXW8TxY+ZCnkyOVx2EYwXBCPToH23W86P5o37MdnG0Y/lH3LEIRCXNnKTviw1mW0phWslBkoyTtwUCFfLF5gCfpuqaEzZ/nUhlvLuonsDWWr2maEsh/LjdYgwfOB/7QNHT2htva72WoALN01YsTDE7xUceGjvPK9aUqGyQvxsJHOqYQYw/MKLa6b1/Tt3brn77GJIF3qqqT5PnUxxeiSIF5le/EqSQfS3kiZJuVFRYMC8LycyskNftSridnz4TFLuYjj8nCRPBfvP0vkquUV/SkrLbNtzkiwUssZRQDvNrX6TfvXq1Ko+DOkjDKXo+V9KM93n/1gwGlhk/q0e5AiGBpE2XohddhQMd8Th5kq8Uhe+KuM/rRtduHozmBtlXjmC7LAJW42oyfdyhdiLlMOp1NcC8240PiDBlx+SLGbkyLknXcmiLflCyQq+PMo/89pnNw
-DKIM-Signature: a=rsa-sha256; bh=2iTOgauixE1SrVQjE6H48KVFcuPrvMgZ33dnmWCt6iU=;
- c=relaxed/relaxed; d=3mdeb.com; h=From; s=ovhmo3617313-selector1;
- t=1795769354; v=1;
- b=EW2/4cEnJGRLB5wTY7ajYREy87jRJGdy3Gk8NmmPCOdO0V3RuLimyWv2lEaXXBEY7lGhrCkj
- yl7me5uAN9yLWDtQ04DR6FFAk3eTG6o2i5HAv977buR6OhFFB3ReZ7LgY9tpch6Zf6Zm5kZ6767
- 32e/S298ciqidjo+sT2S279i7yOUeoqjCqRGzT/rr6R8VPfYe8kGg3PeTTqlgLjtdpS4gIDV/IY
- 7ebSiDQVizSgU30LVZ9GWQyKWM6KQkFzVqxGqN3DmpyBnN9trYo0Fp/fsFK5fTMogc6w2b0II9g
- bDa/m+w46urr14HBY8LNj3Wh87sRqqWGgwp8ErAe4Lr7Q==
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="gv5nh37x244s5vos"
+Content-Disposition: inline
+In-Reply-To: <20261126071124.2383368-3-shivprakash.gupta@nxp.com>
 
-Expose the four-point fan curve run by the EC as pwmN_auto_pointM_temp
-and pwmN_auto_pointM_pwm, so that userspace can read and change it.
-The EC validates the curve on every write and keeps running the
-previous one if the new curve is invalid.
 
-On shutdown, ask the firmware to store the current curve, so that it is
-restored on the next boot.
+--gv5nh37x244s5vos
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Subject: Re: [PATCH v5 2/4] rtc: pcf8525: Add NXP PCF8525 RTC driver
+MIME-Version: 1.0
 
-Fan curve control is only exposed for fans on which the firmware reports
-support for it.
+Hello,
 
-Signed-off-by: Filip Gołaś <filip.golas@3mdeb.com>
----
-Changes in v2:
-- Make the curve point attributes static, so DASHARO_POINT_ATTRS()
-  does not define 16 global symbols.
-- Reject negative fan curve temperatures before converting them to
-  degrees, which can round to positive.
-- Use DIV_ROUND_CLOSEST_ULL() for showing curve PWM instead of
-  DIV_ROUND_CLOSEST(), so it links on 32-bit x86.
-- Setting a curve point stages it, applying it is a separate ACPI call.
-  Add a mutex to prevent staging more changes before the first set is
-  applied.
-- Use dasharo_fan_channel to find correct channel for DASHARO_FEATURE_FAN_POINTS.
-- SFCS now takes no arguments and saves all fans. The Dasharo dev
-  build previously was accepting and ignoring the argument.
+On Thu, Nov 26, 2026 at 12:41:22PM +0530, Shiv Prakash Gupta wrote:
+> +#include <linux/i2c.h>
+> [...]
+> +#include <linux/mod_devicetable.h>
 
-Changes in v3:
-- Fix inconsistent use of parentheses in DASHARO_POINT_ATTRS macro
-- Create curve point attributes for all 24 PWM channels
-- Use DIV_ROUND_CLOSEST for temperature unit conversion
-- Use hwmon_lock instead of a private mutex
+Please rely on <linux/i2c.h> to provide i2c_device_id and of_device_id
+and drop the include for <linux/mod_devicetable.h>. The latter pulls in
+several headers transitively that are not needed and that thus create
+unneeded build dependencies for your driver.
 
-Changes in v4:
-- Remove variable that became unused in v3 in dasharo_probe
-- Fix incomplete creation of point attributes for PWM channels 3-24
-- Fix possible overflows in curve_point_temp_store after using DIV_ROUND_CLOSEST
----
- drivers/platform/x86/dasharo-acpi.c | 227 +++++++++++++++++++++++++++-
- 1 file changed, 226 insertions(+), 1 deletion(-)
+Best regards
+Uwe
 
-diff --git a/drivers/platform/x86/dasharo-acpi.c b/drivers/platform/x86/dasharo-acpi.c
-index 85f88b11fcf9..ebbd9b7c8979 100644
---- a/drivers/platform/x86/dasharo-acpi.c
-+++ b/drivers/platform/x86/dasharo-acpi.c
-@@ -6,6 +6,8 @@
- #include <linux/acpi.h>
- #include <linux/array_size.h>
- #include <linux/hwmon.h>
-+#include <linux/hwmon-sysfs.h>
-+#include <linux/kstrtox.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/types.h>
-@@ -407,6 +409,217 @@ static const struct hwmon_chip_info dasharo_hwmon_chip_info = {
- 	.info = dasharo_hwmon_info,
- };
- 
-+static int dasharo_curve_point_call(struct dasharo_data *data, int pwm_channel, const char *method,
-+				    const u64 *args, unsigned int n_args, u64 *ret)
-+{
-+	int channel = dasharo_fan_channel(data, DASHARO_FEATURE_FAN_POINTS, pwm_channel);
-+
-+	if (channel < 0)
-+		return channel;
-+
-+	return dasharo_call(data, method, DASHARO_FEATURE_FAN_POINTS, channel, args, n_args, ret);
-+}
-+
-+static int dasharo_curve_point_store(struct dasharo_data *data, int channel, const char *method,
-+				     unsigned int point, u64 value)
-+{
-+	u64 args[2] = { point, value };
-+	u64 ret;
-+	int err;
-+
-+	// set of temp/duty
-+	err = dasharo_curve_point_call(data, channel, method, args, 2, &ret);
-+	if (err)
-+		return err;
-+	if (ret)
-+		return -EPERM;
-+
-+	// commit
-+	err = dasharo_curve_point_call(data, channel, "CFCV", NULL, 0, &ret);
-+	if (err)
-+		return err;
-+
-+	// The EC rejected the curve
-+	return ret ? -EINVAL : 0;
-+}
-+
-+static ssize_t curve_point_temp_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-+	struct dasharo_data *data = dev_get_drvdata(dev);
-+	u64 point = sattr->index;
-+	u64 val;
-+	int err;
-+
-+	guard(hwmon_lock)(dev);
-+
-+	err = dasharo_curve_point_call(data, sattr->nr, "GFPT", &point, 1, &val);
-+	if (err)
-+		return err;
-+
-+	return sysfs_emit(buf, "%llu\n", val * MILLIDEGREE_PER_DEGREE);
-+}
-+
-+static ssize_t curve_point_temp_store(struct device *dev, struct device_attribute *attr,
-+				      const char *buf, size_t count)
-+{
-+	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-+	struct dasharo_data *data = dev_get_drvdata(dev);
-+	long val;
-+	int err;
-+
-+	err = kstrtol(buf, 10, &val);
-+	if (err)
-+		return err;
-+
-+	if (val < 0 || val > U8_MAX * MILLIDEGREE_PER_DEGREE)
-+		return -EINVAL;
-+
-+	val = DIV_ROUND_CLOSEST(val, MILLIDEGREE_PER_DEGREE);
-+
-+	guard(hwmon_lock)(dev);
-+
-+	err = dasharo_curve_point_store(data, sattr->nr, "SFPT", sattr->index, val);
-+	return err ?: count;
-+}
-+
-+static ssize_t curve_point_pwm_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-+	struct dasharo_data *data = dev_get_drvdata(dev);
-+	u64 point = sattr->index;
-+	u64 val;
-+	int err;
-+
-+	guard(hwmon_lock)(dev);
-+
-+	err = dasharo_curve_point_call(data, sattr->nr, "GFPD", &point, 1, &val);
-+	if (err)
-+		return err;
-+
-+	return sysfs_emit(buf, "%llu\n", DIV_ROUND_CLOSEST_ULL(val * 255, 100));
-+}
-+
-+static ssize_t curve_point_pwm_store(struct device *dev, struct device_attribute *attr,
-+				     const char *buf, size_t count)
-+{
-+	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-+	struct dasharo_data *data = dev_get_drvdata(dev);
-+	long val;
-+	int err;
-+
-+	err = kstrtol(buf, 10, &val);
-+	if (err)
-+		return err;
-+
-+	if (val < 0 || val > 255)
-+		return -EINVAL;
-+
-+	guard(hwmon_lock)(dev);
-+
-+	err = dasharo_curve_point_store(data, sattr->nr, "SFPD", sattr->index,
-+					DIV_ROUND_CLOSEST(val * 100, 255));
-+	return err ?: count;
-+}
-+
-+#define DASHARO_POINT_ATTR(ch, pt) \
-+	static SENSOR_DEVICE_ATTR_2_RW(pwm##ch##_auto_point##pt##_temp, curve_point_temp, \
-+				       (ch) - 1, (pt) - 1); \
-+	static SENSOR_DEVICE_ATTR_2_RW(pwm##ch##_auto_point##pt##_pwm, curve_point_pwm, \
-+				       (ch) - 1, (pt) - 1)
-+
-+#define DASHARO_POINT_ATTR_PTRS(ch, pt) \
-+	&sensor_dev_attr_pwm##ch##_auto_point##pt##_temp.dev_attr.attr, \
-+	&sensor_dev_attr_pwm##ch##_auto_point##pt##_pwm.dev_attr.attr
-+
-+#define DASHARO_POINT_ATTRS(ch) \
-+	DASHARO_POINT_ATTR(ch, 1); \
-+	DASHARO_POINT_ATTR(ch, 2); \
-+	DASHARO_POINT_ATTR(ch, 3); \
-+	DASHARO_POINT_ATTR(ch, 4)
-+
-+#define DASHARO_CHANNEL_PTRS(ch) \
-+	DASHARO_POINT_ATTR_PTRS(ch, 1), \
-+	DASHARO_POINT_ATTR_PTRS(ch, 2), \
-+	DASHARO_POINT_ATTR_PTRS(ch, 3), \
-+	DASHARO_POINT_ATTR_PTRS(ch, 4)
-+
-+DASHARO_POINT_ATTRS(1);
-+DASHARO_POINT_ATTRS(2);
-+DASHARO_POINT_ATTRS(3);
-+DASHARO_POINT_ATTRS(4);
-+DASHARO_POINT_ATTRS(5);
-+DASHARO_POINT_ATTRS(6);
-+DASHARO_POINT_ATTRS(7);
-+DASHARO_POINT_ATTRS(8);
-+DASHARO_POINT_ATTRS(9);
-+DASHARO_POINT_ATTRS(10);
-+DASHARO_POINT_ATTRS(11);
-+DASHARO_POINT_ATTRS(12);
-+DASHARO_POINT_ATTRS(13);
-+DASHARO_POINT_ATTRS(14);
-+DASHARO_POINT_ATTRS(15);
-+DASHARO_POINT_ATTRS(16);
-+DASHARO_POINT_ATTRS(17);
-+DASHARO_POINT_ATTRS(18);
-+DASHARO_POINT_ATTRS(19);
-+DASHARO_POINT_ATTRS(20);
-+DASHARO_POINT_ATTRS(21);
-+DASHARO_POINT_ATTRS(22);
-+DASHARO_POINT_ATTRS(23);
-+DASHARO_POINT_ATTRS(24);
-+
-+static struct attribute *dasharo_point_attrs[] = {
-+	DASHARO_CHANNEL_PTRS(1),
-+	DASHARO_CHANNEL_PTRS(2),
-+	DASHARO_CHANNEL_PTRS(3),
-+	DASHARO_CHANNEL_PTRS(4),
-+	DASHARO_CHANNEL_PTRS(5),
-+	DASHARO_CHANNEL_PTRS(6),
-+	DASHARO_CHANNEL_PTRS(7),
-+	DASHARO_CHANNEL_PTRS(8),
-+	DASHARO_CHANNEL_PTRS(9),
-+	DASHARO_CHANNEL_PTRS(10),
-+	DASHARO_CHANNEL_PTRS(11),
-+	DASHARO_CHANNEL_PTRS(12),
-+	DASHARO_CHANNEL_PTRS(13),
-+	DASHARO_CHANNEL_PTRS(14),
-+	DASHARO_CHANNEL_PTRS(15),
-+	DASHARO_CHANNEL_PTRS(16),
-+	DASHARO_CHANNEL_PTRS(17),
-+	DASHARO_CHANNEL_PTRS(18),
-+	DASHARO_CHANNEL_PTRS(19),
-+	DASHARO_CHANNEL_PTRS(20),
-+	DASHARO_CHANNEL_PTRS(21),
-+	DASHARO_CHANNEL_PTRS(22),
-+	DASHARO_CHANNEL_PTRS(23),
-+	DASHARO_CHANNEL_PTRS(24),
-+	NULL
-+};
-+
-+static umode_t dasharo_curve_point_is_visible(struct kobject *kobj, struct attribute *attr, int n)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct dasharo_data *data = dev_get_drvdata(dev);
-+	struct device_attribute *dattr = container_of(attr, struct device_attribute, attr);
-+	int channel = to_sensor_dev_attr_2(dattr)->nr;
-+
-+	if (dasharo_fan_channel(data, DASHARO_FEATURE_FAN_POINTS, channel) < 0)
-+		return 0;
-+
-+	return attr->mode;
-+}
-+
-+static const struct attribute_group dasharo_point_group = {
-+	.attrs = dasharo_point_attrs,
-+	.is_visible = dasharo_curve_point_is_visible,
-+};
-+
-+static const struct attribute_group *dasharo_groups[] = {
-+	&dasharo_point_group,
-+	NULL
-+};
-+
- static void dasharo_fill_feature_caps(struct dasharo_data *data, enum dasharo_feature feat)
- {
- 	struct dasharo_capability *cap;
-@@ -442,16 +655,27 @@ static int dasharo_probe(struct platform_device *pdev)
- 	if (!data)
- 		return -ENOMEM;
- 	data->pdev = pdev;
-+	platform_set_drvdata(pdev, data);
- 
- 	for (unsigned int i = 0; i < DASHARO_FEATURE_MAX; ++i)
- 		dasharo_fill_feature_caps(data, i);
- 
- 	hwmon = devm_hwmon_device_register_with_info(&pdev->dev, "dasharo_acpi", data,
--						     &dasharo_hwmon_chip_info, NULL);
-+						     &dasharo_hwmon_chip_info, dasharo_groups);
- 
- 	return PTR_ERR_OR_ZERO(hwmon);
- }
- 
-+static void dasharo_shutdown(struct platform_device *pdev)
-+{
-+	struct dasharo_data *data = platform_get_drvdata(pdev);
-+	u64 ret;
-+
-+	/* Let the firmware persist the fan curve the EC runs */
-+	if (data->caps_found[DASHARO_FEATURE_FAN_POINTS])
-+		acpi_evaluate_integer(ACPI_HANDLE(&pdev->dev), "SFCS", NULL, &ret);
-+}
-+
- static const struct acpi_device_id dasharo_device_ids[] = {
- 	{"DSHR0001", 0},
- 	{}
-@@ -464,6 +688,7 @@ static struct platform_driver dasharo_driver = {
- 		.acpi_match_table = dasharo_device_ids,
- 	},
- 	.probe = dasharo_probe,
-+	.shutdown = dasharo_shutdown,
- };
- module_platform_driver(dasharo_driver);
- 
--- 
-2.56.0
+--gv5nh37x244s5vos
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmsJRCEACgkQj4D7WH0S
+/k4y8Af/YPMv6+VfabvAg6sjAP1iYCrA9X9sWU9HEzF33ikGj2zaSOQAbmelYcKU
+MkYOqadm4ftAn3wh1m+RGl1mnfy1GNluJIXTI9zNZYGx1pj3U8dJqh1/XL74jj8A
+xgaOrHFNOPOBUNkjSWBYaj0jo6IcppLUcPbLI6QT0lkZsww+UNLIAAdTGy3bKvJQ
+zQELEUsrss+cgFYfjeZ40PKOh/wFEqPemnatDmeoUoMCItb7iPp3LZX0szasTHR0
+Y0MOy7nJemFgnBUeFliuIZMWsjW0gTCXFOfwAA/AU9iZ6LoYjQ13w1baDZLxOSsA
+hwUFXsoIF6f/koYvawaOx3iNSkWDag==
+=uvjs
+-----END PGP SIGNATURE-----
+
+--gv5nh37x244s5vos--
