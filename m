@@ -1,56 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=178.32.127.22
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795770796;
-	b=hdKfW0jv+MoHoCG6ANcjFxlD18cqUBxpzn/5ku0w0CwHwpyV01ZVK7P3TZY8HIJu0hm3
-	 qhaxuebN0xBMKQ5Qu/kIFp78o+tRGjK5Zq2nQEFElQvLtwQ7DEjvCsez7xBkH3RDEGAar
-	 FHrGOHODyLBK1s9zikl2LsALePon6GCVwYOGYwbdbsw6rItFi/a4RK5kSn9QsR2EyzMCc
-	 HbF8rGbJlliPgYRCqytKUv1XGTt6RqUbhnYSE8A24usz9iI/H2MStPzk7G/To8QN/Msql
-	 c4GPh9x8cbtQRErtq3pTXB1zdqdW2maeV4JclAt1m+hfsKd5Dcc0brsSa0Dwk/0zcbA==
+	t=1795771484;
+	b=nogxjhENzwzd+cAGRzF03nrlJVZhp0/+sGfgOqJVKtjn6Vl8Jwc1wFdkU5E96kh9SLmt
+	 2tG5Ql3DPPYY0Yk0xFB7C1RXwVteP0QZQDgTKghgGyiOBFO9xawoBDD79y6TfJnZLc/6W
+	 ZZP7QMHek/FfvtCWVp+IfW3o1qVygG3qR/jVauPF+zMXFR5HaTZFzro+abMCB9U0Oyatv
+	 OAwcittMtG/Wd57Zb6ur5nHDYn74aG5hLu+WT/cO8wjiRLzii5/4lYR3tVGZjtWupyJxf
+	 iyL4bG+x25WIU67IT8CiP3u95Oq2G8QX55tiUYDeJGNOpRP4AoO8T+i7RkT+xkrekJw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795770796;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=w/qmFIAHVY/W+bAOGjeN/vEpV82tbedGTTjzJLxbryY=;
-	b=YhORQzOG4dNW2RjntRHTqY+p0LiFcDO5vKF/RCJKN90skig2dIitQVqPw/VlZsTsawFp
-	 4TZbxZGPoJO1XIRPOsGH8V9P9i/HH6bGgLqj7nllShmVIH+HA4tDjSHwOoQ46uATNPQ+n
-	 Io10027R0NwEHfpfiYzdIOEgGNNPBqy7tDhIdlfc9PbKgSpue7gHJ2QCm3hzW2l732V81
-	 1yfWzFrXCcrQa3jJwVzfcq+xsmuWeIDIJJ8wLH114d8IRF3fUha0VNTxR8zrBb6+d/321
-	 hBc5AFrzmNKQgl7DSMP4UYkq8fS7sJA+S8zMWbzJpccyfxWmTm6kr9Vf/Tr6HI7P9xQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795771484;
+	h=DMARC-Filter:Received:Received:Received:X-OVh-ClientIp:From:To:Cc:
+	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:x-ovh-tracer-id:X-VR-SPAMSTATE:
+	 X-VR-SPAMSCORE:X-VR-SPAMCAUSE:DKIM-Signature;
+	bh=O/40p9mPUJ9lzAMAARPW6FZcfYSAz2NfyvuBdIj3BtM=;
+	b=DqYCgUFWx7vIY/reNbUhhv3FDrsBhS7kEU7pyxjo0b0Q7MFIdXEF/WFL+hCwFiVbF253
+	 8BcPqTXanR2/BWCeBLllYYiB6u9EPUx3sNl8j4EhE3NUT2XJcS4GIHgKk70JjjjZrGckd
+	 /b2VFP1+zz04EfMP2wbw9eC5sbmjb56eTFuTl6dFNHWc3Vz5rX8mC+d2r2GdrCcYH2Kkl
+	 NbPAVFFhvzxjuPuC51PeBLoHHR5YIto1ShxiooZunaijZxkEI4GLvvXVHCly3N07n66/Z
+	 oXLCz7+YkGQTCoEQtVRgl+upAFXNEw9uwQ1HZihLavEMuL+9H0Tb8glCaqRNnpXwcHw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dNimtcr6;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=3mdeb.com;
+	spf=pass smtp.mailfrom=3mdeb.com;
+	dkim=pass header.d=3mdeb.com header.i=@3mdeb.com header.a=rsa-sha256 header.s=ovhmo3617313-selector1 header.b=esW6lGKo;
+	arc=none smtp.remote-ip=178.32.127.22
+Received: from 1.mo550.mail-out.ovh.net (1.mo550.mail-out.ovh.net [178.32.127.22])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2672A606A31C
-	for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 09:13:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D8B1606A31E
+	for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 09:24:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3D8B1606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3mdeb.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dNimtcr6
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 923D31F000C1;
-	Fri, 27 Nov 2026 09:13:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795770795;
-	bh=w/qmFIAHVY/W+bAOGjeN/vEpV82tbedGTTjzJLxbryY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dNimtcr6SsDU94FI3wKlVssMqvfdszHHBgwP3eaiv7rUTd9oot4LHMgqpYa60wOxy
-	 vOHsy/0XInW4kySVM/EsOH6YvnJQREyJ7dp93U0QDrGzjEDzzxq/axUcgaFMoQUHn0
-	 sYNuLZHDTVOpb4AKEWHMwPFKG4tlWm7/hnHh6fRwgeqBFacQ1N+n7NqG4xZR78IanM
-	 5ZkxPmGBn2ToSepugAiMu4pr09moGsX1A9Jo5nZuI5TbW67xpFcYUgg7VVdf0l2L6G
-	 91wPhBBZIEzuqNB03Sb0NYY63OuPqq2J4iw3sOpmD/Ap0s/B8bEluxzhEAjzmykHe0
-	 KKywEo4ePr0Ww==
-Message-ID: <sashiko-outbox-236952@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (occ) Check sensor_length against the sensor
- struct size
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Maoyi Xie" <maoyixie.tju@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20261127090837.164246-1-maoyixie.tju@gmail.com>
-References: <20261127090837.164246-1-maoyixie.tju@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 27 Nov 2026 09:13:15 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=3mdeb.com header.i=@3mdeb.com header.a=rsa-sha256 header.s=ovhmo3617313-selector1 header.b=esW6lGKo
+Received: from director3.ghost.mail-out.ovh.net (unknown [10.110.37.191])
+	by mo550.mail-out.ovh.net (Postfix) with ESMTP id 4jbSfq63kfz62cK
+	for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 09:24:35 +0000 (UTC)
+Received: from ghost-submission-7ccd8bbbb6-fkvks (unknown [10.108.42.118])
+	by director3.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 8B524C0148;
+	Fri, 27 Nov 2026 09:24:34 +0000 (UTC)
+Received: from 3mdeb.com ([37.59.142.110])
+	by ghost-submission-7ccd8bbbb6-fkvks with ESMTPSA
+	id BUE8FlJMCWvH9xQAMqfShQ
+	(envelope-from <michal.kopec@3mdeb.com>); Fri, 27 Nov 2026 09:24:34 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-110S00442b59f09-659f-4e85-8f3e-1b21a2cb2032,
+                    D697370656FF9958A21AC54DA46BA3848F1D2CE7) smtp.auth=michal.kopec@3mdeb.com
+X-OVh-ClientIp:213.192.77.249
+From: =?UTF-8?q?Micha=C5=82=20Kope=C4=87?= <michal.kopec@3mdeb.com>
+To: =?UTF-8?q?Filip=20Go=C5=82a=C5=9B?= <filip.golas@3mdeb.com>
+Cc: Hans de Goede <hansg@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	platform-driver-x86@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Micha=C5=82=20Kope=C4=87?= <michal.kopec@3mdeb.com>
+Subject: Re: [PATCH v4 0/3] platform/x86: dasharo-acpi: Add fan control
+Date: Fri, 27 Nov 2026 10:23:54 +0100
+Message-ID: <20261127092354.2974097-1-michal.kopec@3mdeb.com>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261127084910.3355833-1-filip.golas@3mdeb.com>
+References: <20261127084910.3355833-1-filip.golas@3mdeb.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -59,33 +70,27 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+x-ovh-tracer-id: 5499739571757031070
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: dmFkZTGs+RnU3C3OsENUliFAc1h3mKf8kyL6qkRqhxTtUD5XtN9qxQtuDxQiujbTuBNV6RQsu4ZRDrLB6HC4FCcc7tsMHu2OIAI1Kmx9Z0AHJqDnUK8++nQQ+dmKGc4HIgqnL772fqjMG1NyRjEoRoNVvq0xRqJkDiJCQclKM14FvX9A5fUNujM3qx+KfK4S4rfLrgJ6dIpYdG8cA3mrkZesRUMxb0ggeiUED499hDYcFU90y9aFchmcD7iv3sZlouLq5tSdQVCccAr4Ocz28O1bPogfKuoGicdRCilSopCDoIAOTqOWQFbIJs2JK2QLbxmsWq5S8tgLkHPdLdbIz7Q668iqXAw33kNXxXu5PSG+T53kBkb9V7g796/ZWIrUAsmbleuNtFobamGfe9Khsn98Fmc7c+qNI158kN/BMCg+b6tLUIdWOX/6j1v2bV0coVj8cLdf2nyIqz2wPoJguw/vYH21WnlI187IaHf2Ipnuzn0EKDwLNMSH1QgsHXu6xVtv8pZLKKzzVphPQFeYvgp7vjUg+4qoMupbYf5gs5fmtBX1y3O6zKPDirwQ28uSZdHQesgP25oxJAZquUw7x/Bc8tp0DRgIBadzZ7xEJsjxaNtqxbGo6lG5Y+VJOjH6fYHTJV0mhP0xkbuKvbA1u+r84CCED0rIYQ9gjYNEc3rmv5TTPQ
+DKIM-Signature: a=rsa-sha256; bh=O/40p9mPUJ9lzAMAARPW6FZcfYSAz2NfyvuBdIj3BtM=;
+ c=relaxed/relaxed; d=3mdeb.com; h=From; s=ovhmo3617313-selector1;
+ t=1795771475; v=1;
+ b=esW6lGKoFzk7ZX1j98FQevJ9M0+jgPnC16FBKdE6gplJzE57KcA8Yk2FMIcLy3kYe3WiJQwB
+ XDaSy+v8XwXasbhSA+LhnIMv+WMOZfbdxej67uAQuDiCHsn+PclsW78FD3TfcQvGUj/kT66ayY+
+ 6ZL9xDl4i/jtWTdeqlqp/1AgoT5XPs/7gcj55vouaab7pGEKDJ9iX4giUEILOFvrGiV8UZUrwa/
+ yQXd80zqGjOph+iCLyoyorAwxlCE/3orHQUDH4JjFo7B0d8hpusFGQ02pA3hSk3Nqzo5u28ZRbJ
+ 5qNd3QbfGakxuJNhrcvi65PcZyYVfi672oqaJbEdSAxWQ==
 
-> occ_parse_poll_response() bounds each sensor block by
-> num_sensors * sensor_length. The show functions index the block with
-> fixed structs, such as the 68-byte struct power_sensor_a0. A smaller
-> sensor_length passes this check. The reads then run up to 17340 bytes
-> past the block.
->=20
-> Ignore a block whose sensor_length is smaller than the entry read by the
-> show functions, like a block of unknown type. A larger sensor_length is
-> still accepted, because the reads stay inside the block.
->=20
-> Found with a CodeQL-based static analysis tool that we are developing.
-> Reproduced in a userspace harness under AddressSanitizer. Not tested
-> on hardware.
->=20
-> Fixes: c10e753d43eb ("hwmon (occ): Add sensor types and versions")
-> Cc: stable@vger.kernel.org
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Closes: https://lore.kernel.org/all/20260617201822.3B46E1F000E9@smtp.kern=
-el.org/
-> Reported-by: Runyu Xiao <runyu.xiao@seu.edu.cn>
-> Link: https://lore.kernel.org/all/20260619023019.1064970-1-runyu.xiao@seu=
-.edu.cn/
-> Signed-off-by: Maoyi Xie <maoyixie.tju@gmail.com>
+On Fri, Nov 27, 2026 at 09:49:07AM +0100, Filip Gołaś wrote:
+> Add the capability to directly control fan PWM and configure the fan
+> curves. The initial version of the driver only supported monitoring
+> the fans.
 
-Sashiko has reviewed this patch and found no issues.
+For the series:
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261127090837.1642=
-46-1-maoyixie.tju@gmail.com?part=3D1
+Reviewed-by: Michał Kopeć <michal.kopec@3mdeb.com>
