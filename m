@@ -1,90 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795757324;
-	b=k4AE8VY6JOKzRmBxDhvKNNaIg6qyUp7uQKr+cVGRk+IArdwM28IigK3mjW/Dky/vvE3Z
-	 oCl3U3laXss968UdJrkiMEuOpu/Gek6scww3B9AGuEMtGQWi8FpW093S1aUzp2XF8awH8
-	 e+u9a2S3yYI+yehZ8R97te4qcbyXJGtszUsIqdYXPjKtYO2p2q9AptMxnYtU9o1ucWuwI
-	 ocPZAMs7DI1gkrK9lXS5LpPeFgQao8bM5bbmJJ2t9KxHOlffRfvEUq82VnP/2aSDIV0XB
-	 oFSppKI2yRGSoE3dakHNCQgCTPcLkEF7KLZnaa59t4xDtbhhiUAeqIhZaRw/OxWspiA==
+	t=1795757325;
+	b=0Kt2+sEVVLiD08sVfPaWilP+YqobQHYwzuJlxTcZ2NE6TGCaDFO0VC+hl2WMHFKO4vx+
+	 b4ArbYnj6I6m7WougmjZDzbCojdaz8mutQm3UVVgpCmTPIqq7BrOtfPz/Qsbkmbzw+vdu
+	 MRDmcbwCp+/1b4DFB32X8q0U+bWWJQCyPYSnGar3+Ah898l98ag+0RcEJetyUsdCaw4pt
+	 379VrrQKaw+WwYo3qCzQLYZe3G1j6xjIHV0oEdj3sybWNr0XZBu+ZQumAFzWsPpbRguQj
+	 yyporf8W+0BpDkh/gie97/+iyLXCp8Ey1ggUWMd7EaEwV62vniPfNWXpfngiX5BTHzw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795757324;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795757325;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=TdUf6KB/FNH3fbgr4TqtEM818JFeVephPzr1hPpbgiI=;
-	b=SpbuyMCU49UQfI6T/W8jpzQlFP9wYhJPH4ePAvedK0ItTBpPT9HwBIXuR+JI0kFpkCDb
-	 HgLQsESSDNN54H0P4HM/qBiZ5HxRbNNYTnI4UXtaHJe3kbrjYwZCJMdZwLAm0xALr7gyv
-	 HpTjtzwFVRX3Txh9Jzej3mR82cnoBZWnGbjZbzhT/WI/hi3BV/SS/pMRCb6awPO1dkiwZ
-	 +DYI7lVE4xj12AhClGZ8Z54vXN5CCxzprHQWFH0CupTE/kHZMxNtp6nWAOvuIZLZkBD0z
-	 4ldpSd4eWtnXc3ByMA586IK6j5Qza7aulxaukYFeS37/ZoXY3cpx9sUcP2zsv6FP7ag==
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=opzL0+bRRsAW8Xh4G3H8xnm+Ixjopiv/vK7BY1qrbqQ=;
+	b=EP0Oiu3n7/ZEjA7HnlCTvN6d8WLSBxCsEmgAp+it7fAUV92Uo/OF4MYI/ww3xNboS2Do
+	 6tJXGFK0WSaEhhV6SeDCbbMxvwgGzr6MEGHPB4wh8Fp7tgJ+NVj2zKVvnBHmD/KrFB3qj
+	 /Fpc39BJdx5e7DctHlrbQ9mtTOI5HF+KZEBBhfq1BHZFRI73IoKpwumVIB1yEn4+kg6iM
+	 sFdc3QwHmclAUr0Asqf2RRcGXU+/TU0ydpfCgST7wn2MXKiF6pCbHXVgXAqHnEtuTx2y2
+	 P6qrW1spuVqSnpbpNd/hpdjuqY0Vpak+OcsMTtlVbGLxDTTloXxZ43tN6Vxd1xfEepg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kerzcc1K;
-	arc=none smtp.remote-ip=209.85.221.45
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HHgO6koW;
+	arc=none smtp.remote-ip=209.85.128.50
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC8F606A31E
-	for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 05:28:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8CC8F606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85081606A332
+	for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 05:28:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85081606A332
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kerzcc1K
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-48dee593f18so7197100f8f.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 21:28:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HHgO6koW
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4bb85e07aadso94731615e9.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 21:28:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795757323; x=1796362123; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=TdUf6KB/FNH3fbgr4TqtEM818JFeVephPzr1hPpbgiI=;
-        b=kerzcc1KWJx3QCpqFrSzrkKSQ1PEd8pOxqmjIKOYubp2vQeMdUDjf57BUSZTPM6X26
-         V/imo/dK2gBiABO5wyqyOuTcWe9vE9PA5N02RWajkORsUw3Xdj7/gdpXEB0b4lR8cuaO
-         fUj8TjPSLxXJeozkdlIB9+rTvRgBAPsKdASyWY/D9zts84/0VotIOMAbOpbpykACIQBg
-         Jje82t03YeLXFJmS629YmtHxN0ylRXBSB6rO8YLUGlNCCzaEDbmyBoDV6SQQB1RkMAZZ
-         q6j0nEDcy2sgQC+MmfsO2Kmh9jp8eUcVGUB0VcVmpJAMnOvqRWX1l2nuYIs4tNFt7Nr7
-         ZmOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795757323; x=1796362123;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1795757324; x=1796362124; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=TdUf6KB/FNH3fbgr4TqtEM818JFeVephPzr1hPpbgiI=;
-        b=N9797ySUF0xHEJYCNnC+gXjBgPqukLnxiXfghhbnyn5l2grmF8lNGJOR7SdrKJY1Xo
-         +fl4iYBM2JVlUa8eWBNnD+aUkVuR6MU/xlGleX44H1C3Cpv0kvCNVEpmOMMFBuZIXz0w
-         8sAiJR/Hgng5LPwUfo5+cxfE9Eo6T6X6THXyr+smcqZNjgApxLYfwq2rOm6wAc8lauqH
-         Jl8WJiy1AxpphJT1vJCubhcVX+t3mVSI9RlbY58bYHbP9zgbbD0H5fV9hhkrX/2FC2WN
-         1lsNLys31YLkbMraZLj5/4z1vhPoC3HNYVR7vaxC8MdmMRrNrfLzwqNe0XEsYSV/LdIh
-         gxHw==
-X-Gm-Message-State: APuU4Z8kgY4k7xspLhi46OCVR+EQscFfElznHrmESHqfbdrUtgWfNFrW
-	D4RlBZewJJSIT9MY4r2boUf2NGIspHg1vPZtLkMQf0OCN2JxPdHA+J/1UH6bY4ij550=
-X-Gm-Gg: AZFdTZef+cDB3HSOAdp1qttTrA8/wJtUkYi64I/zhYGcelDq9B/jAaJdv36k7BwGvNU
-	9vjEs/k4nHO09NWeHXEbLJXEM9Qdc2SdC1F8K/kiTTF0ChFOlocsLty9exDfidBtlocjgmT3eJ4
-	mhi/vJMJC6IoRr4xRYSQk1+BDbB+tsOy9DTXWNwifLlcBvCOAMiTNeA8FmfvRT5F88jb9C1N+Ui
-	oLkJW6Wzlv0Q++shXD5DuJgYQFIb5qj2o5oL29UbkhOfD0B3ykJRaFq46qP4rqjPrt7DE1CxuLk
-	pRpnlSOnt1/cwEubyV/vmcCtPJWLNbDXuwWzQs5cbXpSAjuqo2TpFtr7DD1TYUK85fcsysBQr/5
-	bmZtlLiqZ+6K3VcEd0H4XHdBI0Sz9JN+zCaMXZKWgQuht4Zav8lHieMdmbwZld4lXIgrru1MgBK
-	Yib5K6uwn423dXZcTPJaoLfgfoRXQ2rKNEq1DZYKg7U3kysXY0KeDP9DwrduQOb04kYO+XQcG22
-	BKe41sQilSF82eW90RZTg4BXKXGeSRkO2Ya5ThckyXgllzsRpmPYcIpO/mzk0TxV+htclphfaPS
-	sAD5BE3wDu1AJxrq1Re+rPy4KbLgzF/T9yifIxHfXBVdebtteTfYCimv+/3lwaIqBVKRbh8FibG
-	kNgtG4UGK9/v7Hh2ss2yYTTu5g8Wl9IS//0ewcECQ22g/NBxeowA/ou4lAYhXRwZom1czab+GpD
-	JFu+ev+KCn4E23iQ15l87AslCQ/HquGHuQpT+m6UNYuZ9Qmh+Z3rA4sNYf43w5Ypdy
-X-Received: by 2002:a05:600c:3511:b0:4ba:73f:ef5 with SMTP id 5b1f17b1804b1-4bb88828304mr482429785e9.34.1795757322788;
-        Thu, 26 Nov 2026 21:28:42 -0800 (PST)
+        bh=opzL0+bRRsAW8Xh4G3H8xnm+Ixjopiv/vK7BY1qrbqQ=;
+        b=HHgO6koWLqKZU69ZnIAuEI/7eGgwnrCAMSgfu/6jJ+veq6GJciQpLSgfidJ3MlEJg2
+         hpthz16QBOsI0yUYdEidEymh2v36F34oL5DUPvGkd4DNjmSiWVwiYARl2UnJ9RIrj+VB
+         lEutaUf2f9+UyO7Z1H9Sfw9a07jtvmhOGowPtTdTN59v+osNGvJNc/y2kxQVf4pBVp90
+         ksv7PyCHZdjrFPHk8ayjRQnRdYoYY7CYS5ey8FtsdpvbQdrINLsaigHKzB+CLVnPlkG3
+         audc9SuS2rxsxiGgP0w5lTWRAUcq7A61axhy31O6kgh0FZNe1VJbCxe5CChTnobzesyJ
+         VNPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795757324; x=1796362124;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=opzL0+bRRsAW8Xh4G3H8xnm+Ixjopiv/vK7BY1qrbqQ=;
+        b=nWKj5my+yCVGnsv8gs7HXMaCCCHE2BzHjMVdUk0AFnp68dBtklCIlRM5QDJuiucS3z
+         hABBWtxID2nS5/891QqbSKBYDr003VedAWT9vVcQkhfXO6nRTbU9rWyx+uq98A0vfNvm
+         sgHAl6fd37TNJrx+e/nsnBYRsGpC5wlJO/7RtjnVRdEceYf1tYbXNfo4hokqkgmLolzb
+         kPFS7KbCF6U7m/SjuL1/vrXnBxC4hg8uKy+mIeLdJ4Z031HnWPRmp/r38ipQ2dy0jzSx
+         Dufkqs5KNu8zsMd/ecgYtEAzGsV/mTHd+kUw+hODHxIE6iSR+BmYskZYwLvlC9mTAL1A
+         sqPQ==
+X-Gm-Message-State: APuU4Z95zlEV498Dse868iFs65zWAMD1UwAwUnaX/u6LqskdlyL/M0VR
+	bIQbCOcy3Jhou9j5/8Fvghd6m4MyPIrziaiPhaCuM2pPnXElPWOa+JZtNXMxwzYZiA4=
+X-Gm-Gg: AZFdTZfOx/H7sPlWInev1ZmXYslDXUefZewnFmK3e5KqptLSEVwpNjyQHJvZsnmmgRC
+	uSbxD0Nm6udvY6Ey7VJ6hwSiE+GowB8TAkMfpi1Ems4FFZoYzeYvgakot3nfDOmSfHCH1wXyyCb
+	3d1VWAwwzvo01Iy25ILs3YZ0FqcHdAhun80Bf5e2XI0iMcQG4UWEpvZDVG7Yn+md26wgaQMQGb9
+	NXK/mBoiMKqPcr/J9vCnrsZ580Cmh+yiAcz6r5ANe45z54mYynh2XGhysWWWCpcaayW5YQ3kxYW
+	tdMUIF3VspJZJuJzFSX/ar2WjWXw4qMKBfs2l/StLtUtc6zLuKDQXe8obXZz+3LJeT/q3AZnJ3i
+	/a8npB811l6GSkD7BV0/2xIHaV0s8Ghyc9Y2yILg+kuQlEAGvXFV9nqD/E36xF61lg2FqYnVePH
+	NygvNOnfMO4RA/vJpYTfklny895CZaICTZlBuqOz9cy8rqSWuVeoJTisFRZXkZRuO/nbNTwhQoW
+	hml2mrDIcMbF1xwHnnv7w7T8m9b1rieM3fY0M20QE4eCvTI6dj4MjPJi54DF7rpnSHxY6RAl+r0
+	HAGvJFzI7m+TJKcg9YDPKlvjSGqi26h+XcLP9qP0arfgHqlNI9bEMgL5Rs5p6sx6x+YUtHbUYN5
+	zT5jtHvV4/ww4NCrRYSQ5f3WV7anXY76y/V3rYBuc4b7lnw67wcZh36e+EM/VC2fMJ+wdjy7vCJ
+	IITAEJGkJPc+JFo6AzDB8Z+F2YTBK/PsaVVD6xpOwsWjb/uNKrJTmCg83R6fb/tJ8=
+X-Received: by 2002:a05:600c:4e16:b0:4bb:69b2:d3df with SMTP id 5b1f17b1804b1-4bb88813024mr472596405e9.25.1795757323826;
+        Thu, 26 Nov 2026 21:28:43 -0800 (PST)
 Received: from sergio-82n7.homenet.telecomitalia.it ([95.236.10.162])
         by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb853368d3sm649073745e9.1.2026.11.26.21.28.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2026 21:28:42 -0800 (PST)
+        Thu, 26 Nov 2026 21:28:43 -0800 (PST)
 From: Sergio Melas <sergiomelas@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] hwmon: (yogafan) Support >2 fans and add additional Lenovo laptops
-Date: Fri, 27 Nov 2026 06:28:39 +0100
-Message-ID: <20261127052841.492895-1-sergiomelas@gmail.com>
+Subject: [PATCH 1/2] hwmon: (yogafan) Support more than two fans and add 3rd fan for Legion Pro 7 16AFR10H
+Date: Fri, 27 Nov 2026 06:28:40 +0100
+Message-ID: <20261127052841.492895-2-sergiomelas@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261127052841.492895-1-sergiomelas@gmail.com>
+References: <20261127052841.492895-1-sergiomelas@gmail.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -96,42 +100,74 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi Guenter, all,
+Expand struct yogafan_config.paths from 2 entries to MAX_FANS (8) so
+laptops with more than two fans can be configured, matching struct
+yoga_fan_data.
 
-Apologies for being away over the last few months due to a family
-illness, and thank you for taking care of the Yoga Pro 7 14IAH10
-(83KF) fix in the meantime. I am back actively maintaining yogafan and
-have audited the pending user-reported DSDT dumps.
+Update the Lenovo Legion Pro 7 16AFR10H (83RU) configuration to include
+its third 8-bit tachometer field (\_SB.PCI0.LPC0.EC0.FASF, EC offset 0x04)
+and update Documentation/hwmon/yogafan.rst accordingly.
 
-This 2-patch series is based on hwmon-next (12c53b6b6):
+Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
+---
+ Documentation/hwmon/yogafan.rst |  2 ++
+ drivers/hwmon/yogafan.c         | 12 ++++++++++--
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-- Patch 1/2 expands struct yogafan_config.paths from 2 to MAX_FANS (8)
-  and adds the 3rd tachometer field (FASF) for the Legion Pro 7
-  16AFR10H (83RU).
-- Patch 2/2 adds DMI quirks and documentation for 9 user-reported
-  Lenovo laptops (reusing existing yogafan_config structs wherever
-  identical).
-
-To avoid merge conflicts and duplication, this series intentionally
-does not touch Yoga Pro 7 14IAH10 (83KF, already queued on hwmon fixes)
-or Yoga 9 2-in-1 14ILL10 (83LC, submitted separately on the list).
-
-Build-tested with W=1, checked with checkpatch.pl --strict --codespell
-(0 errors, 0 warnings), and documentation verified with
-SPHINXDIRS=hwmon make htmldocs.
-
-Best regards,
-Sergio
-
-Sergio Melas (2):
-  hwmon: (yogafan) Support more than two fans and add 3rd fan for Legion
-    Pro 7 16AFR10H
-  hwmon: (yogafan) Add support for additional Lenovo laptops
-
- Documentation/hwmon/yogafan.rst |  21 ++++++
- drivers/hwmon/yogafan.c         | 112 +++++++++++++++++++++++++++++++-
- 2 files changed, 131 insertions(+), 2 deletions(-)
-
+diff --git a/Documentation/hwmon/yogafan.rst b/Documentation/hwmon/yogafan.rst
+index 239c7b576..c30cd9c81 100644
+--- a/Documentation/hwmon/yogafan.rst
++++ b/Documentation/hwmon/yogafan.rst
+@@ -107,6 +107,7 @@ immediately to ensure the user knows the fan has stopped.
+  83RU           | Legion Pro 7 16     | 0x03/0x06 | \_SB.PCI0.LPC0.EC0.FANS/FA2S   |  8-bit | 100
+  83KF           | Yoga Pro 7 14IAH    | 0x06      | \_SB.PC00.LPCB.EC0.FANS        |  8-bit | 100
+  83BS           | Yoga 7 16ARP8       | 0x03/0x06 | \_SB.PCI0.LPC0.EC0.FANS/FA2S   |  8-bit | 100
++ 83RU           | Legion Pro 7 16     | 0x04      | \_SB.PCI0.LPC0.EC0.FASF (Fan3) |  8-bit | 100
+  *Legacy*       | Pre-2020 Models     | 0x06      | \_SB.PCI0.LPC.EC.FAN0          |  8-bit | 100
+  -------------------------------------------------------------------------------------------------------
+ 
+@@ -165,3 +166,4 @@ Contributors & DSDT Providers:
+ - **unlockxiaom** (Legion Pro 7 16AFR10H - 83RU, Yoga Pro 7 14IAH10 - 83KF, ThinkCentre M80q)
+ - **Phani Pavan K** (Yoga Pro 7 14IAH10 - 83KF)
+ - **Splarkszter** (Yoga 7 16ARP8 - 83BS)
++- **GabboRocchia** (Legion Pro 7 16AFR10H - 83RU 3rd fan)
+diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
+index 6d1284c09..172fdc198 100644
+--- a/drivers/hwmon/yogafan.c
++++ b/drivers/hwmon/yogafan.c
+@@ -41,7 +41,7 @@
+ struct yogafan_config {
+ 	int multiplier;
+ 	int fan_count;
+-	const char *paths[2];
++	const char *paths[MAX_FANS];
+ };
+ 
+ struct yoga_fan_data {
+@@ -106,6 +106,14 @@ static const struct yogafan_config yoga_pro_83dn_cfg = {
+ 		   "\\_SB.PC00.LPCB.EC0.FA2S" }
+ };
+ 
++static const struct yogafan_config legion_8bit_triple_cfg = {
++	.multiplier = 100,
++	.fan_count = 3,
++	.paths = { "\\_SB.PCI0.LPC0.EC0.FANS",
++		   "\\_SB.PCI0.LPC0.EC0.FA2S",
++		   "\\_SB.PCI0.LPC0.EC0.FASF" }
++};
++
+ static void apply_rllag_filter(struct yoga_fan_data *data, int idx, long raw_rpm)
+ {
+ 	ktime_t now = ktime_get_boottime();
+@@ -259,7 +267,7 @@ static const struct dmi_system_id yogafan_quirks[] = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+ 			DMI_MATCH(DMI_PRODUCT_FAMILY, "Legion Pro 7 16AFR10H"),
+ 		},
+-		.driver_data = (void *)&xiaoxin_8bit_dual_cfg,
++		.driver_data = (void *)&legion_8bit_triple_cfg,
+ 	},
+ 	{
+ 		.ident = "Lenovo Yoga Pro 7 14IAH10",
 -- 
 2.55.0
 
