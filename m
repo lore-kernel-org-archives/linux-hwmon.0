@@ -1,95 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795756462;
-	b=1PfoC5AeUz1QrvBLK36CcoA/xyPlyaK5oyMig4NZc46KAHsy22Jtwx9TftdSRJPSEeXg
-	 oKlKAoJhn2WMiH34QiAYa1kHPNT2vfC9MnFuZtXRNz3BHIu7CNEmUVlgPcPiU7y/p3cnF
-	 X/p/kTQK1r9BWJoahnOkd83v/gZxkhY+4vQ1OqSQ3YUsQ4THaUxn+r/UhFfkJL+eAQZly
-	 NhPrM9/uKvwnpaEVgmkdPS2E7/Dpl6EsCaf6xkwL7B8HFk0MoWYndItqpnhL+XENQJ0rq
-	 NPGDNeGlb4fIBRWgZtIqy4VYagth/MjGB5dL8bZy8WUV/LUGexeLOLE6DjSXD42Lo8Q==
+	t=1795757324;
+	b=k4AE8VY6JOKzRmBxDhvKNNaIg6qyUp7uQKr+cVGRk+IArdwM28IigK3mjW/Dky/vvE3Z
+	 oCl3U3laXss968UdJrkiMEuOpu/Gek6scww3B9AGuEMtGQWi8FpW093S1aUzp2XF8awH8
+	 e+u9a2S3yYI+yehZ8R97te4qcbyXJGtszUsIqdYXPjKtYO2p2q9AptMxnYtU9o1ucWuwI
+	 ocPZAMs7DI1gkrK9lXS5LpPeFgQao8bM5bbmJJ2t9KxHOlffRfvEUq82VnP/2aSDIV0XB
+	 oFSppKI2yRGSoE3dakHNCQgCTPcLkEF7KLZnaa59t4xDtbhhiUAeqIhZaRw/OxWspiA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795756462;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795757324;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=qzV5IimzsJbOvJ6sW4aUy5Eksg3lYZKwTkqSBUgFwOg=;
-	b=nbGCBIOYJZaZwuDudjHVhINCLYXCSt84H+0ktqn6UuZ+mwOBbtW+yNjCUJGahuTZZWHE
-	 EKt0fT9lznlzR6tjgf3MqbIkXzcu88KsyjWbnksj/a2Sw72aoWd16UxyywkcM3DH5VKyV
-	 YImZF/unCcJS5HT2PWvxgOrJjw6j90ku6IYBTs3Es1qBNBV2YFijyxevM26trNcklnaBT
-	 d4Z6zlWu4RklPGcl412ECN+k8h4XvVZNSfikx2afWpZFmif8QC1RcIgkj70HmozX/wXLQ
-	 xmWQAU7DEnxoPhIbO3yJheQrW+Oytu5NQ6Lk0sMrvxojf9RmDfmBXxVy3+IlKrtwgwQ==
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=TdUf6KB/FNH3fbgr4TqtEM818JFeVephPzr1hPpbgiI=;
+	b=SpbuyMCU49UQfI6T/W8jpzQlFP9wYhJPH4ePAvedK0ItTBpPT9HwBIXuR+JI0kFpkCDb
+	 HgLQsESSDNN54H0P4HM/qBiZ5HxRbNNYTnI4UXtaHJe3kbrjYwZCJMdZwLAm0xALr7gyv
+	 HpTjtzwFVRX3Txh9Jzej3mR82cnoBZWnGbjZbzhT/WI/hi3BV/SS/pMRCb6awPO1dkiwZ
+	 +DYI7lVE4xj12AhClGZ8Z54vXN5CCxzprHQWFH0CupTE/kHZMxNtp6nWAOvuIZLZkBD0z
+	 4ldpSd4eWtnXc3ByMA586IK6j5Qza7aulxaukYFeS37/ZoXY3cpx9sUcP2zsv6FP7ag==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QRlvPmNd;
-	arc=none smtp.remote-ip=209.85.128.51
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kerzcc1K;
+	arc=none smtp.remote-ip=209.85.221.45
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B5A606A32F
-	for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 05:14:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 60B5A606A32F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC8F606A31E
+	for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 05:28:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8CC8F606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QRlvPmNd
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4bb61185057so49259255e9.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 21:14:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kerzcc1K
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-48dee593f18so7197100f8f.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 21:28:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795756461; x=1796361261; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=qzV5IimzsJbOvJ6sW4aUy5Eksg3lYZKwTkqSBUgFwOg=;
-        b=QRlvPmNdghIl4U7Rz1BHAHhkt0zKYanW0QPXUPIwUseORSCsqW522IrEAKTIxHKDGU
-         +C8phOjyC6nAl6NebLAZqP/e+VkriS/8B8T2rj7KHrstoNWAXsVwP5Hte8OXU3xdi8eK
-         pXQawKrsTxKVCNs0lKePbgFksNvRThrrV/bFA0RvtgZSmpTX6Ibb31y9R1zuD/OaOQuF
-         UQHkDnoEA0Xlo9AXibFS4vDkcmxPFWlSOSNPizU35NL5aj8EZVYgw7n+VvuFepgiDLBk
-         vHIAjzCC+oJA7A18TROLqQPNVGSocy6lHHpbqV53lpffT+460/EGdYPcdiTFOfE5OZcM
-         pTIw==
+        d=gmail.com; s=20260707; t=1795757323; x=1796362123; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=TdUf6KB/FNH3fbgr4TqtEM818JFeVephPzr1hPpbgiI=;
+        b=kerzcc1KWJx3QCpqFrSzrkKSQ1PEd8pOxqmjIKOYubp2vQeMdUDjf57BUSZTPM6X26
+         V/imo/dK2gBiABO5wyqyOuTcWe9vE9PA5N02RWajkORsUw3Xdj7/gdpXEB0b4lR8cuaO
+         fUj8TjPSLxXJeozkdlIB9+rTvRgBAPsKdASyWY/D9zts84/0VotIOMAbOpbpykACIQBg
+         Jje82t03YeLXFJmS629YmtHxN0ylRXBSB6rO8YLUGlNCCzaEDbmyBoDV6SQQB1RkMAZZ
+         q6j0nEDcy2sgQC+MmfsO2Kmh9jp8eUcVGUB0VcVmpJAMnOvqRWX1l2nuYIs4tNFt7Nr7
+         ZmOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795756461; x=1796361261;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=qzV5IimzsJbOvJ6sW4aUy5Eksg3lYZKwTkqSBUgFwOg=;
-        b=dghOGGiAqqL2XADSWvYycZd9iAB2Lup0iIMjyA5uoKynl6cSfE47zlyld5kGS6spIk
-         3TVlz6rq2m7YHRrJEuui1lgz6+tIg4vUJ23siFMDVCmGUochT9rVMaGmKJ/WCMvIVsfE
-         YMiuAnL8j4LrUIq0OxwU6jeEDdcQm1or1jWYSX5TqioUZIsdSvmSoCCdD1fnTb47ZQop
-         zjRJ5mKcfY+8ndyFeRkwc+JhlRo3XAGlls63ZAPn1p9BqTozV5ZBlOTz7oODoSfi+4px
-         FDaetbaeSFn9eXD9YzuHT9qJlwDdbhB+i8LzkkVixekGfViVKj3zYLEM202gg8LVuJmN
-         IAXw==
-X-Gm-Message-State: APuU4Z86T6qXw2NM4Q1rMtDmJjGkKn0hbj0/FfMRI0CxA042oggJ62VJ
-	fpP+YUOpL9LM7XCq+GeoYH38Ec1mx+DqLIATRTFS4Oggb9PfRQNNdsiO
-X-Gm-Gg: AZFdTZfIZE5NNjLi4zAqbuSrvT51U9FLWzN0W2jqnK43O0IVt/RXfKd9mkJK0oGRMiA
-	jwLQJdMfeE3gJttnPowLwxvg+f/T6p0R9KC8cCFii4DBMwNNLSEy5PYkb4jbZjM6GLp58QNNdeU
-	CRzzmHuCNmj+xTRbD//74xr0CoEcVFgdLR0b/9U7dotrXqhhmZ3do77qQz+SJOeb2SmN/Ol1znN
-	6vQ5wyipl2ZZ5+f738all4f+iX76X2ggnoZwiFriIgHn0vmPDZa2UJ38VZuiVOFx1DOjPha1QuS
-	PYitV1hv/Y9HyU1O51v5U4NPVrP5xOiibME6KnF+r2as7YqmibTCLJaMfnhGjnsqoE3zLVkDYWD
-	Ui7+W/nFFQNophJr22WvOpQK99VumwxY+ZUC707ecmUCHZjEKR2AfafjjIBYeGp7cAl4fZuPmLt
-	ghtuyuqVy2l9O5xm3wi2MjtdCH9KxvPADVNr001n/1lunLvrvwRC5W7iuhP17bea2c61b4tcIQK
-	a8zrrA2Bnm00WXX1eG8F3Ud4tg2XCuIbBK0spUcqqcFYMY3LzHyHxvgEcKeavTCGSSbHL8ff0+i
-	DaRXGmLR+6xQnF7aA//8HdGbuyMO9zfl3zN6kK26twX+96ZK20AoC13ZMHm8+Gz3EoCBZBv2r46
-	DHH0pcatx+TZJgpcdWwNO6T1ANQSKwNwUtFC2zPWOq3Bn5wKBhoyE54mWDd5VqgN5KL32vhFqtC
-	14oDKzPXe4O9bCV/I4F0WXQmR/o3hoAT4+Po/DhF+wARUGdKIWS7n8hco06hdZ0+Tw
-X-Received: by 2002:a05:600c:3511:b0:4ba:73f:ef5 with SMTP id 5b1f17b1804b1-4bb88828304mr481591525e9.34.1795756460683;
-        Thu, 26 Nov 2026 21:14:20 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795757323; x=1796362123;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=TdUf6KB/FNH3fbgr4TqtEM818JFeVephPzr1hPpbgiI=;
+        b=N9797ySUF0xHEJYCNnC+gXjBgPqukLnxiXfghhbnyn5l2grmF8lNGJOR7SdrKJY1Xo
+         +fl4iYBM2JVlUa8eWBNnD+aUkVuR6MU/xlGleX44H1C3Cpv0kvCNVEpmOMMFBuZIXz0w
+         8sAiJR/Hgng5LPwUfo5+cxfE9Eo6T6X6THXyr+smcqZNjgApxLYfwq2rOm6wAc8lauqH
+         Jl8WJiy1AxpphJT1vJCubhcVX+t3mVSI9RlbY58bYHbP9zgbbD0H5fV9hhkrX/2FC2WN
+         1lsNLys31YLkbMraZLj5/4z1vhPoC3HNYVR7vaxC8MdmMRrNrfLzwqNe0XEsYSV/LdIh
+         gxHw==
+X-Gm-Message-State: APuU4Z8kgY4k7xspLhi46OCVR+EQscFfElznHrmESHqfbdrUtgWfNFrW
+	D4RlBZewJJSIT9MY4r2boUf2NGIspHg1vPZtLkMQf0OCN2JxPdHA+J/1UH6bY4ij550=
+X-Gm-Gg: AZFdTZef+cDB3HSOAdp1qttTrA8/wJtUkYi64I/zhYGcelDq9B/jAaJdv36k7BwGvNU
+	9vjEs/k4nHO09NWeHXEbLJXEM9Qdc2SdC1F8K/kiTTF0ChFOlocsLty9exDfidBtlocjgmT3eJ4
+	mhi/vJMJC6IoRr4xRYSQk1+BDbB+tsOy9DTXWNwifLlcBvCOAMiTNeA8FmfvRT5F88jb9C1N+Ui
+	oLkJW6Wzlv0Q++shXD5DuJgYQFIb5qj2o5oL29UbkhOfD0B3ykJRaFq46qP4rqjPrt7DE1CxuLk
+	pRpnlSOnt1/cwEubyV/vmcCtPJWLNbDXuwWzQs5cbXpSAjuqo2TpFtr7DD1TYUK85fcsysBQr/5
+	bmZtlLiqZ+6K3VcEd0H4XHdBI0Sz9JN+zCaMXZKWgQuht4Zav8lHieMdmbwZld4lXIgrru1MgBK
+	Yib5K6uwn423dXZcTPJaoLfgfoRXQ2rKNEq1DZYKg7U3kysXY0KeDP9DwrduQOb04kYO+XQcG22
+	BKe41sQilSF82eW90RZTg4BXKXGeSRkO2Ya5ThckyXgllzsRpmPYcIpO/mzk0TxV+htclphfaPS
+	sAD5BE3wDu1AJxrq1Re+rPy4KbLgzF/T9yifIxHfXBVdebtteTfYCimv+/3lwaIqBVKRbh8FibG
+	kNgtG4UGK9/v7Hh2ss2yYTTu5g8Wl9IS//0ewcECQ22g/NBxeowA/ou4lAYhXRwZom1czab+GpD
+	JFu+ev+KCn4E23iQ15l87AslCQ/HquGHuQpT+m6UNYuZ9Qmh+Z3rA4sNYf43w5Ypdy
+X-Received: by 2002:a05:600c:3511:b0:4ba:73f:ef5 with SMTP id 5b1f17b1804b1-4bb88828304mr482429785e9.34.1795757322788;
+        Thu, 26 Nov 2026 21:28:42 -0800 (PST)
 Received: from sergio-82n7.homenet.telecomitalia.it ([95.236.10.162])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb853ca452sm636515015e9.15.2026.11.26.21.14.19
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb853368d3sm649073745e9.1.2026.11.26.21.28.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2026 21:14:20 -0800 (PST)
+        Thu, 26 Nov 2026 21:28:42 -0800 (PST)
 From: Sergio Melas <sergiomelas@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Navon John Lukose <navonjohnlukose@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (yogafan) Fix fan paths for Yoga Pro 7 14IAH10
-Date: Fri, 27 Nov 2026 06:14:19 +0100
-Message-ID: <20261127051419.479659-1-sergiomelas@gmail.com>
+Subject: [PATCH 0/2] hwmon: (yogafan) Support >2 fans and add additional Lenovo laptops
+Date: Fri, 27 Nov 2026 06:28:39 +0100
+Message-ID: <20261127052841.492895-1-sergiomelas@gmail.com>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <b672573a-f0ac-4ad8-9be8-6f3a554ddd98@roeck-us.net>
-References: <b672573a-f0ac-4ad8-9be8-6f3a554ddd98@roeck-us.net>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -101,15 +96,42 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi Guenter, Navon,
+Hi Guenter, all,
 
-Apologies for the silence over the last few months -- I had to step away
-due to a family illness, and I am truly sorry Navon had to track down and
-submit this fix on his own in the meantime.
+Apologies for being away over the last few months due to a family
+illness, and thank you for taking care of the Yoga Pro 7 14IAH10
+(83KF) fix in the meantime. I am back actively maintaining yogafan and
+have audited the pending user-reported DSDT dumps.
 
-Thank you both for taking care of it.
+This 2-patch series is based on hwmon-next (12c53b6b6):
 
-Acked-by: Sergio Melas <sergiomelas@gmail.com>
+- Patch 1/2 expands struct yogafan_config.paths from 2 to MAX_FANS (8)
+  and adds the 3rd tachometer field (FASF) for the Legion Pro 7
+  16AFR10H (83RU).
+- Patch 2/2 adds DMI quirks and documentation for 9 user-reported
+  Lenovo laptops (reusing existing yogafan_config structs wherever
+  identical).
+
+To avoid merge conflicts and duplication, this series intentionally
+does not touch Yoga Pro 7 14IAH10 (83KF, already queued on hwmon fixes)
+or Yoga 9 2-in-1 14ILL10 (83LC, submitted separately on the list).
+
+Build-tested with W=1, checked with checkpatch.pl --strict --codespell
+(0 errors, 0 warnings), and documentation verified with
+SPHINXDIRS=hwmon make htmldocs.
 
 Best regards,
 Sergio
+
+Sergio Melas (2):
+  hwmon: (yogafan) Support more than two fans and add 3rd fan for Legion
+    Pro 7 16AFR10H
+  hwmon: (yogafan) Add support for additional Lenovo laptops
+
+ Documentation/hwmon/yogafan.rst |  21 ++++++
+ drivers/hwmon/yogafan.c         | 112 +++++++++++++++++++++++++++++++-
+ 2 files changed, 131 insertions(+), 2 deletions(-)
+
+-- 
+2.55.0
+
