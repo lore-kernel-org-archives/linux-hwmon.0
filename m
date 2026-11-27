@@ -1,67 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=87.98.174.144
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795770148;
-	b=ratWKlgv5oftdAuOUwEsauJylZ+liKaOdKTrNNVqq7CXcu3Wl93ENX3IgVKHkBp0/Y6U
-	 61GJj9dCM/X0LzjX3a0mTY/LmHFfvYXFNugCArd79hgty0qeiJW7gHGNfFhXdQjl1Z9Hs
-	 DadVyNCoYjOJkhRKsJNRX+J3v75D88BvWtPrUh3J94yXX2e7VdANBufY6JhRYrv1GOKpK
-	 n8cKR+mdSM9oex6HMWaaveFjQjckUpGorZ58E18R5II6MMXo84b3/zRFupkRMnjZdTf3Q
-	 drDk3GjKiIt8kLhT07/FGNHiKMYjgBlmFhvvxMbZeHQ2T+iX0w+J9+noj9Jghu7QMrA==
+	t=1795770522;
+	b=D+mlokEBTqjNtJfsgk4NLxYbHtPttrZTqwCNLzmozyXoknJJVJxzOUL6PSyJvUUIvQ5U
+	 sK4wzMlN7zZiZWbgwOrb8638jZEopwtnDbHYqDOnXnBmw5bYpfpipB8K4MKyobJgByKTt
+	 MKygVcD2avpi9KV8x8kfRQx1u1SOEXn610lHJnuL1E7uKJyIc7KHGMUxQZZsDjMqFPc4G
+	 d5eeT76oDNCkYP13ByDDosQrOK16HEhD8PYp72+X/9+8DAf7WUJ3Rbj+Bx+if+BzSfaM1
+	 sKBJuOBwAy20XZFV7b4UcaxMMbXs5tmpsll7MuWwQMnG6rRCrSOiIbW/w1BxD/O92AQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795770148;
-	h=DMARC-Filter:Received:Received:Received:X-OVh-ClientIp:From:To:Cc:
-	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:x-ovh-tracer-id:X-VR-SPAMSTATE:
-	 X-VR-SPAMSCORE:X-VR-SPAMCAUSE:DKIM-Signature;
-	bh=7CLOBYbNi1X6W8t+viisTSOz4Vl/AACkz0yRw2Y7JRU=;
-	b=O4UCKCe7ISrQY9qQrPsqsed/uPcq9Pb6d5jnchL2t2+hTRkc14PUY9/vfuN2E1d6MNFG
-	 SrIEcf5K+2FRoowkNcUWowA4ueamp2IDgj2FNK1fxGZ0/N5WCPVShuEDFP1D7Cw3z2yA8
-	 khZQlpiuvklUUlG6F85dCNlIJQickctDf4Z22dCJ/lNtA9cfRSlKFBySUeao7AIDYojzr
-	 KDZIoN3xnZW7+6sln29/eRpOHu3YxC9b2b0kL9RevE91cXVARROeiN8rHBF/lj1tRKxbJ
-	 JU6woG/pRy4f3HupN/x9bujnNHph8nBJet5miVRIWFJbr5np/E0c2cLSbhWdgzB9aVA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795770522;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=JDoNSN/ccvThmpxJ1pEvOfhTc1YMWgt5laJmjZ6WIdg=;
+	b=zeOTteb6j0A767VE7zuxEbTZiY5s72BXrU0HNa4Vfx5cxd9Xaieim+nXReyxz6scyDsB
+	 fNtFEs6nfOjqKpNE33TNwQcamM3OluUtb9Fof0718a56rVSy3xsusfL9RG9KR2w/iA8sZ
+	 pP6YSj/rpuBufyFamxJtbRqDcfOmU/4cJ9eU76gEpCaGQqO7k5BCd7Bo8XO6+fDAO9Se4
+	 YW8WJ3MehwGKULN/RvCs85qXRfG6C8XLME4F/CDfN8wCFmzuibw47MlDF7UpfjXdecJID
+	 6wugAw/bQHIUUnM3x6TxGqISr3aaf+gY4bSosfF0xITuk/ZSxEYdw7NRjHuH8Z5gZ7A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=3mdeb.com;
-	spf=pass smtp.mailfrom=3mdeb.com;
-	dkim=pass header.d=3mdeb.com header.i=@3mdeb.com header.a=rsa-sha256 header.s=ovhmo3617313-selector1 header.b=mNMbRpsj;
-	arc=none smtp.remote-ip=87.98.174.144
-Received: from 16.mo583.mail-out.ovh.net (16.mo583.mail-out.ovh.net [87.98.174.144])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Z+GBscLM;
+	arc=none smtp.remote-ip=74.125.82.177
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9428D606A324
-	for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 09:02:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9428D606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3mdeb.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD27606A31E
+	for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 09:08:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4BD27606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=3mdeb.com header.i=@3mdeb.com header.a=rsa-sha256 header.s=ovhmo3617313-selector1 header.b=mNMbRpsj
-Received: from director9.ghost.mail-out.ovh.net (unknown [10.109.231.19])
-	by mo583.mail-out.ovh.net (Postfix) with ESMTP id 4jbS982PF4z6DCD
-	for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 09:02:20 +0000 (UTC)
-Received: from ghost-submission-7ccd8bbbb6-qgh79 (unknown [10.109.249.183])
-	by director9.ghost.mail-out.ovh.net (Postfix) with ESMTPS id B17C181D82;
-	Fri, 27 Nov 2026 09:02:19 +0000 (UTC)
-Received: from 3mdeb.com ([37.59.142.114])
-	by ghost-submission-7ccd8bbbb6-qgh79 with ESMTPSA
-	id wBV3JBtHCWvG7hQA11hrdg
-	(envelope-from <filip.golas@3mdeb.com>); Fri, 27 Nov 2026 09:02:19 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-114S0086ebe963c-11e6-4064-90d7-40b8bccae90e,
-                    2D78F170DE5B25267C595F1CD7CE4558A7ADEF44) smtp.auth=filip.golas@3mdeb.com
-X-OVh-ClientIp:213.192.77.249
-From: =?UTF-8?q?Filip=20Go=C5=82a=C5=9B?= <filip.golas@3mdeb.com>
-To: michal.kopec@3mdeb.com
-Cc: filip.golas@3mdeb.com,
-	hansg@kernel.org,
-	ilpo.jarvinen@linux.intel.com,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux@roeck-us.net,
-	platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] platform/x86: dasharo-acpi: Add EC fan curve support
-Date: Fri, 27 Nov 2026 10:02:17 +0100
-Message-ID: <20261127090219.3366764-1-filip.golas@3mdeb.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261126165506.2793034-1-michal.kopec@3mdeb.com>
-References: <20261126165506.2793034-1-michal.kopec@3mdeb.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Z+GBscLM
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-33fb4680717so4358734eec.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 01:08:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795770521; x=1796375321; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=JDoNSN/ccvThmpxJ1pEvOfhTc1YMWgt5laJmjZ6WIdg=;
+        b=Z+GBscLM3RTGFJbG2jH92f+0wKgsUV2kY2bWwzeKt1fs5F9RubU/5FmkS60t4cmTL3
+         Fchq3wJD00JZcmIXtnLgKb5YGEoWRoRK8MwYzCJUR0K+5pe7EMOAK60ABtNVijdrhYjE
+         kGxiPD1RpYs0SOurJIAZPJBdCtTiSIatW7OUFnQLcUbOw8FhFh2xmEOAmvkNoX+sw/XD
+         HzUV0VRelAdR/tTTEgkX8sYn4vqaCOOyzraDQBAxHdmr9FLDAnxB3/JiPlcrHZNcmICK
+         f0Z8Tx4cObss+OFF5Yw9uP9XxKKYzLw1y29qmhlLro0DqU3c8jRyrGLVcGrMitR8yyzj
+         m0mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795770521; x=1796375321;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=JDoNSN/ccvThmpxJ1pEvOfhTc1YMWgt5laJmjZ6WIdg=;
+        b=gMB9pOOCvGyWxFttqzBDNQ53GbguMn5YdseZqdzFBXAQbxFKDN8u8r6SBbLyzzgNGi
+         /yiUusiYLixvwqTuGby955yjOO92ahE1OiO/l0/EvdEEtsuBrb4dh8DC7oBJ+x3k71FI
+         n4acZOHajYuX9xlAzUkg67LTCVpflcTKeIaksOZ580I7u5QGUnqG/on3NHjz94FLHg6I
+         wi5NC1Nt60S2OCyFHhhzgQVWLtW/KePqClmoOV+WF4oIuEXNzHhUKsi23AIKsEH0Dq5v
+         CKdU5iezfDSXRh1jtsQvFD74sLI+rGQVdFuEavxnxvEejg0d0lZvUqxdnz4FHWexVkzn
+         5sSQ==
+X-Gm-Message-State: APuU4Z8WLYyOkAulB2aaKKafVPEW0jqGmXozDnRUesqSaonIvmQrhCwp
+	+Gmeay35iJqNcyPg3BIAx83oV6gqvugc1dMtsqdqvrNGabc1RHfoMQSE
+X-Gm-Gg: AZFdTZfSmjgKtW3G2ShYKxfs8vGSE/q0XpGvRdCnUKS40VnMNbrY47++gutUHNav07X
+	hzylIgBiBWG1lxZY3GuK+WK1/G5oV7vwgxDuwJ2/F5aOohmsT3pWWgqHUj+g1brRX7dhFPithJf
+	MTPnor0z+cGj6Pa3Cq376s/Ek1UGNFBHzuQxs89rug+gbdmS9DPnYUrjB+OSVPxv8gFuXVCB0aM
+	3M5jvjl9154aQUNwBsXpsic9Q8Plp3fpxm1qVDazjjQWy0+AXLrFpSbogO6p9UrZ0/8NuNlmXm0
+	Qwby3J1V/J/K5GMIaFcEoqJb5eNJO4Y09xwv94BuqGtdyqqMFT5Zeyhene3sFiFWuiSQnIhTEFn
+	RnOZf2lYDF3zMOr3XzhrDlOUnK8WgVyrRlALGGUg0RK9Qu7+kAOTT3btBAJYCa6gkJIjV+VRxft
+	rzwsCKR7RRaaxckHDZI1/exABtY0OWmVr4xO24U36MP+TeYTp7bUEG0z1dgDQia7qCeSM/1ND/v
+	4eKn159HqdHl+2PNY5lno4ov35PTrcC8EvaQ4E6zNAwB0GAx6tWEX4LpKqNB4P8xF7fuSnyRACo
+	RRm3iZFephQFC+IKfW1QW59tQBQk3jc+/ZKwh8E5qPaxlLE5Je2kTFBG5lWXvhvLtj8b2wLjg54
+	=
+X-Received: by 2002:a05:693c:87d2:10b0:386:effe:512 with SMTP id 5a478bee46e88-386effe0580mr744270eec.32.1795770521366;
+        Fri, 27 Nov 2026 01:08:41 -0800 (PST)
+Received: from csl-conti-dell7858.ntu.edu.sg ([155.69.195.57])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-385c6830815sm63646122eec.20.2026.11.27.01.08.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Nov 2026 01:08:40 -0800 (PST)
+From: Maoyi Xie <maoyixie.tju@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	stable@vger.kernel.org,
+	Runyu Xiao <runyu.xiao@seu.edu.cn>
+Subject: [PATCH] hwmon: (occ) Check sensor_length against the sensor struct size
+Date: Fri, 27 Nov 2026 17:08:37 +0800
+Message-Id: <20261127090837.164246-1-maoyixie.tju@gmail.com>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -71,27 +94,101 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-x-ovh-tracer-id: 5123970479740088070
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: dmFkZTEw93vh/MW617X4n+OPviiEoEjJ5vbM6ueRLkdQrJ5sQdcbNqyZfQG11kWFOc1q8xIttWgRS5Pd9T8hwoY4YDF0H3DVZLHvYENKlTyNfbO0jwKS5hyTvabZCz1qwYRXRKPD2mn/6hDzG9YF7U/vUy+ph2xwHRM9CB/CMP92faUKB2TOJvj9iuP+ScUlkgVDjzYrB7U63HVPNME3YtXk8dFb5hJMb2yr9Pt24Jh4kZJxWik5Hf+Ks0S3xHmiDOTXbUIf+tcBeUUAWOyUIppurnpppw0HNnsEuFZHLOSw9t/JAx/emOG0YEX5v6Jubb6ty1yP3RYYEO9qek+ysCQ5RQzNEr+SBQFAPAwO3m96zZJoMAkBY0xpPf7Xaj53mBnI13ZiPQpFHQiuC58P8TR1IdIThKQT8WCVNxd+W5YoiRpvc1KQMeah3ljFdoXVZmfAYNy0J9PLXzKiT8WoDgB4KZYQVBV8TLWdXqXNnXnXIZR3idyn49cNFIYBEm+iiKOBRPrOcQA6VPuGmpSrINdsQ3rYta2uFtkMIVl55oHuYosZ42ORMVtfOeQqk5fG85CYskD2vI+Qu+SWuc7LOfCkoDFf7jhOg89/x6CVAiJSZ05vmdQGLe1SFJUZlH/lRqogmpkAF6M3nyebVlumMGoHPCTnVW/ZVozMwNVXGYB31IjQYg
-DKIM-Signature: a=rsa-sha256; bh=7CLOBYbNi1X6W8t+viisTSOz4Vl/AACkz0yRw2Y7JRU=;
- c=relaxed/relaxed; d=3mdeb.com; h=From; s=ovhmo3617313-selector1;
- t=1795770140; v=1;
- b=mNMbRpsj9J3U8fieD55axxz3YD74v7f+H91p08Nj5uMeigZRI5pK1JDkckS3MSaj54ZMlx4j
- HqazIVs9D7KKHU35RnxNGDQuKHPDvD69I0uvj+4iouXXTnH/cT4jNin6dc4vFgx8asD7Ss8EZXl
- aPhz299onHj6Rvwm0s1D9ZqlsnO4jMRQ14kSOpG1su/7/GTNPllXz8C7PKvpzslH02kU+BRbij+
- Z4exVkETWzIB9xUvlDwCN9itRScTNjHefTbIt0xzdlWeQcF34R4R7R7mpWehK6aMB7iJNne/HdT
- 7eB5VlxfxaFoHNKbRagpVB+eeVYE9njsDn5UXTCY2c8Vg==
 
-Hi Michał,
+occ_parse_poll_response() bounds each sensor block by
+num_sensors * sensor_length. The show functions index the block with
+fixed structs, such as the 68-byte struct power_sensor_a0. A smaller
+sensor_length passes this check. The reads then run up to 17340 bytes
+past the block.
 
-thanks for the review. I've addressed your comments in v3
-followed by a v4 fixing some problems it introduced.
+Ignore a block whose sensor_length is smaller than the entry read by the
+show functions, like a block of unknown type. A larger sensor_length is
+still accepted, because the reads stay inside the block.
 
-Link to v4: https://lore.kernel.org/all/20261127084910.3355833-1-filip.golas@3mdeb.com/
+Found with a CodeQL-based static analysis tool that we are developing.
+Reproduced in a userspace harness under AddressSanitizer. Not tested
+on hardware.
 
-Thanks,
-Filip
+Fixes: c10e753d43eb ("hwmon (occ): Add sensor types and versions")
+Cc: stable@vger.kernel.org
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Closes: https://lore.kernel.org/all/20260617201822.3B46E1F000E9@smtp.kernel.org/
+Reported-by: Runyu Xiao <runyu.xiao@seu.edu.cn>
+Link: https://lore.kernel.org/all/20260619023019.1064970-1-runyu.xiao@seu.edu.cn/
+Signed-off-by: Maoyi Xie <maoyixie.tju@gmail.com>
+---
+I used an LLM to help write the harness and this patch.
+
+ drivers/hwmon/occ/common.c | 48 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+
+diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+index 5836054c5c25..4ec954728222 100644
+--- a/drivers/hwmon/occ/common.c
++++ b/drivers/hwmon/occ/common.c
+@@ -1049,6 +1049,45 @@ static int occ_setup_sensor_attrs(struct occ *occ)
+ 	return 0;
+ }
+ 
++/*
++ * Size of one sensor entry, as the show functions read it.
++ * Keep in sync with occ_setup_sensor_attrs().
++ */
++static const struct {
++	const char *type;
++	u8 format;
++	u8 size;
++} occ_sensor_sizes[] = {
++	{ "TEMP", 0x01, sizeof(struct temp_sensor_1) },
++	{ "TEMP", 0x02, sizeof(struct temp_sensor_2) },
++	{ "TEMP", 0x10, sizeof(struct temp_sensor_10) },
++	{ "FREQ", 0x01, sizeof(struct freq_sensor_1) },
++	{ "FREQ", 0x02, sizeof(struct freq_sensor_2) },
++	{ "POWR", 0x01, sizeof(struct power_sensor_1) },
++	{ "POWR", 0x02, sizeof(struct power_sensor_2) },
++	{ "POWR", 0xA0, sizeof(struct power_sensor_a0) },
++	/* format 1 has no user_source */
++	{ "CAPS", 0x01, offsetof(struct caps_sensor_2, user_source) },
++	{ "CAPS", 0x02, sizeof(struct caps_sensor_2) },
++	{ "CAPS", 0x03, sizeof(struct caps_sensor_3) },
++	{ "EXTN", 0x01, sizeof(struct extended_sensor) },
++};
++
++static unsigned int occ_sensor_size(const struct occ_sensor_data_block *block)
++{
++	const struct occ_sensor_data_block_header *header = &block->header;
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(occ_sensor_sizes); i++) {
++		if (header->sensor_format == occ_sensor_sizes[i].format &&
++		    !strncmp(header->eye_catcher, occ_sensor_sizes[i].type, 4))
++			return occ_sensor_sizes[i].size;
++	}
++
++	/* unknown formats are not used, see occ_setup_sensor_attrs() */
++	return 0;
++}
++
+ /* only need to do this once at startup, as OCC won't change sensors on us */
+ static int occ_parse_poll_response(struct occ *occ)
+ {
+@@ -1094,6 +1133,15 @@ static int occ_parse_poll_response(struct occ *occ)
+ 		}
+ 		size += offset;
+ 
++		if (block->header.num_sensors &&
++		    block->header.sensor_length < occ_sensor_size(block)) {
++			dev_warn(occ->bus_dev,
++				 "ignoring OCC %.4s sensors of length %u\n",
++				 block->header.eye_catcher,
++				 block->header.sensor_length);
++			continue;
++		}
++
+ 		dev_dbg(occ->bus_dev, " %04x..%04x: %.4s (%d sensors)\n",
+ 			old_offset, offset - 1, block->header.eye_catcher,
+ 			block->header.num_sensors);
+-- 
+2.34.1
+
