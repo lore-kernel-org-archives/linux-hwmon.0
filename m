@@ -1,55 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=87.98.174.144
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795769781;
-	b=JT8qzIfKqZRBY8YnBtais+Ck5Ra0yvJvUr+jOhcFhDIyAH5T8EZnSpOz/QYjKjDTa6Gx
-	 BNfXFIqnC52euO1uDnXFoZFHlAXogYET0Z8J5qVXGQcbFlb6OqWKmb5iLced3UqtJIqrc
-	 d3X1PzpfdFzM9LZB1duNM+kXPHvXv2WtlKQU0TNb7kksX4TS/dYJJTLdcr61kCTkxOUZd
-	 BqOQjm613ajiIVlgk+mWGrT4PbZSF0woritXbr9FUB6Fx1+UIxM8LiDK/I8SBx18PV54B
-	 41tgslPgWwxC7vUvEa/nD+TgynZMbkQi7Ya1U4aqxKRMeqJslIDOA1OrD9CGLeXumvg==
+	t=1795770148;
+	b=ratWKlgv5oftdAuOUwEsauJylZ+liKaOdKTrNNVqq7CXcu3Wl93ENX3IgVKHkBp0/Y6U
+	 61GJj9dCM/X0LzjX3a0mTY/LmHFfvYXFNugCArd79hgty0qeiJW7gHGNfFhXdQjl1Z9Hs
+	 DadVyNCoYjOJkhRKsJNRX+J3v75D88BvWtPrUh3J94yXX2e7VdANBufY6JhRYrv1GOKpK
+	 n8cKR+mdSM9oex6HMWaaveFjQjckUpGorZ58E18R5II6MMXo84b3/zRFupkRMnjZdTf3Q
+	 drDk3GjKiIt8kLhT07/FGNHiKMYjgBlmFhvvxMbZeHQ2T+iX0w+J9+noj9Jghu7QMrA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795769781;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=ND6B4vyGm/ABSimDmg+H5/7Vt/AKFTwdEn34KGY2MHc=;
-	b=p/nRIK7gKtlXXHnspoediUUSsKosC4TlxPm5jDezj9BoIZsfx54dy/1MPVBi2n3zLOw0
-	 +s5Mzia1ZC32WF9PbkLfUZXSZbLus3fjkj9dE67Tp6yq+FzjXSw1NAXWXmyqK1LrrRFvm
-	 v1zrAQ7CK2a1tVXyw0lpeLaW/zd2p+PmczryYq5uSASKHshcJQdefGsN4UqJslzOcKHzN
-	 FbUk5cgx7/pkz+IR31uWcEliwP4ctQrCgPC6nuaAoDeyeB8pQoULCSwh+HNu/NrjEGyW1
-	 rH0Aa++2Xeb7o5RoVHY8H6wmGUFo2AMcpFRSj9qISGHTkrCUhhJsuVyDIIgJC48IFxw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795770148;
+	h=DMARC-Filter:Received:Received:Received:X-OVh-ClientIp:From:To:Cc:
+	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:x-ovh-tracer-id:X-VR-SPAMSTATE:
+	 X-VR-SPAMSCORE:X-VR-SPAMCAUSE:DKIM-Signature;
+	bh=7CLOBYbNi1X6W8t+viisTSOz4Vl/AACkz0yRw2Y7JRU=;
+	b=O4UCKCe7ISrQY9qQrPsqsed/uPcq9Pb6d5jnchL2t2+hTRkc14PUY9/vfuN2E1d6MNFG
+	 SrIEcf5K+2FRoowkNcUWowA4ueamp2IDgj2FNK1fxGZ0/N5WCPVShuEDFP1D7Cw3z2yA8
+	 khZQlpiuvklUUlG6F85dCNlIJQickctDf4Z22dCJ/lNtA9cfRSlKFBySUeao7AIDYojzr
+	 KDZIoN3xnZW7+6sln29/eRpOHu3YxC9b2b0kL9RevE91cXVARROeiN8rHBF/lj1tRKxbJ
+	 JU6woG/pRy4f3HupN/x9bujnNHph8nBJet5miVRIWFJbr5np/E0c2cLSbhWdgzB9aVA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JEMer1av;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=3mdeb.com;
+	spf=pass smtp.mailfrom=3mdeb.com;
+	dkim=pass header.d=3mdeb.com header.i=@3mdeb.com header.a=rsa-sha256 header.s=ovhmo3617313-selector1 header.b=mNMbRpsj;
+	arc=none smtp.remote-ip=87.98.174.144
+Received: from 16.mo583.mail-out.ovh.net (16.mo583.mail-out.ovh.net [87.98.174.144])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DEC7606A32A;
-	Fri, 27 Nov 2026 08:56:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9428D606A324
+	for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 09:02:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9428D606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3mdeb.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JEMer1av
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A0001F000C1;
-	Fri, 27 Nov 2026 08:56:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795769781;
-	bh=ND6B4vyGm/ABSimDmg+H5/7Vt/AKFTwdEn34KGY2MHc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=JEMer1avNWrpXEjEvImIOUuyT+z6HTKZETC3US6lBIHIlLOj6/XZ/o//MfDCmtawZ
-	 znkS+J4JZ9BGxxQhgAXx23fgvNMF58Bfzi6hg7pkNgj3ZUwNGFR39C7aNM6lzMmxM+
-	 7/XpB8Tsui5axukBrDaxe6p9JgTt2y3eQ4ROTPDiTdtH2vllJNa3WJyKjHaYY7W5yD
-	 h7xQ5aVl1njPv6JFquQ39QOfSa5wxJ8Ssp2snglR6jdhrAvjHt5vzBeqpXjJiGcK90
-	 lVe98yGjhjvYmy8Yt/0XCLQLeX8qm8nJhYy1XM9RdfTnalpOyRGAbAi8gUAMCHLqJs
-	 Z8yi8lwc3NJDw==
-Message-ID: <sashiko-outbox-236927@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 0/4] rtc: Add NXP PCF8525 RTC support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Shiv Prakash Gupta" <shivprakash.gupta@nxp.com>, linux-rtc@vger.kernel.org, linux-hwmon@vger.kernel.org
-Cc: "Alexandre Belloni" <alexandre.belloni@bootlin.com>
-In-Reply-To: <20261127083807.2844507-1-shivprakash.gupta@nxp.com>
-References: <20261127083807.2844507-1-shivprakash.gupta@nxp.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 27 Nov 2026 08:56:20 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=3mdeb.com header.i=@3mdeb.com header.a=rsa-sha256 header.s=ovhmo3617313-selector1 header.b=mNMbRpsj
+Received: from director9.ghost.mail-out.ovh.net (unknown [10.109.231.19])
+	by mo583.mail-out.ovh.net (Postfix) with ESMTP id 4jbS982PF4z6DCD
+	for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 09:02:20 +0000 (UTC)
+Received: from ghost-submission-7ccd8bbbb6-qgh79 (unknown [10.109.249.183])
+	by director9.ghost.mail-out.ovh.net (Postfix) with ESMTPS id B17C181D82;
+	Fri, 27 Nov 2026 09:02:19 +0000 (UTC)
+Received: from 3mdeb.com ([37.59.142.114])
+	by ghost-submission-7ccd8bbbb6-qgh79 with ESMTPSA
+	id wBV3JBtHCWvG7hQA11hrdg
+	(envelope-from <filip.golas@3mdeb.com>); Fri, 27 Nov 2026 09:02:19 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-114S0086ebe963c-11e6-4064-90d7-40b8bccae90e,
+                    2D78F170DE5B25267C595F1CD7CE4558A7ADEF44) smtp.auth=filip.golas@3mdeb.com
+X-OVh-ClientIp:213.192.77.249
+From: =?UTF-8?q?Filip=20Go=C5=82a=C5=9B?= <filip.golas@3mdeb.com>
+To: michal.kopec@3mdeb.com
+Cc: filip.golas@3mdeb.com,
+	hansg@kernel.org,
+	ilpo.jarvinen@linux.intel.com,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux@roeck-us.net,
+	platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] platform/x86: dasharo-acpi: Add EC fan curve support
+Date: Fri, 27 Nov 2026 10:02:17 +0100
+Message-ID: <20261127090219.3366764-1-filip.golas@3mdeb.com>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261126165506.2793034-1-michal.kopec@3mdeb.com>
+References: <20261126165506.2793034-1-michal.kopec@3mdeb.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -58,15 +70,28 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+x-ovh-tracer-id: 5123970479740088070
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: dmFkZTEw93vh/MW617X4n+OPviiEoEjJ5vbM6ueRLkdQrJ5sQdcbNqyZfQG11kWFOc1q8xIttWgRS5Pd9T8hwoY4YDF0H3DVZLHvYENKlTyNfbO0jwKS5hyTvabZCz1qwYRXRKPD2mn/6hDzG9YF7U/vUy+ph2xwHRM9CB/CMP92faUKB2TOJvj9iuP+ScUlkgVDjzYrB7U63HVPNME3YtXk8dFb5hJMb2yr9Pt24Jh4kZJxWik5Hf+Ks0S3xHmiDOTXbUIf+tcBeUUAWOyUIppurnpppw0HNnsEuFZHLOSw9t/JAx/emOG0YEX5v6Jubb6ty1yP3RYYEO9qek+ysCQ5RQzNEr+SBQFAPAwO3m96zZJoMAkBY0xpPf7Xaj53mBnI13ZiPQpFHQiuC58P8TR1IdIThKQT8WCVNxd+W5YoiRpvc1KQMeah3ljFdoXVZmfAYNy0J9PLXzKiT8WoDgB4KZYQVBV8TLWdXqXNnXnXIZR3idyn49cNFIYBEm+iiKOBRPrOcQA6VPuGmpSrINdsQ3rYta2uFtkMIVl55oHuYosZ42ORMVtfOeQqk5fG85CYskD2vI+Qu+SWuc7LOfCkoDFf7jhOg89/x6CVAiJSZ05vmdQGLe1SFJUZlH/lRqogmpkAF6M3nyebVlumMGoHPCTnVW/ZVozMwNVXGYB31IjQYg
+DKIM-Signature: a=rsa-sha256; bh=7CLOBYbNi1X6W8t+viisTSOz4Vl/AACkz0yRw2Y7JRU=;
+ c=relaxed/relaxed; d=3mdeb.com; h=From; s=ovhmo3617313-selector1;
+ t=1795770140; v=1;
+ b=mNMbRpsj9J3U8fieD55axxz3YD74v7f+H91p08Nj5uMeigZRI5pK1JDkckS3MSaj54ZMlx4j
+ HqazIVs9D7KKHU35RnxNGDQuKHPDvD69I0uvj+4iouXXTnH/cT4jNin6dc4vFgx8asD7Ss8EZXl
+ aPhz299onHj6Rvwm0s1D9ZqlsnO4jMRQ14kSOpG1su/7/GTNPllXz8C7PKvpzslH02kU+BRbij+
+ Z4exVkETWzIB9xUvlDwCN9itRScTNjHefTbIt0xzdlWeQcF34R4R7R7mpWehK6aMB7iJNne/HdT
+ 7eB5VlxfxaFoHNKbRagpVB+eeVYE9njsDn5UXTCY2c8Vg==
 
-Sashiko has finished reviewing this 4-patch series:
+Hi Michał,
 
-- Patches 1, 3, and 4: no issues found.
-- Patch 2 ("rtc: pcf8525: Add NXP PCF8525 RTC driver"): 1 potential
-  issue (1 Medium)
+thanks for the review. I've addressed your comments in v3
+followed by a v4 fixing some problems it introduced.
 
-A detailed review has been sent as a separate reply to patch 2.
+Link to v4: https://lore.kernel.org/all/20261127084910.3355833-1-filip.golas@3mdeb.com/
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261127083807.2844=
-507-1-shivprakash.gupta@nxp.com
+Thanks,
+Filip
