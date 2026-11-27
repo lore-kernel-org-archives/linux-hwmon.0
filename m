@@ -1,96 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795756460;
-	b=hZtGRM8TuK/iaj7T6PgmhC8vYXi+0IX1prKSYFyQhJEa37n2TEl605L7oeQLOS0PPygT
-	 h1h4s4w3OfNiKZ9e9PiqE3pQr53HUa/GmHURPmD3DGrvFaL/S83+aAE5ZWo/06AqeM2La
-	 UCEGLSj5x/KWdnBjZmNEtlr2u30YWkjn+BE49f5rQegY1/f3WXaQoe6H1SZi5rwoahJ7j
-	 dhX7jUJ4R8pprjF6tEyQIiXuXgkp1RHNS/0UL6aH4Qlf9GCni6vU1W8mQ3vEQCYaDodJK
-	 0ZGolbJMe7FlpubRntQYCkqOWdtuD/kjlOitCsCwb8jTcdHMkjH67uIcz7TngEua7eQ==
+	t=1795756462;
+	b=1PfoC5AeUz1QrvBLK36CcoA/xyPlyaK5oyMig4NZc46KAHsy22Jtwx9TftdSRJPSEeXg
+	 oKlKAoJhn2WMiH34QiAYa1kHPNT2vfC9MnFuZtXRNz3BHIu7CNEmUVlgPcPiU7y/p3cnF
+	 X/p/kTQK1r9BWJoahnOkd83v/gZxkhY+4vQ1OqSQ3YUsQ4THaUxn+r/UhFfkJL+eAQZly
+	 NhPrM9/uKvwnpaEVgmkdPS2E7/Dpl6EsCaf6xkwL7B8HFk0MoWYndItqpnhL+XENQJ0rq
+	 NPGDNeGlb4fIBRWgZtIqy4VYagth/MjGB5dL8bZy8WUV/LUGexeLOLE6DjSXD42Lo8Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795756460;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795756462;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=BPk/BlkpSjsU6PhXk5sbl5froZzbUVsLM1nv2qWUBJk=;
-	b=bcqmy1wGSBghRKW2NtgfFB88SAuqE4fslPFhq1yRIL4mQre6Cv659HrcQ9fcFpzACHCs
-	 3W5emEx2p5VK7uSJ2crmHGCvMIgDzzvLjsP89IW0UOAPvNFt5n/qg1KS4ec5dxbB4hGDM
-	 WUebQopQ9mmA1iuJ6awTI4W50e1ikrCwNqqjzq6sH5VxCXEsDlGQHQb9BzL/zcfNMPeg4
-	 ZSiY0STXtIMuuiwK+OfixkzIqwgudmdaMtI07IRq7Ujw+dkWeIDDy9QuvrKA4TkESYRUq
-	 zVlLmnlerVE8JInCkfFx4SnhS4C4p0SV2rSCYFNaAngKuj8Jl96h4AkaTKjdAgJn0SQ==
+	bh=qzV5IimzsJbOvJ6sW4aUy5Eksg3lYZKwTkqSBUgFwOg=;
+	b=nbGCBIOYJZaZwuDudjHVhINCLYXCSt84H+0ktqn6UuZ+mwOBbtW+yNjCUJGahuTZZWHE
+	 EKt0fT9lznlzR6tjgf3MqbIkXzcu88KsyjWbnksj/a2Sw72aoWd16UxyywkcM3DH5VKyV
+	 YImZF/unCcJS5HT2PWvxgOrJjw6j90ku6IYBTs3Es1qBNBV2YFijyxevM26trNcklnaBT
+	 d4Z6zlWu4RklPGcl412ECN+k8h4XvVZNSfikx2afWpZFmif8QC1RcIgkj70HmozX/wXLQ
+	 xmWQAU7DEnxoPhIbO3yJheQrW+Oytu5NQ6Lk0sMrvxojf9RmDfmBXxVy3+IlKrtwgwQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GwyFnGZg;
-	arc=none smtp.remote-ip=209.85.128.42
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QRlvPmNd;
+	arc=none smtp.remote-ip=209.85.128.51
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96FEB606A31E
-	for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 05:14:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 96FEB606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B5A606A32F
+	for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 05:14:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 60B5A606A32F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GwyFnGZg
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4ba013938d7so72286035e9.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 21:14:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QRlvPmNd
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4bb61185057so49259255e9.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2026 21:14:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795756459; x=1796361259; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795756461; x=1796361261; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=BPk/BlkpSjsU6PhXk5sbl5froZzbUVsLM1nv2qWUBJk=;
-        b=GwyFnGZgh+G3wJbuIosavkTPnUJEAPDb/zZq+cmHIEhebOtGDgeifD8YXQBjOCJiFW
-         gfSbZHRHrmmg/mvGSB4DGbEhlQ51IQtdPtTtXS4RKnCH0EEX80JU3UczuMUlKRffm0Wy
-         yroaQzQiuQj5MyZuJDlK1D2lKVlFxoMvwg8cJIa3txkAV91lf5K1W2P8S6s7xCQhAVQ3
-         22LONAsiNsxlCL7+JPjLAm7OxB1/inPS6anh1FXNE2kzW9NOIVfwnAihvz1GuDhvRLhN
-         +aeJzvQAE5E+FGwmsreFK+q5gBRB+fi62ZUgb6WfnqCd0h7eC0S7s4nAKlqdlvB7Bx7H
-         U2sg==
+        bh=qzV5IimzsJbOvJ6sW4aUy5Eksg3lYZKwTkqSBUgFwOg=;
+        b=QRlvPmNdghIl4U7Rz1BHAHhkt0zKYanW0QPXUPIwUseORSCsqW522IrEAKTIxHKDGU
+         +C8phOjyC6nAl6NebLAZqP/e+VkriS/8B8T2rj7KHrstoNWAXsVwP5Hte8OXU3xdi8eK
+         pXQawKrsTxKVCNs0lKePbgFksNvRThrrV/bFA0RvtgZSmpTX6Ibb31y9R1zuD/OaOQuF
+         UQHkDnoEA0Xlo9AXibFS4vDkcmxPFWlSOSNPizU35NL5aj8EZVYgw7n+VvuFepgiDLBk
+         vHIAjzCC+oJA7A18TROLqQPNVGSocy6lHHpbqV53lpffT+460/EGdYPcdiTFOfE5OZcM
+         pTIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795756459; x=1796361259;
+        d=1e100.net; s=20260707; t=1795756461; x=1796361261;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BPk/BlkpSjsU6PhXk5sbl5froZzbUVsLM1nv2qWUBJk=;
-        b=RiL2D2NdwEYTA4fXetwKj+onN2978pSxBlpgQZW43vSEjIjtUtZ6kWPJ8bc0inlHgY
-         4tEsHpz3zgC8nnA4Auyp59Xwzg9wwjp7wXnkzKtsqT4cacpIoczPdKgDmPM0C8eDRLoZ
-         ZyhT9bXgZk7Od1ZKJtoWBiaqqItkShBNkmpAPniXoIKSSzchZa/cdTlaYnVRPYRdTmZW
-         VRfC+FTj94cwQ467bzw3tIo12YM7m7K7tX9qUhq186095lIPPm0Aea50l+FKovV23nUO
-         zYwKh29nubpiHmyam7GKABpcI7Z0Pg02znamgcrZ3wSpKED6XMHiHJpaT2RUNQRqj0qd
-         U9Vw==
-X-Gm-Message-State: APuU4Z+SBoUKaQL4FGyVejbYT1X4CmymlPFo/8+30UAx0nKmKvpW9W9Y
-	31RdGZJSOmCzbIQ56eSQMoCrXJ0hUWmpPGTRIQM7WLHiXCmTNY82I1Z4
-X-Gm-Gg: AZFdTZdAM1O5nc75NaRdve2U5F74LdVbj19F2mNsd+FJHpBZnPECPYwsj3dlI1x4kmJ
-	yDn9xWpvCjd8lb60Eqcz2rAVlnVZLcXT7qVa558yMGlaEywyhzF92Ek+Y5+qaV9+k0u3sF2gZes
-	VXxS6mxlVrVj5psSMIjWFAd/3zKTA/HrN3erw0V3XKaoZA68EM4s4wCj3iEOkyyX0hBUBSbrEU0
-	PxMoJQltOX6N6ncJDJJw8tYjM41oAmuJMQy5IRxSClOtvV9slFFGct6sv1gV5mmcsa6eXzDZMTn
-	dUGmw8tK6JtqT1lpy/sxlHVLhq6ZqxjztSGQoyvpSrnc56yuyV2fakg1gOAtnCKTJUvnkOZh+AR
-	t0ovKe+GahkVyvCIBlfuO9g/+luk6avcfdqwNLIL+spvrnDLr9hiSYVFJ4DhDY28L1ZnGFKjcgH
-	Uq5qzgXoxPR+uY3F7UWJL0LiJhDnh9zRK/ZR3G0D9OzP/WAaQdINXymvyrAS6MT9W+3fWAYEHhV
-	/40Ugfp9zjSQGLeKpJCmP9mFZyfhxmP0+EdVbHZvVQB3S7+Vhjcza2aPKoV/WGmvhtEPf9iUPlP
-	C8K1CEVV8yqxLonhTkDvueMVinN91d5akkhbyH9JUL3Ah/7Uvxq5XX8xC3AvqXms3VtF4ljAvbx
-	sOXxgKmzs+qk4VLd6i4403/dPj/Jscjr5+RX2g+NrMAPFKT8apPtg3GwhihyZyp2/WL5mP97ieB
-	TeqSRIEt4muTw3p8O5F4AkBrM4oTbTbKhokNKJWKJWXMJ+f3s0tOvLUOqb7jL6AhZCXG1XmcbSb
-	2JdYvZGt9aO
-X-Received: by 2002:a05:600c:c168:b0:4bb:81b2:c801 with SMTP id 5b1f17b1804b1-4bb889238f1mr454605605e9.20.1795756458767;
-        Thu, 26 Nov 2026 21:14:18 -0800 (PST)
+        bh=qzV5IimzsJbOvJ6sW4aUy5Eksg3lYZKwTkqSBUgFwOg=;
+        b=dghOGGiAqqL2XADSWvYycZd9iAB2Lup0iIMjyA5uoKynl6cSfE47zlyld5kGS6spIk
+         3TVlz6rq2m7YHRrJEuui1lgz6+tIg4vUJ23siFMDVCmGUochT9rVMaGmKJ/WCMvIVsfE
+         YMiuAnL8j4LrUIq0OxwU6jeEDdcQm1or1jWYSX5TqioUZIsdSvmSoCCdD1fnTb47ZQop
+         zjRJ5mKcfY+8ndyFeRkwc+JhlRo3XAGlls63ZAPn1p9BqTozV5ZBlOTz7oODoSfi+4px
+         FDaetbaeSFn9eXD9YzuHT9qJlwDdbhB+i8LzkkVixekGfViVKj3zYLEM202gg8LVuJmN
+         IAXw==
+X-Gm-Message-State: APuU4Z86T6qXw2NM4Q1rMtDmJjGkKn0hbj0/FfMRI0CxA042oggJ62VJ
+	fpP+YUOpL9LM7XCq+GeoYH38Ec1mx+DqLIATRTFS4Oggb9PfRQNNdsiO
+X-Gm-Gg: AZFdTZfIZE5NNjLi4zAqbuSrvT51U9FLWzN0W2jqnK43O0IVt/RXfKd9mkJK0oGRMiA
+	jwLQJdMfeE3gJttnPowLwxvg+f/T6p0R9KC8cCFii4DBMwNNLSEy5PYkb4jbZjM6GLp58QNNdeU
+	CRzzmHuCNmj+xTRbD//74xr0CoEcVFgdLR0b/9U7dotrXqhhmZ3do77qQz+SJOeb2SmN/Ol1znN
+	6vQ5wyipl2ZZ5+f738all4f+iX76X2ggnoZwiFriIgHn0vmPDZa2UJ38VZuiVOFx1DOjPha1QuS
+	PYitV1hv/Y9HyU1O51v5U4NPVrP5xOiibME6KnF+r2as7YqmibTCLJaMfnhGjnsqoE3zLVkDYWD
+	Ui7+W/nFFQNophJr22WvOpQK99VumwxY+ZUC707ecmUCHZjEKR2AfafjjIBYeGp7cAl4fZuPmLt
+	ghtuyuqVy2l9O5xm3wi2MjtdCH9KxvPADVNr001n/1lunLvrvwRC5W7iuhP17bea2c61b4tcIQK
+	a8zrrA2Bnm00WXX1eG8F3Ud4tg2XCuIbBK0spUcqqcFYMY3LzHyHxvgEcKeavTCGSSbHL8ff0+i
+	DaRXGmLR+6xQnF7aA//8HdGbuyMO9zfl3zN6kK26twX+96ZK20AoC13ZMHm8+Gz3EoCBZBv2r46
+	DHH0pcatx+TZJgpcdWwNO6T1ANQSKwNwUtFC2zPWOq3Bn5wKBhoyE54mWDd5VqgN5KL32vhFqtC
+	14oDKzPXe4O9bCV/I4F0WXQmR/o3hoAT4+Po/DhF+wARUGdKIWS7n8hco06hdZ0+Tw
+X-Received: by 2002:a05:600c:3511:b0:4ba:73f:ef5 with SMTP id 5b1f17b1804b1-4bb88828304mr481591525e9.34.1795756460683;
+        Thu, 26 Nov 2026 21:14:20 -0800 (PST)
 Received: from sergio-82n7.homenet.telecomitalia.it ([95.236.10.162])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb8849e598sm641372085e9.8.2026.11.26.21.14.17
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb853ca452sm636515015e9.15.2026.11.26.21.14.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2026 21:14:18 -0800 (PST)
+        Thu, 26 Nov 2026 21:14:20 -0800 (PST)
 From: Sergio Melas <sergiomelas@gmail.com>
-To: KuwaLee <kuwaleecross@gmail.com>,
-	Guenter Roeck <linux@roeck-us.net>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Navon John Lukose <navonjohnlukose@gmail.com>
 Cc: linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (yogafan) Add support for Lenovo Yoga 9 2-in-1 14ILL10
-Date: Fri, 27 Nov 2026 06:14:16 +0100
-Message-ID: <20261127051416.479623-1-sergiomelas@gmail.com>
+Subject: Re: [PATCH] hwmon: (yogafan) Fix fan paths for Yoga Pro 7 14IAH10
+Date: Fri, 27 Nov 2026 06:14:19 +0100
+Message-ID: <20261127051419.479659-1-sergiomelas@gmail.com>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261120230744.34942-1-kuwaleecross@gmail.com>
-References: <20261120230744.34942-1-kuwaleecross@gmail.com>
+In-Reply-To: <b672573a-f0ac-4ad8-9be8-6f3a554ddd98@roeck-us.net>
+References: <b672573a-f0ac-4ad8-9be8-6f3a554ddd98@roeck-us.net>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -102,15 +101,15 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi KuwaLee, Guenter,
+Hi Guenter, Navon,
 
-Apologies for the late reply -- I had to step away for about three months
-due to a family illness, and I am now back and catching up on yogafan.
+Apologies for the silence over the last few months -- I had to step away
+due to a family illness, and I am truly sorry Navon had to track down and
+submit this fix on his own in the meantime.
 
-I verified the ACPI DSDT for the Lenovo Yoga 9 2-in-1 14ILL10 (83LC) and
-this patch looks good to me.
+Thank you both for taking care of it.
 
 Acked-by: Sergio Melas <sergiomelas@gmail.com>
 
-Thanks,
+Best regards,
 Sergio
