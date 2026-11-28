@@ -1,71 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.33
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795860232;
-	b=GqJka0C5YRWXYaSDw0BalV+Zy7rntqu6T3Dg+GLx6aJJctD0dUtlxi60/jrR99SaHQFd
-	 f/NNrxlHbHn6AnZUAOSA32ze45bbCt02l636qDpCnZy8iv0RMp0uUTwsWtUjSVaFQ6K+K
-	 7D1d5+DGPGh2VjFTkBLhCjXiWaDO6kEXJTcgp5Y5kU4GVFMfaZQtso2aQK0Z1HeTp+S9A
-	 8vZG6NG/gT/TdHu0NRRIsAc9MRs/qUWo8TfWweIYKZTpkXA7PMmmEzDY0xXIyuIKzq4ks
-	 TsU2ZUuHp2E/AXvNZ3St4EmJcs++CuyU/gMNuCkHEqP+MP2/JFkgJwb4n1qJ/kR4WRQ==
+	t=1795862104;
+	b=FfiZxM53v4Sfcq8bFMsWAtZ5y1uM9GEHEoECbpzNAuvTYBpUgYvYn321wYjdf8ks00To
+	 eH7V5EJx0ztwmRd00Hv5dKIspyTbzSNe8Vd3p3mITOwuEtFGg5ued4wjnxLUEGK9iFQiz
+	 XUrPAsSPteGoM+CjelDSo2t0xA+hbBCCVNil8vBdFZFZZmeidTDJoC50HJt5LHbbIlVMj
+	 g6McT8A2M+xkqdbCUl9trZYJJf8UC6IPBN0q2KBx72sCLaS6ssvYAcudQgyME96Y4bvv2
+	 q9v8SpTJBwX2sPEQXUQQiVVYwmUeG1LyVxX5lh45oqfnji5GMKZOWaK3lR3wvj4mOkQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795860232;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795862104;
 	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
-	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
-	 References:Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:X-Source-L:X-Exim-ID:
-	 X-Source:X-Source-Args:X-Source-Dir:X-Source-Sender:X-Source-Auth:
-	 X-Email-Count:X-Org:X-Source-Cap:X-Local-Domain:X-CMAE-Envelope;
-	bh=sVFSGdTDmGn9kSHKwjHmdrZMfnLGzOGFumJLob1YCjo=;
-	b=4zqPpegaA61Gx+w/HPk4vF5Yg0RfrODYLVlcPEzcPNaUIeUtAKFUo4GdR4DEQ7pBqQB+
-	 81HF33S+EOIqfZZ8Ui5THmzYjr1mR6c1HZ2/7SNOcsfEBAkqxjr4hiNJP4YO8Tb8HIdvZ
-	 eJ3++1RbQHC+48nAOFZixgf3SihAk2nrV5AlhaM4m6TLz5bzPgUB0ysktfyGZpaqvjT3q
-	 QP8kl6i8Ve/2DYUyPZFulAWLGig3qiOdptLj9I8KsX+LC/b7LJgPb7zYSOwwZOC4UtMsQ
-	 6/gV8JsRuXQn8RCU+yTRvgmIp2Jwvb87tK9WKHfVoTD0JSTeTkDnMyRVdFnBx372mHA==
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
+	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
+	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
+	 X-Local-Domain:X-CMAE-Envelope;
+	bh=3DWTBN3W2OOglTxceZ61QD61ptx6VVBNKwoPW3PhGys=;
+	b=cxQvZUyxZfwUaPn3FU9w5I+v6IERgOdFTLteTUM8/mWMyA7v7tZyWl6ciwaOGuC2LyMd
+	 dtR/ikwbsgQxPqCbs7fvm/BUMCJllvS5/z30NNHRC5v4yoZ/y5yi4RmwQhUHG8dN+xX8G
+	 DIaYWr5r7/NKL4DANMC5yJIW2C2vKSyFwU5bZSYK4zFFbP6+/gtIJpWWFYn7FVZz8jbPf
+	 Wbi83DIoWAQkRvlnRleYXD/PnA39RpUJkLLwKml4eOUVz1FQ9N92FmEn1RHCCOR5XBMCf
+	 uMmF1lus9bIfpYGAWNQs6bQjPKymQZ6Bsy82zu+1N+adYrF+QocGbI+ChTMKq4DL10w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=roeck-us.net;
 	spf=fail smtp.mailfrom=roeck-us.net;
-	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=VRr+1C2U;
-	arc=none smtp.remote-ip=35.89.44.39
-Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=Q+yyJrba;
+	arc=none smtp.remote-ip=35.89.44.33
+Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76343606A31C
-	for <linux-hwmon@vger.kernel.org>; Sat, 28 Nov 2026 10:03:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 76343606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CD9A606A31C
+	for <linux-hwmon@vger.kernel.org>; Sat, 28 Nov 2026 10:35:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6CD9A606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=VRr+1C2U
-Received: from eig-obgw-5006b.ext.cloudfilter.net ([10.0.29.217])
+	dkim=pass (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=Q+yyJrba
+Received: from eig-obgw-6003b.ext.cloudfilter.net ([10.0.30.175])
 	by cmsmtp with ESMTPS
-	id X4vDxgvOMyb4YXFHcxYuBJ; Sat, 28 Nov 2026 10:03:52 +0000
+	id XCPixqgYeAR1iXFloxGyLy; Sat, 28 Nov 2026 10:35:04 +0000
 Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
 	by cmsmtp with ESMTPS
-	id XFHbxRvq0SeuLXFHbxWzcr; Sat, 28 Nov 2026 10:03:51 +0000
-X-Authority-Analysis: v=2.4 cv=NYvm13D4 c=1 sm=1 tr=0 ts=6b0aa707
+	id XFlnx4WDeGh2BXFlnxGvef; Sat, 28 Nov 2026 10:35:03 +0000
+X-Authority-Analysis: v=2.4 cv=Aszu3P9P c=1 sm=1 tr=0 ts=6b0aae57
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=pGLkceISAAAA:8
- a=H_-ZsajgQThrAGVFVt0A:9 a=QEXdDO2ut3YA:10 a=KPbNTLLc3YvdawN95zVk:22
+ a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=M0FbrtG7MMAA:10 a=L-xz6NSyAAAA:8
+ a=zLGufa3UZyHqUvnfKmIA:9 a=CjuIK1q_8ugA:10 a=R1xhReGu_IPUwS1Fismc:22
+ a=H7nlQ9NbTXmbZqfEVjPa:22 a=KPbNTLLc3YvdawN95zVk:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
-	List-Archive; bh=sVFSGdTDmGn9kSHKwjHmdrZMfnLGzOGFumJLob1YCjo=; b=VRr+1C2U2RfT
-	aD//ADQYsdr2w+youe6+gmrWANE6cXAX/uaN7hqbEwvncWxPLbN1CRLrfTJPm5PpGNxCsg5uTrFZv
-	QJaH9K++A/9OqY0v/wzHTNy7WUIlh4L2z93suqNEf7jyZN7VX6NDalimifdy7ZRlfc8U4cSLW0l7Z
-	deqMPURK3EKSNFaJZE059WJr4Oukd3tiJn/yg/8tztDi+vzVtyjg3leXfm8WpR7SEF7S/Li01lxU4
-	LAJ8r75qsHO8xaxTg/i8w7hEYbWmP+7cRjtmuJOnOVbtgjJPCd8qCTH5WY0z0/BUqt4yfU1Bdgl/T
-	vADuXfDNcqot2OlBmkeI0g==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54006)
+	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=3DWTBN3W2OOglTxceZ61QD61ptx6VVBNKwoPW3PhGys=; b=Q+yyJrbaLXS2BIBJpS7jVpIqkh
+	+0pV9ky1aJMwbr4psKrw8oJnxhoRCelHiUPVplFIdERg702WMm1bF77seUsjZNlCroQRXzAUoOYJF
+	lDizP+ym78+XcFyd4RjQO1RoZHyGGpLimpfxpGeSyiQY5eEJN0I5eZWq1dLKytI0ps+L0rjAoSun9
+	RWQXSs3YLuDDCDoK2pZySczHd1xDYQDTF0MWqi1/5gW6m2jrJdb4dMgA7RZMYeyEAepcuh5qU8Y6y
+	xX56yyeXjrMAo1XDMr12alET85mwhMR4O6tCaUOzx1Nnfdkwkm6VzL25iU1txBzrRfd6XTzAeemRy
+	wHeoj+yw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:59246 helo=server.roeck-us.net)
 	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.100.2)
 	(envelope-from <linux@roeck-us.net>)
-	id 1xXFHb-000000017wY-0Z4u;
-	Sat, 28 Nov 2026 15:33:51 +0530
-Message-ID: <a01b1bf3-1228-43e8-8b4d-d3345f27ea4a@roeck-us.net>
-Date: Sat, 28 Nov 2026 02:03:50 -0800
+	id 1xXFln-00000001Luf-0DCC;
+	Sat, 28 Nov 2026 16:05:03 +0530
+Date: Sat, 28 Nov 2026 02:35:02 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: "William A. Kennington III" <william@wkennington.com>
+Cc: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	Andrew Davis <afd@ti.com>,
+	Carlos Jones Jr <carlosjr.jones@analog.com>,
+	Kees Cook <kees+treewide@kernel.org>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (pmbus/max34440): Do not treat ASCII MFR_REVISION
+ as MAX34451ETNA6+
+Message-ID: <a6e77eb9-610a-4fde-a5ca-c95769ae67cc@roeck-us.net>
+References: <20261128025223.2680033-1-william@wkennington.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -75,63 +86,9 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/7] hwmon: (nct6683) Enable fan control on ASRock
- BC-250
-To: Fabio Baltieri <fabio.baltieri@gmail.com>,
- Johan Dahlin <jdahlin@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- Alwyn Kik <alwyn@kik.pw>, Hamza Mahfooz <someguy@effective-light.com>
-References: <20261111082838.1418051-1-jdahlin@gmail.com>
- <20261111082838.1418051-5-jdahlin@gmail.com> <awqYYqF0aIDLpcTg@google.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <awqYYqF0aIDLpcTg@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261128025223.2680033-1-william@wkennington.com>
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -140,66 +97,64 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1xXFHb-000000017wY-0Z4u
+X-Exim-ID: 1xXFln-00000001Luf-0DCC
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54006
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:59246
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 7
+X-Email-Count: 10
 X-Org: HG=direseller_whb_net_legacy;ORG=directi;
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfKOTPXH5WzrneltZklvOTwIs3rbzvpI9hY8qWu+HysMC/CMonZcsEXS9950374ZHJn6dbOkd6+3bnXz+YAlo2h1l+wGiVel7EK+asZFQieSphtaKmFPc
- H4ZYnPMVRdvcp9rHU5xhGeqoH20fRFifsnnPXc4BG10KlBY/x2LrW/+fXsTt0Un96YPR57qWhT4UZy6GxY5hGlWU22C7Tpy/ICzqW7poFkdV3qH3qo9YpGJy
+X-CMAE-Envelope: MS4xfIt7pWZyfLXqQGXJ6T5ROnZ8d4c0Um29fmPUwaNZcdmB2QUq9o1vxWIxnoN8b9R20CJ+bGGdjwQvlJ6hlXHYTt2gi4PEupVp8L6pHACBWjQkisbzVNrV
+ bEg10DpJ67DiAc2kv1XIK1Wken9zD2UCo7q9z7Er6adhdufptu5NLleWXDP9e2o7Sttv927c4f+64+/adyRzWBX009UdXGf2dA08Uvpuo9uf/QxrhvKT6Rfv
 
-On 11/28/26 01:01, Fabio Baltieri wrote:
-> On Wed, Nov 11, 2026 at 09:28:35AM +0100, Johan Dahlin wrote:
->> The ASRock BC-250 (customer ID 0x162b) has an NCT6686D with the same fan
->> control registers as the B850 Steel Legend WiFi, and manual fan control
->> was reported to work there.
->>
->> Enable fan control for channels 0 to 7 on this board as well.
->>
->> Suggested-by: Fabio Baltieri <fabio.baltieri@gmail.com>
->> Signed-off-by: Johan Dahlin <jdahlin@gmail.com>
->> ---
->>   Documentation/hwmon/nct6683.rst | 2 +-
->>   drivers/hwmon/nct6683.c         | 3 ++-
->>   2 files changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/Documentation/hwmon/nct6683.rst b/Documentation/hwmon/nct6683.rst
->> index 026515c35243..8e5cd1d7dcd2 100644
->> --- a/Documentation/hwmon/nct6683.rst
->> +++ b/Documentation/hwmon/nct6683.rst
->> @@ -59,7 +59,7 @@ fan reported by fanN_input.
->>   
->>   It is also supported on the ASRock B850 Steel Legend WiFi (NCT6686D,
->>   customer ID 0x164a), where pwm1 to pwm6 control the fan headers reported
->> -by fan1 to fan6.
->> +by fan1 to fan6, and on the ASRock BC-250 (NCT6686D, customer ID 0x162b).
->>   
->>   pwmN_enable selects the fan control mode:
->>   
->> diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
->> index 29fbf438c04c..f656b84ee8ac 100644
->> --- a/drivers/hwmon/nct6683.c
->> +++ b/drivers/hwmon/nct6683.c
->> @@ -1540,7 +1540,8 @@ nct6683_setup_fans(struct nct6683_data *data)
->>   		}
->>   	}
->>   
->> -	if (data->customer_id == NCT6683_CUSTOMER_ID_ASROCK8)
->> +	if (data->customer_id == NCT6683_CUSTOMER_ID_ASROCK8 ||
->> +	    data->customer_id == NCT6683_CUSTOMER_ID_AMD)
->>   		data->have_fan_ctrl = data->have_pwm & GENMASK(7, 0);
->>   }
+On Sat, Nov 28, 2026 at 02:52:23AM +0000, William A. Kennington III wrote:
+> Per the MAX34451 datasheet, legacy MAX34451 parts return two ISO/IEC
+> 8859-1 characters in MFR_REVISION (0x9b). On an NPCM730 BMC, both
+> MAX34451 devices (MFR_ID 0x4d, MFR_MODEL 0x59) return 0x3236.
 > 
-> Hey, just got a chance to test the v2 on my bc-250 and it works as
-> expected, tested it on hwmon-next since this has already been applied.
+> Comparing rv >= MAX34451ETNA6_MFR_REV (0x0012) and rv >=
+> MAX34451ETNA8_MFR_REV (0x0014) without checking the upper byte
+> misidentifies these legacy chips as MAX34451ETNA8+. That switches
+> PSC_VOLTAGE_OUT from 1 mV/LSB to 8 mV/LSB, reporting every voltage
+> rail 8x too high, and exposes unsupported VIN channels reading -8 mV.
 > 
+> Require rv < 0x0100 before applying the ETNA6+/ETNA8+ quirks. Tested
+> on that hardware: the voltage rails read 1x again and the bogus VIN
+> channels disappear.
+> 
+> Fixes: 19932f844f3f ("hwmon: (pmbus/max34440) Fix support for max34451")
+> Fixes: 596f410c05b1 ("hwmon: (pmbus/max34440): add support for newer version of max34451")
+> Signed-off-by: William A. Kennington III <william@wkennington.com>
 
-A formal "Tested-by:" would still be appreciated in situations like this.
+Applied.
 
+Thanks,
 Guenter
 
+> ---
+>  drivers/hwmon/pmbus/max34440.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/max34440.c b/drivers/hwmon/pmbus/max34440.c
+> index b59e9fd42401..390dc32f6f41 100644
+> --- a/drivers/hwmon/pmbus/max34440.c
+> +++ b/drivers/hwmon/pmbus/max34440.c
+> @@ -352,7 +352,14 @@ static int max34451_set_supported_funcs(struct i2c_client *client,
+>  	if (rv < 0)
+>  		return rv;
+>  
+> -	if (data->id == max34451 && rv >= MAX34451ETNA6_MFR_REV) {
+> +	/*
+> +	 * Legacy MAX34451 parts report MFR_REVISION (0x9b) as two ISO/IEC
+> +	 * 8859-1 characters (e.g. 0x3236), whereas MAX34451ETNA6+ / ETNA8+
+> +	 * use single-byte binary revisions 0x0012 / 0x0014. Require a zero
+> +	 * upper byte so legacy parts keep 1 mV/LSB scaling and do not
+> +	 * expose unsupported VIN/IIN channels.
+> +	 */
+> +	if (data->id == max34451 && rv >= MAX34451ETNA6_MFR_REV && rv < 0x0100) {
+>  		max34451_na6 = true;
+>  		data->info.format[PSC_VOLTAGE_IN] = direct;
+>  		data->info.format[PSC_CURRENT_IN] = direct;
