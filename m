@@ -1,97 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795852799;
-	b=Ojay4yxXwkvCSzxNE7yB4IJJuxOel8tvaaer5Bc9Vkd9MUvvhsFG7qFDH6AEMD2fKfya
-	 Efk4DfK1dkI/5fiFqgHXD/SRmPj9fRFiDoghv0zT+SsnBSyVy8ENzlfSJCbaSQxvrj+mT
-	 DO0VlzAEn/66oMnUMVY2j1Tiawqxz866ctPXnFlNa0zsSqHTdho5Y0cq6pYL5kfyzVZ8r
-	 MU0mYBwQlr2zrJ3awrd5U8rKXDjPztPtMrtQfOlDsU+T77h/G31Fy2qqHoNkkT+29uju9
-	 7IZWN+HzcH4GFe/oKTBdGsx8bQJZDIPAj4aqYi9WjOsSWLW8zsLOxJvLYgFJVTyuyRw==
+	t=1795856487;
+	b=YdAzayfZbY7ecoPLEJ98R8D7nDXkcGLQw4LW7W1x486HiHDx7TBVKwmjxEaxpoYhsC1L
+	 JQxXHJASGNhTSQ9A+yWza5JnS/LuSASGDzbCNWD3B0YA/zDE6rOMNXLgd7oDq25qi5YC6
+	 z78dd2aVMrTIQWdtpZ3X1YkuSa58zLYN2KTbB24BiiZrDKtQPyuet0gkrD+hQAfpdSlI1
+	 azgfGFQwGxaLZV8I7/e4pDutxpqC966UMGZncoV2V0Lols3z6Bkk0HG2X+9Qy5IWRw9MM
+	 rYj01vEjl7E1sx8Xdu5RHsyEcOAlI0my6VHn+K4cIM0MO3jYj+nIX/cpu57MfZ0PGuA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795852799;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795856487;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=rECzFDCKo4XXlZnw/34prSvNBZQ0YYwmq2ei4FG0uow=;
-	b=WXEKXxWuieMZJHyn3hDkarWF/4GFjMnkUBQQRzAw6mLEvCS9q1c4vJZ11094KR6+T2RZ
-	 F+u5ex+PKXKQBjpqHx/tMsZ15ysEBvgxBJ5xnTnbVZPRHCah1AJdebcv3FHS5cc0SnrXe
-	 vERiMjZeRKtEqo8XVZXvwd+3mQTxD0JnJif4yxT7B2qWjU2KBQB+DdKbmeSrrfnFNEDKh
-	 ZC5QQ35Z5zt5tFVcTrhv42l39qVhYJvPuGFFOWgnuTdpqMI5qQcg2hQp5GMPRyqudRROb
-	 SRrhgdyYKyT9AJgA+TiMvQN+iR4L9eA8IZrO7kKGdxCoE7kHsheqhOYpHaCa3Ys1MHg==
+	bh=HcMpuSj3oXcRHJx9YaH6Yolmn9BCDVLY7M9wbuven4A=;
+	b=2g+9w2Q+6VuYIzCePzPQrUEbiz0U8ST2vwWHPh0P4jqkavY5FKG9G1ApkVnc6CFyHZJB
+	 q0p5alwLYIlV05SrC1AC1/4Yhi6ueZc4Q8pVZBPsBDAmAZGwTUCtKaF4vqJL/5PN+QbyB
+	 LG0F5CCEEALC84yk1uyRRxQN7lGOjT/pl9wbsNljlukcx9j4wXglE70c0EDfRhgJq8OqT
+	 g0ymRdkvBYShfZnL7VaXscTRWb3cqT7zyV2ygzYlE8VXRCTMsAC33bttQ4QogxmOKMjWn
+	 pNHcF7ZZjKayII25l/i+IgVoYTWxHhC83iCPVzUATyIO/B/rhmZT/yVsTttnHmjA9CA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=baylibre.com;
-	spf=pass smtp.mailfrom=baylibre.com;
-	dkim=pass header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256 header.s=google header.b="i/U/to+v";
-	arc=none smtp.remote-ip=209.85.221.47
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="tF5IY/3N";
+	arc=none smtp.remote-ip=209.85.221.48
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8E13606A326
-	for <linux-hwmon@vger.kernel.org>; Sat, 28 Nov 2026 07:59:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D8E13606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64EF606A31F
+	for <linux-hwmon@vger.kernel.org>; Sat, 28 Nov 2026 09:01:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B64EF606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256 header.s=google header.b=i/U/to+v
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-49465892f7bso6444506f8f.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2026 23:59:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tF5IY/3N
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-497614c95f0so4985497f8f.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 28 Nov 2026 01:01:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1795852797; x=1796457597; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795856485; x=1796461285; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=rECzFDCKo4XXlZnw/34prSvNBZQ0YYwmq2ei4FG0uow=;
-        b=i/U/to+vCmL1lcMOCEc3owu39hWkCjDpqJ213buTkVu7MoriXmrx+7OGqlR5mKjN0K
-         HJznAwo3QdHX+mccxMSx8rXVqDLQlnkM3P4KKsZD+//BlVONCBDPn8pZ4yevOzRiXp/I
-         gJxK0s6juwE0bQ5bE/7yzG82cu1twxYL71VfcfhRCV7DMYxDCXh5JSCk5HmLwiBDbGcK
-         /3LWwAPMgikzdeET6ZLrmfguyXOEAu3q8eXawDWa1Mz3qgEI2CVV/tpVSCKAYuyGlmKD
-         c7Nrf1KPWTMmTIelV6zqs20Kg89Kf0hmSLldDN2UR8QXyMgoiMgC0Yrgxd++VBF30AKW
-         lUrg==
+        bh=HcMpuSj3oXcRHJx9YaH6Yolmn9BCDVLY7M9wbuven4A=;
+        b=tF5IY/3NhVZLJraWtqmB3EY0/xnFkRCRPsJ9yKllFcz3wvjgNLduq5zNjnyhGwCcoQ
+         feT/IzhIupjOpbic1CDesYTBZIl6DoXFPT2Mis8+X4iIJAwWNXQirrDJKP7q1akF+SUi
+         Z19Ur+LZtz+EH/3CFP4jLBI2mbRhwfh4kZGHL4Dfcc903lY3qk1EX95MV9rl5nCDqCyR
+         ksLJZIsf1owWEI1StTx+ylT+TY040/Tf76OIfhRYcOjZKD8OdI7QE/Re/f6tYGmoWLOf
+         aNbl5KYQjANQ038Uuh9esT6WJ5raZ3DKIjhG+tyKi1NQHrltm+gvBUqg+YwgRcyWT/Sj
+         4vuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795852797; x=1796457597;
+        d=1e100.net; s=20260707; t=1795856485; x=1796461285;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=rECzFDCKo4XXlZnw/34prSvNBZQ0YYwmq2ei4FG0uow=;
-        b=YSiGVGLZU5ePROKZQAkYP79LJNYA/TnZaWisTGP0UynGjVaN29SYDSzI358+ZCGYMV
-         W0714Ls737ycvypkBKxwYboEBBuFHd+RcoplbSVGCDt5OyegoUwICavy/jqsHdCqxxjj
-         DAfTt+iisNBz60v7GlYAIxJiRBvZDe8xaeNRzn80IgIEodcq4+xraTqxrbs8Sdqh1lfj
-         LPOo1Kdy+FiK1EoEi+GyvMStnUBbrKu61I++KuXkOlJU38ek76DNDRyJ+oa99+1Frfmq
-         MpknVgmSDYXam6Pd8aRurHpYusH6ExcWAM/36dRIGKNGNHha4S5yvOnlGV6wYl8sKwsz
-         Z6FA==
-X-Forwarded-Encrypted: i=1; AL+hErEJPg7HF2dDpX9hTdoyudIOMwChvMPMvQs7htzB5n8p8V+Zl0pdxQbqBv0adEenjrArAcZ9T7AmlCVmAQ==@vger.kernel.org
-X-Gm-Message-State: APuU4Z9z7TI2Tb2veWM7/GBxoNQcooiH0SKm0uGjMbtS2Yj4tP1eK14O
-	XHa9r4SrNhXQoi7bqiWwcagz3P77KRnPcqkMY8q7R9L7plVzl4A+n1m/CGRsYXVH8UM=
-X-Gm-Gg: AZFdTZdQ+lUnElrNkol9dT/4yMlZBPBQAmZL7pavy4r4Ov+PmV95MfoHtTul+LkxiY/
-	q1xTXHEgP4DlaMIZrYmwoxURJJEy4cdSKbytEH36ivkfmuEkrcz7BOtRsUZnemM6n7Wa1f2Cak6
-	g9erBm7v5z9Zdb91AriqcIMDx3iCs5VKqzTcJSNPWfbYOYh0eGr1QorbeHoB8YJG69MdSXtAeqh
-	AN7RRrvf8Min6KgoCFDKjgVEJMOdyOR826sAALvEiQ+cbMZeIHkwyfWNWNalVq+dWuxk+mON7l0
-	IU9NMAXk5IJIEPP2s/pAtpj6dSTg90PCRZwZBLYvMe5bDnUx+Elp/F35DN6/RnbkCBFDaybrVvb
-	tdKSnvceI91ssScbyScExrj2Ce008G9j3l0f4gOayS+h184fKmhUmPYWFf9PieYD/F8DqybX19b
-	CrZA9XY7mek9QUBPKCYwjwdaksNuXoqiI8VTXVY8uAiVnXI5/XxKWnFVpjVVM8Ixmsw+BoQ2SH3
-	rZtjp+IrSuEdj9WIjeGEQY9XejVn61PKL9HEbePW1Whs1TPprjWkkDRFrnjj/Svr2toZlr+y6I+
-	1KeThgSpfMwdfZZMixdbyEl2souB/5Qa5rLdul6WwtWzAlNr5ZU1arn06OXXh8iRbBIUF3+At+L
-	/
-X-Received: by 2002:a05:6000:2893:b0:493:f3f2:2241 with SMTP id ffacd0b85a97d-4abb272746fmr52992473f8f.23.1795852797142;
-        Fri, 27 Nov 2026 23:59:57 -0800 (PST)
-Received: from localhost (ip-005-146-085-079.um05.pools.vodafone-ip.de. [5.146.85.79])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-4ab6b110ba3sm42679550f8f.35.2026.11.27.23.59.53
+        bh=HcMpuSj3oXcRHJx9YaH6Yolmn9BCDVLY7M9wbuven4A=;
+        b=e6QwBll/Fug1Eg0FvHddGYS+JNvTfEeMoBQDLt6V3HVEwudIcN/0KhyNypY/+Od4La
+         okMFiY4z+a1znvd2K2rq0kF4OQ//y8zNNV4hREfgysVo5+RMNe+pLdn5I7Rz2Koc8T4S
+         JjyhTI0fyT7qmMwn6N45RjtN1k9iFjIl1H38O/OlmJEKsxIYNYJArEJbl7x+B01JQkuk
+         0VMIEbDC4Pu+qA0CtuS0WvYP+Da1CsFKC7nUcFj+ty9JINTUukSFzmIH0X+2ECny4GHQ
+         54ln60eXz/tRcHcPtWgW46e/s2jTj8iS9NTlo7RBTj/TrUNI76OkEY6eMJN9D3WCTdvv
+         Wjpw==
+X-Forwarded-Encrypted: i=1; AL+hErFxu/Q11qjT1Aw9JqqD2J6XKeJj+6d6E8KCWsuSsYR3x+DfwXNpaoIvjALII+PXACRaZ0Ns/mRVgiXA5Q==@vger.kernel.org
+X-Gm-Message-State: APuU4Z8Nv9qHLotc8Ab7Z8Yj4es6/gqOMnv3PTTRw9b2PmmoyPmaWp/8
+	jhjsBpFKXOUu3hUKPdWdp1SYjXmjGlZe0koP31t7F+viNxmCl5jdrKNY
+X-Gm-Gg: AZFdTZcS4uWdczrcPTDsB2xavMBqy9/j7mHmxQqRZLxleoa0SitsV4zjCguu7a/XKDu
+	Tr3NPnj419UALlV0fnn6HEqmWsH3EKbUynA56Jhj2IH7e36XjL2zvxIPRfyS1Z82UVQj4S+zhip
+	/GWY4pGKt4/U2rnAFdMc2HqSn8EzjI8eLxwBeQM22aDVc+hGnGsUftskFLE3VTuDxGMm5PX+t7J
+	bfduyaiOe1CDzjjatiblH2btX7UTiBMqzxvV0AsEmXbuaJmJLk6W2Gco94+4sq66ZHz3OYYkGRH
+	TiyE2oW1Zkiiw1ufufRlhkMy+ipN272Nv5Khiwj6AKwvkHeKYOZbSmeL18WqOkMY6x29JIuMNtc
+	hXRkIWQyE0suiekFjcIP93CaETQRwJgFAXubbDDR0olC2WcfC+UotdWKlUOuFitycOSZFgK/LoJ
+	5nL7ChZ+kOExeSb/3riOiNV5LaHu+PAW8uql4c+vRiyXpueqo9BBJ2bO56qIuaRkX5Ps7v+FV/I
+	vO+vVdup6LLguQ7QfWvSR/oRVXzYNZtLVZ0Wj6b2RloLa/tzb2xXwIj6pKC2FWVKWRs0ZUHxYx6
+	Q1UjIBxWEu3/zy5tciCZT+YS5KB6CaMNQA==
+X-Received: by 2002:a05:6000:3107:b0:4aa:1ae2:ff2a with SMTP id ffacd0b85a97d-4abaa977260mr63813437f8f.2.1795856484771;
+        Sat, 28 Nov 2026 01:01:24 -0800 (PST)
+Received: from google.com ([37.228.200.172])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6c4353d6sm50089883f8f.56.2026.11.28.01.01.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Nov 2026 23:59:55 -0800 (PST)
-Date: Sat, 28 Nov 2026 08:59:53 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Shiv Prakash Gupta <shivprakash.gupta@nxp.com>
-Cc: linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org, 
-	alexandre.belloni@bootlin.com, krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org, 
-	linux@roeck-us.net, wim@linux-watchdog.org, vikash.bansal@nxp.com, 
-	priyanka.jain@nxp.com, lakshay.piplani@nxp.com
-Subject: Re: [PATCH v6 2/4] rtc: pcf8525: Add NXP PCF8525 RTC driver
-Message-ID: <awqJkqQ_8tXGIqo9@monoceros>
-References: <20261127083807.2844507-1-shivprakash.gupta@nxp.com>
- <20261127083807.2844507-3-shivprakash.gupta@nxp.com>
+        Sat, 28 Nov 2026 01:01:24 -0800 (PST)
+Date: Sat, 28 Nov 2026 09:01:22 +0000
+From: Fabio Baltieri <fabio.baltieri@gmail.com>
+To: Johan Dahlin <jdahlin@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Alwyn Kik <alwyn@kik.pw>,
+	Hamza Mahfooz <someguy@effective-light.com>
+Subject: Re: [PATCH v2 4/7] hwmon: (nct6683) Enable fan control on ASRock
+ BC-250
+Message-ID: <awqYYqF0aIDLpcTg@google.com>
+References: <20261111082838.1418051-1-jdahlin@gmail.com>
+ <20261111082838.1418051-5-jdahlin@gmail.com>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Post: <mailto:linux-hwmon@vger.kernel.org>
@@ -101,45 +99,54 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-hwmon+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="5kez4omv4kntvob6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261127083807.2844507-3-shivprakash.gupta@nxp.com>
+In-Reply-To: <20261111082838.1418051-5-jdahlin@gmail.com>
 
+On Wed, Nov 11, 2026 at 09:28:35AM +0100, Johan Dahlin wrote:
+> The ASRock BC-250 (customer ID 0x162b) has an NCT6686D with the same fan
+> control registers as the B850 Steel Legend WiFi, and manual fan control
+> was reported to work there.
+> 
+> Enable fan control for channels 0 to 7 on this board as well.
+> 
+> Suggested-by: Fabio Baltieri <fabio.baltieri@gmail.com>
+> Signed-off-by: Johan Dahlin <jdahlin@gmail.com>
+> ---
+>  Documentation/hwmon/nct6683.rst | 2 +-
+>  drivers/hwmon/nct6683.c         | 3 ++-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/nct6683.rst b/Documentation/hwmon/nct6683.rst
+> index 026515c35243..8e5cd1d7dcd2 100644
+> --- a/Documentation/hwmon/nct6683.rst
+> +++ b/Documentation/hwmon/nct6683.rst
+> @@ -59,7 +59,7 @@ fan reported by fanN_input.
+>  
+>  It is also supported on the ASRock B850 Steel Legend WiFi (NCT6686D,
+>  customer ID 0x164a), where pwm1 to pwm6 control the fan headers reported
+> -by fan1 to fan6.
+> +by fan1 to fan6, and on the ASRock BC-250 (NCT6686D, customer ID 0x162b).
+>  
+>  pwmN_enable selects the fan control mode:
+>  
+> diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
+> index 29fbf438c04c..f656b84ee8ac 100644
+> --- a/drivers/hwmon/nct6683.c
+> +++ b/drivers/hwmon/nct6683.c
+> @@ -1540,7 +1540,8 @@ nct6683_setup_fans(struct nct6683_data *data)
+>  		}
+>  	}
+>  
+> -	if (data->customer_id == NCT6683_CUSTOMER_ID_ASROCK8)
+> +	if (data->customer_id == NCT6683_CUSTOMER_ID_ASROCK8 ||
+> +	    data->customer_id == NCT6683_CUSTOMER_ID_AMD)
+>  		data->have_fan_ctrl = data->have_pwm & GENMASK(7, 0);
+>  }
 
---5kez4omv4kntvob6
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Subject: Re: [PATCH v6 2/4] rtc: pcf8525: Add NXP PCF8525 RTC driver
-MIME-Version: 1.0
+Hey, just got a chance to test the v2 on my bc-250 and it works as
+expected, tested it on hwmon-next since this has already been applied.
 
-Hello,
+Thanks for the help!
 
-On Fri, Nov 27, 2026 at 02:08:05PM +0530, Shiv Prakash Gupta wrote:
-> +#include <linux/i2c.h>
-> [...]
-> +#include <linux/mod_devicetable.h>
-
-Both of_device_id and i2c_device_id are provided by <linux/i2c.h>
-without additional build dependencies as are introduced by
-<linux/mod_devicetable.h>. So please drop the latter.
-
-Best regards
-Uwe
-
---5kez4omv4kntvob6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmsKifYACgkQj4D7WH0S
-/k7agQf/dUy7wCorcL/I4owilXhYjnsXPrSYVFuZTI3zBHYDbdxpHZa80WwZlBG7
-E4SFU0OwJbEJe6jfB4zfEAJno76UQtmfOsPNrRBjhVwTHfHa+eurWy0zb9D/2CE3
-T9IHil5xV6MLLjEsteKu/ubZ5uOQpl/GemFXCbkkgQnOoNk3fu9vTRW3m81xJ9bm
-uNWYCMXorvZ4Wx7PB2OLQd5RwRNUormhf1E7zoUUE4ilF3XfUbBOvueHDCr0dCy2
-b/wJgjIiQzRLVsEcMQ1QhPUbCxlrMuzkchAgFdHqygmuxVmNh8Sz3yBHvjK4aG4Y
-MLYKgxWCCTBVfnXialkv/zpFTTAkgg==
-=jkpr
------END PGP SIGNATURE-----
-
---5kez4omv4kntvob6--
+Fabio
